@@ -4,6 +4,7 @@
 /build
 /parts
 /venv
+/dist
 /eggs
 /node_modules
 /src/vendor
