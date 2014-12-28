@@ -1,0 +1,10 @@
+.*
+/bin
+/bootstrap.py
+/build
+/parts
+/venv
+/eggs
+/node_modules
+/src/vendor
+
