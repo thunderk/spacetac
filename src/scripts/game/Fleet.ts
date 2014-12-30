@@ -10,6 +10,13 @@ module SpaceTac.Game {
         // Create a fleet, bound to a player
         constructor(player: Player) {
             this.player = player;
+            this.ships = [];
+        }
+
+        // Add a ship in this fleet
+        addShip(ship: Ship): void {
+            ship.fleet = this;
+            this.ships.push(ship);
         }
     }
 }
