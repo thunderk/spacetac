@@ -10,8 +10,14 @@ module SpaceTac.Game {
         }
 
         // Create a quick random player, with a fleet, for testing purposes
-        static newQuickRandom(): Player {
+        static newQuickRandom(name: String): Player {
             var player = new Player();
+
+            new Ship(player.fleet, name + "'s First");
+            new Ship(player.fleet, name + "'s Second");
+            new Ship(player.fleet, name + "'s Third");
+            new Ship(player.fleet, name + "'s Fourth");
+
             return player;
         }
     }

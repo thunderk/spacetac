@@ -16,6 +16,13 @@ module SpaceTac.Game {
         // Number of hull points
         hull: number;
 
+        // Position in the arena
+        arena_x: number;
+        arena_y: number;
+
+        // Facing direction in the arena
+        arena_angle: number;
+
         // Current initiative level (high numbers will allow this ship to play sooner)
         initiative_level: number;
 
@@ -31,6 +38,17 @@ module SpaceTac.Game {
             fleet.addShip(this);
         }
 
+        // Set position in the arena
+        setArenaPosition(x: number, y: number) {
+            this.arena_x = x;
+            this.arena_y = y;
+        }
+
+        // Set facing angle in the arena
+        setArenaFacingAngle(angle: number) {
+            this.arena_angle = angle;
+        }
+
         // String repr
         jasmineToString(): string {
             return "Ship " + this.name;
@@ -39,6 +57,11 @@ module SpaceTac.Game {
         // Make an initiative throw, to resolve play order in a battle
         throwInitiative(gen: RandomGenerator): void {
             this.initative_throw = gen.throw(this.initiative_level);
+        }
+
+        // Return the player owning this ship
+        getPlayer(): Player {
+            return this.fleet.player;
         }
     }
 }
