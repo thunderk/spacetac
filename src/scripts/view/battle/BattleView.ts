@@ -27,7 +27,7 @@ module SpaceTac.View {
         ship_hovered: Game.Ship;
 
         // Subscription to the battle log
-        log_subscription: any;
+        log_processor: LogProcessor;
 
         // Init the view, binding it to a specific battle
         init(player, battle) {
@@ -35,7 +35,7 @@ module SpaceTac.View {
             this.battle = battle;
             this.targetting = null;
             this.ship_hovered = null;
-            this.log_subscription = null;
+            this.log_processor = null;
         }
 
         // Create view graphics
@@ -67,18 +67,15 @@ module SpaceTac.View {
                 new ShipArenaSprite(battleview, ship);
             });
 
-            // Subscribe to log events
-            this.battle.log.subscribe((event) => {
-                battleview.processBattleEvent(event);
-            });
-            this.battle.injectInitialEvents();
+            // Start processing the battle log
+            this.log_processor = new LogProcessor(this);
         }
 
         // Leaving the view, we unbind the battle
         shutdown() {
-            if (this.log_subscription) {
-                this.battle.log.unsubscribe(this.log_subscription);
-                this.log_subscription = null;
+            if (this.log_processor) {
+                this.log_processor.destroy();
+                this.log_processor = null;
             }
 
             if (this.ui) {
@@ -102,15 +99,6 @@ module SpaceTac.View {
             }
 
             this.battle = null;
-        }
-
-        // Process a BaseLogEvent
-        processBattleEvent(event: Game.BaseLogEvent) {
-            console.log("Battle event", event);
-            if (event.code == "ship_change") {
-                // Playing ship changed
-                this.card_playing.setShip(event.target.ship);
-            }
         }
 
         // Method called when cursor starts hovering over a ship (or its icon)
