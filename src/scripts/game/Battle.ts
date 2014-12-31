@@ -1,6 +1,9 @@
 module SpaceTac.Game {
     // A turn-based battle between fleets
     export class Battle {
+        // Log of all battle events
+        log: BattleLog;
+
         // List of fleets engaged in battle
         fleets: Fleet[];
 
@@ -13,6 +16,7 @@ module SpaceTac.Game {
 
         // Create a battle between two fleets
         constructor(fleet1: Fleet, fleet2: Fleet) {
+            this.log = new BattleLog();
             this.fleets = [fleet1, fleet2];
             this.play_order = [];
             this.playing_ship_index = null;
@@ -64,7 +68,9 @@ module SpaceTac.Game {
         // End the current ship turn, passing control to the next one in play order
         //  If at the end of the play order, next turn will start automatically
         //  Member 'play_order' must be defined before calling this function
-        advanceToNextShip(): void {
+        advanceToNextShip(log: boolean=true): void {
+            var previous_ship = this.playing_ship;
+
             if (this.play_order.length == 0) {
                 this.playing_ship_index = null;
                 this.playing_ship = null;
@@ -79,14 +85,28 @@ module SpaceTac.Game {
                 }
                 this.playing_ship = this.play_order[this.playing_ship_index];
             }
+
+            if (log) {
+                this.log.add(new Events.ShipChangeEvent(previous_ship, this.playing_ship));
+            }
         }
 
         // Start the battle
         //  This will call all necessary initialization steps (initiative, placement...)
+        //  This will not add any event to the battle log
         start(): void {
             this.placeShips();
             this.throwInitiative();
-            this.advanceToNextShip();
+            this.advanceToNextShip(false);
+        }
+
+        // Force an injection of events in the battle log to simulate the initial state
+        //  For instance, this may be called after 'start', to use the log subscription system
+        //  to initialize a battle UI
+        injectInitialEvents(): void {
+            // TODO Simulate initial ship placement
+            // Simulate game turn
+            this.log.add(new Events.ShipChangeEvent(this.playing_ship, this.playing_ship));
         }
 
         // Create a quick random battle, for testing purposes

@@ -14,10 +14,14 @@ module SpaceTac.View {
         // Battleground container
         arena: Phaser.Group;
 
+        // Targetting mode (null if we're not in this mode)
+        targetting: Targetting;
+
         // Init the view, binding it to a specific battle
         init(player, battle) {
             this.player = player;
             this.battle = battle;
+            this.targetting = null;
         }
 
         // Create view graphics
@@ -55,6 +59,18 @@ module SpaceTac.View {
 
             this.arena.destroy();
             this.arena = null;
+        }
+
+        // Enter targetting mode
+        //  While in this mode, the Targetting object will receive hover and click events, and handle them
+        enterTargettingMode(): Targetting {
+            this.targetting = new Targetting(this);
+            return this.targetting;
+        }
+
+        // Exit targetting mode
+        exitTargettingMode(): void {
+            this.targetting = null;
         }
     }
 }
