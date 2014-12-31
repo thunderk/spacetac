@@ -7,10 +7,16 @@ module SpaceTac.Game {
         // List of ships, sorted by their initiative throw
         play_order: Ship[];
 
+        // Current ship whose turn it is to play
+        playing_ship_index: number;
+        playing_ship: Ship;
+
         // Create a battle between two fleets
         constructor(fleet1: Fleet, fleet2: Fleet) {
             this.fleets = [fleet1, fleet2];
             this.play_order = [];
+            this.playing_ship_index = null;
+            this.playing_ship = null;
         }
 
         // Create play order, performing an initiative throw
@@ -55,11 +61,32 @@ module SpaceTac.Game {
             this.placeFleetShips(this.fleets[1], 300, 100, Math.PI);
         }
 
+        // End the current ship turn, passing control to the next one in play order
+        //  If at the end of the play order, next turn will start automatically
+        //  Member 'play_order' must be defined before calling this function
+        advanceToNextShip(): void {
+            if (this.play_order.length == 0) {
+                this.playing_ship_index = null;
+                this.playing_ship = null;
+            } else {
+                if (this.playing_ship_index == null) {
+                    this.playing_ship_index = 0;
+                } else {
+                    this.playing_ship_index += 1;
+                }
+                if (this.playing_ship_index >= this.play_order.length) {
+                    this.playing_ship_index = 0;
+                }
+                this.playing_ship = this.play_order[this.playing_ship_index];
+            }
+        }
+
         // Start the battle
         //  This will call all necessary initialization steps (initiative, placement...)
         start(): void {
             this.placeShips();
             this.throwInitiative();
+            this.advanceToNextShip();
         }
 
         // Create a quick random battle, for testing purposes

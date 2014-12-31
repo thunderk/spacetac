@@ -31,7 +31,12 @@
             currentWindowOnload();
         }
         <!-- /build -->
-        new SpaceTac.GameRouter();
+        var queryString = new jasmine.QueryString({
+            getWindowLocation: function() { return window.location; }
+        });
+        if (!queryString.getParam('onlytests')) {
+            new SpaceTac.GameRouter();
+        }
     };
 </script>
 

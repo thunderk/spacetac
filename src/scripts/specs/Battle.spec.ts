@@ -60,5 +60,50 @@ module SpaceTac.Specs {
             expect(ship5.arena_y).toBeCloseTo(75, 0.0001);
             expect(ship5.arena_angle).toBeCloseTo(Math.PI, 0.0001);
         });
+
+        it("advances to next ship in play order", function(){
+            var fleet1 = new Game.Fleet(null);
+            var fleet2 = new Game.Fleet(null);
+
+            var ship1 = new Game.Ship(fleet1, "F1S1");
+            var ship2 = new Game.Ship(fleet1, "F1S2");
+            var ship3 = new Game.Ship(fleet2, "F2S1");
+
+            var battle = new Game.Battle(fleet1, fleet2);
+
+            // Check empty play_order case
+            expect(battle.playing_ship).toBeNull();
+            expect(battle.playing_ship_index).toBeNull();
+            battle.advanceToNextShip();
+            expect(battle.playing_ship).toBeNull();
+            expect(battle.playing_ship_index).toBeNull();
+
+            // Force play order
+            var gen = new Game.RandomGenerator(0.1, 0.2, 0.0);
+            battle.throwInitiative(gen);
+
+            expect(battle.playing_ship).toBeNull();
+            expect(battle.playing_ship_index).toBeNull();
+
+            battle.advanceToNextShip();
+
+            expect(battle.playing_ship).toBe(ship2);
+            expect(battle.playing_ship_index).toBe(0);
+
+            battle.advanceToNextShip();
+
+            expect(battle.playing_ship).toBe(ship1);
+            expect(battle.playing_ship_index).toBe(1);
+
+            battle.advanceToNextShip();
+
+            expect(battle.playing_ship).toBe(ship3);
+            expect(battle.playing_ship_index).toBe(2);
+
+            battle.advanceToNextShip();
+
+            expect(battle.playing_ship).toBe(ship2);
+            expect(battle.playing_ship_index).toBe(0);
+        });
     });
 }
