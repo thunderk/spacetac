@@ -1,0 +1,18 @@
+module SpaceTac.Game.Actions {
+    // Action to move to a given location
+    export class MoveAction extends BaseAction {
+        constructor() {
+            super("move");
+        }
+
+        canBeUsed(battle: Battle, ship: Ship): boolean {
+            return ship.ap_current > 0;
+        }
+
+        checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
+            // TODO Should forbid to move too much near another ship
+            var coords = ship.getLongestMove(target.x, target.y);
+            return Target.newFromLocation(coords[0], coords[1]);
+        }
+    }
+}

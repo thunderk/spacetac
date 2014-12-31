@@ -79,6 +79,14 @@ module SpaceTac.Game {
             return this.fleet.player;
         }
 
+        // Get the list of actions available
+        //  This list does not filter out actions unavailable due to insufficient AP, it justs filter out
+        //  actions that are not allowed/available at all on the ship
+        getAvailableActions(): Actions.BaseAction[] {
+            // TODO
+            return [new Actions.MoveAction()];
+        }
+
         // Consumes action points
         useActionPoints(ap: number): void {
             this.ap_current -= ap;
