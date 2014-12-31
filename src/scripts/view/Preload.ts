@@ -8,9 +8,10 @@ module SpaceTac.View {
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load assets
-            this.load.image("ui-shiplist-own", "assets/images/ui/shiplist-own.png");
-            this.load.image("ui-shiplist-enemy", "assets/images/ui/shiplist-enemy.png");
-            this.load.image("arena-ship", "assets/images/arena/ship01.png");
+            this.load.image("ui-shiplist-own", "assets/images/battle/shiplist-own.png");
+            this.load.image("ui-shiplist-enemy", "assets/images/battle/shiplist-enemy.png");
+            this.load.image("ui-arena-background", "assets/images/battle/arena-background.png");
+            this.load.image("arena-ship", "assets/images/battle/ship01.png");
         }
 
         create() {

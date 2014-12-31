@@ -10,6 +10,7 @@ module SpaceTac.View {
 
             battleview.arena.add(this);
 
+            this.input.useHandCursor = true;
             this.onInputOver.add(() => {
                 battleview.cursorOnShip(ship);
             });

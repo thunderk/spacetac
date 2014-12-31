@@ -12,7 +12,7 @@ module SpaceTac.View {
         ui: UIGroup;
 
         // Battleground container
-        arena: Phaser.Group;
+        arena: Arena;
 
         // Targetting mode (null if we're not in this mode)
         targetting: Targetting;
@@ -44,13 +44,11 @@ module SpaceTac.View {
             var game = this.game;
             var player = this.player;
 
+            this.arena = new Arena(battleview);
+            game.add.existing(this.arena);
+
             this.ui = new UIGroup(game);
             game.add.existing(this.ui);
-            var ui = this.ui;
-
-            this.arena = new Phaser.Group(game);
-            game.add.existing(this.arena);
-            var arena = this.arena;
 
             this.card_playing = new ShipCard(this, 500, 0);
             this.card_hovered = new ShipCard(this, 500, 300);
@@ -110,6 +108,13 @@ module SpaceTac.View {
         cursorOffShip(ship: Game.Ship): void {
             if (this.ship_hovered === ship) {
                 this.setShipHovered(null);
+            }
+        }
+
+        // Method called when cursor moves in space
+        cursorInSpace(x: number, y: number): void {
+            if (!this.ship_hovered) {
+                console.log("In space", x, y);
             }
         }
 

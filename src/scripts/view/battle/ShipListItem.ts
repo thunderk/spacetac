@@ -11,6 +11,7 @@ module SpaceTac.View {
             super(battleview.game, x, y, owned ? 'ui-shiplist-own' : 'ui-shiplist-enemy');
             battleview.ui.add(this);
 
+            this.input.useHandCursor = true;
             this.onInputOver.add(() => {
                 battleview.cursorOnShip(ship);
             });
