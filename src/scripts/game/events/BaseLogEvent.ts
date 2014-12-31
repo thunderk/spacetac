@@ -1,4 +1,4 @@
-module SpaceTac.Game.Events {
+module SpaceTac.Game {
     // Base class for a BattleLog event
     export class BaseLogEvent {
         // Code of the event (its type)

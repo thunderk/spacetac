@@ -1,10 +1,10 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
-module SpaceTac.Specs {
+module SpaceTac.Game {
 
     // Check a single game log event
-    function checkEvent(got: Game.Events.BaseLogEvent, ship: Game.Ship, code: string,
-                        target_ship: Game.Ship = null, target_x: number = null, target_y: number = null): void {
+    function checkEvent(got: BaseLogEvent, ship: Ship, code: string,
+                        target_ship: Ship = null, target_x: number = null, target_y: number = null): void {
         if (target_ship) {
             if (target_x === null) {
                 target_x = target_ship.arena_x;
@@ -30,7 +30,7 @@ module SpaceTac.Specs {
     }
 
     // Fake event
-    class FakeEvent extends Game.Events.BaseLogEvent {
+    class FakeEvent extends BaseLogEvent {
         constructor() {
             super("fake");
         }
@@ -38,7 +38,7 @@ module SpaceTac.Specs {
 
     describe("BattleLog", function () {
         it("forwards events to subscribers, until unsubscribe", function () {
-            var log = new Game.BattleLog();
+            var log = new BattleLog();
             var received = [];
             var fake = new FakeEvent();
 
@@ -58,7 +58,7 @@ module SpaceTac.Specs {
         });
 
         it("logs ship change events", function () {
-            var battle = Game.Battle.newQuickRandom();
+            var battle = Battle.newQuickRandom();
             expect(battle.log.events.length).toBe(0);
 
             battle.advanceToNextShip();
@@ -67,7 +67,7 @@ module SpaceTac.Specs {
         });
 
         it("can receive simulated initial state events", function (){
-            var battle = Game.Battle.newQuickRandom();
+            var battle = Battle.newQuickRandom();
 
             expect(battle.log.events.length).toBe(0);
 

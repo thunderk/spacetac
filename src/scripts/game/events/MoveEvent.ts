@@ -1,4 +1,4 @@
-module SpaceTac.Game.Events {
+module SpaceTac.Game {
     // Event logged when a ship moves
     export class MoveEvent extends BaseLogEvent {
         constructor(ship: Ship, x: number, y: number) {

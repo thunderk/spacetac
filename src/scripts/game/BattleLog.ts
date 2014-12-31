@@ -4,7 +4,7 @@ module SpaceTac.Game {
     //  It also allows to register a callback to receive these events
     export class BattleLog {
         // Full list of battle events
-        events: Events.BaseLogEvent[];
+        events: BaseLogEvent[];
 
         // List of subscribers
         private subscribers: Function[];
@@ -16,7 +16,7 @@ module SpaceTac.Game {
         }
 
         // Add a battle event to the log
-        add(event: Events.BaseLogEvent) {
+        add(event: BaseLogEvent) {
             this.events.push(event);
 
             this.subscribers.forEach((subscriber) => {
@@ -25,7 +25,7 @@ module SpaceTac.Game {
         }
 
         // Subscribe a callback to receive further events
-        subscribe(callback: (event: Events.BaseLogEvent) => void): Function {
+        subscribe(callback: (event: BaseLogEvent) => void): Function {
             this.subscribers.push(callback);
             return callback;
         }

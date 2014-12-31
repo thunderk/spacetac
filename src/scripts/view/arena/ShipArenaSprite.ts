@@ -1,4 +1,4 @@
-module SpaceTac.View.Arena {
+module SpaceTac.View {
     // Ship sprite in the arena (BattleView)
     export class ShipArenaSprite extends Phaser.Button {
         constructor(battleview: BattleView, ship: Game.Ship) {

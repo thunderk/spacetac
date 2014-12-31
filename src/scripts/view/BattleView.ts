@@ -18,10 +18,10 @@ module SpaceTac.View {
         targetting: Targetting;
 
         // Card to display current playing ship
-        card_playing: Widgets.ShipCard;
+        card_playing: ShipCard;
 
         // Card to display hovered ship
-        card_hovered: Widgets.ShipCard;
+        card_hovered: ShipCard;
 
         // Currently hovered ship
         ship_hovered: Game.Ship;
@@ -52,19 +52,19 @@ module SpaceTac.View {
             game.add.existing(this.arena);
             var arena = this.arena;
 
-            this.card_playing = new Widgets.ShipCard(this, 500, 0);
-            this.card_hovered = new Widgets.ShipCard(this, 500, 300);
+            this.card_playing = new ShipCard(this, 500, 0);
+            this.card_hovered = new ShipCard(this, 500, 300);
 
             game.stage.backgroundColor = 0x000000;
 
             // Add ship buttons to UI
             this.battle.play_order.forEach(function (ship: Game.Ship, rank: number) {
-                new Widgets.ShipListItem(battleview, 0, rank * 50, ship, ship.getPlayer() === player);
+                new ShipListItem(battleview, 0, rank * 50, ship, ship.getPlayer() === player);
             });
 
             // Add ship sprites to arena
             this.battle.play_order.forEach(function (ship: Game.Ship) {
-                new Arena.ShipArenaSprite(battleview, ship);
+                new ShipArenaSprite(battleview, ship);
             });
 
             // Subscribe to log events
@@ -105,7 +105,7 @@ module SpaceTac.View {
         }
 
         // Process a BaseLogEvent
-        processBattleEvent(event: Game.Events.BaseLogEvent) {
+        processBattleEvent(event: Game.BaseLogEvent) {
             console.log("Battle event", event);
             if (event.code == "ship_change") {
                 // Playing ship changed

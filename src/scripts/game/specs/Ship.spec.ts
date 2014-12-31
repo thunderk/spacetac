@@ -1,9 +1,9 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
-module SpaceTac.Specs {
+module SpaceTac.Game {
     describe("Ship", function(){
         it("limits movement range by action points", function(){
-            var ship = new Game.Ship(null, "Test");
+            var ship = new Ship(null, "Test");
             ship.ap_current = 8;
             ship.movement_cost = 3;
             ship.setArenaPosition(50, 50);
@@ -17,7 +17,7 @@ module SpaceTac.Specs {
         });
 
         it("moves and consumes action points", function(){
-            var ship = new Game.Ship(null, "Test");
+            var ship = new Ship(null, "Test");
             ship.ap_current = 8;
             ship.movement_cost = 3;
             ship.setArenaPosition(50, 50);

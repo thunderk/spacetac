@@ -1,4 +1,4 @@
-module SpaceTac.View.Widgets {
+module SpaceTac.View {
     // One item in a ship list (used in BattleView)
     export class ShipListItem extends Phaser.Button {
         // Reference to the ship game object

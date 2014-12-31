@@ -87,7 +87,7 @@ module SpaceTac.Game {
             }
 
             if (log) {
-                this.log.add(new Events.ShipChangeEvent(previous_ship, this.playing_ship));
+                this.log.add(new ShipChangeEvent(previous_ship, this.playing_ship));
             }
         }
 
@@ -109,11 +109,11 @@ module SpaceTac.Game {
 
             // Simulate initial ship placement
             this.play_order.forEach((ship) => {
-                log.add(new Events.MoveEvent(ship, ship.arena_x, ship.arena_y));
+                log.add(new MoveEvent(ship, ship.arena_x, ship.arena_y));
             });
 
             // Simulate game turn
-            log.add(new Events.ShipChangeEvent(this.playing_ship, this.playing_ship));
+            log.add(new ShipChangeEvent(this.playing_ship, this.playing_ship));
         }
 
         // Create a quick random battle, for testing purposes

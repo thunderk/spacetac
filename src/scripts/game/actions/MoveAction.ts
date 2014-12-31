@@ -1,4 +1,4 @@
-module SpaceTac.Game.Actions {
+module SpaceTac.Game {
     // Action to move to a given location
     export class MoveAction extends BaseAction {
         constructor() {
