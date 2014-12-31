@@ -1,3 +1,5 @@
+/// <reference path="../../definitions/jasmine.d.ts"/>
+
 module SpaceTac.Specs {
 
     // Check a single game log event
@@ -27,7 +29,34 @@ module SpaceTac.Specs {
         }
     }
 
+    // Fake event
+    class FakeEvent extends Game.Events.BaseLogEvent {
+        constructor() {
+            super("fake");
+        }
+    }
+
     describe("BattleLog", function () {
+        it("forwards events to subscribers, until unsubscribe", function () {
+            var log = new Game.BattleLog();
+            var received = [];
+            var fake = new FakeEvent();
+
+            var sub = log.subscribe(function (event) {
+                received.push(event);
+            });
+
+            log.add(fake);
+            expect(received).toEqual([fake]);
+
+            log.add(fake);
+            expect(received).toEqual([fake, fake]);
+
+            log.unsubscribe(sub);
+            log.add(fake);
+            expect(received).toEqual([fake, fake]);
+        });
+
         it("logs ship change events", function () {
             var battle = Game.Battle.newQuickRandom();
             expect(battle.log.events.length).toBe(0);
@@ -35,6 +64,20 @@ module SpaceTac.Specs {
             battle.advanceToNextShip();
             expect(battle.log.events.length).toBe(1);
             checkEvent(battle.log.events[0], battle.play_order[0], "ship_change", battle.play_order[1]);
+        });
+
+        it("can receive simulated initial state events", function (){
+            var battle = Game.Battle.newQuickRandom();
+
+            expect(battle.log.events.length).toBe(0);
+
+            battle.injectInitialEvents();
+
+            expect(battle.log.events.length).toBe(9);
+            for (var i = 0; i < 8; i++) {
+                checkEvent(battle.log.events[i], battle.play_order[i], "move", null, battle.play_order[i].arena_x, battle.play_order[i].arena_y);
+            }
+            checkEvent(battle.log.events[8], battle.playing_ship, "ship_change", battle.playing_ship);
         });
     });
 }

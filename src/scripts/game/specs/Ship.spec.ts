@@ -1,4 +1,4 @@
-/// <reference path="../definitions/jasmine.d.ts"/>
+/// <reference path="../../definitions/jasmine.d.ts"/>
 
 module SpaceTac.Specs {
     describe("Ship", function(){

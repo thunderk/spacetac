@@ -103,10 +103,17 @@ module SpaceTac.Game {
         // Force an injection of events in the battle log to simulate the initial state
         //  For instance, this may be called after 'start', to use the log subscription system
         //  to initialize a battle UI
+        //  Attributes 'play_order' and 'playing_ship' should be defined before calling this
         injectInitialEvents(): void {
-            // TODO Simulate initial ship placement
+            var log = this.log;
+
+            // Simulate initial ship placement
+            this.play_order.forEach((ship) => {
+                log.add(new Events.MoveEvent(ship, ship.arena_x, ship.arena_y));
+            });
+
             // Simulate game turn
-            this.log.add(new Events.ShipChangeEvent(this.playing_ship, this.playing_ship));
+            log.add(new Events.ShipChangeEvent(this.playing_ship, this.playing_ship));
         }
 
         // Create a quick random battle, for testing purposes
