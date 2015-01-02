@@ -17,6 +17,9 @@ module SpaceTac.View {
             this.onInputOut.add(() => {
                 battleview.cursorOffShip(ship);
             });
+            this.onInputUp.add(() => {
+                battleview.cursorClicked();
+            });
         }
     }
 }

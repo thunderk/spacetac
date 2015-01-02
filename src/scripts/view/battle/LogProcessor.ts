@@ -29,9 +29,16 @@ module SpaceTac.View {
         // Process a BaseLogEvent
         processBattleEvent(event: Game.BaseLogEvent) {
             console.log("Battle event", event);
-            if (event.code == "ship_change") {
-                // Playing ship changed
-                this.view.card_playing.setShip(event.target.ship);
+
+            switch (event.code) {
+                case "ship_change":
+                    // Playing ship changed
+                    this.view.card_playing.setShip(event.target.ship);
+                    this.view.action_bar.setShip(event.target.ship);
+                    break;
+                case "move":
+                    // TODO A ship moved
+                    break;
             }
         }
 

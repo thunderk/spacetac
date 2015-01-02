@@ -14,5 +14,10 @@ module SpaceTac.Game {
             var coords = ship.getLongestMove(target.x, target.y);
             return Target.newFromLocation(coords[0], coords[1]);
         }
+
+        protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
+            ship.moveTo(target.x, target.y);
+            return true;
+        }
     }
 }

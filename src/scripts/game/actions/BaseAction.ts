@@ -37,5 +37,19 @@ module SpaceTac.Game {
         checkShipTarget(battle: Battle, ship: Ship, target: Target): Target {
             return null;
         }
+
+        // Apply an action, returning true if it was successful
+        apply(battle: Battle, ship: Ship, target: Target): boolean {
+            target = this.checkTarget(battle, ship, target);
+            if (!target) {
+                return false;
+            }
+            return this.customApply(battle, ship, target);
+        }
+
+        // Method to reimplement to apply a action
+        protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
+            return false;
+        }
     }
 }

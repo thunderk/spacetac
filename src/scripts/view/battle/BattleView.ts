@@ -23,6 +23,9 @@ module SpaceTac.View {
         // Card to display hovered ship
         card_hovered: ShipCard;
 
+        // Action bar
+        action_bar: ActionBar;
+
         // Currently hovered ship
         ship_hovered: Game.Ship;
 
@@ -44,16 +47,20 @@ module SpaceTac.View {
             var game = this.game;
             var player = this.player;
 
+            game.stage.backgroundColor = 0x000000;
+
+            // Add arena (local map)
             this.arena = new Arena(battleview);
             game.add.existing(this.arena);
 
+            // Add UI layer
             this.ui = new UIGroup(game);
             game.add.existing(this.ui);
 
+            // Add UI elements
+            this.action_bar = new ActionBar(this);
             this.card_playing = new ShipCard(this, 500, 0);
             this.card_hovered = new ShipCard(this, 500, 300);
-
-            game.stage.backgroundColor = 0x000000;
 
             // Add ship buttons to UI
             this.battle.play_order.forEach(function (ship: Game.Ship, rank: number) {
@@ -71,6 +78,8 @@ module SpaceTac.View {
 
         // Leaving the view, we unbind the battle
         shutdown() {
+            this.exitTargettingMode();
+
             if (this.log_processor) {
                 this.log_processor.destroy();
                 this.log_processor = null;
@@ -115,6 +124,16 @@ module SpaceTac.View {
         cursorInSpace(x: number, y: number): void {
             if (!this.ship_hovered) {
                 console.log("In space", x, y);
+                if (this.targetting) {
+                    this.targetting.setTargetSpace(x, y);
+                }
+            }
+        }
+
+        // Method called when cursor has been clicked (in space or on a ship)
+        cursorClicked(): void {
+            if (this.targetting) {
+                this.targetting.validate();
             }
         }
 
@@ -122,17 +141,27 @@ module SpaceTac.View {
         setShipHovered(ship: Game.Ship): void {
             this.ship_hovered = ship;
             this.card_hovered.setShip(ship);
+            if (this.targetting && ship) {
+                this.targetting.setTargetShip(ship);
+            }
         }
 
         // Enter targetting mode
         //  While in this mode, the Targetting object will receive hover and click events, and handle them
         enterTargettingMode(): Targetting {
+            if (this.targetting) {
+                this.exitTargettingMode();
+            }
+
             this.targetting = new Targetting(this);
             return this.targetting;
         }
 
         // Exit targetting mode
         exitTargettingMode(): void {
+            if (this.targetting) {
+                this.targetting.destroy();
+            }
             this.targetting = null;
         }
     }
