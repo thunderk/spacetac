@@ -11,6 +11,9 @@ module SpaceTac.View {
         // Related game action
         action: Game.BaseAction;
 
+        // Current targetting
+        private targetting: Targetting;
+
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y:number, ship: Game.Ship, action: Game.BaseAction) {
             this.battleview = bar.battleview;
@@ -29,15 +32,25 @@ module SpaceTac.View {
         processClick() {
             console.log("Action started", this.action);
 
-            var targetting = this.battleview.enterTargettingMode();
-            targetting.targetSelected.add(this.processTarget, this);
+            this.targetting = this.battleview.enterTargettingMode();
+            this.targetting.setSource(this.battleview.arena.findShipSprite(this.ship));
+            this.targetting.targetSelected.add(this.processSelection, this);
+            this.targetting.targetHovered.add(this.processHover, this);
         }
 
-        // Receive a target for the action
-        processTarget(target: Game.Target) {
+        // Called when a target is hovered
+        //  This will check the target against current action and adjust it if needed
+        processHover(target: Game.Target) {
+            target = this.action.checkTarget(this.battleview.battle, this.ship, target);
+            this.targetting.setTarget(target, false);
+        }
+
+        // Called when a target is selected
+        processSelection(target: Game.Target) {
             console.log("Action target", this.action, target);
 
             this.action.apply(this.battleview.battle, this.ship, target);
+            this.battleview.exitTargettingMode();
         }
     }
 }

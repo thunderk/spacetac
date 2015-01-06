@@ -118,7 +118,6 @@ module SpaceTac.View {
         // Method called when cursor moves in space
         cursorInSpace(x: number, y: number): void {
             if (!this.ship_hovered) {
-                console.log("In space", x, y);
                 if (this.targetting) {
                     this.targetting.setTargetSpace(x, y);
                 }
