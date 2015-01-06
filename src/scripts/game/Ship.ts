@@ -88,7 +88,7 @@ module SpaceTac.Game {
         //  actions that are not allowed/available at all on the ship
         getAvailableActions(): BaseAction[] {
             // TODO
-            return [new MoveAction()];
+            return [new MoveAction(), new EndTurnAction()];
         }
 
         // Consumes action points

@@ -15,13 +15,15 @@ module SpaceTac.View {
         private targetting: Targetting;
 
         // Create an icon for a single ship action
-        constructor(bar: ActionBar, x: number, y:number, ship: Game.Ship, action: Game.BaseAction) {
+        constructor(bar: ActionBar, x: number, y: number, ship: Game.Ship, action: Game.BaseAction) {
             this.battleview = bar.battleview;
             this.ship = ship;
             this.action = action;
 
             super(bar.game, x, y, 'action-' + action.code);
             bar.add(this);
+
+            // TODO Handle action.canBeUsed() result to enable/disable the button
 
             this.onInputUp.add(() => {
                 this.processClick();
@@ -30,12 +32,20 @@ module SpaceTac.View {
 
         // Process a click event on the action icon
         processClick() {
+            if (!this.action.canBeUsed(this.battleview.battle, this.ship)) {
+                return;
+            }
+
             console.log("Action started", this.action);
 
-            this.targetting = this.battleview.enterTargettingMode();
-            this.targetting.setSource(this.battleview.arena.findShipSprite(this.ship));
-            this.targetting.targetSelected.add(this.processSelection, this);
-            this.targetting.targetHovered.add(this.processHover, this);
+            if (this.action.needs_target) {
+                this.targetting = this.battleview.enterTargettingMode();
+                this.targetting.setSource(this.battleview.arena.findShipSprite(this.ship));
+                this.targetting.targetSelected.add(this.processSelection, this);
+                this.targetting.targetHovered.add(this.processHover, this);
+            } else {
+                this.processSelection(null);
+            }
         }
 
         // Called when a target is hovered
@@ -49,8 +59,9 @@ module SpaceTac.View {
         processSelection(target: Game.Target) {
             console.log("Action target", this.action, target);
 
-            this.action.apply(this.battleview.battle, this.ship, target);
-            this.battleview.exitTargettingMode();
+            if (this.action.apply(this.battleview.battle, this.ship, target)) {
+                this.battleview.exitTargettingMode();
+            }
         }
     }
 }

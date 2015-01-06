@@ -4,8 +4,13 @@ module SpaceTac.Game {
         // Identifier code for the type of action
         code: string;
 
-        constructor(code: string) {
+        // Boolean at true if the action needs a target
+        needs_target: boolean;
+
+        // Create the action
+        constructor(code: string, needs_target: boolean) {
             this.code = code;
+            this.needs_target = needs_target;
         }
 
         // Check basic conditions to know if the ship can use this action at all
@@ -19,10 +24,14 @@ module SpaceTac.Game {
         checkTarget(battle: Battle, ship: Ship, target: Target): Target {
             if (!this.canBeUsed(battle, ship)) {
                 return null;
-            } else if (target.ship) {
-                return this.checkShipTarget(battle, ship, target);
+            } else if (target) {
+                if (target.ship) {
+                    return this.checkShipTarget(battle, ship, target);
+                } else {
+                    return this.checkLocationTarget(battle, ship, target);
+                }
             } else {
-                return this.checkLocationTarget(battle, ship, target);
+                return null;
             }
         }
 
@@ -40,11 +49,15 @@ module SpaceTac.Game {
 
         // Apply an action, returning true if it was successful
         apply(battle: Battle, ship: Ship, target: Target): boolean {
-            target = this.checkTarget(battle, ship, target);
-            if (!target) {
+            if (this.canBeUsed(battle, ship)) {
+                target = this.checkTarget(battle, ship, target);
+                if (!target && this.needs_target) {
+                    return false;
+                }
+                return this.customApply(battle, ship, target);
+            } else {
                 return false;
             }
-            return this.customApply(battle, ship, target);
         }
 
         // Method to reimplement to apply a action

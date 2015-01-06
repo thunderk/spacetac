@@ -48,7 +48,7 @@ module SpaceTac.View {
         // Update visual effects for current targetting
         update(): void {
             if (this.battleview) {
-                if (this.source) {
+                if (this.source && this.target) {
                     this.line.clear();
                     this.line.lineStyle(3, 0xFFFFFF);
                     this.line.moveTo(this.source.x, this.source.y);
