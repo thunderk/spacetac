@@ -30,7 +30,7 @@ module SpaceTac.View {
             });
 
             // Watch mouse move to capture hovering over background
-            this.input_callback = this.game.input.addMoveCallback((pointer) => {
+            this.input_callback = this.game.input.addMoveCallback((pointer: Phaser.Pointer) => {
                 var point = new Phaser.Point();
                 if (battleview.game.input.hitTest(background, pointer, point)) {
                     battleview.cursorInSpace(point.x * background.scale.x, point.y * background.scale.y);

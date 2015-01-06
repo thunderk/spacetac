@@ -39,7 +39,7 @@ module SpaceTac.Game {
     describe("BattleLog", function () {
         it("forwards events to subscribers, until unsubscribe", function () {
             var log = new BattleLog();
-            var received = [];
+            var received: BaseLogEvent[] = [];
             var fake = new FakeEvent();
 
             var sub = log.subscribe(function (event) {
@@ -66,7 +66,7 @@ module SpaceTac.Game {
             checkEvent(battle.log.events[0], battle.play_order[0], "ship_change", battle.play_order[1]);
         });
 
-        it("can receive simulated initial state events", function (){
+        it("can receive simulated initial state events", function () {
             var battle = Battle.newQuickRandom();
 
             expect(battle.log.events.length).toBe(0);

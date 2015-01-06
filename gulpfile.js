@@ -36,6 +36,7 @@ gulp.task('copy', function () {
 var tsProject = ts.createProject({
   declarationFiles: true,
   noExternalResolve: true,
+  noImplicitAny: true,
   sortOutput: true,
   sourceRoot: '../scripts'
 });

@@ -33,7 +33,7 @@ module SpaceTac.View {
         log_processor: LogProcessor;
 
         // Init the view, binding it to a specific battle
-        init(player, battle) {
+        init(player: Game.Player, battle: Game.Battle) {
             this.player = player;
             this.battle = battle;
             this.targetting = null;

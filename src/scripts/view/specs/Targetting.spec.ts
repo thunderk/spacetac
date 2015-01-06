@@ -5,8 +5,8 @@ module SpaceTac.View {
         it("broadcasts hovering and selection events", () => {
             var targetting = new Targetting(null);
 
-            var hovered = [];
-            var selected = [];
+            var hovered: Game.Target[] = [];
+            var selected: Game.Target[] = [];
             targetting.targetHovered.add((target: Game.Target) => {
                 hovered.push(target);
             });
