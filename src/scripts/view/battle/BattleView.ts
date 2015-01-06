@@ -67,11 +67,6 @@ module SpaceTac.View {
                 new ShipListItem(battleview, 0, rank * 50, ship, ship.getPlayer() === player);
             });
 
-            // Add ship sprites to arena
-            this.battle.play_order.forEach(function (ship: Game.Ship) {
-                new ShipArenaSprite(battleview, ship);
-            });
-
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
         }

@@ -37,7 +37,11 @@ module SpaceTac.View {
                     this.view.action_bar.setShip(event.target.ship);
                     break;
                 case "move":
-                    // TODO A ship moved
+                    var sprite = this.view.arena.findShipSprite(event.ship);
+                    if (sprite) {
+                        sprite.x = event.target.x;
+                        sprite.y = event.target.y;
+                    }
                     break;
             }
         }

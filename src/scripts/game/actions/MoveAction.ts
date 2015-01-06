@@ -17,6 +17,7 @@ module SpaceTac.Game {
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
             ship.moveTo(target.x, target.y);
+            battle.log.add(new MoveEvent(ship, target.x, target.y));
             return true;
         }
     }

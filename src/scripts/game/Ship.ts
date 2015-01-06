@@ -46,6 +46,10 @@ module SpaceTac.Game {
             this.fleet = fleet;
             this.name = name;
             this.initiative_level = 1;
+            this.ap_current = 10;
+            this.ap_maximal = 20;
+            this.ap_recover = 5;
+            this.movement_cost = 0.1;
 
             if (fleet) {
                 fleet.addShip(this);
