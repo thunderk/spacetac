@@ -6,6 +6,8 @@
 /venv
 /dist
 /eggs
+/coverage
+/core
 /node_modules
 /src/vendor
 
