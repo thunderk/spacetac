@@ -1,6 +1,7 @@
 module SpaceTac.View {
-    export class Main extends Phaser.State {
+    "use strict";
 
+    export class Main extends Phaser.State {
         create() {
             // Switch to a test battle
             var battle = Game.Battle.newQuickRandom();

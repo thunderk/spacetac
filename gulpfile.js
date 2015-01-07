@@ -7,6 +7,7 @@ var gulp = require('gulp'),
     processhtml = require('gulp-processhtml'),
     connect = require('gulp-connect'),
     karma = require('gulp-karma'),
+    tslint = require('gulp-tslint'),
     open = require('gulp-open'),
     del = require('del'),
     uglify = require('gulp-uglifyjs'),
@@ -67,6 +68,14 @@ gulp.task('tests', ['typescript'], function () {
         .pipe(karma({configFile: 'karma.conf.js', action: 'run'}))
 });
 
+gulp.task('tslint', function () {
+    return gulp.src(['src/scripts/game/**/*.ts', 'src/scripts/view/**/*.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('verbose', {
+          emitError: false
+        }));
+});
+
 gulp.task('processhtml', function () {
     return gulp.src(paths.index)
         .pipe(processhtml())
@@ -79,7 +88,7 @@ gulp.task('reload', ['typescript'], function () {
 });
 
 gulp.task('watch', function () {
-    gulp.watch(paths.ts, ['typescript', 'tests', 'reload']);
+    gulp.watch(paths.ts, ['typescript', 'tslint', 'tests', 'reload']);
     gulp.watch(paths.less, ['less', 'reload']);
     gulp.watch(paths.index, ['reload']);
 });
@@ -115,8 +124,8 @@ gulp.task('deploy', function () {
 });
 
 gulp.task('default', function () {
-    runSequence('clean', ['typescript', 'less', 'connect', 'watch'], ['tests', 'open']);
+    runSequence('clean', ['typescript', 'tslint', 'less', 'connect', 'watch'], ['tests', 'open']);
 });
 gulp.task('build', function () {
-    return runSequence('clean', ['typescript', 'less', 'copy', 'minifyJs', 'minifyCss', 'processhtml']);
+    return runSequence('clean', ['typescript', 'tslint', 'less', 'copy', 'minifyJs', 'minifyCss', 'processhtml']);
 });

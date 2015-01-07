@@ -1,4 +1,6 @@
 module SpaceTac.Game {
+    "use strict";
+
     // Action to end the ship's turn
     export class EndTurnAction extends BaseAction {
         constructor() {

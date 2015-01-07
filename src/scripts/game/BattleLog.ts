@@ -1,4 +1,6 @@
 module SpaceTac.Game {
+    "use strict";
+
     // Log of a battle
     //  This keeps track of all events in a battle
     //  It also allows to register a callback to receive these events
@@ -19,7 +21,7 @@ module SpaceTac.Game {
         add(event: BaseLogEvent) {
             this.events.push(event);
 
-            this.subscribers.forEach((subscriber) => {
+            this.subscribers.forEach((subscriber: Function) => {
                 subscriber(event);
             });
         }

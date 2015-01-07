@@ -1,4 +1,6 @@
 module SpaceTac.Game {
+    "use strict";
+
     // A single ship in a Fleet
     export class Ship {
         // Fleet this ship is a member of

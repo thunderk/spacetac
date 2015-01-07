@@ -1,6 +1,8 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
 module SpaceTac.Game.Specs {
+    "use strict";
+
     describe("EndTurnAction", () => {
         it("can't be applied to non-playing ship", () => {
             var battle = Battle.newQuickRandom();

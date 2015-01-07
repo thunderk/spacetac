@@ -1,6 +1,8 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
 module SpaceTac.Game {
+    "use strict";
+
     describe("Battle", function () {
         it("defines play order by initiative throws", function () {
             var fleet1 = new Fleet(null);
@@ -27,7 +29,7 @@ module SpaceTac.Game {
             expect(battle.play_order).toEqual([ship1, ship4, ship5, ship3, ship2]);
         });
 
-        it("places ships on lines, facing the arena center", function(){
+        it("places ships on lines, facing the arena center", function () {
             var fleet1 = new Fleet(null);
             var fleet2 = new Fleet(null);
 
@@ -61,7 +63,7 @@ module SpaceTac.Game {
             expect(ship5.arena_angle).toBeCloseTo(Math.PI, 0.0001);
         });
 
-        it("advances to next ship in play order", function(){
+        it("advances to next ship in play order", function () {
             var fleet1 = new Fleet(null);
             var fleet2 = new Fleet(null);
 

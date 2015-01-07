@@ -1,4 +1,6 @@
 module SpaceTac.Game {
+    "use strict";
+
     // Target for a capability
     //  This could be a location in space, or a ship
     export class Target {

@@ -1,4 +1,6 @@
 module SpaceTac.Game {
+    "use strict";
+
     // A fleet of ships
     export class Fleet {
         // Fleet owner

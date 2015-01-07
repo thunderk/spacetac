@@ -1,4 +1,6 @@
 module SpaceTac.Game {
+    "use strict";
+
     // One player (human or IA)
     export class Player {
         // Current fleet

@@ -1,4 +1,6 @@
 module SpaceTac.View {
+    "use strict";
+
     // Card to display detailed information about a ship
     export class ShipCard extends Phaser.Sprite {
         // Displayed ship

@@ -1,4 +1,6 @@
 module SpaceTac.View {
+    "use strict";
+
     // Ship sprite in the arena (BattleView)
     export class ShipArenaSprite extends Phaser.Button {
         // Link to displayed ship

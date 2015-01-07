@@ -1,10 +1,12 @@
 module SpaceTac.View {
+    "use strict";
+
     export class Preload extends Phaser.State {
         private preloadBar: Phaser.Sprite;
 
         preload() {
             // Add preload sprite
-            this.preloadBar = this.add.sprite(290, 290, 'preload-bar');
+            this.preloadBar = this.add.sprite(290, 290, "preload-bar");
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load assets
@@ -15,7 +17,7 @@ module SpaceTac.View {
         }
 
         create() {
-            this.game.state.start('main');
+            this.game.state.start("main");
         }
     }
 }

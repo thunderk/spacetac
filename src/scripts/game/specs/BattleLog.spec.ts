@@ -1,6 +1,7 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
 module SpaceTac.Game {
+    "use strict";
 
     // Check a single game log event
     function checkEvent(got: BaseLogEvent, ship: Ship, code: string,
@@ -42,7 +43,7 @@ module SpaceTac.Game {
             var received: BaseLogEvent[] = [];
             var fake = new FakeEvent();
 
-            var sub = log.subscribe(function (event) {
+            var sub = log.subscribe(function (event: BaseLogEvent) {
                 received.push(event);
             });
 
@@ -75,7 +76,8 @@ module SpaceTac.Game {
 
             expect(battle.log.events.length).toBe(9);
             for (var i = 0; i < 8; i++) {
-                checkEvent(battle.log.events[i], battle.play_order[i], "move", null, battle.play_order[i].arena_x, battle.play_order[i].arena_y);
+                checkEvent(battle.log.events[i], battle.play_order[i], "move", null,
+                    battle.play_order[i].arena_x, battle.play_order[i].arena_y);
             }
             checkEvent(battle.log.events[8], battle.playing_ship, "ship_change", battle.playing_ship);
         });

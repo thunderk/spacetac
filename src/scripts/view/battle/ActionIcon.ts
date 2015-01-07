@@ -1,4 +1,6 @@
 module SpaceTac.View {
+    "use strict";
+
     // Icon to activate a ship capability (move, fire...)
     export class ActionIcon extends Phaser.Button {
 
@@ -20,7 +22,7 @@ module SpaceTac.View {
             this.ship = ship;
             this.action = action;
 
-            super(bar.game, x, y, 'action-' + action.code);
+            super(bar.game, x, y, "action-" + action.code);
             bar.add(this);
 
             // TODO Handle action.canBeUsed() result to enable/disable the button

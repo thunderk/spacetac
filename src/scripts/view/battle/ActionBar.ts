@@ -1,4 +1,6 @@
 module SpaceTac.View {
+    "use strict";
+
     // Bar with all available action icons displayed
     export class ActionBar extends Phaser.Group {
         // Link to the parent battleview
@@ -27,7 +29,7 @@ module SpaceTac.View {
 
         // Clear the action icons
         clearAll(): void {
-            this.actions.forEach((action) => {
+            this.actions.forEach((action: ActionIcon) => {
                 action.destroy();
             });
             this.actions = [];
@@ -46,7 +48,7 @@ module SpaceTac.View {
             this.clearAll();
 
             var actions = ship.getAvailableActions();
-            actions.forEach((action) => {
+            actions.forEach((action: Game.BaseAction) => {
                 action_bar.addAction(ship, action);
             });
         }

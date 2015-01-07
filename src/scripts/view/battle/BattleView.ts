@@ -1,4 +1,6 @@
 module SpaceTac.View {
+    "use strict";
+
     // Interactive view of a Battle
     export class BattleView extends Phaser.State {
 

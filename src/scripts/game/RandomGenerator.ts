@@ -1,4 +1,6 @@
 module SpaceTac.Game {
+    "use strict";
+
     // Random generator, used in all throws
     export class RandomGenerator {
         // Array of next values, empty for a correct generator
@@ -13,8 +15,7 @@ module SpaceTac.Game {
         throw(level: number): number {
             if (this.fake_values.length > 0) {
                 return this.fake_values.shift() * level;
-            }
-            else {
+            } else {
                 return Math.random() * level;
             }
         }

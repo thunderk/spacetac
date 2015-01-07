@@ -1,4 +1,6 @@
 module SpaceTac.View {
+    "use strict";
+
     // Processor of battle log events
     //  This will process incoming battle events, and update the battleview accordingly
     export class LogProcessor {
@@ -20,7 +22,7 @@ module SpaceTac.View {
             this.battle = view.battle;
             this.log = view.battle.log;
 
-            this.subscription = this.log.subscribe((event) => {
+            this.subscription = this.log.subscribe((event: Game.BaseLogEvent) => {
                 this.processBattleEvent(event);
             });
             this.battle.injectInitialEvents();

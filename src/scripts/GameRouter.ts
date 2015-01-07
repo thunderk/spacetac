@@ -1,6 +1,8 @@
 /// <reference path="definitions/phaser.d.ts"/>
 
 module SpaceTac {
+    "use strict";
+
     // Router between game views
     export class GameRouter extends Phaser.Game {
         constructor() {

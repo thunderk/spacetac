@@ -1,16 +1,9 @@
 module SpaceTac.View {
+    "use strict";
+
     // Targetting system
     //  Allows to pick a target for an action
     export class Targetting {
-        // Access to the parent battle view
-        private battleview: BattleView;
-
-        // Source of the targetting
-        private source: PIXI.Sprite;
-
-        // Current target
-        private target: Game.Target;
-
         // Signal to receive hovering events
         targetHovered: Phaser.Signal;
 
@@ -19,6 +12,15 @@ module SpaceTac.View {
 
         // Target visual line
         line: Phaser.Graphics;
+
+        // Access to the parent battle view
+        private battleview: BattleView;
+
+        // Source of the targetting
+        private source: PIXI.Sprite;
+
+        // Current target
+        private target: Game.Target;
 
         // Create a default targetting mode
         constructor(battleview: BattleView) {
@@ -66,7 +68,7 @@ module SpaceTac.View {
         }
 
         // Set a target from a target object
-        setTarget(target: Game.Target, dispatch: boolean = true):void {
+        setTarget(target: Game.Target, dispatch: boolean = true): void {
             this.target = target;
             if (dispatch) {
                 this.targetHovered.dispatch(this.target);

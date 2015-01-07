@@ -1,8 +1,10 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
 module SpaceTac.Game {
+    "use strict";
+
     describe("MoveAction", function () {
-        it("checks movement against remaining AP", function(){
+        it("checks movement against remaining AP", function () {
             var ship = new Ship(null, "Test");
             ship.ap_current = 6;
             ship.movement_cost = 2;
@@ -13,15 +15,15 @@ module SpaceTac.Game {
             var result = action.checkTarget(null, ship, Target.newFromLocation(0, 2));
             expect(result).toEqual(Target.newFromLocation(0, 2));
 
-            var result = action.checkTarget(null, ship, Target.newFromLocation(0, 8));
+            result = action.checkTarget(null, ship, Target.newFromLocation(0, 8));
             expect(result).toEqual(Target.newFromLocation(0, 3));
 
             ship.ap_current = 0;
-            var result = action.checkTarget(null, ship, Target.newFromLocation(0, 8));
+            result = action.checkTarget(null, ship, Target.newFromLocation(0, 8));
             expect(result).toBeNull();
         });
 
-        it("forbids targetting a ship", function(){
+        it("forbids targetting a ship", function () {
             var ship1 = new Ship(null, "Test1");
             var ship2 = new Ship(null, "Test2");
             var action = new MoveAction();
@@ -29,11 +31,11 @@ module SpaceTac.Game {
             var result = action.checkTarget(null, ship1, Target.newFromShip(ship1));
             expect(result).toBeNull();
 
-            var result = action.checkTarget(null, ship1, Target.newFromShip(ship2));
+            result = action.checkTarget(null, ship1, Target.newFromShip(ship2));
             expect(result).toBeNull();
         });
 
-        it("applies to ship location, battle log and AP", function(){
+        it("applies to ship location, battle log and AP", function () {
             var battle = new Battle(null, null);
             var ship = new Ship(null, "Test");
             ship.ap_current = 5;
@@ -48,7 +50,7 @@ module SpaceTac.Game {
             expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
             expect(ship.ap_current).toEqual(0);
 
-            var result = action.apply(battle, ship, Target.newFromLocation(10, 10));
+            result = action.apply(battle, ship, Target.newFromLocation(10, 10));
             expect(result).toBe(false);
             expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
             expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);

@@ -1,4 +1,6 @@
 module SpaceTac.View {
+    "use strict";
+
     // Graphical representation of a battle
     //  This is the area in the BattleView that will display ships with their real positions
     export class Arena extends Phaser.Group {
@@ -20,7 +22,7 @@ module SpaceTac.View {
 
             super(battleview.game);
 
-            var background = new Phaser.Button(battleview.game, 0, 0, 'ui-arena-background');
+            var background = new Phaser.Button(battleview.game, 0, 0, "ui-arena-background");
             background.scale.set(20, 10);
             this.background = background;
 

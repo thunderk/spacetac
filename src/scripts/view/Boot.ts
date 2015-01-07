@@ -1,7 +1,9 @@
 module SpaceTac.View {
+    "use strict";
+
     export class Boot extends Phaser.State {
         preload() {
-            this.load.image('preload-bar', 'assets/images/preloader.gif');
+            this.load.image("preload-bar", "assets/images/preloader.gif");
         }
 
         create() {
@@ -10,7 +12,7 @@ module SpaceTac.View {
             this.input.maxPointers = 1;
             this.stage.disableVisibilityChange = true;
 
-            this.game.state.start('preload');
+            this.game.state.start("preload");
         }
     }
 }

@@ -1,6 +1,8 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
 module SpaceTac.View {
+    "use strict";
+
     describe("Targetting", () => {
         it("broadcasts hovering and selection events", () => {
             var targetting = new Targetting(null);
