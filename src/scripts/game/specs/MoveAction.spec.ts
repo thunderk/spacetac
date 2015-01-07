@@ -32,5 +32,34 @@ module SpaceTac.Game {
             var result = action.checkTarget(null, ship1, Target.newFromShip(ship2));
             expect(result).toBeNull();
         });
+
+        it("applies to ship location, battle log and AP", function(){
+            var battle = new Battle(null, null);
+            var ship = new Ship(null, "Test");
+            ship.ap_current = 5;
+            ship.movement_cost = 1;
+            ship.arena_x = 0;
+            ship.arena_y = 0;
+            var action = new MoveAction();
+
+            var result = action.apply(battle, ship, Target.newFromLocation(10, 10));
+            expect(result).toBe(true);
+            expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
+            expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
+            expect(ship.ap_current).toEqual(0);
+
+            var result = action.apply(battle, ship, Target.newFromLocation(10, 10));
+            expect(result).toBe(false);
+            expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
+            expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
+            expect(ship.ap_current).toEqual(0);
+
+            expect(battle.log.events.length).toBe(1);
+            expect(battle.log.events[0].code).toEqual("move");
+            expect(battle.log.events[0].ship).toBe(ship);
+            expect(battle.log.events[0].target.ship).toBeNull();
+            expect(battle.log.events[0].target.x).toBeCloseTo(3.535533, 0.00001);
+            expect(battle.log.events[0].target.y).toBeCloseTo(3.535533, 0.00001);
+        });
     });
 }
