@@ -14,6 +14,8 @@ module SpaceTac.View {
             this.load.image("ui-shiplist-enemy", "assets/images/battle/shiplist-enemy.png");
             this.load.image("ui-arena-background", "assets/images/battle/arena-background.png");
             this.load.image("arena-ship", "assets/images/battle/ship01.png");
+            this.load.image("ui-bar-standard-background", "assets/images/ui/bars/standard-background.png");
+            this.load.image("ui-bar-standard-foreground", "assets/images/ui/bars/standard-foreground.png");
         }
 
         create() {

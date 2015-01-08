@@ -69,6 +69,11 @@ module SpaceTac.View {
                 new ShipListItem(battleview, 0, rank * 50, ship, ship.getPlayer() === player);
             });
 
+            // Add a test progress bar
+            var bar = ValueBar.newStandard(game, 300, 300);
+            bar.setValue(50, 100);
+            this.ui.add(bar);
+
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
         }

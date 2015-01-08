@@ -1,6 +1,6 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
-module SpaceTac.View {
+module SpaceTac.View.Specs {
     "use strict";
 
     describe("Targetting", () => {
