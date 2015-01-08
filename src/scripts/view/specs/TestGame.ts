@@ -15,6 +15,7 @@ module SpaceTac.View.Specs {
 
         create() {
             this.testfunc(this.game);
+            this.game.destroy();
             this.donefunc();
         }
     }
