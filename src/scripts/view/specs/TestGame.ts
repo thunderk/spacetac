@@ -18,6 +18,8 @@ module SpaceTac.View.Specs {
                 orig_create.apply(state);
                 func(game, state);
                 done();
+                game.state.clearCurrentState();
+                // TODO Find a way to game.destroy (it causes an error currently)
             };
 
             game.state.add("test", state);

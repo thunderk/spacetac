@@ -29,8 +29,8 @@ module SpaceTac.View.Specs {
             expect(result).toBe(battleview.targetting);
 
             // Collect targetting events
-            var hovered = [];
-            var clicked = [];
+            var hovered: Game.Target[] = [];
+            var clicked: Game.Target[] = [];
             result.targetHovered.add((target: Game.Target) => {
                 hovered.push(target);
             });
