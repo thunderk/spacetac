@@ -4,6 +4,9 @@ module SpaceTac.View {
     // Targetting system
     //  Allows to pick a target for an action
     export class Targetting {
+        // Current target
+        target: Game.Target;
+
         // Signal to receive hovering events
         targetHovered: Phaser.Signal;
 
@@ -18,9 +21,6 @@ module SpaceTac.View {
 
         // Source of the targetting
         private source: PIXI.Sprite;
-
-        // Current target
-        private target: Game.Target;
 
         // Create a default targetting mode
         constructor(battleview: BattleView) {

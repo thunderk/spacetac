@@ -142,8 +142,12 @@ module SpaceTac.View {
         setShipHovered(ship: Game.Ship): void {
             this.ship_hovered = ship;
             this.card_hovered.setShip(ship);
-            if (this.targetting && ship) {
-                this.targetting.setTargetShip(ship);
+            if (this.targetting) {
+                if (ship) {
+                    this.targetting.setTargetShip(ship);
+                } else {
+                    this.targetting.unsetTarget();
+                }
             }
         }
 

@@ -1,4 +1,5 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
+/// <reference path="../events/BaseLogEvent.ts"/>
 
 module SpaceTac.Game {
     "use strict";
