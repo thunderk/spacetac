@@ -41,8 +41,9 @@ module SpaceTac.View {
                 case "move":
                     var sprite = this.view.arena.findShipSprite(event.ship);
                     if (sprite) {
-                        sprite.x = event.target.x;
-                        sprite.y = event.target.y;
+                        var tween = this.view.game.tweens.create(sprite);
+                        tween.to({x: event.target.x, y: event.target.y});
+                        tween.start();
                     }
                     break;
             }

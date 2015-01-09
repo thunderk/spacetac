@@ -14,11 +14,13 @@ module SpaceTac.View.Specs {
             }
 
             var orig_create = state.create;
-            state.create = function() {
+            state.create = function () {
                 orig_create.apply(state);
                 func(game, state);
                 done();
-                setTimeout(() => {game.destroy();}, 1000);
+                setTimeout(() => {
+                    game.destroy();
+                }, 1000);
             };
 
             game.state.add("test", state);
