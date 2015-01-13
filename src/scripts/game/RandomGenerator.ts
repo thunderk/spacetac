@@ -12,7 +12,7 @@ module SpaceTac.Game {
         }
 
         // Generate a value, based on an attribute level
-        throw(level: number): number {
+        throw(level: number = 1): number {
             if (this.fake_values.length > 0) {
                 return this.fake_values.shift() * level;
             } else {
