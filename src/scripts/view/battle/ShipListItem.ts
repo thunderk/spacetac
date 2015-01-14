@@ -7,18 +7,17 @@ module SpaceTac.View {
         private ship: Game.Ship;
 
         // Create a ship button for the battle ship list
-        constructor(battleview: BattleView, x: number, y: number, ship: Game.Ship, owned: boolean) {
+        constructor(list: ShipList, x: number, y: number, ship: Game.Ship, owned: boolean) {
             this.ship = ship;
 
-            super(battleview.game, x, y, owned ? "ui-shiplist-own" : "ui-shiplist-enemy");
-            battleview.ui.add(this);
+            super(list.battleview.game, x, y, owned ? "ui-shiplist-own" : "ui-shiplist-enemy");
 
             this.input.useHandCursor = true;
             this.onInputOver.add(() => {
-                battleview.cursorOnShip(ship);
+                list.battleview.cursorOnShip(ship);
             });
             this.onInputOut.add(() => {
-                battleview.cursorOffShip(ship);
+                list.battleview.cursorOffShip(ship);
             });
         }
     }

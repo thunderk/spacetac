@@ -25,6 +25,9 @@ module SpaceTac.View {
         // Card to display hovered ship
         card_hovered: ShipCard;
 
+        // Ship list
+        ship_list: ShipList;
+
         // Action bar
         action_bar: ActionBar;
 
@@ -47,7 +50,6 @@ module SpaceTac.View {
         create() {
             var battleview = this;
             var game = this.game;
-            var player = this.player;
 
             game.stage.backgroundColor = 0x000000;
 
@@ -61,13 +63,9 @@ module SpaceTac.View {
 
             // Add UI elements
             this.action_bar = new ActionBar(this);
+            this.ship_list = new ShipList(this);
             this.card_playing = new ShipCard(this, 500, 0);
             this.card_hovered = new ShipCard(this, 500, 300);
-
-            // Add ship buttons to UI
-            this.battle.play_order.forEach(function (ship: Game.Ship, rank: number) {
-                new ShipListItem(battleview, 0, rank * 50, ship, ship.getPlayer() === player);
-            });
 
             // Add a test progress bar
             var bar = ValueBar.newStandard(game, 300, 300);

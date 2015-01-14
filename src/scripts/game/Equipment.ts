@@ -23,8 +23,5 @@ module SpaceTac.Game {
 
         // Level requirement
         min_level: number;
-
-        constructor() {
-        }
     }
 }
