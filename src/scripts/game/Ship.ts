@@ -43,6 +43,9 @@ module SpaceTac.Game {
         // Number of action points used to make a 1.0 move
         movement_cost: number;
 
+        // List of slots, able to contain equipment
+        slots: Slot[];
+
         // Create a new ship inside a fleet
         constructor(fleet: Fleet, name: string) {
             this.fleet = fleet;
@@ -52,6 +55,7 @@ module SpaceTac.Game {
             this.ap_maximal = 20;
             this.ap_recover = 5;
             this.movement_cost = 0.1;
+            this.slots = [];
 
             if (fleet) {
                 fleet.addShip(this);

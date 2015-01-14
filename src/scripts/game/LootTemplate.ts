@@ -1,26 +1,6 @@
 module SpaceTac.Game {
     "use strict";
 
-    // Range of values
-    export class Range {
-        // Minimal value
-        private min: number;
-
-        // Maximal value
-        private max: number;
-
-        // Create a range of values
-        constructor(min: number, max: number) {
-            this.min = min;
-            this.max = max;
-        }
-
-        // Get a proportional value (give 0.0-1.0 value to obtain a value in range)
-        getProportional(cursor: number) :number {
-            return (this.max - this.min) * cursor + this.min;
-        }
-    }
-
     // Template used to generate a loot equipment
     export class LootTemplate {
         // Type of slot this equipment will fit in
@@ -39,8 +19,8 @@ module SpaceTac.Game {
         // Effect area's radius
         blast: Range;
 
-        // Duration
-        duration: Range;
+        // Duration, in number of turns
+        duration: IntegerRange;
 
         // Effects
 
@@ -48,7 +28,7 @@ module SpaceTac.Game {
         ap_usage: Range;
 
         // Level requirement
-        min_level: Range;
+        min_level: IntegerRange;
 
         // Create a loot template
         constructor(slot: SlotType, name: string) {
@@ -56,14 +36,14 @@ module SpaceTac.Game {
             this.name = name;
             this.distance = new Range(0, 0);
             this.blast = new Range(0, 0);
-            this.duration = new Range(0, 0);
+            this.duration = new IntegerRange(0, 0);
             this.ap_usage = new Range(0, 0);
-            this.min_level = new Range(0, 0);
+            this.min_level = new IntegerRange(0, 0);
         }
 
         // Generate a random equipment with this template
-        generate(): Equipment {
-            var random = new RandomGenerator();
+        generate(random: RandomGenerator = null): Equipment {
+            random = random || new RandomGenerator();
             var power = random.throw();
             return this.generateFixed(power);
         }
@@ -75,13 +55,50 @@ module SpaceTac.Game {
             result.slot = this.slot;
             result.name = this.name;
 
-            result.distance = Math.floor(this.distance.getProportional(power));
-            result.blast = Math.floor(this.blast.getProportional(power));
-            result.duration = Math.floor(this.duration.getProportional(power));
-            result.ap_usage = Math.floor(this.ap_usage.getProportional(power));
-            result.min_level = Math.floor(this.min_level.getProportional(power));
+            result.distance = this.distance.getProportional(power);
+            result.blast = this.blast.getProportional(power);
+            result.duration = this.duration.getProportional(power);
+            result.ap_usage = this.ap_usage.getProportional(power);
+            result.min_level = this.min_level.getProportional(power);
 
             return result;
+        }
+
+        // Find the power range that will result in the level range
+        getPowerRangeForLevel(level: IntegerRange): Range {
+            if (level.min > this.min_level.max || level.max < this.min_level.min) {
+                return null;
+            } else {
+                var min: number;
+                var max: number;
+
+                if (level.min <= this.min_level.min) {
+                    min = 0.0;
+                } else {
+                    min = this.min_level.getReverseProportional(level.min);
+                }
+                if (level.max >= this.min_level.max) {
+                    max = 1.0;
+                } else {
+                    max = this.min_level.getReverseProportional(level.max);
+                }
+
+                return new Range(min, max);
+            }
+        }
+
+        // Generate an equipment that will have its level requirement in the given range
+        //  May return null if level range is not compatible with the template
+        generateInLevelRange(level: IntegerRange, random: RandomGenerator = null): Equipment {
+            random = random || new RandomGenerator();
+
+            var random_range = this.getPowerRangeForLevel(level);
+            if (random_range) {
+                var power = random.throw() * (random_range.max - random_range.min) + random_range.min;
+                return this.generateFixed(power);
+            } else {
+                return null;
+            }
         }
     }
 }
