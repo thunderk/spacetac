@@ -24,10 +24,11 @@ module SpaceTac.View.Specs {
             };
 
             game.state.add("test", state);
-            stateargs.unshift(true);
-            stateargs.unshift(true);
-            stateargs.unshift("test");
-            game.state.start.apply(game.state, stateargs);
+            var args = stateargs.slice(0);
+            args.unshift(true);
+            args.unshift(true);
+            args.unshift("test");
+            game.state.start.apply(game.state, args);
         });
     }
 }

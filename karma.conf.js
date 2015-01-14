@@ -4,12 +4,13 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'src/vendor/jasmine/lib/jasmine-core/jasmine.js',
-            'src/vendor/jasmine/lib/jasmine-core/jasmine-html.js',
-            'src/vendor/jasmine/lib/jasmine-core/boot.js',
             'src/vendor/phaser-official/build/phaser.js',
             'build/main.js'
         ],
+        client: {
+            captureConsole: false
+        },
+        logLevel: config.LOG_WARN,
         browsers: ['PhantomJS'],
         singleRun: true,
         reporters: ['progress', 'coverage'],
