@@ -80,7 +80,7 @@ module SpaceTac.Game {
                 if (level.max >= this.min_level.max) {
                     max = 1.0;
                 } else {
-                    max = this.min_level.getReverseProportional(level.max);
+                    max = this.min_level.getReverseProportional(level.max + 1);
                 }
 
                 return new Range(min, max);
@@ -93,6 +93,7 @@ module SpaceTac.Game {
             random = random || new RandomGenerator();
 
             var random_range = this.getPowerRangeForLevel(level);
+            console.log(level, random_range);
             if (random_range) {
                 var power = random.throw() * (random_range.max - random_range.min) + random_range.min;
                 return this.generateFixed(power);
