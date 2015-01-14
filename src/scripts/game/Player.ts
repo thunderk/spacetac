@@ -14,11 +14,24 @@ module SpaceTac.Game {
         // Create a quick random player, with a fleet, for testing purposes
         static newQuickRandom(name: String): Player {
             var player = new Player();
+            var ship: Ship;
+            var ship_generator = new ShipGenerator();
 
-            new Ship(player.fleet, name + "'s First");
-            new Ship(player.fleet, name + "'s Second");
-            new Ship(player.fleet, name + "'s Third");
-            new Ship(player.fleet, name + "'s Fourth");
+            ship = ship_generator.generate(1);
+            ship.name = name + "'s First";
+            player.fleet.addShip(ship);
+
+            ship = ship_generator.generate(1);
+            ship.name = name + "'s Second";
+            player.fleet.addShip(ship);
+
+            ship = ship_generator.generate(1);
+            ship.name = name + "'s Third";
+            player.fleet.addShip(ship);
+
+            ship = ship_generator.generate(1);
+            ship.name = name + "'s Fourth";
+            player.fleet.addShip(ship);
 
             return player;
         }

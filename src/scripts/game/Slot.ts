@@ -11,8 +11,20 @@ module SpaceTac.Game {
         // Type of slot
         type: SlotType;
 
-        // Currently attached equipment
+        // Currently attached equipment, null if none
         attached: Equipment;
+
+        // Create an empty slot for a ship
+        constructor(ship: Ship, type: SlotType) {
+            this.ship = ship;
+            this.type = type;
+            this.attached = null;
+        }
+
+        // Attach an equipment in this slot
+        attach(equipment: Equipment): void {
+            this.attached = equipment;
+        }
     }
 
 }

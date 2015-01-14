@@ -11,16 +11,24 @@ module SpaceTac.Game {
 
         // Construct a basic loot generator
         //  The list of templates will be automatically populated
-        constructor() {
+        constructor(random: RandomGenerator = null) {
             this.templates = [];
-            this.random = new RandomGenerator();
+            this.random = random || new RandomGenerator();
 
             this.populate();
         }
 
         // Fill the list of templates
         populate(): void {
-
+            var templates: LootTemplate[] = [];
+            for (var template_name in SpaceTac.Game.Equipments) {
+                if (template_name) {
+                    var template_class = SpaceTac.Game.Equipments[template_name];
+                    var template: LootTemplate = new template_class();
+                    templates.push(template);
+                }
+            }
+            this.templates = templates;
         }
 
         // Generate a random equipment

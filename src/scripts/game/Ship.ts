@@ -47,7 +47,7 @@ module SpaceTac.Game {
         slots: Slot[];
 
         // Create a new ship inside a fleet
-        constructor(fleet: Fleet, name: string) {
+        constructor(fleet: Fleet = null, name: string = null) {
             this.fleet = fleet;
             this.name = name;
             this.initiative_level = 1;
@@ -130,6 +130,13 @@ module SpaceTac.Game {
 
             this.setArenaPosition(this.arena_x + dx, this.arena_y + dy);
             this.useActionPoints(cost);
+        }
+
+        // Add an empty equipment slot of the given type
+        addSlot(type: SlotType): Slot {
+            var result = new Slot(this, type);
+            this.slots.push(result);
+            return result;
         }
     }
 }
