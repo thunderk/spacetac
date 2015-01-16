@@ -140,9 +140,9 @@ def bootstrap_buildout(venv_dir, bootstrap_path):
     else:
         fp.close()
 
-    print("Bootstrapping Buildout using: %s %s..." % (
+    print("Bootstrapping Buildout using: %s %s install..." % (
         python_bin, bootstrap_path))
-    subprocess.check_call([python_bin, bootstrap_path])
+    subprocess.check_call([python_bin, bootstrap_path, "install"])
 
 
 if len(sys.argv) == 2:
@@ -159,4 +159,3 @@ venv_dir = create_virtualenv(destination)
 bootstrap_path = download_bootstrap(destination)
 bootstrap_buildout(venv_dir, bootstrap_path)
 
-print("You can know run ./bin/buildout from directory %s" % real_destination)
