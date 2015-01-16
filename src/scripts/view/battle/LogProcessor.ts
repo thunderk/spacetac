@@ -41,8 +41,9 @@ module SpaceTac.View {
                 case "move":
                     var sprite = this.view.arena.findShipSprite(event.ship);
                     if (sprite) {
+                        var angle = Math.atan2(event.target.y - sprite.y, event.target.x - sprite.x);
                         var tween = this.view.game.tweens.create(sprite);
-                        tween.to({x: event.target.x, y: event.target.y});
+                        tween.to({x: event.target.x, y: event.target.y, rotation: angle});
                         tween.start();
                     }
                     break;
