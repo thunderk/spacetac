@@ -61,6 +61,8 @@ module SpaceTac.Game {
             result.ap_usage = this.ap_usage.getProportional(power);
             result.min_level = this.min_level.getProportional(power);
 
+            result.action = this.getActionForEquipment(result);
+
             return result;
         }
 
@@ -99,6 +101,11 @@ module SpaceTac.Game {
             } else {
                 return null;
             }
+        }
+
+        // Method to reimplement to assign an action to a generated equipment
+        protected getActionForEquipment(equipment: Equipment): BaseAction {
+            return null;
         }
     }
 }

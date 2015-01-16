@@ -1,7 +1,14 @@
 module SpaceTac.Game {
     "use strict";
 
-    export enum SlotType {Armor, Shield, Engine, Power, Weapon, }
+    // Types of slots
+    export enum SlotType {
+        Armor,
+        Shield,
+        Engine,
+        Power,
+        Weapon
+    }
 
     // Slot to attach an equipment to a ship
     export class Slot {

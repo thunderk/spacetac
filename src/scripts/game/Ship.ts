@@ -90,11 +90,19 @@ module SpaceTac.Game {
         }
 
         // Get the list of actions available
-        //  This list does not filter out actions unavailable due to insufficient AP, it justs filter out
+        //  This list does not filter out actions unavailable due to insufficient AP, it only filters out
         //  actions that are not allowed/available at all on the ship
         getAvailableActions(): BaseAction[] {
-            // TODO
-            return [new MoveAction(), new EndTurnAction()];
+            var actions: BaseAction[] = [];
+
+            this.slots.forEach((slot: Slot) => {
+                if (slot.attached && slot.attached.action) {
+                    actions.push(slot.attached.action);
+                }
+            });
+
+            actions.push(new EndTurnAction());
+            return actions;
         }
 
         // Consumes action points

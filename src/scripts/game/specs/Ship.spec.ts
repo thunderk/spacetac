@@ -34,5 +34,26 @@ module SpaceTac.Game {
             expect(ship.arena_x).toBeCloseTo(52.333333, 0.00001);
             expect(ship.arena_y).toEqual(50);
         });
+
+        it("lists available actions from attached equipment", function () {
+            var ship = new Ship(null, "Test");
+            var actions: BaseAction[];
+            var slot: Slot;
+            var equipment: Equipment;
+
+            actions = ship.getAvailableActions();
+            expect(actions.length).toBe(1);
+            expect(actions[0].code).toEqual("endturn");
+
+            slot = ship.addSlot(SlotType.Engine);
+            equipment = new Equipment();
+            equipment.action = new MoveAction();
+            slot.attach(equipment);
+
+            actions = ship.getAvailableActions();
+            expect(actions.length).toBe(2);
+            expect(actions[0].code).toEqual("move");
+            expect(actions[1].code).toEqual("endturn");
+        });
     });
 }

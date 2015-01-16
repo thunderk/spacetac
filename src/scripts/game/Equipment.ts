@@ -23,5 +23,8 @@ module SpaceTac.Game {
 
         // Level requirement
         min_level: number;
+
+        // Action associated with this equipment
+        action: BaseAction;
     }
 }

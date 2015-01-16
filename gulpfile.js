@@ -41,7 +41,7 @@ gulp.task('copy', function () {
 var tsProject = ts.createProject({
     declarationFiles: true,
     noExternalResolve: true,
-    noImplicitAny: true,
+    noImplicitAny: false,  // Handled by tslint
     sortOutput: true,
     sourceRoot: '../scripts'
 });
