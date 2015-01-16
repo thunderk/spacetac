@@ -120,7 +120,9 @@ gulp.task('minifyCss', ['less'], function () {
 
 gulp.task('deploy', function () {
     return gulp.src('./dist/**/*')
-        .pipe(deploy());
+        .pipe(deploy({
+            remoteUrl: "git@github.com:thunderk/spacetac.git",
+        }));
 });
 
 gulp.task('default', function () {
