@@ -64,13 +64,8 @@ module SpaceTac.View {
             // Add UI elements
             this.action_bar = new ActionBar(this);
             this.ship_list = new ShipList(this);
-            this.card_playing = new ShipCard(this, 500, 0);
-            this.card_hovered = new ShipCard(this, 500, 300);
-
-            // Add a test progress bar
-            var bar = ValueBar.newStandard(game, 300, 300);
-            bar.setValue(50, 100);
-            this.ui.add(bar);
+            this.card_playing = new ShipCard(this, 1060, 130);
+            this.card_hovered = new ShipCard(this, 1060, 430);
 
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);

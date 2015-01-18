@@ -31,7 +31,7 @@ module SpaceTac.View {
         }
 
         // Set an image to use for the bar
-        setBarImage(key: string, offset_x: number, offset_y: number): void {
+        setBarImage(key: string, offset_x: number = 0, offset_y: number = 0): void {
             this.bar_sprite = new Phaser.Sprite(this.game, offset_x, offset_y, key);
             this.addChild(this.bar_sprite);
         }

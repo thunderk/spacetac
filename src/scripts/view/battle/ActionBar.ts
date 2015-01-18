@@ -9,6 +9,9 @@ module SpaceTac.View {
         // List of action icons
         actions: ActionIcon[];
 
+        // Progress bar displaying action points
+        actionpoints: ValueBar;
+
         // Create an empty action bar
         constructor(battleview: BattleView) {
             this.battleview = battleview;
@@ -17,7 +20,11 @@ module SpaceTac.View {
             super(battleview.game, 170, 0, "ui-battle-actionbar");
             battleview.ui.add(this);
 
-            this.update();
+            // Action points progress bar
+            this.actionpoints = new ValueBar(battleview.game, 119, 76, "ui-battle-actionpointsempty");
+            this.actionpoints.setBarImage("ui-battle-actionpointsfull");
+            this.actionpoints.setValue(50, 100);
+            this.addChild(this.actionpoints);
         }
 
         // Clear the action icons
