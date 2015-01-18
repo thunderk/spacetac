@@ -10,4 +10,5 @@
 /core
 /node_modules
 /src/vendor
+/graphics/**/*.blend?*
 

@@ -6,7 +6,7 @@ module SpaceTac {
     // Router between game views
     export class GameRouter extends Phaser.Game {
         constructor() {
-            super(800, 600, Phaser.AUTO, '-space-tac');
+            super(1280, 720, Phaser.AUTO, '-space-tac');
 
             this.state.add('boot', View.Boot);
             this.state.add('preload', View.Preload);

@@ -23,7 +23,7 @@ module SpaceTac.View {
             this.action = action;
 
             super(bar.game, x, y, "action-" + action.code);
-            bar.add(this);
+            bar.addChild(this);
 
             // TODO Handle action.canBeUsed() result to enable/disable the button
 

@@ -2,7 +2,7 @@ module SpaceTac.View {
     "use strict";
 
     // Bar with all available action icons displayed
-    export class ActionBar extends Phaser.Group {
+    export class ActionBar extends Phaser.Sprite {
         // Link to the parent battleview
         battleview: BattleView;
 
@@ -14,17 +14,10 @@ module SpaceTac.View {
             this.battleview = battleview;
             this.actions = [];
 
-            super(battleview.game, battleview.ui);
+            super(battleview.game, 170, 0, "ui-battle-actionbar");
             battleview.ui.add(this);
 
             this.update();
-        }
-
-        // Update the bar status (and position)
-        update() {
-            super.update();
-
-            this.x = 100;
         }
 
         // Clear the action icons
@@ -37,7 +30,7 @@ module SpaceTac.View {
 
         // Add an action icon
         addAction(ship: Game.Ship, action: Game.BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, this.actions.length * 50, 0, ship, action);
+            var icon = new ActionIcon(this, 110 + this.actions.length * 50, 25, ship, action);
             this.actions.push(icon);
             return icon;
         }
