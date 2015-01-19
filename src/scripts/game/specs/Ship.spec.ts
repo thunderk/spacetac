@@ -6,7 +6,8 @@ module SpaceTac.Game {
     describe("Ship", function () {
         it("limits movement range by action points", function () {
             var ship = new Ship(null, "Test");
-            ship.ap_current = 8;
+            ship.ap_current.setMaximal(20);
+            ship.ap_current.set(8);
             ship.movement_cost = 3;
             ship.setArenaPosition(50, 50);
 
@@ -20,17 +21,18 @@ module SpaceTac.Game {
 
         it("moves and consumes action points", function () {
             var ship = new Ship(null, "Test");
-            ship.ap_current = 8;
+            ship.ap_current.setMaximal(20);
+            ship.ap_current.set(8);
             ship.movement_cost = 3;
             ship.setArenaPosition(50, 50);
 
             ship.moveTo(51, 50);
-            expect(ship.ap_current).toEqual(5);
+            expect(ship.ap_current.current).toEqual(5);
             expect(ship.arena_x).toEqual(51);
             expect(ship.arena_y).toEqual(50);
 
             ship.moveTo(53, 50);
-            expect(ship.ap_current).toBe(0);
+            expect(ship.ap_current.current).toBe(0);
             expect(ship.arena_x).toBeCloseTo(52.333333, 0.00001);
             expect(ship.arena_y).toEqual(50);
         });

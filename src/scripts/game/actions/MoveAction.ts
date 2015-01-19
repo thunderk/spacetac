@@ -8,7 +8,7 @@ module SpaceTac.Game {
         }
 
         canBeUsed(battle: Battle, ship: Ship): boolean {
-            return ship.ap_current > 0;
+            return ship.ap_current.current > 0;
         }
 
         checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {

@@ -90,6 +90,9 @@ module SpaceTac.Game {
         //  This will call all necessary initialization steps (initiative, placement...)
         //  This will not add any event to the battle log
         start(): void {
+            this.fleets.forEach((fleet: Fleet) => {
+                fleet.setBattle(this);
+            });
             this.placeShips();
             this.throwInitiative();
             this.advanceToNextShip(false);
