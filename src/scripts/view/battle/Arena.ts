@@ -24,7 +24,9 @@ module SpaceTac.View {
             super(battleview.game);
 
             var background = new Phaser.Button(battleview.game, 0, 0, "ui-arena-background");
-            background.scale.set(this.stage.width / background.width, this.stage.height / background.height);
+            var expected_width = this.stage.width - 252;
+            var expected_height = this.stage.height - 100;
+            background.scale.set(expected_width/ background.width, expected_height / background.height);
             this.background = background;
 
             // Capture clicks on background
@@ -40,7 +42,8 @@ module SpaceTac.View {
                 }
             }, null);
 
-            this.add(this.background);
+            this.position.set(32, 100);
+            this.addChild(this.background);
 
             this.init();
         }
