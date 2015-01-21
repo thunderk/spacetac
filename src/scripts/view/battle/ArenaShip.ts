@@ -19,7 +19,7 @@ module SpaceTac.View {
             super(battleview.game);
 
             // Add hover effect
-            this.hover = new Phaser.Image(battleview.game, 0, 0, "ui-battle-shipspritehover");
+            this.hover = new Phaser.Image(battleview.game, 0, 0, "ui-battle-shipspritehover", 0);
             this.hover.scale.set(0.4, 0.4);
             this.hover.anchor.set(0.5, 0.5);
             this.hover.visible = false;

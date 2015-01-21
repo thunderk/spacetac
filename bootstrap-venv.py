@@ -140,9 +140,13 @@ def bootstrap_buildout(venv_dir, bootstrap_path):
     else:
         fp.close()
 
-    print("Bootstrapping Buildout using: %s %s install..." % (
+    print("Bootstrapping Buildout using: %s %s..." % (
         python_bin, bootstrap_path))
-    subprocess.check_call([python_bin, bootstrap_path, "install"])
+    subprocess.check_call([python_bin, bootstrap_path])
+
+    print("Invoking bootstrapped buildout...")
+    buildout_bin = os.path.join(os.path.dirname(bootstrap_path), "bin", "buildout")
+    subprocess.check_call([buildout_bin])
 
 
 if len(sys.argv) == 2:
