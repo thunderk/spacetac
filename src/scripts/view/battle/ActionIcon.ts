@@ -27,6 +27,7 @@ module SpaceTac.View {
 
             // TODO Handle action.canBeUsed() result to enable/disable the button
 
+            this.input.useHandCursor = true;
             this.onInputUp.add(() => {
                 this.processClick();
             }, this);
