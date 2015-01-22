@@ -61,6 +61,8 @@ module SpaceTac.Game {
 
         it("logs ship change events", function () {
             var battle = Battle.newQuickRandom();
+            battle.log.clear();
+            battle.log.addFilter("attr");
             expect(battle.log.events.length).toBe(0);
 
             battle.advanceToNextShip();
@@ -70,7 +72,8 @@ module SpaceTac.Game {
 
         it("can receive simulated initial state events", function () {
             var battle = Battle.newQuickRandom();
-
+            battle.log.clear();
+            battle.log.addFilter("attr");
             expect(battle.log.events.length).toBe(0);
 
             battle.injectInitialEvents();

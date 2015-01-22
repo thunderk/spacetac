@@ -16,6 +16,9 @@ module SpaceTac.Game {
         playing_ship_index: number;
         playing_ship: Ship;
 
+        // Boolean indicating if its the first turn
+        first_turn: boolean;
+
         // Create a battle between two fleets
         constructor(fleet1: Fleet, fleet2: Fleet) {
             this.log = new BattleLog();
@@ -23,6 +26,7 @@ module SpaceTac.Game {
             this.play_order = [];
             this.playing_ship_index = null;
             this.playing_ship = null;
+            this.first_turn = true;
         }
 
         // Create a quick random battle, for testing purposes
@@ -56,6 +60,7 @@ module SpaceTac.Game {
 
         // Defines the initial ship positions of all engaged fleets
         placeShips(): void {
+            this.first_turn = true;
             this.placeFleetShips(this.fleets[0], 100, 100, 0);
             this.placeFleetShips(this.fleets[1], 300, 100, Math.PI);
         }
@@ -77,8 +82,13 @@ module SpaceTac.Game {
                 }
                 if (this.playing_ship_index >= this.play_order.length) {
                     this.playing_ship_index = 0;
+                    this.first_turn = false;
                 }
                 this.playing_ship = this.play_order[this.playing_ship_index];
+            }
+
+            if (this.playing_ship) {
+                this.playing_ship.startTurn(this.first_turn);
             }
 
             if (log) {

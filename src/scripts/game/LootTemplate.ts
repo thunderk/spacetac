@@ -109,6 +109,13 @@ module SpaceTac.Game {
             }
         }
 
+        // Convenience function to add a permanent attribute effect on equipment
+        addPermanentAttributeValueEffect(code: AttributeCode, min: number, max: number = null): void {
+            var template = new EffectTemplate(new AttributeValueEffect(code, 0));
+            template.addModifier("value", new Range(min, max));
+            this.permanent_effects.push(template);
+        }
+
         // Convenience function to add a permanent attribute max effect on equipment
         addPermanentAttributeMaxEffect(code: AttributeCode, min: number, max: number = null): void {
             var template = new EffectTemplate(new AttributeMaxEffect(code, 0));

@@ -107,5 +107,36 @@ module SpaceTac.Game {
             expect(battle.playing_ship).toBe(ship2);
             expect(battle.playing_ship_index).toBe(0);
         });
+
+        it("calls startTurn on ships, with first turn indicator", function () {
+            var fleet1 = new Fleet(null);
+            var fleet2 = new Fleet(null);
+
+            var ship1 = new Ship(fleet1, "F1S1");
+            var ship2 = new Ship(fleet1, "F1S2");
+            var ship3 = new Ship(fleet2, "F2S1");
+
+            var battle = new Battle(fleet1, fleet2);
+
+            spyOn(ship1, "startTurn").and.callThrough();
+            spyOn(ship2, "startTurn").and.callThrough();
+            spyOn(ship3, "startTurn").and.callThrough();
+
+            // Force play order
+            var gen = new RandomGenerator(0.3, 0.2, 0.1);
+            battle.throwInitiative(gen);
+
+            battle.advanceToNextShip();
+            expect(ship1.startTurn).toHaveBeenCalledWith(true);
+
+            battle.advanceToNextShip();
+            expect(ship2.startTurn).toHaveBeenCalledWith(true);
+
+            battle.advanceToNextShip();
+            expect(ship3.startTurn).toHaveBeenCalledWith(true);
+
+            battle.advanceToNextShip();
+            expect(ship1.startTurn).toHaveBeenCalledWith(false);
+        });
     });
 }

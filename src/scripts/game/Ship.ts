@@ -174,14 +174,15 @@ module SpaceTac.Game {
 
         // Method called at the start of this ship turn
         startTurn(first: boolean): void {
+            // Recompute attributes
+            this.updateAttributes();
+
             // Manage action points
             if (first) {
                 this.initializeActionPoints();
             } else {
                 this.recoverActionPoints();
             }
-
-            // TODO Apply active effects
         }
 
         // Get the maximal position reachable in the arena with current action points
@@ -221,15 +222,20 @@ module SpaceTac.Game {
         updateAttributes(): void {
             // TODO Something more generic
 
-            // Compute new maximal values for all attributes
+            // Compute new maximal values for attributes
             var new_attrs = new AttributeCollection();
             this.collectEffects("attrmax").forEach((effect: AttributeMaxEffect) => {
                 new_attrs.addValue(effect.attrcode, effect.value);
             });
-            var old_attrs = this.attributes;
-            Attribute.forEachCode((code: AttributeCode) => {
-                old_attrs.setMaximum(code, new_attrs.getValue(code));
+            this.ap_current.setMaximal(new_attrs.getValue(AttributeCode.AP));
+
+            // Compute new current values for attributes
+            new_attrs = new AttributeCollection();
+            this.collectEffects("attr").forEach((effect: AttributeMaxEffect) => {
+                new_attrs.addValue(effect.attrcode, effect.value);
             });
+            this.ap_initial.set(new_attrs.getValue(AttributeCode.AP_Initial));
+            this.ap_recover.set(new_attrs.getValue(AttributeCode.AP_Recovery));
         }
 
         // Collect all effects to apply for updateAttributes
