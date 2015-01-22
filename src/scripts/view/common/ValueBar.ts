@@ -39,7 +39,9 @@ module SpaceTac.View {
         // Update graphics representation
         update() {
             if (this.bar_sprite) {
-                this.bar_sprite.scale.x = this.proportional;
+                var tween = this.game.tweens.create(this.bar_sprite.scale);
+                tween.to({x: this.proportional});
+                tween.start();
             }
         }
 
