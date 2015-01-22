@@ -12,10 +12,14 @@ module SpaceTac.View {
         // Progress bar displaying action points
         actionpoints: ValueBar;
 
+        // Current ship, whose actions are displayed
+        ship: Game.Ship;
+
         // Create an empty action bar
         constructor(battleview: BattleView) {
             this.battleview = battleview;
             this.actions = [];
+            this.ship = null;
 
             super(battleview.game, 170, 0, "ui-battle-actionbar");
             battleview.ui.add(this);
@@ -23,7 +27,6 @@ module SpaceTac.View {
             // Action points progress bar
             this.actionpoints = new ValueBar(battleview.game, 119, 76, "ui-battle-actionpointsempty");
             this.actionpoints.setBarImage("ui-battle-actionpointsfull");
-            this.actionpoints.setValue(50, 100);
             this.addChild(this.actionpoints);
         }
 
@@ -42,6 +45,16 @@ module SpaceTac.View {
             return icon;
         }
 
+        // Update the action points indicator
+        updateActionPoints(): void {
+            if (this.ship) {
+                this.actionpoints.setValue(this.ship.ap_current.current, this.ship.ap_current.maximal);
+                this.actionpoints.visible = true;
+            } else {
+                this.actionpoints.visible = false;
+            }
+        }
+
         // Set action icons from selected ship
         setShip(ship: Game.Ship): void {
             var action_bar = this;
@@ -51,6 +64,15 @@ module SpaceTac.View {
             actions.forEach((action: Game.BaseAction) => {
                 action_bar.addAction(ship, action);
             });
+
+            this.ship = ship;
+
+            this.updateActionPoints();
+        }
+
+        // Called by an action icon when the action has been applied
+        actionEnded(): void {
+            this.updateActionPoints();
         }
     }
 }

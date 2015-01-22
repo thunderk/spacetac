@@ -3,6 +3,8 @@ module SpaceTac.View {
 
     // Icon to activate a ship capability (move, fire...)
     export class ActionIcon extends Phaser.Button {
+        // Link to the parent bar
+        bar: ActionBar;
 
         // Link to the parent battle view
         battleview: BattleView;
@@ -18,6 +20,7 @@ module SpaceTac.View {
 
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Game.Ship, action: Game.BaseAction) {
+            this.bar = bar;
             this.battleview = bar.battleview;
             this.ship = ship;
             this.action = action;
@@ -64,6 +67,7 @@ module SpaceTac.View {
 
             if (this.action.apply(this.battleview.battle, this.ship, target)) {
                 this.battleview.exitTargettingMode();
+                this.bar.actionEnded();
             }
         }
     }
