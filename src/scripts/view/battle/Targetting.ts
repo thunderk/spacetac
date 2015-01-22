@@ -20,7 +20,7 @@ module SpaceTac.View {
         private battleview: BattleView;
 
         // Source of the targetting
-        private source: PIXI.Sprite;
+        private source: PIXI.DisplayObject;
 
         // Create a default targetting mode
         constructor(battleview: BattleView) {
@@ -63,7 +63,7 @@ module SpaceTac.View {
         }
 
         // Set the source sprite for the targetting (for visual effects)
-        setSource(sprite: PIXI.Sprite) {
+        setSource(sprite: PIXI.DisplayObject) {
             this.source = sprite;
         }
 

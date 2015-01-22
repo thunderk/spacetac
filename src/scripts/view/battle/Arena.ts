@@ -14,8 +14,9 @@ module SpaceTac.View {
         private battleview: BattleView;
 
         // List of ship sprites
-        private ship_sprites: ShipArenaSprite[];
+        private ship_sprites: ArenaShip[];
 
+        // Create a graphical arena for ship sprites to fight in a 2D space
         constructor(battleview: BattleView) {
             this.battleview = battleview;
             this.ship_sprites = [];
@@ -23,7 +24,9 @@ module SpaceTac.View {
             super(battleview.game);
 
             var background = new Phaser.Button(battleview.game, 0, 0, "ui-arena-background");
-            background.scale.set(20, 10);
+            var expected_width = this.stage.width - 252;
+            var expected_height = this.stage.height - 100;
+            background.scale.set(expected_width / background.width, expected_height / background.height);
             this.background = background;
 
             // Capture clicks on background
@@ -39,7 +42,8 @@ module SpaceTac.View {
                 }
             }, null);
 
-            this.add(this.background);
+            this.position.set(32, 100);
+            this.addChild(this.background);
 
             this.init();
         }
@@ -54,21 +58,29 @@ module SpaceTac.View {
 
             // Add ship sprites
             this.battleview.battle.play_order.forEach(function (ship: Game.Ship) {
-                var sprite = new ShipArenaSprite(arena.battleview, ship);
-                arena.add(sprite);
+                var sprite = new ArenaShip(arena.battleview, ship);
+                arena.addChild(sprite);
                 arena.ship_sprites.push(sprite);
             });
         }
 
         // Find the sprite for a ship
-        findShipSprite(ship: Game.Ship): ShipArenaSprite {
-            var result: ShipArenaSprite = null;
-            this.ship_sprites.forEach((sprite: ShipArenaSprite) => {
+        findShipSprite(ship: Game.Ship): ArenaShip {
+            var result: ArenaShip = null;
+            this.ship_sprites.forEach((sprite: ArenaShip) => {
                 if (sprite.ship === ship) {
                     result = sprite;
                 }
             });
             return result;
+        }
+
+        // Set the hovered state on a ship sprite
+        setShipHovered(ship: Game.Ship, hovered: boolean): void {
+            var arena_ship = this.findShipSprite(ship);
+            if (arena_ship) {
+                arena_ship.setHovered(hovered);
+            }
         }
     }
 }
