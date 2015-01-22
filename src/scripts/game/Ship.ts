@@ -46,20 +46,29 @@ module SpaceTac.Game {
         // List of slots, able to contain equipment
         slots: Slot[];
 
+        // Collection of available attributes
+        attributes: AttributeCollection;
+
         // Create a new ship inside a fleet
         constructor(fleet: Fleet = null, name: string = null) {
+            this.attributes = new AttributeCollection();
             this.fleet = fleet;
             this.name = name;
             this.initiative_level = 1;
-            this.ap_current = new Attribute(AttributeCode.AP);
-            this.ap_initial = new Attribute(AttributeCode.AP_Initial);
-            this.ap_recover = new Attribute(AttributeCode.AP_Recovery);
+            this.ap_current = this.newAttribute(AttributeCode.AP);
+            this.ap_initial = this.newAttribute(AttributeCode.AP_Initial);
+            this.ap_recover = this.newAttribute(AttributeCode.AP_Recovery);
             this.movement_cost = 0.1;
             this.slots = [];
 
             if (fleet) {
                 fleet.addShip(this);
             }
+        }
+
+        // Create and register an attribute
+        newAttribute(code: AttributeCode): Attribute {
+            return this.attributes.getRawAttr(code);
         }
 
         // Set position in the arena
@@ -205,6 +214,39 @@ module SpaceTac.Game {
         addSlot(type: SlotType): Slot {
             var result = new Slot(this, type);
             this.slots.push(result);
+            return result;
+        }
+
+        // Update attributes, taking into account attached equipment and active effects
+        updateAttributes(): void {
+            // TODO Something more generic
+
+            // Compute new maximal values for all attributes
+            var new_attrs = new AttributeCollection();
+            this.collectEffects("attrmax").forEach((effect: AttributeMaxEffect) => {
+                new_attrs.addValue(effect.attrcode, effect.value);
+            });
+            var old_attrs = this.attributes;
+            Attribute.forEachCode((code: AttributeCode) => {
+                old_attrs.setMaximum(code, new_attrs.getValue(code));
+            });
+            console.log(old_attrs, new_attrs);
+        }
+
+        // Collect all effects to apply for updateAttributes
+        private collectEffects(code: string = null): BaseEffect[] {
+            var result: BaseEffect[] = [];
+
+            this.slots.forEach((slot: Slot) => {
+                if (slot.attached) {
+                    slot.attached.permanent_effects.forEach((effect: BaseEffect) => {
+                        if (effect.code === code) {
+                            result.push(effect);
+                        }
+                    });
+                }
+            });
+
             return result;
         }
     }

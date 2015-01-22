@@ -39,15 +39,25 @@ module SpaceTac.Game {
         current: number;
 
         // Create an attribute
-        constructor(code: AttributeCode, maximal: number = 1, current: number = 0) {
+        constructor(code: AttributeCode = AttributeCode.Misc, maximal: number = null, current: number = 0) {
             this.code = code;
             this.maximal = maximal;
             this.current = current;
         }
 
+        // Iterator over each code
+        static forEachCode(callback: (code: AttributeCode) => void) {
+            for (var val in AttributeCode) {
+                if (!isNaN(val)) {
+                    callback(<AttributeCode>parseInt(val, 10));
+                }
+            }
+        }
+
         // Set the maximal value
         setMaximal(value: number): void {
             this.maximal = value;
+            this.fix();
         }
 
         // Set an absolute value
@@ -70,7 +80,7 @@ module SpaceTac.Game {
 
         // Fix the value to remain lower than maximal, and positive
         private fix(): void {
-            if (this.current > this.maximal) {
+            if (this.maximal !== null && this.current > this.maximal) {
                 this.current = this.maximal;
             }
             if (this.current < 0.0001) {

@@ -4,6 +4,29 @@ module SpaceTac.Game {
     "use strict";
 
     describe("Attribute", function () {
+        it("is initially not limited", function () {
+            var attr = new Attribute();
+
+            attr.set(8888888);
+            expect(attr.current).toBe(8888888);
+        });
+
+        it("enumerates codes", function () {
+            var result = [];
+            Attribute.forEachCode((code: AttributeCode) => {
+                result.push(code);
+            });
+            expect(result).toEqual([
+                AttributeCode.Initiative,
+                AttributeCode.Hull,
+                AttributeCode.Shield,
+                AttributeCode.AP,
+                AttributeCode.AP_Recovery,
+                AttributeCode.AP_Initial,
+                AttributeCode.Misc
+            ]);
+        });
+
         it("applies minimal and maximal value", function () {
             var attr = new Attribute(AttributeCode.Misc, 100, 50);
             expect(attr.current).toBe(50);
@@ -28,6 +51,12 @@ module SpaceTac.Game {
 
             attr.set(105);
             expect(attr.current).toBe(100);
+
+            attr.setMaximal(50);
+            expect(attr.current).toBe(50);
+
+            attr.setMaximal(80);
+            expect(attr.current).toBe(50);
         });
 
         it("tells if value changed", function () {

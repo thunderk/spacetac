@@ -57,5 +57,24 @@ module SpaceTac.Game {
             expect(actions[0].code).toEqual("move");
             expect(actions[1].code).toEqual("endturn");
         });
+
+        it("applies permanent effects of equipments on attributes", function () {
+            var ship = new Ship(null, "Test");
+            var slot: Slot;
+            var equipment: Equipment;
+
+            slot = ship.addSlot(SlotType.Power);
+            equipment = new Equipment();
+            equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.AP, 4));
+            slot.attach(equipment);
+
+            slot = ship.addSlot(SlotType.Power);
+            equipment = new Equipment();
+            equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.AP, 5));
+            slot.attach(equipment);
+
+            ship.updateAttributes();
+            expect(ship.ap_current.maximal).toBe(9);
+        });
     });
 }

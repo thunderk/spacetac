@@ -26,5 +26,13 @@ module SpaceTac.Game {
 
         // Action associated with this equipment
         action: BaseAction;
+
+        // Permanent effects
+        permanent_effects: BaseEffect[];
+
+        // Basic constructor
+        constructor() {
+            this.permanent_effects = [];
+        }
     }
 }
