@@ -10,9 +10,13 @@ module SpaceTac.Game {
         max: number;
 
         // Create a range of values
-        constructor(min: number, max: number) {
+        constructor(min: number, max: number = null) {
             this.min = min;
-            this.max = max;
+            if (max === null) {
+                this.max = this.min;
+            } else {
+                this.max = max;
+            }
         }
 
         // Get a proportional value (give 0.0-1.0 value to obtain a value in range)

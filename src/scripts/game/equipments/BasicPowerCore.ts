@@ -8,6 +8,7 @@ module SpaceTac.Game.Equipments {
             super(SlotType.Power, "Basic Power Core");
 
             this.min_level = new IntegerRange(1, 1);
+            this.addPermanentAttributeMaxEffect(AttributeCode.AP, 8);
         }
     }
 }

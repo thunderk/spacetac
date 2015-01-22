@@ -23,6 +23,7 @@ module SpaceTac.Game {
         duration: IntegerRange;
 
         // Effects
+        permanent_effects: EffectTemplate[];
 
         // Action Points usage
         ap_usage: Range;
@@ -39,6 +40,7 @@ module SpaceTac.Game {
             this.duration = new IntegerRange(0, 0);
             this.ap_usage = new Range(0, 0);
             this.min_level = new IntegerRange(0, 0);
+            this.permanent_effects = [];
         }
 
         // Generate a random equipment with this template
@@ -62,6 +64,10 @@ module SpaceTac.Game {
             result.min_level = this.min_level.getProportional(power);
 
             result.action = this.getActionForEquipment(result);
+
+            this.permanent_effects.forEach((eff_template: EffectTemplate) => {
+                result.permanent_effects.push(eff_template.generateFixed(power));
+            });
 
             return result;
         }
@@ -101,6 +107,13 @@ module SpaceTac.Game {
             } else {
                 return null;
             }
+        }
+
+        // Convenience function to add a permanent attribute max effect on equipment
+        addPermanentAttributeMaxEffect(code: AttributeCode, min: number, max: number = null): void {
+            var template = new EffectTemplate(new AttributeMaxEffect(code, 0));
+            template.addModifier("value", new Range(min, max));
+            this.permanent_effects.push(template);
         }
 
         // Method to reimplement to assign an action to a generated equipment

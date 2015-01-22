@@ -230,7 +230,6 @@ module SpaceTac.Game {
             Attribute.forEachCode((code: AttributeCode) => {
                 old_attrs.setMaximum(code, new_attrs.getValue(code));
             });
-            console.log(old_attrs, new_attrs);
         }
 
         // Collect all effects to apply for updateAttributes

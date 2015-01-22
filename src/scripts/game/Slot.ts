@@ -31,6 +31,10 @@ module SpaceTac.Game {
         // Attach an equipment in this slot
         attach(equipment: Equipment): void {
             this.attached = equipment;
+
+            if (this.ship) {
+                this.ship.updateAttributes();
+            }
         }
     }
 
