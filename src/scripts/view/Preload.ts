@@ -7,7 +7,7 @@ module SpaceTac.View {
         preload() {
             // Add preload sprite
             this.preloadBar = this.add.sprite(0, 0, "preload-bar");
-            this.preloadBar.position.set((this.stage.width - this.preloadBar.width) / 2, (this.stage.height - this.preloadBar.height) / 2);
+            this.preloadBar.position.set((1280 - this.preloadBar.width) / 2, (720 - this.preloadBar.height) / 2);
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load assets
