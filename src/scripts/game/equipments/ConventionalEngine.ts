@@ -9,6 +9,7 @@ module SpaceTac.Game.Equipments {
             super(SlotType.Engine, "Conventional Engine");
 
             this.min_level = new IntegerRange(1, 1);
+            this.addPermanentAttributeMaxEffect(AttributeCode.Initiative, 1);
         }
 
         protected getActionForEquipment(equipment: Equipment): BaseAction {

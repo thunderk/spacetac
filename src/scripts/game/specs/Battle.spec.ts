@@ -9,15 +9,15 @@ module SpaceTac.Game {
             var fleet2 = new Fleet(null);
 
             var ship1 = new Ship(fleet1, "F1S1");
-            ship1.initiative_level = 2;
+            ship1.initiative.setMaximal(2);
             var ship2 = new Ship(fleet1, "F1S2");
-            ship2.initiative_level = 4;
+            ship2.initiative.setMaximal(4);
             var ship3 = new Ship(fleet1, "F1S3");
-            ship3.initiative_level = 1;
+            ship3.initiative.setMaximal(1);
             var ship4 = new Ship(fleet2, "F2S1");
-            ship4.initiative_level = 8;
+            ship4.initiative.setMaximal(8);
             var ship5 = new Ship(fleet2, "F2S2");
-            ship5.initiative_level = 2;
+            ship5.initiative.setMaximal(2);
 
             var battle = new Battle(fleet1, fleet2);
             expect(battle.play_order.length).toBe(0);

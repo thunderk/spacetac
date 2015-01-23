@@ -25,11 +25,8 @@ module SpaceTac.Game {
         // Facing direction in the arena
         arena_angle: number;
 
-        // Current initiative level (high numbers will allow this ship to play sooner)
-        initiative_level: number;
-
-        // Last initiative throw
-        initative_throw: number;
+        // Initiative (high numbers will allow this ship to play sooner)
+        initiative: Attribute;
 
         // Current number of action points
         ap_current: Attribute;
@@ -54,7 +51,8 @@ module SpaceTac.Game {
             this.attributes = new AttributeCollection();
             this.fleet = fleet;
             this.name = name;
-            this.initiative_level = 1;
+            this.initiative = this.newAttribute(AttributeCode.Initiative);
+            this.initiative.setMaximal(1);
             this.ap_current = this.newAttribute(AttributeCode.AP);
             this.ap_initial = this.newAttribute(AttributeCode.AP_Initial);
             this.ap_recover = this.newAttribute(AttributeCode.AP_Recovery);
@@ -90,7 +88,7 @@ module SpaceTac.Game {
 
         // Make an initiative throw, to resolve play order in a battle
         throwInitiative(gen: RandomGenerator): void {
-            this.initative_throw = gen.throw(this.initiative_level);
+            this.initiative.set(gen.throw(this.initiative.maximal));
         }
 
         // Return the player owning this ship
@@ -227,6 +225,7 @@ module SpaceTac.Game {
             this.collectEffects("attrmax").forEach((effect: AttributeMaxEffect) => {
                 new_attrs.addValue(effect.attrcode, effect.value);
             });
+            this.initiative.setMaximal(new_attrs.getValue(AttributeCode.Initiative));
             this.ap_current.setMaximal(new_attrs.getValue(AttributeCode.AP));
 
             // Compute new current values for attributes
