@@ -21,12 +21,12 @@ module SpaceTac.View {
             this.actions = [];
             this.ship = null;
 
-            super(battleview.game, 170, 0, "ui-battle-actionbar");
+            super(battleview.game, 170, 0, "battle-actionbar");
             battleview.ui.add(this);
 
             // Action points progress bar
-            this.actionpoints = new ValueBar(battleview.game, 119, 76, "ui-battle-actionpointsempty");
-            this.actionpoints.setBarImage("ui-battle-actionpointsfull");
+            this.actionpoints = new ValueBar(battleview.game, 119, 76, "battle-actionpointsempty");
+            this.actionpoints.setBarImage("battle-actionpointsfull");
             this.addChild(this.actionpoints);
         }
 

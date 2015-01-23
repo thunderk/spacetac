@@ -10,7 +10,7 @@ module SpaceTac.View {
         constructor(list: ShipList, x: number, y: number, ship: Game.Ship, owned: boolean) {
             this.ship = ship;
 
-            super(list.battleview.game, x, y, owned ? "ui-shiplist-own" : "ui-shiplist-enemy");
+            super(list.battleview.game, x, y, owned ? "battle-shiplist-own" : "battle-shiplist-enemy");
 
             this.input.useHandCursor = true;
             this.onInputOver.add(() => {

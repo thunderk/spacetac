@@ -17,8 +17,8 @@ module SpaceTac.View {
 
         // Create a quick standard bar
         static newStandard(game: Phaser.Game, x: number, y: number): ValueBar {
-            var result = new ValueBar(game, x, y, "ui-bar-standard-background");
-            result.setBarImage("ui-bar-standard-foreground", 5, 5);
+            var result = new ValueBar(game, x, y, "common-standard-bar-background");
+            result.setBarImage("common-standard-bar-foreground", 5, 5);
             return result;
         }
 

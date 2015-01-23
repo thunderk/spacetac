@@ -11,17 +11,17 @@ module SpaceTac.View {
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load assets
-            this.load.image("ui-shiplist-own", "assets/images/battle/shiplist-own.png");
-            this.load.image("ui-shiplist-enemy", "assets/images/battle/shiplist-enemy.png");
-            this.load.image("ui-arena-background", "assets/images/battle/arena-background.png");
-            this.load.image("ui-battle-actionbar", "assets/images/ui/battle/actionbar.png");
-            this.load.image("ui-battle-actionpointsempty", "assets/images/ui/battle/actionpointsempty.png");
-            this.load.image("ui-battle-actionpointsfull", "assets/images/ui/battle/actionpointsfull.png");
-            this.load.image("ui-battle-shipspritehover", "assets/images/ui/battle/shipspritehover.png");
-            this.load.image("ui-ship-card", "assets/images/battle/ship-card.png");
-            this.load.image("arena-ship", "assets/images/battle/ship01.png");
-            this.load.image("ui-bar-standard-background", "assets/images/ui/bars/standard-background.png");
-            this.load.image("ui-bar-standard-foreground", "assets/images/ui/bars/standard-foreground.png");
+            this.load.image("battle-shiplist-own", "assets/images/battle/shiplist-own.png");
+            this.load.image("battle-shiplist-enemy", "assets/images/battle/shiplist-enemy.png");
+            this.load.image("battle-arena-background", "assets/images/battle/arena/background.png");
+            this.load.image("battle-actionbar", "assets/images/battle/actionbar.png");
+            this.load.image("battle-actionpointsempty", "assets/images/battle/actionpointsempty.png");
+            this.load.image("battle-actionpointsfull", "assets/images/battle/actionpointsfull.png");
+            this.load.image("battle-arena-shipspritehover", "assets/images/battle/arena/shipspritehover.png");
+            this.load.image("battle-ship-card", "assets/images/battle/ship-card.png");
+            this.load.image("battle-arena-ship01", "assets/images/battle/arena/ship01.png");
+            this.load.image("common-standard-bar-background", "assets/images/common/standard-bar-background.png");
+            this.load.image("common-standard-bar-foreground", "assets/images/common/standard-bar-foreground.png");
         }
 
         create() {

@@ -23,7 +23,7 @@ module SpaceTac.View {
 
             super(battleview.game);
 
-            var background = new Phaser.Button(battleview.game, 0, 0, "ui-arena-background");
+            var background = new Phaser.Button(battleview.game, 0, 0, "battle-arena-background");
             var expected_width = 1280 - 252;
             var expected_height = 720 - 100;
             background.scale.set(expected_width / background.width, expected_height / background.height);

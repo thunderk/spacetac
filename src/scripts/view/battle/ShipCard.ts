@@ -8,7 +8,7 @@ module SpaceTac.View {
 
         // Build an empty ship card
         constructor(battleview: BattleView, x: number, y: number) {
-            super(battleview.game, x, y, "ui-ship-card");
+            super(battleview.game, x, y, "battle-ship-card");
 
             this.ship = null;
             this.visible = false;
