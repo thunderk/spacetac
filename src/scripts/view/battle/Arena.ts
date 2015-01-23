@@ -16,10 +16,14 @@ module SpaceTac.View {
         // List of ship sprites
         private ship_sprites: ArenaShip[];
 
+        // Currently playing ship
+        private playing: ArenaShip;
+
         // Create a graphical arena for ship sprites to fight in a 2D space
         constructor(battleview: BattleView) {
             this.battleview = battleview;
             this.ship_sprites = [];
+            this.playing = null;
 
             super(battleview.game);
 
@@ -81,6 +85,18 @@ module SpaceTac.View {
             if (arena_ship) {
                 arena_ship.setHovered(hovered);
             }
+        }
+
+        // Set the playing state on a ship sprite
+        setShipPlaying(ship: Game.Ship): void {
+            if (this.playing) {
+                this.playing.setPlaying(false);
+            }
+            var arena_ship = this.findShipSprite(ship);
+            if (arena_ship) {
+                arena_ship.setPlaying(true);
+            }
+            this.playing = arena_ship;
         }
     }
 }

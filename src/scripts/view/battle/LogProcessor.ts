@@ -35,6 +35,7 @@ module SpaceTac.View {
             switch (event.code) {
                 case "ship_change":
                     // Playing ship changed
+                    this.view.arena.setShipPlaying(event.target.ship);
                     this.view.card_playing.setShip(event.target.ship);
                     this.view.action_bar.setShip(event.target.ship);
                     break;

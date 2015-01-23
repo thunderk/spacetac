@@ -12,6 +12,9 @@ module SpaceTac.View {
         // Hover effect
         hover: Phaser.Image;
 
+        // Playing effect
+        playing: Phaser.Image;
+
         // Create a ship sprite usable in the Arena
         constructor(battleview: BattleView, ship: Game.Ship) {
             this.ship = ship;
@@ -31,6 +34,12 @@ module SpaceTac.View {
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.addChild(this.sprite);
+
+            // Add playing effect
+            this.playing = new Phaser.Image(battleview.game, 0, 0, "battle-arena-shipspriteplaying", 0);
+            this.playing.anchor.set(0.5, 0.5);
+            this.playing.visible = false;
+            this.addChild(this.playing);
 
             // Handle input on ship sprite
             this.sprite.input.useHandCursor = true;
@@ -52,6 +61,12 @@ module SpaceTac.View {
         //  This will toggle the hover effect
         setHovered(hovered: boolean) {
             this.hover.visible = hovered;
+        }
+
+        // Set the playing state on this ship
+        //  This will toggle the "playing" indicator
+        setPlaying(playing: boolean) {
+            this.playing.visible = playing;
         }
 
         // Move the sprite to a location
