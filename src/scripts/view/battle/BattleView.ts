@@ -133,20 +133,15 @@ module SpaceTac.View {
 
         // Set the currently hovered ship
         setShipHovered(ship: Game.Ship): void {
-            if (this.ship_hovered) {
-                this.arena.setShipHovered(this.ship_hovered, false);
-            }
             this.ship_hovered = ship;
             this.card_hovered.setShip(ship);
+            this.arena.setShipHovered(ship);
             if (this.targetting) {
                 if (ship) {
                     this.targetting.setTargetShip(ship);
                 } else {
                     this.targetting.unsetTarget();
                 }
-            }
-            if (ship) {
-                this.arena.setShipHovered(this.ship_hovered, true);
             }
         }
 

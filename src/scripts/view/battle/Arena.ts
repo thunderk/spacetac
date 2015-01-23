@@ -16,6 +16,8 @@ module SpaceTac.View {
         // List of ship sprites
         private ship_sprites: ArenaShip[];
 
+        // Currently hovered ship
+        private hovered: ArenaShip;
         // Currently playing ship
         private playing: ArenaShip;
 
@@ -24,6 +26,7 @@ module SpaceTac.View {
             this.battleview = battleview;
             this.ship_sprites = [];
             this.playing = null;
+            this.hovered = null;
 
             super(battleview.game);
 
@@ -80,11 +83,15 @@ module SpaceTac.View {
         }
 
         // Set the hovered state on a ship sprite
-        setShipHovered(ship: Game.Ship, hovered: boolean): void {
+        setShipHovered(ship: Game.Ship): void {
+            if (this.hovered) {
+                this.hovered.setHovered(false);
+            }
             var arena_ship = this.findShipSprite(ship);
             if (arena_ship) {
-                arena_ship.setHovered(hovered);
+                arena_ship.setHovered(true);
             }
+            this.hovered = arena_ship;
         }
 
         // Set the playing state on a ship sprite
