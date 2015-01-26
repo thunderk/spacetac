@@ -3,6 +3,8 @@ module SpaceTac.Game {
 
     // Generic tools functions
     export class Tools {
+
+        // Copy an object (only a shallow copy of immediate properties)
         static copyObject<T> (object: T): T {
             var objectCopy = <T>{};
 

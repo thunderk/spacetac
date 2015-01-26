@@ -76,7 +76,7 @@ module SpaceTac.View {
                 var tween_sprite = this.game.tweens.create(this.sprite);
                 tween_group.to({x: x, y: y});
                 tween_group.start();
-                tween_sprite.to({rotation: facing_angle});
+                Tools.rotationTween(tween_sprite, facing_angle);
                 tween_sprite.start();
             } else {
                 this.x = x;
