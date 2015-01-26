@@ -37,6 +37,33 @@ module SpaceTac.Game {
             expect(ship.arena_y).toEqual(50);
         });
 
+        it("computes facing angle", function () {
+            var ship = new Ship(null, "Test");
+            ship.ap_current.setMaximal(20);
+            ship.ap_current.set(20);
+            ship.movement_cost = 3;
+            ship.arena_angle = 0;
+            ship.setArenaPosition(50, 50);
+
+            ship.moveTo(50, 50);
+            expect(ship.arena_angle).toEqual(0);
+
+            ship.moveTo(51, 51);
+            expect(ship.arena_angle).toBeCloseTo(0.785398, 0.00001);
+
+            ship.moveTo(51, 52);
+            expect(ship.arena_angle).toBeCloseTo(1.5707963, 0.00001);
+
+            ship.moveTo(52, 52);
+            expect(ship.arena_angle).toEqual(0);
+
+            ship.moveTo(52, 50);
+            expect(ship.arena_angle).toBeCloseTo(-1.5707963, 0.00001);
+
+            ship.moveTo(50, 50);
+            expect(ship.arena_angle).toBeCloseTo(3.14159265, 0.00001);
+        });
+
         it("lists available actions from attached equipment", function () {
             var ship = new Ship(null, "Test");
             var actions: BaseAction[];

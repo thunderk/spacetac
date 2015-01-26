@@ -70,19 +70,18 @@ module SpaceTac.View {
         }
 
         // Move the sprite to a location
-        moveTo(x: number, y: number, animate: boolean = true) {
-            var angle = Math.atan2(y - this.y, x - this.x);
+        moveTo(x: number, y: number, facing_angle: number, animate: boolean = true) {
             if (animate) {
                 var tween_group = this.game.tweens.create(this);
                 var tween_sprite = this.game.tweens.create(this.sprite);
                 tween_group.to({x: x, y: y});
                 tween_group.start();
-                tween_sprite.to({rotation: angle});
+                tween_sprite.to({rotation: facing_angle});
                 tween_sprite.start();
             } else {
                 this.x = x;
                 this.y = y;
-                this.sprite.rotation = angle;
+                this.sprite.rotation = facing_angle;
             }
         }
     }

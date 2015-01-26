@@ -204,8 +204,10 @@ module SpaceTac.Game {
             var dy = dest[1] - this.arena_y;
             var distance = Math.sqrt(dx * dx + dy * dy);
             var cost = distance * this.movement_cost;
+            var angle = Math.atan2(y - this.arena_y, x - this.arena_x);
 
             this.setArenaPosition(this.arena_x + dx, this.arena_y + dy);
+            this.setArenaFacingAngle(angle);
             this.useActionPoints(cost);
         }
 

@@ -40,9 +40,10 @@ module SpaceTac.View {
                     this.view.action_bar.setShip(event.target.ship);
                     break;
                 case "move":
-                    var sprite = this.view.arena.findShipSprite(event.ship);
+                    var move_event: Game.MoveEvent = <Game.MoveEvent>event;
+                    var sprite = this.view.arena.findShipSprite(move_event.ship);
                     if (sprite) {
-                        sprite.moveTo(event.target.x, event.target.y);
+                        sprite.moveTo(move_event.target.x, move_event.target.y, move_event.facing_angle, true);
                     }
                     break;
             }
