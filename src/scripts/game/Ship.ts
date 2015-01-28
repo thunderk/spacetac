@@ -12,12 +12,6 @@ module SpaceTac.Game {
         // Current level
         level: number;
 
-        // Number of shield points
-        shield: number;
-
-        // Number of hull points
-        hull: number;
-
         // Position in the arena
         arena_x: number;
         arena_y: number;
@@ -36,6 +30,12 @@ module SpaceTac.Game {
 
         // Number of action points recovered by turn
         ap_recover: Attribute;
+
+        // Number of hull points (once it reaches 0, the ship is dead)
+        hull: Attribute;
+
+        // Number of shield points (a shield wan absorb some damage to protect the hull)
+        shield: Attribute;
 
         // Number of action points used to make a 1.0 move
         movement_cost: number;
@@ -56,8 +56,13 @@ module SpaceTac.Game {
             this.ap_current = this.newAttribute(AttributeCode.AP);
             this.ap_initial = this.newAttribute(AttributeCode.AP_Initial);
             this.ap_recover = this.newAttribute(AttributeCode.AP_Recovery);
+            this.hull = this.newAttribute(AttributeCode.Hull);
+            this.shield = this.newAttribute(AttributeCode.Shield);
             this.movement_cost = 0.1;
             this.slots = [];
+
+            this.arena_x = 0;
+            this.arena_y = 0;
 
             if (fleet) {
                 fleet.addShip(this);
@@ -229,6 +234,8 @@ module SpaceTac.Game {
             });
             this.initiative.setMaximal(new_attrs.getValue(AttributeCode.Initiative));
             this.ap_current.setMaximal(new_attrs.getValue(AttributeCode.AP));
+            this.hull.setMaximal(new_attrs.getValue(AttributeCode.Hull));
+            this.shield.setMaximal(new_attrs.getValue(AttributeCode.Shield));
 
             // Compute new current values for attributes
             new_attrs = new AttributeCollection();
@@ -237,6 +244,12 @@ module SpaceTac.Game {
             });
             this.ap_initial.set(new_attrs.getValue(AttributeCode.AP_Initial));
             this.ap_recover.set(new_attrs.getValue(AttributeCode.AP_Recovery));
+        }
+
+        // Fully restore hull and shield
+        restoreHealth(): void {
+            this.hull.set(this.hull.maximal);
+            this.shield.set(this.shield.maximal);
         }
 
         // Collect all effects to apply for updateAttributes

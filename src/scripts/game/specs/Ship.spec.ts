@@ -103,5 +103,20 @@ module SpaceTac.Game {
             ship.updateAttributes();
             expect(ship.ap_current.maximal).toBe(9);
         });
+
+        it("repairs hull and recharges shield", function () {
+            var ship = new Ship(null, "Test");
+
+            ship.hull.setMaximal(120);
+            ship.shield.setMaximal(150);
+
+            expect(ship.hull.current).toEqual(0);
+            expect(ship.shield.current).toEqual(0);
+
+            ship.restoreHealth();
+
+            expect(ship.hull.current).toEqual(120);
+            expect(ship.shield.current).toEqual(150);
+        });
     });
 }

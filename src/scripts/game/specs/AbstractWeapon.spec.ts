@@ -18,5 +18,106 @@ module SpaceTac.Game.Specs {
             expect(action.code).toEqual("fire");
             expect(action.needs_target).toBe(true);
         });
+
+        it("controls ability to target emptiness", function () {
+            var weapon = new Equipments.AbstractWeapon("Super Fire Weapon", 50, 60);
+            weapon.setRange(10, 20, true);
+
+            var equipment = weapon.generateFixed(20);
+            var action = <FireWeaponAction>equipment.action;
+            expect(action.can_target_space).toBe(true);
+
+            weapon.setRange(10, 20, false);
+
+            equipment = weapon.generateFixed(20);
+            action = <FireWeaponAction>equipment.action;
+            expect(action.can_target_space).toBe(false);
+        });
+
+        it("can't friendly fire", function () {
+            var fleet1 = new Fleet(new Player());
+            var fleet2 = new Fleet(new Player());
+            var ship1a = new Ship(fleet1);
+            var ship1b = new Ship(fleet1);
+            var ship2a = new Ship(fleet2);
+
+            var weapon = new Equipments.AbstractWeapon("Super Fire Weapon", 50, 60);
+            weapon.setRange(10, 10);
+            var equipment = weapon.generateFixed(0);
+
+            expect(equipment.action.checkShipTarget(null, ship1a, Target.newFromShip(ship2a))).toEqual(
+                Target.newFromShip(ship2a));
+            expect(equipment.action.checkShipTarget(null, ship1a, Target.newFromShip(ship1b))).toBeNull();
+        });
+
+        it("can't fire farther than its range", function () {
+            var fleet1 = new Fleet(new Player());
+            var fleet2 = new Fleet(new Player());
+
+            var ship = new Ship(fleet1);
+            ship.setArenaPosition(10, 10);
+
+            var weapon = new Equipments.AbstractWeapon("Super Fire Weapon", 50);
+            weapon.setRange(10, 10, true);
+
+            var equipment = weapon.generateFixed(0);
+            expect(equipment.distance).toEqual(10);
+
+            expect(equipment.action.checkLocationTarget(null, ship, Target.newFromLocation(15, 10))).toEqual(
+                Target.newFromLocation(15, 10));
+            expect(equipment.action.checkLocationTarget(null, ship, Target.newFromLocation(30, 10))).toEqual(
+                Target.newFromLocation(20, 10));
+
+            // Ship targetting
+            var ship2 = new Ship(fleet2);
+
+            ship2.setArenaPosition(10, 15);
+            expect(equipment.action.checkShipTarget(null, ship, Target.newFromShip(ship2))).toEqual(
+                Target.newFromShip(ship2));
+
+            ship2.setArenaPosition(10, 25);
+            expect(equipment.action.checkShipTarget(null, ship, Target.newFromShip(ship2))).toBeNull();
+
+            // Forbid targetting in space
+            weapon.setRange(10, 10, false);
+            equipment = weapon.generateFixed(0);
+            expect(equipment.action.checkLocationTarget(null, ship, Target.newFromLocation(15, 10))).toBeNull();
+        });
+
+        it("can target an enemy ship and damage it", function () {
+            var fleet1 = new Fleet(new Player());
+            var fleet2 = new Fleet(new Player());
+
+            var ship1 = new Ship(fleet1);
+            ship1.ap_current.set(50);
+
+            var ship2 = new Ship(fleet2);
+            ship2.hull.setMaximal(100);
+            ship2.shield.setMaximal(30);
+            ship2.restoreHealth();
+
+            expect(ship2.hull.current).toEqual(100);
+            expect(ship2.shield.current).toEqual(30);
+
+            var weapon = new Equipments.AbstractWeapon("Super Fire Weapon", 20);
+            weapon.ap_usage = new IntegerRange(1, 1);
+
+            var equipment = weapon.generateFixed(0);
+
+            equipment.action.apply(null, ship1, Target.newFromShip(ship2));
+            expect(ship2.hull.current).toEqual(100);
+            expect(ship2.shield.current).toEqual(10);
+            expect(ship1.ap_current.current).toEqual(49);
+
+            equipment.action.apply(null, ship1, Target.newFromShip(ship2));
+            expect(ship2.hull.current).toEqual(90);
+            expect(ship2.shield.current).toEqual(0);
+            expect(ship1.ap_current.current).toEqual(48);
+
+            equipment.action.apply(null, ship1, Target.newFromShip(ship2));
+            expect(ship2.hull.current).toEqual(70);
+            expect(ship2.shield.current).toEqual(0);
+            expect(ship1.ap_current.current).toEqual(47);
+        });
     });
 }
