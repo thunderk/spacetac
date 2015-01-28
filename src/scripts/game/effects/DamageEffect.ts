@@ -13,5 +13,10 @@ module SpaceTac.Game {
 
             this.value = value;
         }
+
+        applyOnShip(ship: Ship): boolean {
+            // TODO
+            return true;
+        }
     }
 }

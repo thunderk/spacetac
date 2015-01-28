@@ -9,10 +9,14 @@ module SpaceTac.Game {
         // Boolean at true if the action needs a target
         needs_target: boolean;
 
+        // Equipment that triggers this action
+        equipment: Equipment;
+
         // Create the action
-        constructor(code: string, needs_target: boolean) {
+        constructor(code: string, needs_target: boolean, equipment: Equipment = null) {
             this.code = code;
             this.needs_target = needs_target;
+            this.equipment = equipment;
         }
 
         // Check basic conditions to know if the ship can use this action at all

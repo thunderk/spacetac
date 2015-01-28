@@ -3,8 +3,8 @@ module SpaceTac.Game {
 
     // Action to move to a given location
     export class MoveAction extends BaseAction {
-        constructor() {
-            super("move", true);
+        constructor(equipment: Equipment) {
+            super("move", true, equipment);
         }
 
         canBeUsed(battle: Battle, ship: Ship): boolean {

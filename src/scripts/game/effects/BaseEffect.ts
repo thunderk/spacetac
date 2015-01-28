@@ -11,5 +11,11 @@ module SpaceTac.Game {
         constructor(code: string) {
             this.code = code;
         }
+
+        // Apply ponctually the effect on a given ship
+        //  Return true if the effect could be applied
+        applyOnShip(ship: Ship): boolean {
+            return false;
+        }
     }
 }

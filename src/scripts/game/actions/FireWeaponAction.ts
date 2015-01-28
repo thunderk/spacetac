@@ -5,8 +5,13 @@ module SpaceTac.Game {
 
     // Action to fire a weapon on another ship, or in space
     export class FireWeaponAction extends BaseAction {
-        constructor() {
-            super("fire", true);
+        // Boolean set to true if the weapon can target space
+        can_target_space: boolean;
+
+        constructor(equipment: Equipment, can_target_space: boolean = false) {
+            super("fire", true, equipment);
+
+            this.can_target_space = can_target_space;
         }
 
         canBeUsed(battle: Battle, ship: Ship): boolean {
@@ -14,8 +19,12 @@ module SpaceTac.Game {
         }
 
         checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
-            // TODO In space targetting
-            return null;
+            if (this.can_target_space) {
+                target = target.constraintInRange(ship.arena_x, ship.arena_y, this.equipment.distance);
+                return target;
+            } else {
+                return null;
+            }
         }
 
         checkShipTarget(battle: Battle, ship: Ship, target: Target): Target {
@@ -23,14 +32,29 @@ module SpaceTac.Game {
                 // No friendly fire
                 return null;
             } else {
-                // TODO Limit by weapon range
-                return target;
+                // Check if target is in range
+                if (target.isInRange(ship.arena_x, ship.arena_y, this.equipment.distance)) {
+                    return target;
+                } else {
+                    return null;
+                }
             }
         }
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
-            // TODO
-            return false;
+            if (target.ship) {
+                // Apply all target effects
+                var result = false;
+                this.equipment.target_effects.forEach((effect: BaseEffect) => {
+                    var eff_result = effect.applyOnShip(target.ship);
+                    result = result || eff_result;
+                });
+                return result;
+            } else {
+                // TODO target in space (=> apply blast radius)
+                return false;
+            }
+
         }
     }
 }

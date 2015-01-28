@@ -76,7 +76,7 @@ module SpaceTac.Game {
 
             slot = ship.addSlot(SlotType.Engine);
             equipment = new Equipment();
-            equipment.action = new MoveAction();
+            equipment.action = new MoveAction(equipment);
             slot.attach(equipment);
 
             actions = ship.getAvailableActions();

@@ -13,7 +13,7 @@ module SpaceTac.Game.Equipments {
         }
 
         protected getActionForEquipment(equipment: Equipment): BaseAction {
-            return new MoveAction();
+            return new MoveAction(equipment);
         }
     }
 }
