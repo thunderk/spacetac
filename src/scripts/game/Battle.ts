@@ -105,6 +105,10 @@ module SpaceTac.Game {
             });
             this.placeShips();
             this.throwInitiative();
+            this.play_order.forEach((ship: Ship) => {
+                ship.updateAttributes();
+                ship.restoreHealth();
+            });
             this.advanceToNextShip(false);
         }
 

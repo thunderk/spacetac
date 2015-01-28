@@ -54,5 +54,17 @@ module SpaceTac.View {
             this.add(result);
             return result;
         }
+
+        // Find an item for a ship
+        //  Returns null if not found
+        findItem(ship: Game.Ship): ShipListItem {
+            var found: ShipListItem = null;
+            this.ships.forEach((item: ShipListItem) => {
+                if (item.ship === ship) {
+                    found = item;
+                }
+            });
+            return found;
+        }
     }
 }

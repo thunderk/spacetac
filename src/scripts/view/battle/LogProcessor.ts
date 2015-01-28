@@ -40,12 +40,18 @@ module SpaceTac.View {
                     this.view.action_bar.setShip(event.target.ship);
                     break;
                 case "move":
-                    var move_event: Game.MoveEvent = <Game.MoveEvent>event;
+                    var move_event = <Game.MoveEvent>event;
                     var sprite = this.view.arena.findShipSprite(move_event.ship);
                     if (sprite) {
                         sprite.moveTo(move_event.target.x, move_event.target.y, move_event.facing_angle, true);
                     }
                     break;
+                case "attr":
+                    var attr_event = <Game.AttributeChangeEvent>event;
+                    var item = this.view.ship_list.findItem(attr_event.ship);
+                    if (item) {
+                        item.attributeChanged(attr_event.attribute);
+                    }
             }
         }
 
