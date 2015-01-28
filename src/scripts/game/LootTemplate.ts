@@ -22,8 +22,11 @@ module SpaceTac.Game {
         // Duration, in number of turns
         duration: IntegerRange;
 
-        // Effects
+        // Permanent effects (when attached to an equipment slot)
         permanent_effects: EffectTemplate[];
+
+        // Effects on target
+        target_effects: EffectTemplate[];
 
         // Action Points usage
         ap_usage: Range;
@@ -41,6 +44,7 @@ module SpaceTac.Game {
             this.ap_usage = new Range(0, 0);
             this.min_level = new IntegerRange(0, 0);
             this.permanent_effects = [];
+            this.target_effects = [];
         }
 
         // Generate a random equipment with this template
@@ -67,6 +71,9 @@ module SpaceTac.Game {
 
             this.permanent_effects.forEach((eff_template: EffectTemplate) => {
                 result.permanent_effects.push(eff_template.generateFixed(power));
+            });
+            this.target_effects.forEach((eff_template: EffectTemplate) => {
+                result.target_effects.push(eff_template.generateFixed(power));
             });
 
             return result;
@@ -121,6 +128,13 @@ module SpaceTac.Game {
             var template = new EffectTemplate(new AttributeMaxEffect(code, 0));
             template.addModifier("value", new Range(min, max));
             this.permanent_effects.push(template);
+        }
+
+        // Convenience function to add a "damage on target" effect
+        addDamageOnTargetEffect(min: number, max: number = null): void {
+            var template = new EffectTemplate(new DamageEffect(0));
+            template.addModifier("value", new Range(min, max));
+            this.target_effects.push(template);
         }
 
         // Method to reimplement to assign an action to a generated equipment

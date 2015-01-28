@@ -30,7 +30,6 @@ module SpaceTac.View {
             } else if (value - dest < -Math.PI) {
                 dest -= 2 * Math.PI;
             }
-            console.log(value, dest);
             var changes: Object = {};
             changes[property] = dest;
             tween.to(changes);

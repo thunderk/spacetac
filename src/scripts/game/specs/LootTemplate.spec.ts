@@ -80,5 +80,16 @@ module SpaceTac.Game.Specs {
             expect(result.min).toBeCloseTo(0.25, 0.000001);
             expect(result.max).toBeCloseTo(0.5, 0.000001);
         });
+
+        it("adds damage on target effects", () => {
+            var template = new LootTemplate(SlotType.Weapon, "Bulletator");
+            template.addDamageOnTargetEffect(80, 120);
+
+            var result = template.generateFixed(0.5);
+            expect(result.target_effects.length).toBe(1);
+            var effect = <DamageEffect>result.target_effects[0];
+            expect(effect.code).toEqual("damage");
+            expect(effect.value).toEqual(100);
+        });
     });
 }

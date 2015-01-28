@@ -1,12 +1,12 @@
-/// <reference path="../LootTemplate.ts"/>
+/// <reference path="AbstractWeapon.ts"/>
 
 module SpaceTac.Game.Equipments {
     "use strict";
 
     // Equipment: Gatling Gun
-    export class GatlingGun extends LootTemplate {
+    export class GatlingGun extends AbstractWeapon {
         constructor() {
-            super(SlotType.Weapon, "Gatling Gun");
+            super("Gatling Gun", 10, 20);
 
             this.distance = new Range(20, 30);
             this.ap_usage = new Range(3, 4);

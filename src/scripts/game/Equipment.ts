@@ -30,9 +30,13 @@ module SpaceTac.Game {
         // Permanent effects
         permanent_effects: BaseEffect[];
 
+        // Effects on target
+        target_effects: BaseEffect[];
+
         // Basic constructor
         constructor() {
             this.permanent_effects = [];
+            this.target_effects = [];
         }
     }
 }
