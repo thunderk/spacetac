@@ -34,6 +34,25 @@ module SpaceTac.Game.Specs {
             expect(action.can_target_space).toBe(false);
         });
 
+        it("can't fire without sufficient AP", function () {
+            var ship = new Ship();
+            ship.ap_current.set(3);
+
+            var weapon = new Equipments.AbstractWeapon("Super Fire Weapon", 50);
+
+            weapon.ap_usage = new Range(2);
+            var equipment = weapon.generateFixed(0);
+            expect(equipment.action.canBeUsed(null, ship)).toBe(true);
+
+            weapon.ap_usage = new Range(3);
+            equipment = weapon.generateFixed(0);
+            expect(equipment.action.canBeUsed(null, ship)).toBe(true);
+
+            weapon.ap_usage = new Range(4);
+            equipment = weapon.generateFixed(0);
+            expect(equipment.action.canBeUsed(null, ship)).toBe(false);
+        });
+
         it("can't friendly fire", function () {
             var fleet1 = new Fleet(new Player());
             var fleet2 = new Fleet(new Player());
