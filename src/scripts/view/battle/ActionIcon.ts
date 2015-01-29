@@ -18,6 +18,9 @@ module SpaceTac.View {
         // Current targetting
         private targetting: Targetting;
 
+        // Layer applied when the action is active
+        private active: Phaser.Image;
+
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Game.Ship, action: Game.BaseAction) {
             this.bar = bar;
@@ -25,15 +28,20 @@ module SpaceTac.View {
             this.ship = ship;
             this.action = action;
 
-            super(bar.game, x, y, "action-" + action.code);
+            super(bar.game, x, y, "battle-action-inactive");
             bar.addChild(this);
 
-            // TODO Handle action.canBeUsed() result to enable/disable the button
+            // Active layer
+            this.active = new Phaser.Image(bar.battleview.game, 0, 0, "battle-action-active", 0);
+            this.addChild(this.active);
 
-            this.input.useHandCursor = true;
+            // Click process
             this.onInputUp.add(() => {
                 this.processClick();
             }, this);
+
+            // Initialize
+            this.updateActiveStatus();
         }
 
         // Process a click event on the action icon
@@ -69,6 +77,17 @@ module SpaceTac.View {
                 this.battleview.exitTargettingMode();
                 this.bar.actionEnded();
             }
+        }
+
+        // Update the active status, from the action canBeUsed result
+        updateActiveStatus() {
+            var active = this.action.canBeUsed(this.battleview.battle, this.ship);
+
+            var tween = this.battleview.game.tweens.create(this.active);
+            tween.to({alpha: active ? 1 : 0});
+            tween.start();
+
+            this.input.useHandCursor = active;
         }
     }
 }

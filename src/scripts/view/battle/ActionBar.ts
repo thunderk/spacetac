@@ -40,7 +40,7 @@ module SpaceTac.View {
 
         // Add an action icon
         addAction(ship: Game.Ship, action: Game.BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, 110 + this.actions.length * 50, 25, ship, action);
+            var icon = new ActionIcon(this, 90 + this.actions.length * 62, 2, ship, action);
             this.actions.push(icon);
             return icon;
         }
@@ -73,6 +73,9 @@ module SpaceTac.View {
         // Called by an action icon when the action has been applied
         actionEnded(): void {
             this.updateActionPoints();
+            this.actions.forEach((action: ActionIcon) => {
+                action.updateActiveStatus();
+            });
         }
     }
 }

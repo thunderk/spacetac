@@ -15,6 +15,8 @@ module SpaceTac.View {
             this.load.image("battle-shiplist-enemy", "assets/images/battle/shiplist-enemy.png");
             this.load.image("battle-arena-background", "assets/images/battle/arena/background.png");
             this.load.image("battle-actionbar", "assets/images/battle/actionbar.png");
+            this.load.image("battle-action-inactive", "assets/images/battle/action-inactive.png");
+            this.load.image("battle-action-active", "assets/images/battle/action-active.png");
             this.load.image("battle-actionpointsempty", "assets/images/battle/actionpointsempty.png");
             this.load.image("battle-actionpointsfull", "assets/images/battle/actionpointsfull.png");
             this.load.image("battle-arena-shipspritehover", "assets/images/battle/arena/shipspritehover.png");
