@@ -20,13 +20,17 @@ module SpaceTac.Game {
         first_turn: boolean;
 
         // Create a battle between two fleets
-        constructor(fleet1: Fleet, fleet2: Fleet) {
+        constructor(fleet1: Fleet = null, fleet2: Fleet = null) {
             this.log = new BattleLog();
-            this.fleets = [fleet1, fleet2];
+            this.fleets = [fleet1 || new Fleet(), fleet2 || new Fleet()];
             this.play_order = [];
             this.playing_ship_index = null;
             this.playing_ship = null;
             this.first_turn = true;
+
+            this.fleets.forEach((fleet: Fleet) => {
+                fleet.setBattle(this);
+            });
         }
 
         // Create a quick random battle, for testing purposes
@@ -100,9 +104,6 @@ module SpaceTac.Game {
         //  This will call all necessary initialization steps (initiative, placement...)
         //  This will not add any event to the battle log
         start(): void {
-            this.fleets.forEach((fleet: Fleet) => {
-                fleet.setBattle(this);
-            });
             this.placeShips();
             this.throwInitiative();
             this.play_order.forEach((ship: Ship) => {

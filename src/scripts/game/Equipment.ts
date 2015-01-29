@@ -9,7 +9,7 @@ module SpaceTac.Game {
         // Equipment name
         name: string;
 
-        // Distance to target
+        // Maximal distance allowed to target
         distance: number;
 
         // Effect area's radius

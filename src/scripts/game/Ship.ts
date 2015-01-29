@@ -37,9 +37,6 @@ module SpaceTac.Game {
         // Number of shield points (a shield wan absorb some damage to protect the hull)
         shield: Attribute;
 
-        // Number of action points used to make a 1.0 move
-        movement_cost: number;
-
         // List of slots, able to contain equipment
         slots: Slot[];
 
@@ -49,7 +46,7 @@ module SpaceTac.Game {
         // Create a new ship inside a fleet
         constructor(fleet: Fleet = null, name: string = null) {
             this.attributes = new AttributeCollection();
-            this.fleet = fleet;
+            this.fleet = fleet || new Fleet();
             this.name = name;
             this.initiative = this.newAttribute(AttributeCode.Initiative);
             this.initiative.setMaximal(1);
@@ -58,11 +55,11 @@ module SpaceTac.Game {
             this.ap_recover = this.newAttribute(AttributeCode.AP_Recovery);
             this.hull = this.newAttribute(AttributeCode.Hull);
             this.shield = this.newAttribute(AttributeCode.Shield);
-            this.movement_cost = 0.1;
             this.slots = [];
 
             this.arena_x = 0;
             this.arena_y = 0;
+            this.arena_angle = 0;
 
             if (fleet) {
                 fleet.addShip(this);
@@ -188,32 +185,17 @@ module SpaceTac.Game {
             }
         }
 
-        // Get the maximal position reachable in the arena with current action points
-        getLongestMove(x: number, y: number): number[] {
-            var dx = x - this.arena_x;
-            var dy = y - this.arena_y;
-            var length = Math.sqrt(dx * dx + dy * dy);
-            var max_length = this.ap_current.current / this.movement_cost;
-            if (max_length >= length) {
-                return [x, y];
-            } else {
-                var factor = max_length / length;
-                return [this.arena_x + dx * factor, this.arena_y + dy * factor];
-            }
-        }
-
-        // Move toward a location, consuming action points
-        moveTo(x: number, y: number): void {
-            var dest = this.getLongestMove(x, y);
-            var dx = dest[0] - this.arena_x;
-            var dy = dest[1] - this.arena_y;
-            var distance = Math.sqrt(dx * dx + dy * dy);
-            var cost = distance * this.movement_cost;
+        // Move toward a location
+        //  This does not check or consume action points
+        moveTo(x: number, y: number, log: boolean = true): void {
             var angle = Math.atan2(y - this.arena_y, x - this.arena_x);
-
-            this.setArenaPosition(this.arena_x + dx, this.arena_y + dy);
             this.setArenaFacingAngle(angle);
-            this.useActionPoints(cost);
+
+            this.setArenaPosition(x, y);
+
+            if (log && this.getBattle()) {
+                this.getBattle().log.add(new MoveEvent(this, x, y));
+            }
         }
 
         // Add an empty equipment slot of the given type

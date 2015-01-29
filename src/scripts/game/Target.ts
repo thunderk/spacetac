@@ -28,6 +28,13 @@ module SpaceTac.Game {
             return new Target(x, y, null);
         }
 
+        // Get distance to another target
+        getDistanceTo(other: Target): number {
+            var dx = other.x - this.x;
+            var dy = other.y - this.y;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
         // Check if a target is in range from a specific point
         isInRange(x: number, y: number, radius: number): boolean {
             var dx = this.x - x;

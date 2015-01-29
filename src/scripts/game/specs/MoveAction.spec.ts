@@ -8,10 +8,12 @@ module SpaceTac.Game {
             var ship = new Ship(null, "Test");
             ship.ap_current.setMaximal(20);
             ship.ap_current.set(6);
-            ship.movement_cost = 2;
             ship.arena_x = 0;
             ship.arena_y = 0;
-            var action = new MoveAction(null);
+            var engine = new Equipment();
+            engine.distance = 1;
+            engine.ap_usage = 2;
+            var action = new MoveAction(engine);
 
             var result = action.checkTarget(null, ship, Target.newFromLocation(0, 2));
             expect(result).toEqual(Target.newFromLocation(0, 2));
@@ -37,14 +39,16 @@ module SpaceTac.Game {
         });
 
         it("applies to ship location, battle log and AP", function () {
-            var battle = new Battle(null, null);
-            var ship = new Ship(null, "Test");
+            var ship = new Ship();
+            var battle = new Battle(ship.fleet);
             ship.ap_current.setMaximal(20);
             ship.ap_current.set(5);
-            ship.movement_cost = 1;
             ship.arena_x = 0;
             ship.arena_y = 0;
-            var action = new MoveAction(null);
+            var engine = new Equipment();
+            engine.distance = 1;
+            engine.ap_usage = 1;
+            var action = new MoveAction(engine);
 
             var result = action.apply(battle, ship, Target.newFromLocation(10, 10));
             expect(result).toBe(true);
@@ -58,12 +62,18 @@ module SpaceTac.Game {
             expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
             expect(ship.ap_current.current).toEqual(0);
 
-            expect(battle.log.events.length).toBe(1);
+            expect(battle.log.events.length).toBe(2);
+
             expect(battle.log.events[0].code).toEqual("move");
             expect(battle.log.events[0].ship).toBe(ship);
             expect(battle.log.events[0].target.ship).toBeNull();
             expect(battle.log.events[0].target.x).toBeCloseTo(3.535533, 0.00001);
             expect(battle.log.events[0].target.y).toBeCloseTo(3.535533, 0.00001);
+
+            expect(battle.log.events[1].code).toEqual("attr");
+            expect(battle.log.events[1].ship).toBe(ship);
+            expect((<AttributeChangeEvent>battle.log.events[1]).attribute).toEqual(
+                new Attribute(AttributeCode.AP, 20, 0));
         });
     });
 }

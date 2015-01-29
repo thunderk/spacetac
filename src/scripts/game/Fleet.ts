@@ -13,8 +13,8 @@ module SpaceTac.Game {
         battle: Battle;
 
         // Create a fleet, bound to a player
-        constructor(player: Player) {
-            this.player = player;
+        constructor(player: Player = null) {
+            this.player = player || new Player();
             this.ships = [];
             this.battle = null;
         }
