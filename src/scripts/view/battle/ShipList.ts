@@ -9,10 +9,14 @@ module SpaceTac.View {
         // List of ship items
         ships: ShipListItem[];
 
+        // Playing ship
+        playing: ShipListItem;
+
         // Create an empty action bar
         constructor(battleview: BattleView) {
             this.battleview = battleview;
             this.ships = [];
+            this.playing = null;
 
             super(battleview.game, battleview.ui);
             battleview.ui.add(this);
@@ -27,7 +31,7 @@ module SpaceTac.View {
         update() {
             super.update();
 
-            this.y = 100;
+            this.y = 76;
         }
 
         // Clear the action icons
@@ -49,7 +53,7 @@ module SpaceTac.View {
         // Add a ship icon
         addShip(ship: Game.Ship): ShipListItem {
             var owned = ship.getPlayer() === this.battleview.player;
-            var result = new ShipListItem(this, 0, this.ships.length * 50, ship, owned);
+            var result = new ShipListItem(this, 0, this.ships.length * 80, ship, owned);
             this.ships.push(result);
             this.add(result);
             return result;
@@ -65,6 +69,17 @@ module SpaceTac.View {
                 }
             });
             return found;
+        }
+
+        // Set the currently playing ship
+        setPlaying(ship: Game.Ship): void {
+            if (this.playing) {
+                this.playing.setPlaying(false);
+            }
+            this.playing = this.findItem(ship);
+            if (this.playing) {
+                this.playing.setPlaying(true);
+            }
         }
     }
 }

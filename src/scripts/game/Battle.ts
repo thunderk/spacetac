@@ -65,8 +65,8 @@ module SpaceTac.Game {
         // Defines the initial ship positions of all engaged fleets
         placeShips(): void {
             this.first_turn = true;
-            this.placeFleetShips(this.fleets[0], 100, 300, 0);
-            this.placeFleetShips(this.fleets[1], 950, 300, Math.PI);
+            this.placeFleetShips(this.fleets[0], 50, 300, 0);
+            this.placeFleetShips(this.fleets[1], 800, 300, Math.PI);
         }
 
         // End the current ship turn, passing control to the next one in play order

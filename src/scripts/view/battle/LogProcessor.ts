@@ -59,6 +59,7 @@ module SpaceTac.View {
         // Playing ship changed
         private processShipChangeEvent(event: Game.ShipChangeEvent) {
             this.view.arena.setShipPlaying(event.target.ship);
+            this.view.ship_list.setPlaying(event.target.ship);
             this.view.card_playing.setShip(event.target.ship);
             this.view.action_bar.setShip(event.target.ship);
         }
