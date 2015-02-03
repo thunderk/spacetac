@@ -198,6 +198,16 @@ module SpaceTac.Game {
             }
         }
 
+        // Apply damages to hull and/or shield
+        addDamage(hull: number, shield: number, log: boolean = true): void {
+            this.setAttribute(this.hull, -hull, true, log);
+            this.setAttribute(this.shield, -shield, true, log);
+
+            if (log && this.getBattle()) {
+                this.getBattle().log.add(new DamageEvent(this, hull, shield));
+            }
+        }
+
         // Add an empty equipment slot of the given type
         addSlot(type: SlotType): Slot {
             var result = new Slot(this, type);

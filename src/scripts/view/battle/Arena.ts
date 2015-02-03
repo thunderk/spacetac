@@ -29,7 +29,6 @@ module SpaceTac.View {
             this.hovered = null;
 
             super(battleview.game);
-            this.scale.set(2, 2);
 
             var background = new Phaser.Button(battleview.game, 0, 0, "battle-arena-background");
             var expected_width = 1280 - 252;

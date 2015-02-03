@@ -16,22 +16,26 @@ module SpaceTac.Game {
 
         applyOnShip(ship: Ship): boolean {
             var damage = this.value;
+            var hull: number;
+            var shield: number;
 
             // Apply on shields
-            var absorbed = ship.shield.current;
             if (damage >= ship.shield.current) {
-                ship.setAttribute(ship.shield, 0);
+                shield = ship.shield.current;
             } else {
-                ship.setAttribute(ship.shield, -damage, true);
+                shield = damage;
             }
-            damage -= absorbed;
+            damage -= shield;
 
             // Apply on hull
             if (damage >= ship.hull.current) {
-                ship.setAttribute(ship.hull, 0);
+                hull = ship.hull.current;
             } else {
-                ship.setAttribute(ship.hull, -damage, true);
+                hull = damage;
             }
+
+            // Effective damages on ship
+            ship.addDamage(hull, shield);
 
             return true;
         }

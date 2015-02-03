@@ -34,24 +34,17 @@ module SpaceTac.View {
 
             switch (event.code) {
                 case "ship_change":
-                    // Playing ship changed
-                    this.view.arena.setShipPlaying(event.target.ship);
-                    this.view.card_playing.setShip(event.target.ship);
-                    this.view.action_bar.setShip(event.target.ship);
+                    this.processShipChangeEvent(<Game.ShipChangeEvent>event);
+                    break;
+                case "damage":
+                    this.processDamageEvent(<Game.DamageEvent>event);
                     break;
                 case "move":
-                    var move_event = <Game.MoveEvent>event;
-                    var sprite = this.view.arena.findShipSprite(move_event.ship);
-                    if (sprite) {
-                        sprite.moveTo(move_event.target.x, move_event.target.y, move_event.facing_angle, true);
-                    }
+                    this.processMoveEvent(<Game.MoveEvent>event);
                     break;
                 case "attr":
-                    var attr_event = <Game.AttributeChangeEvent>event;
-                    var item = this.view.ship_list.findItem(attr_event.ship);
-                    if (item) {
-                        item.attributeChanged(attr_event.attribute);
-                    }
+                    this.processAttributeChangedEvent(<Game.AttributeChangeEvent>event);
+                    break;
             }
         }
 
@@ -60,6 +53,37 @@ module SpaceTac.View {
             if (this.subscription) {
                 this.log.unsubscribe(this.subscription);
                 this.subscription = null;
+            }
+        }
+
+        // Playing ship changed
+        private processShipChangeEvent(event: Game.ShipChangeEvent) {
+            this.view.arena.setShipPlaying(event.target.ship);
+            this.view.card_playing.setShip(event.target.ship);
+            this.view.action_bar.setShip(event.target.ship);
+        }
+
+        // Damage to ship
+        private processDamageEvent(event: Game.DamageEvent) {
+            var sprite = this.view.arena.findShipSprite(event.ship);
+            if (sprite) {
+                sprite.displayDamage(event.hull, event.shield);
+            }
+        }
+
+        // Ship moved
+        private processMoveEvent(event: Game.MoveEvent) {
+            var sprite = this.view.arena.findShipSprite(event.ship);
+            if (sprite) {
+                sprite.moveTo(event.target.x, event.target.y, event.facing_angle, true);
+            }
+        }
+
+        // Ship attribute changed
+        private processAttributeChangedEvent(event: Game.AttributeChangeEvent) {
+            var item = this.view.ship_list.findItem(event.ship);
+            if (item) {
+                item.attributeChanged(event.attribute);
             }
         }
     }

@@ -84,5 +84,32 @@ module SpaceTac.View {
                 this.sprite.rotation = facing_angle;
             }
         }
+
+        // Briefly display the damage done to the ship
+        displayDamage(hull: number, shield: number) {
+            if (hull > 0) {
+                var hull_text = new Phaser.Text(this.game, -20, -20, Math.round(hull).toString(),
+                    {font: "bold 16px Arial", align: "center", fill: "#ffbbbb"});
+                hull_text.anchor.set(0.5, 0.5);
+                this.addChild(hull_text);
+                this.animateDamageText(hull_text);
+            }
+            if (shield > 0) {
+                var shield_text = new Phaser.Text(this.game, 20, -20, Math.round(shield).toString(),
+                    {font: "bold 16px Arial", align: "center", fill: "#bbbbff"});
+                shield_text.anchor.set(0.5, 0.5);
+                this.addChild(shield_text);
+                this.animateDamageText(shield_text);
+            }
+        }
+
+        private animateDamageText(text: Phaser.Text) {
+            var tween = this.game.tweens.create(text);
+            tween.to({y: -50, alpha: 0}, 800, Phaser.Easing.Circular.In, false, 200);
+            tween.onComplete.addOnce(() => {
+                text.destroy();
+            });
+            tween.start();
+        }
     }
 }

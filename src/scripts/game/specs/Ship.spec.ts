@@ -93,5 +93,31 @@ module SpaceTac.Game {
             expect(ship.hull.current).toEqual(120);
             expect(ship.shield.current).toEqual(150);
         });
+
+        it("applies and logs hull and shield damage", function () {
+            var fleet = new Fleet();
+            var battle = new Battle(fleet);
+            var ship = new Ship(fleet);
+
+            ship.hull.setMaximal(50);
+            ship.shield.setMaximal(100);
+            ship.restoreHealth();
+            battle.log.clear();
+
+            ship.addDamage(10, 20);
+            expect(ship.hull.current).toEqual(40);
+            expect(ship.shield.current).toEqual(80);
+            expect(battle.log.events.length).toBe(3);
+            expect(battle.log.events[0]).toEqual(new AttributeChangeEvent(ship, ship.hull));
+            expect(battle.log.events[1]).toEqual(new AttributeChangeEvent(ship, ship.shield));
+            expect(battle.log.events[2]).toEqual(new DamageEvent(ship, 10, 20));
+
+            battle.log.clear();
+
+            ship.addDamage(15, 25, false);
+            expect(ship.hull.current).toEqual(25);
+            expect(ship.shield.current).toEqual(55);
+            expect(battle.log.events.length).toBe(0);
+        });
     });
 }

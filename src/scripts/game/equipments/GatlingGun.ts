@@ -8,7 +8,7 @@ module SpaceTac.Game.Equipments {
         constructor() {
             super("Gatling Gun", 50, 100);
 
-            this.setRange(300, 300, false);
+            this.setRange(1000, 1000, false);
 
             this.ap_usage = new Range(3, 4);
             this.min_level = new IntegerRange(1, 3);
