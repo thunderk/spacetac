@@ -11,6 +11,7 @@ module SpaceTac.View {
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load assets
+            this.load.image("battle-background", "assets/images/battle/background.jpg");
             this.load.image("battle-shiplist-own", "assets/images/battle/shiplist-own.png");
             this.load.image("battle-shiplist-enemy", "assets/images/battle/shiplist-enemy.png");
             this.load.image("battle-arena-background", "assets/images/battle/arena/background.png");

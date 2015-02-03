@@ -16,6 +16,9 @@ module SpaceTac.View {
         // Battleground container
         arena: Arena;
 
+        // Background image
+        background: Phaser.Image;
+
         // Targetting mode (null if we're not in this mode)
         targetting: Targetting;
 
@@ -44,6 +47,7 @@ module SpaceTac.View {
             this.targetting = null;
             this.ship_hovered = null;
             this.log_processor = null;
+            this.background = null;
         }
 
         // Create view graphics
@@ -51,7 +55,10 @@ module SpaceTac.View {
             var battleview = this;
             var game = this.game;
 
+            // Background
             game.stage.backgroundColor = 0x000000;
+            this.background = new Phaser.Image(game, 0, 0, "battle-background", 0);
+            game.add.existing(this.background);
 
             // Add arena (local map)
             this.arena = new Arena(battleview);
