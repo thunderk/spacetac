@@ -143,6 +143,7 @@ module SpaceTac.View {
             this.ship_hovered = ship;
             this.card_hovered.setShip(ship);
             this.arena.setShipHovered(ship);
+            this.ship_list.setHovered(ship);
             if (this.targetting) {
                 if (ship) {
                     this.targetting.setTargetShip(ship);

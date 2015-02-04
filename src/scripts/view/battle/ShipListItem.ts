@@ -12,6 +12,9 @@ module SpaceTac.View {
         // Shield display
         shield: ValueBar;
 
+        // Hover indicator
+        layer_hover: Phaser.Image;
+
         // Playing indicator
         layer_playing: Phaser.Image;
 
@@ -45,6 +48,12 @@ module SpaceTac.View {
             this.layer_enemy = new Phaser.Image(this.game, 0, 0, owned ? "battle-shiplist-own" : "battle-shiplist-enemy", 0);
             this.addChild(this.layer_enemy);
 
+            this.layer_hover = new Phaser.Image(this.game, 0, 0, "battle-arena-shipspritehover", 0);
+            this.layer_hover.visible = false;
+            this.layer_hover.scale.set(0.5, 0.5);
+            this.layer_hover.position.set(8, 5);
+            this.addChild(this.layer_hover);
+
             this.hull = ValueBar.newStandard(list.battleview.game, 85, 28);
             this.hull.scale.set(0.1, 0.1);
             this.addChild(this.hull);
@@ -71,6 +80,11 @@ module SpaceTac.View {
             var tween2 = this.game.tweens.create(this.layer_normal);
             tween2.to({alpha: playing ? 0 : 1});
             tween2.start();
+        }
+
+        // Set the hovered status
+        setHovered(hovered: boolean) {
+            this.layer_hover.visible = hovered;
         }
     }
 }

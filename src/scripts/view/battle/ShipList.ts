@@ -12,11 +12,15 @@ module SpaceTac.View {
         // Playing ship
         playing: ShipListItem;
 
+        // Hovered ship
+        hovered: ShipListItem;
+
         // Create an empty action bar
         constructor(battleview: BattleView) {
             this.battleview = battleview;
             this.ships = [];
             this.playing = null;
+            this.hovered = null;
 
             super(battleview.game, battleview.ui);
             battleview.ui.add(this);
@@ -79,6 +83,17 @@ module SpaceTac.View {
             this.playing = this.findItem(ship);
             if (this.playing) {
                 this.playing.setPlaying(true);
+            }
+        }
+
+        // Set the currently hovered ship
+        setHovered(ship: Game.Ship): void {
+            if (this.hovered) {
+                this.hovered.setHovered(false);
+            }
+            this.hovered = this.findItem(ship);
+            if (this.hovered) {
+                this.hovered.setHovered(true);
             }
         }
     }
