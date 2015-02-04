@@ -11,28 +11,33 @@ module SpaceTac.View {
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load assets
-            this.load.image("battle-background", "assets/images/battle/background.jpg");
-            this.load.image("battle-shiplist-base", "assets/images/battle/shiplist-base.png");
-            this.load.image("battle-shiplist-normal", "assets/images/battle/shiplist-normal.png");
-            this.load.image("battle-shiplist-playing", "assets/images/battle/shiplist-playing.png");
-            this.load.image("battle-shiplist-own", "assets/images/battle/shiplist-own.png");
-            this.load.image("battle-shiplist-enemy", "assets/images/battle/shiplist-enemy.png");
-            this.load.image("battle-arena-background", "assets/images/battle/arena/background.png");
-            this.load.image("battle-actionbar", "assets/images/battle/actionbar.png");
-            this.load.image("battle-action-inactive", "assets/images/battle/action-inactive.png");
-            this.load.image("battle-action-active", "assets/images/battle/action-active.png");
-            this.load.image("battle-actionpointsempty", "assets/images/battle/actionpointsempty.png");
-            this.load.image("battle-actionpointsfull", "assets/images/battle/actionpointsfull.png");
-            this.load.image("battle-arena-shipspritehover", "assets/images/battle/arena/shipspritehover.png");
-            this.load.image("battle-arena-shipspriteplaying", "assets/images/battle/arena/shipspriteplaying.png");
-            this.load.image("battle-ship-card", "assets/images/battle/ship-card.png");
-            this.load.image("battle-arena-ship01", "assets/images/battle/arena/ship01.png");
-            this.load.image("common-standard-bar-background", "assets/images/common/standard-bar-background.png");
-            this.load.image("common-standard-bar-foreground", "assets/images/common/standard-bar-foreground.png");
+            this.loadImage("battle/background.jpg");
+            this.loadImage("battle/shiplist-base.png");
+            this.loadImage("battle/shiplist-normal.png");
+            this.loadImage("battle/shiplist-playing.png");
+            this.loadImage("battle/shiplist-own.png");
+            this.loadImage("battle/shiplist-enemy.png");
+            this.loadImage("battle/arena/background.png");
+            this.loadImage("battle/actionbar.png");
+            this.loadImage("battle/action-inactive.png");
+            this.loadImage("battle/action-active.png");
+            this.loadImage("battle/actionpointsempty.png");
+            this.loadImage("battle/actionpointsfull.png");
+            this.loadImage("battle/arena/shipspritehover.png");
+            this.loadImage("battle/arena/shipspriteplaying.png");
+            this.loadImage("battle/ship-card.png");
+            this.loadImage("ship/scout/sprite.png");
+            this.loadImage("ship/scout/portrait.png");
+            this.loadImage("common/standard-bar-background.png");
+            this.loadImage("common/standard-bar-foreground.png");
         }
 
         create() {
             this.game.state.start("main");
+        }
+
+        private loadImage(path: string) {
+            this.load.image(path.replace(/\//g, "-").replace(".png", "").replace(".jpg", ""), "assets/images/" + path);
         }
     }
 }
