@@ -74,8 +74,9 @@ module SpaceTac.View {
         actionEnded(): void {
             this.updateActionPoints();
             this.actions.forEach((action: ActionIcon) => {
-                action.updateActiveStatus();
+                action.resetState();
             });
+            this.battleview.exitTargettingMode();
         }
     }
 }

@@ -32,7 +32,7 @@ module SpaceTac.View {
             bar.addChild(this);
 
             // Active layer
-            this.active = new Phaser.Image(bar.battleview.game, 0, 0, "battle-action-active", 0);
+            this.active = new Phaser.Image(this.game, 0, 0, "battle-action-active", 0);
             this.addChild(this.active);
 
             // Click process
@@ -45,45 +45,61 @@ module SpaceTac.View {
         }
 
         // Process a click event on the action icon
-        processClick() {
+        processClick(): void {
             if (!this.action.canBeUsed(this.battleview.battle, this.ship)) {
                 return;
             }
 
             console.log("Action started", this.action);
 
+            // End any previously selected action
+            this.bar.actionEnded();
+
+            // Set the lighting color to highlight
+            this.active.tint = 0xFFD060;
+
             if (this.action.needs_target) {
+                // Switch to targetting mode (will apply action when a target is selected)
                 this.targetting = this.battleview.enterTargettingMode();
                 this.targetting.setSource(this.battleview.arena.findShipSprite(this.ship));
                 this.targetting.targetSelected.add(this.processSelection, this);
                 this.targetting.targetHovered.add(this.processHover, this);
             } else {
+                // No target needed, apply action immediately
                 this.processSelection(null);
             }
         }
 
         // Called when a target is hovered
         //  This will check the target against current action and adjust it if needed
-        processHover(target: Game.Target) {
+        processHover(target: Game.Target): void {
             target = this.action.checkTarget(this.battleview.battle, this.ship, target);
             this.targetting.setTarget(target, false);
         }
 
         // Called when a target is selected
-        processSelection(target: Game.Target) {
+        processSelection(target: Game.Target): void {
             console.log("Action target", this.action, target);
 
             if (this.action.apply(this.battleview.battle, this.ship, target)) {
-                this.battleview.exitTargettingMode();
                 this.bar.actionEnded();
             }
         }
 
+        // Called to clear the current state
+        resetState(): void {
+            if (this.targetting) {
+                this.targetting = null;
+            }
+            this.active.tint = 0xFFFFFF;
+            this.updateActiveStatus();
+        }
+
         // Update the active status, from the action canBeUsed result
-        updateActiveStatus() {
+        updateActiveStatus(): void {
             var active = this.action.canBeUsed(this.battleview.battle, this.ship);
 
-            var tween = this.battleview.game.tweens.create(this.active);
+            var tween = this.game.tweens.create(this.active);
             tween.to({alpha: active ? 1 : 0});
             tween.start();
 
