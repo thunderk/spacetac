@@ -18,8 +18,11 @@ module SpaceTac.View {
         // Current targetting
         private targetting: Targetting;
 
+        // Action icon - image representing the action
+        private layer_icon: Phaser.Image;
+
         // Layer applied when the action is active
-        private active: Phaser.Image;
+        private layer_active: Phaser.Image;
 
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Game.Ship, action: Game.BaseAction) {
@@ -32,8 +35,12 @@ module SpaceTac.View {
             bar.addChild(this);
 
             // Active layer
-            this.active = new Phaser.Image(this.game, 0, 0, "battle-action-active", 0);
-            this.addChild(this.active);
+            this.layer_active = new Phaser.Image(this.game, 0, 0, "battle-action-active", 0);
+            this.addChild(this.layer_active);
+
+            // Icon layer
+            this.layer_icon = new Phaser.Image(this.game, 14, 17, "battle-actions-" + action.code, 0);
+            this.addChild(this.layer_icon);
 
             // Click process
             this.onInputUp.add(() => {
@@ -56,7 +63,7 @@ module SpaceTac.View {
             this.bar.actionEnded();
 
             // Set the lighting color to highlight
-            this.active.tint = 0xFFD060;
+            this.layer_active.tint = 0xFFD060;
 
             if (this.action.needs_target) {
                 // Switch to targetting mode (will apply action when a target is selected)
@@ -91,7 +98,7 @@ module SpaceTac.View {
             if (this.targetting) {
                 this.targetting = null;
             }
-            this.active.tint = 0xFFFFFF;
+            this.layer_active.tint = 0xFFFFFF;
             this.updateActiveStatus();
         }
 
@@ -99,7 +106,7 @@ module SpaceTac.View {
         updateActiveStatus(): void {
             var active = this.action.canBeUsed(this.battleview.battle, this.ship);
 
-            var tween = this.game.tweens.create(this.active);
+            var tween = this.game.tweens.create(this.layer_active);
             tween.to({alpha: active ? 1 : 0});
             tween.start();
 
