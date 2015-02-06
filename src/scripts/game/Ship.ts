@@ -12,6 +12,9 @@ module SpaceTac.Game {
         // Current level
         level: number;
 
+        // Flag indicating if the ship is alive
+        alive: boolean;
+
         // Position in the arena
         arena_x: number;
         arena_y: number;
@@ -34,7 +37,7 @@ module SpaceTac.Game {
         // Number of hull points (once it reaches 0, the ship is dead)
         hull: Attribute;
 
-        // Number of shield points (a shield wan absorb some damage to protect the hull)
+        // Number of shield points (a shield can absorb some damage to protect the hull)
         shield: Attribute;
 
         // List of slots, able to contain equipment
@@ -48,6 +51,7 @@ module SpaceTac.Game {
             this.attributes = new AttributeCollection();
             this.fleet = fleet || new Fleet();
             this.name = name;
+            this.alive = true;
             this.initiative = this.newAttribute(AttributeCode.Initiative);
             this.initiative.setMaximal(1);
             this.ap_current = this.newAttribute(AttributeCode.AP);
@@ -64,6 +68,13 @@ module SpaceTac.Game {
             if (fleet) {
                 fleet.addShip(this);
             }
+        }
+
+        // Returns true if the ship is able to play
+        //  If *check_ap* is true, ap_current=0 will make this function return false
+        isAbleToPlay(check_ap: boolean = true): boolean {
+            var ap_checked = !check_ap || this.ap_current.current > 0;
+            return this.alive && ap_checked;
         }
 
         // Create and register an attribute
@@ -127,6 +138,14 @@ module SpaceTac.Game {
             return actions;
         }
 
+        // Add an event to the battle log, if any
+        addBattleEvent(event: BaseLogEvent): void {
+            var battle = this.getBattle();
+            if (battle && battle.log) {
+                battle.log.add(event);
+            }
+        }
+
         // Set an attribute value
         //  If offset is true, the value will be added to current value
         //  If log is true, an attribute event will be added to the battle log
@@ -140,10 +159,7 @@ module SpaceTac.Game {
             }
 
             if (changed && log) {
-                var battle = this.getBattle();
-                if (battle) {
-                    battle.log.add(new AttributeChangeEvent(this, attr));
-                }
+                this.addBattleEvent(new AttributeChangeEvent(this, attr));
             }
         }
 
@@ -193,8 +209,8 @@ module SpaceTac.Game {
 
             this.setArenaPosition(x, y);
 
-            if (log && this.getBattle()) {
-                this.getBattle().log.add(new MoveEvent(this, x, y));
+            if (log) {
+                this.addBattleEvent(new MoveEvent(this, x, y));
             }
         }
 
@@ -203,8 +219,16 @@ module SpaceTac.Game {
             this.setAttribute(this.hull, -hull, true, log);
             this.setAttribute(this.shield, -shield, true, log);
 
-            if (log && this.getBattle()) {
-                this.getBattle().log.add(new DamageEvent(this, hull, shield));
+            if (log) {
+                this.addBattleEvent(new DamageEvent(this, hull, shield));
+            }
+
+            if (this.hull.current == 0) {
+                // Ship is dead
+                this.alive = false;
+                if (log) {
+                    this.addBattleEvent(new DeathEvent(this));
+                }
             }
         }
 

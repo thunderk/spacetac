@@ -119,5 +119,54 @@ module SpaceTac.Game {
             expect(ship.shield.current).toEqual(55);
             expect(battle.log.events.length).toBe(0);
         });
+
+        it("sets and logs death state", function (){
+            var fleet = new Fleet();
+            var battle = new Battle(fleet);
+            var ship = new Ship(fleet);
+
+            expect(ship.alive).toBe(true);
+
+            ship.hull.set(10);
+            battle.log.clear();
+            ship.addDamage(5, 0);
+
+            expect(ship.alive).toBe(true);
+            expect(battle.log.events.length).toBe(2);
+            expect(battle.log.events[0].code).toEqual("attr");
+            expect(battle.log.events[1].code).toEqual("damage");
+
+            battle.log.clear();
+            ship.addDamage(5, 0);
+
+            expect(ship.alive).toBe(false);
+            expect(battle.log.events.length).toBe(3);
+            expect(battle.log.events[0].code).toEqual("attr");
+            expect(battle.log.events[1].code).toEqual("damage");
+            expect(battle.log.events[2].code).toEqual("death");
+        });
+
+        it("checks if a ship is able to play", function () {
+            var ship = new Ship();
+
+            expect(ship.isAbleToPlay()).toBe(false);
+            expect(ship.isAbleToPlay(false)).toBe(true);
+
+            ship.ap_current.set(5);
+
+            expect(ship.isAbleToPlay()).toBe(true);
+            expect(ship.isAbleToPlay(false)).toBe(true);
+
+            ship.hull.set(10);
+            ship.addDamage(8, 0);
+
+            expect(ship.isAbleToPlay()).toBe(true);
+            expect(ship.isAbleToPlay(false)).toBe(true);
+
+            ship.addDamage(8, 0);
+
+            expect(ship.isAbleToPlay()).toBe(false);
+            expect(ship.isAbleToPlay(false)).toBe(false);
+        });
     });
 }
