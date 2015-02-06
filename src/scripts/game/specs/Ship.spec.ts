@@ -51,6 +51,7 @@ module SpaceTac.Game {
 
             slot = ship.addSlot(SlotType.Engine);
             equipment = new Equipment();
+            equipment.slot = slot.type;
             equipment.action = new MoveAction(equipment);
             slot.attach(equipment);
 
@@ -67,11 +68,13 @@ module SpaceTac.Game {
 
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment();
+            equipment.slot = slot.type;
             equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.AP, 4));
             slot.attach(equipment);
 
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment();
+            equipment.slot = slot.type;
             equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.AP, 5));
             slot.attach(equipment);
 
@@ -120,7 +123,7 @@ module SpaceTac.Game {
             expect(battle.log.events.length).toBe(0);
         });
 
-        it("sets and logs death state", function (){
+        it("sets and logs death state", function () {
             var fleet = new Fleet();
             var battle = new Battle(fleet);
             var ship = new Ship(fleet);

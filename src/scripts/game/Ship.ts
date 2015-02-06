@@ -40,6 +40,14 @@ module SpaceTac.Game {
         // Number of shield points (a shield can absorb some damage to protect the hull)
         shield: Attribute;
 
+        // Capabilities level
+        cap_material: Attribute;
+        cap_energy: Attribute;
+        cap_electronics: Attribute;
+        cap_human: Attribute;
+        cap_time: Attribute;
+        cap_gravity: Attribute;
+
         // List of slots, able to contain equipment
         slots: Slot[];
 
@@ -59,6 +67,12 @@ module SpaceTac.Game {
             this.ap_recover = this.newAttribute(AttributeCode.AP_Recovery);
             this.hull = this.newAttribute(AttributeCode.Hull);
             this.shield = this.newAttribute(AttributeCode.Shield);
+            this.cap_material = this.newAttribute(AttributeCode.Cap_Material);
+            this.cap_energy = this.newAttribute(AttributeCode.Cap_Energy);
+            this.cap_electronics = this.newAttribute(AttributeCode.Cap_Electronics);
+            this.cap_human = this.newAttribute(AttributeCode.Cap_Human);
+            this.cap_time = this.newAttribute(AttributeCode.Cap_Time);
+            this.cap_gravity = this.newAttribute(AttributeCode.Cap_Gravity);
             this.slots = [];
 
             this.arena_x = 0;
@@ -223,7 +237,7 @@ module SpaceTac.Game {
                 this.addBattleEvent(new DamageEvent(this, hull, shield));
             }
 
-            if (this.hull.current == 0) {
+            if (this.hull.current === 0) {
                 // Ship is dead
                 this.alive = false;
                 if (log) {

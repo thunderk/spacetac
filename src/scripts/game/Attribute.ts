@@ -21,6 +21,24 @@ module SpaceTac.Game {
         // Starting action points in a battle
         AP_Initial,
 
+        // Capability level in materials
+        Cap_Material,
+
+        // Capability level in energy
+        Cap_Energy,
+
+        // Capability level in electronics
+        Cap_Electronics,
+
+        // Capability level in human things
+        Cap_Human,
+
+        // Capability level in time manipulation
+        Cap_Time,
+
+        // Capability level in gravity manipulation
+        Cap_Gravity,
+
         // Miscellaneous attribute
         Misc
     }
@@ -39,7 +57,7 @@ module SpaceTac.Game {
         current: number;
 
         // Create an attribute
-        constructor(code: AttributeCode = AttributeCode.Misc, maximal: number = null, current: number = 0) {
+        constructor(code: AttributeCode = AttributeCode.Misc, current: number = 0, maximal: number = null) {
             this.code = code;
             this.maximal = maximal;
             this.current = current;

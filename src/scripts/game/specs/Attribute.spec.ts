@@ -23,12 +23,18 @@ module SpaceTac.Game {
                 AttributeCode.AP,
                 AttributeCode.AP_Recovery,
                 AttributeCode.AP_Initial,
+                AttributeCode.Cap_Material,
+                AttributeCode.Cap_Energy,
+                AttributeCode.Cap_Electronics,
+                AttributeCode.Cap_Human,
+                AttributeCode.Cap_Time,
+                AttributeCode.Cap_Gravity,
                 AttributeCode.Misc
             ]);
         });
 
         it("applies minimal and maximal value", function () {
-            var attr = new Attribute(AttributeCode.Misc, 100, 50);
+            var attr = new Attribute(AttributeCode.Misc, 50, 100);
             expect(attr.current).toBe(50);
 
             attr.add(8);
@@ -61,7 +67,7 @@ module SpaceTac.Game {
 
         it("tells if value changed", function () {
             var result: boolean;
-            var attr = new Attribute(AttributeCode.Misc, 100, 50);
+            var attr = new Attribute(AttributeCode.Misc, 50, 100);
             expect(attr.current).toBe(50);
 
             result = attr.set(51);

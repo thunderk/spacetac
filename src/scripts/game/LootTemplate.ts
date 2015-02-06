@@ -9,9 +9,8 @@ module SpaceTac.Game {
         // Base name, lower cased
         name: string;
 
-        // Ability requirement ranges
-
-        // Targetting flags
+        // Capability requirement ranges (indexed by AttributeCode)
+        requirements: IntegerRange[];
 
         // Distance to target
         distance: Range;
@@ -38,6 +37,7 @@ module SpaceTac.Game {
         constructor(slot: SlotType, name: string) {
             this.slot = slot;
             this.name = name;
+            this.requirements = [];
             this.distance = new Range(0, 0);
             this.blast = new Range(0, 0);
             this.duration = new IntegerRange(0, 0);
@@ -45,6 +45,11 @@ module SpaceTac.Game {
             this.min_level = new IntegerRange(0, 0);
             this.permanent_effects = [];
             this.target_effects = [];
+        }
+
+        // Set a capability requirement
+        addRequirement(capability: AttributeCode, min: number, max: number = null): void {
+            this.requirements[capability] = new IntegerRange(min, max);
         }
 
         // Generate a random equipment with this template
@@ -68,6 +73,12 @@ module SpaceTac.Game {
             result.min_level = this.min_level.getProportional(power);
 
             result.action = this.getActionForEquipment(result);
+
+            this.requirements.forEach((requirement: IntegerRange, index: AttributeCode) => {
+                if (requirement) {
+                    result.requirements.push(new Attribute(index, requirement.getProportional(power)));
+                }
+            });
 
             this.permanent_effects.forEach((eff_template: EffectTemplate) => {
                 result.permanent_effects.push(eff_template.generateFixed(power));

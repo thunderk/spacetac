@@ -73,7 +73,7 @@ module SpaceTac.Game {
             expect(battle.log.events[1].code).toEqual("attr");
             expect(battle.log.events[1].ship).toBe(ship);
             expect((<AttributeChangeEvent>battle.log.events[1]).attribute).toEqual(
-                new Attribute(AttributeCode.AP, 20, 0));
+                new Attribute(AttributeCode.AP, 0, 20));
         });
     });
 }

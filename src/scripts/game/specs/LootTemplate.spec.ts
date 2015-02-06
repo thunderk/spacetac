@@ -12,6 +12,8 @@ module SpaceTac.Game.Specs {
             template.duration = new IntegerRange(1, 2);
             template.ap_usage = new Range(4, 12);
             template.min_level = new IntegerRange(5, 9);
+            template.addRequirement(AttributeCode.Cap_Energy, 2, 8);
+            template.addRequirement(AttributeCode.Cap_Human, 5);
 
             var equipment = template.generateFixed(0.0);
 
@@ -22,6 +24,9 @@ module SpaceTac.Game.Specs {
             expect(equipment.duration).toEqual(1);
             expect(equipment.ap_usage).toEqual(4);
             expect(equipment.min_level).toEqual(5);
+            expect(equipment.requirements.length).toBe(2);
+            expect(equipment.requirements[0]).toEqual(new Attribute(AttributeCode.Cap_Energy, 2));
+            expect(equipment.requirements[1]).toEqual(new Attribute(AttributeCode.Cap_Human, 5));
 
             equipment = template.generateFixed(1.0);
 
@@ -32,6 +37,9 @@ module SpaceTac.Game.Specs {
             expect(equipment.duration).toEqual(2);
             expect(equipment.ap_usage).toEqual(12);
             expect(equipment.min_level).toEqual(9);
+            expect(equipment.requirements.length).toBe(2);
+            expect(equipment.requirements[0]).toEqual(new Attribute(AttributeCode.Cap_Energy, 8));
+            expect(equipment.requirements[1]).toEqual(new Attribute(AttributeCode.Cap_Human, 5));
 
             equipment = template.generateFixed(0.5);
 
@@ -42,6 +50,9 @@ module SpaceTac.Game.Specs {
             expect(equipment.duration).toEqual(2);
             expect(equipment.ap_usage).toEqual(8);
             expect(equipment.min_level).toEqual(7);
+            expect(equipment.requirements.length).toBe(2);
+            expect(equipment.requirements[0]).toEqual(new Attribute(AttributeCode.Cap_Energy, 5));
+            expect(equipment.requirements[1]).toEqual(new Attribute(AttributeCode.Cap_Human, 5));
         });
 
         it("restricts power range to stay in a level range", () => {
