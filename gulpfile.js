@@ -75,6 +75,11 @@ gulp.task('tslint', function () {
           emitError: false
         }));
 });
+gulp.task('tslintstrict', function () {
+    return gulp.src(['src/scripts/game/**/*.ts', 'src/scripts/view/**/*.ts'])
+        .pipe(tslint())
+        .pipe(tslint.report('verbose'));
+});
 
 gulp.task('processhtml', function () {
     return gulp.src(paths.index)
@@ -121,7 +126,7 @@ gulp.task('minifyCss', ['less'], function () {
 gulp.task('deploy', function () {
     return gulp.src('./dist/**/*')
         .pipe(deploy({
-            remoteUrl: "git@github.com:thunderk/spacetac.git",
+            remoteUrl: "git@github.com:thunderk/spacetac.git"
         }));
 });
 
@@ -130,4 +135,7 @@ gulp.task('default', function () {
 });
 gulp.task('build', function () {
     return runSequence('clean', ['typescript', 'tslint', 'less', 'copy', 'minifyJs', 'minifyCss', 'processhtml']);
+});
+gulp.task('strict', function () {
+    return runSequence('clean', ['typescript', 'tslintstrict', 'tests']);
 });

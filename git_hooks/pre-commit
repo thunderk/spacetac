@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+git_root=$(git rev-parse --show-toplevel)
+PATH=${PATH}:${git_root}/bin ${git_root}/bin/gulp strict
+

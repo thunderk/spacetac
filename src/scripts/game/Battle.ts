@@ -92,11 +92,11 @@ module SpaceTac.Game {
 
             var alive_fleets = this.countAliveFleets();
 
-            if (alive_fleets == 0) {
+            if (alive_fleets === 0) {
                 // It's a draw
                 this.ended = true;
                 this.log.add(new EndBattleEvent(null));
-            } else if (alive_fleets == 1) {
+            } else if (alive_fleets === 1) {
                 // We have a winner
                 var winner: Player = null;
                 this.fleets.forEach((fleet: Fleet) => {

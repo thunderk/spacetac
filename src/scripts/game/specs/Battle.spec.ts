@@ -153,7 +153,7 @@ module SpaceTac.Game {
 
             var ship1 = new Ship(fleet1, "F1S1");
             var ship2 = new Ship(fleet1, "F1S2");
-            var ship3 = new Ship(fleet2, "F2S1");
+            new Ship(fleet2, "F2S1");
 
             var battle = new Battle(fleet1, fleet2);
 
