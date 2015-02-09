@@ -29,5 +29,16 @@ module SpaceTac.Game {
         setBattle(battle: Battle): void {
             this.battle = battle;
         }
+
+        // Check if the fleet still has living ships
+        isAlive(): boolean {
+            var count = 0;
+            this.ships.forEach((ship: Ship) => {
+                if (ship.alive) {
+                    count += 1;
+                }
+            });
+            return (count > 0);
+        }
     }
 }

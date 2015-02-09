@@ -106,6 +106,14 @@ module SpaceTac.Game {
 
             expect(battle.playing_ship).toBe(ship2);
             expect(battle.playing_ship_index).toBe(0);
+
+            // A dead ship is skipped
+            ship1.alive = false;
+
+            battle.advanceToNextShip();
+
+            expect(battle.playing_ship).toBe(ship3);
+            expect(battle.playing_ship_index).toBe(2);
         });
 
         it("calls startTurn on ships, with first turn indicator", function () {
@@ -137,6 +145,58 @@ module SpaceTac.Game {
 
             battle.advanceToNextShip();
             expect(ship1.startTurn).toHaveBeenCalledWith(false);
+        });
+
+        it("detects victory condition and logs a final EndBattleEvent", function () {
+            var fleet1 = new Fleet();
+            var fleet2 = new Fleet();
+
+            var ship1 = new Ship(fleet1, "F1S1");
+            var ship2 = new Ship(fleet1, "F1S2");
+            var ship3 = new Ship(fleet2, "F2S1");
+
+            var battle = new Battle(fleet1, fleet2);
+
+            battle.start();
+            expect(battle.ended).toBe(false);
+
+            ship1.setDead();
+            ship2.setDead();
+
+            battle.log.clear();
+            battle.advanceToNextShip();
+
+            expect(battle.ended).toBe(true);
+            expect(battle.log.events.length).toBe(1);
+            expect(battle.log.events[0].code).toBe("endbattle");
+            expect((<EndBattleEvent>battle.log.events[0]).winner).not.toBeNull();
+            expect((<EndBattleEvent>battle.log.events[0]).winner).toBe(fleet2.player);
+        });
+
+        it("handles a draw in end battle", function () {
+            var fleet1 = new Fleet();
+            var fleet2 = new Fleet();
+
+            var ship1 = new Ship(fleet1, "F1S1");
+            var ship2 = new Ship(fleet1, "F1S2");
+            var ship3 = new Ship(fleet2, "F2S1");
+
+            var battle = new Battle(fleet1, fleet2);
+
+            battle.start();
+            expect(battle.ended).toBe(false);
+
+            ship1.setDead();
+            ship2.setDead();
+            ship3.setDead();
+
+            battle.log.clear();
+            battle.advanceToNextShip();
+
+            expect(battle.ended).toBe(true);
+            expect(battle.log.events.length).toBe(1);
+            expect(battle.log.events[0].code).toBe("endbattle");
+            expect((<EndBattleEvent>battle.log.events[0]).winner).toBeNull();
         });
     });
 }

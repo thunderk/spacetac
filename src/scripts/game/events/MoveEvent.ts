@@ -1,3 +1,5 @@
+/// <reference path="BaseLogEvent.ts"/>
+
 module SpaceTac.Game {
     "use strict";
 

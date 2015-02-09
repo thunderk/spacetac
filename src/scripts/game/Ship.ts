@@ -228,6 +228,14 @@ module SpaceTac.Game {
             }
         }
 
+        // Set the death status on this ship
+        setDead(log: boolean = true): void {
+            this.alive = false;
+            if (log) {
+                this.addBattleEvent(new DeathEvent(this));
+            }
+        }
+
         // Apply damages to hull and/or shield
         addDamage(hull: number, shield: number, log: boolean = true): void {
             this.setAttribute(this.hull, -hull, true, log);
@@ -239,10 +247,7 @@ module SpaceTac.Game {
 
             if (this.hull.current === 0) {
                 // Ship is dead
-                this.alive = false;
-                if (log) {
-                    this.addBattleEvent(new DeathEvent(this));
-                }
+                this.setDead(log);
             }
         }
 

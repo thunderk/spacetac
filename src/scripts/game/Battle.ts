@@ -3,6 +3,9 @@ module SpaceTac.Game {
 
     // A turn-based battle between fleets
     export class Battle {
+        // Flag indicating if the battle is ended
+        ended: boolean;
+
         // Log of all battle events
         log: BattleLog;
 
@@ -27,6 +30,7 @@ module SpaceTac.Game {
             this.playing_ship_index = null;
             this.playing_ship = null;
             this.first_turn = true;
+            this.ended = false;
 
             this.fleets.forEach((fleet: Fleet) => {
                 fleet.setBattle(this);
@@ -69,26 +73,76 @@ module SpaceTac.Game {
             this.placeFleetShips(this.fleets[1], 800, 300, Math.PI);
         }
 
+        // Count the number of fleets still alive
+        countAliveFleets(): number {
+            var result = 0;
+            this.fleets.forEach((fleet: Fleet) => {
+                if (fleet.isAlive()) {
+                    result += 1;
+                }
+            });
+            return result;
+        }
+
+        // Checks end battle conditions, returns true if the battle ended
+        checkEndBattle(log: boolean = true) {
+            if (this.ended) {
+                return true;
+            }
+
+            var alive_fleets = this.countAliveFleets();
+
+            if (alive_fleets == 0) {
+                // It's a draw
+                this.ended = true;
+                this.log.add(new EndBattleEvent(null));
+            } else if (alive_fleets == 1) {
+                // We have a winner
+                var winner: Player = null;
+                this.fleets.forEach((fleet: Fleet) => {
+                    if (fleet.isAlive()) {
+                        winner = fleet.player;
+                    }
+                });
+                this.ended = true;
+                this.log.add(new EndBattleEvent(winner));
+            }
+
+            return this.ended;
+        }
+
         // End the current ship turn, passing control to the next one in play order
         //  If at the end of the play order, next turn will start automatically
         //  Member 'play_order' must be defined before calling this function
         advanceToNextShip(log: boolean = true): void {
             var previous_ship = this.playing_ship;
 
+            if (this.checkEndBattle(log)) {
+                return;
+            }
+
             if (this.play_order.length === 0) {
                 this.playing_ship_index = null;
                 this.playing_ship = null;
             } else {
-                if (this.playing_ship_index == null) {
-                    this.playing_ship_index = 0;
-                } else {
-                    this.playing_ship_index += 1;
+                var i = 0;
+                do {
+                    if (this.playing_ship_index == null) {
+                        this.playing_ship_index = 0;
+                    } else {
+                        this.playing_ship_index += 1;
+                    }
+                    if (this.playing_ship_index >= this.play_order.length) {
+                        this.playing_ship_index = 0;
+                        this.first_turn = false;
+                    }
+                    this.playing_ship = this.play_order[this.playing_ship_index];
+                    i++;
+                } while (!this.playing_ship.alive && i < 1000);
+
+                if (i >= 1000) {
+                    throw new Error("Infinite loop in advanceToNextShip");
                 }
-                if (this.playing_ship_index >= this.play_order.length) {
-                    this.playing_ship_index = 0;
-                    this.first_turn = false;
-                }
-                this.playing_ship = this.play_order[this.playing_ship_index];
             }
 
             if (this.playing_ship) {
@@ -104,6 +158,7 @@ module SpaceTac.Game {
         //  This will call all necessary initialization steps (initiative, placement...)
         //  This will not add any event to the battle log
         start(): void {
+            this.ended = false;
             this.placeShips();
             this.throwInitiative();
             this.play_order.forEach((ship: Ship) => {
