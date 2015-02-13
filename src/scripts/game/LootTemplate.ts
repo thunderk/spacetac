@@ -115,9 +115,7 @@ module SpaceTac.Game {
 
         // Generate an equipment that will have its level requirement in the given range
         //  May return null if level range is not compatible with the template
-        generateInLevelRange(level: IntegerRange, random: RandomGenerator = null): Equipment {
-            random = random || new RandomGenerator();
-
+        generateInLevelRange(level: IntegerRange, random: RandomGenerator = new RandomGenerator()): Equipment {
             var random_range = this.getPowerRangeForLevel(level);
             if (random_range) {
                 var power = random.throw() * (random_range.max - random_range.min) + random_range.min;

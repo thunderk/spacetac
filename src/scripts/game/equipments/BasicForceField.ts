@@ -5,7 +5,7 @@ module SpaceTac.Game.Equipments {
 
     export class BasicForceField extends LootTemplate {
         constructor() {
-            super(SlotType.Shield, "BasicForceField");
+            super(SlotType.Shield, "Basic Force Field");
 
             this.min_level = new IntegerRange(1, 3);
 

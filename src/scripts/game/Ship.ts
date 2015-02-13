@@ -9,9 +9,6 @@ module SpaceTac.Game {
         // Name of the ship
         name: string;
 
-        // Current level
-        level: number;
-
         // Flag indicating if the ship is alive
         alive: boolean;
 

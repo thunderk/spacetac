@@ -17,9 +17,6 @@ module SpaceTac.Game {
             var result = new Ship();
             var loot = new LootGenerator(this.random);
 
-            // Set basic info
-            result.level = level;
-
             // Add equipment slots
             result.addSlot(SlotType.Armor);
             result.addSlot(SlotType.Engine);

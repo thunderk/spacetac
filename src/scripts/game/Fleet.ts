@@ -12,8 +12,12 @@ module SpaceTac.Game {
         // Current battle in which the fleet is engaged (null if not fighting)
         battle: Battle;
 
+        // Current level of the fleet
+        level: number;
+
         // Create a fleet, bound to a player
         constructor(player: Player = null) {
+            this.level = 1;
             this.player = player || new Player();
             this.ships = [];
             this.battle = null;

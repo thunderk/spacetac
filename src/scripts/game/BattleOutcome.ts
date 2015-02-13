@@ -37,14 +37,36 @@ module SpaceTac.Game {
                         } else {
                             var luck = random.throw();
                             if (luck > 0.9) {
-                                // TODO Salvage a supposedly transported item
+                                // Salvage a supposedly transported item
+                                var transported = this.generateLootItem(random);
+                                if (transported) {
+                                    this.loot.push(transported);
+                                }
                             } else if (luck > 0.5) {
-                                // TODO Salvage an equipped item
+                                // Salvage one equipped item
+                                var token = ship.getRandomEquipment(random);
+                                if (token) {
+                                    token.detach();
+                                    this.loot.push(token);
+                                }
                             }
                         }
                     }
                 });
             });
+        }
+
+        // Create a loot generator for lucky loots
+        getLootGenerator(random: RandomGenerator): LootGenerator {
+            return new LootGenerator(random);
+        }
+
+        // Generate a special loot item for the winner fleet
+        //  The equipment will be in the winner range (because its a lucky loot!)
+        generateLootItem(random: RandomGenerator): Equipment {
+            var generator = this.getLootGenerator(random);
+            var level = new IntegerRange(this.winner.level - 1, this.winner.level + 1);
+            return generator.generate(level);
         }
     }
 }
