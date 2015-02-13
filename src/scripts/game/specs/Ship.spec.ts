@@ -171,5 +171,37 @@ module SpaceTac.Game {
             expect(ship.isAbleToPlay()).toBe(false);
             expect(ship.isAbleToPlay(false)).toBe(false);
         });
+
+        it("counts attached equipment", function () {
+            var ship = new Ship();
+
+            expect(ship.getEquipmentCount()).toBe(0);
+
+            ship.addSlot(SlotType.Armor).attach(new Equipment(SlotType.Armor));
+            ship.addSlot(SlotType.Shield);
+            ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
+
+            expect(ship.getEquipmentCount()).toBe(2);
+        });
+
+        it("can pick a random attached equipment", function () {
+            var ship = new Ship();
+
+            expect(ship.getRandomEquipment()).toBe(null);
+
+            ship.addSlot(SlotType.Armor).attach(new Equipment(SlotType.Armor));
+            ship.addSlot(SlotType.Shield);
+            ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
+
+            var random = new RandomGenerator(0.2);
+            var picked = ship.getRandomEquipment(random);
+            expect(picked).not.toBeNull();
+            expect(picked).toBe(ship.slots[0].attached);
+
+            random.forceNextValue(1);
+            picked = ship.getRandomEquipment(random);
+            expect(picked).not.toBeNull();
+            expect(picked).toBe(ship.slots[2].attached);
+        });
     });
 }

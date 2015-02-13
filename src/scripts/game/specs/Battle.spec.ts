@@ -169,8 +169,8 @@ module SpaceTac.Game {
             expect(battle.ended).toBe(true);
             expect(battle.log.events.length).toBe(1);
             expect(battle.log.events[0].code).toBe("endbattle");
-            expect((<EndBattleEvent>battle.log.events[0]).winner).not.toBeNull();
-            expect((<EndBattleEvent>battle.log.events[0]).winner).toBe(fleet2.player);
+            expect((<EndBattleEvent>battle.log.events[0]).outcome.winner).not.toBeNull();
+            expect((<EndBattleEvent>battle.log.events[0]).outcome.winner).toBe(fleet2);
         });
 
         it("handles a draw in end battle", function () {
@@ -196,7 +196,7 @@ module SpaceTac.Game {
             expect(battle.ended).toBe(true);
             expect(battle.log.events.length).toBe(1);
             expect(battle.log.events[0].code).toBe("endbattle");
-            expect((<EndBattleEvent>battle.log.events[0]).winner).toBeNull();
+            expect((<EndBattleEvent>battle.log.events[0]).outcome.winner).toBeNull();
         });
     });
 }

@@ -258,6 +258,38 @@ module SpaceTac.Game {
             return result;
         }
 
+        // Get the number of attached equipments
+        getEquipmentCount(): number {
+            var result = 0;
+            this.slots.forEach((slot: Slot) => {
+                if (slot.attached) {
+                    result++;
+                }
+            });
+            return result;
+        }
+
+        // Get a random attached equipment, null if no equipment is attached
+        getRandomEquipment(random: RandomGenerator = new RandomGenerator()): Equipment {
+            var count = this.getEquipmentCount();
+            if (count === 0) {
+                return null;
+            } else {
+                var picked = random.throwInt(0, count - 1);
+                var result: Equipment = null;
+                var index = 0;
+                this.slots.forEach((slot: Slot) => {
+                    if (slot.attached) {
+                        if (index === picked) {
+                            result = slot.attached;
+                        }
+                        index++;
+                    }
+                });
+                return result;
+            }
+        }
+
         // Update attributes, taking into account attached equipment and active effects
         updateAttributes(): void {
             // TODO Something more generic

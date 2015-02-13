@@ -21,8 +21,10 @@ module SpaceTac.Game {
 
         // Add a ship in this fleet
         addShip(ship: Ship): void {
+            if (this.ships.indexOf(ship) < 0) {
+                this.ships.push(ship);
+            }
             ship.fleet = this;
-            this.ships.push(ship);
         }
 
         // Set the current battle

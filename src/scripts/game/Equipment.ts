@@ -3,7 +3,10 @@ module SpaceTac.Game {
 
     // Piece of equipment to attach in slots
     export class Equipment {
-        // Type of slot this equipment will fit in
+        // Actual slot this equipment is attached to
+        attached_to: Slot;
+
+        // Type of slot this equipment can fit in
         slot: SlotType;
 
         // Equipment name
@@ -37,7 +40,9 @@ module SpaceTac.Game {
         target_effects: BaseEffect[];
 
         // Basic constructor
-        constructor() {
+        constructor(slot: SlotType = null, name: string = null) {
+            this.slot = slot;
+            this.name = name;
             this.requirements = [];
             this.permanent_effects = [];
             this.target_effects = [];
@@ -46,13 +51,25 @@ module SpaceTac.Game {
         // Returns true if the equipment can be equipped on a ship
         //  This checks *requirements* against the ship capabilities
         canBeEquipped(ship: Ship): boolean {
-            var able = true;
-            this.requirements.forEach((cap: Attribute) => {
-                if (ship.attributes.getValue(cap.code) < cap.current) {
-                    able = false;
-                }
-            });
-            return able;
+            if (this.attached_to) {
+                return false;
+            } else {
+                var able = true;
+                this.requirements.forEach((cap: Attribute) => {
+                    if (ship.attributes.getValue(cap.code) < cap.current) {
+                        able = false;
+                    }
+                });
+                return able;
+            }
+        }
+
+        // Detach from the slot it is attached to
+        detach(): void {
+            if (this.attached_to) {
+                this.attached_to.attached = null;
+                this.attached_to = null;
+            }
         }
     }
 }

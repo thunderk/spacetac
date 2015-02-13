@@ -6,6 +6,9 @@ module SpaceTac.Game {
         // Flag indicating if the battle is ended
         ended: boolean;
 
+        // Battle outcome, if *ended* is true
+        outcome: BattleOutcome;
+
         // Log of all battle events
         log: BattleLog;
 
@@ -84,6 +87,18 @@ module SpaceTac.Game {
             return result;
         }
 
+        // Ends a battle and sets the outcome
+        endBattle(winner: Fleet, log: boolean = true) {
+            this.ended = true;
+            this.outcome = new BattleOutcome(winner);
+            if (winner) {
+                this.outcome.createLoot(this);
+            }
+            if (log && this.log) {
+                this.log.add(new EndBattleEvent(this.outcome));
+            }
+        }
+
         // Checks end battle conditions, returns true if the battle ended
         checkEndBattle(log: boolean = true) {
             if (this.ended) {
@@ -94,18 +109,16 @@ module SpaceTac.Game {
 
             if (alive_fleets === 0) {
                 // It's a draw
-                this.ended = true;
-                this.log.add(new EndBattleEvent(null));
+                this.endBattle(null, log);
             } else if (alive_fleets === 1) {
                 // We have a winner
-                var winner: Player = null;
+                var winner: Fleet = null;
                 this.fleets.forEach((fleet: Fleet) => {
                     if (fleet.isAlive()) {
-                        winner = fleet.player;
+                        winner = fleet;
                     }
                 });
-                this.ended = true;
-                this.log.add(new EndBattleEvent(winner));
+                this.endBattle(winner, log);
             }
 
             return this.ended;

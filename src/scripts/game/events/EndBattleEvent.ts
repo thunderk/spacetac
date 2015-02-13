@@ -6,13 +6,13 @@ module SpaceTac.Game {
     // Event logged when the battle ended
     //  This is always the last event of a battle log
     export class EndBattleEvent extends BaseLogEvent {
-        // Winner of the battle
-        winner: Player;
+        // Outcome of the battle
+        outcome: BattleOutcome;
 
-        constructor(winner: Player) {
+        constructor(outcome: BattleOutcome) {
             super("endbattle");
 
-            this.winner = winner;
+            this.outcome = outcome;
         }
     }
 }

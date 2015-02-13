@@ -8,7 +8,11 @@ module SpaceTac.Game {
 
         // Basic constructor (can specify fake values as arguments)
         constructor(...values: number[]) {
-            this.fake_values = values;
+            this.fake_values = [];
+
+            values.forEach((value: number) => {
+                this.forceNextValue(value);
+            });
         }
 
         // Generate a value, based on an attribute level
@@ -23,7 +27,7 @@ module SpaceTac.Game {
         // Generate a random integer value in a range
         throwInt(min: number, max: number): number {
             var value = this.throw(max - min + 1);
-            return Math.floor(value) + max;
+            return Math.floor(value) + min;
         }
 
         // Choose a random item from an array
@@ -36,6 +40,11 @@ module SpaceTac.Game {
         // Call it several times to set future successive values
         // This value will replace the 0.0-1.0 random value, not the final one
         forceNextValue(value: number): void {
+            if (value < 0.0) {
+                value = 0.0;
+            } else if (value >= 1.0) {
+                value = 0.999999999;
+            }
             this.fake_values.push(value);
         }
     }
