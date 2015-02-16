@@ -41,13 +41,28 @@ module SpaceTac.Game {
         }
 
         // Create a quick random battle, for testing purposes
-        static newQuickRandom(): Battle {
+        static newQuickRandom(with_ai: boolean = false): Battle {
             var player1 = Player.newQuickRandom("John");
             var player2 = Player.newQuickRandom("Carl");
 
             var result = new Battle(player1.fleet, player2.fleet);
+            if (with_ai) {
+                player2.ai = new AI.BullyAI(player2.fleet);
+            }
             result.start();
             return result;
+        }
+
+        // Check if a player is able to play
+        //  This can be used by the UI to determine if player interaction is allowed
+        canPlay(player: Player): boolean {
+            if (this.ended) {
+                return false;
+            } else if (this.playing_ship.getPlayer() === player) {
+                return this.playing_ship.isAbleToPlay();
+            } else {
+                return false;
+            }
         }
 
         // Create play order, performing an initiative throw
@@ -160,6 +175,18 @@ module SpaceTac.Game {
 
             if (this.playing_ship) {
                 this.playing_ship.startTurn(this.first_turn);
+
+                if (!this.playing_ship.isAbleToPlay()) {
+                    // If the ship is not able to play, wait a little, then advance to the next one
+                    setTimeout(() => {
+                        this.advanceToNextShip(log);
+                    }, 2000);
+                } else if (this.playing_ship.getPlayer().ai) {
+                    // TODO If the ship is managed by an AI, let it get to work
+                    setTimeout(() => {
+                        this.advanceToNextShip(log);
+                    }, 2000);
+                }
             }
 
             if (log) {
@@ -178,7 +205,7 @@ module SpaceTac.Game {
                 ship.updateAttributes();
                 ship.restoreHealth();
             });
-            this.advanceToNextShip(false);
+            this.advanceToNextShip();
         }
 
         // Force an injection of events in the battle log to simulate the initial state

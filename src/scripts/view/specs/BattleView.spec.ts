@@ -8,7 +8,7 @@ module SpaceTac.View.Specs {
     export function inbattleview_it(desc: string, func: (battleview: BattleView) => void) {
         var battleview = new BattleView();
         var battle = Game.Battle.newQuickRandom();
-        var player = battle.fleets[0].player;
+        var player = battle.playing_ship.getPlayer();
         ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
             func(battleview);
         }, battleview, player, battle);

@@ -40,6 +40,12 @@ module SpaceTac.View {
         // Subscription to the battle log
         log_processor: LogProcessor;
 
+        // True if player interaction is allowed
+        interacting: boolean;
+
+        // Indicator of interaction disabled
+        icon_waiting: Phaser.Image;
+
         // Init the view, binding it to a specific battle
         init(player: Game.Player, battle: Game.Battle) {
             this.player = player;
@@ -73,6 +79,11 @@ module SpaceTac.View {
             this.ship_list = new ShipList(this);
             this.card_playing = new ShipCard(this, 1060, 130);
             this.card_hovered = new ShipCard(this, 1060, 430);
+
+            this.icon_waiting = new Phaser.Image(this.game, 640, 360, "battle-waiting", 0);
+            this.icon_waiting.anchor.set(0.5, 0.5);
+            game.add.existing(this.icon_waiting);
+            game.tweens.create(this.icon_waiting).to({"angle": 360}, 3000).repeat(-1).start();
 
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
@@ -153,9 +164,22 @@ module SpaceTac.View {
             }
         }
 
+        // Enable or disable the global player interaction
+        //  Disable interaction when it is the AI turn, or when the current ship can't play
+        setInteractionEnabled(enabled: boolean): void {
+            this.exitTargettingMode();
+            this.interacting = enabled;
+
+            this.icon_waiting.visible = !this.interacting;
+        }
+
         // Enter targetting mode
         //  While in this mode, the Targetting object will receive hover and click events, and handle them
         enterTargettingMode(): Targetting {
+            if (!this.interacting) {
+                return null;
+            }
+
             if (this.targetting) {
                 this.exitTargettingMode();
             }

@@ -11,12 +11,13 @@ module SpaceTac.View {
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load assets
-            this.loadImage("battle/background.jpg");
+            this.loadImage("battle/waiting.png");
             this.loadImage("battle/shiplist-base.png");
             this.loadImage("battle/shiplist-normal.png");
             this.loadImage("battle/shiplist-playing.png");
             this.loadImage("battle/shiplist-own.png");
             this.loadImage("battle/shiplist-enemy.png");
+            this.loadImage("battle/background.jpg");
             this.loadImage("battle/arena/background.png");
             this.loadImage("battle/actionbar.png");
             this.loadImage("battle/action-inactive.png");

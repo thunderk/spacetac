@@ -62,6 +62,8 @@ module SpaceTac.View {
             this.view.ship_list.setPlaying(event.target.ship);
             this.view.card_playing.setShip(event.target.ship);
             this.view.action_bar.setShip(event.target.ship);
+
+            this.view.setInteractionEnabled(this.battle.canPlay(this.view.player));
         }
 
         // Damage to ship

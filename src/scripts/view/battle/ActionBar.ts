@@ -60,12 +60,16 @@ module SpaceTac.View {
             var action_bar = this;
             this.clearAll();
 
-            var actions = ship.getAvailableActions();
-            actions.forEach((action: Game.BaseAction) => {
-                action_bar.addAction(ship, action);
-            });
+            if (ship.getPlayer() === this.battleview.player) {
+                var actions = ship.getAvailableActions();
+                actions.forEach((action: Game.BaseAction) => {
+                    action_bar.addAction(ship, action);
+                });
 
-            this.ship = ship;
+                this.ship = ship;
+            } else {
+                this.ship = null;
+            }
 
             this.updateActionPoints();
         }

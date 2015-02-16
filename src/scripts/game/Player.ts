@@ -6,9 +6,13 @@ module SpaceTac.Game {
         // Current fleet
         fleet: Fleet;
 
+        // AI playing (null for human player)
+        ai: AI.AbstractAI;
+
         // Create a player, with an empty fleet
         constructor() {
             this.fleet = new Fleet(this);
+            this.ai = null;
         }
 
         // Create a quick random player, with a fleet, for testing purposes
