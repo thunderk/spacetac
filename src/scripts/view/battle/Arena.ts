@@ -104,6 +104,8 @@ module SpaceTac.View {
                 arena_ship.setPlaying(true);
             }
             this.playing = arena_ship;
+
+            Sound.playOnce(this.game, "battle-ship-change");
         }
     }
 }

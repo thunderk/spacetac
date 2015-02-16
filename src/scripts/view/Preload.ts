@@ -10,7 +10,7 @@ module SpaceTac.View {
             this.preloadBar.position.set((1280 - this.preloadBar.width) / 2, (720 - this.preloadBar.height) / 2);
             this.load.setPreloadSprite(this.preloadBar);
 
-            // Load assets
+            // Load images
             this.loadImage("battle/waiting.png");
             this.loadImage("battle/shiplist-base.png");
             this.loadImage("battle/shiplist-normal.png");
@@ -32,6 +32,9 @@ module SpaceTac.View {
             this.loadImage("ship/scout/portrait.png");
             this.loadImage("common/standard-bar-background.png");
             this.loadImage("common/standard-bar-foreground.png");
+
+            // Load sounds
+            this.loadSound("battle/ship-change.wav");
         }
 
         create() {
@@ -40,6 +43,11 @@ module SpaceTac.View {
 
         private loadImage(path: string) {
             this.load.image(path.replace(/\//g, "-").replace(".png", "").replace(".jpg", ""), "assets/images/" + path);
+        }
+
+        private loadSound(path: string) {
+            var key = path.replace(/\//g, "-").replace(".wav", "");
+            this.load.audio(key, "assets/sounds/" + path);
         }
     }
 }
