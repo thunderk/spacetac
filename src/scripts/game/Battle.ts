@@ -182,10 +182,8 @@ module SpaceTac.Game {
                         this.advanceToNextShip(log);
                     }, 2000);
                 } else if (this.playing_ship.getPlayer().ai) {
-                    // TODO If the ship is managed by an AI, let it get to work
-                    setTimeout(() => {
-                        this.advanceToNextShip(log);
-                    }, 2000);
+                    // If the ship is managed by an AI, let it get to work
+                    this.playing_ship.getPlayer().ai.playShip(this.playing_ship);
                 }
             }
 

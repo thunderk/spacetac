@@ -255,6 +255,19 @@ module SpaceTac.Game {
             return result;
         }
 
+        // List all attached equipments of a given type (all types if null)
+        listEquipment(slottype: SlotType = null): Equipment[] {
+            var result: Equipment[] = [];
+
+            this.slots.forEach((slot: Slot) => {
+                if (slot.type === slottype && slot.attached) {
+                    result.push(slot.attached);
+                }
+            });
+
+            return result;
+        }
+
         // Get the number of attached equipments
         getEquipmentCount(): number {
             var result = 0;
