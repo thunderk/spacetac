@@ -19,12 +19,26 @@ module SpaceTac.Game.AI {
             super(fleet);
         }
 
+        protected initWork(): void {
+            this.addWorkItem(() => {
+                var moves = this.listAllMoves();
+
+                if (moves.length > 0) {
+                    var move = moves[0];
+                    this.applyMove(move);
+
+                    // Try to make another move
+                    this.initWork();
+                }
+            });
+        }
+
         // List all enemy ships that can be a target
         listAllEnemies(): Ship[] {
             var result: Ship[] = [];
 
             this.fleet.battle.play_order.forEach((ship: Ship) => {
-                if (ship.getPlayer() !== this.ship.getPlayer()) {
+                if (ship.alive && ship.getPlayer() !== this.ship.getPlayer()) {
                     result.push(ship);
                 }
             });
@@ -76,7 +90,7 @@ module SpaceTac.Game.AI {
                 } else {
                     var engine = engines[0];
                     var move_distance = distance - weapon.distance;
-                    var move_ap = engine.ap_usage * move_distance;
+                    var move_ap = engine.ap_usage * move_distance / engine.distance;
                     if (move_ap > remaining_ap) {
                         // Not enough AP to move in range
                         return null;
@@ -98,6 +112,21 @@ module SpaceTac.Game.AI {
                 result.weapon = weapon;
                 return result;
             }
+        }
+
+        // Effectively apply the move
+        private applyMove(move: BullyMove): void {
+            if (move.move_to) {
+                this.addWorkItem(() => {
+                    this.ship.moveTo(move.move_to.x, move.move_to.y);
+                }, 1000);
+            }
+
+            this.addWorkItem(() => {
+                move.weapon.action.apply(this.fleet.battle, this.ship, Target.newFromShip(move.target));
+            }, 1500);
+
+            this.addWorkItem(null, 500);
         }
     }
 }

@@ -45,6 +45,7 @@ module SpaceTac.Game.AI.Specs {
             var ship = new Ship();
             var engine = new Equipment(SlotType.Engine);
             engine.ap_usage = 3;
+            engine.distance = 1;
             ship.addSlot(SlotType.Engine).attach(engine);
             ship.ap_current.setMaximal(10);
             ship.ap_current.set(8);

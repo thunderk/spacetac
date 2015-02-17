@@ -43,8 +43,24 @@ module SpaceTac.Game.AI {
         }
 
         // Add a work item to the work queue
-        addWorkItem(item: Function): void {
-            this.workqueue.push(item);
+        addWorkItem(item: Function, delay: number = null): void {
+            var wrapped = () => {
+                if (item) {
+                    item();
+                }
+                this.processNextWorkItem();
+            };
+
+            if (!delay) {
+                delay = 100;
+            }
+            if (this.async && delay) {
+                this.workqueue.push(() => {
+                    setTimeout(wrapped, delay);
+                });
+            } else {
+                this.workqueue.push(wrapped);
+            }
         }
 
         // Initially fill the work queue.
@@ -58,24 +74,9 @@ module SpaceTac.Game.AI {
             if (this.workqueue.length > 0) {
                 // Take the first item
                 var item = this.workqueue.shift();
-                this.processWorkItem(item);
+                item();
             } else {
                 this.endTurn();
-            }
-        }
-
-        // Process one work item, then call processNextWorkItem
-        private processWorkItem(item: Function): void {
-            // Process current item
-            item();
-
-            // On to the next item
-            if (this.async) {
-                setTimeout(() => {
-                    this.processNextWorkItem();
-                }, 100);
-            } else {
-                this.processNextWorkItem();
             }
         }
 
