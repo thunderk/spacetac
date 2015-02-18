@@ -75,6 +75,15 @@ module SpaceTac.View {
             return found;
         }
 
+        // Remove a ship from the list
+        removeShip(ship: Game.Ship): void {
+            var item = this.findItem(ship);
+            if (item) {
+                this.ships.splice(this.ships.indexOf(item), 1);
+                item.destroy();
+            }
+        }
+
         // Set the currently playing ship
         setPlaying(ship: Game.Ship): void {
             if (this.playing) {

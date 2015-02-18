@@ -45,6 +45,9 @@ module SpaceTac.View {
                 case "attr":
                     this.processAttributeChangedEvent(<Game.AttributeChangeEvent>event);
                     break;
+                case "death":
+                    this.processDeathEvent(<Game.DeathEvent>event);
+                    break;
             }
         }
 
@@ -57,7 +60,7 @@ module SpaceTac.View {
         }
 
         // Playing ship changed
-        private processShipChangeEvent(event: Game.ShipChangeEvent) {
+        private processShipChangeEvent(event: Game.ShipChangeEvent): void {
             this.view.arena.setShipPlaying(event.target.ship);
             this.view.ship_list.setPlaying(event.target.ship);
             this.view.card_playing.setShip(event.target.ship);
@@ -67,7 +70,7 @@ module SpaceTac.View {
         }
 
         // Damage to ship
-        private processDamageEvent(event: Game.DamageEvent) {
+        private processDamageEvent(event: Game.DamageEvent): void {
             var sprite = this.view.arena.findShipSprite(event.ship);
             if (sprite) {
                 sprite.displayDamage(event.hull, event.shield);
@@ -75,7 +78,7 @@ module SpaceTac.View {
         }
 
         // Ship moved
-        private processMoveEvent(event: Game.MoveEvent) {
+        private processMoveEvent(event: Game.MoveEvent): void {
             var sprite = this.view.arena.findShipSprite(event.ship);
             if (sprite) {
                 sprite.moveTo(event.target.x, event.target.y, event.facing_angle, true);
@@ -83,11 +86,17 @@ module SpaceTac.View {
         }
 
         // Ship attribute changed
-        private processAttributeChangedEvent(event: Game.AttributeChangeEvent) {
+        private processAttributeChangedEvent(event: Game.AttributeChangeEvent): void {
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {
                 item.attributeChanged(event.attribute);
             }
+        }
+
+        // A ship died
+        private processDeathEvent(event: Game.DeathEvent): void {
+            this.view.arena.removeShip(event.ship);
+            this.view.ship_list.removeShip(event.ship);
         }
     }
 }
