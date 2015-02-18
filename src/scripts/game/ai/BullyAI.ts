@@ -11,6 +11,12 @@ module SpaceTac.Game.AI {
 
         // Ship to target
         target: Ship;
+
+        // Get a sorting score, by distance to another point
+        //   Nearest means higher score
+        getScoreByDistance(point: Target): number {
+            return -point.getDistanceTo(Target.newFromShip(this.target));
+        }
     }
 
     // Basic Artificial Intelligence, with a tendency to move forward and shoot the nearest enemy
@@ -24,7 +30,7 @@ module SpaceTac.Game.AI {
                 var moves = this.listAllMoves();
 
                 if (moves.length > 0) {
-                    var move = moves[0];
+                    var move = this.pickMove(moves);
                     this.applyMove(move);
 
                     // Try to make another move
@@ -112,6 +118,21 @@ module SpaceTac.Game.AI {
                 result.weapon = weapon;
                 return result;
             }
+        }
+
+        // Pick a move from a list of available ones
+        //  By default, it chooses the nearest enemy
+        pickMove(available: BullyMove[]): BullyMove {
+            if (available.length === 0) {
+                return null;
+            }
+
+            // Sort by descending score
+            available.sort((m1: BullyMove, m2: BullyMove): number => {
+                var point = Target.newFromShip(this.ship);
+                return m1.getScoreByDistance(point) < m2.getScoreByDistance(point) ? 1 : -1;
+            });
+            return available[0];
         }
 
         // Effectively apply the move
