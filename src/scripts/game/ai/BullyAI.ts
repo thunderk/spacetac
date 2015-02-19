@@ -6,6 +6,9 @@ module SpaceTac.Game.AI {
         // Position to move to, before firing
         move_to: Target;
 
+        // Engine used to move
+        engine: Equipment;
+
         // Weapon to use
         weapon: Equipment;
 
@@ -83,6 +86,7 @@ module SpaceTac.Game.AI {
             var target = Target.newFromShip(enemy);
             var distance = target.getDistanceTo(Target.newFromShip(this.ship));
             var move: Target;
+            var engine: Equipment;
             var remaining_ap = this.ship.ap_current.current;
             if (distance <= weapon.distance) {
                 // No need to move
@@ -94,7 +98,7 @@ module SpaceTac.Game.AI {
                     // No engine available to move
                     return null;
                 } else {
-                    var engine = engines[0];
+                    engine = engines[0];
                     var move_distance = distance - weapon.distance;
                     var move_ap = engine.ap_usage * move_distance / engine.distance;
                     if (move_ap > remaining_ap) {
@@ -114,6 +118,7 @@ module SpaceTac.Game.AI {
             } else {
                 var result = new BullyMove();
                 result.move_to = move;
+                result.engine = engine;
                 result.target = enemy;
                 result.weapon = weapon;
                 return result;
@@ -135,11 +140,11 @@ module SpaceTac.Game.AI {
             return available[0];
         }
 
-        // Effectively apply the move
-        private applyMove(move: BullyMove): void {
+        // Effectively apply the chosen move
+        applyMove(move: BullyMove): void {
             if (move.move_to) {
                 this.addWorkItem(() => {
-                    this.ship.moveTo(move.move_to.x, move.move_to.y);
+                    move.engine.action.apply(this.battle, this.ship, move.move_to);
                 }, 1000);
             }
 

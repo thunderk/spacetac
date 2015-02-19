@@ -44,23 +44,26 @@ module SpaceTac.Game.AI {
 
         // Add a work item to the work queue
         addWorkItem(item: Function, delay: number = null): void {
+            if (!this.async) {
+                if (item) {
+                    item();
+                }
+                return;
+            }
+
+            if (!delay) {
+                delay = 100;
+            }
+
             var wrapped = () => {
                 if (item) {
                     item();
                 }
                 this.processNextWorkItem();
             };
-
-            if (!delay) {
-                delay = 100;
-            }
-            if (this.async && delay) {
-                this.workqueue.push(() => {
-                    setTimeout(wrapped, delay);
-                });
-            } else {
-                this.workqueue.push(wrapped);
-            }
+            this.workqueue.push(() => {
+                setTimeout(wrapped, delay);
+            });
         }
 
         // Initially fill the work queue.

@@ -111,8 +111,8 @@ module SpaceTac.Game {
             expect(ship.hull.current).toEqual(40);
             expect(ship.shield.current).toEqual(80);
             expect(battle.log.events.length).toBe(3);
-            expect(battle.log.events[0]).toEqual(new AttributeChangeEvent(ship, ship.hull));
-            expect(battle.log.events[1]).toEqual(new AttributeChangeEvent(ship, ship.shield));
+            expect(battle.log.events[0]).toEqual(new AttributeChangeEvent(ship, ship.shield));
+            expect(battle.log.events[1]).toEqual(new AttributeChangeEvent(ship, ship.hull));
             expect(battle.log.events[2]).toEqual(new DamageEvent(ship, 10, 20));
 
             battle.log.clear();

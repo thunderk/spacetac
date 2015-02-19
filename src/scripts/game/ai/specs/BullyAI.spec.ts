@@ -150,5 +150,55 @@ module SpaceTac.Game.AI.Specs {
             result = ai.listAllMoves();
             expect(result.length).toBe(3);
         });
+
+        it("applies the chosen move", function () {
+            var battle = new Battle();
+            var ship1 = new Ship();
+            ship1.setArenaPosition(0, 0);
+            battle.fleets[0].addShip(ship1);
+            var ship2 = new Ship();
+            ship2.setArenaPosition(8, 0);
+            battle.fleets[1].addShip(ship2);
+
+            var ai = new BullyAI(ship1.fleet);
+            ai.async = false;
+            ai.ship = ship1;
+
+            var engine = new Equipment(SlotType.Engine);
+            engine.distance = 1;
+            engine.ap_usage = 2;
+            engine.action = new MoveAction(engine);
+            ai.ship.addSlot(SlotType.Engine).attach(engine);
+
+            var weapon = new Equipment(SlotType.Weapon);
+            weapon.distance = 6;
+            weapon.ap_usage = 1;
+            weapon.target_effects.push(new DamageEffect(20));
+            weapon.action = new FireWeaponAction(weapon);
+            ai.ship.addSlot(SlotType.Weapon).attach(weapon);
+
+            ai.ship.ap_current.setMaximal(10);
+            ai.ship.ap_current.set(6);
+
+            ship2.hull.set(15);
+            ship2.shield.set(10);
+
+            var move = ai.checkBullyMove(ship2, weapon);
+            expect(move).not.toBeNull();
+
+            battle.log.clear();
+            ai.applyMove(move);
+            expect(battle.log.events.length).toBe(6);
+            expect(battle.log.events[0]).toEqual(new MoveEvent(ship1, 2, 0));
+            expect(battle.log.events[1]).toEqual(new AttributeChangeEvent(ship1,
+                new Attribute(AttributeCode.AP, 2, 10)));
+            expect(battle.log.events[2]).toEqual(new AttributeChangeEvent(ship2,
+                new Attribute(AttributeCode.Shield, 0)));
+            expect(battle.log.events[3]).toEqual(new AttributeChangeEvent(ship2,
+                new Attribute(AttributeCode.Hull, 5)));
+            expect(battle.log.events[4]).toEqual(new DamageEvent(ship2, 10, 10));
+            expect(battle.log.events[5]).toEqual(new AttributeChangeEvent(ship1,
+                new Attribute(AttributeCode.AP, 1, 10)));
+        });
     });
 }
