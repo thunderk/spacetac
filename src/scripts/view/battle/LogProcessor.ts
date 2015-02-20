@@ -48,6 +48,9 @@ module SpaceTac.View {
                 case "death":
                     this.processDeathEvent(<Game.DeathEvent>event);
                     break;
+                case "fire":
+                    this.processFireEvent(<Game.FireEvent>event);
+                    break;
             }
         }
 
@@ -97,6 +100,16 @@ module SpaceTac.View {
         private processDeathEvent(event: Game.DeathEvent): void {
             this.view.arena.removeShip(event.ship);
             this.view.ship_list.removeShip(event.ship);
+        }
+
+        // Weapon used
+        private processFireEvent(event: Game.FireEvent): void {
+            // TODO Handle in-space target
+            var source = this.view.arena.findShipSprite(event.ship);
+            var destination = this.view.arena.findShipSprite(event.target.ship);
+
+            var effect = new WeaponEffect(source, destination, event.weapon.code);
+            effect.start();
         }
     }
 }

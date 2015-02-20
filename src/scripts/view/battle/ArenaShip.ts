@@ -104,7 +104,9 @@ module SpaceTac.View {
         }
 
         private animateDamageText(text: Phaser.Text) {
+            text.alpha = 0;
             var tween = this.game.tweens.create(text);
+            tween.to({alpha: 1}, 100, Phaser.Easing.Circular.In, false, 500);
             tween.to({y: -50, alpha: 0}, 800, Phaser.Easing.Circular.In, false, 200);
             tween.onComplete.addOnce(() => {
                 text.destroy();

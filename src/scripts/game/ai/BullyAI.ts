@@ -145,14 +145,14 @@ module SpaceTac.Game.AI {
             if (move.move_to) {
                 this.addWorkItem(() => {
                     move.engine.action.apply(this.battle, this.ship, move.move_to);
-                }, 1000);
+                }, 500);
             }
 
             this.addWorkItem(() => {
                 move.weapon.action.apply(this.fleet.battle, this.ship, Target.newFromShip(move.target));
             }, 1500);
 
-            this.addWorkItem(null, 500);
+            this.addWorkItem(null, 1500);
         }
     }
 }

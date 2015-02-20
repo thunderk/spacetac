@@ -9,6 +9,9 @@ module SpaceTac.Game {
         // Type of slot this equipment can fit in
         slot: SlotType;
 
+        // Identifiable equipment code (may be used by UI to customize visual effects)
+        code: string;
+
         // Equipment name
         name: string;
 
@@ -40,9 +43,10 @@ module SpaceTac.Game {
         target_effects: BaseEffect[];
 
         // Basic constructor
-        constructor(slot: SlotType = null, name: string = null) {
+        constructor(slot: SlotType = null, code: string = null) {
             this.slot = slot;
-            this.name = name;
+            this.code = code;
+            this.name = code;
             this.requirements = [];
             this.permanent_effects = [];
             this.target_effects = [];

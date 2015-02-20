@@ -64,6 +64,7 @@ module SpaceTac.Game {
             var result = new Equipment();
 
             result.slot = this.slot;
+            result.code = Tools.getClassName(this);
             result.name = this.name;
 
             result.distance = this.distance.getProportional(power);

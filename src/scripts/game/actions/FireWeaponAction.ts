@@ -43,6 +43,9 @@ module SpaceTac.Game {
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
             if (target.ship) {
+                // Fire event
+                ship.addBattleEvent(new FireEvent(ship, this.equipment, target));
+
                 // Apply all target effects
                 var result = false;
                 this.equipment.target_effects.forEach((effect: BaseEffect) => {

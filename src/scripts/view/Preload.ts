@@ -28,6 +28,7 @@ module SpaceTac.View {
             this.loadImage("battle/arena/shipspriteplaying.png");
             this.loadImage("battle/ship-card.png");
             this.loadImage("battle/actions/move.png");
+            this.loadImage("battle/weapon/bullet.png");
             this.loadImage("ship/scout/sprite.png");
             this.loadImage("ship/scout/portrait.png");
             this.loadImage("common/standard-bar-background.png");
@@ -35,6 +36,7 @@ module SpaceTac.View {
 
             // Load sounds
             this.loadSound("battle/ship-change.wav");
+            this.loadSound("battle/weapon-bullets.wav");
         }
 
         create() {
