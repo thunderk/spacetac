@@ -46,6 +46,9 @@ module SpaceTac.View {
         // Indicator of interaction disabled
         icon_waiting: Phaser.Image;
 
+        // Listener for space key presses
+        private space_key: Phaser.Key;
+
         // Init the view, binding it to a specific battle
         init(player: Game.Player, battle: Game.Battle) {
             this.player = player;
@@ -54,6 +57,7 @@ module SpaceTac.View {
             this.ship_hovered = null;
             this.log_processor = null;
             this.background = null;
+            this.space_key = null;
         }
 
         // Create view graphics
@@ -87,6 +91,10 @@ module SpaceTac.View {
 
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
+
+            // Handle space bar to end turn
+            this.space_key = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            this.space_key.onUp.add(this.onSpaceKeyPressed, this);
         }
 
         // Leaving the view, we unbind the battle
@@ -118,7 +126,19 @@ module SpaceTac.View {
                 this.card_hovered = null;
             }
 
+            if (this.space_key) {
+                this.space_key.onUp.remove(this.onSpaceKeyPressed, this);
+                this.space_key = null;
+            }
+
             this.battle = null;
+        }
+
+        // Listener for space key events
+        onSpaceKeyPressed(): void {
+            if (this.battle.playing_ship && this.battle.playing_ship.getPlayer() === this.player) {
+                this.battle.advanceToNextShip();
+            }
         }
 
         // Method called when cursor starts hovering over a ship (or its icon)
