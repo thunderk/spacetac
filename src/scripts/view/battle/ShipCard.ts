@@ -19,7 +19,7 @@ module SpaceTac.View {
         // Set the currently displayed ship (null to hide)
         setShip(ship: Game.Ship) {
             this.ship = ship;
-            this.visible = (ship !== null);
+            Animation.setVisibility(this.game, this, ship !== null, 200);
         }
     }
 }

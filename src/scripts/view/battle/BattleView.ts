@@ -190,7 +190,7 @@ module SpaceTac.View {
             this.exitTargettingMode();
             this.interacting = enabled;
 
-            this.icon_waiting.visible = !this.interacting;
+            Animation.setVisibility(this.game, this.icon_waiting, !this.interacting, 100);
         }
 
         // Enter targetting mode

@@ -79,17 +79,13 @@ module SpaceTac.View {
 
         // Set the playing status
         setPlaying(playing: boolean) {
-            var tween1 = this.game.tweens.create(this.layer_playing);
-            tween1.to({alpha: playing ? 1 : 0});
-            tween1.start();
-            var tween2 = this.game.tweens.create(this.layer_normal);
-            tween2.to({alpha: playing ? 0 : 1});
-            tween2.start();
+            Animation.setVisibility(this.game, this.layer_playing, playing, 500);
+            Animation.setVisibility(this.game, this.layer_normal, !playing, 500);
         }
 
         // Set the hovered status
         setHovered(hovered: boolean) {
-            this.layer_hover.visible = hovered;
+            Animation.setVisibility(this.game, this.layer_hover, hovered, 200);
         }
     }
 }

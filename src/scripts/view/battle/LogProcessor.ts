@@ -51,6 +51,9 @@ module SpaceTac.View {
                 case "fire":
                     this.processFireEvent(<Game.FireEvent>event);
                     break;
+                case "endbattle":
+                    this.view.setInteractionEnabled(false);
+                    break;
             }
         }
 

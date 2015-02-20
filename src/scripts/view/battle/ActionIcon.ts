@@ -105,11 +105,7 @@ module SpaceTac.View {
         // Update the active status, from the action canBeUsed result
         updateActiveStatus(): void {
             var active = this.action.canBeUsed(this.battleview.battle, this.ship);
-
-            var tween = this.game.tweens.create(this.layer_active);
-            tween.to({alpha: active ? 1 : 0});
-            tween.start();
-
+            Animation.setVisibility(this.game, this.layer_active, active, 500);
             this.input.useHandCursor = active;
         }
     }

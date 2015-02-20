@@ -60,13 +60,13 @@ module SpaceTac.View {
         // Set the hovered state on this ship
         //  This will toggle the hover effect
         setHovered(hovered: boolean) {
-            this.hover.visible = hovered;
+            Animation.setVisibility(this.game, this.hover, hovered, 200);
         }
 
         // Set the playing state on this ship
         //  This will toggle the "playing" indicator
         setPlaying(playing: boolean) {
-            this.playing.visible = playing;
+            Animation.setVisibility(this.game, this.playing, playing, 500);
         }
 
         // Move the sprite to a location
