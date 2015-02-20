@@ -52,6 +52,7 @@ module SpaceTac.Game.AI.Specs {
             var enemy = new Ship();
             var ai = new BullyAI(ship.fleet);
             ai.ship = ship;
+            ai.move_margin = 0;
             var weapon = new Equipment(SlotType.Weapon);
             weapon.ap_usage = 2;
             weapon.distance = 3;
@@ -77,6 +78,17 @@ module SpaceTac.Game.AI.Specs {
             expect(result.move_to).toEqual(Target.newFromLocation(3, 0));
             expect(result.target).toBe(enemy);
             expect(result.weapon).toBe(weapon);
+
+            // enemy out of range, but moving can bring it in range, except for the safety margin
+            ai.move_margin = 0.1;
+            ship.ap_current.set(8);
+            ship.arena_x = 1;
+            ship.arena_y = 0;
+            enemy.arena_x = 6;
+            enemy.arena_y = 0;
+            result = ai.checkBullyMove(enemy, weapon);
+            expect(result).toBeNull();
+            ai.move_margin = 0;
 
             // enemy totally out of range
             ship.ap_current.set(8);
@@ -161,6 +173,7 @@ module SpaceTac.Game.AI.Specs {
             battle.fleets[1].addShip(ship2);
 
             var ai = new BullyAI(ship1.fleet);
+            ai.move_margin = 0;
             ai.async = false;
             ai.ship = ship1;
 

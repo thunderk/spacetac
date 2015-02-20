@@ -24,8 +24,13 @@ module SpaceTac.Game.AI {
 
     // Basic Artificial Intelligence, with a tendency to move forward and shoot the nearest enemy
     export class BullyAI extends AbstractAI {
+        // Safety margin in moves to account for floating-point rounding errors
+        move_margin: number;
+
         constructor(fleet: Fleet) {
             super(fleet);
+
+            this.move_margin = 0.1;
         }
 
         protected initWork(): void {
@@ -99,7 +104,7 @@ module SpaceTac.Game.AI {
                     return null;
                 } else {
                     engine = engines[0];
-                    var move_distance = distance - weapon.distance;
+                    var move_distance = distance - weapon.distance + this.move_margin;
                     var move_ap = engine.ap_usage * move_distance / engine.distance;
                     if (move_ap > remaining_ap) {
                         // Not enough AP to move in range
