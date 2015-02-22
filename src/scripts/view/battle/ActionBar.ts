@@ -2,7 +2,7 @@ module SpaceTac.View {
     "use strict";
 
     // Bar with all available action icons displayed
-    export class ActionBar extends Phaser.Sprite {
+    export class ActionBar extends Phaser.Group {
         // Link to the parent battleview
         battleview: BattleView;
 
@@ -21,8 +21,13 @@ module SpaceTac.View {
             this.actions = [];
             this.ship = null;
 
-            super(battleview.game, 170, 0, "battle-actionbar");
+            super(battleview.game);
+            this.x = 170;
+            this.y = 0;
             battleview.ui.add(this);
+
+            // Background
+            this.addChild(new Phaser.Image(battleview.game, 0, 0, "battle-actionbar", 0));
 
             // Action points progress bar
             this.actionpoints = new ValueBar(battleview.game, 119, 76, "battle-actionpointsempty");

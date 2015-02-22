@@ -1,8 +1,17 @@
 module SpaceTac.View {
     "use strict";
 
+    // Display mode for ValueBar
+    export enum ValueBarMode {
+        Scaled,
+        Truncated
+    }
+
     // Bar to display a value (like a progress bar)
     export class ValueBar extends Phaser.Sprite {
+        // Display mode, true to scale the internal bar, false to truncate it
+        display_mode: ValueBarMode;
+
         // Current value
         private current: number;
 
@@ -14,6 +23,7 @@ module SpaceTac.View {
 
         // Sprite of internal bar (inside the background sprite)
         private bar_sprite: Phaser.Sprite;
+        private bar_sprite_rect: Phaser.Rectangle;
 
         // Create a quick standard bar
         static newStandard(game: Phaser.Game, x: number, y: number): ValueBar {
@@ -24,8 +34,11 @@ module SpaceTac.View {
 
         // Build an value bar sprite
         //  background is the key to the image to use as background
-        constructor(game: Phaser.Game, x: number, y: number, background: string) {
+        constructor(game: Phaser.Game, x: number, y: number, background: string,
+                    display_mode: ValueBarMode = ValueBarMode.Truncated) {
             super(game, x, y, background);
+
+            this.display_mode = display_mode;
 
             this.setValue(0, 1000);
         }
@@ -33,6 +46,7 @@ module SpaceTac.View {
         // Set an image to use for the bar
         setBarImage(key: string, offset_x: number = 0, offset_y: number = 0): void {
             this.bar_sprite = new Phaser.Sprite(this.game, offset_x, offset_y, key);
+            this.bar_sprite_rect = new Phaser.Rectangle(0, 0, this.bar_sprite.width, this.bar_sprite.height);
             this.addChild(this.bar_sprite);
         }
 
@@ -44,9 +58,12 @@ module SpaceTac.View {
                     dest = 0.00001;
                 }
 
-                var tween = this.game.tweens.create(this.bar_sprite.scale);
-                tween.to({x: dest});
-                tween.start();
+                if (this.display_mode === ValueBarMode.Scaled) {
+                    this.game.tweens.create(this.bar_sprite.scale).to({x: dest}).start();
+                } else {
+                    // TODO Animate
+                    this.bar_sprite.crop(Phaser.Rectangle.clone(this.bar_sprite_rect).scale(dest, 1.0), false);
+                }
             }
         }
 
