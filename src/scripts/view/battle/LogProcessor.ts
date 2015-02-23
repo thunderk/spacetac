@@ -101,6 +101,9 @@ module SpaceTac.View {
 
         // A ship died
         private processDeathEvent(event: Game.DeathEvent): void {
+            if (this.view.ship_hovered === event.ship) {
+                this.view.setShipHovered(null);
+            }
             this.view.arena.removeShip(event.ship);
             this.view.ship_list.removeShip(event.ship);
         }
