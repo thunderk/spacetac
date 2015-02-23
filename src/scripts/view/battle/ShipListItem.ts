@@ -54,9 +54,8 @@ module SpaceTac.View {
             this.layer_enemy = new Phaser.Image(this.game, 0, 0, owned ? "battle-shiplist-own" : "battle-shiplist-enemy", 0);
             this.addChild(this.layer_enemy);
 
-            this.layer_hover = new Phaser.Image(this.game, 8, 5, "battle-arena-shipspritehover", 0);
+            this.layer_hover = new Phaser.Image(this.game, 14, 14, "battle-arena-shipspritehover", 0);
             this.layer_hover.visible = false;
-            this.layer_hover.scale.set(0.5, 0.5);
             this.addChild(this.layer_hover);
 
             this.hull = ValueBar.newStandard(list.battleview.game, 85, 28);

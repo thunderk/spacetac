@@ -21,19 +21,18 @@ module SpaceTac.View {
 
             super(battleview.game);
 
-            // Add hover effect
-            this.hover = new Phaser.Image(battleview.game, 0, 0, "battle-arena-shipspritehover", 0);
-            this.hover.scale.set(0.4, 0.4);
-            this.hover.anchor.set(0.5, 0.5);
-            this.hover.visible = false;
-            this.addChild(this.hover);
-
             // Add ship sprite
             this.sprite = new Phaser.Button(battleview.game, 0, 0, "ship-scout-sprite");
             this.sprite.scale.set(0.1, 0.1);
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.addChild(this.sprite);
+
+            // Add hover effect
+            this.hover = new Phaser.Image(battleview.game, 0, 0, "battle-arena-shipspritehover", 0);
+            this.hover.anchor.set(0.5, 0.5);
+            this.hover.visible = false;
+            this.addChild(this.hover);
 
             // Add playing effect
             this.playing = new Phaser.Image(battleview.game, 0, 0, "battle-arena-shipspriteplaying", 0);
