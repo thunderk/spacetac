@@ -9,7 +9,7 @@ module SpaceTac.Game {
         can_target_space: boolean;
 
         constructor(equipment: Equipment, can_target_space: boolean = false) {
-            super("fire", true, equipment);
+            super("fire-" + equipment.code, true, equipment);
 
             this.can_target_space = can_target_space;
         }

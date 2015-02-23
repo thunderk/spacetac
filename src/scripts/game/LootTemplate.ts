@@ -6,7 +6,7 @@ module SpaceTac.Game {
         // Type of slot this equipment will fit in
         slot: SlotType;
 
-        // Base name, lower cased
+        // Base name that will be given to generated equipment
         name: string;
 
         // Capability requirement ranges (indexed by AttributeCode)
@@ -64,7 +64,7 @@ module SpaceTac.Game {
             var result = new Equipment();
 
             result.slot = this.slot;
-            result.code = Tools.getClassName(this);
+            result.code = (this.name || "").toLowerCase().replace(/ /g, "");
             result.name = this.name;
 
             result.distance = this.distance.getProportional(power);

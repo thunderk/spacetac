@@ -39,7 +39,7 @@ module SpaceTac.View {
             this.addChild(this.layer_active);
 
             // Icon layer
-            this.layer_icon = new Phaser.Image(this.game, 14, 17, "battle-actions-" + action.code, 0);
+            this.layer_icon = new Phaser.Image(this.game, 15, 18, "battle-actions-" + action.code, 0);
             this.addChild(this.layer_icon);
 
             // Click process
@@ -106,6 +106,7 @@ module SpaceTac.View {
         updateActiveStatus(): void {
             var active = this.action.canBeUsed(this.battleview.battle, this.ship);
             Animation.setVisibility(this.game, this.layer_active, active, 500);
+            this.game.tweens.create(this.layer_icon).to({alpha: active ? 1 : 0.3}, 500).start();
             this.input.useHandCursor = active;
         }
     }

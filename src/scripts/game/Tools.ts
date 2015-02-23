@@ -16,10 +16,5 @@ module SpaceTac.Game {
 
             return objectCopy;
         }
-
-        // Get a class name, from an instance
-        static getClassName(object: any): string {
-            return object.constructor.name;
-        }
     }
 }

@@ -18,7 +18,7 @@ module SpaceTac.Game.Specs {
             var equipment = template.generateFixed(0.0);
 
             expect(equipment.slot).toEqual(SlotType.Weapon);
-            expect(equipment.code).toEqual("LootTemplate");
+            expect(equipment.code).toEqual("bulletator");
             expect(equipment.name).toEqual("Bulletator");
             expect(equipment.distance).toEqual(1);
             expect(equipment.blast).toEqual(1);
@@ -32,7 +32,7 @@ module SpaceTac.Game.Specs {
             equipment = template.generateFixed(1.0);
 
             expect(equipment.slot).toEqual(SlotType.Weapon);
-            expect(equipment.code).toEqual("LootTemplate");
+            expect(equipment.code).toEqual("bulletator");
             expect(equipment.name).toEqual("Bulletator");
             expect(equipment.distance).toEqual(3);
             expect(equipment.blast).toEqual(1);
@@ -46,7 +46,7 @@ module SpaceTac.Game.Specs {
             equipment = template.generateFixed(0.5);
 
             expect(equipment.slot).toEqual(SlotType.Weapon);
-            expect(equipment.code).toEqual("LootTemplate");
+            expect(equipment.code).toEqual("bulletator");
             expect(equipment.name).toEqual("Bulletator");
             expect(equipment.distance).toEqual(2);
             expect(equipment.blast).toEqual(1);

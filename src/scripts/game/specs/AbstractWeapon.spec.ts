@@ -15,7 +15,7 @@ module SpaceTac.Game.Specs {
             expect(effect.value).toEqual(51);
 
             var action = equipment.action;
-            expect(action.code).toEqual("fire");
+            expect(action.code).toEqual("fire-superfireweapon");
             expect(action.needs_target).toBe(true);
         });
 
