@@ -111,6 +111,12 @@ module SpaceTac.View {
             var source = this.view.arena.findShipSprite(event.ship);
             var destination = this.view.arena.findShipSprite(event.target.ship);
 
+            var dy = destination.y - source.y;
+            var dx = destination.x - source.x;
+            var angle = Math.atan2(dy, dx);
+
+            source.moveTo(source.x, source.y, angle, true);
+
             var effect = new WeaponEffect(source, destination, event.weapon.code);
             effect.start();
         }
