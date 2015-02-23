@@ -4,7 +4,7 @@ module SpaceTac.View {
     // Card to display detailed information about a ship
     export class ShipCard extends Phaser.Sprite {
         // Displayed ship
-        private ship: Game.Ship;
+        ship: Game.Ship;
 
         // Build an empty ship card
         constructor(battleview: BattleView, x: number, y: number) {
