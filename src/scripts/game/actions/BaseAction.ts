@@ -79,7 +79,16 @@ module SpaceTac.Game {
                 if (!target && this.needs_target) {
                     return false;
                 }
-                return this.customApply(battle, ship, target);
+
+                var cost = this.getActionPointsUsage(battle, ship, target);
+                if (this.customApply(battle, ship, target)) {
+                    if (cost > 0) {
+                        ship.useActionPoints(cost);
+                    }
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }

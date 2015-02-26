@@ -35,9 +35,7 @@ module SpaceTac.Game {
         }
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
-            var cost = this.getActionPointsUsage(battle, ship, target);
             ship.moveTo(target.x, target.y);
-            ship.useActionPoints(cost);
             return true;
         }
     }

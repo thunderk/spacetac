@@ -49,11 +49,6 @@ module SpaceTac.Game {
                     result = result || eff_result;
                 });
 
-                // Consume AP
-                if (result) {
-                    ship.useActionPoints(this.equipment.ap_usage);
-                }
-
                 return result;
             } else {
                 // TODO target in space (=> apply blast radius)
