@@ -35,6 +35,15 @@ module SpaceTac.Game {
             return remaining_ap >= ap_usage;
         }
 
+        // Get the number of action points the action applied to a target would use
+        getActionPointsUsage(battle: Battle, ship: Ship, target: Target): number {
+            if (this.equipment) {
+                return this.equipment.ap_usage;
+            } else {
+                return 0;
+            }
+        }
+
         // Method to check if a target is applicable for this action
         //  Will call checkLocationTarget or checkShipTarget by default
         checkTarget(battle: Battle, ship: Ship, target: Target): Target {

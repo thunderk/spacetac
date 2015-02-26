@@ -35,6 +35,8 @@ module SpaceTac.View.Specs {
         inbattleview_it("mark actions that would become unavailable after use", (battleview: BattleView) => {
             var bar = battleview.action_bar;
             var ship = new Game.Ship();
+            ship.arena_x = 1;
+            ship.arena_y = 8;
             var engine = (new Game.Equipments.ConventionalEngine()).generate();
             engine.ap_usage = 8;
             engine.distance = 4;
@@ -81,6 +83,19 @@ module SpaceTac.View.Specs {
             // Not enough AP to move
             ship.ap_current.set(3);
             bar.actions[1].processClick();
+            checkFading([0, 1, 2], [3]);
+
+            // Dynamic AP usage for move actions
+            ship.ap_current.set(6);
+            bar.actions[0].processClick();
+            checkFading([], [0, 1, 2, 3]);
+            bar.actions[0].processHover(Game.Target.newFromLocation(2, 8));
+            checkFading([2], [0, 1, 3]);
+            bar.actions[0].processHover(Game.Target.newFromLocation(3, 8));
+            checkFading([1, 2], [0, 3]);
+            bar.actions[0].processHover(Game.Target.newFromLocation(4, 8));
+            checkFading([0, 1, 2], [3]);
+            bar.actions[0].processHover(Game.Target.newFromLocation(5, 8));
             checkFading([0, 1, 2], [3]);
         });
     });

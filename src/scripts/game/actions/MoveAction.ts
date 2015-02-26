@@ -19,6 +19,15 @@ module SpaceTac.Game {
             return remaining_ap > 0.0001;
         }
 
+        getActionPointsUsage(battle: Battle, ship: Ship, target: Target): number {
+            if (target === null) {
+                return 0;
+            }
+
+            var distance = Target.newFromShip(ship).getDistanceTo(target);
+            return this.equipment.ap_usage * distance / this.equipment.distance;
+        }
+
         checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
             // TODO Should forbid to move too much near another ship
             var max_distance = this.equipment.distance * ship.ap_current.current / this.equipment.ap_usage;
@@ -26,9 +35,8 @@ module SpaceTac.Game {
         }
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
-            var distance = Target.newFromShip(ship).getDistanceTo(target);
+            var cost = this.getActionPointsUsage(battle, ship, target);
             ship.moveTo(target.x, target.y);
-            var cost = this.equipment.ap_usage * distance / this.equipment.distance;
             ship.useActionPoints(cost);
             return true;
         }

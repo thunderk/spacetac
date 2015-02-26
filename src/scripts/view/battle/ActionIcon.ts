@@ -80,7 +80,7 @@ module SpaceTac.View {
             this.bar.actionEnded();
 
             // Update fading statuses
-            this.bar.updateFadings(this.action.equipment.ap_usage);
+            this.bar.updateFadings(this.action.getActionPointsUsage(this.battleview.battle, this.ship, null));
 
             // Set the lighting color to highlight
             if (this.game.renderType !== Phaser.HEADLESS) {
@@ -105,6 +105,7 @@ module SpaceTac.View {
         processHover(target: Game.Target): void {
             target = this.action.checkTarget(this.battleview.battle, this.ship, target);
             this.targetting.setTarget(target, false);
+            this.bar.updateFadings(this.action.getActionPointsUsage(this.battleview.battle, this.ship, target));
         }
 
         // Called when a target is selected
@@ -123,6 +124,7 @@ module SpaceTac.View {
             }
             this.layer_active.tint = 0xFFFFFF;
             this.updateActiveStatus();
+            this.updateFadingStatus(this.ship.ap_current.current);
         }
 
         // Update the active status, from the action canBeUsed result
@@ -136,7 +138,7 @@ module SpaceTac.View {
         // Update the fading status, given an hypothetical remaining AP
         updateFadingStatus(remaining_ap: number): void {
             this.fading = !this.action.canBeUsed(this.battleview.battle, this.ship, remaining_ap);
-            Animation.setVisibility(this.game, this.layer_fading, this.fading, 200);
+            Animation.setVisibility(this.game, this.layer_fading, this.fading && this.active, 200);
         }
     }
 }
