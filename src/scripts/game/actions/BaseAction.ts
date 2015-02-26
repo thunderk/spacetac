@@ -21,8 +21,18 @@ module SpaceTac.Game {
 
         // Check basic conditions to know if the ship can use this action at all
         //  Method to reimplement to set conditions
-        canBeUsed(battle: Battle, ship: Ship): boolean {
-            return true;
+        canBeUsed(battle: Battle, ship: Ship, remaining_ap: number = null): boolean {
+            if (battle && battle.playing_ship !== ship) {
+                // Ship is not playing
+                return false;
+            }
+
+            // Check AP usage
+            if (remaining_ap === null) {
+                remaining_ap = ship.ap_current.current;
+            }
+            var ap_usage = this.equipment ? this.equipment.ap_usage : 0;
+            return remaining_ap >= ap_usage;
         }
 
         // Method to check if a target is applicable for this action

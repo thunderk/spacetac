@@ -5,15 +5,6 @@
 module SpaceTac.View.Specs {
     "use strict";
 
-    export function inbattleview_it(desc: string, func: (battleview: BattleView) => void) {
-        var battleview = new BattleView();
-        var battle = Game.Battle.newQuickRandom();
-        var player = battle.playing_ship.getPlayer();
-        ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
-            func(battleview);
-        }, battleview, player, battle);
-    }
-
     describe("BattleView", () => {
         inbattleview_it("forwards events in targetting mode", (battleview: BattleView) => {
             expect(battleview.targetting).toBeNull();

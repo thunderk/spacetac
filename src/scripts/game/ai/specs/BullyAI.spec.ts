@@ -199,6 +199,7 @@ module SpaceTac.Game.AI.Specs {
             var move = ai.checkBullyMove(ship2, weapon);
             expect(move).not.toBeNull();
 
+            battle.playing_ship = ai.ship;
             battle.log.clear();
             ai.applyMove(move);
 

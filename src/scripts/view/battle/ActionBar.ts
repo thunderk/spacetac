@@ -60,6 +60,19 @@ module SpaceTac.View {
             }
         }
 
+        // Update fading flags
+        //  ap_usage is the consumption of currently selected action
+        updateFadings(ap_usage: number): void {
+            var remaining_ap = this.ship.ap_current.current - ap_usage;
+            if (remaining_ap < 0) {
+                remaining_ap = 0;
+            }
+
+            this.actions.forEach((icon: ActionIcon) => {
+                icon.updateFadingStatus(remaining_ap);
+            });
+        }
+
         // Set action icons from selected ship
         setShip(ship: Game.Ship): void {
             var action_bar = this;

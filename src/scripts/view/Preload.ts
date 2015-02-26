@@ -22,6 +22,7 @@ module SpaceTac.View {
             this.loadImage("battle/actionbar.png");
             this.loadImage("battle/action-inactive.png");
             this.loadImage("battle/action-active.png");
+            this.loadImage("battle/action-fading.png");
             this.loadImage("battle/actionpointsempty.png");
             this.loadImage("battle/actionpointsfull.png");
             this.loadImage("battle/arena/shipspritehover.png");

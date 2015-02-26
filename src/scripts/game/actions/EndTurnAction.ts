@@ -7,10 +7,6 @@ module SpaceTac.Game {
             super("endturn", false);
         }
 
-        canBeUsed(battle: Battle, ship: Ship): boolean {
-            return battle.playing_ship === ship;
-        }
-
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
             battle.advanceToNextShip();
             return true;

@@ -7,8 +7,16 @@ module SpaceTac.Game {
             super("move", true, equipment);
         }
 
-        canBeUsed(battle: Battle, ship: Ship): boolean {
-            return ship.ap_current.current > 0;
+        canBeUsed(battle: Battle, ship: Ship, remaining_ap: number = null): boolean {
+            if (battle && battle.playing_ship !== ship) {
+                return false;
+            }
+
+            // Check AP usage
+            if (remaining_ap === null) {
+                remaining_ap = ship.ap_current.current;
+            }
+            return remaining_ap > 0.0001;
         }
 
         checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {

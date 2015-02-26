@@ -36,7 +36,7 @@
         var queryString = new jasmine.QueryString({
             getWindowLocation: function() { return window.location; }
         });
-        if (queryString.getParam('onlytests')) {
+        if (queryString.getParam('onlytests') || queryString.getParam('spec')) {
             document.getElementById("-space-tac").hidden = true;
         } else {
             new SpaceTac.GameRouter();

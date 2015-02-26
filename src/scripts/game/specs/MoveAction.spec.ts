@@ -49,6 +49,7 @@ module SpaceTac.Game {
             engine.distance = 1;
             engine.ap_usage = 1;
             var action = new MoveAction(engine);
+            battle.playing_ship = ship;
 
             var result = action.apply(battle, ship, Target.newFromLocation(10, 10));
             expect(result).toBe(true);

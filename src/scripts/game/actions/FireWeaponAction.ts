@@ -14,10 +14,6 @@ module SpaceTac.Game {
             this.can_target_space = can_target_space;
         }
 
-        canBeUsed(battle: Battle, ship: Ship): boolean {
-            return ship.ap_current.current >= this.equipment.ap_usage;
-        }
-
         checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
             if (this.can_target_space) {
                 target = target.constraintInRange(ship.arena_x, ship.arena_y, this.equipment.distance);

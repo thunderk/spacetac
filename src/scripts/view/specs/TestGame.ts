@@ -7,6 +7,9 @@ module SpaceTac.View.Specs {
     export function ingame_it(desc: string, func: (game: Phaser.Game, state: Phaser.State) => void,
                               state: Phaser.State = null, ...stateargs: any[]) {
         it(desc, (done: () => void) => {
+            spyOn(console, "log").and.stub();
+            spyOn(console, "warn").and.stub();
+
             var game = new Phaser.Game(500, 500, Phaser.HEADLESS);
 
             if (!state) {
@@ -30,5 +33,15 @@ module SpaceTac.View.Specs {
             args.unshift("test");
             game.state.start.apply(game.state, args);
         });
+    }
+
+    // Test game wrapper, with a battleview initialized on a random battle
+    export function inbattleview_it(desc: string, func: (battleview: BattleView) => void) {
+        var battleview = new BattleView();
+        var battle = Game.Battle.newQuickRandom();
+        var player = battle.playing_ship.getPlayer();
+        ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
+            func(battleview);
+        }, battleview, player, battle);
     }
 }
