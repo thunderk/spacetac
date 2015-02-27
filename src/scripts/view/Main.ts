@@ -3,9 +3,12 @@ module SpaceTac.View {
 
     export class Main extends Phaser.State {
         create() {
-            // Switch to a test battle
-            var battle = Game.Battle.newQuickRandom(true);
-            this.game.state.start("battle", true, false, battle.fleets[0].player, battle);
+            var universe = (<GameRouter>this.game).universe;
+
+            if (universe.battle) {
+                // A battle is raging, go to it
+                this.game.state.start("battle", true, false, universe.player, universe.battle);
+            }
         }
     }
 }
