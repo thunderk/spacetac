@@ -123,6 +123,42 @@ module SpaceTac.Game {
             expect(battle.log.events.length).toBe(0);
         });
 
+        it("sets and logs temporary effects", function () {
+            var ship = new Ship();
+            var battle = new Battle(ship.fleet);
+
+            var effect = new TemporaryEffect("test", 2);
+
+            ship.addTemporaryEffect(effect);
+
+            expect(ship.temporary_effects).toEqual([effect]);
+            expect(battle.log.events).toEqual([
+                new EffectAddedEvent(ship, effect)
+            ]);
+
+            battle.log.clear();
+            ship.endTurn();
+
+            expect(ship.temporary_effects).toEqual([new TemporaryEffect("test", 1)]);
+            expect(battle.log.events).toEqual([
+                new EffectDurationChangedEvent(ship, new TemporaryEffect("test", 1), 2)
+            ]);
+
+            battle.log.clear();
+            ship.endTurn();
+
+            expect(ship.temporary_effects).toEqual([]);
+            expect(battle.log.events).toEqual([
+                new EffectRemovedEvent(ship, new TemporaryEffect("test", 1))
+            ]);
+
+            battle.log.clear();
+            ship.endTurn();
+
+            expect(ship.temporary_effects).toEqual([]);
+            expect(battle.log.events).toEqual([]);
+        });
+
         it("sets and logs death state", function () {
             var fleet = new Fleet();
             var battle = new Battle(fleet);

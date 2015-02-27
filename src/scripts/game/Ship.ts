@@ -224,12 +224,27 @@ module SpaceTac.Game {
         // Method called at the end of this ship turn
         endTurn(): void {
             // Decrement sticky effects duration
+            this.temporary_effects = this.temporary_effects.filter((effect: TemporaryEffect): boolean => {
+                if (effect.duration <= 1) {
+                    this.addBattleEvent(new EffectRemovedEvent(this, effect));
+                    return false;
+                } else {
+                    return true;
+                }
+            });
             this.temporary_effects.forEach((effect: TemporaryEffect) => {
                 effect.duration -= 1;
+                this.addBattleEvent(new EffectDurationChangedEvent(this, effect, effect.duration + 1));
             });
-            this.temporary_effects = this.temporary_effects.filter((effect: TemporaryEffect): boolean => {
-                return effect.duration > 0;
-            });
+        }
+
+        // Add a temporary effect
+        //  A copy of the effect will be used
+        addTemporaryEffect(effect: TemporaryEffect, log: boolean = true): void {
+            this.temporary_effects.push(Tools.copyObject(effect));
+            if (log) {
+                this.addBattleEvent(new EffectAddedEvent(this, effect));
+            }
         }
 
         // Move toward a location

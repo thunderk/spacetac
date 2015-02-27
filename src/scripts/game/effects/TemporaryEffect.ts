@@ -16,7 +16,7 @@ module SpaceTac.Game {
         }
 
         applyOnShip(ship: Ship): boolean {
-            ship.temporary_effects.push(Tools.copyObject(this));
+            ship.addTemporaryEffect(this);
             this.singleApply(ship, true);
             return true;
         }
