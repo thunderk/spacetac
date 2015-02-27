@@ -8,7 +8,7 @@ module SpaceTac.Game.Equipments {
         // Boolean set to true if the weapon can target space
         can_target_space: boolean;
 
-        constructor(name: string, min_damage: number, max_damage: number = null) {
+        constructor(name: string, min_damage: number = 0, max_damage: number = null) {
             super(SlotType.Weapon, name);
 
             this.can_target_space = false;

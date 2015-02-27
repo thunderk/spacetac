@@ -8,6 +8,7 @@ module SpaceTac.Game {
         }
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
+            ship.endTurn();
             battle.advanceToNextShip();
             return true;
         }

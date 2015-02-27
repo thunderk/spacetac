@@ -147,6 +147,15 @@ module SpaceTac.Game {
             this.target_effects.push(template);
         }
 
+        // Convenience function to add a sticking effect on target
+        addTemporaryEffectOnTarget(effect: TemporaryEffect, min_value: number, max_value: number = null,
+                                   min_duration: number = 1, max_duration: number = null): void {
+            var template = new EffectTemplate(effect);
+            template.addModifier("value", new Range(min_value, max_value));
+            template.addModifier("duration", new Range(min_duration, max_duration));
+            this.target_effects.push(template);
+        }
+
         // Method to reimplement to assign an action to a generated equipment
         protected getActionForEquipment(equipment: Equipment): BaseAction {
             return null;

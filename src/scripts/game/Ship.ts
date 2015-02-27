@@ -37,6 +37,9 @@ module SpaceTac.Game {
         // Number of shield points (a shield can absorb some damage to protect the hull)
         shield: Attribute;
 
+        // Sticky temporary effects
+        temporary_effects: TemporaryEffect[];
+
         // Capabilities level
         cap_material: Attribute;
         cap_energy: Attribute;
@@ -70,6 +73,7 @@ module SpaceTac.Game {
             this.cap_human = this.newAttribute(AttributeCode.Cap_Human);
             this.cap_time = this.newAttribute(AttributeCode.Cap_Time);
             this.cap_gravity = this.newAttribute(AttributeCode.Cap_Gravity);
+            this.temporary_effects = [];
             this.slots = [];
 
             this.arena_x = 0;
@@ -200,7 +204,7 @@ module SpaceTac.Game {
         }
 
         // Method called at the start of this ship turn
-        startTurn(first: boolean): void {
+        startTurn(first: boolean = false): void {
             // Recompute attributes
             this.updateAttributes();
 
@@ -210,6 +214,22 @@ module SpaceTac.Game {
             } else {
                 this.recoverActionPoints();
             }
+
+            // Apply sticky effects
+            this.temporary_effects.forEach((effect: TemporaryEffect) => {
+                effect.singleApply(this, false);
+            });
+        }
+
+        // Method called at the end of this ship turn
+        endTurn(): void {
+            // Decrement sticky effects duration
+            this.temporary_effects.forEach((effect: TemporaryEffect) => {
+                effect.duration -= 1;
+            });
+            this.temporary_effects = this.temporary_effects.filter((effect: TemporaryEffect): boolean => {
+                return effect.duration > 0;
+            });
         }
 
         // Move toward a location
