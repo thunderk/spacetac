@@ -12,6 +12,9 @@ module SpaceTac.View {
         // Shield display
         shield: ValueBar;
 
+        // Action points display
+        ap: ValueBar;
+
         // Portrait
         layer_portrait: Phaser.Image;
 
@@ -58,13 +61,23 @@ module SpaceTac.View {
             this.layer_hover.visible = false;
             this.addChild(this.layer_hover);
 
-            this.hull = ValueBar.newStandard(list.battleview.game, 85, 28);
-            this.hull.scale.set(0.1, 0.1);
+            this.hull = ValueBar.newStyled(list.battleview.game, "battle-shiplist-hull", 76, 23);
             this.addChild(this.hull);
 
-            this.shield = ValueBar.newStandard(list.battleview.game, 85, 46);
-            this.shield.scale.set(0.1, 0.1);
+            this.shield = ValueBar.newStyled(list.battleview.game, "battle-shiplist-shield", 76, 35);
             this.addChild(this.shield);
+
+            this.ap = ValueBar.newStyled(list.battleview.game, "battle-shiplist-ap", 76, 47);
+            this.addChild(this.ap);
+
+            this.updateAttributes();
+        }
+
+        // Update attributes from associated ship
+        updateAttributes() {
+            this.attributeChanged(this.ship.hull);
+            this.attributeChanged(this.ship.shield);
+            this.attributeChanged(this.ship.ap_current);
         }
 
         // Called when an attribute for this ship changed through the battle log
@@ -73,6 +86,8 @@ module SpaceTac.View {
                 this.hull.setValue(attribute.current, attribute.maximal);
             } else if (attribute.code === Game.AttributeCode.Shield) {
                 this.shield.setValue(attribute.current, attribute.maximal);
+            } else if (attribute.code === Game.AttributeCode.AP) {
+                this.ap.setValue(attribute.current, attribute.maximal);
             }
         }
 

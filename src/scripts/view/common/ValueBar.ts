@@ -32,6 +32,13 @@ module SpaceTac.View {
             return result;
         }
 
+        // Create a quick styled bar
+        static newStyled(game: Phaser.Game, base_key: string, x: number, y: number): ValueBar {
+            var result = new ValueBar(game, x, y, base_key + "-empty");
+            result.setBarImage(base_key + "-full");
+            return result;
+        }
+
         // Build an value bar sprite
         //  background is the key to the image to use as background
         constructor(game: Phaser.Game, x: number, y: number, background: string,
