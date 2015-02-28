@@ -90,8 +90,9 @@ module SpaceTac.View {
             this.card_playing = new ShipCard(this, 1060, 130);
             this.card_hovered = new ShipCard(this, 1060, 430);
 
-            this.icon_waiting = new Phaser.Image(this.game, 640, 360, "battle-waiting", 0);
+            this.icon_waiting = new Phaser.Image(this.game, 640, 50, "battle-waiting", 0);
             this.icon_waiting.anchor.set(0.5, 0.5);
+            this.icon_waiting.scale.set(0.5, 0.5);
             game.add.existing(this.icon_waiting);
             game.tweens.create(this.icon_waiting).to({"angle": 360}, 3000).repeat(-1).start();
 

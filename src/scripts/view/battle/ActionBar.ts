@@ -85,8 +85,10 @@ module SpaceTac.View {
                 });
 
                 this.ship = ship;
+                this.game.tweens.create(this).to({"alpha": 1}, 400).start();
             } else {
                 this.ship = null;
+                this.game.tweens.create(this).to({"alpha": 0.5}, 400).start();
             }
 
             this.updateActionPoints();
