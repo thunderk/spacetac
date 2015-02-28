@@ -97,6 +97,12 @@ module SpaceTac.View {
             if (item) {
                 item.attributeChanged(event.attribute);
             }
+            if (event.ship === this.view.card_playing.ship) {
+                this.view.card_playing.attributeChanged(event.attribute);
+            }
+            if (event.ship === this.view.card_hovered.ship) {
+                this.view.card_hovered.attributeChanged(event.attribute);
+            }
         }
 
         // A ship died

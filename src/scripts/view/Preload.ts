@@ -35,6 +35,12 @@ module SpaceTac.View {
             this.loadImage("battle/arena/shipspritehover.png");
             this.loadImage("battle/arena/shipspriteplaying.png");
             this.loadImage("battle/ship-card.png");
+            this.loadImage("battle/shipcard-ap-empty.png");
+            this.loadImage("battle/shipcard-ap-full.png");
+            this.loadImage("battle/shipcard-hull-empty.png");
+            this.loadImage("battle/shipcard-hull-full.png");
+            this.loadImage("battle/shipcard-shield-empty.png");
+            this.loadImage("battle/shipcard-shield-full.png");
             this.loadImage("battle/actions/move.png");
             this.loadImage("battle/actions/endturn.png");
             this.loadImage("battle/actions/fire-gatlinggun.png");

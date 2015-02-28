@@ -87,8 +87,8 @@ module SpaceTac.View {
             // Add UI elements
             this.action_bar = new ActionBar(this);
             this.ship_list = new ShipList(this);
-            this.card_playing = new ShipCard(this, 1060, 130);
-            this.card_hovered = new ShipCard(this, 1060, 430);
+            this.card_playing = new ShipCard(this, 1066, 130);
+            this.card_hovered = new ShipCard(this, 1066, 424);
 
             this.icon_waiting = new Phaser.Image(this.game, 640, 50, "battle-waiting", 0);
             this.icon_waiting.anchor.set(0.5, 0.5);

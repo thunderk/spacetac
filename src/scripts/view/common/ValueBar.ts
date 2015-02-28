@@ -1,16 +1,10 @@
 module SpaceTac.View {
     "use strict";
 
-    // Display mode for ValueBar
-    export enum ValueBarMode {
-        Scaled,
-        Truncated
-    }
-
     // Bar to display a value (like a progress bar)
     export class ValueBar extends Phaser.Sprite {
-        // Display mode, true to scale the internal bar, false to truncate it
-        display_mode: ValueBarMode;
+        // Vertical orientation
+        vertical: boolean;
 
         // Current value
         private current: number;
@@ -24,6 +18,7 @@ module SpaceTac.View {
         // Sprite of internal bar (inside the background sprite)
         private bar_sprite: Phaser.Sprite;
         private bar_sprite_rect: Phaser.Rectangle;
+        private bar_sprite_offset: number;
 
         // Create a quick standard bar
         static newStandard(game: Phaser.Game, x: number, y: number): ValueBar {
@@ -33,19 +28,18 @@ module SpaceTac.View {
         }
 
         // Create a quick styled bar
-        static newStyled(game: Phaser.Game, base_key: string, x: number, y: number): ValueBar {
-            var result = new ValueBar(game, x, y, base_key + "-empty");
+        static newStyled(game: Phaser.Game, base_key: string, x: number, y: number, vertical: boolean = false): ValueBar {
+            var result = new ValueBar(game, x, y, base_key + "-empty", vertical);
             result.setBarImage(base_key + "-full");
             return result;
         }
 
         // Build an value bar sprite
         //  background is the key to the image to use as background
-        constructor(game: Phaser.Game, x: number, y: number, background: string,
-                    display_mode: ValueBarMode = ValueBarMode.Truncated) {
+        constructor(game: Phaser.Game, x: number, y: number, background: string, vertical: boolean = false) {
             super(game, x, y, background);
 
-            this.display_mode = display_mode;
+            this.vertical = vertical;
 
             this.setValue(0, 1000);
         }
@@ -54,22 +48,25 @@ module SpaceTac.View {
         setBarImage(key: string, offset_x: number = 0, offset_y: number = 0): void {
             this.bar_sprite = new Phaser.Sprite(this.game, offset_x, offset_y, key);
             this.bar_sprite_rect = new Phaser.Rectangle(0, 0, this.bar_sprite.width, this.bar_sprite.height);
+            this.bar_sprite_offset = this.vertical ? offset_y : offset_x;
             this.addChild(this.bar_sprite);
         }
 
         // Update graphics representation
         update() {
             if (this.bar_sprite) {
-                var dest = this.proportional;
-                if (dest < 0.00001) {
-                    dest = 0.00001;
-                }
+                var xdest = this.vertical ? 1.0 : this.proportional;
+                var ydest = this.vertical ? this.proportional : 1.0;
 
-                if (this.display_mode === ValueBarMode.Scaled) {
-                    this.game.tweens.create(this.bar_sprite.scale).to({x: dest}).start();
-                } else {
-                    // TODO Animate
-                    this.bar_sprite.crop(Phaser.Rectangle.clone(this.bar_sprite_rect).scale(dest, 1.0), false);
+                // TODO Animate
+                var rect = Phaser.Rectangle.clone(this.bar_sprite_rect);
+                rect = rect.scale(xdest, ydest);
+                if (this.vertical) {
+                    rect = rect.offset(0, this.bar_sprite_rect.height - rect.height);
+                }
+                this.bar_sprite.crop(rect, false);
+                if (this.vertical) {
+                    this.bar_sprite.y = this.bar_sprite_offset + (this.bar_sprite_rect.height - rect.height);
                 }
             }
         }
