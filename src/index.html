@@ -27,6 +27,7 @@
 
 <script>
     var currentWindowOnload = window.onload;
+    window.oncontextmenu = function (e) { e.preventDefault(); }
     window.onload = function () {
         <!-- build:remove -->
         if (currentWindowOnload) {
