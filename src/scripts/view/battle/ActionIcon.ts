@@ -78,6 +78,7 @@ module SpaceTac.View {
 
             // End any previously selected action
             this.bar.actionEnded();
+            this.bar.actionStarted();
 
             // Update fading statuses
             this.bar.updateFadings(this.action.getActionPointsUsage(this.battleview.battle, this.ship, null));

@@ -15,6 +15,9 @@ module SpaceTac.View {
         // Current ship, whose actions are displayed
         ship: Game.Ship;
 
+        // Cancel button
+        cancel: Phaser.Button;
+
         // Create an empty action bar
         constructor(battleview: BattleView) {
             this.battleview = battleview;
@@ -27,12 +30,20 @@ module SpaceTac.View {
             battleview.ui.add(this);
 
             // Background
-            this.addChild(new Phaser.Image(battleview.game, 0, 0, "battle-actionbar", 0));
+            this.addChild(new Phaser.Image(this.game, 0, 0, "battle-actionbar", 0));
 
             // Action points progress bar
-            this.actionpoints = new ValueBar(battleview.game, 119, 76, "battle-actionpointsempty");
+            this.actionpoints = new ValueBar(this.game, 119, 76, "battle-actionpointsempty");
             this.actionpoints.setBarImage("battle-actionpointsfull");
             this.addChild(this.actionpoints);
+
+            // Cancel button
+            this.cancel = new Phaser.Button(this.game, 849, 8, "battle-actionbar-cancel", () => {
+                this.actionEnded();
+            });
+            this.cancel.visible = false;
+            this.cancel.input.useHandCursor = true;
+            this.addChild(this.cancel);
         }
 
         // Clear the action icons
@@ -41,6 +52,7 @@ module SpaceTac.View {
                 action.destroy();
             });
             this.actions = [];
+            Animation.fadeOut(this.game, this.cancel, 200);
         }
 
         // Add an action icon
@@ -94,6 +106,11 @@ module SpaceTac.View {
             this.updateActionPoints();
         }
 
+        // Called by an action icon when the action is selected
+        actionStarted(): void {
+            Animation.fadeIn(this.game, this.cancel, 200);
+        }
+
         // Called by an action icon when the action has been applied
         actionEnded(): void {
             this.updateActionPoints();
@@ -101,6 +118,7 @@ module SpaceTac.View {
                 action.resetState();
             });
             this.battleview.exitTargettingMode();
+            Animation.fadeOut(this.game, this.cancel, 200);
         }
     }
 }
