@@ -58,6 +58,15 @@ module SpaceTac.Game {
                     var field_value = obj[field_name];
                     if (field_value instanceof Serializable) {
                         fields[field_name] = this.toData(field_value);
+                    } else if (Array.isArray(field_value) && field_value.length > 0 && field_value[0] instanceof Serializable) {
+                        var items: Serializable[] = [];
+                        field_value.forEach((item: any) => {
+                            items.push(this.toData(item));
+                        });
+                        fields[field_name] = {
+                            _s: "a",
+                            items: items
+                        };
                     } else {
                         fields[field_name] = field_value;
                     }
@@ -65,6 +74,7 @@ module SpaceTac.Game {
             }
 
             var data = {
+                _s: "o",
                 path: this.getClassPath(obj),
                 fields: fields
             };
@@ -77,8 +87,14 @@ module SpaceTac.Game {
             for (var field_name in data.fields) {
                 if (data.fields.hasOwnProperty(field_name)) {
                     var field_value = data.fields[field_name];
-                    if (typeof field_value === "object" && field_value.hasOwnProperty("path")) {
+                    if (typeof field_value === "object" && field_value._s === "o") {
                         obj[field_name] = this.fromData(field_value);
+                    } else if (typeof field_value === "object" && field_value._s === "a") {
+                        var items: Serializable[] = [];
+                        field_value.items.forEach((item: any) => {
+                            items.push(this.fromData(item));
+                        });
+                        obj[field_name] = items;
                     } else {
                         obj[field_name] = field_value;
                     }

@@ -22,10 +22,13 @@ module SpaceTac.Game.Specs {
 
         b: SerializableTestObj2;
 
+        c: SerializableTestObj2[];
+
         constructor(a: number = 5, b: SerializableTestObj2 = null) {
             super();
             this.a = a;
             this.b = b;
+            this.c = [];
         }
     }
 
@@ -59,11 +62,15 @@ module SpaceTac.Game.Specs {
         it("serializes and deserializes nested typescript objects", () => {
             var serializer = new Serializer();
             var obj = new SerializableTestObj1(8, new SerializableTestObj2("test"));
+            obj.c.push(new SerializableTestObj2("second test"));
+            obj.c.push(new SerializableTestObj2("third test"));
+
             var dumped = serializer.serialize(obj);
             var loaded = serializer.unserialize(dumped);
 
             expect(loaded).toEqual(obj);
             expect((<SerializableTestObj1>loaded).b.prepend("this is a ")).toEqual("this is a test");
+            expect((<SerializableTestObj1>loaded).c[1].prepend("this is a ")).toEqual("this is a third test");
         });
     });
 }
