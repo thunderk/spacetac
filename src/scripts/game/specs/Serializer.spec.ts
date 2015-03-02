@@ -55,5 +55,15 @@ module SpaceTac.Game.Specs {
             expect(loaded).toEqual(obj);
             expect((<SerializableTestObj2>loaded).prepend("this is ")).toEqual("this is a string");
         });
+
+        it("serializes and deserializes nested typescript objects", () => {
+            var serializer = new Serializer();
+            var obj = new SerializableTestObj1(8, new SerializableTestObj2("test"));
+            var dumped = serializer.serialize(obj);
+            var loaded = serializer.unserialize(dumped);
+
+            expect(loaded).toEqual(obj);
+            expect((<SerializableTestObj1>loaded).b.prepend("this is a ")).toEqual("this is a test");
+        });
     });
 }
