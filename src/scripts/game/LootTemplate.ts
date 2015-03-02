@@ -1,8 +1,10 @@
+/// <reference path="Serializable.ts"/>
+
 module SpaceTac.Game {
     "use strict";
 
     // Template used to generate a loot equipment
-    export class LootTemplate {
+    export class LootTemplate extends Serializable {
         // Type of slot this equipment will fit in
         slot: SlotType;
 
@@ -35,6 +37,7 @@ module SpaceTac.Game {
 
         // Create a loot template
         constructor(slot: SlotType, name: string) {
+            super();
             this.slot = slot;
             this.name = name;
             this.requirements = [];
