@@ -1,8 +1,10 @@
+/// <reference path="Serializable.ts"/>
+
 module SpaceTac.Game {
     "use strict";
 
     // One player (human or IA)
-    export class Player {
+    export class Player extends Serializable {
         // Current fleet
         fleet: Fleet;
 
@@ -11,6 +13,8 @@ module SpaceTac.Game {
 
         // Create a player, with an empty fleet
         constructor() {
+            super();
+
             this.fleet = new Fleet(this);
             this.ai = null;
         }

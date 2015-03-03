@@ -98,6 +98,9 @@ module SpaceTac.Game {
                             items: items
                         };
                     } else {
+                        if (Object.prototype.toString.call(field_value) === "[object Object]") {
+                            console.error("Non Serializable object", field_value);
+                        }
                         fields[field_name] = field_value;
                     }
                 }

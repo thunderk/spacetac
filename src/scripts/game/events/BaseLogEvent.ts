@@ -1,8 +1,10 @@
+/// <reference path="../Serializable.ts"/>
+
 module SpaceTac.Game {
     "use strict";
 
     // Base class for a BattleLog event
-    export class BaseLogEvent {
+    export class BaseLogEvent extends Serializable {
         // Code of the event (its type)
         code: string;
 
@@ -13,6 +15,8 @@ module SpaceTac.Game {
         target: Target;
 
         constructor(code: string, ship: Ship = null, target: Target = null) {
+            super();
+
             this.code = code;
             this.ship = ship;
             this.target = target;

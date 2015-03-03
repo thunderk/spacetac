@@ -1,3 +1,5 @@
+/// <reference path="Serializable.ts"/>
+
 module SpaceTac.Game {
     "use strict";
 
@@ -46,7 +48,7 @@ module SpaceTac.Game {
     // Value computed from equipment
     //  This value can be altered by effects
     //  Example attributes are health points, action points recovery...
-    export class Attribute {
+    export class Attribute extends Serializable {
         // Identifying code of this attribute
         code: AttributeCode;
 
@@ -58,6 +60,8 @@ module SpaceTac.Game {
 
         // Create an attribute
         constructor(code: AttributeCode = AttributeCode.Misc, current: number = 0, maximal: number = null) {
+            super();
+
             this.code = code;
             this.maximal = maximal;
             this.current = current;
