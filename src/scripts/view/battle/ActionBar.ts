@@ -12,6 +12,9 @@ module SpaceTac.View {
         // Progress bar displaying action points
         actionpoints: ValueBar;
 
+        // Tooltip to display hovered action info
+        tooltip: ActionTooltip;
+
         // Current ship, whose actions are displayed
         ship: Game.Ship;
 
@@ -44,6 +47,10 @@ module SpaceTac.View {
             this.cancel.visible = false;
             this.cancel.input.useHandCursor = true;
             this.addChild(this.cancel);
+
+            // Tooltip
+            this.tooltip = new ActionTooltip(this);
+            this.addChild(this.tooltip);
         }
 
         // Clear the action icons
@@ -59,6 +66,9 @@ module SpaceTac.View {
         addAction(ship: Game.Ship, action: Game.BaseAction): ActionIcon {
             var icon = new ActionIcon(this, 90 + this.actions.length * 62, 2, ship, action);
             this.actions.push(icon);
+
+            this.tooltip.bringToTop();
+
             return icon;
         }
 

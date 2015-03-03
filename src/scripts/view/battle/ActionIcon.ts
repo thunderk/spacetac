@@ -64,11 +64,13 @@ module SpaceTac.View {
                 this.processClick();
             });
 
-            // Range hints on hover
+            // Information on hover
             this.onInputOver.add(() => {
+                this.bar.tooltip.setAction(this);
                 this.battleview.arena.range_hint.setSecondary(this.ship, this.action);
             });
             this.onInputOut.add(() => {
+                this.bar.tooltip.setAction(null);
                 this.battleview.arena.range_hint.clearSecondary();
             });
 
