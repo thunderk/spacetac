@@ -7,6 +7,9 @@ module SpaceTac.View {
         // Arena background
         background: Phaser.Button;
 
+        // Hint for weapon or move range
+        range_hint: RangeHint;
+
         // Input callback to receive mouse move events
         private input_callback: any;
 
@@ -27,6 +30,7 @@ module SpaceTac.View {
             this.ship_sprites = [];
             this.playing = null;
             this.hovered = null;
+            this.range_hint = null;
 
             super(battleview.game);
 
@@ -51,6 +55,9 @@ module SpaceTac.View {
 
             this.position.set(196, 100);
             this.addChild(this.background);
+
+            this.range_hint = new RangeHint(this);
+            this.addChild(this.range_hint);
 
             this.init();
         }

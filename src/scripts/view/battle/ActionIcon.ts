@@ -62,7 +62,15 @@ module SpaceTac.View {
             // Click process
             this.onInputUp.add(() => {
                 this.processClick();
-            }, this);
+            });
+
+            // Range hints on hover
+            this.onInputOver.add(() => {
+                this.battleview.arena.range_hint.setSecondary(this.ship, this.action);
+            });
+            this.onInputOut.add(() => {
+                this.battleview.arena.range_hint.clearSecondary();
+            });
 
             // Initialize
             this.updateActiveStatus();
@@ -79,6 +87,9 @@ module SpaceTac.View {
             // End any previously selected action
             this.bar.actionEnded();
             this.bar.actionStarted();
+
+            // Update range hint
+            this.battleview.arena.range_hint.setPrimary(this.ship, this.action);
 
             // Update fading statuses
             this.bar.updateFadings(this.action.getActionPointsUsage(this.battleview.battle, this.ship, null));
@@ -126,6 +137,7 @@ module SpaceTac.View {
             this.layer_active.tint = 0xFFFFFF;
             this.updateActiveStatus();
             this.updateFadingStatus(this.ship.ap_current.current);
+            this.battleview.arena.range_hint.clearPrimary();
         }
 
         // Update the active status, from the action canBeUsed result

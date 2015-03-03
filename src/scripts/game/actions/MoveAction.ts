@@ -28,6 +28,10 @@ module SpaceTac.Game {
             return this.equipment.ap_usage * distance / this.equipment.distance;
         }
 
+        getRangeRadius(ship: Ship): number {
+            return ship.ap_current.current * this.equipment.distance / this.equipment.ap_usage;
+        }
+
         checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
             // TODO Should forbid to move too much near another ship
             var max_distance = this.equipment.distance * ship.ap_current.current / this.equipment.ap_usage;
