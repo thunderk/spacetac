@@ -3,6 +3,17 @@ module SpaceTac.Game {
 
     // Serializer to cascade through Serializable objects
     export class Serializer {
+        // Mapping of IDs to objects
+        refs: {[index: string]: any};
+
+        // Serializable classes
+        classes: {[index: string]: typeof Serializable};
+
+        constructor() {
+            this.refs = {};
+            this.classes = this.collectSerializableClasses();
+        }
+
         // List all classes that implement "Serializable", with their full path in SpaceTac.Game namespace
         collectSerializableClasses(container: any = null, path: string = ""): {[index: string]: typeof Serializable} {
             if (container) {
@@ -26,10 +37,9 @@ module SpaceTac.Game {
 
         // Get the full path in SpaceTac namespace, of a serializable object
         getClassPath(obj: Serializable): string {
-            var classes = this.collectSerializableClasses();
-            for (var class_path in classes) {
-                if (classes.hasOwnProperty(class_path)) {
-                    var class_obj = classes[class_path];
+            for (var class_path in this.classes) {
+                if (this.classes.hasOwnProperty(class_path)) {
+                    var class_obj = this.classes[class_path];
                     if (class_obj.prototype === obj.constructor.prototype) {
                         return class_path;
                     }
@@ -40,19 +50,39 @@ module SpaceTac.Game {
 
         // Serialize an object to a string
         serialize(obj: Serializable): string {
-            var data = this.toData(obj);
+            this.refs = {};
+            var data = {
+                refs: this.refs,
+                root: this.toData(obj)
+            };
             return JSON.stringify(data);
         }
 
         // Load an object from a serialized string
         unserialize(sdata: string): Serializable {
             var data = JSON.parse(sdata);
-            var result = this.fromData(data);
-            return result;
+            this.refs = data.refs;
+            return this.fromData(data.root);
         }
 
         private toData(obj: Serializable): any {
+            var sid = obj.getSerializeId();
+            var cached = this.refs[sid];
+            var data = {
+                _s: "r",
+                _i: sid
+            };
+            if (typeof cached !== "undefined") {
+                return data;
+            }
+
             var fields = {};
+            this.refs[sid] = {
+                _s: "o",
+                path: this.getClassPath(obj),
+                fields: fields
+            };
+
             for (var field_name in obj) {
                 if (obj.hasOwnProperty(field_name)) {
                     var field_value = obj[field_name];
@@ -73,34 +103,37 @@ module SpaceTac.Game {
                 }
             }
 
-            var data = {
-                _s: "o",
-                path: this.getClassPath(obj),
-                fields: fields
-            };
             return data;
         }
 
         private fromData(data: any): Serializable {
-            var class_info = this.collectSerializableClasses()[data.path];
-            var obj = Object.create(class_info.prototype);
-            for (var field_name in data.fields) {
-                if (data.fields.hasOwnProperty(field_name)) {
-                    var field_value = data.fields[field_name];
-                    if (typeof field_value === "object" && field_value._s === "o") {
-                        obj[field_name] = this.fromData(field_value);
-                    } else if (typeof field_value === "object" && field_value._s === "a") {
-                        var items: Serializable[] = [];
-                        field_value.items.forEach((item: any) => {
-                            items.push(this.fromData(item));
-                        });
-                        obj[field_name] = items;
-                    } else {
-                        obj[field_name] = field_value;
+            var sid = data._i;
+            var cached = this.refs[sid];
+
+            if (cached._s === "o") {
+                var class_info = this.classes[cached.path];
+                var obj = Object.create(class_info.prototype);
+                this.refs[sid] = obj;
+                for (var field_name in cached.fields) {
+                    if (cached.fields.hasOwnProperty(field_name)) {
+                        var field_value = cached.fields[field_name];
+                        if (field_value !== null && typeof field_value === "object" && field_value._s === "r") {
+                            obj[field_name] = this.fromData(field_value);
+                        } else if (field_value !== null && typeof field_value === "object" && field_value._s === "a") {
+                            var items: Serializable[] = [];
+                            field_value.items.forEach((item: any) => {
+                                items.push(this.fromData(item));
+                            });
+                            obj[field_name] = items;
+                        } else {
+                            obj[field_name] = field_value;
+                        }
                     }
                 }
+                return obj;
+            } else {
+                return cached;
             }
-            return obj;
         }
     }
 }

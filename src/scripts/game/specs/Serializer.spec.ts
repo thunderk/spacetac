@@ -4,12 +4,20 @@
 module SpaceTac.Game.Specs {
     "use strict";
 
+    export class SerializableTestObj3 extends Serializable {
+        a: boolean;
+        b: SerializableTestObj1;
+    }
+
     export class SerializableTestObj2 extends Serializable {
         a: string;
+
+        b: SerializableTestObj3;
 
         constructor(a: string = "test") {
             super();
             this.a = a;
+            this.b = null;
         }
 
         prepend(prefix: string): string {
@@ -39,6 +47,7 @@ module SpaceTac.Game.Specs {
 
             expect(classes["SpaceTac.Game.Specs.SerializableTestObj1"]).toBe(SerializableTestObj1);
             expect(classes["SpaceTac.Game.Specs.SerializableTestObj2"]).toBe(SerializableTestObj2);
+            expect(classes["SpaceTac.Game.Specs.SerializableTestObj3"]).toBe(SerializableTestObj3);
             expect(classes["SpaceTac.Game.Range"]).toBe(Range);
             expect(classes["SpaceTac.Game.Equipments.GatlingGun"]).toBe(Equipments.GatlingGun);
         });
@@ -47,6 +56,7 @@ module SpaceTac.Game.Specs {
             var serializer = new Serializer();
 
             expect(serializer.getClassPath(new SerializableTestObj1())).toBe("SpaceTac.Game.Specs.SerializableTestObj1");
+            expect(serializer.getClassPath(new Range(0, 1))).toBe("SpaceTac.Game.Range");
         });
 
         it("serializes and deserializes simple typescript objects", () => {
@@ -71,6 +81,36 @@ module SpaceTac.Game.Specs {
             expect(loaded).toEqual(obj);
             expect((<SerializableTestObj1>loaded).b.prepend("this is a ")).toEqual("this is a test");
             expect((<SerializableTestObj1>loaded).c[1].prepend("this is a ")).toEqual("this is a third test");
+        });
+
+        it("does not create copies of same object", () => {
+            var serializer = new Serializer();
+            var obj = new SerializableTestObj1(8, new SerializableTestObj2("test"));
+            obj.c.push(obj.b);
+
+            var dumped = serializer.serialize(obj);
+            var loaded = serializer.unserialize(dumped);
+
+            expect(loaded).toEqual(obj);
+            expect((<SerializableTestObj1>loaded).b).toBe((<SerializableTestObj1>loaded).c[0]);
+        });
+
+        it("handles reference cycles", () => {
+            var serializer = new Serializer();
+            var obj3 = new SerializableTestObj3();
+            obj3.a = true;
+            var obj2 = new SerializableTestObj2("test");
+            var obj1 = new SerializableTestObj1(8, obj2);
+
+            obj3.b = obj1;
+            obj2.b = obj3;
+
+            var dumped = serializer.serialize(obj1);
+            var loaded = serializer.unserialize(dumped);
+
+            expect(loaded).toEqual(obj1);
+            expect((<SerializableTestObj1>loaded).b.b.a).toBe(true);
+            expect((<SerializableTestObj1>loaded).b.b.b).toBe(loaded);
         });
     });
 }
