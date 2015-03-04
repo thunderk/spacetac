@@ -28,5 +28,11 @@ module SpaceTac.Game.Specs {
 
             expect(cop.get()).toEqual("test");
         });
+
+        it("merges objects", () => {
+            expect(Tools.merge({}, {})).toEqual({});
+            expect(Tools.merge({"a": 1}, {"b": 2})).toEqual({"a": 1, "b": 2});
+            expect(Tools.merge({"a": 1}, {"a": 3, "b": 2})).toEqual({"a": 3, "b": 2});
+        });
     });
 }

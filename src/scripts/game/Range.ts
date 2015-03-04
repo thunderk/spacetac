@@ -1,8 +1,10 @@
+/// <reference path="Serializable.ts"/>
+
 module SpaceTac.Game {
     "use strict";
 
     // Range of number values
-    export class Range {
+    export class Range extends Serializable {
         // Minimal value
         min: number;
 
@@ -11,6 +13,7 @@ module SpaceTac.Game {
 
         // Create a range of values
         constructor(min: number, max: number = null) {
+            super();
             this.set(min, max);
         }
 

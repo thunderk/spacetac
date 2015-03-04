@@ -16,5 +16,16 @@ module SpaceTac.Game {
 
             return objectCopy;
         }
+
+        // Merge an object into another
+        static merge(base: any, incoming: any): any {
+            var result = Tools.copyObject(base);
+            for (var obj_name in incoming) {
+                if (obj_name) {
+                    result[obj_name] = incoming[obj_name];
+                }
+            }
+            return result;
+        }
     }
 }

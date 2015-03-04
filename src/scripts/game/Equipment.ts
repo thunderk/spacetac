@@ -1,8 +1,10 @@
+/// <reference path="Serializable.ts"/>
+
 module SpaceTac.Game {
     "use strict";
 
     // Piece of equipment to attach in slots
-    export class Equipment {
+    export class Equipment extends Serializable {
         // Actual slot this equipment is attached to
         attached_to: Slot;
 
@@ -44,6 +46,8 @@ module SpaceTac.Game {
 
         // Basic constructor
         constructor(slot: SlotType = null, code: string = null) {
+            super();
+
             this.slot = slot;
             this.code = code;
             this.name = code;

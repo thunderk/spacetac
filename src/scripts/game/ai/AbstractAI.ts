@@ -1,8 +1,10 @@
+/// <reference path="../Serializable.ts"/>
+
 module SpaceTac.Game.AI {
     "use strict";
 
     // Base class for all Artificial Intelligence interaction
-    export class AbstractAI {
+    export class AbstractAI extends Serializable {
         // The battle this AI is involved in
         battle: Battle;
 
@@ -25,6 +27,8 @@ module SpaceTac.Game.AI {
         private workqueue: Function[];
 
         constructor(fleet: Fleet) {
+            super();
+
             this.fleet = fleet;
             this.battle = fleet.battle;
             this.async = true;

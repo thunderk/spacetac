@@ -1,4 +1,5 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
+/// <reference path="../battle/BattleView.ts"/>
 
 module SpaceTac.View.Specs {
     "use strict";
