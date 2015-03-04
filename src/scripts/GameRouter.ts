@@ -21,11 +21,41 @@ module SpaceTac {
             this.state.start('boot');
         }
 
+        // Start a new game
         newGame(): Game.Universe {
             // Currently create a quick battle
             var universe = new Game.Universe();
             universe.startQuickBattle();
             return universe;
+        }
+
+        // Save current game in local browser storage
+        saveGame(): boolean {
+            if (typeof(Storage) !== "undefined") {
+                localStorage.setItem("spacetac-savegame", this.universe.saveToString());
+                console.log("Game saved");
+                return true;
+            } else {
+                console.error("localStorage not available");
+            }
+        }
+
+        // Load current game from local browser storage
+        loadGame(): boolean {
+            if (typeof(Storage) !== "undefined") {
+                var loaded = localStorage.getItem("spacetac-savegame");
+                if (loaded) {
+                    this.universe = Game.Universe.loadFromString(loaded);
+                    this.state.start('main');
+                    console.log("Game loaded");
+                    return true;
+                } else {
+                    console.error("No saved game found");
+                    return false;
+                }
+            } else {
+                console.error("localStorage not available");
+            }
         }
     }
 }

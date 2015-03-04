@@ -109,6 +109,16 @@ module SpaceTac.View {
             // Handle space bar to end turn
             this.space_key = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.space_key.onUp.add(this.onSpaceKeyPressed, this);
+
+            // Shortcuts
+            var key_s = this.input.keyboard.addKey(Phaser.Keyboard.S);
+            key_s.onUp.add(() => {
+                (<GameRouter>this.game).saveGame();
+            });
+            var key_l = this.input.keyboard.addKey(Phaser.Keyboard.L);
+            key_l.onUp.add(() => {
+                (<GameRouter>this.game).loadGame();
+            });
         }
 
         // Leaving the view, we unbind the battle

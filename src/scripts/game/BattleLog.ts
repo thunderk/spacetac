@@ -25,6 +25,10 @@ module SpaceTac.Game {
             this.filters = [];
         }
 
+        postSerialize(fields: any): void {
+            fields.subscribers = [];
+        }
+
         // Clear the stored events
         clear(): void {
             this.events = [];

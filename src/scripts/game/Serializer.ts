@@ -105,6 +105,7 @@ module SpaceTac.Game {
                     }
                 }
             }
+            obj.postSerialize(fields);
 
             return data;
         }

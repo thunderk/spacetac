@@ -11,11 +11,17 @@ module SpaceTac.Game {
             this._sid = null;
         }
 
+        // Get an ID that can be used for serialization
         getSerializeId(): string {
             if (this._sid === null) {
                 this._sid = (Serializable._next_sid++).toString();
             }
             return this._sid;
+        }
+
+        // Method called when fields have been serialized in this object
+        postSerialize(fields: any): void {
+            // Abstract method
         }
     }
 }

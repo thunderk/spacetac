@@ -35,6 +35,10 @@ module SpaceTac.Game.AI {
             this.workqueue = [];
         }
 
+        postSerialize(fields: any): void {
+            fields.workqueue = [];
+        }
+
         // Play a ship turn
         //  This will start asynchronous work. The AI will then call action methods, then advanceToNextShip to
         //  indicate it has finished.
