@@ -59,6 +59,7 @@ module SpaceTac.View {
                 action.destroy();
             });
             this.actions = [];
+            this.tooltip.setAction(null);
             Animation.fadeOut(this.game, this.cancel, 200);
         }
 
