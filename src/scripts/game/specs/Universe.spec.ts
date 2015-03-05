@@ -25,6 +25,17 @@ module SpaceTac.Game.Specs {
             applyGameSteps(universe);
             applyGameSteps(loaded_universe);
 
+            // Clean stored times as they might differ
+            var clean = (u: Universe) => {
+                u.battle.fleets.forEach((fleet: Fleet) => {
+                    if (fleet.player.ai) {
+                        fleet.player.ai.started = 0;
+                    }
+                });
+            };
+            clean(universe);
+            clean(loaded_universe);
+
             // Check equality after game steps
             expect(loaded_universe).toEqual(universe);
         });

@@ -18,7 +18,7 @@ module SpaceTac.Game.AI {
         async: boolean;
 
         // Time at which work as started
-        private started: number;
+        started: number;
 
         // Queue of work items to process
         //  Work items will be called successively, leaving time for other processing between them.
