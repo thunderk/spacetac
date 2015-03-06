@@ -118,7 +118,7 @@ module SpaceTac.View {
         //  This will check the target against current action and adjust it if needed
         processHover(target: Game.Target): void {
             target = this.action.checkTarget(this.battleview.battle, this.ship, target);
-            this.targetting.setTarget(target, false);
+            this.targetting.setTarget(target, false, this.action.getBlastRadius(this.ship));
             this.bar.updateFadings(this.action.getActionPointsUsage(this.battleview.battle, this.ship, target));
         }
 

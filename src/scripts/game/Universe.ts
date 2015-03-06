@@ -18,8 +18,8 @@ module SpaceTac.Game {
         }
 
         // Start a new "quick battle" game
-        startQuickBattle(): void {
-            this.battle = Game.Battle.newQuickRandom(true);
+        startQuickBattle(with_ai: boolean = false): void {
+            this.battle = Game.Battle.newQuickRandom(with_ai);
             this.player = this.battle.fleets[0].player;
         }
 

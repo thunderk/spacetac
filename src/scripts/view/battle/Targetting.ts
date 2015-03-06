@@ -12,6 +12,10 @@ module SpaceTac.View {
         target_corrected: Game.Target;
         line_corrected: Phaser.Graphics;
 
+        // Circle for effect radius
+        blast_radius: number;
+        blast: Phaser.Graphics;
+
         // Signal to receive hovering events
         targetHovered: Phaser.Signal;
 
@@ -32,9 +36,14 @@ module SpaceTac.View {
 
             // Visual effects
             if (battleview) {
+                this.blast = new Phaser.Graphics(battleview.game, 0, 0);
+                this.blast.visible = false;
+                battleview.arena.add(this.blast);
                 this.line_initial = new Phaser.Graphics(battleview.game, 0, 0);
+                this.line_initial.visible = false;
                 battleview.arena.add(this.line_initial);
                 this.line_corrected = new Phaser.Graphics(battleview.game, 0, 0);
+                this.line_corrected.visible = false;
                 battleview.arena.add(this.line_corrected);
             }
 
@@ -53,6 +62,9 @@ module SpaceTac.View {
             if (this.line_corrected) {
                 this.line_corrected.destroy();
             }
+            if (this.blast) {
+                this.blast.destroy();
+            }
         }
 
         // Update visual effects for current targetting
@@ -67,6 +79,7 @@ module SpaceTac.View {
                 } else {
                     this.line_initial.visible = false;
                 }
+
                 if (this.source && this.target_corrected) {
                     this.line_corrected.clear();
                     this.line_corrected.lineStyle(3, 0x00FF00);
@@ -75,6 +88,17 @@ module SpaceTac.View {
                     this.line_corrected.visible = true;
                 } else {
                     this.line_corrected.visible = false;
+                }
+
+                if (this.target_corrected && this.blast_radius) {
+                    this.blast.clear();
+                    this.blast.lineStyle(5, 0x208620, 0.4);
+                    this.blast.beginFill(0x60D860, 0.2);
+                    this.blast.drawCircle(this.target_corrected.x, this.target_corrected.y, this.blast_radius * 2);
+                    this.blast.endFill();
+                    this.blast.visible = true;
+                } else {
+                    this.blast.visible = false;
                 }
             }
         }
@@ -85,8 +109,9 @@ module SpaceTac.View {
         }
 
         // Set a target from a target object
-        setTarget(target: Game.Target, dispatch: boolean = true): void {
+        setTarget(target: Game.Target, dispatch: boolean = true, blast_radius: number = 0): void {
             this.target_corrected = target;
+            this.blast_radius = blast_radius;
             if (dispatch) {
                 this.target_initial = target ? Game.Tools.copyObject(target) : null;
                 this.targetHovered.dispatch(this.target_corrected);

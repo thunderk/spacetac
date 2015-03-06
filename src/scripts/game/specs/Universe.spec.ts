@@ -12,7 +12,7 @@ module SpaceTac.Game.Specs {
     describe("Universe", () => {
         it("serializes to a string", () => {
             var universe = new Universe();
-            universe.startQuickBattle();
+            universe.startQuickBattle(false);
 
             // Dump and reload
             var dumped = universe.saveToString();

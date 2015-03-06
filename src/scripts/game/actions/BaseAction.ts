@@ -57,6 +57,15 @@ module SpaceTac.Game {
             }
         }
 
+        // Get the effect area radius of this action
+        getBlastRadius(ship: Ship): number {
+            if (this.equipment) {
+                return this.equipment.blast;
+            } else {
+                return 0;
+            }
+        }
+
         // Method to check if a target is applicable for this action
         //  Will call checkLocationTarget or checkShipTarget by default
         checkTarget(battle: Battle, ship: Ship, target: Target): Target {

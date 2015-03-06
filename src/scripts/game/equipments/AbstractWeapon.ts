@@ -23,6 +23,11 @@ module SpaceTac.Game.Equipments {
             this.can_target_space = can_target_space;
         }
 
+        // Set the effect radius (blast) for this weapon
+        setBlast(min_blast: number, max_blast: number = null): void {
+            this.blast = new Range(min_blast, max_blast);
+        }
+
         protected getActionForEquipment(equipment: Equipment): BaseAction {
             var result = new FireWeaponAction(equipment, this.can_target_space);
             return result;

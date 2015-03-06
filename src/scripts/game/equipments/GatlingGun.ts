@@ -3,7 +3,6 @@
 module SpaceTac.Game.Equipments {
     "use strict";
 
-    // Equipment: Gatling Gun
     export class GatlingGun extends AbstractWeapon {
         constructor() {
             super("Gatling Gun", 50, 100);

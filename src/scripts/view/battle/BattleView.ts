@@ -46,9 +46,6 @@ module SpaceTac.View {
         // Indicator of interaction disabled
         icon_waiting: Phaser.Image;
 
-        // Listener for space key presses
-        private space_key: Phaser.Key;
-
         // Lines used to highlight hovered ship
         private line_hover_left: Phaser.Graphics;
         private line_hover_right: Phaser.Graphics;
@@ -61,14 +58,12 @@ module SpaceTac.View {
             this.ship_hovered = null;
             this.log_processor = null;
             this.background = null;
-            this.space_key = null;
             this.line_hover_left = null;
             this.line_hover_right = null;
         }
 
         // Create view graphics
         create() {
-            var battleview = this;
             var game = this.game;
 
             // Background
@@ -77,7 +72,7 @@ module SpaceTac.View {
             game.add.existing(this.background);
 
             // Add arena (local map)
-            this.arena = new Arena(battleview);
+            this.arena = new Arena(this);
             game.add.existing(this.arena);
 
             // Add UI layer
@@ -107,8 +102,8 @@ module SpaceTac.View {
             this.log_processor = new LogProcessor(this);
 
             // Key mapping
-            this.space_key = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-            this.space_key.onUp.add(this.onSpaceKeyPressed, this);
+            var key_space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            key_space.onUp.add(this.onSpaceKeyPressed, this);
             var key_s = this.input.keyboard.addKey(Phaser.Keyboard.S);
             key_s.onUp.add(() => {
                 (<GameRouter>this.game).saveGame();
@@ -156,11 +151,6 @@ module SpaceTac.View {
             if (this.line_hover_right) {
                 this.line_hover_right.destroy();
                 this.line_hover_right = null;
-            }
-
-            if (this.space_key) {
-                this.space_key.onUp.remove(this.onSpaceKeyPressed, this);
-                this.space_key = null;
             }
 
             this.battle = null;

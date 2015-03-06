@@ -25,7 +25,7 @@ module SpaceTac {
         newGame(): Game.Universe {
             // Currently create a quick battle
             var universe = new Game.Universe();
-            universe.startQuickBattle();
+            universe.startQuickBattle(true);
             return universe;
         }
 
