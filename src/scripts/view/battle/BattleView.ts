@@ -106,11 +106,9 @@ module SpaceTac.View {
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
 
-            // Handle space bar to end turn
-            this.space_key = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+            // Key mapping
+            this.space_key = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             this.space_key.onUp.add(this.onSpaceKeyPressed, this);
-
-            // Shortcuts
             var key_s = this.input.keyboard.addKey(Phaser.Keyboard.S);
             key_s.onUp.add(() => {
                 (<GameRouter>this.game).saveGame();

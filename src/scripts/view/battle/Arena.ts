@@ -64,17 +64,16 @@ module SpaceTac.View {
 
         destroy() {
             this.game.input.deleteMoveCallback(this.input_callback);
+            super.destroy();
         }
 
         // Initialize state (create sprites)
         init(): void {
-            var arena = this;
-
             // Add ship sprites
-            this.battleview.battle.play_order.forEach(function (ship: Game.Ship) {
-                var sprite = new ArenaShip(arena.battleview, ship);
-                arena.addChild(sprite);
-                arena.ship_sprites.push(sprite);
+            this.battleview.battle.play_order.forEach((ship: Game.Ship) => {
+                var sprite = new ArenaShip(this.battleview, ship);
+                this.addChild(sprite);
+                this.ship_sprites.push(sprite);
             });
         }
 
