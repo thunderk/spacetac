@@ -4,17 +4,19 @@ module SpaceTac.View {
     // Targetting system
     //  Allows to pick a target for an action
     export class Targetting {
-        // Current target
-        target: Game.Target;
+        // Initial target (as pointed by the user)
+        target_initial: Game.Target;
+        line_initial: Phaser.Graphics;
+
+        // Corrected target (applying action rules)
+        target_corrected: Game.Target;
+        line_corrected: Phaser.Graphics;
 
         // Signal to receive hovering events
         targetHovered: Phaser.Signal;
 
         // Signal to receive targetting events
         targetSelected: Phaser.Signal;
-
-        // Target visual line
-        line: Phaser.Graphics;
 
         // Access to the parent battle view
         private battleview: BattleView;
@@ -30,34 +32,49 @@ module SpaceTac.View {
 
             // Visual effects
             if (battleview) {
-                this.line = new Phaser.Graphics(battleview.game, 0, 0);
-                battleview.arena.add(this.line);
+                this.line_initial = new Phaser.Graphics(battleview.game, 0, 0);
+                battleview.arena.add(this.line_initial);
+                this.line_corrected = new Phaser.Graphics(battleview.game, 0, 0);
+                battleview.arena.add(this.line_corrected);
             }
 
             this.source = null;
-            this.target = null;
+            this.target_initial = null;
+            this.target_corrected = null;
         }
 
         // Destructor
         destroy(): void {
             this.targetHovered.dispose();
             this.targetSelected.dispose();
-            if (this.line) {
-                this.line.destroy();
+            if (this.line_initial) {
+                this.line_initial.destroy();
+            }
+            if (this.line_corrected) {
+                this.line_corrected.destroy();
             }
         }
 
         // Update visual effects for current targetting
         update(): void {
             if (this.battleview) {
-                if (this.source && this.target) {
-                    this.line.clear();
-                    this.line.lineStyle(3, 0xFFFFFF);
-                    this.line.moveTo(this.source.x, this.source.y);
-                    this.line.lineTo(this.target.x, this.target.y);
-                    this.line.visible = true;
+                if (this.source && this.target_initial) {
+                    this.line_initial.clear();
+                    this.line_initial.lineStyle(2, 0xFF0000);
+                    this.line_initial.moveTo(this.source.x, this.source.y);
+                    this.line_initial.lineTo(this.target_initial.x, this.target_initial.y);
+                    this.line_initial.visible = true;
                 } else {
-                    this.line.visible = false;
+                    this.line_initial.visible = false;
+                }
+                if (this.source && this.target_corrected) {
+                    this.line_corrected.clear();
+                    this.line_corrected.lineStyle(3, 0x00FF00);
+                    this.line_corrected.moveTo(this.source.x, this.source.y);
+                    this.line_corrected.lineTo(this.target_corrected.x, this.target_corrected.y);
+                    this.line_corrected.visible = true;
+                } else {
+                    this.line_corrected.visible = false;
                 }
             }
         }
@@ -69,9 +86,10 @@ module SpaceTac.View {
 
         // Set a target from a target object
         setTarget(target: Game.Target, dispatch: boolean = true): void {
-            this.target = target;
+            this.target_corrected = target;
             if (dispatch) {
-                this.targetHovered.dispatch(this.target);
+                this.target_initial = target ? Game.Tools.copyObject(target) : null;
+                this.targetHovered.dispatch(this.target_corrected);
             }
             this.update();
         }
@@ -94,7 +112,7 @@ module SpaceTac.View {
         // Validate the current target (when clicked)
         //  This will broadcast the targetSelected signal
         validate(): void {
-            this.targetSelected.dispatch(this.target);
+            this.targetSelected.dispatch(this.target_corrected);
         }
     }
 }

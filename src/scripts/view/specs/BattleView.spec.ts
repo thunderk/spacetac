@@ -33,7 +33,7 @@ module SpaceTac.View.Specs {
             battleview.cursorInSpace(8, 4);
 
             expect(battleview.ship_hovered).toBeNull();
-            expect(battleview.targetting.target).toEqual(Game.Target.newFromLocation(8, 4));
+            expect(battleview.targetting.target_corrected).toEqual(Game.Target.newFromLocation(8, 4));
 
             // Process a click on space
             battleview.cursorClicked();
@@ -42,19 +42,19 @@ module SpaceTac.View.Specs {
             battleview.cursorOnShip(battleview.battle.play_order[0]);
 
             expect(battleview.ship_hovered).toEqual(battleview.battle.playing_ship);
-            expect(battleview.targetting.target).toEqual(Game.Target.newFromShip(battleview.battle.playing_ship));
+            expect(battleview.targetting.target_corrected).toEqual(Game.Target.newFromShip(battleview.battle.playing_ship));
 
             // Don't leave a ship we're not hovering
             battleview.cursorOffShip(battleview.battle.play_order[1]);
 
             expect(battleview.ship_hovered).toEqual(battleview.battle.playing_ship);
-            expect(battleview.targetting.target).toEqual(Game.Target.newFromShip(battleview.battle.playing_ship));
+            expect(battleview.targetting.target_corrected).toEqual(Game.Target.newFromShip(battleview.battle.playing_ship));
 
             // Don't move in space while on ship
             battleview.cursorInSpace(1, 3);
 
             expect(battleview.ship_hovered).toEqual(battleview.battle.playing_ship);
-            expect(battleview.targetting.target).toEqual(Game.Target.newFromShip(battleview.battle.playing_ship));
+            expect(battleview.targetting.target_corrected).toEqual(Game.Target.newFromShip(battleview.battle.playing_ship));
 
             // Process a click on ship
             battleview.cursorClicked();
@@ -63,7 +63,7 @@ module SpaceTac.View.Specs {
             battleview.cursorOffShip(battleview.battle.play_order[0]);
 
             expect(battleview.ship_hovered).toBeNull();
-            expect(battleview.targetting.target).toBeNull();
+            expect(battleview.targetting.target_corrected).toBeNull();
 
             // Quit targetting
             battleview.exitTargettingMode();
