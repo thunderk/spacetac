@@ -198,5 +198,23 @@ module SpaceTac.Game {
             expect(battle.log.events[0].code).toBe("endbattle");
             expect((<EndBattleEvent>battle.log.events[0]).outcome.winner).toBeNull();
         });
+
+        it("collects ships present in a circle", function () {
+            var fleet1 = new Fleet();
+            var ship1 = new Ship(fleet1, "F1S1");
+            ship1.setArenaPosition(0, 0);
+            var ship2 = new Ship(fleet1, "F1S2");
+            ship2.setArenaPosition(5, 8);
+            var ship3 = new Ship(fleet1, "F1S3");
+            ship3.setArenaPosition(6.5, 9.5);
+            var ship4 = new Ship(fleet1, "F1S4");
+            ship4.setArenaPosition(12, 12);
+
+            var battle = new Battle(fleet1);
+            battle.throwInitiative(new RandomGenerator(5, 4, 3, 2));
+
+            var result = battle.collectShipsInCircle(Target.newFromLocation(5, 8), 3);
+            expect(result).toEqual([ship2, ship3]);
+        });
     });
 }

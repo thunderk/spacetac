@@ -106,6 +106,17 @@ module SpaceTac.Game {
             return result;
         }
 
+        // Collect all ships within a given radius of a target
+        collectShipsInCircle(center: Target, radius: number): Ship[] {
+            var result: Ship[] = [];
+            this.play_order.forEach((ship: Ship) => {
+                if (Target.newFromShip(ship).getDistanceTo(center) <= radius) {
+                    result.push(ship);
+                }
+            });
+            return result;
+        }
+
         // Ends a battle and sets the outcome
         endBattle(winner: Fleet, log: boolean = true) {
             this.ended = true;

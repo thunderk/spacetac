@@ -116,17 +116,15 @@ module SpaceTac.View {
 
         // Weapon used
         private processFireEvent(event: Game.FireEvent): void {
-            // TODO Handle in-space target
-            var source = this.view.arena.findShipSprite(event.ship);
-            var destination = this.view.arena.findShipSprite(event.target.ship);
+            var source = Game.Target.newFromShip(event.ship);
+            var destination = event.target;
 
-            var dy = destination.y - source.y;
-            var dx = destination.x - source.x;
-            var angle = Math.atan2(dy, dx);
+            // Face the target
+            var attacker = this.view.arena.findShipSprite(event.ship);
+            var angle = source.getAngleTo(destination);
+            attacker.moveTo(source.x, source.y, angle, true);
 
-            source.moveTo(source.x, source.y, angle, true);
-
-            var effect = new WeaponEffect(source, destination, event.weapon.code);
+            var effect = new WeaponEffect(this.view.arena, source, destination, event.weapon.code);
             effect.start();
         }
     }

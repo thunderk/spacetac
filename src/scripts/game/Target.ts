@@ -39,6 +39,13 @@ module SpaceTac.Game {
             return Math.sqrt(dx * dx + dy * dy);
         }
 
+        // Get the normalized angle, in radians, to another target
+        getAngleTo(other: Target): number {
+            var dx = other.x - this.x;
+            var dy = other.y - this.y;
+            return Math.atan2(dy, dx);
+        }
+
         // Check if a target is in range from a specific point
         isInRange(x: number, y: number, radius: number): boolean {
             var dx = this.x - x;

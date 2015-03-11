@@ -38,23 +38,27 @@ module SpaceTac.Game {
         }
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
-            if (target.ship) {
-                // Fire event
-                ship.addBattleEvent(new FireEvent(ship, this.equipment, target));
+            var affected: Ship[] = [];
+            var blast = this.getBlastRadius(ship);
 
-                // Apply all target effects
-                var result = false;
-                this.equipment.target_effects.forEach((effect: BaseEffect) => {
-                    var eff_result = effect.applyOnShip(target.ship);
-                    result = result || eff_result;
-                });
-
-                return result;
-            } else {
-                // TODO target in space (=> apply blast radius)
-                return false;
+            // Collect affected ships
+            if (blast) {
+                affected = affected.concat(battle.collectShipsInCircle(target, blast));
+            } else if (target.ship) {
+                affected.push(target.ship);
             }
 
+            // Fire event
+            ship.addBattleEvent(new FireEvent(ship, this.equipment, target));
+
+            // Apply all target effects
+            affected.forEach((affship: Ship) => {
+                this.equipment.target_effects.forEach((effect: BaseEffect) => {
+                    effect.applyOnShip(affship);
+                });
+            });
+
+            return true;
         }
     }
 }
