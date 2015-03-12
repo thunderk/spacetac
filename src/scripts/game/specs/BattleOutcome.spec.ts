@@ -6,7 +6,6 @@ module SpaceTac.Game.Specs {
     describe("BattleOutcome", () => {
         it("generates loot from dead ships, for the winner to take", () => {
             var fleet1 = new Fleet();
-            fleet1.level = 5;
             fleet1.addShip(new Ship(fleet1));
             fleet1.addShip(new Ship(fleet1));
             fleet1.addShip(new Ship(fleet1));
@@ -15,6 +14,9 @@ module SpaceTac.Game.Specs {
             fleet2.addShip(new Ship(fleet2));
             fleet2.addShip(new Ship(fleet2));
             fleet2.addShip(new Ship(fleet2));
+
+            fleet2.ships[2].level = 5;
+            fleet2.ships[3].level = 5;
 
             fleet1.ships[0].setDead();
             fleet1.ships[0].addSlot(SlotType.Armor).attach(new Equipment(SlotType.Armor));
@@ -44,7 +46,7 @@ module SpaceTac.Game.Specs {
                 0,      //  - take first equipment
                 0.4,    // no loot on second ship
                 0.95,   // lucky loot on third ship
-                0,      //  - lower end of level range (winner has 5, so range is 4-6)
+                0,      //  - lower end of level range (dead ship has 5, so range is 4-6)
                 0,      //  - take first generated equipment (there is only one anyway)
                 0.96,   // lucky loot on fourth ship
                 1       //  - higher end of level range

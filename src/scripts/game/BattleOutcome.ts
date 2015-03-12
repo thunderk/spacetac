@@ -42,7 +42,7 @@ module SpaceTac.Game {
                             var luck = random.throw();
                             if (luck > 0.9) {
                                 // Salvage a supposedly transported item
-                                var transported = this.generateLootItem(random);
+                                var transported = this.generateLootItem(random, ship.level);
                                 if (transported) {
                                     this.loot.push(transported);
                                 }
@@ -66,10 +66,10 @@ module SpaceTac.Game {
         }
 
         // Generate a special loot item for the winner fleet
-        //  The equipment will be in the winner range (because its a lucky loot!)
-        generateLootItem(random: RandomGenerator): Equipment {
+        //  The equipment will be in the dead ship range
+        generateLootItem(random: RandomGenerator, base_level: number): Equipment {
             var generator = this.getLootGenerator(random);
-            var level = new IntegerRange(this.winner.level - 1, this.winner.level + 1);
+            var level = new IntegerRange(base_level - 1, base_level + 1);
             return generator.generate(level);
         }
     }

@@ -8,6 +8,9 @@ module SpaceTac.Game {
         // Fleet this ship is a member of
         fleet: Fleet;
 
+        // Level of this ship
+        level: number;
+
         // Name of the ship
         name: string;
 
@@ -62,6 +65,7 @@ module SpaceTac.Game {
 
             this.attributes = new AttributeCollection();
             this.fleet = fleet || new Fleet();
+            this.level = 1;
             this.name = name;
             this.alive = true;
             this.initiative = this.newAttribute(AttributeCode.Initiative);

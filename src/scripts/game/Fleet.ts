@@ -14,14 +14,10 @@ module SpaceTac.Game {
         // Current battle in which the fleet is engaged (null if not fighting)
         battle: Battle;
 
-        // Current level of the fleet
-        level: number;
-
         // Create a fleet, bound to a player
         constructor(player: Player = null) {
             super();
 
-            this.level = 1;
             this.player = player || new Player();
             this.ships = [];
             this.battle = null;
@@ -38,6 +34,20 @@ module SpaceTac.Game {
         // Set the current battle
         setBattle(battle: Battle): void {
             this.battle = battle;
+        }
+
+        // Get the average level of this fleet
+        getLevel(): number {
+            if (this.ships.length === 0) {
+                return 0;
+            }
+
+            var sum = 0;
+            this.ships.forEach((ship: Ship) => {
+                sum += ship.level;
+            });
+            var avg = sum / this.ships.length;
+            return Math.round(avg);
         }
 
         // Check if the fleet still has living ships
