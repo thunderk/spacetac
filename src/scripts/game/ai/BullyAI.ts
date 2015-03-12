@@ -5,12 +5,12 @@ module SpaceTac.Game.AI {
     // Combination of a move action and a fire action
     export class BullyManeuver {
         // Move action to position the ship before firing
-        move: AIManeuver;
+        move: Maneuver;
 
         // Fire action
-        fire: AIManeuver;
+        fire: Maneuver;
 
-        constructor(move: AIManeuver = null, fire: AIManeuver = null) {
+        constructor(move: Maneuver = null, fire: Maneuver = null) {
             this.move = move;
             this.fire = fire;
         }
@@ -123,9 +123,9 @@ module SpaceTac.Game.AI {
             } else {
                 var result = new BullyManeuver();
                 if (move) {
-                    result.move = new AIManeuver(this.ship, engine, move);
+                    result.move = new Maneuver(this.ship, engine, move);
                 }
-                result.fire = new AIManeuver(this.ship, weapon, target);
+                result.fire = new Maneuver(this.ship, weapon, target);
                 return result;
             }
         }

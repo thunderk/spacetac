@@ -3,7 +3,7 @@ module SpaceTac.Game.AI {
 
     // Ship maneuver for an artifical intelligence
     //   A maneuver is like a human player action, choosing an equipment and using it
-    export class AIManeuver {
+    export class Maneuver {
         // Concerned ship
         ship: Ship;
 
