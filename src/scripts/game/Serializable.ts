@@ -11,6 +11,11 @@ module SpaceTac.Game {
             this._sid = null;
         }
 
+        // Reset the SID sequence, given a maximal known SID
+        static resetIdSequence(highest_known: number): void {
+            Serializable._next_sid = highest_known + 1;
+        }
+
         // Get an ID that can be used for serialization
         getSerializeId(): string {
             if (this._sid === null) {

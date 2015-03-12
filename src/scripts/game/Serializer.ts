@@ -48,6 +48,17 @@ module SpaceTac.Game {
             return null;
         }
 
+        // Compute the highest known SID
+        getMaxId(): number {
+            var result = -1;
+            for (var sid in this.refs) {
+                if (typeof sid === "string") {
+                    result = Math.max(result, parseInt(sid, 10));
+                }
+            }
+            return result;
+        }
+
         // Serialize an object to a string
         serialize(obj: Serializable): string {
             this.refs = {};
@@ -62,7 +73,9 @@ module SpaceTac.Game {
         unserialize(sdata: string): Serializable {
             var data = JSON.parse(sdata);
             this.refs = data.refs;
-            return this.fromData(data.root);
+            var result = this.fromData(data.root);
+            Serializable.resetIdSequence(this.getMaxId());
+            return result;
         }
 
         private toData(obj: Serializable): any {

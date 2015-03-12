@@ -112,5 +112,30 @@ module SpaceTac.Game.Specs {
             expect((<SerializableTestObj1>loaded).b.b.a).toBe(true);
             expect((<SerializableTestObj1>loaded).b.b.b).toBe(loaded);
         });
+
+        it("resets id sequence between sessions", () => {
+            // Start with a fresh ID sequence
+            Serializable._next_sid = 0;
+
+            var serializer = new Serializer();
+
+            // Serialize an object
+            var obj1 = new SerializableTestObj1(8);
+            var dumped = serializer.serialize(obj1);
+
+            // Simulate a page refresh
+            Serializable._next_sid = 0;
+
+            // Load dumped object
+            var loaded = <SerializableTestObj1>serializer.unserialize(dumped);
+
+            // Add a new object
+            loaded.b = new SerializableTestObj2("test");
+
+            // If the ID sequence is not propertly reset, the ID of both objects will clash
+            dumped = serializer.serialize(loaded);
+            var loaded_again = serializer.unserialize(dumped);
+            expect(loaded_again).toEqual(loaded);
+        });
     });
 }
