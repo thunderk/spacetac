@@ -63,10 +63,10 @@ module SpaceTac.Game.AI.Specs {
             ship.arena_y = 0;
             enemy.arena_x = 3;
             enemy.arena_y = 0;
-            var result = ai.checkBullyMove(enemy, weapon);
-            expect(result.move_to).toBeNull();
-            expect(result.target).toBe(enemy);
-            expect(result.weapon).toBe(weapon);
+            var result = ai.checkBullyManeuver(enemy, weapon);
+            expect(result.move).toBeNull();
+            expect(result.fire.target).toEqual(Target.newFromShip(enemy));
+            expect(result.fire.equipment).toBe(weapon);
 
             // enemy out of range, but moving can bring it in range
             ship.ap_current.set(8);
@@ -74,10 +74,10 @@ module SpaceTac.Game.AI.Specs {
             ship.arena_y = 0;
             enemy.arena_x = 6;
             enemy.arena_y = 0;
-            result = ai.checkBullyMove(enemy, weapon);
-            expect(result.move_to).toEqual(Target.newFromLocation(3, 0));
-            expect(result.target).toBe(enemy);
-            expect(result.weapon).toBe(weapon);
+            result = ai.checkBullyManeuver(enemy, weapon);
+            expect(result.move.target).toEqual(Target.newFromLocation(3, 0));
+            expect(result.fire.target).toEqual(Target.newFromShip(enemy));
+            expect(result.fire.equipment).toBe(weapon);
 
             // enemy out of range, but moving can bring it in range, except for the safety margin
             ai.move_margin = 0.1;
@@ -86,7 +86,7 @@ module SpaceTac.Game.AI.Specs {
             ship.arena_y = 0;
             enemy.arena_x = 6;
             enemy.arena_y = 0;
-            result = ai.checkBullyMove(enemy, weapon);
+            result = ai.checkBullyManeuver(enemy, weapon);
             expect(result).toBeNull();
             ai.move_margin = 0;
 
@@ -96,7 +96,7 @@ module SpaceTac.Game.AI.Specs {
             ship.arena_y = 0;
             enemy.arena_x = 30;
             enemy.arena_y = 0;
-            result = ai.checkBullyMove(enemy, weapon);
+            result = ai.checkBullyManeuver(enemy, weapon);
             expect(result).toBeNull();
 
             // enemy in range but not enough AP to fire
@@ -105,7 +105,7 @@ module SpaceTac.Game.AI.Specs {
             ship.arena_y = 0;
             enemy.arena_x = 3;
             enemy.arena_y = 0;
-            result = ai.checkBullyMove(enemy, weapon);
+            result = ai.checkBullyManeuver(enemy, weapon);
             expect(result).toBeNull();
 
             // can move in range of enemy, but not enough AP to fire
@@ -114,7 +114,7 @@ module SpaceTac.Game.AI.Specs {
             ship.arena_y = 0;
             enemy.arena_x = 6;
             enemy.arena_y = 0;
-            result = ai.checkBullyMove(enemy, weapon);
+            result = ai.checkBullyManeuver(enemy, weapon);
             expect(result).toBeNull();
 
             // no engine, can't move
@@ -124,7 +124,7 @@ module SpaceTac.Game.AI.Specs {
             ship.arena_y = 0;
             enemy.arena_x = 6;
             enemy.arena_y = 0;
-            result = ai.checkBullyMove(enemy, weapon);
+            result = ai.checkBullyManeuver(enemy, weapon);
             expect(result).toBeNull();
         });
 
@@ -144,7 +144,7 @@ module SpaceTac.Game.AI.Specs {
             var ai = new BullyAI(ship1.fleet);
             ai.ship = ship1;
 
-            var result = ai.listAllMoves();
+            var result = ai.listAllManeuvers();
             expect(result.length).toBe(0);
 
             var weapon1 = new Equipment(SlotType.Weapon);
@@ -159,7 +159,7 @@ module SpaceTac.Game.AI.Specs {
             ai.ship.ap_current.setMaximal(10);
             ai.ship.ap_current.set(8);
 
-            result = ai.listAllMoves();
+            result = ai.listAllManeuvers();
             expect(result.length).toBe(3);
         });
 
@@ -196,12 +196,12 @@ module SpaceTac.Game.AI.Specs {
             ship2.hull.set(15);
             ship2.shield.set(10);
 
-            var move = ai.checkBullyMove(ship2, weapon);
+            var move = ai.checkBullyManeuver(ship2, weapon);
             expect(move).not.toBeNull();
 
             battle.playing_ship = ai.ship;
             battle.log.clear();
-            ai.applyMove(move);
+            ai.applyManeuver(move);
 
             expect(battle.log.events.length).toBe(7);
 

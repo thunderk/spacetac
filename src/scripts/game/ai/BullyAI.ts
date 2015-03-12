@@ -2,23 +2,23 @@
 module SpaceTac.Game.AI {
     "use strict";
 
-    export class BullyMove {
-        // Position to move to, before firing
-        move_to: Target;
+    // Combination of a move action and a fire action
+    export class BullyManeuver {
+        // Move action to position the ship before firing
+        move: AIManeuver;
 
-        // Engine used to move
-        engine: Equipment;
+        // Fire action
+        fire: AIManeuver;
 
-        // Weapon to use
-        weapon: Equipment;
-
-        // Ship to target
-        target: Ship;
+        constructor(move: AIManeuver = null, fire: AIManeuver = null) {
+            this.move = move;
+            this.fire = fire;
+        }
 
         // Get a sorting score, by distance to another point
         //   Nearest means higher score
         getScoreByDistance(point: Target): number {
-            return -point.getDistanceTo(Target.newFromShip(this.target));
+            return -point.getDistanceTo(this.fire.target);
         }
     }
 
@@ -35,13 +35,13 @@ module SpaceTac.Game.AI {
 
         protected initWork(): void {
             this.addWorkItem(() => {
-                var moves = this.listAllMoves();
+                var maneuvers = this.listAllManeuvers();
 
-                if (moves.length > 0) {
-                    var move = this.pickMove(moves);
-                    this.applyMove(move);
+                if (maneuvers.length > 0) {
+                    var maneuver = this.pickManeuver(maneuvers);
+                    this.applyManeuver(maneuver);
 
-                    // Try to make another move
+                    // Try to make another maneuver
                     this.initWork();
                 }
             });
@@ -65,18 +65,18 @@ module SpaceTac.Game.AI {
             return this.ship.listEquipment(SlotType.Weapon);
         }
 
-        // List all available "moves" for the playing ship
-        listAllMoves(): BullyMove[] {
-            var result: BullyMove[] = [];
+        // List all available maneuvers for the playing ship
+        listAllManeuvers(): BullyManeuver[] {
+            var result: BullyManeuver[] = [];
 
             var enemies = this.listAllEnemies();
             var weapons = this.listAllWeapons();
 
             enemies.forEach((ship: Ship) => {
                 weapons.forEach((weapon: Equipment) => {
-                    var move = this.checkBullyMove(ship, weapon);
-                    if (move) {
-                        result.push(move);
+                    var maneuver = this.checkBullyManeuver(ship, weapon);
+                    if (maneuver) {
+                        result.push(maneuver);
                     }
                 });
             });
@@ -85,8 +85,8 @@ module SpaceTac.Game.AI {
         }
 
         // Check if a weapon can be used against an enemy
-        //   Returns the BullyMove, or null if impossible to fire
-        checkBullyMove(enemy: Ship, weapon: Equipment): BullyMove {
+        //   Returns the BullyManeuver, or null if impossible to fire
+        checkBullyManeuver(enemy: Ship, weapon: Equipment): BullyManeuver {
             // Check if enemy in range
             var target = Target.newFromShip(enemy);
             var distance = target.getDistanceTo(Target.newFromShip(this.ship));
@@ -121,40 +121,40 @@ module SpaceTac.Game.AI {
                 // Not enough AP to fire
                 return null;
             } else {
-                var result = new BullyMove();
-                result.move_to = move;
-                result.engine = engine;
-                result.target = enemy;
-                result.weapon = weapon;
+                var result = new BullyManeuver();
+                if (move) {
+                    result.move = new AIManeuver(this.ship, engine, move);
+                }
+                result.fire = new AIManeuver(this.ship, weapon, target);
                 return result;
             }
         }
 
-        // Pick a move from a list of available ones
+        // Pick a maneuver from a list of available ones
         //  By default, it chooses the nearest enemy
-        pickMove(available: BullyMove[]): BullyMove {
+        pickManeuver(available: BullyManeuver[]): BullyManeuver {
             if (available.length === 0) {
                 return null;
             }
 
             // Sort by descending score
-            available.sort((m1: BullyMove, m2: BullyMove): number => {
+            available.sort((m1: BullyManeuver, m2: BullyManeuver): number => {
                 var point = Target.newFromShip(this.ship);
                 return m1.getScoreByDistance(point) < m2.getScoreByDistance(point) ? 1 : -1;
             });
             return available[0];
         }
 
-        // Effectively apply the chosen move
-        applyMove(move: BullyMove): void {
-            if (move.move_to) {
+        // Effectively apply the chosen maneuver
+        applyManeuver(maneuver: BullyManeuver): void {
+            if (maneuver.move) {
                 this.addWorkItem(() => {
-                    move.engine.action.apply(this.battle, this.ship, move.move_to);
+                    maneuver.move.apply();
                 }, 500);
             }
 
             this.addWorkItem(() => {
-                move.weapon.action.apply(this.fleet.battle, this.ship, Target.newFromShip(move.target));
+                maneuver.fire.apply();
             }, 1500);
 
             this.addWorkItem(null, 1500);
