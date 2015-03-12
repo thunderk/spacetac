@@ -2,7 +2,7 @@ module SpaceTac.Game.AI {
     "use strict";
 
     // A chain of Maneuver to execute sequentially
-    export class ManeuverChain {
+    export class ManeuverSequence {
         // Concerned ship
         ship: Ship;
 

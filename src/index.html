@@ -4,7 +4,23 @@
     <meta charset="utf-8"/>
     <title>SpaceTac</title>
 
-    <link rel="stylesheet" href="main.css">
+    <style>
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #101010;
+      padding: 0;
+      margin: 0;
+    }
+
+    .game {
+      width: 1280px;
+      height: 720px;
+      margin: 20px auto;
+    }
+    </style>
+
 <!-- build:remove -->
     <link rel="stylesheet" href="vendor/jasmine/lib/jasmine-core/jasmine.css">
 <!-- /build -->
@@ -28,7 +44,7 @@
 
 <script>
     var currentWindowOnload = window.onload;
-    window.oncontextmenu = function (e) { e.preventDefault(); }
+    window.oncontextmenu = function (e) { e.preventDefault(); };
     window.onload = function () {
         <!-- build:remove -->
         if (currentWindowOnload) {
@@ -41,7 +57,7 @@
         if (queryString.getParam('onlytests') || queryString.getParam('spec')) {
             document.getElementById("-space-tac").hidden = true;
         } else {
-            new SpaceTac.GameRouter();
+            new SpaceTac.GameUI();
         }
     };
 </script>

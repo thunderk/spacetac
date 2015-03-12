@@ -1,7 +1,5 @@
 var gulp = require('gulp'),
     ts = require('gulp-typescript'),
-    less = require('gulp-less'),
-    minifyCSS = require('gulp-minify-css'),
     concat = require('gulp-concat-sourcemap'),
     sourcemaps = require('gulp-sourcemaps'),
     processhtml = require('gulp-processhtml'),
@@ -16,7 +14,6 @@ var gulp = require('gulp'),
 
 var paths = {
     assets: 'src/assets/**/*',
-    less: 'src/css/main.less',
     index: 'src/index.html',
     libs: [
         'src/vendor/jasmine/lib/jasmine-core/jasmine.js',
@@ -54,12 +51,6 @@ gulp.task('typescript', function () {
     return tsResult.js
         .pipe(concat('main.js'))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(paths.build));
-});
-
-gulp.task('less', function () {
-    return gulp.src(paths.less)
-        .pipe(less())
         .pipe(gulp.dest(paths.build));
 });
 
@@ -117,12 +108,6 @@ gulp.task('minifyJs', ['typescript'], function () {
         .pipe(gulp.dest(paths.dist));
 });
 
-gulp.task('minifyCss', ['less'], function () {
-    return gulp.src(paths.build + 'main.css')
-        .pipe(minifyCSS())
-        .pipe(gulp.dest(paths.dist))
-});
-
 gulp.task('deploy', function () {
     return gulp.src('./dist/**/*')
         .pipe(deploy({
@@ -131,10 +116,10 @@ gulp.task('deploy', function () {
 });
 
 gulp.task('default', function () {
-    runSequence('clean', ['typescript', 'tslint', 'less', 'connect', 'watch'], ['tests', 'open']);
+    runSequence('clean', ['typescript', 'tslint', 'connect', 'watch'], ['tests', 'open']);
 });
 gulp.task('build', function () {
-    return runSequence('clean', ['typescript', 'tslint', 'less', 'copy', 'minifyJs', 'minifyCss', 'processhtml']);
+    return runSequence('clean', ['typescript', 'tslint', 'copy', 'minifyJs', 'processhtml']);
 });
 gulp.task('strict', function () {
     return runSequence('clean', ['typescript', 'tslintstrict', 'tests']);

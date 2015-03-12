@@ -11,7 +11,7 @@ module SpaceTac.View {
         player: Game.Player;
 
         // UI container
-        ui: UIGroup;
+        ui: Phaser.Group;
 
         // Battleground container
         arena: Arena;
@@ -76,7 +76,7 @@ module SpaceTac.View {
             game.add.existing(this.arena);
 
             // Add UI layer
-            this.ui = new UIGroup(game);
+            this.ui = new Phaser.Group(game);
             game.add.existing(this.ui);
 
             // Add UI elements
@@ -106,11 +106,11 @@ module SpaceTac.View {
             key_space.onUp.add(this.onSpaceKeyPressed, this);
             var key_s = this.input.keyboard.addKey(Phaser.Keyboard.S);
             key_s.onUp.add(() => {
-                (<GameRouter>this.game).saveGame();
+                (<GameUI>this.game).saveGame();
             });
             var key_l = this.input.keyboard.addKey(Phaser.Keyboard.L);
             key_l.onUp.add(() => {
-                (<GameRouter>this.game).loadGame();
+                (<GameUI>this.game).loadGame();
             });
         }
 

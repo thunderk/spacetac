@@ -6,11 +6,14 @@ module SpaceTac.View {
 
         preload() {
             // Add preload sprite
+            this.add.text(640, 340, "... Loading ...", {align: "center", font: "bold 20px Arial", fill: "#c0c0c0"})
+                .anchor.set(0.5, 0.5);
             this.preloadBar = this.add.sprite(0, 0, "preload-bar");
             this.preloadBar.position.set((1280 - this.preloadBar.width) / 2, (720 - this.preloadBar.height) / 2);
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load images
+            this.loadImage("menu/button.png");
             this.loadImage("battle/waiting.png");
             this.loadImage("battle/shiplist-base.png");
             this.loadImage("battle/shiplist-normal.png");
@@ -57,7 +60,7 @@ module SpaceTac.View {
         }
 
         create() {
-            this.game.state.start("main");
+            this.game.state.start("mainmenu");
         }
 
         private loadImage(path: string) {
