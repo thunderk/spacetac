@@ -43,11 +43,32 @@ module SpaceTac.View {
 
         // Get the function that will be called to start the visual effect
         getEffectForWeapon(weapon: string): Function {
-            return this.defaultEffect;
+            switch (weapon) {
+                case "gatlinggun":
+                    return this.gunEffect;
+                default:
+                    return this.defaultEffect;
+            }
         }
 
-        // Default firing effect (bullets)
+        // Default firing effect (missile)
         private defaultEffect(): void {
+            var missile = new Phaser.Sprite(this.arena.game, this.source.x, this.source.y, "battle-weapon-bullet");
+            missile.anchor.set(0.5, 0.5);
+            missile.scale.set(0.2, 0.2);
+            missile.rotation = this.source.getAngleTo(this.destination);
+            this.arena.addChild(missile);
+
+            var tween = this.arena.game.tweens.create(missile);
+            tween.to({x: this.destination.x, y: this.destination.y}, 1000);
+            tween.onComplete.addOnce(() => {
+                missile.destroy();
+            });
+            tween.start();
+        }
+
+        // Submachine gun effect (small chain of bullets)
+        private gunEffect(): void {
             this.arena.game.sound.play("battle-weapon-bullets");
 
             var source = this.arena.toGlobal(new PIXI.Point(this.source.x, this.source.y));

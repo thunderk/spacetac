@@ -111,6 +111,7 @@ module SpaceTac.View {
             var key_l = this.input.keyboard.addKey(Phaser.Keyboard.L);
             key_l.onUp.add(() => {
                 (<GameUI>this.game).loadGame();
+                this.game.state.start("router");
             });
         }
 
