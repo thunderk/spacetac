@@ -20,5 +20,25 @@ module SpaceTac.Game {
         isLinking(first: Star, second: Star) {
             return (this.first === first && this.second === second) || (this.first === second && this.second === first);
         }
+
+        // Get the length of a link
+        getLength(): number {
+            return this.first.getDistanceTo(this.second);
+        }
+
+        // Check if this link crosses another
+        isCrossing(other: StarLink): boolean {
+            if (this.first === other.first || this.second === other.first || this.first === other.second || this.second === other.second) {
+                return false;
+            }
+            var ccw = (a: Star, b: Star, c: Star): boolean => {
+                return (c.y - a.y) * (b.x - a.x) > (b.y - a.y) * (c.x - a.x);
+            };
+            var cc1 = ccw(this.first, other.first, other.second);
+            var cc2 = ccw(this.second, other.first, other.second);
+            var cc3 = ccw(this.first, this.second, other.first);
+            var cc4 = ccw(this.first, this.second, other.second);
+            return cc1 !== cc2 && cc3 !== cc4;
+        }
     }
 }

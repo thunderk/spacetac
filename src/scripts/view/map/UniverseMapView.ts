@@ -29,7 +29,7 @@ module SpaceTac.View {
 
             this.universe.starlinks.forEach((link: Game.StarLink) => {
                 var line = this.add.graphics(0, 0, this.stars);
-                line.lineStyle(0.3, 0xFFFFFF);
+                line.lineStyle(0.3, 0xA0A0A0);
                 line.moveTo(link.first.x, link.first.y);
                 line.lineTo(link.second.x, link.second.y);
             });
