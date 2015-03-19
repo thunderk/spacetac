@@ -33,6 +33,15 @@ module SpaceTac.Game {
             return <Universe>serializer.unserialize(serialized);
         }
 
+        // Generate a real single player game
+        static newGame(): Universe {
+            var universe = new Universe();
+            universe.generate();
+            universe.player = new Game.Player();
+            universe.player.setVisited(universe.stars[0]);
+            return universe;
+        }
+
         // Start a new "quick battle" game
         startQuickBattle(with_ai: boolean = false): void {
             this.battle = Game.Battle.newQuickRandom(with_ai);

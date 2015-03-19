@@ -29,8 +29,7 @@ module SpaceTac.View {
         onNewGame(): void {
             var gameui = <GameUI>this.game;
 
-            gameui.universe = new Game.Universe();
-            gameui.universe.generate();
+            gameui.universe = Game.Universe.newGame();
 
             this.game.state.start("router");
         }
