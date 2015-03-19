@@ -2,12 +2,14 @@ module SpaceTac.View {
     "use strict";
 
     export class MainMenu extends Phaser.State {
+        button_new_game: Phaser.Button;
         button_quick_battle: Phaser.Button;
         button_load_game: Phaser.Button;
 
         preload() {
-            this.button_quick_battle = this.addButton(1280 / 2 - 300, 400, "Quick Battle", this.onQuickBattle);
-            this.button_load_game = this.addButton(1280 / 2 + 300, 400, "Load game", this.onLoadGame);
+            this.button_new_game = this.addButton(1280 / 2 - 300, 400, "New Game", this.onNewGame);
+            this.button_quick_battle = this.addButton(1280 / 2, 400, "Quick Battle", this.onQuickBattle);
+            this.button_load_game = this.addButton(1280 / 2 + 300, 400, "Load Game", this.onLoadGame);
         }
 
         addButton(x: number, y: number, caption: string, callback: Function): Phaser.Button {
@@ -23,6 +25,16 @@ module SpaceTac.View {
             return button;
         }
 
+        // Called when "New Game" is clicked
+        onNewGame(): void {
+            var gameui = <GameUI>this.game;
+
+            gameui.universe = new Game.Universe();
+            gameui.universe.generate();
+
+            this.game.state.start("router");
+        }
+
         // Called when "Quick Battle" is clicked
         onQuickBattle(): void {
             var gameui = <GameUI>this.game;
@@ -33,7 +45,7 @@ module SpaceTac.View {
             this.game.state.start("router");
         }
 
-        // Called when "Load game" is clicked
+        // Called when "Load Game" is clicked
         onLoadGame(): void {
             var gameui = <GameUI>this.game;
 

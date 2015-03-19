@@ -53,6 +53,7 @@ module SpaceTac.View {
             this.loadImage("ship/scout/portrait.png");
             this.loadImage("common/standard-bar-background.png");
             this.loadImage("common/standard-bar-foreground.png");
+            this.loadImage("map/star-icon.png");
 
             // Load sounds
             this.loadSound("battle/ship-change.wav");

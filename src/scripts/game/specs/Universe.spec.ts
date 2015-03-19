@@ -39,5 +39,12 @@ module SpaceTac.Game.Specs {
             // Check equality after game steps
             expect(loaded_universe).toEqual(universe);
         });
+
+        it("generates star systems", () => {
+            var universe = new Universe();
+            universe.generate(31);
+
+            expect(universe.stars.length).toBe(31);
+        });
     });
 }

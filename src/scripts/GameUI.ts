@@ -18,6 +18,7 @@ module SpaceTac {
             this.state.add('mainmenu', View.MainMenu);
             this.state.add('router', View.Router);
             this.state.add('battle', View.BattleView);
+            this.state.add('universe', View.UniverseMapView);
 
             this.state.start('boot');
         }
