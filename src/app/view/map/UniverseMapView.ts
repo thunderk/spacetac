@@ -11,7 +11,10 @@ module SpaceTac.View {
         player: Game.Player;
 
         // Group for the stars and links
-        stars: Phaser.Group;
+        private stars: Phaser.Group;
+
+        // Scaling used to transform game coordinates in screen ones
+        private scaling: number;
 
         // Init the view, binding it to a universe
         init(universe: Game.Universe, player: Game.Player) {
@@ -23,9 +26,9 @@ module SpaceTac.View {
         create() {
             this.stars = this.add.group();
 
-            var scale = 720 / (this.universe.radius * 2);
-            this.stars.position.set(this.universe.radius * scale, this.universe.radius * scale);
-            this.stars.scale.set(scale);
+            this.scaling = 720 / (this.universe.radius * 2);
+            this.stars.position.set(this.universe.radius * this.scaling, this.universe.radius * this.scaling);
+            this.stars.scale.set(this.scaling);
 
             this.drawStars();
 
@@ -52,9 +55,15 @@ module SpaceTac.View {
             });
             this.universe.stars.forEach((star: Game.Star) => {
                 if (this.player.hasVisited(star)) {
-                    var sprite = this.add.sprite(star.x, star.y, "map-star-icon", 0, this.stars);
-                    sprite.scale.set(0.1, 0.1);
+                    var sprite = new Phaser.Button(this.game, star.x, star.y, "map-star-icon");
+                    sprite.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
                     sprite.anchor.set(0.5, 0.5);
+
+                    sprite.onInputUp.add(() => {
+                        this.game.state.start("starsystem", true, false, star, this.player);
+                    });
+
+                    this.stars.addChild(sprite);
                 }
             });
         }

@@ -11,6 +11,9 @@ module SpaceTac.Game {
         // List of ships
         ships: Ship[];
 
+        // Current fleet location
+        location: StarLocation;
+
         // Current battle in which the fleet is engaged (null if not fighting)
         battle: Battle;
 
@@ -20,6 +23,7 @@ module SpaceTac.Game {
 
             this.player = player || new Player();
             this.ships = [];
+            this.location = null;
             this.battle = null;
         }
 

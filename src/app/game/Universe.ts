@@ -60,6 +60,10 @@ module SpaceTac.Game {
 
             var links = this.getPotentialLinks();
             this.starlinks = this.filterCrossingLinks(links);
+
+            this.stars.forEach((star: Star) => {
+                star.generate(random);
+            });
         }
 
         // Generate a given number of stars, not too crowded
