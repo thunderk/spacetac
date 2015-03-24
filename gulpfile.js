@@ -21,7 +21,7 @@ var paths = {
         'src/vendor/jasmine/lib/jasmine-core/boot.js',
         'src/vendor/phaser-official/build/phaser.min.js'
     ],
-    ts: 'src/scripts/**/*.ts',
+    ts: 'src/app/**/*.ts',
     build: './build/',
     dist: './dist/'
 };
@@ -40,7 +40,7 @@ var tsProject = ts.createProject({
     noExternalResolve: true,
     noImplicitAny: false,  // Handled by tslint
     sortOutput: true,
-    sourceRoot: '../scripts'
+    sourceRoot: '../app'
 });
 
 gulp.task('typescript', function () {
@@ -60,14 +60,14 @@ gulp.task('tests', ['typescript'], function () {
 });
 
 gulp.task('tslint', function () {
-    return gulp.src(['src/scripts/game/**/*.ts', 'src/scripts/view/**/*.ts'])
+    return gulp.src(['src/app/game/**/*.ts', 'src/app/view/**/*.ts'])
         .pipe(tslint())
         .pipe(tslint.report('verbose', {
           emitError: false
         }));
 });
 gulp.task('tslintstrict', function () {
-    return gulp.src(['src/scripts/game/**/*.ts', 'src/scripts/view/**/*.ts'])
+    return gulp.src(['src/app/game/**/*.ts', 'src/app/view/**/*.ts'])
         .pipe(tslint())
         .pipe(tslint.report('verbose'));
 });
