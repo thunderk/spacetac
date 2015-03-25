@@ -50,15 +50,28 @@ module SpaceTac.Game {
             result.push(new StarLocation(this, StarLocationType.STAR, 0, 0));
 
             // Add warp locations around the star
-            var warps = 3;
-            while (warps--) {
+            var links = this.getLinks();
+            links.forEach((link: StarLink) => {
                 result.push(this.generateOneLocation(StarLocationType.WARP, result, this.radius * 0.3, random));
-            }
+            });
 
             // Add random locations
             while (count--) {
                 result.push(this.generateOneLocation(StarLocationType.PLANET, result, this.radius, random));
             }
+
+            return result;
+        }
+
+        // Get the number of links to other stars
+        getLinks(): StarLink[] {
+            var result: StarLink[] = [];
+
+            this.universe.starlinks.forEach((link: StarLink) => {
+                if (link.first === this || link.second === this) {
+                    result.push(link);
+                }
+            });
 
             return result;
         }

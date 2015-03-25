@@ -24,6 +24,7 @@ module SpaceTac.Game {
             super();
 
             this.stars = [];
+            this.starlinks = [];
             this.radius = 50;
         }
 
@@ -156,6 +157,13 @@ module SpaceTac.Game {
                 }
             });
             return result;
+        }
+
+        // Add a link between two stars
+        addLink(first: Star, second: Star): void {
+            if (!this.areLinked(first, second)) {
+                this.starlinks.push(new StarLink(first, second));
+            }
         }
     }
 }
