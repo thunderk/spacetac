@@ -27,6 +27,12 @@ module SpaceTac.Game {
             this.battle = null;
         }
 
+        // Set the current location of the fleet
+        setLocation(location: StarLocation): void {
+            this.location = location;
+            this.player.setVisited(this.location.star);
+        }
+
         // Add a ship in this fleet
         addShip(ship: Ship): void {
             if (this.ships.indexOf(ship) < 0) {

@@ -32,6 +32,12 @@ module SpaceTac.View {
 
             this.drawStars();
 
+            var location = this.player.fleet.location.star;
+            var fleet = this.add.sprite(location.x, location.y, "map-fleet-icon", 0, this.stars);
+            fleet.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
+            fleet.anchor.set(0.5, -0.5);
+            this.game.tweens.create(fleet).to({angle: -360}, 5000, undefined, true, 0, -1);
+
             // Inputs
             this.input.keyboard.addKey(Phaser.Keyboard.R).onUp.addOnce(this.revealAll, this);
         }
@@ -62,6 +68,7 @@ module SpaceTac.View {
                     sprite.onInputUp.add(() => {
                         this.game.state.start("starsystem", true, false, star, this.player);
                     });
+                    sprite.input.useHandCursor = true;
 
                     this.stars.addChild(sprite);
                 }

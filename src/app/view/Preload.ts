@@ -54,6 +54,7 @@ module SpaceTac.View {
             this.loadImage("common/standard-bar-background.png");
             this.loadImage("common/standard-bar-foreground.png");
             this.loadImage("map/star-icon.png");
+            this.loadImage("map/fleet-icon.png");
             this.loadImage("map/planet-icon.png");
             this.loadImage("map/warp-icon.png");
             this.loadImage("map/button-back.png");

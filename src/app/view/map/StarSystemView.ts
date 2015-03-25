@@ -33,8 +33,15 @@ module SpaceTac.View {
 
             this.drawLocations();
 
+            // Draw fleet location
+            var location = this.player.fleet.location;
+            var fleet = this.add.sprite(location.x, location.y, "map-fleet-icon", 0, this.locations);
+            fleet.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
+            fleet.anchor.set(0.5, -0.5);
+            this.game.tweens.create(fleet).to({angle: -360}, 5000, undefined, true, 0, -1);
+
             // Back button
-            this.add.button(0, 0, "map-button-back", this.onBackClicked, this);
+            this.add.button(0, 0, "map-button-back", this.onBackClicked, this).input.useHandCursor = true;
         }
 
         // Leaving the view, unbind and destroy
@@ -45,7 +52,6 @@ module SpaceTac.View {
 
         // Redraw the locations map
         drawLocations(): void {
-            console.log(this.star.locations);
             this.locations.removeAll(true, true);
             this.star.locations.forEach((location: Game.StarLocation) => {
                 var key = "map-" + Game.StarLocationType[location.type].toLowerCase() + "-icon";

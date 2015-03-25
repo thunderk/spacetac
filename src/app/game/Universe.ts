@@ -38,7 +38,7 @@ module SpaceTac.Game {
             var universe = new Universe();
             universe.generate();
             universe.player = new Game.Player();
-            universe.player.setVisited(universe.stars[0]);
+            universe.player.fleet.setLocation(universe.stars[0].locations[0]);
             return universe;
         }
 
