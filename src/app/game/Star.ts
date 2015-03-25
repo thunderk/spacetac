@@ -5,8 +5,66 @@ module SpaceTac.Game {
 
     // A star system
     export class Star extends Serializable {
+
+        // Available names for star systems
+        static NAMES_POOL = [
+            "Alpha Prime",
+            "Bright Skies",
+            "Costan Sector",
+            "Duncan's Legacy",
+            "Ethiopea",
+            "Fringe Space",
+            "Gesurd Deep",
+            "Helios",
+            "Justice Enclave",
+            "Kovak Second",
+            "Lumen Circle",
+            "Manoa Society",
+            "Neptune's Record",
+            "Ominous Murmur",
+            "Pirate's Landing",
+            "Quasuc Effect",
+            "Roaring Thunder",
+            "Safe Passage",
+            "Time Holes",
+            "Unknown Territory",
+            "Vulcan Terror",
+            "Wings Aurora",
+            "Xenos Trading",
+            "Yu's Pride",
+            "Zoki's Hammer",
+            "Astral Tempest",
+            "Burned Star",
+            "Crystal Bride",
+            "Death Star",
+            "Ether Bending",
+            "Forgotten Realm",
+            "Galactic Ring",
+            "Hegemonia",
+            "Jorgon Trails",
+            "Kemini System",
+            "Light Rain",
+            "Moons Astride",
+            "Nubia's Sisters",
+            "Opium Hide",
+            "Paradise Quest",
+            "Quarter Horizon",
+            "Rising Dust",
+            "Silence of Forge",
+            "Titan Feet",
+            "Unicorn Fly",
+            "Violated Sanctuary",
+            "World's Repose",
+            "Xanthia's Travel",
+            "Yggdrasil",
+            "Zone of Ending",
+        ];
+
         // Parent universe
         universe: Universe;
+
+        // Name of the system (unique in the universe)
+        name: string;
 
         // Location in the universe
         x: number;

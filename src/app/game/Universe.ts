@@ -71,6 +71,8 @@ module SpaceTac.Game {
         generateStars(count: number, random: RandomGenerator = new RandomGenerator()): Star[] {
             var result: Star[] = [];
 
+            var names = new NameGenerator(Star.NAMES_POOL);
+
             while (count) {
                 var x = random.throw() * this.radius * 2.0 - this.radius;
                 var y = random.throw() * this.radius * 2.0 - this.radius;
@@ -81,6 +83,7 @@ module SpaceTac.Game {
                     continue;
                 }
 
+                star.name = names.getName();
                 result.push(star);
 
                 count--;

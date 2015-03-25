@@ -71,6 +71,12 @@ module SpaceTac.View {
                     sprite.input.useHandCursor = true;
 
                     this.stars.addChild(sprite);
+
+                    var name = new Phaser.Text(this.game, star.x, star.y, star.name,
+                        {align: "center", font: "bold 14px Arial", fill: "#90FEE3"});
+                    name.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
+                    name.anchor.set(0.5, -0.4);
+                    this.stars.addChild(name);
                 }
             });
         }
