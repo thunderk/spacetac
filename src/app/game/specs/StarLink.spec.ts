@@ -27,5 +27,16 @@ module SpaceTac.Game.Specs {
                 });
             });
         });
+
+        it("gets the peer of a given sector", () => {
+            var star1 = new Star(null, 0, 0);
+            var star2 = new Star(null, 0, 1);
+            var star3 = new Star(null, 0, 1);
+            var link1 = new StarLink(star1, star2);
+
+            expect(link1.getPeer(star1)).toBe(star2);
+            expect(link1.getPeer(star2)).toBe(star1);
+            expect(link1.getPeer(star3)).toBeNull();
+        });
     });
 }

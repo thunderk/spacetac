@@ -110,7 +110,17 @@ module SpaceTac.Game {
             // Add warp locations around the star
             var links = this.getLinks();
             links.forEach((link: StarLink) => {
-                result.push(this.generateOneLocation(StarLocationType.WARP, result, this.radius * 0.3, random));
+                var warp = this.generateOneLocation(StarLocationType.WARP, result, this.radius * 0.3, random);
+
+                // If there is an unbound warp location on destination sector, bind with it
+                var peer_star = link.getPeer(this);
+                var peer_location = peer_star.findUnboundWarp();
+                if (peer_location) {
+                    peer_location.setJumpDestination(warp);
+                    warp.setJumpDestination(peer_location);
+                }
+
+                result.push(warp);
             });
 
             // Add random locations
@@ -131,6 +141,17 @@ module SpaceTac.Game {
                 }
             });
 
+            return result;
+        }
+
+        // Find an unbound warp location to bind, null if none found
+        findUnboundWarp(): StarLocation {
+            var result: StarLocation = null;
+            this.locations.forEach((location: StarLocation) => {
+                if (location.type === StarLocationType.WARP && !location.jump_dest) {
+                    result = location;
+                }
+            });
             return result;
         }
 

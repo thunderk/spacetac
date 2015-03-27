@@ -58,6 +58,7 @@ module SpaceTac.View {
             this.loadImage("map/planet-icon.png");
             this.loadImage("map/warp-icon.png");
             this.loadImage("map/button-back.png");
+            this.loadImage("map/button-jump.png");
 
             // Load sounds
             this.loadSound("battle/ship-change.wav");

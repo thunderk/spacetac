@@ -70,5 +70,15 @@ module SpaceTac.Game {
             });
             return (count > 0);
         }
+
+        // Use the current warp location to make a jump to another star
+        jump(): boolean {
+            if (this.location && this.location.type === StarLocationType.WARP && this.location.jump_dest) {
+                this.player.fleet.setLocation(this.player.fleet.location.jump_dest);
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 }

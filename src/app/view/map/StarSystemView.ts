@@ -16,6 +16,9 @@ module SpaceTac.View {
         // Scaling used to transform game coordinates in screen ones
         private scaling: number;
 
+        // Buttons
+        private button_back: Phaser.Button;
+        private button_jump: Phaser.Button;
 
         // Init the view, binding it to a universe
         init(star: Game.Star, player: Game.Player) {
@@ -31,17 +34,14 @@ module SpaceTac.View {
             this.locations.position.set(this.star.radius * this.scaling, this.star.radius * this.scaling);
             this.locations.scale.set(this.scaling);
 
-            this.drawLocations();
+            // Buttons
+            this.button_back = this.add.button(0, 0, "map-button-back", this.onBackClicked, this);
+            this.button_back.input.useHandCursor = true;
+            this.button_jump = this.add.button(150, 0, "map-button-jump", this.onJumpClicked, this);
+            this.button_jump.input.useHandCursor = true;
+            this.button_jump.visible = false;
 
-            // Draw fleet location
-            var location = this.player.fleet.location;
-            var fleet = this.add.sprite(location.x, location.y, "map-fleet-icon", 0, this.locations);
-            fleet.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
-            fleet.anchor.set(0.5, -0.5);
-            this.game.tweens.create(fleet).to({angle: -360}, 5000, undefined, true, 0, -1);
-
-            // Back button
-            this.add.button(0, 0, "map-button-back", this.onBackClicked, this).input.useHandCursor = true;
+            this.drawAll();
         }
 
         // Leaving the view, unbind and destroy
@@ -50,19 +50,48 @@ module SpaceTac.View {
             this.player = null;
         }
 
+        // Redraw the view
+        drawAll(): void {
+            this.locations.removeAll(true, true);
+
+            // Draw location icons
+            this.drawLocations();
+
+            // Draw fleet
+            var location = this.player.fleet.location;
+            var fleet = this.add.sprite(location.x, location.y, "map-fleet-icon", 0, this.locations);
+            fleet.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
+            fleet.anchor.set(0.5, -0.5);
+            this.game.tweens.create(fleet).to({angle: -360}, 5000, undefined, true, 0, -1);
+
+            // Buttons
+            this.button_jump.visible = this.player.fleet.location.jump_dest !== null;
+        }
+
         // Redraw the locations map
         drawLocations(): void {
-            this.locations.removeAll(true, true);
             this.star.locations.forEach((location: Game.StarLocation) => {
                 var key = "map-" + Game.StarLocationType[location.type].toLowerCase() + "-icon";
-                var sprite = this.add.sprite(location.x, location.y, key, 0, this.locations);
+                var sprite = this.add.button(location.x, location.y, key);
+                sprite.input.useHandCursor = true;
+                sprite.onInputUp.addOnce(() => {
+                    this.player.fleet.setLocation(location);
+                    this.drawAll();
+                });
                 sprite.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
                 sprite.anchor.set(0.5, 0.5);
+                this.locations.addChild(sprite);
             });
         }
 
         // Called when "Back" is clicked, go back to universe map
         onBackClicked(): void {
+            this.game.state.start("universe", true, false, this.star.universe, this.player);
+        }
+
+        // Called when "jump" is clicked, initiate sector jump, and go back to universe map
+        onJumpClicked(): void {
+            this.player.fleet.jump();
             this.game.state.start("universe", true, false, this.star.universe, this.player);
         }
     }

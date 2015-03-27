@@ -40,5 +40,16 @@ module SpaceTac.Game {
             var cc4 = ccw(this.first, this.second, other.second);
             return cc1 !== cc2 && cc3 !== cc4;
         }
+
+        // Get the other side of the link, for a given side
+        getPeer(star: Star): Star {
+            if (star === this.first) {
+                return this.second;
+            } else if (star === this.second) {
+                return this.first;
+            } else {
+                return null;
+            }
+        }
     }
 }

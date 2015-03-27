@@ -23,6 +23,9 @@ module SpaceTac.Game {
         x: number;
         y: number;
 
+        // Destination for jump, if its a WARP location
+        jump_dest: StarLocation;
+
         constructor(star: Star, type: StarLocationType, x: number, y: number) {
             super();
 
@@ -30,6 +33,14 @@ module SpaceTac.Game {
             this.type = type;
             this.x = x;
             this.y = y;
+            this.jump_dest = null;
+        }
+
+        // Set the jump destination of a WARP location
+        setJumpDestination(jump_dest: StarLocation): void {
+            if (this.type === StarLocationType.WARP) {
+                this.jump_dest = jump_dest;
+            }
         }
     }
 }
