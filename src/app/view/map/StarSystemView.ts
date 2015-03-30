@@ -30,8 +30,10 @@ module SpaceTac.View {
         create() {
             this.locations = this.add.group();
 
-            this.scaling = 720 / (this.star.radius * 2);
-            this.locations.position.set(this.star.radius * this.scaling, this.star.radius * this.scaling);
+            var display_margin = 50;
+            var display_width = 720 - (display_margin * 2);
+            this.scaling = display_width / (this.star.radius * 2);
+            this.locations.position.set(display_margin + display_width / 2, display_margin + display_width / 2);
             this.locations.scale.set(this.scaling);
 
             // Buttons
@@ -58,14 +60,21 @@ module SpaceTac.View {
             this.drawLocations();
 
             // Draw fleet
+            if (this.player.fleet.location.star === this.star) {
+                this.drawFleet();
+            }
+
+            // Buttons
+            this.button_jump.visible = this.player.fleet.location.jump_dest !== null;
+        }
+
+        // Draw the fleet marker
+        drawFleet(): void {
             var location = this.player.fleet.location;
             var fleet = this.add.sprite(location.x, location.y, "map-fleet-icon", 0, this.locations);
             fleet.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
             fleet.anchor.set(0.5, -0.5);
             this.game.tweens.create(fleet).to({angle: -360}, 5000, undefined, true, 0, -1);
-
-            // Buttons
-            this.button_jump.visible = this.player.fleet.location.jump_dest !== null;
         }
 
         // Redraw the locations map

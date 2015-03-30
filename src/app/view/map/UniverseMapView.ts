@@ -26,17 +26,13 @@ module SpaceTac.View {
         create() {
             this.stars = this.add.group();
 
-            this.scaling = 720 / (this.universe.radius * 2);
-            this.stars.position.set(this.universe.radius * this.scaling, this.universe.radius * this.scaling);
+            var display_margin = 50;
+            var display_width = 720 - (display_margin * 2);
+            this.scaling = display_width / (this.universe.radius * 2);
+            this.stars.position.set(display_margin + display_width / 2, display_margin + display_width / 2);
             this.stars.scale.set(this.scaling);
 
-            this.drawStars();
-
-            var location = this.player.fleet.location.star;
-            var fleet = this.add.sprite(location.x, location.y, "map-fleet-icon", 0, this.stars);
-            fleet.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
-            fleet.anchor.set(0.5, -0.5);
-            this.game.tweens.create(fleet).to({angle: -360}, 5000, undefined, true, 0, -1);
+            this.drawAll();
 
             // Inputs
             this.input.keyboard.addKey(Phaser.Keyboard.R).onUp.addOnce(this.revealAll, this);
@@ -48,9 +44,26 @@ module SpaceTac.View {
             this.player = null;
         }
 
-        // Redraw the star map
-        drawStars(): void {
+        // Redraw the whole scene
+        drawAll(): void {
             this.stars.removeAll(true, true);
+
+            this.drawStars();
+
+            this.drawFleet();
+        }
+
+        // Draw the fleet marker
+        drawFleet(): void {
+            var location = this.player.fleet.location.star;
+            var fleet = this.add.sprite(location.x, location.y, "map-fleet-icon", 0, this.stars);
+            fleet.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
+            fleet.anchor.set(0.5, -0.5);
+            this.game.tweens.create(fleet).to({angle: -360}, 5000, undefined, true, 0, -1);
+        }
+
+        // Draw the stars and links
+        drawStars(): void {
             this.universe.starlinks.forEach((link: Game.StarLink) => {
                 if (this.player.hasVisited(link.first) || this.player.hasVisited(link.second)) {
                     var line = this.add.graphics(0, 0, this.stars);
@@ -87,7 +100,7 @@ module SpaceTac.View {
             this.universe.stars.forEach((star: Game.Star) => {
                 this.player.setVisited(star);
             });
-            this.drawStars();
+            this.drawAll();
         }
     }
 }
