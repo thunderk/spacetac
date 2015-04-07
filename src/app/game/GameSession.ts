@@ -32,6 +32,8 @@ module SpaceTac.Game {
 
         // Generate a real single player game
         startNewGame(): void {
+            var fleet_generator = new FleetGenerator();
+
             this.universe = new Universe();
             this.universe.generate();
 
@@ -40,6 +42,7 @@ module SpaceTac.Game {
             start_location.encounter = null;
 
             this.player = new Game.Player(this.universe);
+            this.player.fleet = fleet_generator.generate(1, this.player);
             this.player.fleet.setLocation(start_location);
         }
 

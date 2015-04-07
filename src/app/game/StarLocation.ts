@@ -57,7 +57,10 @@ module SpaceTac.Game {
                 this.encounter_gen = true;
 
                 if (random.throw() < 0.8) {
-                    this.encounter = new Fleet();
+                    var fleet_generator = new FleetGenerator(random);
+                    var ship_count = random.throwInt(1, 5);
+                    this.encounter = fleet_generator.generate(this.star.level, null, ship_count);
+                    this.encounter.player.ai = new AI.BullyAI(this.encounter);
                 }
             }
 
