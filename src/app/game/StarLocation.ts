@@ -26,6 +26,10 @@ module SpaceTac.Game {
         // Destination for jump, if its a WARP location
         jump_dest: StarLocation;
 
+        // Enemy encounter
+        encounter: Fleet;
+        encounter_gen: boolean;
+
         constructor(star: Star, type: StarLocationType, x: number, y: number) {
             super();
 
@@ -34,12 +38,43 @@ module SpaceTac.Game {
             this.x = x;
             this.y = y;
             this.jump_dest = null;
+
+            this.encounter = null;
+            this.encounter_gen = false;
         }
 
         // Set the jump destination of a WARP location
         setJumpDestination(jump_dest: StarLocation): void {
             if (this.type === StarLocationType.WARP) {
                 this.jump_dest = jump_dest;
+            }
+        }
+
+        // Call this when first probing a location to generate the possible encounter
+        //  Returns the encountered fleet, null if no encounter happens
+        tryGenerateEncounter(random: RandomGenerator = new RandomGenerator()): Fleet {
+            if (!this.encounter_gen) {
+                this.encounter_gen = true;
+
+                if (random.throw() < 0.8) {
+                    this.encounter = new Fleet();
+                }
+            }
+
+            return this.encounter;
+        }
+
+        // Call this when entering a location to generate the possible encounter
+        //  *fleet* is the player fleet, entering the location
+        //  Returns the engaged battle, null if no encounter happens
+        enterLocation(fleet: Fleet, random: RandomGenerator = new RandomGenerator()): Battle {
+            var encounter = this.tryGenerateEncounter(random);
+            if (encounter) {
+                var battle = new Battle(fleet, encounter);
+                battle.start();
+                return battle;
+            } else {
+                return null;
             }
         }
     }

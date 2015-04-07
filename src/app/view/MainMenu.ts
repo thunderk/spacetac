@@ -29,7 +29,7 @@ module SpaceTac.View {
         onNewGame(): void {
             var gameui = <GameUI>this.game;
 
-            gameui.universe = Game.Universe.newGame();
+            gameui.session.startNewGame();
 
             this.game.state.start("router");
         }
@@ -38,8 +38,7 @@ module SpaceTac.View {
         onQuickBattle(): void {
             var gameui = <GameUI>this.game;
 
-            gameui.universe = new Game.Universe();
-            gameui.universe.startQuickBattle(true);
+            gameui.session.startQuickBattle(true);
 
             this.game.state.start("router");
         }

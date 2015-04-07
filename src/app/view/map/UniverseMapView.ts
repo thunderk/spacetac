@@ -79,7 +79,8 @@ module SpaceTac.View {
                     sprite.anchor.set(0.5, 0.5);
 
                     sprite.onInputUp.add(() => {
-                        this.game.state.start("starsystem", true, false, star, this.player);
+                        (<GameUI>this.game).star = star;
+                        this.game.state.start("router", true, false);
                     });
                     sprite.input.useHandCursor = true;
 

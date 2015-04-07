@@ -234,7 +234,9 @@ module SpaceTac.Game {
             });
 
             // Simulate game turn
-            log.add(new ShipChangeEvent(this.playing_ship, this.playing_ship));
+            if (this.playing_ship) {
+                log.add(new ShipChangeEvent(this.playing_ship, this.playing_ship));
+            }
         }
 
         // Defines the initial ship positions for one fleet

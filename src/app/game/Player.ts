@@ -5,6 +5,9 @@ module SpaceTac.Game {
 
     // One player (human or IA)
     export class Player extends Serializable {
+        // Universe in which we are playing
+        universe: Universe;
+
         // Current fleet
         fleet: Fleet;
 
@@ -15,9 +18,10 @@ module SpaceTac.Game {
         visited: Star[];
 
         // Create a player, with an empty fleet
-        constructor() {
+        constructor(universe: Universe = new Universe()) {
             super();
 
+            this.universe = universe;
             this.fleet = new Fleet(this);
             this.ai = null;
             this.visited = [];
@@ -25,7 +29,7 @@ module SpaceTac.Game {
 
         // Create a quick random player, with a fleet, for testing purposes
         static newQuickRandom(name: String): Player {
-            var player = new Player();
+            var player = new Player(new Universe());
             var ship: Ship;
             var ship_generator = new ShipGenerator();
 
@@ -58,6 +62,14 @@ module SpaceTac.Game {
             if (!this.hasVisited(star)) {
                 this.visited.push(star);
             }
+        }
+
+        // Get currently played battle, null when none is in progress
+        getBattle(): Battle {
+            return this.fleet.battle;
+        }
+        setBattle(battle: Battle): void {
+            this.fleet.setBattle(battle);
         }
     }
 }

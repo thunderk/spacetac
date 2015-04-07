@@ -76,6 +76,9 @@ module SpaceTac.Game {
         // List of points of interest
         locations: StarLocation[];
 
+        // Base level for encounters in this system
+        level: number;
+
         constructor(universe: Universe, x: number, y: number) {
             super();
 
@@ -84,6 +87,7 @@ module SpaceTac.Game {
             this.y = y;
             this.radius = 0.1;
             this.locations = [];
+            this.level = 1;
         }
 
         // Get the distance to another star

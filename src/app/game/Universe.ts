@@ -5,12 +5,6 @@ module SpaceTac.Game {
 
     // Main game universe
     export class Universe extends Serializable {
-        // Current connected player
-        player: Player;
-
-        // Currently played battle
-        battle: Battle;
-
         // List of star systems
         stars: Star[];
 
@@ -26,33 +20,6 @@ module SpaceTac.Game {
             this.stars = [];
             this.starlinks = [];
             this.radius = 50;
-        }
-
-        // Load a game state from a string
-        static loadFromString(serialized: string): Universe {
-            var serializer = new Serializer();
-            return <Universe>serializer.unserialize(serialized);
-        }
-
-        // Generate a real single player game
-        static newGame(): Universe {
-            var universe = new Universe();
-            universe.generate();
-            universe.player = new Game.Player();
-            universe.player.fleet.setLocation(universe.stars[0].locations[0]);
-            return universe;
-        }
-
-        // Start a new "quick battle" game
-        startQuickBattle(with_ai: boolean = false): void {
-            this.battle = Game.Battle.newQuickRandom(with_ai);
-            this.player = this.battle.fleets[0].player;
-        }
-
-        // Serializes the game state to a string
-        saveToString(): string {
-            var serializer = new Serializer();
-            return serializer.serialize(this);
         }
 
         // Generates a universe, with star systems and such

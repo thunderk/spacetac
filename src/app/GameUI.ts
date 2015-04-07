@@ -5,13 +5,17 @@ module SpaceTac {
 
     // Router between game views
     export class GameUI extends Phaser.Game {
-        // Currently playing universe
-        universe: Game.Universe;
+        // Current game session
+        session: Game.GameSession;
+
+        // Current focused star system
+        star: Game.Star;
 
         constructor() {
             super(1280, 720, Phaser.AUTO, '-space-tac');
 
-            this.universe = null;
+            this.session = new Game.GameSession();
+            this.star = null;
 
             this.state.add('boot', View.Boot);
             this.state.add('preload', View.Preload);
@@ -27,7 +31,7 @@ module SpaceTac {
         // Save current game in local browser storage
         saveGame(): boolean {
             if (typeof(Storage) !== "undefined") {
-                localStorage.setItem("spacetac-savegame", this.universe.saveToString());
+                localStorage.setItem("spacetac-savegame", this.session.saveToString());
                 console.log("Game saved");
                 return true;
             } else {
@@ -40,7 +44,7 @@ module SpaceTac {
             if (typeof(Storage) !== "undefined") {
                 var loaded = localStorage.getItem("spacetac-savegame");
                 if (loaded) {
-                    this.universe = Game.Universe.loadFromString(loaded);
+                    this.session = Game.GameSession.loadFromString(loaded);
                     console.log("Game loaded");
                     return true;
                 } else {
@@ -49,6 +53,15 @@ module SpaceTac {
                 }
             } else {
                 console.error("localStorage not available");
+            }
+        }
+
+        // Get the focuses star system
+        getFocusedStar(): Game.Star {
+            if (this.star && this.star.universe === this.session.universe) {
+                return this.star;
+            } else {
+                return null;
             }
         }
     }

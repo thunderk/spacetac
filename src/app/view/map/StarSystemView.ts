@@ -85,7 +85,12 @@ module SpaceTac.View {
                 sprite.input.useHandCursor = true;
                 sprite.onInputUp.addOnce(() => {
                     this.player.fleet.setLocation(location);
-                    this.drawAll();
+
+                    if (this.player.getBattle()) {
+                        this.game.state.start("router", true, false);
+                    } else {
+                        this.drawAll();
+                    }
                 });
                 sprite.scale.set(1.0 / this.scaling, 1.0 / this.scaling);
                 sprite.anchor.set(0.5, 0.5);
@@ -95,13 +100,14 @@ module SpaceTac.View {
 
         // Called when "Back" is clicked, go back to universe map
         onBackClicked(): void {
-            this.game.state.start("universe", true, false, this.star.universe, this.player);
+            (<GameUI>this.game).star = null;
+            this.game.state.start("router", true, false);
         }
 
         // Called when "jump" is clicked, initiate sector jump, and go back to universe map
         onJumpClicked(): void {
             this.player.fleet.jump();
-            this.game.state.start("universe", true, false, this.star.universe, this.player);
+            this.onBackClicked();
         }
     }
 }
