@@ -1,8 +1,10 @@
+/// <reference path="../BaseView.ts"/>
+
 module SpaceTac.View {
     "use strict";
 
     // Interactive map of the universe
-    export class UniverseMapView extends Phaser.State {
+    export class UniverseMapView extends BaseView {
 
         // Displayed universe
         universe: Game.Universe;
@@ -18,12 +20,16 @@ module SpaceTac.View {
 
         // Init the view, binding it to a universe
         init(universe: Game.Universe, player: Game.Player) {
+            super.init();
+
             this.universe = universe;
             this.player = player;
         }
 
         // Create view graphics
         create() {
+            super.create();
+
             this.stars = this.add.group();
 
             var display_margin = 50;
@@ -42,6 +48,8 @@ module SpaceTac.View {
         shutdown() {
             this.universe = null;
             this.player = null;
+
+            super.shutdown();
         }
 
         // Redraw the whole scene

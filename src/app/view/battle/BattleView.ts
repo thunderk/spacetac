@@ -1,8 +1,10 @@
+/// <reference path="../BaseView.ts"/>
+
 module SpaceTac.View {
     "use strict";
 
     // Interactive view of a Battle
-    export class BattleView extends Phaser.State {
+    export class BattleView extends BaseView {
 
         // Displayed battle
         battle: Game.Battle;
@@ -52,6 +54,8 @@ module SpaceTac.View {
 
         // Init the view, binding it to a specific battle
         init(player: Game.Player, battle: Game.Battle) {
+            super.init();
+
             this.player = player;
             this.battle = battle;
             this.targetting = null;
@@ -64,6 +68,8 @@ module SpaceTac.View {
 
         // Create view graphics
         create() {
+            super.create();
+
             var game = this.game;
 
             // Background
@@ -100,6 +106,9 @@ module SpaceTac.View {
 
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
+
+            // "Battle" animation
+            this.displayFightMessage();
 
             // Key mapping
             var key_space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -155,6 +164,21 @@ module SpaceTac.View {
             }
 
             this.battle = null;
+
+            super.shutdown();
+        }
+
+        // Display an animated "BATTLE" text in the center of the view
+        displayFightMessage(): void {
+            var text = this.game.add.text(1280 / 2, 720 / 2, "BATTLE !",
+                {align: "center", font: "bold 42px Arial", fill: "#EE2233"});
+            text.anchor.set(0.5, 0.5);
+            this.game.tweens.create(text.scale).to({x: 3, y: 3}).start();
+            var text_anim = this.game.tweens.create(text).to({alpha: 0});
+            text_anim.onComplete.addOnce(() => {
+                text.destroy();
+            });
+            text_anim.start();
         }
 
         // Listener for space key events

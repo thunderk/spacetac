@@ -1,8 +1,10 @@
+/// <reference path="../BaseView.ts"/>
+
 module SpaceTac.View {
     "use strict";
 
     // Interactive map of a star system
-    export class StarSystemView extends Phaser.State {
+    export class StarSystemView extends BaseView {
 
         // Displayed star system
         star: Game.Star;
@@ -22,12 +24,16 @@ module SpaceTac.View {
 
         // Init the view, binding it to a universe
         init(star: Game.Star, player: Game.Player) {
+            super.init();
+
             this.star = star;
             this.player = player;
         }
 
         // Create view graphics
         create() {
+            super.create();
+
             this.locations = this.add.group();
 
             var display_margin = 50;
@@ -50,6 +56,8 @@ module SpaceTac.View {
         shutdown() {
             this.star = null;
             this.player = null;
+
+            super.shutdown();
         }
 
         // Redraw the view
