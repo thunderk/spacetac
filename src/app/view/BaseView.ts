@@ -6,6 +6,20 @@ module SpaceTac.View {
         // Link to the root UI
         protected gameui: GameUI;
 
+        // Get the size of display
+        getWidth(): number {
+            return this.game.width || 1280;
+        }
+        getHeight(): number {
+            return this.game.height || 720;
+        }
+        getMidWidth(): number {
+            return this.getWidth() / 2;
+        }
+        getMidHeight(): number {
+            return this.getHeight() / 2;
+        }
+
         // Init the view
         init(...args: any[]) {
             this.gameui = <GameUI>this.game;

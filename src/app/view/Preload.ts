@@ -1,7 +1,9 @@
+/// <reference path="BaseView.ts"/>
+
 module SpaceTac.View {
     "use strict";
 
-    export class Preload extends Phaser.State {
+    export class Preload extends BaseView {
         private preloadBar: Phaser.Sprite;
 
         preload() {
@@ -9,7 +11,8 @@ module SpaceTac.View {
             this.add.text(640, 340, "... Loading ...", {align: "center", font: "bold 20px Arial", fill: "#c0c0c0"})
                 .anchor.set(0.5, 0.5);
             this.preloadBar = this.add.sprite(0, 0, "preload-bar");
-            this.preloadBar.position.set((1280 - this.preloadBar.width) / 2, (720 - this.preloadBar.height) / 2);
+            this.preloadBar.anchor.set(0.5, 0.5);
+            this.preloadBar.position.set(this.getMidWidth(), this.getMidHeight());
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load images

@@ -1,15 +1,20 @@
+/// <reference path="BaseView.ts"/>
+
 module SpaceTac.View {
     "use strict";
 
-    export class MainMenu extends Phaser.State {
+    export class MainMenu extends BaseView {
         button_new_game: Phaser.Button;
         button_quick_battle: Phaser.Button;
         button_load_game: Phaser.Button;
 
         preload() {
-            this.button_new_game = this.addButton(1280 / 2 - 300, 400, "New Game", this.onNewGame);
-            this.button_quick_battle = this.addButton(1280 / 2, 400, "Quick Battle", this.onQuickBattle);
-            this.button_load_game = this.addButton(1280 / 2 + 300, 400, "Load Game", this.onLoadGame);
+            var basex = this.getMidWidth();
+            var y = Math.floor(this.getHeight() * 0.6);
+            var space = this.getWidth() * 0.2;
+            this.button_new_game = this.addButton(basex - space, y, "New Game", this.onNewGame);
+            this.button_quick_battle = this.addButton(basex, y, "Quick Battle", this.onQuickBattle);
+            this.button_load_game = this.addButton(basex + space, y, "Load Game", this.onLoadGame);
         }
 
         addButton(x: number, y: number, caption: string, callback: Function): Phaser.Button {

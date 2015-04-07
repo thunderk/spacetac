@@ -170,7 +170,7 @@ module SpaceTac.View {
 
         // Display an animated "BATTLE" text in the center of the view
         displayFightMessage(): void {
-            var text = this.game.add.text(1280 / 2, 720 / 2, "BATTLE !",
+            var text = this.game.add.text(this.getMidWidth(), this.getMidHeight(), "BATTLE !",
                 {align: "center", font: "bold 42px Arial", fill: "#EE2233"});
             text.anchor.set(0.5, 0.5);
             this.game.tweens.create(text.scale).to({x: 3, y: 3}).start();
