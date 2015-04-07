@@ -19,7 +19,7 @@ var paths = {
         'src/vendor/jasmine/lib/jasmine-core/jasmine.js',
         'src/vendor/jasmine/lib/jasmine-core/jasmine-html.js',
         'src/vendor/jasmine/lib/jasmine-core/boot.js',
-        'src/vendor/phaser-official/build/phaser.min.js'
+        'src/vendor/phaser/build/phaser.min.js'
     ],
     ts: 'src/app/**/*.ts',
     build: './build/',

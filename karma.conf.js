@@ -4,7 +4,7 @@ module.exports = function (config) {
         basePath: '',
         frameworks: ['jasmine'],
         files: [
-            'src/vendor/phaser-official/build/phaser.js',
+            'src/vendor/phaser/build/phaser.js',
             'src/vendor/deep-diff/releases/deep-diff-0.3.0.min.js',
             'build/main.js'
         ],
