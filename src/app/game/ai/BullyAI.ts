@@ -36,13 +36,18 @@ module SpaceTac.Game.AI {
         protected initWork(): void {
             this.addWorkItem(() => {
                 var maneuvers = this.listAllManeuvers();
+                var maneuver: BullyManeuver;
 
                 if (maneuvers.length > 0) {
-                    var maneuver = this.pickManeuver(maneuvers);
+                    maneuver = this.pickManeuver(maneuvers);
                     this.applyManeuver(maneuver);
 
                     // Try to make another maneuver
                     this.initWork();
+                } else {
+                    // No bullying available, going to fallback move
+                    maneuver = this.getFallbackManeuver();
+                    this.applyManeuver(maneuver);
                 }
             });
         }
@@ -84,6 +89,16 @@ module SpaceTac.Game.AI {
             return result;
         }
 
+        // Get an equipped engine to make a move
+        getEngine(): Equipment {
+            var engines = this.ship.listEquipment(SlotType.Engine);
+            if (engines.length === 0) {
+                return null;
+            } else {
+                return engines[0];
+            }
+        }
+
         // Check if a weapon can be used against an enemy
         //   Returns the BullyManeuver, or null if impossible to fire
         checkBullyManeuver(enemy: Ship, weapon: Equipment): BullyManeuver {
@@ -98,12 +113,11 @@ module SpaceTac.Game.AI {
                 move = null;
             } else {
                 // Move to be in range, using first engine
-                var engines = this.ship.listEquipment(SlotType.Engine);
-                if (engines.length === 0) {
+                engine = this.getEngine();
+                if (!engine) {
                     // No engine available to move
                     return null;
                 } else {
-                    engine = engines[0];
                     var move_distance = distance - weapon.distance + this.move_margin;
                     var move_ap = engine.ap_usage * move_distance / engine.distance;
                     if (move_ap > remaining_ap) {
@@ -130,6 +144,29 @@ module SpaceTac.Game.AI {
             }
         }
 
+        // When no bully action is available, pick a random enemy, and go towards it
+        getFallbackManeuver(): BullyManeuver {
+            var enemies = this.listAllEnemies();
+            if (enemies.length === 0) {
+                return null;
+            }
+
+            var MIN_DISTANCE = 20;
+            var APPROACH_FACTOR = 0.5;
+
+            var picked = this.random.choice(enemies);
+            var target = Target.newFromShip(picked);
+            var distance = target.getDistanceTo(Target.newFromShip(this.ship));
+            var engine = this.getEngine();
+            if (distance > MIN_DISTANCE) { // Don't move too close
+                target = target.constraintInRange(this.ship.arena_x, this.ship.arena_y, (distance - MIN_DISTANCE) * APPROACH_FACTOR);
+                target = engine.action.checkLocationTarget(this.fleet.battle, this.ship, target);
+                return new BullyManeuver(new Maneuver(this.ship, engine, target));
+            } else {
+                return null;
+            }
+        }
+
         // Pick a maneuver from a list of available ones
         //  By default, it chooses the nearest enemy
         pickManeuver(available: BullyManeuver[]): BullyManeuver {
@@ -153,9 +190,11 @@ module SpaceTac.Game.AI {
                 }, 500);
             }
 
-            this.addWorkItem(() => {
-                maneuver.fire.apply();
-            }, 1500);
+            if (maneuver.fire) {
+                this.addWorkItem(() => {
+                    maneuver.fire.apply();
+                }, 1500);
+            }
 
             this.addWorkItem(null, 1500);
         }

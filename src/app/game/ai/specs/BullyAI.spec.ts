@@ -163,6 +163,38 @@ module SpaceTac.Game.AI.Specs {
             expect(result.length).toBe(3);
         });
 
+        it("gets a fallback maneuver", function () {
+            var battle = TestTools.createBattle(1, 3);
+            var ai = new BullyAI(battle.fleets[0]);
+            ai.async = false;
+            ai.ship = battle.fleets[0].ships[0];
+
+            TestTools.setShipAP(ai.ship, 5);
+            TestTools.addEngine(ai.ship, 100);
+
+            var maneuver: BullyManeuver;
+
+            battle.fleets[1].ships.forEach((ship: Ship) => {
+                ai.ship.setArenaPosition(0, 0);
+            });
+
+            // Too much near an enemy, don't move
+            ai.ship.setArenaPosition(10, 0);
+            maneuver = ai.getFallbackManeuver();
+            expect(maneuver).toBeNull();
+            ai.ship.setArenaPosition(20, 0);
+            maneuver = ai.getFallbackManeuver();
+            expect(maneuver).toBeNull();
+
+            // Move towards an enemy (up to minimal distance)
+            ai.ship.setArenaPosition(30, 0);
+            maneuver = ai.getFallbackManeuver();
+            expect(maneuver.move.target).toEqual(Target.newFromLocation(25, 0));
+            ai.ship.setArenaPosition(25, 0);
+            maneuver = ai.getFallbackManeuver();
+            expect(maneuver.move.target).toEqual(Target.newFromLocation(22.5, 0));
+        });
+
         it("applies the chosen move", function () {
             var battle = new Battle();
             var ship1 = new Ship();

@@ -17,6 +17,9 @@ module SpaceTac.Game.AI {
         // Time at which work as started
         started: number;
 
+        // Random generator, if needed
+        random: RandomGenerator;
+
         // Queue of work items to process
         //  Work items will be called successively, leaving time for other processing between them.
         //  So work items should always be as short as possible.
@@ -29,6 +32,7 @@ module SpaceTac.Game.AI {
             this.fleet = fleet;
             this.async = true;
             this.workqueue = [];
+            this.random = new RandomGenerator();
         }
 
         postSerialize(fields: any): void {
