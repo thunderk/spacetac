@@ -32,10 +32,10 @@ module SpaceTac {
         saveGame(): boolean {
             if (typeof(Storage) !== "undefined") {
                 localStorage.setItem("spacetac-savegame", this.session.saveToString());
-                console.log("Game saved");
+                (<View.BaseView>this.state.getCurrentState()).messages.addMessage("Game saved");
                 return true;
             } else {
-                console.error("localStorage not available");
+                (<View.BaseView>this.state.getCurrentState()).messages.addMessage("Your browser does not support saving");
             }
         }
 

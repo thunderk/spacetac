@@ -6,6 +6,9 @@ module SpaceTac.View {
         // Link to the root UI
         protected gameui: GameUI;
 
+        // Message notifications
+        messages: Messages;
+
         // Get the size of display
         getWidth(): number {
             return this.game.width || 1280;
@@ -27,6 +30,9 @@ module SpaceTac.View {
 
         // Create view graphics
         create() {
+            // Notifications
+            this.messages = new Messages(this);
+
             // Key mapping
             var key_s = this.input.keyboard.addKey(Phaser.Keyboard.S);
             key_s.onUp.add(() => {

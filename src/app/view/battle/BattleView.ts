@@ -113,15 +113,6 @@ module SpaceTac.View {
             // Key mapping
             var key_space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             key_space.onUp.add(this.onSpaceKeyPressed, this);
-            var key_s = this.input.keyboard.addKey(Phaser.Keyboard.S);
-            key_s.onUp.add(() => {
-                (<GameUI>this.game).saveGame();
-            });
-            var key_l = this.input.keyboard.addKey(Phaser.Keyboard.L);
-            key_l.onUp.add(() => {
-                (<GameUI>this.game).loadGame();
-                this.game.state.start("router");
-            });
         }
 
         // Leaving the view, we unbind the battle
