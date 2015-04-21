@@ -52,7 +52,7 @@ module SpaceTac.View {
                     this.processFireEvent(<Game.FireEvent>event);
                     break;
                 case "endbattle":
-                    this.view.setInteractionEnabled(false);
+                    this.processEndBattleEvent(<Game.EndBattleEvent>event);
                     break;
             }
         }
@@ -126,6 +126,20 @@ module SpaceTac.View {
 
             var effect = new WeaponEffect(this.view.arena, source, destination, event.weapon.code);
             effect.start();
+        }
+
+        // Battle ended (victory or defeat)
+        private processEndBattleEvent(event: Game.EndBattleEvent): void {
+            this.view.setInteractionEnabled(false);
+
+            if (event.outcome.winner.player === this.view.player) {
+                // Victory !
+                // TODO Loot screen
+                this.view.player.exitBattle();
+                this.view.game.state.start("router");
+            } else {
+                // TODO Game over ?
+            }
         }
     }
 }

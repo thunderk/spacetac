@@ -71,5 +71,11 @@ module SpaceTac.Game {
         setBattle(battle: Battle): void {
             this.fleet.setBattle(battle);
         }
+
+        // Exit the current battle unconditionally, if any
+        //  This does not apply retreat penalties, or battle outcome, only unbind the battle from current session
+        exitBattle(): void {
+            this.setBattle(null);
+        }
     }
 }

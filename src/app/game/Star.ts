@@ -79,10 +79,10 @@ module SpaceTac.Game {
         // Base level for encounters in this system
         level: number;
 
-        constructor(universe: Universe, x: number, y: number) {
+        constructor(universe: Universe = null, x: number = 0, y: number = 0) {
             super();
 
-            this.universe = universe;
+            this.universe = universe || new Universe();
             this.x = x;
             this.y = y;
             this.radius = 0.1;

@@ -30,10 +30,10 @@ module SpaceTac.Game {
         encounter: Fleet;
         encounter_gen: boolean;
 
-        constructor(star: Star, type: StarLocationType, x: number, y: number) {
+        constructor(star: Star, type: StarLocationType, x: number = 0, y: number = 0) {
             super();
 
-            this.star = star;
+            this.star = star || new Star();
             this.type = type;
             this.x = x;
             this.y = y;
@@ -74,6 +74,15 @@ module SpaceTac.Game {
             var encounter = this.tryGenerateEncounter(random);
             if (encounter) {
                 var battle = new Battle(fleet, encounter);
+                battle.log.subscribe((event: BaseLogEvent) => {
+                    if (event.code === "endbattle") {
+                        var endbattle = <EndBattleEvent>event;
+                        if (!endbattle.outcome.draw && endbattle.outcome.winner !== encounter) {
+                            // The encounter fleet lost, remove it
+                            this.encounter = null;
+                        }
+                    }
+                });
                 battle.start();
                 return battle;
             } else {

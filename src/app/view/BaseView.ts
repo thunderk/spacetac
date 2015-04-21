@@ -4,7 +4,7 @@ module SpaceTac.View {
     // Base class for all game views
     export class BaseView extends Phaser.State {
         // Link to the root UI
-        protected gameui: GameUI;
+        gameui: GameUI;
 
         // Message notifications
         messages: Messages;
