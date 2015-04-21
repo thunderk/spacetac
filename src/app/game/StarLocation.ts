@@ -80,5 +80,13 @@ module SpaceTac.Game {
                 return null;
             }
         }
+
+        // Get the distance to another location
+        getDistanceTo(other: StarLocation): number {
+            var dx = this.x - other.x;
+            var dy = this.y - other.y;
+
+            return Math.sqrt(dx * dx + dy * dy);
+        }
     }
 }

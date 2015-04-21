@@ -159,10 +159,22 @@ module SpaceTac.Game {
             return result;
         }
 
+        // Check if a location is far enough from all other ones
+        private checkMinDistance(loc: StarLocation, others: StarLocation[]): boolean {
+            return others.every((iloc: StarLocation): boolean => {
+                return iloc.getDistanceTo(loc) > this.radius * 0.1;
+            });
+        }
+
+        // Generate a single location
         private generateOneLocation(type: StarLocationType, others: StarLocation[], radius: number, random: RandomGenerator): StarLocation {
-            var x = (random.throw(2) - 1) * radius;
-            var y = (random.throw(2) - 1) * radius;
-            return new StarLocation(this, type, x, y);
+            do {
+                var x = (random.throw(2) - 1) * radius;
+                var y = (random.throw(2) - 1) * radius;
+                var result = new StarLocation(this, type, x, y);
+            } while (!this.checkMinDistance(result, others));
+
+            return result;
         }
     }
 }
