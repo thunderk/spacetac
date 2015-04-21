@@ -1,0 +1,2 @@
+install: python bootstrap-venv.py
+script: PATH=bin bin/gulp tests
