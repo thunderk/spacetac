@@ -3,8 +3,14 @@ module SpaceTac.Game {
 
     // Action to move to a given location
     export class MoveAction extends BaseAction {
+
+        // Safety distance from other ships
+        safety_distance: number;
+
         constructor(equipment: Equipment) {
             super("move", true, equipment);
+
+            this.safety_distance = 50;
         }
 
         canBeUsed(battle: Battle, ship: Ship, remaining_ap: number = null): boolean {
@@ -33,9 +39,19 @@ module SpaceTac.Game {
         }
 
         checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
-            // TODO Should forbid to move too much near another ship
+            // Apply maximal distance
             var max_distance = this.equipment.distance * ship.ap_current.current / this.equipment.ap_usage;
-            return target.constraintInRange(ship.arena_x, ship.arena_y, max_distance);
+            target = target.constraintInRange(ship.arena_x, ship.arena_y, max_distance);
+
+            // Apply collision prevention
+            battle.play_order.forEach((iship: Ship) => {
+                if (iship !== ship) {
+                    target = target.moveOutOfCircle(iship.arena_x, iship.arena_y, this.safety_distance,
+                        ship.arena_x, ship.arena_y);
+                }
+            });
+
+            return target;
         }
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {

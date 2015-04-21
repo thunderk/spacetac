@@ -37,10 +37,11 @@ module SpaceTac.Game {
         }
 
         // Add an engine, allowing a ship to move *distance*, for each action points
-        static addEngine(ship: Ship, distance: number): void {
+        static addEngine(ship: Ship, distance: number): Equipment {
             var equipment = this.getOrGenEquipment(ship, SlotType.Engine, new Equipments.ConventionalEngine());
             equipment.ap_usage = 1;
             equipment.distance = distance;
+            return equipment;
         }
 
         // Set a ship action points, adding/updating an equipment if needed

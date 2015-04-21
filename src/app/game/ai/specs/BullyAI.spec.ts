@@ -170,7 +170,8 @@ module SpaceTac.Game.AI.Specs {
             ai.ship = battle.fleets[0].ships[0];
 
             TestTools.setShipAP(ai.ship, 5);
-            TestTools.addEngine(ai.ship, 100);
+            var engine = TestTools.addEngine(ai.ship, 100);
+            (<MoveAction>engine.action).safety_distance = 20;
 
             var maneuver: BullyManeuver;
 

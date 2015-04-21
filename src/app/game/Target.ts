@@ -3,6 +3,22 @@
 module SpaceTac.Game {
     "use strict";
 
+    // Find the nearest intersection between a line and a circle
+    //  Circle is supposed to be centered at (0,0)
+    //  Nearest intersection to (x1,y1) is returned
+    function intersectLineCircle(x1: number, y1: number, x2: number, y2: number, r: number): [number, number] {
+        // See http://mathworld.wolfram.com/Circle-LineIntersection.html
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+        var dr = Math.sqrt(dx * dx + dy * dy);
+        var d = x1 * y2 - x2 * y1;
+        var delta = r * r * dr * dr - d * d;
+
+        var rx = (d * dy - dx * Math.sqrt(delta)) / (dr * dr);
+        var ry = (-d * dx - dy * Math.sqrt(delta)) / (dr * dr);
+        return [rx, ry];
+    }
+
     // Target for a capability
     //  This could be a location in space, or a ship
     export class Target extends Serializable {
@@ -65,6 +81,25 @@ module SpaceTac.Game {
             } else {
                 var factor = radius / length;
                 return Target.newFromLocation(x + dx * factor, y + dy * factor);
+            }
+        }
+
+        // Force a target to stay out of a given circle
+        //  If the target is in the circle, it will be moved to the nearest intersection between targetting line
+        //  and the circle
+        //  May return the original target if it's already out of the circle
+        moveOutOfCircle(circlex: number, circley: number, radius: number, sourcex: number, sourcey: number): Target {
+            var dx = this.x - circlex;
+            var dy = this.y - circley;
+            var length = Math.sqrt(dx * dx + dy * dy);
+            if (length >= radius) {
+                // Already out of circle
+                return this;
+            } else {
+                // Find nearest intersection with circle
+                var res = intersectLineCircle(sourcex - circlex, sourcey - circley,
+                    this.x - circlex, this.y - circley, radius);
+                return Target.newFromLocation(res[0] + circlex, res[1] + circley);
             }
         }
     }

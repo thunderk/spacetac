@@ -5,7 +5,9 @@ module SpaceTac.Game {
 
     describe("MoveAction", function () {
         it("checks movement against remaining AP", function () {
-            var ship = new Ship(null, "Test");
+            var ship = new Ship();
+            var battle = new Battle(ship.fleet);
+            battle.playing_ship = ship;
             ship.ap_current.setMaximal(20);
             ship.ap_current.set(6);
             ship.arena_x = 0;
@@ -15,14 +17,14 @@ module SpaceTac.Game {
             engine.ap_usage = 2;
             var action = new MoveAction(engine);
 
-            var result = action.checkTarget(null, ship, Target.newFromLocation(0, 2));
+            var result = action.checkTarget(battle, ship, Target.newFromLocation(0, 2));
             expect(result).toEqual(Target.newFromLocation(0, 2));
 
-            result = action.checkTarget(null, ship, Target.newFromLocation(0, 8));
+            result = action.checkTarget(battle, ship, Target.newFromLocation(0, 8));
             expect(result).toEqual(Target.newFromLocation(0, 3));
 
             ship.ap_current.set(0);
-            result = action.checkTarget(null, ship, Target.newFromLocation(0, 8));
+            result = action.checkTarget(battle, ship, Target.newFromLocation(0, 8));
             expect(result).toBeNull();
         });
 
@@ -75,6 +77,34 @@ module SpaceTac.Game {
             expect(battle.log.events[1].ship).toBe(ship);
             expect((<AttributeChangeEvent>battle.log.events[1]).attribute).toEqual(
                 new Attribute(AttributeCode.AP, 0, 20));
+        });
+
+        it("can't move too much near another ship", function () {
+            var battle = TestTools.createBattle(1, 1);
+            var ship = battle.fleets[0].ships[0];
+            var enemy = battle.fleets[1].ships[0];
+            var engine = TestTools.addEngine(ship, 10);
+            TestTools.setShipAP(ship, 100);
+            ship.setArenaPosition(5, 5);
+            enemy.setArenaPosition(10, 5);
+
+            var action = new MoveAction(engine);
+            action.safety_distance = 2;
+
+            var result = action.checkLocationTarget(battle, ship, Target.newFromLocation(7, 5));
+            expect(result).toEqual(Target.newFromLocation(7, 5));
+
+            result = action.checkLocationTarget(battle, ship, Target.newFromLocation(8, 5));
+            expect(result).toEqual(Target.newFromLocation(8, 5));
+
+            result = action.checkLocationTarget(battle, ship, Target.newFromLocation(9, 5));
+            expect(result).toEqual(Target.newFromLocation(8, 5));
+
+            result = action.checkLocationTarget(battle, ship, Target.newFromLocation(10, 5));
+            expect(result).toEqual(Target.newFromLocation(8, 5));
+
+            result = action.checkLocationTarget(battle, ship, Target.newFromLocation(12, 5));
+            expect(result).toEqual(Target.newFromLocation(12, 5));
         });
     });
 }

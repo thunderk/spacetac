@@ -151,15 +151,16 @@ module SpaceTac.Game.AI {
                 return null;
             }
 
-            var MIN_DISTANCE = 20;
             var APPROACH_FACTOR = 0.5;
 
             var picked = this.random.choice(enemies);
             var target = Target.newFromShip(picked);
             var distance = target.getDistanceTo(Target.newFromShip(this.ship));
             var engine = this.getEngine();
-            if (distance > MIN_DISTANCE) { // Don't move too close
-                target = target.constraintInRange(this.ship.arena_x, this.ship.arena_y, (distance - MIN_DISTANCE) * APPROACH_FACTOR);
+            var safety_distance = (<MoveAction>engine.action).safety_distance;
+            if (distance > safety_distance) { // Don't move too close
+                target = target.constraintInRange(this.ship.arena_x, this.ship.arena_y,
+                    (distance - safety_distance) * APPROACH_FACTOR);
                 target = engine.action.checkLocationTarget(this.fleet.battle, this.ship, target);
                 return new BullyManeuver(new Maneuver(this.ship, engine, target));
             } else {

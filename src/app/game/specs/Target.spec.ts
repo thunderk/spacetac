@@ -39,5 +39,16 @@ module SpaceTac.Game.Specs {
             expect(target.constraintInRange(1, 1, Math.sqrt(80) * 0.5)).toEqual(Target.newFromLocation(3, 5));
             expect(target.constraintInRange(1, 1, 70)).toBe(target);
         });
+
+        it("pushes a target out of a given circle", () => {
+            var target = Target.newFromLocation(5, 5);
+            expect(target.moveOutOfCircle(0, 0, 3, 0, 0)).toBe(target);
+            expect(target.moveOutOfCircle(6, 6, 3, 0, 0)).toEqual(Target.newFromLocation(3.8786796564403576, 3.8786796564403576));
+            expect(target.moveOutOfCircle(4, 4, 3, 10, 10)).toEqual(Target.newFromLocation(6.121320343559642, 6.121320343559642));
+            expect(target.moveOutOfCircle(5, 8, 6, 5, 0)).toEqual(Target.newFromLocation(5, 2));
+            expect(target.moveOutOfCircle(5, 2, 6, 5, 10)).toEqual(Target.newFromLocation(5, 8));
+            expect(target.moveOutOfCircle(8, 5, 6, 0, 5)).toEqual(Target.newFromLocation(2, 5));
+            expect(target.moveOutOfCircle(2, 5, 6, 10, 5)).toEqual(Target.newFromLocation(8, 5));
+        });
     });
 }
