@@ -110,6 +110,9 @@ module SpaceTac.View {
             // "Battle" animation
             this.displayFightMessage();
 
+            // BGM
+            this.gameui.audio.startMusic("full-on");
+
             // Key mapping
             var key_space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
             key_space.onUp.add(this.onSpaceKeyPressed, this);

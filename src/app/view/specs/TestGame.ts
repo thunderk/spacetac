@@ -11,7 +11,7 @@ module SpaceTac.View.Specs {
             spyOn(console, "log").and.stub();
             spyOn(console, "warn").and.stub();
 
-            var game = new Phaser.Game(500, 500, Phaser.HEADLESS);
+            var game = new GameUI(true);
 
             if (!state) {
                 state = new Phaser.State();

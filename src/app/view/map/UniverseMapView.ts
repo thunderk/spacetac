@@ -40,6 +40,8 @@ module SpaceTac.View {
 
             this.drawAll();
 
+            this.gameui.audio.startMusic("walking-along");
+
             // Inputs
             this.input.keyboard.addKey(Phaser.Keyboard.R).onUp.addOnce(this.revealAll, this);
         }

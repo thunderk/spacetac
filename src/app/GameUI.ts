@@ -11,8 +11,13 @@ module SpaceTac {
         // Current focused star system
         star: Game.Star;
 
-        constructor() {
-            super(1280, 720, Phaser.AUTO, '-space-tac');
+        // Audio manager
+        audio: View.Audio;
+
+        constructor(headless: boolean = false) {
+            super(1280, 720, headless ? Phaser.HEADLESS : Phaser.AUTO, '-space-tac');
+
+            this.audio = new View.Audio(this);
 
             this.session = new Game.GameSession();
             this.star = null;

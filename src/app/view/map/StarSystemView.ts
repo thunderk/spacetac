@@ -50,6 +50,8 @@ module SpaceTac.View {
             this.button_jump.visible = false;
 
             this.drawAll();
+
+            this.gameui.audio.startMusic("walking-along");
         }
 
         // Leaving the view, unbind and destroy

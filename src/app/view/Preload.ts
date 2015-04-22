@@ -66,6 +66,10 @@ module SpaceTac.View {
             // Load sounds
             this.loadSound("battle/ship-change.wav");
             this.loadSound("battle/weapon-bullets.wav");
+
+            // Load musics
+            this.loadSound("music/walking-along.mp3");
+            this.loadSound("music/full-on.mp3");
         }
 
         create() {
@@ -77,7 +81,7 @@ module SpaceTac.View {
         }
 
         private loadSound(path: string) {
-            var key = path.replace(/\//g, "-").replace(".wav", "");
+            var key = path.replace(/\//g, "-").replace(".wav", "").replace(".mp3", "");
             this.load.audio(key, "assets/sounds/" + path);
         }
     }

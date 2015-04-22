@@ -43,6 +43,10 @@ module SpaceTac.View {
                 this.gameui.loadGame();
                 this.game.state.start("router");
             });
+            var key_m = this.input.keyboard.addKey(Phaser.Keyboard.M);
+            key_m.onUp.add(() => {
+                this.gameui.audio.toggleMute();
+            });
         }
     }
 }

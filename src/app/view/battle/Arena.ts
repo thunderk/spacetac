@@ -120,7 +120,7 @@ module SpaceTac.View {
             }
             this.playing = arena_ship;
 
-            Sound.playOnce(this.game, "battle-ship-change");
+            this.battleview.gameui.audio.playOnce("battle-ship-change");
         }
     }
 }
