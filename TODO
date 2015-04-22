@@ -1,5 +1,6 @@
-* Display active effects on ships
 * Add a cheat system, to use for development (win battle, revive killed ship ...)
 * Add a defeat screen (game over for now)
 * Add a victory screen, with looting
 * Add retreat from battle
+* Refactor the tooltip system to use it more
+* Flash ship icons that receive damage

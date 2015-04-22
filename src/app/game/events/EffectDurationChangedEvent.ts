@@ -12,7 +12,7 @@ module SpaceTac.Game {
         previous: number;
 
         constructor(ship: Ship, effect: TemporaryEffect, previous: number) {
-            super("effectadd", ship);
+            super("effectduration", ship);
 
             this.effect = effect;
             this.previous = previous;

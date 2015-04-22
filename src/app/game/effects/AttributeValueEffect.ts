@@ -18,5 +18,9 @@ module SpaceTac.Game {
             this.attrcode = attrcode;
             this.value = value;
         }
+
+        getFullCode(): string {
+            return this.code + "-" + AttributeCode[this.attrcode].toLowerCase().replace("_", "");
+        }
     }
 }

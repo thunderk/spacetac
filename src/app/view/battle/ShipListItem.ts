@@ -30,6 +30,9 @@ module SpaceTac.View {
         // Enemy indicator
         layer_enemy: Phaser.Image;
 
+        // Active effects group
+        active_effects: Phaser.Group;
+
         // Create a ship button for the battle ship list
         constructor(list: ShipList, x: number, y: number, ship: Game.Ship, owned: boolean) {
             this.ship = ship;
@@ -61,23 +64,32 @@ module SpaceTac.View {
             this.layer_hover.visible = false;
             this.addChild(this.layer_hover);
 
-            this.hull = ValueBar.newStyled(list.battleview.game, "battle-shiplist-hull", 76, 23);
+            this.hull = ValueBar.newStyled(list.battleview.game, "battle-shiplist-hull", 76, 26);
             this.addChild(this.hull);
 
-            this.shield = ValueBar.newStyled(list.battleview.game, "battle-shiplist-shield", 76, 35);
+            this.shield = ValueBar.newStyled(list.battleview.game, "battle-shiplist-shield", 76, 44);
             this.addChild(this.shield);
 
-            this.ap = ValueBar.newStyled(list.battleview.game, "battle-shiplist-ap", 76, 47);
-            this.addChild(this.ap);
+            this.active_effects = new Phaser.Group(this.game);
+            this.addChild(this.active_effects);
 
             this.updateAttributes();
+            this.updateEffects();
         }
 
         // Update attributes from associated ship
         updateAttributes() {
             this.attributeChanged(this.ship.hull);
             this.attributeChanged(this.ship.shield);
-            this.attributeChanged(this.ship.ap_current);
+        }
+
+        // Update effects applied on the ship
+        updateEffects() {
+            this.active_effects.removeAll(true);
+            this.ship.temporary_effects.forEach((effect: Game.TemporaryEffect) => {
+                var icon = new EffectDisplay(this.game, effect);
+                this.active_effects.addChild(icon);
+            });
         }
 
         // Called when an attribute for this ship changed through the battle log
@@ -86,8 +98,6 @@ module SpaceTac.View {
                 this.hull.setValue(attribute.current, attribute.maximal);
             } else if (attribute.code === Game.AttributeCode.Shield) {
                 this.shield.setValue(attribute.current, attribute.maximal);
-            } else if (attribute.code === Game.AttributeCode.AP) {
-                this.ap.setValue(attribute.current, attribute.maximal);
             }
         }
 

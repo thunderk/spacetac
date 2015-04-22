@@ -25,5 +25,9 @@ module SpaceTac.Game {
                 ship.setAttribute(ship.attributes.getRawAttr(this.attrcode), this.value);
             }
         }
-    }
+
+        getFullCode(): string {
+            return this.code + "-" + AttributeCode[this.attrcode].toLowerCase().replace("_", "");
+        }
+   }
 }

@@ -26,5 +26,10 @@ module SpaceTac.Game {
         singleApply(ship: Ship, on_stick: boolean): void {
             // Abstract
         }
+
+        // Get a full code, that can be used to identify this effect (for example: "attrlimit-aprecovery")
+        getFullCode(): string {
+            return this.code;
+        }
     }
 }

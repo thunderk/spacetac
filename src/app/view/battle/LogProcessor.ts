@@ -54,6 +54,11 @@ module SpaceTac.View {
                 case "endbattle":
                     this.processEndBattleEvent(<Game.EndBattleEvent>event);
                     break;
+                case "effectadd":
+                case "effectduration":
+                case "effectdel":
+                    this.processEffectEvent(event);
+                    break;
             }
         }
 
@@ -139,6 +144,14 @@ module SpaceTac.View {
                 this.view.game.state.start("router");
             } else {
                 // TODO Game over ?
+            }
+        }
+
+        // Temporary effect on ship added, changed or removed
+        private processEffectEvent(event: Game.BaseLogEvent): void {
+            var item = this.view.ship_list.findItem(event.ship);
+            if (item) {
+                item.updateEffects();
             }
         }
     }
