@@ -77,6 +77,11 @@ module SpaceTac.View {
             });
         }
 
+        // Get the current GameUI instance
+        getGame(): GameUI {
+            return this.battleview.gameui;
+        }
+
         // Remove a ship sprite
         removeShip(ship: Game.Ship): void {
             var sprite = this.findShipSprite(ship);

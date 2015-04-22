@@ -69,7 +69,7 @@ module SpaceTac.View {
 
         // Submachine gun effect (small chain of bullets)
         private gunEffect(): void {
-            this.arena.game.sound.play("battle-weapon-bullets");
+            this.arena.getGame().audio.playOnce("battle-weapon-bullets");
 
             var source = this.arena.toGlobal(new PIXI.Point(this.source.x, this.source.y));
             var destination = this.arena.toGlobal(new PIXI.Point(this.destination.x, this.destination.y));
