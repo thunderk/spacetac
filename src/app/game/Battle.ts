@@ -91,8 +91,8 @@ module SpaceTac.Game {
         // Defines the initial ship positions of all engaged fleets
         placeShips(): void {
             this.first_turn = true;
-            this.placeFleetShips(this.fleets[0], 50, 300, 0);
-            this.placeFleetShips(this.fleets[1], 800, 300, Math.PI);
+            this.placeFleetShips(this.fleets[0], 50, 310, 0);
+            this.placeFleetShips(this.fleets[1], 800, 310, Math.PI);
         }
 
         // Count the number of fleets still alive
@@ -244,7 +244,7 @@ module SpaceTac.Game {
         //  facing_angle is the forward angle in radians
         private placeFleetShips(fleet: Fleet, x: number, y: number, facing_angle: number): void {
             var side_angle = facing_angle + Math.PI * 0.5;
-            var spacing = 150;
+            var spacing = 140;
             var total_length = spacing * (fleet.ships.length - 1);
             var dx = Math.cos(side_angle);
             var dy = Math.sin(side_angle);
