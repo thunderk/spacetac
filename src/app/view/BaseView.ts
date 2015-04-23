@@ -9,6 +9,9 @@ module SpaceTac.View {
         // Message notifications
         messages: Messages;
 
+        // Input and key bindings
+        inputs: InputManager;
+
         // Get the size of display
         getWidth(): number {
             return this.game.width || 1280;
@@ -33,20 +36,8 @@ module SpaceTac.View {
             // Notifications
             this.messages = new Messages(this);
 
-            // Key mapping
-            var key_s = this.input.keyboard.addKey(Phaser.Keyboard.S);
-            key_s.onUp.add(() => {
-                this.gameui.saveGame();
-            });
-            var key_l = this.input.keyboard.addKey(Phaser.Keyboard.L);
-            key_l.onUp.add(() => {
-                this.gameui.loadGame();
-                this.game.state.start("router");
-            });
-            var key_m = this.input.keyboard.addKey(Phaser.Keyboard.M);
-            key_m.onUp.add(() => {
-                this.gameui.audio.toggleMute();
-            });
+            // Input manager
+            this.inputs = new InputManager(this);
         }
     }
 }

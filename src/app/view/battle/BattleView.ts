@@ -114,8 +114,10 @@ module SpaceTac.View {
             this.gameui.audio.startMusic("full-on");
 
             // Key mapping
-            var key_space = this.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-            key_space.onUp.add(this.onSpaceKeyPressed, this);
+            this.inputs.bind(Phaser.Keyboard.SPACEBAR, "End turn", this.onSpaceKeyPressed);
+            this.inputs.bindCheat(Phaser.Keyboard.W, "Win current battle", () => {
+                this.battle.endBattle(this.player.fleet);
+            });
         }
 
         // Leaving the view, we unbind the battle

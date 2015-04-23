@@ -43,7 +43,7 @@ module SpaceTac.View {
             this.gameui.audio.startMusic("walking-along");
 
             // Inputs
-            this.input.keyboard.addKey(Phaser.Keyboard.R).onUp.addOnce(this.revealAll, this);
+            this.inputs.bindCheat(Phaser.Keyboard.R, "Reveal whole map", this.revealAll);
         }
 
         // Leaving the view, unbind and destroy
@@ -107,7 +107,6 @@ module SpaceTac.View {
 
         // Reveal the whole map (this is a cheat)
         revealAll(): void {
-            console.warn("Cheat : reveal whole map");
             this.universe.stars.forEach((star: Game.Star) => {
                 this.player.setVisited(star);
             });
