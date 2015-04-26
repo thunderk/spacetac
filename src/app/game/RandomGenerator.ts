@@ -1,13 +1,17 @@
+/// <reference path="Serializable.ts"/>
+
 module SpaceTac.Game {
     "use strict";
 
     // Random generator, used in all throws
-    export class RandomGenerator {
+    export class RandomGenerator extends Serializable {
         // Array of next values, empty for a correct generator
         private fake_values: number[];
 
         // Basic constructor (can specify fake values as arguments)
         constructor(...values: number[]) {
+            super();
+
             this.fake_values = [];
 
             values.forEach((value: number) => {

@@ -6,14 +6,14 @@ module SpaceTac.Game.Specs {
     function applyGameSteps(session: GameSession): void {
         var battle = session.getBattle();
         battle.advanceToNextShip();
-        // TODO Make some moves (IA?)
+        // TODO Make some moves (AI?)
         battle.endBattle(battle.fleets[0]);
     }
 
     describe("GameSession", () => {
         it("serializes to a string", () => {
             var session = new GameSession();
-            session.startQuickBattle(false);
+            session.startQuickBattle(true);
 
             // Dump and reload
             var dumped = session.saveToString();
