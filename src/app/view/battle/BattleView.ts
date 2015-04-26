@@ -238,7 +238,7 @@ module SpaceTac.View {
                 if (listitem && sprite) {
                     var listitemhover = listitem.layer_hover;
                     var spritehover = sprite.hover;
-                    var start = listitemhover.toGlobal(new PIXI.Point(listitemhover.width, listitemhover.height / 2));
+                    var start = listitemhover.toGlobal(new PIXI.Point(listitemhover.width / 2, 0));
                     var end = spritehover.toGlobal(new PIXI.Point(-spritehover.width / 2, 0));
 
                     this.line_hover_left.clear();

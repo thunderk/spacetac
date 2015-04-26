@@ -25,10 +25,24 @@ module SpaceTac.View {
             super(battleview.game, battleview.ui);
             battleview.ui.add(this);
 
+            this.addBackground();
+
             if (battleview.battle) {
                 this.setShipsFromBattle(battleview.battle);
             }
-            this.update();
+        }
+
+        // Add background children
+        addBackground(): void {
+            var background = new Phaser.Graphics(this.game, 0, 0);
+            background.beginFill(0xFFFFFFFF, 0.9);
+            background.drawRect(0, 0, 224, 84);
+            background.endFill();
+            background.beginFill(0xFFFFFFFF, 0.45);
+            background.drawRect(0, 84, 206, this.battleview.getHeight() - 84);
+            background.endFill();
+            background.visible = true;
+            this.addChild(background);
         }
 
         // Clear the action icons
@@ -87,9 +101,9 @@ module SpaceTac.View {
                 if (position === 0) {
                     item.moveTo(12, 12, animate);
                 } else {
-                    item.moveTo(3, 20 + position * 63, animate);
+                    item.moveTo(3, 26 + position * 63, animate);
                 }
-                this.setChildIndex(item, position);
+                this.setChildIndex(item, 1 + position);
             });
         }
 
