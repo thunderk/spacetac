@@ -27,12 +27,13 @@ module SpaceTac.View {
 
         // Start a background music
         startMusic(key: string): void {
+            key = "music-" + key;
             if (this.isActive()) {
                 if (this.music && this.music.key !== key) {
                     this.stopMusic();
                 }
                 if (!this.music) {
-                    this.music = this.game.sound.play("music-" + key, 1, true);
+                    this.music = this.game.sound.play(key, 1, true);
                 }
             }
         }
