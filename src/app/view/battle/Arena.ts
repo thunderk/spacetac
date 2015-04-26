@@ -34,9 +34,12 @@ module SpaceTac.View {
 
             super(battleview.game);
 
+            var offset_x = 206;
+            var offset_y = 84;
+
             var background = new Phaser.Button(battleview.game, 0, 0, "battle-arena-background");
-            var expected_width = battleview.getWidth() - 416;
-            var expected_height = battleview.getHeight() - 100;
+            var expected_width = battleview.getWidth() - offset_x;
+            var expected_height = battleview.getHeight() - offset_y;
             background.scale.set(expected_width / background.width, expected_height / background.height);
             this.background = background;
 
@@ -53,7 +56,7 @@ module SpaceTac.View {
                 }
             }, null);
 
-            this.position.set(196, 100);
+            this.position.set(offset_x, offset_y);
             this.addChild(this.background);
 
             this.range_hint = new RangeHint(this);

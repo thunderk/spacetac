@@ -91,8 +91,8 @@ module SpaceTac.Game {
         // Defines the initial ship positions of all engaged fleets
         placeShips(): void {
             this.first_turn = true;
-            this.placeFleetShips(this.fleets[0], 50, 310, 0);
-            this.placeFleetShips(this.fleets[1], 800, 310, Math.PI);
+            this.placeFleetShips(this.fleets[0], 50, 320, 0);
+            this.placeFleetShips(this.fleets[1], 1020, 320, Math.PI);
         }
 
         // Count the number of fleets still alive

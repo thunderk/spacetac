@@ -74,7 +74,6 @@ module SpaceTac.View {
         private processShipChangeEvent(event: Game.ShipChangeEvent): void {
             this.view.arena.setShipPlaying(event.target.ship);
             this.view.ship_list.setPlaying(event.target.ship);
-            this.view.card_playing.setShip(event.target.ship);
             this.view.action_bar.setShip(event.target.ship);
 
             this.view.setInteractionEnabled(this.battle.canPlay(this.view.player));
@@ -101,12 +100,6 @@ module SpaceTac.View {
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {
                 item.attributeChanged(event.attribute);
-            }
-            if (event.ship === this.view.card_playing.ship) {
-                this.view.card_playing.attributeChanged(event.attribute);
-            }
-            if (event.ship === this.view.card_hovered.ship) {
-                this.view.card_hovered.attributeChanged(event.attribute);
             }
         }
 
