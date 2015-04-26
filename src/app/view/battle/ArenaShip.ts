@@ -23,7 +23,6 @@ module SpaceTac.View {
 
             // Add ship sprite
             this.sprite = new Phaser.Button(battleview.game, 0, 0, "ship-scout-sprite");
-            this.sprite.scale.set(0.1, 0.1);
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.addChild(this.sprite);

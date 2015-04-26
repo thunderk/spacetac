@@ -41,8 +41,6 @@ module SpaceTac.View {
             this.loadImage("battle/actions/endturn.png");
             this.loadImage("battle/actions/fire-gatlinggun.png");
             this.loadImage("battle/weapon/bullet.png");
-            this.loadImage("ship/scout/sprite.png");
-            this.loadImage("ship/scout/portrait.png");
             this.loadImage("common/standard-bar-background.png");
             this.loadImage("common/standard-bar-foreground.png");
             this.loadImage("map/star-icon.png");
@@ -51,6 +49,10 @@ module SpaceTac.View {
             this.loadImage("map/warp-icon.png");
             this.loadImage("map/button-back.png");
             this.loadImage("map/button-jump.png");
+
+            // Load ships
+            this.loadShip("scout");
+            this.loadShip("whirlwind");
 
             // Load sounds
             this.loadSound("battle/ship-change.wav");
@@ -63,6 +65,11 @@ module SpaceTac.View {
 
         create() {
             this.game.state.start("mainmenu");
+        }
+
+        private loadShip(name: string) {
+            this.loadImage("ship/" + name + "/sprite.png");
+            this.loadImage("ship/" + name + "/portrait.png");
         }
 
         private loadImage(path: string) {
