@@ -31,13 +31,6 @@ module SpaceTac.View {
             this.update();
         }
 
-        // Update the bar status (and position)
-        update() {
-            super.update();
-
-            this.y = 76;
-        }
-
         // Clear the action icons
         clearAll(): void {
             this.ships.forEach((ship: ShipListItem) => {
@@ -52,12 +45,13 @@ module SpaceTac.View {
             battle.play_order.forEach((ship: Game.Ship) => {
                 this.addShip(ship);
             }, this);
+            this.updateItemsLocation();
         }
 
         // Add a ship icon
         addShip(ship: Game.Ship): ShipListItem {
             var owned = ship.getPlayer() === this.battleview.player;
-            var result = new ShipListItem(this, 0, this.ships.length * 80, ship, owned);
+            var result = new ShipListItem(this, -200, 0, ship, owned);
             this.ships.push(result);
             this.add(result);
             return result;
@@ -75,6 +69,30 @@ module SpaceTac.View {
             return found;
         }
 
+        // Find the play position in play_order for a given ship (0 is currently playing)
+        findPlayPosition(ship: Game.Ship): number {
+            var battle = this.battleview.battle;
+            var idx = battle.play_order.indexOf(ship);
+            var diff = idx - battle.playing_ship_index;
+            if (diff < 0) {
+                diff += battle.play_order.length;
+            }
+            return diff;
+        }
+
+        // Update the locations of all items
+        updateItemsLocation(animate: boolean = true): void {
+            this.ships.forEach((item: ShipListItem) => {
+                var position = this.findPlayPosition(item.ship);
+                if (position === 0) {
+                    item.moveTo(12, 12, animate);
+                } else {
+                    item.moveTo(3, 20 + position * 63, animate);
+                }
+                this.setChildIndex(item, position);
+            });
+        }
+
         // Remove a ship from the list
         removeShip(ship: Game.Ship): void {
             var item = this.findItem(ship);
@@ -82,17 +100,13 @@ module SpaceTac.View {
                 this.ships.splice(this.ships.indexOf(item), 1);
                 item.destroy();
             }
+            this.updateItemsLocation();
         }
 
         // Set the currently playing ship
         setPlaying(ship: Game.Ship): void {
-            if (this.playing) {
-                this.playing.setPlaying(false);
-            }
             this.playing = this.findItem(ship);
-            if (this.playing) {
-                this.playing.setPlaying(true);
-            }
+            this.updateItemsLocation();
         }
 
         // Set the currently hovered ship

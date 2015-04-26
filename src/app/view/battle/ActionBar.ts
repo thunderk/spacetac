@@ -28,7 +28,7 @@ module SpaceTac.View {
             this.ship = null;
 
             super(battleview.game);
-            this.x = 170;
+            this.x = 230;
             this.y = 0;
             battleview.ui.add(this);
 

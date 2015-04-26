@@ -19,12 +19,8 @@ module SpaceTac.View {
             this.loadImage("menu/button.png");
             this.loadImage("battle/waiting.png");
             this.loadImage("battle/shiplist-base.png");
-            this.loadImage("battle/shiplist-normal.png");
-            this.loadImage("battle/shiplist-playing.png");
             this.loadImage("battle/shiplist-own.png");
             this.loadImage("battle/shiplist-enemy.png");
-            this.loadImage("battle/shiplist-ap-empty.png");
-            this.loadImage("battle/shiplist-ap-full.png");
             this.loadImage("battle/shiplist-hull-empty.png");
             this.loadImage("battle/shiplist-hull-full.png");
             this.loadImage("battle/shiplist-shield-empty.png");
