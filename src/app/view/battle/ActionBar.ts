@@ -11,6 +11,7 @@ module SpaceTac.View {
 
         // Progress bar displaying action points
         actionpoints: ValueBar;
+        actionpointstemp: ValueBar;
 
         // Tooltip to display hovered action info
         tooltip: ActionTooltip;
@@ -37,8 +38,11 @@ module SpaceTac.View {
 
             // Action points progress bar
             this.actionpoints = new ValueBar(this.game, 119, 76, "battle-actionpointsempty");
-            this.actionpoints.setBarImage("battle-actionpointsfull");
+            this.actionpoints.setBarImage("battle-actionpointspart");
             this.addChild(this.actionpoints);
+            this.actionpointstemp = new ValueBar(this.game, 119, 76, "battle-actionpointsempty");
+            this.actionpointstemp.setBarImage("battle-actionpointsfull");
+            this.addChild(this.actionpointstemp);
 
             // Cancel button
             this.cancel = new Phaser.Button(this.game, 849, 8, "battle-actionbar-cancel", () => {
@@ -77,9 +81,12 @@ module SpaceTac.View {
         updateActionPoints(): void {
             if (this.ship) {
                 this.actionpoints.setValue(this.ship.ap_current.current, this.ship.ap_current.maximal);
+                this.actionpointstemp.setValue(this.ship.ap_current.current, this.ship.ap_current.maximal);
                 this.actionpoints.visible = true;
+                this.actionpointstemp.visible = true;
             } else {
                 this.actionpoints.visible = false;
+                this.actionpointstemp.visible = false;
             }
         }
 
@@ -94,6 +101,7 @@ module SpaceTac.View {
             this.actions.forEach((icon: ActionIcon) => {
                 icon.updateFadingStatus(remaining_ap);
             });
+            this.actionpointstemp.setValue(remaining_ap, this.ship.ap_current.maximal);
         }
 
         // Set action icons from selected ship

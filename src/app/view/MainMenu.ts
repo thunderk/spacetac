@@ -8,7 +8,14 @@ module SpaceTac.View {
         button_quick_battle: Phaser.Button;
         button_load_game: Phaser.Button;
 
-        preload() {
+        create() {
+            // Title
+            var text = new Phaser.Text(this.game, this.getMidWidth(), this.getHeight() * 0.4, "SpaceTac",
+                {align: "center", font: "bold 42px Arial", fill: "#4050f2"});
+            text.anchor.set(0.5, 0.5);
+            this.add.existing(text);
+
+            // Menu buttons
             var basex = this.getMidWidth();
             var y = Math.floor(this.getHeight() * 0.6);
             var space = this.getWidth() * 0.2;

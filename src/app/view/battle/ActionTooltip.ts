@@ -17,7 +17,7 @@ module SpaceTac.View {
         // Set current action to display, null to hide
         setAction(action: ActionIcon): void {
             if (action) {
-                this.position.set(action.x, action.y + action.height);
+                this.position.set(action.x, action.y + action.height + action.bar.actionpoints.height);
                 this.title.setText(action.action.code);
                 Animation.fadeIn(this.game, this, 200);
             } else {

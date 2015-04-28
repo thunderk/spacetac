@@ -73,7 +73,7 @@ module SpaceTac.View {
 
         // Set current value
         setValue(current: number, maximal: number = -1) {
-            this.current = current;
+            this.current = current > 0 ? current : 0;
             if (maximal >= 0) {
                 this.maximal = maximal;
             }
