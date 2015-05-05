@@ -13,16 +13,20 @@ module SpaceTac.Game {
 
         // Generate a ship of a given level
         //  The ship will not be named, nor will be a member of any fleet
-        generate(level: number): Ship {
+        generate(level: number, model: ShipModel = null): Ship {
             var result = new Ship();
             var loot = new LootGenerator(this.random);
 
-            // Add equipment slots
-            result.addSlot(SlotType.Armor);
-            result.addSlot(SlotType.Engine);
-            result.addSlot(SlotType.Power);
-            result.addSlot(SlotType.Shield);
-            result.addSlot(SlotType.Weapon);
+            if (!model) {
+                // Get a random model
+                model = ShipModel.getRandomModel(level, this.random);
+            }
+
+            // Apply model
+            result.model = model.code;
+            model.slots.forEach((slot: SlotType) => {
+                result.addSlot(slot);
+            });
 
             // Fill equipment slots
             result.slots.forEach((slot: Slot) => {

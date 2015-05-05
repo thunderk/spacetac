@@ -41,7 +41,7 @@ module SpaceTac.View {
             this.layer_base = new Phaser.Image(this.game, 0, 0, "battle-shiplist-base", 0);
             this.addChild(this.layer_base);
 
-            this.layer_portrait = new Phaser.Image(this.game, 30, 30, "ship-scout-portrait", 0);
+            this.layer_portrait = new Phaser.Image(this.game, 30, 30, "ship-" + ship.model + "-portrait", 0);
             this.layer_portrait.anchor.set(0.5, 0.5);
             this.layer_portrait.scale.set(0.19, 0.19);
             this.addChild(this.layer_portrait);

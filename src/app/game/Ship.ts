@@ -14,6 +14,9 @@ module SpaceTac.Game {
         // Name of the ship
         name: string;
 
+        // Code of the ShipModel used to create it
+        model: string;
+
         // Flag indicating if the ship is alive
         alive: boolean;
 
@@ -67,6 +70,7 @@ module SpaceTac.Game {
             this.fleet = fleet || new Fleet();
             this.level = 1;
             this.name = name;
+            this.model = "default";
             this.alive = true;
             this.initiative = this.newAttribute(AttributeCode.Initiative);
             this.initiative.setMaximal(1);

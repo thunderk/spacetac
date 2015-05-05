@@ -1,6 +1,6 @@
 /// <reference path="../../definitions/jasmine.d.ts"/>
 
-module SpaceTac.Game {
+module SpaceTac.Game.Specs {
     "use strict";
 
     describe("Ship", function () {
