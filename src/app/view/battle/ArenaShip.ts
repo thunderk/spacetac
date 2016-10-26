@@ -17,9 +17,9 @@ module SpaceTac.View {
 
         // Create a ship sprite usable in the Arena
         constructor(battleview: BattleView, ship: Game.Ship) {
-            this.ship = ship;
-
             super(battleview.game);
+
+            this.ship = ship;
 
             // Add ship sprite
             this.sprite = new Phaser.Button(battleview.game, 0, 0, "ship-" + ship.model + "-sprite");

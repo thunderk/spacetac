@@ -1,0 +1,23 @@
+{
+  "name": "spacetac",
+  "version": "0.1.0",
+  "description": "A tactical RPG set in space",
+  "main": "src/build.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "simple-server out 8012"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://code.thunderk.net/michael/spacetac.git"
+  },
+  "author": "Michael Lemaire",
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "^1.7.9",
+    "jasmine": "^2.5.2",
+    "simple-server": "^1.0.1",
+    "typescript": "^2.0.6"
+  }
+}

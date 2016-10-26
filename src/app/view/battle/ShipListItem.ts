@@ -26,9 +26,9 @@ module SpaceTac.View {
 
         // Create a ship button for the battle ship list
         constructor(list: ShipList, x: number, y: number, ship: Game.Ship, owned: boolean) {
-            this.ship = ship;
-
             super(list.battleview.game, x, y, owned ? "battle-shiplist-own" : "battle-shiplist-enemy");
+
+            this.ship = ship;
 
             this.input.useHandCursor = true;
             this.onInputOver.add(() => {

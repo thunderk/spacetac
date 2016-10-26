@@ -41,7 +41,6 @@ module SpaceTac.Game {
             this.filters.forEach((code: string) => {
                 if (event.code === code) {
                     filtered = true;
-                    return false;
                 }
             });
             if (filtered) {

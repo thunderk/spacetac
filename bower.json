@@ -1,0 +1,16 @@
+{
+  "name": "spacetac",
+  "description": "A tactical RPG set in space",
+  "main": "out/build.js",
+  "authors": [
+    "Michael Lemaire"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "dependencies": {
+    "phaser": "2.3.0",
+    "jasmine-core": "jasmine#^2.5.2",
+    "deep-diff": "0.3.0"
+  }
+}

@@ -35,12 +35,13 @@ module SpaceTac.View {
 
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Game.Ship, action: Game.BaseAction) {
+            super(bar.game, x, y, "battle-action-inactive");
+            
             this.bar = bar;
             this.battleview = bar.battleview;
             this.ship = ship;
             this.action = action;
 
-            super(bar.game, x, y, "battle-action-inactive");
             bar.addChild(this);
 
             // Active layer

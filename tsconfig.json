@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitAny": false,
+        "noImplicitThis": true,
+        "noImplicitReturns": true,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "out": "src/build.js",
+        "strictNullChecks": false,
+        "sourceMap": true,
+        "target": "es5"
+    },
+    "exclude": [
+        "out",
+        "src/vendor",
+        "coverage",
+        "node_modules"
+    ]
+}
+

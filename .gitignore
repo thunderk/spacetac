@@ -1,14 +1,7 @@
 .*
-/bin
-/bootstrap.py
-/build
-/parts
-/venv
-/dist
-/eggs
 /coverage
-/core
 /node_modules
 /src/vendor
+/src/build.*
 /graphics/**/*.blend?*
-
+*.log

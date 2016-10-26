@@ -70,9 +70,7 @@ module SpaceTac.Game {
         // Iterator over each code
         static forEachCode(callback: (code: AttributeCode) => void) {
             for (var val in AttributeCode) {
-                if (!isNaN(val)) {
-                    callback(<AttributeCode>parseInt(val, 10));
-                }
+                callback(<AttributeCode>parseInt(val, 10));
             }
         }
 

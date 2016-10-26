@@ -17,12 +17,13 @@ module SpaceTac.View {
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
+            super(battleview.game, battleview.ui);
+
             this.battleview = battleview;
             this.ships = [];
             this.playing = null;
             this.hovered = null;
 
-            super(battleview.game, battleview.ui);
             battleview.ui.add(this);
 
             this.addBackground();

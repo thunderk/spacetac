@@ -41,6 +41,7 @@ module SpaceTac {
                 return true;
             } else {
                 (<View.BaseView>this.state.getCurrentState()).messages.addMessage("Your browser does not support saving");
+                return false;
             }
         }
 
@@ -58,6 +59,7 @@ module SpaceTac {
                 }
             } else {
                 console.error("localStorage not available");
+                return false;
             }
         }
 
