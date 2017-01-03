@@ -1,8 +1,6 @@
 /// <reference path="BaseEffect.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Effect on attribute value
     //  Typically, these effects are summed up to define an attribute value
     export class AttributeValueEffect extends BaseEffect {

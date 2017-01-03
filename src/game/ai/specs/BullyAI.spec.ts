@@ -1,6 +1,4 @@
 module SpaceTac.Game.AI.Specs {
-    "use strict";
-
     describe("BullyAI", function () {
         it("lists enemies", function () {
             var battle = new Battle();

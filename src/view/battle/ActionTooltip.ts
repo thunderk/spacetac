@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Tooltip to display action information
     export class ActionTooltip extends Phaser.Sprite {
         // Action name

@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Icon to display an effect currently applied on a ship
     export class EffectDisplay extends Phaser.Image {
         constructor(game: Phaser.Game, effect: Game.TemporaryEffect) {

@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Main game universe
     export class Universe extends Serializable {
         // List of star systems

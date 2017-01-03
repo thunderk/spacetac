@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("Target", () => {
         it("initializes from ship or location", () => {
             var target: Target;

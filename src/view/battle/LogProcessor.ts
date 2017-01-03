@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Processor of battle log events
     //  This will process incoming battle events, and update the battleview accordingly
     export class LogProcessor {

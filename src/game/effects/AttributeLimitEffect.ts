@@ -1,8 +1,6 @@
 /// <reference path="TemporaryEffect.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Hard limitation on attribute value
     //  For example, this could be used to slow a target by limiting its action points
     export class AttributeLimitEffect extends TemporaryEffect {
@@ -29,5 +27,5 @@ module SpaceTac.Game {
         getFullCode(): string {
             return this.code + "-" + AttributeCode[this.attrcode].toLowerCase().replace("_", "");
         }
-   }
+    }
 }

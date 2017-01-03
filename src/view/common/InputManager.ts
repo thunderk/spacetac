@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Manager for keyboard input / bindings
     //  Action callbacks will receive the view as 'this' context
     export class InputManager {

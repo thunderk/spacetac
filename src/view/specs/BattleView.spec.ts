@@ -2,8 +2,6 @@
 /// <reference path="../battle/BattleView.ts"/>
 
 module SpaceTac.View.Specs {
-    "use strict";
-
     describe("BattleView", () => {
         inbattleview_it("forwards events in targetting mode", (battleview: BattleView) => {
             expect(battleview.targetting).toBeNull();

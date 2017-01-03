@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     // A model of ship
     //  It defines the ship looks, and available slots for equipment
     export class ShipModel {

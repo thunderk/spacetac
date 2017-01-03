@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     describe("BaseAction", function () {
         it("check if equipment can be used with remaining AP", function () {
             var equipment = new Equipment(SlotType.Armor);

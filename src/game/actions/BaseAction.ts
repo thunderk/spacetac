@@ -1,8 +1,6 @@
 /// <reference path="../Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Base class for action definitions
     export class BaseAction extends Serializable {
         // Identifier code for the type of action

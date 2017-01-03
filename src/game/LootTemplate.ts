@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Template used to generate a loot equipment
     export class LootTemplate extends Serializable {
         // Type of slot this equipment will fit in
@@ -152,7 +150,7 @@ module SpaceTac.Game {
 
         // Convenience function to add a sticking effect on target
         addTemporaryEffectOnTarget(effect: TemporaryEffect, min_value: number, max_value: number = null,
-                                   min_duration: number = 1, max_duration: number = null): void {
+            min_duration: number = 1, max_duration: number = null): void {
             var template = new EffectTemplate(effect);
             template.addModifier("value", new Range(min_value, max_value));
             template.addModifier("duration", new IntegerRange(min_duration, max_duration));

@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Range of number values
     export class Range extends Serializable {
         // Minimal value

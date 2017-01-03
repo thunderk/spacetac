@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Targetting system
     //  Allows to pick a target for an action
     export class Targetting {

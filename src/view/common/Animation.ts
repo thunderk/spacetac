@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Utility functions for animation
     export class Animation {
 

@@ -1,8 +1,6 @@
 /// <reference path="AbstractWeapon.ts"/>
 
 module SpaceTac.Game.Equipments {
-    "use strict";
-
     export class SubMunitionMissile extends AbstractWeapon {
         constructor() {
             super("SubMunition Missile", 30, 50);

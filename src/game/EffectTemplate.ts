@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     // Modifier for a value of a BaseEffect subclass
     export class EffectTemplateModifier {
         // Value name

@@ -1,8 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
 module SpaceTac.Game.Equipments {
-    "use strict";
-
     export class IronHull extends LootTemplate {
         constructor() {
             super(SlotType.Armor, "IronHull");

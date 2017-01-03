@@ -1,8 +1,6 @@
 /// <reference path="../Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Base class for effects of actions
     //  Effects can be permanent or temporary (for a number of turns)
     export class BaseEffect extends Serializable {

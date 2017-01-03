@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Common UI tools functions
     export class Tools {
 

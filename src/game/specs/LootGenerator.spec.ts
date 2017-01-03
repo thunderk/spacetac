@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     class TestTemplate extends LootTemplate {
         constructor() {
             super(SlotType.Shield, "Hexagrid Shield");

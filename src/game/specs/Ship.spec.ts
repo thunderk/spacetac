@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("Ship", function () {
         it("moves and computes facing angle", function () {
             var ship = new Ship(null, "Test");

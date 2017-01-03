@@ -1,8 +1,6 @@
 /// <reference path="BaseEffect.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Base class for actions that will stick to a target for a number of rounds
     export class TemporaryEffect extends BaseEffect {
         // Duration, in number of turns

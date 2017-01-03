@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Particle that is rotated to always face its ongoing direction
     class BulletParticle extends Phaser.Particle {
         update(): void {

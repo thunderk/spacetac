@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Code to identify
     export enum AttributeCode {
         // Initiative level

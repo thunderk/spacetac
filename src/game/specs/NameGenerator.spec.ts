@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("NameGenerator", () => {
         it("generates unique names", () => {
             var random = new RandomGenerator(0.48, 0.9, 0.1);

@@ -1,8 +1,6 @@
 /// <reference path="BaseEffect.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Effect on attribute maximum
     //  Typically, these effects are summed up to define an attribute maximum
     export class AttributeMaxEffect extends BaseEffect {

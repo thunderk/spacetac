@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // An hyperspace link between two star systems
     export class StarLink extends Serializable {
         // Stars

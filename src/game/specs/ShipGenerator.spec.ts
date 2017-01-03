@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("ShipGenerator", function () {
         it("can use ship model", function () {
             var gen = new ShipGenerator();

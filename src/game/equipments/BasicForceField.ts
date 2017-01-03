@@ -1,8 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
 module SpaceTac.Game.Equipments {
-    "use strict";
-
     export class BasicForceField extends LootTemplate {
         constructor() {
             super(SlotType.Shield, "Basic Force Field");

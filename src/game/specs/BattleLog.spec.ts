@@ -1,8 +1,6 @@
 /// <reference path="../events/BaseLogEvent.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Check a single game log event
     function checkEvent(got: BaseLogEvent, ship: Ship, code: string,
         target_ship: Ship = null, target_x: number = null, target_y: number = null): void {

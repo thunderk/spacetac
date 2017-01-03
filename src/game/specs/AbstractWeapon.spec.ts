@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("AbstractWeapon", function () {
         it("has fire action, and damage effects on target", function () {
             var weapon = new Equipments.AbstractWeapon("Super Fire Weapon", 50, 60);

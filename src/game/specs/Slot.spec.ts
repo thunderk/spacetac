@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("Slot", () => {
         it("checks equipment type", () => {
             var ship = new Ship();

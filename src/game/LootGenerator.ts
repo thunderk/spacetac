@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     // Equipment generator from loot templates
     export class LootGenerator {
         // List of available templates

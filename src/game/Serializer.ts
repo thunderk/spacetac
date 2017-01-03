@@ -1,13 +1,11 @@
 module SpaceTac.Game {
-    "use strict";
-
     // Serializer to cascade through Serializable objects
     export class Serializer {
         // Mapping of IDs to objects
-        refs: {[index: string]: any};
+        refs: { [index: string]: any };
 
         // Serializable classes
-        classes: {[index: string]: typeof Serializable};
+        classes: { [index: string]: typeof Serializable };
 
         constructor() {
             this.refs = {};
@@ -15,9 +13,9 @@ module SpaceTac.Game {
         }
 
         // List all classes that implement "Serializable", with their full path in SpaceTac.Game namespace
-        collectSerializableClasses(container: any = null, path: string = ""): {[index: string]: typeof Serializable} {
+        collectSerializableClasses(container: any = null, path: string = ""): { [index: string]: typeof Serializable } {
             if (container) {
-                var result: {[index: string]: typeof Serializable} = {};
+                var result: { [index: string]: typeof Serializable } = {};
                 for (var obj_name in container) {
                     if (container.hasOwnProperty(obj_name)) {
                         var obj = container[obj_name];

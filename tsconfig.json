@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "alwaysStrict": true,
         "module": "system",
         "forceConsistentCasingInFileNames": true,
         "noFallthroughCasesInSwitch": true,

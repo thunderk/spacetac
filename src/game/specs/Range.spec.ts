@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     function checkProportional(range: Range, value1: number, value2: number) {
         expect(range.getProportional(value1)).toEqual(value2);
         expect(range.getReverseProportional(value2)).toEqual(value1);

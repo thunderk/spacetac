@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     describe("Attribute", function () {
         it("is initially not limited", function () {
             var attr = new Attribute();

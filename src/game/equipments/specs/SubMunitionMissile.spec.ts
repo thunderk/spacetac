@@ -1,8 +1,6 @@
 /// <reference path="../SubMunitionMissile.ts"/>
 
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("SubMunitionMissile", () => {
         it("hits several targets in circle", () => {
             var battle = TestTools.createBattle(1, 2);

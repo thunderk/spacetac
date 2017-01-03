@@ -1,8 +1,6 @@
 /// <reference path="AbstractWeapon.ts"/>
 
 module SpaceTac.Game.Equipments {
-    "use strict";
-
     export class EnergyDepleter extends AbstractWeapon {
         constructor() {
             super("Energy Depleter");

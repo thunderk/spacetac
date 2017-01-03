@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     // Generic tools functions
     export class Tools {
 

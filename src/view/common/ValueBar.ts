@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Bar to display a value (like a progress bar)
     export class ValueBar extends Phaser.Sprite {
         // Vertical orientation

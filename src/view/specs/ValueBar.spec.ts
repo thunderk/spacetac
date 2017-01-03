@@ -1,6 +1,4 @@
 module SpaceTac.View.Specs {
-    "use strict";
-
     describe("ValueBar", () => {
         ingame_it("computes proportional value", (game: Phaser.Game) => {
             var bar = ValueBar.newStandard(game, 0, 0);

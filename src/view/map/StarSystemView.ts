@@ -1,8 +1,6 @@
 /// <reference path="../BaseView.ts"/>
 
 module SpaceTac.View {
-    "use strict";
-
     // Interactive map of a star system
     export class StarSystemView extends BaseView {
 

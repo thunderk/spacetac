@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // A turn-based battle between fleets
     export class Battle extends Serializable {
         // Flag indicating if the battle is ended

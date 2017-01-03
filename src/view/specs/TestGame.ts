@@ -1,8 +1,6 @@
 /// <reference path="../battle/BattleView.ts"/>
 
 module SpaceTac.View.Specs {
-    "use strict";
-
     // Test game wrapper (use instead of jasmine 'it')
     export function ingame_it(desc: string, func: (game: Phaser.Game, state: Phaser.State) => void,
         state: Phaser.State = null, ...stateargs: any[]) {

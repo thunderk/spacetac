@@ -1,8 +1,6 @@
 /// <reference path="../typings/index.d.ts"/>
 
 module SpaceTac {
-    "use strict";
-
     // Router between game views
     export class GameUI extends Phaser.Game {
         // Current game session

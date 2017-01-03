@@ -1,8 +1,6 @@
 /// <reference path="TestGame.ts"/>
 
 module SpaceTac.View.Specs {
-    "use strict";
-
     describe("ActionBar", () => {
         inbattleview_it("lists available actions for selected ship", (battleview: BattleView) => {
             var bar = battleview.action_bar;

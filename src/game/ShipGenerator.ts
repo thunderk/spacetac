@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     // Generator of random ship
     export class ShipGenerator {
         // Random number generator used

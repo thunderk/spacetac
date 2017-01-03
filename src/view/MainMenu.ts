@@ -1,8 +1,6 @@
 /// <reference path="BaseView.ts"/>
 
 module SpaceTac.View {
-    "use strict";
-
     export class MainMenu extends BaseView {
         button_new_game: Phaser.Button;
         button_quick_battle: Phaser.Button;

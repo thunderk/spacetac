@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("Equipment", () => {
         it("checks capabilities requirements", () => {
             var equipment = new Equipment();

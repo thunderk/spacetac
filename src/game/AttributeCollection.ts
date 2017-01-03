@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Collection of several attributes
     export class AttributeCollection extends Serializable {
         // Attributes

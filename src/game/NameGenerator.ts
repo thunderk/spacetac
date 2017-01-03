@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     // A unique name generator
     export class NameGenerator {
         // List of available choices

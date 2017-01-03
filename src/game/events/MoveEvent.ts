@@ -1,8 +1,6 @@
 /// <reference path="BaseLogEvent.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Event logged when a ship moves
     export class MoveEvent extends BaseLogEvent {
         // New facing angle, in radians

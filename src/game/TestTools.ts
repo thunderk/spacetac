@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     // unit testing utilities
     export class TestTools {
 

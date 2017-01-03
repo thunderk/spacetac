@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Graphical hints for movement and weapon range
     export class RangeHint extends Phaser.Group {
         // Link to the arena

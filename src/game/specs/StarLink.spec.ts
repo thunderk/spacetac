@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("StarLink", () => {
         it("checks link intersection", () => {
             var star1 = new Star(null, 0, 0);

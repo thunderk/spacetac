@@ -1,6 +1,4 @@
 module SpaceTac.View.Specs {
-    "use strict";
-
     describe("Tools", () => {
         it("normalizes angles", () => {
             expect(Tools.normalizeAngle(0)).toEqual(0);

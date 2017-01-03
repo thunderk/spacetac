@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Piece of equipment to attach in slots
     export class Equipment extends Serializable {
         // Actual slot this equipment is attached to

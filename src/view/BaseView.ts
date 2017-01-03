@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Base class for all game views
     export class BaseView extends Phaser.State {
         // Link to the root UI

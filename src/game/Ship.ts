@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // A single ship in a Fleet
     export class Ship extends Serializable {
         // Fleet this ship is a member of

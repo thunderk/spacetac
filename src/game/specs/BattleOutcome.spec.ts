@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("BattleOutcome", () => {
         it("generates loot from dead ships, for the winner to take", () => {
             var fleet1 = new Fleet();

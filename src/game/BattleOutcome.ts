@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Result of an ended battle
     export class BattleOutcome extends Serializable {
         // Indicates if the battle is a draw (no winner)

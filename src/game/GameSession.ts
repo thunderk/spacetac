@@ -1,8 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // A game session, binding a universe and a player
     export class GameSession extends Serializable {
         // Game universe

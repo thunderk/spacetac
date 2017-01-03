@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("Star", () => {
         it("lists links to other stars", () => {
             var universe = new Universe();

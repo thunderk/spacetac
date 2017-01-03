@@ -1,8 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
 module SpaceTac.Game.Equipments {
-    "use strict";
-
     // Equipment: Conventional Engine
     export class ConventionalEngine extends LootTemplate {
         constructor() {

@@ -1,8 +1,6 @@
 /// <reference path="BaseView.ts"/>
 
 module SpaceTac.View {
-    "use strict";
-
     export class Preload extends BaseView {
         private preloadBar: Phaser.Sprite;
 

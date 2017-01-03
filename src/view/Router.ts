@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Router to other states
     export class Router extends Phaser.State {
         create() {

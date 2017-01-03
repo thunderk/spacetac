@@ -1,6 +1,4 @@
 module SpaceTac.Game.Specs {
-    "use strict";
-
     describe("LootTemplate", () => {
         it("interpolates between weak and strong loot", () => {
             var template = new LootTemplate(SlotType.Weapon, "Bulletator");

@@ -1,8 +1,6 @@
 /// <reference path="BaseLogEvent.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Event logged when a TemporaryEffect is removed from a ship
     export class EffectRemovedEvent extends BaseLogEvent {
         // Pointer to the effect

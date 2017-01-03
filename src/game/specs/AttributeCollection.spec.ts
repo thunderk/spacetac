@@ -1,6 +1,4 @@
 module SpaceTac.Game {
-    "use strict";
-
     describe("AttributeCollection", function () {
         it("sets and gets an attribute value", function () {
             var coll = new AttributeCollection();

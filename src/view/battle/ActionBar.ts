@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     // Bar with all available action icons displayed
     export class ActionBar extends Phaser.Group {
         // Link to the parent battleview

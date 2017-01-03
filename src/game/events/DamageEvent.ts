@@ -1,8 +1,6 @@
 /// <reference path="BaseLogEvent.ts"/>
 
 module SpaceTac.Game {
-    "use strict";
-
     // Event logged when a ship takes damage
     export class DamageEvent extends BaseLogEvent {
         // Damage to hull

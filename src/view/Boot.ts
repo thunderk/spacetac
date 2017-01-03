@@ -1,6 +1,4 @@
 module SpaceTac.View {
-    "use strict";
-
     export class Boot extends Phaser.State {
         preload() {
             this.game.stage.backgroundColor = 0x202020;
