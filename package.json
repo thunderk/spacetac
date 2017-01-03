@@ -4,8 +4,10 @@
   "description": "A tactical RPG set in space",
   "main": "src/build.js",
   "scripts": {
+    "deps": "bower install",
     "build": "tsc -p .",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jasmine",
+    "cover": "istanbul cover node_modules/jasmine/bin/jasmine.js && remap-istanbul -i coverage/coverage.json -o coverage -t html",
     "serve": "simple-server out 8012"
   },
   "repository": {
@@ -17,6 +19,8 @@
   "devDependencies": {
     "bower": "^1.7.9",
     "jasmine": "^2.5.2",
+    "istanbul": "0.4",
+    "remap-istanbul": "0.6",
     "simple-server": "^1.0.1",
     "typescript": "^2.0.6"
   }

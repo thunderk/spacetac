@@ -1,7 +1,7 @@
 .*
 /coverage
 /node_modules
-/src/vendor
-/src/build.*
+/out/vendor
+/out/build.*
 /graphics/**/*.blend?*
 *.log
