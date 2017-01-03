@@ -1,4 +1,3 @@
-/// <reference path="../../definitions/jasmine.d.ts"/>
 /// <reference path="../Serializable.ts"/>
 
 module SpaceTac.Game.Specs {

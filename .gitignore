@@ -4,4 +4,5 @@
 /out/vendor
 /out/build.*
 /graphics/**/*.blend?*
+/typings/
 *.log

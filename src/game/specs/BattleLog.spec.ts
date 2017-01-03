@@ -1,4 +1,3 @@
-/// <reference path="../../definitions/jasmine.d.ts"/>
 /// <reference path="../events/BaseLogEvent.ts"/>
 
 module SpaceTac.Game {
@@ -6,7 +5,7 @@ module SpaceTac.Game {
 
     // Check a single game log event
     function checkEvent(got: BaseLogEvent, ship: Ship, code: string,
-                        target_ship: Ship = null, target_x: number = null, target_y: number = null): void {
+        target_ship: Ship = null, target_x: number = null, target_y: number = null): void {
         if (target_ship) {
             if (target_x === null) {
                 target_x = target_ship.arena_x;

@@ -1,4 +1,3 @@
-/// <reference path="../../definitions/jasmine.d.ts"/>
 /// <reference path="TestGame.ts"/>
 /// <reference path="../battle/BattleView.ts"/>
 

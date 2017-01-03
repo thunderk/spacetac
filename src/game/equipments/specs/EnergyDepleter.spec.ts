@@ -1,4 +1,3 @@
-/// <reference path="../../../definitions/jasmine.d.ts"/>
 /// <reference path="../EnergyDepleter.ts"/>
 
 module SpaceTac.Game.Specs {

@@ -1,5 +1,3 @@
-/// <reference path="../../definitions/jasmine.d.ts"/>
-
 module SpaceTac.View.Specs {
     "use strict";
 

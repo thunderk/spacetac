@@ -1,5 +1,3 @@
-/// <reference path="../../definitions/jasmine.d.ts"/>
-
 module SpaceTac.Game.Specs {
     "use strict";
 
@@ -9,7 +7,7 @@ module SpaceTac.Game.Specs {
 
         constructor() {
             this.a = "test";
-            this.b = {c: 5.1, d: ["unit", "test", 5]};
+            this.b = { c: 5.1, d: ["unit", "test", 5] };
         }
 
         get(): string {
@@ -31,8 +29,8 @@ module SpaceTac.Game.Specs {
 
         it("merges objects", () => {
             expect(Tools.merge({}, {})).toEqual({});
-            expect(Tools.merge({"a": 1}, {"b": 2})).toEqual({"a": 1, "b": 2});
-            expect(Tools.merge({"a": 1}, {"a": 3, "b": 2})).toEqual({"a": 3, "b": 2});
+            expect(Tools.merge({ "a": 1 }, { "b": 2 })).toEqual({ "a": 1, "b": 2 });
+            expect(Tools.merge({ "a": 1 }, { "a": 3, "b": 2 })).toEqual({ "a": 3, "b": 2 });
         });
     });
 }

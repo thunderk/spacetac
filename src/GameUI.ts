@@ -1,4 +1,4 @@
-/// <reference path="definitions/phaser.d.ts"/>
+/// <reference path="../typings/index.d.ts"/>
 
 module SpaceTac {
     "use strict";
@@ -35,7 +35,7 @@ module SpaceTac {
 
         // Save current game in local browser storage
         saveGame(): boolean {
-            if (typeof(Storage) !== "undefined") {
+            if (typeof (Storage) !== "undefined") {
                 localStorage.setItem("spacetac-savegame", this.session.saveToString());
                 (<View.BaseView>this.state.getCurrentState()).messages.addMessage("Game saved");
                 return true;
@@ -47,7 +47,7 @@ module SpaceTac {
 
         // Load current game from local browser storage
         loadGame(): boolean {
-            if (typeof(Storage) !== "undefined") {
+            if (typeof (Storage) !== "undefined") {
                 var loaded = localStorage.getItem("spacetac-savegame");
                 if (loaded) {
                     this.session = Game.GameSession.loadFromString(loaded);
