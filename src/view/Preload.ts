@@ -6,7 +6,7 @@ module SpaceTac.View {
 
         preload() {
             // Add preload sprite
-            this.add.text(640, 340, "... Loading ...", {align: "center", font: "bold 20px Arial", fill: "#c0c0c0"})
+            this.add.text(640, 340, "... Loading ...", { align: "center", font: "bold 20px Arial", fill: "#c0c0c0" })
                 .anchor.set(0.5, 0.5);
             this.preloadBar = this.add.sprite(0, 0, "preload-bar");
             this.preloadBar.anchor.set(0.5, 0.5);
@@ -16,9 +16,11 @@ module SpaceTac.View {
             // Load images
             this.loadImage("menu/button.png");
             this.loadImage("battle/waiting.png");
-            this.loadImage("battle/shiplist-base.png");
+            this.loadImage("battle/shiplist-background.png");
             this.loadImage("battle/shiplist-own.png");
             this.loadImage("battle/shiplist-enemy.png");
+            this.loadImage("battle/shiplist-energy-empty.png");
+            this.loadImage("battle/shiplist-energy-full.png");
             this.loadImage("battle/shiplist-hull-empty.png");
             this.loadImage("battle/shiplist-hull-full.png");
             this.loadImage("battle/shiplist-shield-empty.png");
@@ -31,6 +33,7 @@ module SpaceTac.View {
             this.loadImage("battle/action-active.png");
             this.loadImage("battle/action-fading.png");
             this.loadImage("battle/action-tooltip.png");
+            this.loadImage("battle/actionpointsnone.png");
             this.loadImage("battle/actionpointsempty.png");
             this.loadImage("battle/actionpointsfull.png");
             this.loadImage("battle/actionpointspart.png");

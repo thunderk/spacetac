@@ -23,23 +23,21 @@ module SpaceTac.View {
         // Create an empty action bar
         constructor(battleview: BattleView) {
             super(battleview.game);
-            
+
             this.battleview = battleview;
             this.actions = [];
             this.ship = null;
 
-            this.x = 230;
-            this.y = 0;
             battleview.ui.add(this);
 
             // Background
             this.addChild(new Phaser.Image(this.game, 0, 0, "battle-actionbar", 0));
 
             // Action points progress bar
-            this.actionpoints = new ValueBar(this.game, 119, 76, "battle-actionpointsempty");
+            this.actionpoints = new ValueBar(this.game, 190, 111, "battle-actionpointsempty");
             this.actionpoints.setBarImage("battle-actionpointspart");
             this.addChild(this.actionpoints);
-            this.actionpointstemp = new ValueBar(this.game, 119, 76, "battle-actionpointsempty");
+            this.actionpointstemp = new ValueBar(this.game, 190, 111, "battle-actionpointsnone");
             this.actionpointstemp.setBarImage("battle-actionpointsfull");
             this.addChild(this.actionpointstemp);
 
@@ -68,7 +66,7 @@ module SpaceTac.View {
 
         // Add an action icon
         addAction(ship: Game.Ship, action: Game.BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, 90 + this.actions.length * 62, 2, ship, action);
+            var icon = new ActionIcon(this, 200 + this.actions.length * 62, 2, ship, action);
             this.actions.push(icon);
 
             this.tooltip.bringToTop();
@@ -115,10 +113,10 @@ module SpaceTac.View {
                 });
 
                 this.ship = ship;
-                this.game.tweens.create(this).to({"alpha": 1}, 400).start();
+                this.game.tweens.create(this).to({ "alpha": 1 }, 400).start();
             } else {
                 this.ship = null;
-                this.game.tweens.create(this).to({"alpha": 0.5}, 400).start();
+                this.game.tweens.create(this).to({ "alpha": 0.5 }, 400).start();
             }
 
             this.updateActionPoints();

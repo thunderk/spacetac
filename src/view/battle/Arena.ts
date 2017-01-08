@@ -25,15 +25,15 @@ module SpaceTac.View {
         // Create a graphical arena for ship sprites to fight in a 2D space
         constructor(battleview: BattleView) {
             super(battleview.game);
-            
+
             this.battleview = battleview;
             this.ship_sprites = [];
             this.playing = null;
             this.hovered = null;
             this.range_hint = null;
 
-            var offset_x = 206;
-            var offset_y = 84;
+            var offset_x = 133;
+            var offset_y = 132;
 
             var background = new Phaser.Button(battleview.game, 0, 0, "battle-arena-background");
             var expected_width = battleview.getWidth() - offset_x;

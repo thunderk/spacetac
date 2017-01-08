@@ -13,7 +13,7 @@ module SpaceTac {
         audio: View.Audio;
 
         constructor(headless: boolean = false) {
-            super(1280, 720, headless ? Phaser.HEADLESS : Phaser.AUTO, '-space-tac');
+            super(1920, 1080, headless ? Phaser.HEADLESS : Phaser.AUTO, '-space-tac');
 
             this.audio = new View.Audio(this);
 

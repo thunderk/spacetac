@@ -1,6 +1,6 @@
 module SpaceTac.View {
     // Bar with all playing ships, by play order
-    export class ShipList extends Phaser.Group {
+    export class ShipList extends Phaser.Image {
         // Link to the parent battleview
         battleview: BattleView;
 
@@ -15,7 +15,7 @@ module SpaceTac.View {
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
-            super(battleview.game, battleview.ui);
+            super(battleview.game, 0, 131, "battle-shiplist-background");
 
             this.battleview = battleview;
             this.ships = [];
@@ -24,24 +24,9 @@ module SpaceTac.View {
 
             battleview.ui.add(this);
 
-            this.addBackground();
-
             if (battleview.battle) {
                 this.setShipsFromBattle(battleview.battle);
             }
-        }
-
-        // Add background children
-        addBackground(): void {
-            var background = new Phaser.Graphics(this.game, 0, 0);
-            background.beginFill(0xFFFFFFFF, 0.9);
-            background.drawRect(0, 0, 224, 84);
-            background.endFill();
-            background.beginFill(0xFFFFFFFF, 0.45);
-            background.drawRect(0, 84, 206, this.battleview.getHeight() - 84);
-            background.endFill();
-            background.visible = true;
-            this.addChild(background);
         }
 
         // Clear the action icons
@@ -66,7 +51,7 @@ module SpaceTac.View {
             var owned = ship.getPlayer() === this.battleview.player;
             var result = new ShipListItem(this, -200, 0, ship, owned);
             this.ships.push(result);
-            this.add(result);
+            this.addChild(result);
             return result;
         }
 
@@ -98,11 +83,11 @@ module SpaceTac.View {
             this.ships.forEach((item: ShipListItem) => {
                 var position = this.findPlayPosition(item.ship);
                 if (position === 0) {
-                    item.moveTo(12, 12, animate);
+                    item.moveTo(20, 20 - this.y, animate);
                 } else {
-                    item.moveTo(3, 26 + position * 63, animate);
+                    item.moveTo(8, 36 + position * 102 - this.y, animate);
                 }
-                this.setChildIndex(item, 1 + position);
+                this.setChildIndex(item, position);
             });
         }
 
