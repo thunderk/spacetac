@@ -2,7 +2,7 @@ module SpaceTac.Game {
     // Action to end the ship's turn
     export class EndTurnAction extends BaseAction {
         constructor() {
-            super("endturn", false);
+            super("endturn", "End ship's turn", false);
         }
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {

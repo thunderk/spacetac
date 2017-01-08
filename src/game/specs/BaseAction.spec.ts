@@ -3,7 +3,7 @@ module SpaceTac.Game {
         it("check if equipment can be used with remaining AP", function () {
             var equipment = new Equipment(SlotType.Armor);
             equipment.ap_usage = 3;
-            var action = new BaseAction("test", false, equipment);
+            var action = new BaseAction("test", "Test", false, equipment);
             var ship = new Ship();
             ship.addSlot(SlotType.Armor).attach(equipment);
             ship.ap_current.setMaximal(10);

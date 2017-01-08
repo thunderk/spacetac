@@ -6,8 +6,8 @@ module SpaceTac.Game {
         // Boolean set to true if the weapon can target space
         can_target_space: boolean;
 
-        constructor(equipment: Equipment, can_target_space: boolean = false) {
-            super("fire-" + equipment.code, true, equipment);
+        constructor(equipment: Equipment, can_target_space = false, name = "Fire") {
+            super("fire-" + equipment.code, name, true, equipment);
 
             this.can_target_space = can_target_space;
         }

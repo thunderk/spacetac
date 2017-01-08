@@ -6,7 +6,7 @@ module SpaceTac.Game {
         safety_distance: number;
 
         constructor(equipment: Equipment) {
-            super("move", true, equipment);
+            super("move", "Move", true, equipment);
 
             this.safety_distance = 50;
         }

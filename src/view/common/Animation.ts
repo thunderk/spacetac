@@ -3,20 +3,20 @@ module SpaceTac.View {
     export class Animation {
 
         // Display an object, fading in using opacity
-        static fadeIn(game: Phaser.Game, obj: PIXI.DisplayObject, duration: number = 1000): void {
+        static fadeIn(game: Phaser.Game, obj: PIXI.DisplayObject, duration: number = 1000, alpha: number = 1): void {
             if (!obj.visible) {
                 obj.alpha = 0;
                 obj.visible = true;
             }
             var tween = game.tweens.create(obj);
-            tween.to({alpha: 1}, duration);
+            tween.to({ alpha: alpha }, duration);
             tween.start();
         }
 
         // Hide an object, fading out using opacity
         static fadeOut(game: Phaser.Game, obj: PIXI.DisplayObject, duration: number = 1000): void {
             var tween = game.tweens.create(obj);
-            tween.to({alpha: 0}, duration);
+            tween.to({ alpha: 0 }, duration);
             tween.start();
         }
 

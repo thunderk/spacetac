@@ -1,23 +1,45 @@
 module SpaceTac.View {
     // Tooltip to display action information
     export class ActionTooltip extends Phaser.Sprite {
-        // Action name
-        title: Phaser.Text;
+        icon: Phaser.Image | null;
+        main_title: Phaser.Text;
+        sub_title: Phaser.Text;
+        cost: Phaser.Text;
 
         constructor(parent: ActionBar) {
             super(parent.game, 0, 0, "battle-action-tooltip");
             this.visible = false;
 
-            this.title = new Phaser.Text(this.game, 0, 0, "", {font: "14px Arial", fill: "#000000"});
-            this.addChild(this.title);
+            this.icon = null;
+
+            this.main_title = new Phaser.Text(this.game, 325, 20, "", { font: "24px Arial", fill: "#ffffff" });
+            this.main_title.anchor.set(0.5, 0);
+            this.addChild(this.main_title);
+
+            this.sub_title = new Phaser.Text(this.game, 325, 60, "", { font: "22px Arial", fill: "#ffffff" });
+            this.sub_title.anchor.set(0.5, 0);
+            this.addChild(this.sub_title);
+
+            this.cost = new Phaser.Text(this.game, 325, 100, "", { font: "20px Arial", fill: "#ffff00" });
+            this.cost.anchor.set(0.5, 0);
+            this.addChild(this.cost);
         }
 
         // Set current action to display, null to hide
         setAction(action: ActionIcon): void {
             if (action) {
+                if (this.icon) {
+                    this.icon.destroy(true);
+                }
+                this.icon = new Phaser.Image(this.game, 20, 15, "battle-actions-" + action.action.code);
+                this.addChild(this.icon);
+
                 this.position.set(action.x, action.y + action.height + action.bar.actionpoints.height);
-                this.title.setText(action.action.code);
-                Animation.fadeIn(this.game, this, 200);
+                this.main_title.setText(action.action.equipment ? action.action.equipment.name : action.action.name);
+                this.sub_title.setText(action.action.equipment ? action.action.name : "");
+                this.cost.setText(action.action.equipment ? `Cost: ${action.action.equipment.ap_usage.toPrecision(3)} energy` : "");
+
+                Animation.fadeIn(this.game, this, 200, 0.9);
             } else {
                 Animation.fadeOut(this.game, this, 200);
             }

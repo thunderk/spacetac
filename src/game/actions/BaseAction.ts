@@ -6,6 +6,9 @@ module SpaceTac.Game {
         // Identifier code for the type of action
         code: string;
 
+        // Human-readable name
+        name: string;
+
         // Boolean at true if the action needs a target
         needs_target: boolean;
 
@@ -13,10 +16,11 @@ module SpaceTac.Game {
         equipment: Equipment;
 
         // Create the action
-        constructor(code: string, needs_target: boolean, equipment: Equipment = null) {
+        constructor(code: string, name: string, needs_target: boolean, equipment: Equipment = null) {
             super();
 
             this.code = code;
+            this.name = name;
             this.needs_target = needs_target;
             this.equipment = equipment;
         }
