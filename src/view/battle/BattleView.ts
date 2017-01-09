@@ -40,9 +40,6 @@ module SpaceTac.View {
         // Indicator of interaction disabled
         icon_waiting: Phaser.Image;
 
-        // Lines used to highlight hovered ship
-        private line_hover_left: Phaser.Graphics;
-
         // Init the view, binding it to a specific battle
         init(player: Game.Player, battle: Game.Battle) {
             super.init();
@@ -53,7 +50,6 @@ module SpaceTac.View {
             this.ship_hovered = null;
             this.log_processor = null;
             this.background = null;
-            this.line_hover_left = null;
         }
 
         // Create view graphics
@@ -83,11 +79,7 @@ module SpaceTac.View {
             this.icon_waiting.anchor.set(0.5, 0.5);
             this.icon_waiting.scale.set(0.5, 0.5);
             game.add.existing(this.icon_waiting);
-            game.tweens.create(this.icon_waiting).to({"angle": 360}, 3000).repeat(-1).start();
-
-            this.line_hover_left = new Phaser.Graphics(this.game, 0, 0);
-            this.line_hover_left.visible = false;
-            game.add.existing(this.line_hover_left);
+            game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).repeat(-1).start();
 
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
@@ -124,11 +116,6 @@ module SpaceTac.View {
                 this.arena = null;
             }
 
-            if (this.line_hover_left) {
-                this.line_hover_left.destroy();
-                this.line_hover_left = null;
-            }
-
             this.battle = null;
 
             super.shutdown();
@@ -137,10 +124,10 @@ module SpaceTac.View {
         // Display an animated "BATTLE" text in the center of the view
         displayFightMessage(): void {
             var text = this.game.add.text(this.getMidWidth(), this.getMidHeight(), "BATTLE !",
-                {align: "center", font: "bold 42px Arial", fill: "#EE2233"});
+                { align: "center", font: "bold 42px Arial", fill: "#EE2233" });
             text.anchor.set(0.5, 0.5);
-            this.game.tweens.create(text.scale).to({x: 3, y: 3}).start();
-            var text_anim = this.game.tweens.create(text).to({alpha: 0});
+            this.game.tweens.create(text.scale).to({ x: 3, y: 3 }).start();
+            var text_anim = this.game.tweens.create(text).to({ alpha: 0 });
             text_anim.onComplete.addOnce(() => {
                 text.destroy();
             });
@@ -193,34 +180,6 @@ module SpaceTac.View {
                 } else {
                     this.targetting.unsetTarget();
                 }
-            }
-            this.updateHoverLines();
-        }
-
-        // Update the hover lines
-        updateHoverLines(): void {
-            // TODO Simplify this
-            if (this.ship_hovered) {
-                var listitem = this.ship_list.findItem(this.ship_hovered);
-                var sprite = this.arena.findShipSprite(this.ship_hovered);
-
-                if (listitem && sprite) {
-                    var listitemhover = listitem.layer_hover;
-                    var spritehover = sprite.hover;
-                    var start = listitemhover.toGlobal(new PIXI.Point(listitemhover.width / 2, 0));
-                    var end = spritehover.toGlobal(new PIXI.Point(-spritehover.width / 2, 0));
-
-                    this.line_hover_left.clear();
-                    this.line_hover_left.lineStyle(2, 0xC7834A, 0.7);
-                    this.line_hover_left.moveTo(start.x, start.y);
-                    this.line_hover_left.lineTo(end.x, end.y);
-
-                    Animation.fadeIn(this.game, this.line_hover_left, 200);
-                } else {
-                    Animation.fadeOut(this.game, this.line_hover_left, 200);
-                }
-            } else {
-                Animation.fadeOut(this.game, this.line_hover_left, 200);
             }
         }
 

@@ -25,6 +25,10 @@ module SpaceTac.Game {
         // Boolean indicating if its the first turn
         first_turn: boolean;
 
+        // Size of the battle area
+        width = 1000
+        height = 500
+
         // Create a battle between two fleets
         constructor(fleet1: Fleet = null, fleet2: Fleet = null) {
             super();
@@ -89,8 +93,8 @@ module SpaceTac.Game {
         // Defines the initial ship positions of all engaged fleets
         placeShips(): void {
             this.first_turn = true;
-            this.placeFleetShips(this.fleets[0], 50, 320, 0);
-            this.placeFleetShips(this.fleets[1], 1020, 320, Math.PI);
+            this.placeFleetShips(this.fleets[0], this.width * 0.05, this.height * 0.5, 0);
+            this.placeFleetShips(this.fleets[1], this.width * 0.95, this.height * 0.5, Math.PI);
         }
 
         // Count the number of fleets still alive
@@ -242,7 +246,7 @@ module SpaceTac.Game {
         //  facing_angle is the forward angle in radians
         private placeFleetShips(fleet: Fleet, x: number, y: number, facing_angle: number): void {
             var side_angle = facing_angle + Math.PI * 0.5;
-            var spacing = 140;
+            var spacing = this.height * 0.2;
             var total_length = spacing * (fleet.ships.length - 1);
             var dx = Math.cos(side_angle);
             var dy = Math.sin(side_angle);
