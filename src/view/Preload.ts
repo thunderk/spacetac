@@ -37,6 +37,7 @@ module SpaceTac.View {
             this.loadImage("battle/actionpointsempty.png");
             this.loadImage("battle/actionpointsfull.png");
             this.loadImage("battle/actionpointspart.png");
+            this.loadImage("battle/ship-tooltip.png");
             this.loadImage("battle/arena/shipspritehover.png");
             this.loadImage("battle/arena/shipspriteplaying.png");
             this.loadImage("battle/actions/move.png");

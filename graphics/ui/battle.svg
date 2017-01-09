@@ -85,14 +85,14 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="101.91241"
-     inkscape:cy="877.88947"
+     inkscape:zoom="4"
+     inkscape:cx="752.60811"
+     inkscape:cy="207.999"
      inkscape:document-units="px"
-     inkscape:current-layer="layer16"
+     inkscape:current-layer="layer17"
      showgrid="false"
      units="px"
-     showguides="true"
+     showguides="false"
      inkscape:snap-bbox="false"
      inkscape:bbox-nodes="true"
      inkscape:bbox-paths="true"
@@ -134,6 +134,47 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer17"
+     inkscape:label="Arena">
+    <g
+       id="g4273">
+      <rect
+         y="821.71985"
+         x="675.19873"
+         height="112.25"
+         width="112.75"
+         id="rect4417"
+         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         inkscape:connector-curvature="0"
+         id="rect4375"
+         d="m 680.39685,830.2035 47.64132,47.64132 -47.64132,47.64132 3.53553,3.53553 47.64132,-47.64132 47.64132,47.64132 3.53553,-3.53553 -47.64132,-47.64132 47.64132,-47.64132 -3.53553,-3.53553 -47.64132,47.64132 -47.64132,-47.64132 -3.53553,3.53553 z"
+         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <path
+       style="opacity:1;fill:#cbe6ed;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 696.57273,842.84286 0,70.00391 70.00195,0 0,-70.00391 -70.00195,0 z m 3.35741,3.35937 63.28711,0 0,63.28516 -63.28711,0 0,-63.28516 z"
+       id="path4438"
+       inkscape:connector-curvature="0" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g4184"
+       id="use4320"
+       transform="matrix(0.06661534,0.18302414,-0.18302414,0.06661534,775.18857,930.22583)"
+       width="100%"
+       height="100%" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#use4320"
+       id="use4429"
+       transform="matrix(-0.96592583,0.25881905,-0.25881905,-0.96592583,2076.4223,1439.5912)"
+       width="100%"
+       height="100%" />
+  </g>
   <g
      inkscape:groupmode="layer"
      id="layer13"
@@ -279,7 +320,10 @@
          inkscape:rounded="0"
          inkscape:randomized="0"
          d="m 54.25,161.88109 -4.443658,-7.69664 8.887316,0 z"
-         inkscape:transform-center-y="1.2827735" />
+         inkscape:transform-center-y="1.2827735"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <use
          x="0"
          y="0"
@@ -288,7 +332,10 @@
          id="use4314"
          transform="matrix(1,0,0,-1,0,375.61555)"
          width="100%"
-         height="100%" />
+         height="100%"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <use
          x="0"
          y="0"
@@ -297,7 +344,10 @@
          transform="matrix(0,-1,1,0,-133.125,242.13379)"
          width="100%"
          height="100%"
-         inkscape:transform-center-x="-1.2827735" />
+         inkscape:transform-center-x="-1.2827735"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <use
          x="0"
          y="0"
@@ -306,7 +356,10 @@
          transform="matrix(0,1,-1,0,241.5,133.63379)"
          width="100%"
          height="100%"
-         inkscape:transform-center-x="1.2827734" />
+         inkscape:transform-center-x="1.2827734"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
     </g>
   </g>
   <g

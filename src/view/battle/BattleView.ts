@@ -31,6 +31,9 @@ module SpaceTac.View {
         // Currently hovered ship
         ship_hovered: Game.Ship;
 
+        // Ship tooltip
+        ship_tooltip: ShipTooltip;
+
         // Subscription to the battle log
         log_processor: LogProcessor;
 
@@ -74,6 +77,7 @@ module SpaceTac.View {
             // Add UI elements
             this.action_bar = new ActionBar(this);
             this.ship_list = new ShipList(this);
+            this.ship_tooltip = new ShipTooltip(this);
 
             this.icon_waiting = new Phaser.Image(this.game, this.getWidth() / 2, 50, "battle-waiting", 0);
             this.icon_waiting.anchor.set(0.5, 0.5);
@@ -174,6 +178,7 @@ module SpaceTac.View {
             this.ship_hovered = ship;
             this.arena.setShipHovered(ship);
             this.ship_list.setHovered(ship);
+            this.ship_tooltip.setShip(ship);
             if (this.targetting) {
                 if (ship) {
                     this.targetting.setTargetShip(ship);
