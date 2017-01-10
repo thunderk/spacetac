@@ -77,6 +77,24 @@
            style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       </g>
     </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask5918">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5920"
+         d="m 1088.6255,724.87588 0,112.25 112.75,0 0,-112.25 -112.75,0 z m 8.7324,4.94727 47.6426,47.64062 47.6406,-47.64062 3.5352,3.53515 -47.6406,47.64258 47.6406,47.64063 -3.5352,3.53515 -47.6406,-47.64062 -47.6426,47.64062 -3.5351,-3.53515 47.6426,-47.64063 -47.6426,-47.64258 3.5351,-3.53515 z"
+         style="opacity:0.747;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </mask>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask5923">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5925"
+         d="m 675.19922,821.7207 0,112.25 112.75,0 0,-112.25 -112.75,0 z m 8.73242,4.94727 47.64258,47.64062 47.64062,-47.64062 3.53516,3.53515 -47.64062,47.64258 47.64062,47.64063 -3.53516,3.53515 -47.64062,-47.64062 -47.64258,47.64062 -3.53516,-3.53515 47.64258,-47.64063 -47.64258,-47.64258 3.53516,-3.53515 z"
+         style="opacity:0.747;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </mask>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -85,11 +103,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="752.60811"
-     inkscape:cy="207.999"
+     inkscape:zoom="5.6568542"
+     inkscape:cx="56.831357"
+     inkscape:cy="908.08122"
      inkscape:document-units="px"
-     inkscape:current-layer="layer17"
+     inkscape:current-layer="layer16"
      showgrid="false"
      units="px"
      showguides="false"
@@ -138,26 +156,15 @@
      inkscape:groupmode="layer"
      id="layer17"
      inkscape:label="Arena">
-    <g
-       id="g4273">
-      <rect
-         y="821.71985"
-         x="675.19873"
-         height="112.25"
-         width="112.75"
-         id="rect4417"
-         style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <path
-         inkscape:connector-curvature="0"
-         id="rect4375"
-         d="m 680.39685,830.2035 47.64132,47.64132 -47.64132,47.64132 3.53553,3.53553 47.64132,-47.64132 47.64132,47.64132 3.53553,-3.53553 -47.64132,-47.64132 47.64132,-47.64132 -3.53553,-3.53553 -47.64132,47.64132 -47.64132,-47.64132 -3.53553,3.53553 z"
-         style="opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    </g>
     <path
-       style="opacity:1;fill:#cbe6ed;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="opacity:1;fill:#038700;fill-opacity:0.74901962;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 696.57273,842.84286 0,70.00391 70.00195,0 0,-70.00391 -70.00195,0 z m 3.35741,3.35937 63.28711,0 0,63.28516 -63.28711,0 0,-63.28516 z"
        id="path4438"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       mask="url(#mask5923)"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/ship-playing-enemy.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <use
        x="0"
        y="0"
@@ -174,6 +181,11 @@
        transform="matrix(-0.96592583,0.25881905,-0.25881905,-0.96592583,2076.4223,1439.5912)"
        width="100%"
        height="100%" />
+    <path
+       style="opacity:1;fill:#038700;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       mask="url(#mask5918)"
+       d="M 1109.998 812.71289 L 1109.998 816.00195 L 1180 816.00195 L 1180 812.71289 L 1109.998 812.71289 z "
+       id="path4438-7" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -295,71 +307,78 @@
        id="layer16"
        inkscape:label="Ship list hover"
        style="display:inline">
-      <rect
-         y="148.93114"
-         x="15.297348"
-         height="77.905304"
-         width="77.905304"
-         id="rect4248-3"
-         style="display:inline;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a833b0;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         inkscape:export-filename="/tmp/export.png"
+      <g
+         id="g4299"
+         style=""
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-hover.png"
          inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
-      <path
-         sodipodi:type="star"
-         style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a833b0;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         id="path4312"
-         sodipodi:sides="3"
-         sodipodi:cx="54.25"
-         sodipodi:cy="156.75"
-         sodipodi:r1="5.131094"
-         sodipodi:r2="2.565547"
-         sodipodi:arg1="1.5707963"
-         sodipodi:arg2="2.6179939"
-         inkscape:flatsided="true"
-         inkscape:rounded="0"
-         inkscape:randomized="0"
-         d="m 54.25,161.88109 -4.443658,-7.69664 8.887316,0 z"
-         inkscape:transform-center-y="1.2827735"
-         inkscape:export-filename="/tmp/export.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path4312"
-         inkscape:transform-center-y="-1.2827702"
-         id="use4314"
-         transform="matrix(1,0,0,-1,0,375.61555)"
-         width="100%"
-         height="100%"
-         inkscape:export-filename="/tmp/export.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path4312"
-         id="use4316"
-         transform="matrix(0,-1,1,0,-133.125,242.13379)"
-         width="100%"
-         height="100%"
-         inkscape:transform-center-x="-1.2827735"
-         inkscape:export-filename="/tmp/export.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
-      <use
-         x="0"
-         y="0"
-         xlink:href="#path4312"
-         id="use4318"
-         transform="matrix(0,1,-1,0,241.5,133.63379)"
-         width="100%"
-         height="100%"
-         inkscape:transform-center-x="1.2827734"
-         inkscape:export-filename="/tmp/export.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-ydpi="90">
+        <rect
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/tmp/export.png"
+           style="display:inline;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#efd9f4;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4248-3"
+           width="77.905304"
+           height="77.905304"
+           x="15.297348"
+           y="148.93114" />
+        <path
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/tmp/export.png"
+           inkscape:transform-center-y="1.2827735"
+           d="m 54.25,161.88109 -4.443658,-7.69664 8.887316,0 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="2.6179939"
+           sodipodi:arg1="1.5707963"
+           sodipodi:r2="2.565547"
+           sodipodi:r1="5.131094"
+           sodipodi:cy="156.75"
+           sodipodi:cx="54.25"
+           sodipodi:sides="3"
+           id="path4312"
+           style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#efd9f4;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           sodipodi:type="star" />
+        <use
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/tmp/export.png"
+           height="100%"
+           width="100%"
+           transform="matrix(1,0,0,-1,0,375.61555)"
+           id="use4314"
+           inkscape:transform-center-y="-1.2827702"
+           xlink:href="#path4312"
+           y="0"
+           x="0" />
+        <use
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/tmp/export.png"
+           inkscape:transform-center-x="-1.2827735"
+           height="100%"
+           width="100%"
+           transform="matrix(0,-1,1,0,-133.125,242.13379)"
+           id="use4316"
+           xlink:href="#path4312"
+           y="0"
+           x="0" />
+        <use
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/tmp/export.png"
+           inkscape:transform-center-x="1.2827734"
+           height="100%"
+           width="100%"
+           transform="matrix(0,1,-1,0,241.5,133.63379)"
+           id="use4318"
+           xlink:href="#path4312"
+           y="0"
+           x="0" />
+      </g>
     </g>
   </g>
   <g
@@ -472,7 +491,10 @@
        width="493.87869"
        height="636.92389"
        x="141"
-       y="139" />
+       y="139"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/ship-tooltip.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -490,14 +512,20 @@
        width="465"
        height="165.00002"
        x="157"
-       y="192" />
+       y="192"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/ship-tooltip.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
        style="opacity:1;fill:#999999;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4586"
        width="464"
        height="391.3381"
        x="156"
-       y="370" />
+       y="370"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/ship-tooltip.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <rect
        style="opacity:1;fill:#808080;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4594"

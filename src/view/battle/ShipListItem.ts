@@ -41,7 +41,7 @@ module SpaceTac.View {
             this.layer_portrait.scale.set(0.3, 0.3);
             this.addChild(this.layer_portrait);
 
-            this.layer_hover = new Phaser.Image(this.game, 30, 30, "battle-arena-shipspritehover", 0);
+            this.layer_hover = new Phaser.Image(this.game, 30, 30, "battle-arena-ship-hover", 0);
             this.layer_hover.position.set(5, 5);
             this.layer_hover.visible = false;
             this.addChild(this.layer_hover);

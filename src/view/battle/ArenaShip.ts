@@ -4,20 +4,24 @@ module SpaceTac.View {
         // Link to displayed ship
         ship: Game.Ship;
 
+        // Boolean to indicate if it is an enemy ship
+        enemy: boolean;
+
         // Ship sprite
         sprite: Phaser.Button;
 
         // Hover effect
         hover: Phaser.Image;
 
-        // Playing effect
-        playing: Phaser.Image;
+        // Frame to indicate the owner of the ship, and if it is playing
+        frame: Phaser.Image;
 
         // Create a ship sprite usable in the Arena
         constructor(battleview: BattleView, ship: Game.Ship) {
             super(battleview.game);
 
             this.ship = ship;
+            this.enemy = this.ship.getPlayer() != battleview.player;
 
             // Add ship sprite
             this.sprite = new Phaser.Button(battleview.game, 0, 0, "ship-" + ship.model + "-sprite");
@@ -25,17 +29,16 @@ module SpaceTac.View {
             this.sprite.anchor.set(0.5, 0.5);
             this.addChild(this.sprite);
 
+            // Add playing effect
+            this.frame = new Phaser.Image(battleview.game, 0, 0, `battle-arena-ship-normal-${this.enemy ? "enemy" : "own"}`, 0);
+            this.frame.anchor.set(0.5, 0.5);
+            this.addChild(this.frame);
+
             // Add hover effect
-            this.hover = new Phaser.Image(battleview.game, 0, 0, "battle-arena-shipspritehover", 0);
+            this.hover = new Phaser.Image(battleview.game, 0, 0, "battle-arena-ship-hover", 0);
             this.hover.anchor.set(0.5, 0.5);
             this.hover.visible = false;
             this.addChild(this.hover);
-
-            // Add playing effect
-            this.playing = new Phaser.Image(battleview.game, 0, 0, "battle-arena-shipspriteplaying", 0);
-            this.playing.anchor.set(0.5, 0.5);
-            this.playing.visible = false;
-            this.addChild(this.playing);
 
             // Handle input on ship sprite
             this.sprite.input.useHandCursor = true;
@@ -62,7 +65,7 @@ module SpaceTac.View {
         // Set the playing state on this ship
         //  This will toggle the "playing" indicator
         setPlaying(playing: boolean) {
-            Animation.setVisibility(this.game, this.playing, playing, 500);
+            this.frame.loadTexture(`battle-arena-ship-${playing ? "playing" : "normal"}-${this.enemy ? "enemy" : "own"}`);
         }
 
         // Move the sprite to a location

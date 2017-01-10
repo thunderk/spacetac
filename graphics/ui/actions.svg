@@ -9,11 +9,11 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="210mm"
-   height="297mm"
+   width="256"
+   height="256"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.91 r13725"
    sodipodi:docname="actions.svg"
    inkscape:export-filename="/home/michael/workspace/spacetac/graphics/ui/temp.png"
    inkscape:export-xdpi="90"
@@ -24,7 +24,7 @@
        clipPathUnits="userSpaceOnUse"
        id="clipPath3925">
       <path
-         style="fill:#40686f;fill-opacity:0.37542665;stroke:#68a3ad;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+         style="fill:#40686f;fill-opacity:0.37542665;stroke:#68a3ad;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="m 343.37404,232.575 0,280 280,0 0,-280 -280,0 z m 240.65625,13.34375 10.625,10.59375 -106.09375,106.0625 105.5,105.5 -10.59375,10.59375 -105.5,-105.46875 -98.40625,98.40625 -10.625,-10.59375 98.4375,-98.4375 -99,-99 10.59375,-10.59375 99,99 106.0625,-106.0625 z"
          id="path3927"
          inkscape:connector-curvature="0" />
@@ -37,12 +37,12 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4"
-     inkscape:cx="444.96825"
-     inkscape:cy="400.52375"
+     inkscape:zoom="1.979899"
+     inkscape:cx="122.81513"
+     inkscape:cy="168.49069"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
-     showgrid="true"
+     inkscape:current-layer="layer2"
+     showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1030"
      inkscape:window-x="0"
@@ -51,7 +51,8 @@
      inkscape:snap-global="true"
      inkscape:snap-bbox="false"
      inkscape:snap-nodes="true"
-     inkscape:snap-bbox-midpoints="false">
+     inkscape:snap-bbox-midpoints="false"
+     units="px">
     <inkscape:grid
        type="xygrid"
        id="grid3004" />
@@ -69,52 +70,60 @@
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:label="Calque 1"
+     inkscape:label="endturn"
      inkscape:groupmode="layer"
-     id="layer1">
-    <path
-       style="fill:#4b818a;fill-opacity:1;stroke:none"
-       d="m 160,362.36218 210,0 -95,-120 10,85 -125,0 z"
-       id="path3006"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc" />
-    <path
-       style="fill:#40686f;fill-opacity:1;stroke:none"
-       d="m 160,362.36218 210,0 -95,120 10,-85 -125,0 z"
-       id="path3006-7"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cccccc" />
-    <path
-       sodipodi:type="arc"
-       style="fill:none;stroke:#68a3ad;stroke-width:31.39999962;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="path3794"
-       sodipodi:cx="480"
-       sodipodi:cy="362.36218"
-       sodipodi:rx="110"
-       sodipodi:ry="110"
-       d="m 590,362.36218 a 110,110 0 1 1 -220,0 110,110 0 1 1 220,0 z"
-       transform="translate(16.625964,-0.19999977)"
-       clip-path="url(#clipPath3925)"
-       inkscape:export-filename="/home/michael/workspace/spacetac/graphics/ui/temp.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
+     id="layer1"
+     transform="translate(0,-796.36216)">
     <g
        id="g3939"
        inkscape:export-filename="/home/michael/workspace/spacetac/graphics/ui/temp.png"
        inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90">
+       inkscape:export-ydpi="90"
+       transform="matrix(0.61036973,0,0,0.61036973,-76.47386,495.66155)">
       <path
          sodipodi:nodetypes="cccc"
          inkscape:connector-curvature="0"
          id="path3935"
          d="m 160,632.36218 120,210 0,-130 z"
-         style="fill:#43903f;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1" />
+         style="fill:#43903f;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
       <path
          sodipodi:nodetypes="cccc"
          inkscape:connector-curvature="0"
          id="path3937"
          d="m 280,842.36218 0,-130 230,-150 z"
-         style="fill:#4a6c48;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1" />
+         style="fill:#4a6c48;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="move">
+    <g
+       id="g5815"
+       transform="matrix(0.49994317,0,0,0.49994317,-67.559263,-53.06051)">
+      <path
+         sodipodi:nodetypes="cccccc"
+         inkscape:connector-curvature="0"
+         id="path3006"
+         d="m 160,362.36218 210,0 -95,-120 10,85 -125,0 z"
+         style="fill:#4b818a;fill-opacity:1;stroke:none" />
+      <path
+         sodipodi:nodetypes="cccccc"
+         inkscape:connector-curvature="0"
+         id="path3006-7"
+         d="m 160,362.36218 210,0 -95,120 10,-85 -125,0 z"
+         style="fill:#40686f;fill-opacity:1;stroke:none" />
+    </g>
+    <circle
+       style="fill:none;stroke:#68a3ad;stroke-width:31.39999962;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path3794"
+       transform="matrix(0.49994317,0,0,0.49994317,-59.247222,-53.160498)"
+       clip-path="url(#clipPath3925)"
+       inkscape:export-filename="/home/michael/workspace/spacetac/graphics/ui/temp.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       cx="480"
+       cy="362.36218"
+       r="110" />
   </g>
 </svg>
