@@ -5,8 +5,18 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     singleRun: true,
     browsers: ['PhantomJS'],
-    reporters: ['dots'],
+    reporters: ['dots', 'coverage'],
     logLevel: config.LOG_WARN,
+
+    preprocessors: {
+      'out/build.js': ['coverage']
+    },
+    coverageReporter: {
+      type : 'json',
+      dir : 'out/coverage/',
+      subdir: '.',
+      file: 'coverage.json'
+    },
 
     files: [
       'out/vendor/phaser/build/phaser.js',
