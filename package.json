@@ -8,7 +8,7 @@
     "build": "tsc -p .",
     "test": "karma start spec/support/karma.conf.js && remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html",
     "build-test": "npm run build && npm run test",
-    "serve": "simple-server out 8012"
+    "serve": "live-server out --host=127.0.0.1 --port=8012 --ignore=coverage"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
     "karma-jasmine": "~1.1",
     "karma-phantomjs-launcher": "~1.0",
     "remap-istanbul": "~0.6",
-    "simple-server": "~1.0",
+    "live-server": "~1.2",
     "typescript": "~2.1",
     "typings": "~1.4"
   }
