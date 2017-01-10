@@ -8,7 +8,8 @@
     "build": "tsc -p .",
     "test": "karma start spec/support/karma.conf.js && remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html",
     "build-test": "npm run build && npm run test",
-    "serve": "live-server out --host=127.0.0.1 --port=8012 --ignore=coverage"
+    "serve": "live-server out --host=127.0.0.1 --port=8012 --ignore=coverage",
+    "codecov": "remap-istanbul -i out/coverage/coverage.json -o out/coverage/mapped.json -t json && codecov -f out/coverage/mapped.json"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   "license": "MIT",
   "devDependencies": {
     "bower": "~1.8",
+    "codecov": "~1.0",
     "jasmine": "~2.5",
     "karma": "~1.3",
     "karma-coverage": "~1.1",
