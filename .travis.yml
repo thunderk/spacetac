@@ -1,2 +1,6 @@
-install: python bootstrap-venv.py
-script: PATH=bin bin/gulp tests
+language: node_js
+node_js:
+    - "6"
+before_script:
+    - npm run deps
+    - npm run build
