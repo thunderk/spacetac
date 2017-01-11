@@ -20,46 +20,23 @@
       height: 1080px;
     }
     </style>
-
-<!-- build:remove -->
-<link rel="stylesheet" href="vendor/jasmine-core/lib/jasmine-core/jasmine.css">
-<!-- /build -->
 </head>
 
 <body>
 
     <div id="-space-tac" class="game"></div>
 
-    <!-- build:remove -->
-    <script src="http://localhost:35729/livereload.js"></script>
-    <script src="vendor/deep-diff/releases/deep-diff-0.3.0.min.js"></script>
-    <!-- /build -->
-
-    <!-- build:js all.min.js -->
     <script src="vendor/jasmine-core/lib/jasmine-core/jasmine.js"></script>
     <script src="vendor/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
     <script src="vendor/jasmine-core/lib/jasmine-core/boot.js"></script>
     <script src="vendor/phaser/build/phaser.js"></script>
     <script src="build.js"></script>
-    <!-- /build -->
 
     <script>
         var currentWindowOnload = window.onload;
         window.oncontextmenu = function (e) { e.preventDefault(); };
         window.onload = function () {
-            <!--build:remove-- >
-        if (currentWindowOnload) {
-                currentWindowOnload();
-            }
-            <!-- /build -->
-            var queryString = new jasmine.QueryString({
-                getWindowLocation: function () { return window.location; }
-            });
-            if (queryString.getParam('onlytests') || queryString.getParam('spec')) {
-                document.getElementById("-space-tac").hidden = true;
-            } else {
-                new SpaceTac.GameUI();
-            }
+            new SpaceTac.GameUI();
         };
     </script>
 

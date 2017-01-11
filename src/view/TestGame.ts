@@ -1,4 +1,4 @@
-/// <reference path="../battle/BattleView.ts"/>
+/// <reference path="battle/BattleView.ts"/>
 
 module SpaceTac.View.Specs {
     // Test game wrapper (use instead of jasmine 'it')

@@ -37,7 +37,7 @@ module SpaceTac.View {
                 this.position.set(action.x, action.y + action.height + action.bar.actionpoints.height);
                 this.main_title.setText(action.action.equipment ? action.action.equipment.name : action.action.name);
                 this.sub_title.setText(action.action.equipment ? action.action.name : "");
-                this.cost.setText(action.action.equipment ? `Cost: ${action.action.equipment.ap_usage.toPrecision(3)} power` : "");
+                this.cost.setText(action.action.equipment ? `Cost: ${action.action.equipment.ap_usage} power` : "");
 
                 Animation.fadeIn(this.game, this, 200, 0.9);
             } else {

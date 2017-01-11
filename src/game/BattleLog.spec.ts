@@ -1,4 +1,4 @@
-/// <reference path="../events/BaseLogEvent.ts"/>
+/// <reference path="events/BaseLogEvent.ts"/>
 
 module SpaceTac.Game {
     // Check a single game log event

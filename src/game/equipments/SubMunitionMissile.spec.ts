@@ -1,5 +1,3 @@
-/// <reference path="../SubMunitionMissile.ts"/>
-
 module SpaceTac.Game.Specs {
     describe("SubMunitionMissile", () => {
         it("hits several targets in circle", () => {

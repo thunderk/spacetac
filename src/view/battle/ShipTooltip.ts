@@ -88,15 +88,15 @@ module SpaceTac.View {
 
                 // Fill info
                 this.title.setText(ship.name);
-                this.attr_hull.setText(ship.hull.getValue().toString());
-                this.attr_shield.setText(ship.shield.getValue().toString());
-                this.attr_power.setText(ship.ap_current.getValue().toString());
-                this.attr_materials.setText(ship.cap_material.getValue().toString());
-                this.attr_electronics.setText(ship.cap_electronics.getValue().toString());
-                this.attr_energy.setText(ship.cap_energy.getValue().toString());
-                this.attr_human.setText(ship.cap_human.getValue().toString());
-                this.attr_gravity.setText(ship.cap_gravity.getValue().toString());
-                this.attr_time.setText(ship.cap_time.getValue().toString());
+                this.attr_hull.setText(ship.hull.current.toString());
+                this.attr_shield.setText(ship.shield.current.toString());
+                this.attr_power.setText(ship.ap_current.current.toString());
+                this.attr_materials.setText(ship.cap_material.current.toString());
+                this.attr_electronics.setText(ship.cap_electronics.current.toString());
+                this.attr_energy.setText(ship.cap_energy.current.toString());
+                this.attr_human.setText(ship.cap_human.current.toString());
+                this.attr_gravity.setText(ship.cap_gravity.current.toString());
+                this.attr_time.setText(ship.cap_time.current.toString());
 
                 Animation.fadeIn(this.game, this, 200, 0.9);
             } else {

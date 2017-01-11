@@ -1,5 +1,4 @@
-/// <reference path="TestGame.ts"/>
-/// <reference path="../battle/BattleView.ts"/>
+/// <reference path="../TestGame.ts"/>
 
 module SpaceTac.View.Specs {
     describe("BattleView", () => {

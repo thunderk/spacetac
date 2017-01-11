@@ -1,3 +1,5 @@
+/// <reference path="LootTemplate.ts" />
+
 module SpaceTac.Game.Specs {
     class TestTemplate extends LootTemplate {
         constructor() {

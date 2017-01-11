@@ -1,4 +1,4 @@
-/// <reference path="TestGame.ts"/>
+/// <reference path="../TestGame.ts"/>
 
 module SpaceTac.View.Specs {
     describe("ActionBar", () => {

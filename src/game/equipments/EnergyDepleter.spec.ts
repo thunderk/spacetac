@@ -1,5 +1,3 @@
-/// <reference path="../EnergyDepleter.ts"/>
-
 module SpaceTac.Game.Specs {
     describe("EnergyDepleter", () => {
         it("limits target's AP", () => {

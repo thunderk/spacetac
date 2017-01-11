@@ -81,11 +81,6 @@ module SpaceTac.Game {
             this.fix();
         }
 
-        // Get current value
-        getValue(): number {
-            return Math.floor(this.current);
-        }
-
         // Set an absolute value
         //  Returns true if the value changed
         set(value: number): boolean {
@@ -104,12 +99,12 @@ module SpaceTac.Game {
             return this.current !== old_value;
         }
 
-        // Fix the value to remain lower than maximal, and positive
+        // Fix the value to be integer, positive and lower than maximal
         private fix(): void {
             if (this.maximal !== null && this.current > this.maximal) {
                 this.current = this.maximal;
             }
-            if (this.current < 0.0001) {
+            if (this.current < 0) {
                 this.current = 0;
             }
         }

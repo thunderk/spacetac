@@ -1,4 +1,4 @@
-/// <reference path="../Serializable.ts"/>
+/// <reference path="Serializable.ts"/>
 
 module SpaceTac.Game.Specs {
     export class SerializableTestObj3 extends Serializable {

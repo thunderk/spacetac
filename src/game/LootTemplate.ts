@@ -42,7 +42,7 @@ module SpaceTac.Game {
             this.distance = new Range(0, 0);
             this.blast = new Range(0, 0);
             this.duration = new IntegerRange(0, 0);
-            this.ap_usage = new Range(0, 0);
+            this.ap_usage = new IntegerRange(0, 0);
             this.min_level = new IntegerRange(0, 0);
             this.permanent_effects = [];
             this.target_effects = [];
@@ -130,21 +130,21 @@ module SpaceTac.Game {
         // Convenience function to add a permanent attribute effect on equipment
         addPermanentAttributeValueEffect(code: AttributeCode, min: number, max: number = null): void {
             var template = new EffectTemplate(new AttributeValueEffect(code, 0));
-            template.addModifier("value", new Range(min, max));
+            template.addModifier("value", new IntegerRange(min, max));
             this.permanent_effects.push(template);
         }
 
         // Convenience function to add a permanent attribute max effect on equipment
         addPermanentAttributeMaxEffect(code: AttributeCode, min: number, max: number = null): void {
             var template = new EffectTemplate(new AttributeMaxEffect(code, 0));
-            template.addModifier("value", new Range(min, max));
+            template.addModifier("value", new IntegerRange(min, max));
             this.permanent_effects.push(template);
         }
 
         // Convenience function to add a "damage on target" effect
         addDamageOnTargetEffect(min: number, max: number = null): void {
             var template = new EffectTemplate(new DamageEffect(0));
-            template.addModifier("value", new Range(min, max));
+            template.addModifier("value", new IntegerRange(min, max));
             this.target_effects.push(template);
         }
 
@@ -152,7 +152,7 @@ module SpaceTac.Game {
         addTemporaryEffectOnTarget(effect: TemporaryEffect, min_value: number, max_value: number = null,
             min_duration: number = 1, max_duration: number = null): void {
             var template = new EffectTemplate(effect);
-            template.addModifier("value", new Range(min_value, max_value));
+            template.addModifier("value", new IntegerRange(min_value, max_value));
             template.addModifier("duration", new IntegerRange(min_duration, max_duration));
             this.target_effects.push(template);
         }

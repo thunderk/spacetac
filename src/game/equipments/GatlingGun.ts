@@ -7,7 +7,7 @@ module SpaceTac.Game.Equipments {
 
             this.setRange(400, 400, false);
 
-            this.ap_usage = new Range(2, 3);
+            this.ap_usage = new IntegerRange(2, 3);
             this.min_level = new IntegerRange(1, 3);
         }
     }
