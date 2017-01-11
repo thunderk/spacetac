@@ -3,23 +3,70 @@ module SpaceTac.View {
     export class ShipTooltip extends Phaser.Sprite {
         battleview: BattleView;
         title: Phaser.Text;
+        attr_hull: Phaser.Text;
+        attr_shield: Phaser.Text;
+        attr_power: Phaser.Text;
+        attr_materials: Phaser.Text;
+        attr_electronics: Phaser.Text;
+        attr_energy: Phaser.Text;
+        attr_human: Phaser.Text;
+        attr_gravity: Phaser.Text;
+        attr_time: Phaser.Text;
 
         constructor(parent: BattleView) {
-            super(parent.game, 0, 0, "battle-ship-tooltip");
+            super(parent.game, 0, 0, "battle-ship-tooltip-own");
             this.visible = false;
             this.battleview = parent;
 
-            this.title = new Phaser.Text(this.game, 247, 10, "", { font: "24px Arial", fill: "#ffffff" });
+            this.title = new Phaser.Text(this.game, 250, 10, "", { font: "24pt Arial", fill: "#ffffff" });
             this.title.anchor.set(0.5, 0);
             this.addChild(this.title);
+
+            this.attr_hull = new Phaser.Text(this.game, 97, 86, "", { font: "18pt Arial", fill: "#eb4e4a", fontWeight: "bold" });
+            this.attr_hull.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_hull);
+
+            this.attr_shield = new Phaser.Text(this.game, 250, 86, "", { font: "18pt Arial", fill: "#2ad8dc", fontWeight: "bold" });
+            this.attr_shield.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_shield);
+
+            this.attr_power = new Phaser.Text(this.game, 397, 86, "", { font: "18pt Arial", fill: "#ffdd4b", fontWeight: "bold" });
+            this.attr_power.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_power);
+
+            this.attr_materials = new Phaser.Text(this.game, 217, 149, "", { font: "14pt Arial", fill: "#d5d5ff", fontWeight: "bold" });
+            this.attr_materials.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_materials);
+
+            this.attr_electronics = new Phaser.Text(this.game, 447, 149, "", { font: "14pt Arial", fill: "#d5d5ff", fontWeight: "bold" });
+            this.attr_electronics.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_electronics);
+
+            this.attr_energy = new Phaser.Text(this.game, 217, 176, "", { font: "14pt Arial", fill: "#d5d5ff", fontWeight: "bold" });
+            this.attr_energy.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_energy);
+
+            this.attr_human = new Phaser.Text(this.game, 447, 176, "", { font: "14pt Arial", fill: "#d5d5ff", fontWeight: "bold" });
+            this.attr_human.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_human);
+
+            this.attr_gravity = new Phaser.Text(this.game, 447, 203, "", { font: "14pt Arial", fill: "#d5d5ff", fontWeight: "bold" });
+            this.attr_gravity.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_gravity);
+
+            this.attr_time = new Phaser.Text(this.game, 217, 203, "", { font: "14pt Arial", fill: "#d5d5ff", fontWeight: "bold" });
+            this.attr_time.anchor.set(0.5, 0.5);
+            this.addChild(this.attr_time);
 
             parent.ui.add(this);
         }
 
         // Set current ship to display, null to hide
         setShip(ship: Game.Ship | null): void {
-            console.log(ship);
             if (ship) {
+                var enemy = ship.getPlayer() != this.battleview.player;
+                this.loadTexture(`battle-ship-tooltip-${enemy ? "enemy" : "own"}`);
+
                 // Find ship sprite to position next to it
                 var sprite = this.battleview.arena.findShipSprite(ship);
                 if (sprite) {
@@ -41,6 +88,15 @@ module SpaceTac.View {
 
                 // Fill info
                 this.title.setText(ship.name);
+                this.attr_hull.setText(ship.hull.getValue().toString());
+                this.attr_shield.setText(ship.shield.getValue().toString());
+                this.attr_power.setText(ship.ap_current.getValue().toString());
+                this.attr_materials.setText(ship.cap_material.getValue().toString());
+                this.attr_electronics.setText(ship.cap_electronics.getValue().toString());
+                this.attr_energy.setText(ship.cap_energy.getValue().toString());
+                this.attr_human.setText(ship.cap_human.getValue().toString());
+                this.attr_gravity.setText(ship.cap_gravity.getValue().toString());
+                this.attr_time.setText(ship.cap_time.getValue().toString());
 
                 Animation.fadeIn(this.game, this, 200, 0.9);
             } else {

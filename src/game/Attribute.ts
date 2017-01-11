@@ -81,6 +81,11 @@ module SpaceTac.Game {
             this.fix();
         }
 
+        // Get current value
+        getValue(): number {
+            return Math.floor(this.current);
+        }
+
         // Set an absolute value
         //  Returns true if the value changed
         set(value: number): boolean {

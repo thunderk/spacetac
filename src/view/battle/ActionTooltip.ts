@@ -12,15 +12,15 @@ module SpaceTac.View {
 
             this.icon = null;
 
-            this.main_title = new Phaser.Text(this.game, 325, 20, "", { font: "24px Arial", fill: "#ffffff" });
+            this.main_title = new Phaser.Text(this.game, 325, 20, "", { font: "24pt Arial", fill: "#ffffff" });
             this.main_title.anchor.set(0.5, 0);
             this.addChild(this.main_title);
 
-            this.sub_title = new Phaser.Text(this.game, 325, 60, "", { font: "22px Arial", fill: "#ffffff" });
+            this.sub_title = new Phaser.Text(this.game, 325, 60, "", { font: "22pt Arial", fill: "#ffffff" });
             this.sub_title.anchor.set(0.5, 0);
             this.addChild(this.sub_title);
 
-            this.cost = new Phaser.Text(this.game, 325, 100, "", { font: "20px Arial", fill: "#ffff00" });
+            this.cost = new Phaser.Text(this.game, 325, 100, "", { font: "20pt Arial", fill: "#ffff00" });
             this.cost.anchor.set(0.5, 0);
             this.addChild(this.cost);
         }
@@ -37,7 +37,7 @@ module SpaceTac.View {
                 this.position.set(action.x, action.y + action.height + action.bar.actionpoints.height);
                 this.main_title.setText(action.action.equipment ? action.action.equipment.name : action.action.name);
                 this.sub_title.setText(action.action.equipment ? action.action.name : "");
-                this.cost.setText(action.action.equipment ? `Cost: ${action.action.equipment.ap_usage.toPrecision(3)} energy` : "");
+                this.cost.setText(action.action.equipment ? `Cost: ${action.action.equipment.ap_usage.toPrecision(3)} power` : "");
 
                 Animation.fadeIn(this.game, this, 200, 0.9);
             } else {

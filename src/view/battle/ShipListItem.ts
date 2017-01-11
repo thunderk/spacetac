@@ -46,14 +46,14 @@ module SpaceTac.View {
             this.layer_hover.visible = false;
             this.addChild(this.layer_hover);
 
-            this.energy = ValueBar.newStyled(this.game, "battle-shiplist-energy", 90, 39, true);
-            this.addChild(this.energy);
+            this.hull = ValueBar.newStyled(this.game, "battle-shiplist-hull", 90, 39, true);
+            this.addChild(this.hull);
 
             this.shield = ValueBar.newStyled(this.game, "battle-shiplist-shield", 98, 39, true);
             this.addChild(this.shield);
 
-            this.hull = ValueBar.newStyled(this.game, "battle-shiplist-hull", 106, 39, true);
-            this.addChild(this.hull);
+            this.energy = ValueBar.newStyled(this.game, "battle-shiplist-energy", 106, 39, true);
+            this.addChild(this.energy);
 
             this.active_effects = new Phaser.Group(this.game);
             this.active_effects.position.set(63, 9);
