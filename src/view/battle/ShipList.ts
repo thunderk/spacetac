@@ -15,7 +15,7 @@ module SpaceTac.View {
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
-            super(battleview.game, 0, 131, "battle-shiplist-background");
+            super(battleview.game, 0, 133, "battle-shiplist-background");
 
             this.battleview = battleview;
             this.ships = [];
@@ -85,7 +85,7 @@ module SpaceTac.View {
                 if (position === 0) {
                     item.moveTo(20, 20 - this.y, animate);
                 } else {
-                    item.moveTo(8, 36 + position * 102 - this.y, animate);
+                    item.moveTo(8, 38 + position * 102 - this.y, animate);
                 }
                 this.setChildIndex(item, position);
             });

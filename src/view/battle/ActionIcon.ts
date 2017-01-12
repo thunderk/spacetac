@@ -34,7 +34,7 @@ module SpaceTac.View {
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Game.Ship, action: Game.BaseAction) {
             super(bar.game, x, y, "battle-action-inactive");
-            
+
             this.bar = bar;
             this.battleview = bar.battleview;
             this.ship = ship;
@@ -49,7 +49,9 @@ module SpaceTac.View {
             this.addChild(this.layer_active);
 
             // Icon layer
-            this.layer_icon = new Phaser.Image(this.game, 15, 18, "battle-actions-" + action.code, 0);
+            this.layer_icon = new Phaser.Image(this.game, this.layer_active.width / 2, this.layer_active.height / 2, "battle-actions-" + action.code, 0);
+            this.layer_icon.anchor.set(0.5, 0.5);
+            this.layer_icon.scale.set(0.25, 0.25);
             this.addChild(this.layer_icon);
 
             // Fading layer
@@ -145,7 +147,7 @@ module SpaceTac.View {
         updateActiveStatus(): void {
             this.active = this.action.canBeUsed(this.battleview.battle, this.ship);
             Animation.setVisibility(this.game, this.layer_active, this.active, 500);
-            this.game.tweens.create(this.layer_icon).to({alpha: this.active ? 1 : 0.3}, 500).start();
+            this.game.tweens.create(this.layer_icon).to({ alpha: this.active ? 1 : 0.3 }, 500).start();
             this.input.useHandCursor = this.active;
         }
 

@@ -47,6 +47,8 @@ module SpaceTac.View {
             this.loadImage("battle/actions/move.png");
             this.loadImage("battle/actions/endturn.png");
             this.loadImage("battle/actions/fire-gatlinggun.png");
+            this.loadImage("battle/actions/fire-energydepleter.png");
+            this.loadImage("battle/actions/fire-submunitionmissile.png");
             this.loadImage("battle/weapon/bullet.png");
             this.loadImage("common/standard-bar-background.png");
             this.loadImage("common/standard-bar-foreground.png");

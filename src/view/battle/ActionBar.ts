@@ -34,10 +34,10 @@ module SpaceTac.View {
             this.addChild(new Phaser.Image(this.game, 0, 0, "battle-actionbar", 0));
 
             // Action points progress bar
-            this.actionpoints = new ValueBar(this.game, 190, 111, "battle-actionpointsempty");
+            this.actionpoints = new ValueBar(this.game, 190, 108, "battle-actionpointsempty");
             this.actionpoints.setBarImage("battle-actionpointspart");
             this.addChild(this.actionpoints);
-            this.actionpointstemp = new ValueBar(this.game, 190, 111, "battle-actionpointsnone");
+            this.actionpointstemp = new ValueBar(this.game, 190, 108, "battle-actionpointsnone");
             this.actionpointstemp.setBarImage("battle-actionpointsfull");
             this.addChild(this.actionpointstemp);
 
@@ -66,7 +66,7 @@ module SpaceTac.View {
 
         // Add an action icon
         addAction(ship: Game.Ship, action: Game.BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, 200 + this.actions.length * 62, 2, ship, action);
+            var icon = new ActionIcon(this, 192 + this.actions.length * 88, 8, ship, action);
             this.actions.push(icon);
 
             this.tooltip.bringToTop();

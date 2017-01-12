@@ -31,10 +31,12 @@ module SpaceTac.View {
                 if (this.icon) {
                     this.icon.destroy(true);
                 }
-                this.icon = new Phaser.Image(this.game, 20, 15, "battle-actions-" + action.action.code);
+                this.icon = new Phaser.Image(this.game, 76, 72, "battle-actions-" + action.action.code);
+                this.icon.anchor.set(0.5, 0.5);
+                this.icon.scale.set(0.44, 0.44);
                 this.addChild(this.icon);
 
-                this.position.set(action.x, action.y + action.height + action.bar.actionpoints.height);
+                this.position.set(action.x, action.y + action.height + 44);
                 this.main_title.setText(action.action.equipment ? action.action.equipment.name : action.action.name);
                 this.sub_title.setText(action.action.equipment ? action.action.name : "");
                 this.cost.setText(action.action.equipment ? `Cost: ${action.action.equipment.ap_usage} power` : "");
