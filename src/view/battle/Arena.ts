@@ -84,11 +84,10 @@ module SpaceTac.View {
         }
 
         // Remove a ship sprite
-        removeShip(ship: Game.Ship): void {
+        markAsDead(ship: Game.Ship): void {
             var sprite = this.findShipSprite(ship);
             if (sprite) {
-                this.ship_sprites.splice(this.ship_sprites.indexOf(sprite), 1);
-                sprite.destroy();
+                sprite.alpha = 0.5;
             }
         }
 

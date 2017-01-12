@@ -106,8 +106,8 @@ module SpaceTac.View {
             if (this.view.ship_hovered === event.ship) {
                 this.view.setShipHovered(null);
             }
-            this.view.arena.removeShip(event.ship);
-            this.view.ship_list.removeShip(event.ship);
+            this.view.arena.markAsDead(event.ship);
+            this.view.ship_list.markAsDead(event.ship);
         }
 
         // Weapon used

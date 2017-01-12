@@ -92,13 +92,11 @@ module SpaceTac.View {
         }
 
         // Remove a ship from the list
-        removeShip(ship: Game.Ship): void {
+        markAsDead(ship: Game.Ship): void {
             var item = this.findItem(ship);
             if (item) {
-                this.ships.splice(this.ships.indexOf(item), 1);
-                item.destroy();
+                item.alpha = 0.5;
             }
-            this.updateItemsLocation();
         }
 
         // Set the currently playing ship
