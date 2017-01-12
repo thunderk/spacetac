@@ -191,7 +191,7 @@ module SpaceTac.Game {
             }
 
             if (this.playing_ship) {
-                this.playing_ship.startTurn(this.first_turn);
+                this.playing_ship.startTurn();
 
                 if (!this.playing_ship.isAbleToPlay()) {
                     // If the ship is not able to play, wait a little, then advance to the next one
@@ -217,8 +217,7 @@ module SpaceTac.Game {
             this.placeShips();
             this.throwInitiative();
             this.play_order.forEach((ship: Ship) => {
-                ship.updateAttributes();
-                ship.restoreHealth();
+                ship.startBattle();
             });
             this.advanceToNextShip();
         }

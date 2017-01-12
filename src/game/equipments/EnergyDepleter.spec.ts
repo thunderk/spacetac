@@ -29,17 +29,11 @@ module SpaceTac.Game.Specs {
                 new AttributeLimitEffect(AttributeCode.AP, 1, 4)
             ]);
 
+            // Attribute vanishes before the end of turn, so AP recovery happens
             target.endTurn();
-            expect(target.ap_current.current).toBe(4);
-            expect(target.temporary_effects).toEqual([]);
-
-            // Attribute vanishes before the start of next turn, so AP recovery happens
-            target.startTurn();
 
             expect(target.ap_current.current).toBe(6);
             expect(target.temporary_effects).toEqual([]);
-
-            target.endTurn();
         });
     });
 }

@@ -112,7 +112,7 @@ module SpaceTac.Game {
             expect(battle.playing_ship_index).toBe(2);
         });
 
-        it("calls startTurn on ships, with first turn indicator", function () {
+        it("calls startTurn on ships", function () {
             var fleet1 = new Fleet(null);
             var fleet2 = new Fleet(null);
 
@@ -131,16 +131,16 @@ module SpaceTac.Game {
             battle.throwInitiative(gen);
 
             battle.advanceToNextShip();
-            expect(ship1.startTurn).toHaveBeenCalledWith(true);
+            expect(ship1.startTurn).toHaveBeenCalledWith();
 
             battle.advanceToNextShip();
-            expect(ship2.startTurn).toHaveBeenCalledWith(true);
+            expect(ship2.startTurn).toHaveBeenCalledWith();
 
             battle.advanceToNextShip();
-            expect(ship3.startTurn).toHaveBeenCalledWith(true);
+            expect(ship3.startTurn).toHaveBeenCalledWith();
 
             battle.advanceToNextShip();
-            expect(ship1.startTurn).toHaveBeenCalledWith(false);
+            expect(ship1.startTurn).toHaveBeenCalledWith();
         });
 
         it("detects victory condition and logs a final EndBattleEvent", function () {

@@ -199,7 +199,7 @@ module SpaceTac.Game {
         }
 
         // Recover action points
-        //  This should be called once at the start of a turn
+        //  This should be called once at the end of a turn
         //  If no value is provided, the current attribute ap_recovery will be used
         recoverActionPoints(value: number = null): void {
             if (value === null) {
@@ -213,17 +213,17 @@ module SpaceTac.Game {
             this.setAttribute(this.ap_current, -value, true);
         }
 
+        // Method called at the start of battle
+        startBattle() {
+            this.updateAttributes();
+            this.restoreHealth();
+            this.initializeActionPoints();
+        }
+
         // Method called at the start of this ship turn
-        startTurn(first: boolean = false): void {
+        startTurn(): void {
             // Recompute attributes
             this.updateAttributes();
-
-            // Manage action points
-            if (first) {
-                this.initializeActionPoints();
-            } else {
-                this.recoverActionPoints();
-            }
 
             // Apply sticky effects
             this.temporary_effects.forEach((effect: TemporaryEffect) => {
@@ -233,6 +233,9 @@ module SpaceTac.Game {
 
         // Method called at the end of this ship turn
         endTurn(): void {
+            // Recover action points for next turn
+            this.recoverActionPoints();
+
             // Decrement sticky effects duration
             this.temporary_effects = this.temporary_effects.filter((effect: TemporaryEffect): boolean => {
                 if (effect.duration <= 1) {

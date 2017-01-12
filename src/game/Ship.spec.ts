@@ -235,5 +235,22 @@ module SpaceTac.Game.Specs {
             expect(picked).not.toBeNull();
             expect(picked).toBe(ship.slots[2].attached);
         });
+
+        it("recover action points at end of turn", function () {
+            var ship = new Ship();
+
+            var power_core_template = new Equipments.BasicPowerCore();
+            ship.addSlot(SlotType.Power).attach(power_core_template.generateFixed(0));
+
+            expect(ship.ap_current.current).toBe(0);
+            ship.initializeActionPoints();
+            expect(ship.ap_current.current).toBe(5);
+            ship.ap_current.set(2);
+            expect(ship.ap_current.current).toBe(2);
+            ship.endTurn();
+            expect(ship.ap_current.current).toBe(6);
+            ship.endTurn();
+            expect(ship.ap_current.current).toBe(8);
+        });
     });
 }
