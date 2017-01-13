@@ -56,7 +56,7 @@ module SpaceTac.View.Specs {
             var checkFading = (fading: number[], available: number[]) => {
                 fading.forEach((index: number) => {
                     var icon = bar.actions[index];
-                    expect(icon.fading).toBe(true);
+                    expect(icon.fading || !icon.active).toBe(true);
                 });
                 available.forEach((index: number) => {
                     var icon = bar.actions[index];

@@ -383,11 +383,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568542"
-     inkscape:cx="243.62481"
-     inkscape:cy="1128.5583"
+     inkscape:zoom="2"
+     inkscape:cx="159.70712"
+     inkscape:cy="1005.3619"
      inkscape:document-units="px"
-     inkscape:current-layer="layer25"
+     inkscape:current-layer="layer9"
      showgrid="false"
      units="px"
      showguides="true"
@@ -1142,10 +1142,6 @@
            width="100%"
            height="100%" />
       </g>
-      <g
-         inkscape:groupmode="layer"
-         id="layer25"
-         inkscape:label="Action icon fading" />
     </g>
     <g
        inkscape:groupmode="layer"

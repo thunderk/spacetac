@@ -145,16 +145,27 @@ module SpaceTac.View {
 
         // Update the active status, from the action canBeUsed result
         updateActiveStatus(): void {
+            var old_active = this.active;
             this.active = this.action.canBeUsed(this.battleview.battle, this.ship);
-            Animation.setVisibility(this.game, this.layer_active, this.active, 500);
-            this.game.tweens.create(this.layer_icon).to({ alpha: this.active ? 1 : 0.3 }, 500).start();
-            this.input.useHandCursor = this.active;
+            if (this.active != old_active) {
+                Animation.setVisibility(this.game, this.layer_active, this.active, 500);
+                this.game.tweens.create(this.layer_icon).to({ alpha: this.active ? 1 : 0.3 }, 500).start();
+                this.input.useHandCursor = this.active;
+            }
         }
 
         // Update the fading status, given an hypothetical remaining AP
         updateFadingStatus(remaining_ap: number): void {
-            this.fading = !this.action.canBeUsed(this.battleview.battle, this.ship, remaining_ap);
-            Animation.setVisibility(this.game, this.layer_fading, this.fading && this.active, 200);
+            var old_fading = this.fading;
+            this.fading = this.active && !this.action.canBeUsed(this.battleview.battle, this.ship, remaining_ap);
+            if (this.fading != old_fading) {
+                if (this.fading) {
+                    this.game.tweens.create(this.layer_active).to({ alpha: 0.4 }, 100).delay(180).to({ alpha: 1 }, 90).to({ alpha: 0.4 }, 80).delay(130).to({ alpha: 1 }, 100).to({ alpha: 0.4 }, 90).delay(160).to({ alpha: 0.8 }, 70).loop(true).start();
+                } else {
+                    this.game.tweens.removeFrom(this.layer_active);
+                    this.layer_active.alpha = this.active ? 1 : 0;
+                }
+            }
         }
     }
 }
