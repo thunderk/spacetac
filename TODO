@@ -1,5 +1,9 @@
-* Add a defeat screen (game over for now)
-* Add a victory screen, with looting
-* Add retreat from battle
-* Refactor the tooltip system to use it more
+* Floor movement power usage, and show it on the displayed line
+* Add auto-move to attack
+* Re-style cancel button and allow to cancel by clicking the action again
 * Flash ship icons that receive damage
+* Mobile: display tooltips on hold
+* Mobile: targetting in two times, using a draggable target indicator
+* Add a defeat screen (game over for now)
+* Add a victory screen, with loot display
+* Add retreat from battle
