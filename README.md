@@ -9,6 +9,18 @@
 
 *Play directly in your browser, no download or dependency required.*
 
+## How to develop
+
+If you want to build on your computer, clone the repository, then run:
+
+    npm install    # Install dependencies
+    npm test       # Run unit tests
+    rpm start      # Start development server, and open game in web browser
+
+After making changes to sources, you need to recompile:
+
+    npm run build
+
 ## Attributes
 
 * **Initiative** - Ability to play before other ships in the play order

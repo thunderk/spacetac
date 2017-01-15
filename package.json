@@ -4,11 +4,12 @@
   "description": "A tactical RPG set in space",
   "main": "src/build.js",
   "scripts": {
-    "deps": "bower install && typings install",
+    "postinstall": "bower install && typings install",
     "build": "tsc -p .",
+    "pretest": "tsc -p .",
     "test": "karma start spec/support/karma.conf.js && remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html",
-    "build-test": "npm run build && npm run test",
-    "serve": "live-server out --host=127.0.0.1 --port=8012 --ignore=coverage",
+    "prestart": "tsc -p .",
+    "start": "live-server out --host=127.0.0.1 --port=8012 --ignore=coverage",
     "codecov": "remap-istanbul -i out/coverage/coverage.json -o out/coverage/mapped.json -t json && codecov -f out/coverage/mapped.json"
   },
   "repository": {
