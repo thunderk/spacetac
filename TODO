@@ -3,7 +3,6 @@
 * Re-style cancel button and allow to cancel by clicking the action again
 * Add equipment and active effects on ship tooltip
 * Add effect description on action tooltip
-* Flash ship icons that receive damage
 * Mobile: display tooltips on hold
 * Mobile: targetting in two times, using a draggable target indicator
 * Add a defeat screen (game over for now)

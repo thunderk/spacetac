@@ -83,6 +83,10 @@ module SpaceTac.View {
             if (sprite) {
                 sprite.displayDamage(event.hull, event.shield);
             }
+            var item = this.view.ship_list.findItem(event.ship);
+            if (item) {
+                item.setDamageHit();
+            }
         }
 
         // Ship moved

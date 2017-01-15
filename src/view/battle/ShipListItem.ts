@@ -16,6 +16,9 @@ module SpaceTac.View {
         // Portrait
         layer_portrait: Phaser.Image;
 
+        // Damage flashing indicator
+        layer_damage: Phaser.Image;
+
         // Hover indicator
         layer_hover: Phaser.Image;
 
@@ -36,13 +39,15 @@ module SpaceTac.View {
                 list.battleview.cursorOffShip(ship);
             });
 
-            this.layer_portrait = new Phaser.Image(this.game, 76, 76, "ship-" + ship.model + "-portrait", 0);
-            this.layer_portrait.position.set(8, 8);
+            this.layer_portrait = new Phaser.Image(this.game, 8, 8, "ship-" + ship.model + "-portrait", 0);
             this.layer_portrait.scale.set(0.3, 0.3);
             this.addChild(this.layer_portrait);
 
-            this.layer_hover = new Phaser.Image(this.game, 30, 30, "battle-arena-ship-hover", 0);
-            this.layer_hover.position.set(5, 5);
+            this.layer_damage = new Phaser.Image(this.game, 8, 8, "battle-shiplist-damage", 0);
+            this.layer_damage.alpha = 0;
+            this.addChild(this.layer_damage);
+
+            this.layer_hover = new Phaser.Image(this.game, 5, 5, "battle-arena-ship-hover", 0);
             this.layer_hover.visible = false;
             this.addChild(this.layer_hover);
 
@@ -88,6 +93,11 @@ module SpaceTac.View {
             } else if (attribute.code === Game.AttributeCode.AP) {
                 this.energy.setValue(attribute.current, attribute.maximal);
             }
+        }
+
+        // Flash a damage indicator
+        setDamageHit() {
+            this.game.tweens.create(this.layer_damage).to({ alpha: 1 }, 100).to({ alpha: 0 }, 150).repeatAll(2).start();
         }
 
         // Move to a given location on screen

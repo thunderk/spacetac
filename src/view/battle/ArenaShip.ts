@@ -88,14 +88,14 @@ module SpaceTac.View {
         displayDamage(hull: number, shield: number) {
             if (hull > 0) {
                 var hull_text = new Phaser.Text(this.game, -20, -20, Math.round(hull).toString(),
-                    { font: "bold 16px Arial", align: "center", fill: "#ffbbbb" });
+                    { font: "bold 16pt Arial", align: "center", fill: "#ffbbbb" });
                 hull_text.anchor.set(0.5, 0.5);
                 this.addChild(hull_text);
                 this.animateDamageText(hull_text);
             }
             if (shield > 0) {
                 var shield_text = new Phaser.Text(this.game, 20, -20, Math.round(shield).toString(),
-                    { font: "bold 16px Arial", align: "center", fill: "#bbbbff" });
+                    { font: "bold 16pt Arial", align: "center", fill: "#bbbbff" });
                 shield_text.anchor.set(0.5, 0.5);
                 this.addChild(shield_text);
                 this.animateDamageText(shield_text);
@@ -105,8 +105,8 @@ module SpaceTac.View {
         private animateDamageText(text: Phaser.Text) {
             text.alpha = 0;
             var tween = this.game.tweens.create(text);
-            tween.to({ alpha: 1 }, 100, Phaser.Easing.Circular.In, false, 500);
-            tween.to({ y: -50, alpha: 0 }, 800, Phaser.Easing.Circular.In, false, 200);
+            tween.to({ alpha: 1 }, 100, Phaser.Easing.Circular.In, false, 400);
+            tween.to({ y: -50, alpha: 0 }, 1000, Phaser.Easing.Circular.In, false, 1000);
             tween.onComplete.addOnce(() => {
                 text.destroy();
             });

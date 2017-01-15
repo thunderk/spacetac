@@ -375,6 +375,19 @@
          stdDeviation="1.140475"
          id="feGaussianBlur10852" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter5961"
+       x="-0.0456"
+       width="1.0912"
+       y="-0.0456"
+       height="1.0912">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.4344999"
+         id="feGaussianBlur5963" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -383,11 +396,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2"
-     inkscape:cx="159.70712"
-     inkscape:cy="1005.3619"
+     inkscape:zoom="2.8284272"
+     inkscape:cx="182.77595"
+     inkscape:cy="695.32256"
      inkscape:document-units="px"
-     inkscape:current-layer="layer9"
+     inkscape:current-layer="layer19"
      showgrid="false"
      units="px"
      showguides="true"
@@ -495,7 +508,7 @@
        style="display:inline">
       <g
          id="g4211"
-         transform="translate(-0.59654921,27.602305)"
+         transform="translate(-190.27795,-12.702781)"
          inkscape:export-filename="/tmp/export.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90"
@@ -593,15 +606,15 @@
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
          id="use4335"
-         transform="translate(-189.6814,-40.305086)"
          width="100%"
-         height="100%" />
+         height="100%"
+         transform="translate(189.6814,40.305086)" />
       <use
          x="0"
          y="0"
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
-         transform="translate(-4.0854365e-6,101.86058)"
+         transform="translate(189.6814,142.16567)"
          id="use4337"
          width="100%"
          height="100%" />
@@ -610,7 +623,7 @@
          y="0"
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
-         transform="translate(-4.0854365e-6,203.72117)"
+         transform="translate(189.6814,244.02626)"
          id="use4339"
          width="100%"
          height="100%" />
@@ -619,7 +632,7 @@
          y="0"
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
-         transform="translate(-4.0854365e-6,305.58175)"
+         transform="translate(189.6814,345.88684)"
          id="use4341"
          width="100%"
          height="100%" />
@@ -628,7 +641,7 @@
          y="0"
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
-         transform="translate(-4.0854365e-6,407.44233)"
+         transform="translate(189.6814,447.74742)"
          id="use4343"
          width="100%"
          height="100%" />
@@ -637,7 +650,7 @@
          y="0"
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
-         transform="translate(-4.0854365e-6,509.30291)"
+         transform="translate(189.6814,549.608)"
          id="use4345"
          width="100%"
          height="100%" />
@@ -646,7 +659,7 @@
          y="0"
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
-         transform="translate(-4.0854365e-6,611.1635)"
+         transform="translate(189.6814,651.46859)"
          id="use4347"
          width="100%"
          height="100%" />
@@ -655,7 +668,7 @@
          y="0"
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
-         transform="translate(-4.0854365e-6,713.02408)"
+         transform="translate(189.6814,753.32917)"
          id="use4349"
          width="100%"
          height="100%" />
@@ -664,7 +677,7 @@
          y="0"
          inkscape:tiled-clone-of="#g4211"
          xlink:href="#g4211"
-         transform="translate(-4.0854365e-6,814.88466)"
+         transform="translate(189.6814,855.18975)"
          id="use4351"
          width="100%"
          height="100%" />
@@ -676,7 +689,6 @@
        style="display:inline">
       <g
          id="g4299"
-         style=""
          inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-hover.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90">
@@ -745,6 +757,45 @@
            xlink:href="#path4312"
            y="0"
            x="0" />
+      </g>
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="layer26"
+       inkscape:label="Ship list damage">
+      <g
+         id="g6399"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/shiplist-damage.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <rect
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/shiplist-damage.png"
+           style="display:inline;opacity:1;fill:#ff0000;fill-opacity:0.53404254;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="rect4248-36"
+           width="77.905304"
+           height="77.905304"
+           x="15.297348"
+           y="351.79733" />
+        <path
+           transform="matrix(0.92227455,0,0,0.92227455,4.3907517,30.395226)"
+           inkscape:transform-center-y="0.20520969"
+           inkscape:transform-center-x="2.3542535"
+           d="m 66.814516,381.04262 21.947361,-5.15483 -18.852646,12.36271 21.828993,5.63507 -22.438429,2.18538 16.709867,15.13404 -20.883838,-8.4926 7.762712,21.166 -14.545012,-17.22503 -2.962788,22.34907 -4.874099,-22.01141 -13.009548,18.41224 5.913412,-21.75524 -20.075978,10.25739 15.346231,-16.51521 -22.543243,-0.24731 21.263414,-7.49174 -19.846123,-10.69534 22.309404,3.24799 -12.602495,-18.69321 18.24458,13.24365 -2.471787,-22.40869 10.00014,20.20535 8.225178,-20.9906 -0.53521,22.53825 17.037853,-14.76383 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="false"
+           sodipodi:arg2="-0.4055507"
+           sodipodi:arg1="-0.64721167"
+           sodipodi:r2="38.113316"
+           sodipodi:r1="16.388725"
+           sodipodi:cy="390.92444"
+           sodipodi:cx="53.740112"
+           sodipodi:sides="13"
+           id="path4421"
+           style="opacity:1;fill:#ff643a;fill-opacity:0.77021275;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5961)"
+           sodipodi:type="star" />
       </g>
     </g>
   </g>
@@ -1153,7 +1204,7 @@
          y="0"
          xlink:href="#g4211"
          id="use4222"
-         transform="translate(11.203149,-122.13397)"
+         transform="translate(200.88455,-81.828884)"
          width="100%"
          height="100%" />
     </g>
