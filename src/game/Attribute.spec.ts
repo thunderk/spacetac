@@ -29,6 +29,11 @@ module SpaceTac.Game {
             ]);
         });
 
+        it("gets human readable name", function () {
+            expect(ATTRIBUTE_NAMES[AttributeCode.Initiative]).toEqual("initiative");
+            expect(ATTRIBUTE_NAMES[AttributeCode.AP]).toEqual("power");
+        });
+
         it("applies minimal and maximal value", function () {
             var attr = new Attribute(AttributeCode.Misc, 50, 100);
             expect(attr.current).toBe(50);

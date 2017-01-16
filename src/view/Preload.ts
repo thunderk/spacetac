@@ -20,6 +20,8 @@ module SpaceTac.View {
             this.loadImage("battle/shiplist-own.png");
             this.loadImage("battle/shiplist-enemy.png");
             this.loadImage("battle/shiplist-damage.png");
+            this.loadImage("battle/shiplist-effect-good.png");
+            this.loadImage("battle/shiplist-effect-bad.png");
             this.loadImage("battle/shiplist-energy-empty.png");
             this.loadImage("battle/shiplist-energy-full.png");
             this.loadImage("battle/shiplist-hull-empty.png");
@@ -32,7 +34,6 @@ module SpaceTac.View {
             this.loadImage("battle/actionbar-cancel.png");
             this.loadImage("battle/action-inactive.png");
             this.loadImage("battle/action-active.png");
-            this.loadImage("battle/action-fading.png");
             this.loadImage("battle/action-tooltip.png");
             this.loadImage("battle/actionpointsnone.png");
             this.loadImage("battle/actionpointsempty.png");
@@ -40,6 +41,7 @@ module SpaceTac.View {
             this.loadImage("battle/actionpointspart.png");
             this.loadImage("battle/ship-tooltip-own.png");
             this.loadImage("battle/ship-tooltip-enemy.png");
+            this.loadImage("battle/ship-tooltip-effect.png");
             this.loadImage("battle/arena/ship-hover.png");
             this.loadImage("battle/arena/ship-normal-enemy.png");
             this.loadImage("battle/arena/ship-normal-own.png");

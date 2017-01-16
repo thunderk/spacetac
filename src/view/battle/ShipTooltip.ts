@@ -12,6 +12,7 @@ module SpaceTac.View {
         attr_human: Phaser.Text;
         attr_gravity: Phaser.Text;
         attr_time: Phaser.Text;
+        active_effects: Phaser.Group;
 
         constructor(parent: BattleView) {
             super(parent.game, 0, 0, "battle-ship-tooltip-own");
@@ -58,6 +59,9 @@ module SpaceTac.View {
             this.attr_time.anchor.set(0.5, 0.5);
             this.addChild(this.attr_time);
 
+            this.active_effects = new Phaser.Group(this.game);
+            this.addChild(this.active_effects);
+
             parent.ui.add(this);
         }
 
@@ -97,11 +101,31 @@ module SpaceTac.View {
                 this.attr_human.setText(ship.cap_human.current.toString());
                 this.attr_gravity.setText(ship.cap_gravity.current.toString());
                 this.attr_time.setText(ship.cap_time.current.toString());
+                this.active_effects.removeAll(true);
+                ship.temporary_effects.forEach((effect, index) => {
+                    this.addEffect(effect, index);
+                });
 
                 Animation.fadeIn(this.game, this, 200, 0.9);
             } else {
                 Animation.fadeOut(this.game, this, 200);
             }
+        }
+
+        // Add a temporary effect display
+        addEffect(effect: Game.TemporaryEffect, index = 0) {
+            var effect_group = new Phaser.Image(this.game, 27, 243 + 60 * index, "battle-ship-tooltip-effect");
+            this.active_effects.addChild(effect_group);
+
+            var effect_icon = new Phaser.Image(this.game, 30, effect_group.height / 2, `battle-effect-${effect.getFullCode()}`);
+            effect_icon.anchor.set(0.5, 0.5);
+            effect_group.addChild(effect_icon);
+
+            var text = `${effect.getDescription()} (${effect.duration} turns)`;
+            var color = effect.isBeneficial() ? "afe9c6" : "#e9afaf";
+            var effect_text = new Phaser.Text(this.game, 60, effect_group.height / 2, text, { font: "16pt Arial", fill: color });
+            effect_text.anchor.set(0, 0.5);
+            effect_group.addChild(effect_text);
         }
     }
 }

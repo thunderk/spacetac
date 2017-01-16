@@ -43,6 +43,22 @@ module SpaceTac.Game {
         Misc
     }
 
+    // Name mapping for attributes
+    export const ATTRIBUTE_NAMES = [
+        "initiative",
+        "hull",
+        "shield",
+        "power",
+        "power recovery",
+        "initial power",
+        "materials",
+        "energy",
+        "electronics",
+        "human",
+        "time",
+        "gravity"
+    ]
+
     // Value computed from equipment
     //  This value can be altered by effects
     //  Example attributes are health points, action points recovery...

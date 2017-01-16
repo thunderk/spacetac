@@ -28,9 +28,6 @@ module SpaceTac.View {
         // Layer applied when the action is active
         private layer_active: Phaser.Image;
 
-        // Layer applied when the action will become unavailable if another action is played
-        private layer_fading: Phaser.Image;
-
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Game.Ship, action: Game.BaseAction) {
             super(bar.game, x, y, "battle-action-inactive");
@@ -53,12 +50,6 @@ module SpaceTac.View {
             this.layer_icon.anchor.set(0.5, 0.5);
             this.layer_icon.scale.set(0.25, 0.25);
             this.addChild(this.layer_icon);
-
-            // Fading layer
-            this.fading = false;
-            this.layer_fading = new Phaser.Image(this.game, 0, 0, "battle-action-fading", 0);
-            this.layer_fading.visible = false;
-            this.addChild(this.layer_fading);
 
             // Click process
             this.onInputUp.add(() => {

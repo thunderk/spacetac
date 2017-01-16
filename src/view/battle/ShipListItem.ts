@@ -61,7 +61,6 @@ module SpaceTac.View {
             this.addChild(this.energy);
 
             this.active_effects = new Phaser.Group(this.game);
-            this.active_effects.position.set(63, 9);
             this.addChild(this.active_effects);
 
             this.updateAttributes();
@@ -78,9 +77,13 @@ module SpaceTac.View {
         // Update effects applied on the ship
         updateEffects() {
             this.active_effects.removeAll(true);
-            this.ship.temporary_effects.forEach((effect: Game.TemporaryEffect) => {
-                var icon = new EffectDisplay(this.game, effect);
-                this.active_effects.addChild(icon);
+            var count = this.ship.temporary_effects.length;
+            var spacing = (8 * (count - 1) > 72) ? 72 / (count - 1) : 8;
+            this.ship.temporary_effects.forEach((effect, index) => {
+                var x = 46 - (count - 1) * spacing / 2 + index * spacing;
+                var badge = new Phaser.Image(this.game, x, 85, `battle-shiplist-effect-${effect.isBeneficial() ? "good" : "bad"}`);
+                badge.anchor.set(0.5, 0.5);
+                this.active_effects.addChild(badge);
             });
         }
 

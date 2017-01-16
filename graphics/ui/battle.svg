@@ -17,7 +17,7 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="battle.svg"
-   inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/actionbar.png"
+   inkscape:export-filename="/tmp/whole.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -396,18 +396,21 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284272"
-     inkscape:cx="182.77595"
-     inkscape:cy="695.32256"
+     inkscape:zoom="11.313709"
+     inkscape:cx="56.720009"
+     inkscape:cy="752.24415"
      inkscape:document-units="px"
-     inkscape:current-layer="layer19"
+     inkscape:current-layer="layer14"
      showgrid="false"
      units="px"
      showguides="true"
      inkscape:snap-bbox="false"
      inkscape:bbox-nodes="true"
      inkscape:bbox-paths="true"
-     inkscape:snap-to-guides="true">
+     inkscape:snap-to-guides="true"
+     inkscape:object-nodes="false"
+     inkscape:snap-intersection-paths="false"
+     inkscape:object-paths="false">
     <sodipodi:guide
        position="0,0"
        orientation="0,1920"
@@ -797,6 +800,38 @@
            style="opacity:1;fill:#ff643a;fill-opacity:0.77021275;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5961)"
            sodipodi:type="star" />
       </g>
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="layer25"
+       inkscape:label="Ship list effects">
+      <ellipse
+         style="opacity:1;fill:#afe9c6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="path4455"
+         cx="53.669197"
+         cy="328.125"
+         rx="2.4911165"
+         ry="3.9937184"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/shiplist-effect-good.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <ellipse
+         ry="3.9937184"
+         rx="2.4911165"
+         cy="328.125"
+         cx="60.254128"
+         id="ellipse4478"
+         style="opacity:1;fill:#afe9c6;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <ellipse
+         ry="3.9937184"
+         rx="2.4911165"
+         cy="328.125"
+         cx="47.084263"
+         id="ellipse4480"
+         style="opacity:1;fill:#e9afaf;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/shiplist-effect-bad.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
     </g>
   </g>
   <g
@@ -1623,14 +1658,20 @@
          width="444"
          height="57"
          x="166"
-         y="379" />
+         y="379"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/ship-tooltip-effect.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <rect
          style="display:inline;opacity:1;fill:#666666;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect4596"
          width="43.5"
          height="43.5"
          x="174"
-         y="386" />
+         y="386"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/ship-tooltip-effect.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
       <text
          xml:space="preserve"
          style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -1673,6 +1714,34 @@
            x="226.24536"
            y="483.41992"
            style="font-size:20px;fill:#e9afaf">Power recovery -1 (2 turns)</tspan></text>
+      <use
+         x="0"
+         y="0"
+         xlink:href="#rect4594"
+         id="use4423"
+         transform="translate(0,137.17871)"
+         width="100%"
+         height="100%" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#rect4596"
+         id="use4425"
+         transform="translate(0,136.92871)"
+         width="100%"
+         height="100%" />
+      <text
+         sodipodi:linespacing="125%"
+         id="text4445"
+         y="550.18652"
+         x="226.24536"
+         style="font-style:normal;font-weight:normal;font-size:20px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#e9afaf;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-size:20px;fill:#afe9c6;fill-opacity:1"
+           y="550.18652"
+           x="226.24536"
+           id="tspan4447"
+           sodipodi:role="line">Shield +50 (1 turn)</tspan></text>
     </g>
   </g>
   <g

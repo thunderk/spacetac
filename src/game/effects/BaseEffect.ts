@@ -19,5 +19,15 @@ module SpaceTac.Game {
         applyOnShip(ship: Ship): boolean {
             return false;
         }
+
+        // Return true if the effect is beneficial to the ship, false if it's a drawback
+        isBeneficial(): boolean {
+            return false;
+        }
+
+        // Return a human readable description
+        getDescription(): string {
+            return "unknown effect";
+        }
     }
 }
