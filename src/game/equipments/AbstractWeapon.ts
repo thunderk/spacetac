@@ -11,7 +11,9 @@ module SpaceTac.Game.Equipments {
 
             this.can_target_space = false;
 
-            this.addDamageOnTargetEffect(min_damage, max_damage);
+            if (min_damage > 0 || (max_damage != null && max_damage > 0)) {
+                this.addDamageOnTargetEffect(min_damage, max_damage);
+            }
         }
 
         // Set the range for this weapon
@@ -23,7 +25,7 @@ module SpaceTac.Game.Equipments {
 
         // Set the effect radius (blast) for this weapon
         setBlast(min_blast: number, max_blast: number = null): void {
-            this.blast = new Range(min_blast, max_blast);
+            this.blast = new IntegerRange(min_blast, max_blast);
         }
 
         protected getActionForEquipment(equipment: Equipment): BaseAction {

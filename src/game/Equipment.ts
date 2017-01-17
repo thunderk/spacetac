@@ -77,5 +77,22 @@ module SpaceTac.Game {
                 this.attached_to = null;
             }
         }
+
+        // Get a human readable description of the effects of this equipment
+        getActionDescription(): string {
+            if (this.permanent_effects.length == 0 && this.target_effects.length == 0) {
+                return "does nothing";
+            } else {
+                var result: string[] = [];
+                this.target_effects.forEach(effect => {
+                    let suffix = this.blast ? `on all ships in ${this.blast}km of impact` : "on target";
+                    if (effect instanceof TemporaryEffect) {
+                        suffix = `for ${effect.duration} turn${effect.duration > 1 ? "s" : ""} ${suffix}`;
+                    }
+                    result.push("- " + effect.getDescription() + " " + suffix);
+                });
+                return result.join("\n");
+            }
+        }
     }
 }

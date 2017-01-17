@@ -37,5 +37,9 @@ module SpaceTac.Game {
 
             return true;
         }
+
+        getDescription(): string {
+            return `${this.value} damage`;
+        }
     }
 }

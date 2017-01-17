@@ -5,6 +5,7 @@ module SpaceTac.View {
         main_title: Phaser.Text;
         sub_title: Phaser.Text;
         cost: Phaser.Text;
+        description: Phaser.Text;
 
         constructor(parent: ActionBar) {
             super(parent.game, 0, 0, "battle-action-tooltip");
@@ -23,6 +24,11 @@ module SpaceTac.View {
             this.cost = new Phaser.Text(this.game, 325, 100, "", { font: "20pt Arial", fill: "#ffff00" });
             this.cost.anchor.set(0.5, 0);
             this.addChild(this.cost);
+
+            this.description = new Phaser.Text(this.game, 21, 144, "", { font: "14pt Arial", fill: "#ffffff" });
+            this.description.wordWrap = true;
+            this.description.wordWrapWidth = 476;
+            this.addChild(this.description);
         }
 
         // Set current action to display, null to hide
@@ -40,6 +46,7 @@ module SpaceTac.View {
                 this.main_title.setText(action.action.equipment ? action.action.equipment.name : action.action.name);
                 this.sub_title.setText(action.action.equipment ? action.action.name : "");
                 this.cost.setText(action.action.equipment ? `Cost: ${action.action.equipment.ap_usage} power` : "");
+                this.description.setText(action.action.equipment ? action.action.equipment.getActionDescription() : "");
 
                 Animation.fadeIn(this.game, this, 200, 0.9);
             } else {

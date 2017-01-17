@@ -1,6 +1,6 @@
 module SpaceTac.Game.Specs {
     describe("Equipment", () => {
-        it("checks capabilities requirements", () => {
+        it("checks capabilities requirements", function () {
             var equipment = new Equipment();
             var ship = new Ship();
 
@@ -30,6 +30,22 @@ module SpaceTac.Game.Specs {
             ship.cap_material.set(4);
 
             expect(equipment.canBeEquipped(ship)).toBe(true);
+        });
+
+        it("generates a description of the effects", function () {
+            var equipment = new Equipment();
+            equipment.distance = 3;
+            expect(equipment.getActionDescription()).toEqual("does nothing");
+
+            equipment.target_effects.push(new DamageEffect(50));
+            expect(equipment.getActionDescription()).toEqual("- 50 damage on target");
+
+            equipment.blast = 20;
+            expect(equipment.getActionDescription()).toEqual("- 50 damage on all ships in 20km of impact");
+
+            equipment.blast = 0;
+            equipment.target_effects.push(new AttributeLimitEffect(AttributeCode.Shield, 3, 200));
+            expect(equipment.getActionDescription()).toEqual("- 50 damage on target\n- limit shield to 200 for 3 turns on target");
         });
     });
 }

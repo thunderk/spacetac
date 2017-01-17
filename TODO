@@ -4,7 +4,6 @@
 * Fix "thinking" icon in actionbar not rotating
 * Add equipment info (or summary) in ship tooltip
 * Handle effects overflowing ship tooltip when too numerous
-* Add effect description on action tooltip
 * Mobile: display tooltips on hold
 * Mobile: targetting in two times, using a draggable target indicator
 * Add a defeat screen (game over for now)
