@@ -1,7 +1,6 @@
 * Floor movement power usage, and show it on the displayed line
 * Add auto-move to attack
 * Re-style cancel button and allow to cancel by clicking the action again
-* Fix "thinking" icon in actionbar not rotating
 * Add equipment info (or summary) in ship tooltip
 * Handle effects overflowing ship tooltip when too numerous
 * Mobile: display tooltips on hold

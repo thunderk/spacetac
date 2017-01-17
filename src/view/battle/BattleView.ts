@@ -83,7 +83,7 @@ module SpaceTac.View {
             this.icon_waiting.anchor.set(0.5, 0.5);
             this.icon_waiting.scale.set(0.5, 0.5);
             game.add.existing(this.icon_waiting);
-            game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).repeat(-1).start();
+            game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
 
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
