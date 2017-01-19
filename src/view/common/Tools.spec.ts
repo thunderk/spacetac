@@ -37,7 +37,7 @@ module SpaceTac.View.Specs {
             [button, funcs] = newButton();
             button.onInputDown.dispatch();
             button.onInputUp.dispatch();
-            expect(funcs.enter).toHaveBeenCalledTimes(0);
+            expect(funcs.enter).toHaveBeenCalledTimes(1);
             expect(funcs.leave).toHaveBeenCalledTimes(1);
             expect(funcs.click).toHaveBeenCalledTimes(1);
         });

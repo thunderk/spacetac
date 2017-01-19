@@ -40,9 +40,14 @@ module SpaceTac.View {
             obj.onInputUp.add(() => {
                 prevententer();
                 if (new Date().getTime() - holdstart.getTime() < holdtime) {
+                    if (!hovered) {
+                        enter();
+                    }
                     click();
-                }
-                if (!hovered) {
+                    if (!hovered) {
+                        leave();
+                    }
+                } else if (!hovered) {
                     leave();
                 }
             });
