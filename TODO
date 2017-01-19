@@ -3,7 +3,7 @@
 * Re-style cancel button and allow to cancel by clicking the action again
 * Add equipment info (or summary) in ship tooltip
 * Handle effects overflowing ship tooltip when too numerous
-* Mobile: display tooltips on hold
+* Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: targetting in two times, using a draggable target indicator
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display

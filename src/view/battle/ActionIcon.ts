@@ -51,20 +51,17 @@ module SpaceTac.View {
             this.layer_icon.scale.set(0.25, 0.25);
             this.addChild(this.layer_icon);
 
-            // Click process
-            this.onInputUp.add(() => {
-                this.processClick();
-            });
-
-            // Information on hover
-            this.onInputOver.add(() => {
+            let show_info = () => {
                 this.bar.tooltip.setAction(this);
                 this.battleview.arena.range_hint.setSecondary(this.ship, this.action);
-            });
-            this.onInputOut.add(() => {
+            };
+            let hide_info = () => {
                 this.bar.tooltip.setAction(null);
                 this.battleview.arena.range_hint.clearSecondary();
-            });
+            };
+
+            // Events
+            Tools.setHoverClick(this, show_info, hide_info, () => this.processClick());
 
             // Initialize
             this.updateActiveStatus();

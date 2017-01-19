@@ -31,14 +31,6 @@ module SpaceTac.View {
 
             this.ship = ship;
 
-            this.input.useHandCursor = true;
-            this.onInputOver.add(() => {
-                list.battleview.cursorOnShip(ship);
-            });
-            this.onInputOut.add(() => {
-                list.battleview.cursorOffShip(ship);
-            });
-
             this.layer_portrait = new Phaser.Image(this.game, 8, 8, "ship-" + ship.model + "-portrait", 0);
             this.layer_portrait.scale.set(0.3, 0.3);
             this.addChild(this.layer_portrait);
@@ -65,6 +57,8 @@ module SpaceTac.View {
 
             this.updateAttributes();
             this.updateEffects();
+
+            Tools.setHoverClick(this, () => list.battleview.cursorOnShip(ship), () => list.battleview.cursorOffShip(ship), () => list.battleview.cursorClicked());
         }
 
         // Update attributes from associated ship

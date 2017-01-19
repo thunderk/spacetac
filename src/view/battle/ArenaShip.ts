@@ -41,16 +41,7 @@ module SpaceTac.View {
             this.addChild(this.hover);
 
             // Handle input on ship sprite
-            this.sprite.input.useHandCursor = true;
-            this.sprite.onInputOver.add(() => {
-                battleview.cursorOnShip(ship);
-            });
-            this.sprite.onInputOut.add(() => {
-                battleview.cursorOffShip(ship);
-            });
-            this.sprite.onInputUp.add(() => {
-                battleview.cursorClicked();
-            });
+            Tools.setHoverClick(this.sprite, () => battleview.cursorOnShip(ship), () => battleview.cursorOffShip(ship), () => battleview.cursorClicked());
 
             // Set location
             this.position.set(ship.arena_x, ship.arena_y);
