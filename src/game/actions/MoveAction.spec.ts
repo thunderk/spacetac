@@ -13,6 +13,8 @@ module SpaceTac.Game {
             engine.ap_usage = 2;
             var action = new MoveAction(engine);
 
+            expect(action.getDistanceByActionPoint(ship)).toBe(0.5);
+
             var result = action.checkTarget(battle, ship, Target.newFromLocation(0, 2));
             expect(result).toEqual(Target.newFromLocation(0, 2));
 

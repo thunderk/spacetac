@@ -30,6 +30,7 @@ module SpaceTac.View {
             this.loadImage("battle/shiplist-shield-full.png");
             this.loadImage("battle/background.jpg");
             this.loadImage("battle/arena/background.png");
+            this.loadImage("battle/arena/ap-indicator.png");
             this.loadImage("battle/actionbar.png");
             this.loadImage("battle/actionbar-cancel.png");
             this.loadImage("battle/action-inactive.png");

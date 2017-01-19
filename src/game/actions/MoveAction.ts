@@ -29,16 +29,23 @@ module SpaceTac.Game {
             }
 
             var distance = Target.newFromShip(ship).getDistanceTo(target);
-            return this.equipment.ap_usage * distance / this.equipment.distance;
+            return Math.ceil(this.equipment.ap_usage * distance / this.equipment.distance);
         }
 
         getRangeRadius(ship: Ship): number {
             return ship.ap_current.current * this.equipment.distance / this.equipment.ap_usage;
         }
 
+        /**
+         * Get the distance that may be traveled with 1 action point
+         */
+        getDistanceByActionPoint(ship: Ship): number {
+            return this.equipment.distance / this.equipment.ap_usage;
+        }
+
         checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
             // Apply maximal distance
-            var max_distance = this.equipment.distance * ship.ap_current.current / this.equipment.ap_usage;
+            var max_distance = this.getRangeRadius(ship);
             target = target.constraintInRange(ship.arena_x, ship.arena_y, max_distance);
 
             // Apply collision prevention

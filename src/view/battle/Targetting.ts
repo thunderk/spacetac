@@ -20,6 +20,10 @@ module SpaceTac.View {
         // Signal to receive targetting events
         targetSelected: Phaser.Signal;
 
+        // AP usage display
+        ap_interval: number = 0;
+        ap_indicators: Phaser.Image[] = [];
+
         // Access to the parent battle view
         private battleview: BattleView;
 
@@ -63,6 +67,13 @@ module SpaceTac.View {
             if (this.blast) {
                 this.blast.destroy();
             }
+            this.ap_indicators.forEach(indicator => indicator.destroy());
+        }
+
+        // Set AP indicators to display at fixed interval along the line
+        setApIndicatorsInterval(interval: number) {
+            this.ap_interval = interval;
+            this.updateApIndicators();
         }
 
         // Update visual effects for current targetting
@@ -98,6 +109,40 @@ module SpaceTac.View {
                 } else {
                     this.blast.visible = false;
                 }
+
+                this.updateApIndicators();
+            }
+        }
+
+        // Update the AP indicators display
+        updateApIndicators() {
+            // Get indicator count
+            let count = 0;
+            let distance = 0;
+            if (this.line_corrected.visible && this.ap_interval > 0) {
+                distance = this.target_corrected.getDistanceTo(Game.Target.newFromLocation(this.source.x, this.source.y)) - 0.00001;
+                count = Math.ceil(distance / this.ap_interval);
+            }
+
+            // Adjust object count to match
+            while (this.ap_indicators.length < count) {
+                let indicator = new Phaser.Image(this.battleview.game, 0, 0, "battle-arena-ap-indicator");
+                indicator.anchor.set(0.5, 0.5);
+                this.battleview.arena.addChild(indicator);
+                this.ap_indicators.push(indicator);
+            }
+            while (this.ap_indicators.length > count) {
+                this.ap_indicators[this.ap_indicators.length - 1].destroy();
+                this.ap_indicators.pop();
+            }
+
+            // Spread indicators
+            if (count > 0 && distance > 0) {
+                let dx = this.ap_interval * (this.target_corrected.x - this.source.x) / distance;
+                let dy = this.ap_interval * (this.target_corrected.y - this.source.y) / distance;
+                this.ap_indicators.forEach((indicator, index) => {
+                    indicator.position.set(this.source.x + dx * index, this.source.y + dy * index);
+                });
             }
         }
 

@@ -52,7 +52,7 @@ module SpaceTac.View {
             this.addChild(this.layer_icon);
 
             let show_info = () => {
-                if (this.bar.ship)  {
+                if (this.bar.ship) {
                     this.bar.tooltip.setAction(this);
                     this.battleview.arena.range_hint.setSecondary(this.ship, this.action);
                 }
@@ -99,6 +99,9 @@ module SpaceTac.View {
                 this.targetting.setSource(this.battleview.arena.findShipSprite(this.ship));
                 this.targetting.targetSelected.add(this.processSelection, this);
                 this.targetting.targetHovered.add(this.processHover, this);
+                if (this.action instanceof Game.MoveAction) {
+                    this.targetting.setApIndicatorsInterval(this.action.getDistanceByActionPoint(this.ship));
+                }
             } else {
                 // No target needed, apply action immediately
                 this.processSelection(null);

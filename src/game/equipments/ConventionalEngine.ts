@@ -7,8 +7,8 @@ module SpaceTac.Game.Equipments {
             super(SlotType.Engine, "Conventional Engine");
 
             this.min_level = new IntegerRange(1, 1);
-            this.distance = new Range(300, 300);
-            this.ap_usage = new IntegerRange(3);
+            this.distance = new Range(100, 100);
+            this.ap_usage = new IntegerRange(1);
 
             this.addPermanentAttributeMaxEffect(AttributeCode.Initiative, 1);
         }

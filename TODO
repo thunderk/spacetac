@@ -1,11 +1,13 @@
-* Floor movement power usage, and show it on the displayed line
 * Add auto-move to attack
 * Re-style cancel button and allow to cancel by clicking the action again
+* Fix energy depleter effect not fading after one turn
 * Add equipment info (or summary) in ship tooltip
 * Handle effects overflowing ship tooltip when too numerous
 * Proper arena scaling (not graphical, only space coordinates)
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
+* Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
+* AI: apply safety distances to move actions
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle
