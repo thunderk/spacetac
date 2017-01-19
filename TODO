@@ -1,5 +1,4 @@
 * Add auto-move to attack
-* Re-style cancel button and allow to cancel by clicking the action again
 * Fix energy depleter effect not fading after one turn
 * Add equipment info (or summary) in ship tooltip
 * Handle effects overflowing ship tooltip when too numerous

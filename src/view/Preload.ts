@@ -32,9 +32,9 @@ module SpaceTac.View {
             this.loadImage("battle/arena/background.png");
             this.loadImage("battle/arena/ap-indicator.png");
             this.loadImage("battle/actionbar.png");
-            this.loadImage("battle/actionbar-cancel.png");
             this.loadImage("battle/action-inactive.png");
             this.loadImage("battle/action-active.png");
+            this.loadImage("battle/action-selected.png");
             this.loadImage("battle/action-tooltip.png");
             this.loadImage("battle/actionpointsnone.png");
             this.loadImage("battle/actionpointsempty.png");

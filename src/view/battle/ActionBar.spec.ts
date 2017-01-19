@@ -67,20 +67,24 @@ module SpaceTac.View.Specs {
             // Weapon 1 leaves all choices open
             bar.actions[1].processClick();
             checkFading([], [0, 1, 2, 3]);
+            bar.actionEnded();
 
             // Weapon 2 can't be fired twice
             bar.actions[2].processClick();
             checkFading([2], [0, 1, 3]);
+            bar.actionEnded();
 
             // Not enough AP for both weapons
             ship.ap_current.set(7);
             bar.actions[2].processClick();
             checkFading([1, 2], [0, 3]);
+            bar.actionEnded();
 
             // Not enough AP to move
             ship.ap_current.set(3);
             bar.actions[1].processClick();
             checkFading([0, 1, 2], [3]);
+            bar.actionEnded();
 
             // Dynamic AP usage for move actions
             ship.ap_current.set(6);
@@ -94,6 +98,7 @@ module SpaceTac.View.Specs {
             checkFading([0, 1, 2], [3]);
             bar.actions[0].processHover(Game.Target.newFromLocation(5, 8));
             checkFading([0, 1, 2], [3]);
+            bar.actionEnded();
         });
     });
 }

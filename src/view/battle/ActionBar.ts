@@ -17,9 +17,6 @@ module SpaceTac.View {
         // Current ship, whose actions are displayed
         ship: Game.Ship;
 
-        // Cancel button
-        cancel: Phaser.Button;
-
         // Create an empty action bar
         constructor(battleview: BattleView) {
             super(battleview.game);
@@ -41,14 +38,6 @@ module SpaceTac.View {
             this.actionpointstemp.setBarImage("battle-actionpointsfull");
             this.addChild(this.actionpointstemp);
 
-            // Cancel button
-            this.cancel = new Phaser.Button(this.game, 849, 8, "battle-actionbar-cancel", () => {
-                this.actionEnded();
-            });
-            this.cancel.visible = false;
-            this.cancel.input.useHandCursor = true;
-            this.addChild(this.cancel);
-
             // Tooltip
             this.tooltip = new ActionTooltip(this);
             this.addChild(this.tooltip);
@@ -61,7 +50,6 @@ module SpaceTac.View {
             });
             this.actions = [];
             this.tooltip.setAction(null);
-            Animation.fadeOut(this.game, this.cancel, 200);
         }
 
         // Add an action icon
@@ -123,7 +111,6 @@ module SpaceTac.View {
 
         // Called by an action icon when the action is selected
         actionStarted(): void {
-            Animation.fadeIn(this.game, this.cancel, 200);
         }
 
         // Called by an action icon when the action has been applied
@@ -133,7 +120,6 @@ module SpaceTac.View {
                 action.resetState();
             });
             this.battleview.exitTargettingMode();
-            Animation.fadeOut(this.game, this.cancel, 200);
         }
     }
 }

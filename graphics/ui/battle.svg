@@ -2,6 +2,7 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -19,9 +20,22 @@
    sodipodi:docname="battle.svg"
    inkscape:export-filename="/tmp/whole.png"
    inkscape:export-xdpi="90"
-   inkscape:export-ydpi="90">
+   inkscape:export-ydpi="90"
+   enable-background="new">
   <defs
      id="defs4">
+    <linearGradient
+       id="linearGradient5947"
+       osb:paint="gradient">
+      <stop
+         style="stop-color:#f2f2f2;stop-opacity:1;"
+         offset="0"
+         id="stop5949" />
+      <stop
+         style="stop-color:#f2f2f2;stop-opacity:0;"
+         offset="1"
+         id="stop5951" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient10006">
@@ -388,6 +402,48 @@
          stdDeviation="1.4344999"
          id="feGaussianBlur5963" />
     </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Outer Glow"
+       id="filter6021-3-2">
+      <feFlood
+         flood-opacity="0.709804"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood6023-6-9" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite6025-7-1" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="4.2"
+         result="blur"
+         id="feGaussianBlur6027-5-2" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset6029-3-7" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite6031-5-0" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4497">
+      <feBlend
+         inkscape:collect="always"
+         mode="lighten"
+         in2="BackgroundImage"
+         id="feBlend4499" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -396,11 +452,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.313709"
-     inkscape:cx="56.720009"
-     inkscape:cy="752.24415"
+     inkscape:zoom="8.0000004"
+     inkscape:cx="262.84553"
+     inkscape:cy="1129.2716"
      inkscape:document-units="px"
-     inkscape:current-layer="layer14"
+     inkscape:current-layer="layer27"
      showgrid="false"
      units="px"
      showguides="true"
@@ -928,7 +984,8 @@
       <g
          inkscape:groupmode="layer"
          id="layer10"
-         inkscape:label="Actions background">
+         inkscape:label="Actions background"
+         style="display:inline">
         <rect
            style="opacity:1;fill:#4c555b;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5827)"
            id="rect4439"
@@ -1193,16 +1250,67 @@
       </g>
       <g
          inkscape:groupmode="layer"
+         id="layer27"
+         inkscape:label="Action icon selected"
+         style="display:inline;opacity:1;filter:url(#filter4497)">
+        <path
+           style="opacity:1;fill:#e0f3ff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="m 288.98108,-24.305884 0,10.076267 -10.07626,0"
+           id="rect4438"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccc"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-selected.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+        <use
+           x="0"
+           y="0"
+           xlink:href="#rect4438"
+           id="use4441"
+           transform="matrix(-1,0,0,1,504.47831,0)"
+           width="100%"
+           height="100%"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-selected.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+        <use
+           x="0"
+           y="0"
+           xlink:href="#rect4438"
+           id="use4443"
+           transform="matrix(1,0,0,-1,0,-101.95737)"
+           width="100%"
+           height="100%"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-selected.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+        <use
+           x="0"
+           y="0"
+           xlink:href="#rect4438"
+           id="use4445"
+           transform="matrix(-1,0,0,-1,504.5061,-101.94119)"
+           width="100%"
+           height="100%"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-selected.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
+      </g>
+      <g
+         inkscape:groupmode="layer"
          id="layer24"
          inkscape:label="Action icon active"
-         style="display:inline">
+         style="display:none">
         <ellipse
            style="opacity:1;fill:#97d3fb;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter10850)"
            id="path10840"
            cx="285.67114"
            cy="-51.10569"
            rx="1.7677671"
-           ry="32.79208" />
+           ry="32.79208"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-active.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
         <use
            x="0"
            y="0"
@@ -1210,7 +1318,10 @@
            id="use10854"
            transform="translate(-66.998368,0)"
            width="100%"
-           height="100%" />
+           height="100%"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-active.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
         <use
            x="0"
            y="0"
@@ -1218,7 +1329,10 @@
            id="use10856"
            transform="matrix(0,1,-1,0,201.15465,-370.01085)"
            width="100%"
-           height="100%" />
+           height="100%"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-active.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
         <use
            x="0"
            y="0"
@@ -1226,7 +1340,10 @@
            id="use10858"
            transform="matrix(0,1,-1,0,200.97788,-303.54282)"
            width="100%"
-           height="100%" />
+           height="100%"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-active.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
       </g>
     </g>
     <g
