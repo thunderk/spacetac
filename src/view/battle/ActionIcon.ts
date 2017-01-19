@@ -52,8 +52,10 @@ module SpaceTac.View {
             this.addChild(this.layer_icon);
 
             let show_info = () => {
-                this.bar.tooltip.setAction(this);
-                this.battleview.arena.range_hint.setSecondary(this.ship, this.action);
+                if (this.bar.ship)  {
+                    this.bar.tooltip.setAction(this);
+                    this.battleview.arena.range_hint.setSecondary(this.ship, this.action);
+                }
             };
             let hide_info = () => {
                 this.bar.tooltip.setAction(null);

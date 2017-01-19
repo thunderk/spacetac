@@ -79,14 +79,14 @@ module SpaceTac.View {
         displayDamage(hull: number, shield: number) {
             if (hull > 0) {
                 var hull_text = new Phaser.Text(this.game, -20, -20, Math.round(hull).toString(),
-                    { font: "bold 16pt Arial", align: "center", fill: "#ffbbbb" });
+                    { font: "bold 16pt Arial", align: "center", fill: "#eb4e4a" });
                 hull_text.anchor.set(0.5, 0.5);
                 this.addChild(hull_text);
                 this.animateDamageText(hull_text);
             }
             if (shield > 0) {
                 var shield_text = new Phaser.Text(this.game, 20, -20, Math.round(shield).toString(),
-                    { font: "bold 16pt Arial", align: "center", fill: "#bbbbff" });
+                    { font: "bold 16pt Arial", align: "center", fill: "#2ad8dc" });
                 shield_text.anchor.set(0.5, 0.5);
                 this.addChild(shield_text);
                 this.animateDamageText(shield_text);

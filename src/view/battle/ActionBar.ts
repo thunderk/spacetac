@@ -103,13 +103,12 @@ module SpaceTac.View {
 
         // Set action icons from selected ship
         setShip(ship: Game.Ship): void {
-            var action_bar = this;
             this.clearAll();
 
             if (ship.getPlayer() === this.battleview.player) {
                 var actions = ship.getAvailableActions();
                 actions.forEach((action: Game.BaseAction) => {
-                    action_bar.addAction(ship, action);
+                    this.addAction(ship, action);
                 });
 
                 this.ship = ship;
