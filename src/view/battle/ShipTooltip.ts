@@ -74,8 +74,8 @@ module SpaceTac.View {
                 // Find ship sprite to position next to it
                 var sprite = this.battleview.arena.findShipSprite(ship);
                 if (sprite) {
-                    var x = sprite.worldPosition.x + sprite.width * 0.5;
-                    var y = sprite.worldPosition.y - sprite.height * 0.5;
+                    var x = sprite.worldPosition.x + sprite.width * sprite.worldScale.x * 0.5;
+                    var y = sprite.worldPosition.y - sprite.height * sprite.worldScale.y * 0.5;
                     if (y + this.height > this.battleview.getHeight()) {
                         y = this.battleview.getHeight() - this.height;
                     }
@@ -83,7 +83,7 @@ module SpaceTac.View {
                         y = 0;
                     }
                     if (x + this.width > this.battleview.getWidth()) {
-                        x = sprite.worldPosition.x - sprite.width * 0.5 - this.width;
+                        x = sprite.worldPosition.x - sprite.width * sprite.worldScale.x * 0.5 - this.width;
                     }
                     this.position.set(x, y);
                 } else {

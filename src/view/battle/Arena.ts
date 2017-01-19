@@ -60,6 +60,8 @@ module SpaceTac.View {
             this.range_hint = new RangeHint(this);
             this.addChild(this.range_hint);
 
+            this.scale.set(1.78, 1.78);
+
             this.init();
         }
 
