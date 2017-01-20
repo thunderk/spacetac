@@ -60,6 +60,9 @@ module SpaceTac.Game {
         // Collection of available attributes
         attributes: AttributeCollection;
 
+        // Boolean set to true if the ship is currently playing its turn
+        playing = false;
+
         // Create a new ship inside a fleet
         constructor(fleet: Fleet = null, name: string = null) {
             super();
@@ -222,6 +225,12 @@ module SpaceTac.Game {
 
         // Method called at the start of this ship turn
         startTurn(): void {
+            if (this.playing) {
+                console.error("startTurn called twice", this);
+                return;
+            }
+            this.playing = true;
+
             // Recompute attributes
             this.updateAttributes();
 
@@ -233,6 +242,12 @@ module SpaceTac.Game {
 
         // Method called at the end of this ship turn
         endTurn(): void {
+            if (!this.playing) {
+                console.error("endTurn called before startTurn", this);
+                return;
+            }
+            this.playing = false;
+
             // Recover action points for next turn
             this.recoverActionPoints();
 

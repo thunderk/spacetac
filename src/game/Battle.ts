@@ -166,6 +166,10 @@ module SpaceTac.Game {
                 return;
             }
 
+            if (this.playing_ship && this.playing_ship.playing) {
+                this.playing_ship.endTurn();
+            }
+
             if (this.play_order.length === 0) {
                 this.playing_ship_index = null;
                 this.playing_ship = null;
@@ -196,6 +200,7 @@ module SpaceTac.Game {
                 if (!this.playing_ship.isAbleToPlay()) {
                     // If the ship is not able to play, wait a little, then advance to the next one
                     setTimeout(() => {
+                        this.playing_ship.endTurn();
                         this.advanceToNextShip(log);
                     }, 2000);
                 } else if (this.playing_ship.getPlayer().ai) {

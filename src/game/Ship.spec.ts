@@ -132,6 +132,7 @@ module SpaceTac.Game.Specs {
                 new EffectAddedEvent(ship, effect)
             ]);
 
+            ship.startTurn();
             battle.log.clear();
             ship.endTurn();
 
@@ -140,6 +141,7 @@ module SpaceTac.Game.Specs {
                 new EffectDurationChangedEvent(ship, new TemporaryEffect("test", 1), 2)
             ]);
 
+            ship.startTurn();
             battle.log.clear();
             ship.endTurn();
 
@@ -148,6 +150,7 @@ module SpaceTac.Game.Specs {
                 new EffectRemovedEvent(ship, new TemporaryEffect("test", 1))
             ]);
 
+            ship.startTurn();
             battle.log.clear();
             ship.endTurn();
 
@@ -247,9 +250,9 @@ module SpaceTac.Game.Specs {
             expect(ship.ap_current.current).toBe(5);
             ship.ap_current.set(2);
             expect(ship.ap_current.current).toBe(2);
-            ship.endTurn();
+            ship.recoverActionPoints();
             expect(ship.ap_current.current).toBe(6);
-            ship.endTurn();
+            ship.recoverActionPoints();
             expect(ship.ap_current.current).toBe(8);
         });
     });

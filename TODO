@@ -1,5 +1,4 @@
 * Add auto-move to attack
-* Fix energy depleter effect not fading after one turn
 * Add equipment info (or summary) in ship tooltip
 * Handle effects overflowing ship tooltip when too numerous
 * Proper arena scaling (not graphical, only space coordinates)

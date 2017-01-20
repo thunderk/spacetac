@@ -101,6 +101,7 @@ module SpaceTac.Game.AI {
                     return;
                 }
             }
+            this.ship.endTurn();
             this.ship = null;
             this.fleet.battle.advanceToNextShip();
         }
