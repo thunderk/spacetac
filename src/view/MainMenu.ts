@@ -9,6 +9,17 @@ module SpaceTac.View {
         create() {
             this.game.stage.backgroundColor = "#000000";
 
+            // Stars
+            for (let i = 0; i < 300; i++) {
+                let fade = Math.random() * 0.5 + 0.5;
+                let x = Math.random() * 0.998 + 0.001;
+                let star = this.add.image(1920 * x, Math.random() * 1080, "menu-star");
+                star.anchor.set(0.5, 0.5);
+                star.alpha = 0.7 * fade;
+                star.scale.set(0.1 * fade, 0.1 * fade);
+                this.tweens.create(star).to({ x: -30 }, 30000 * x / fade).to({ x: 1950 }, 0.00001).to({ x: 1920 * x }, 30000 * (1 - x) / fade).loop().start();
+            }
+
             // Menu buttons
             this.button_new_game = this.addButton(322, 674, "New Game", this.onNewGame);
             this.button_load_game = this.addButton(960, 674, "Load Game", this.onLoadGame);

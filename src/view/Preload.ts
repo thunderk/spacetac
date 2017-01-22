@@ -13,6 +13,7 @@ module SpaceTac.View {
             // Load images
             this.loadImage("menu/title.png");
             this.loadImage("menu/button.png");
+            this.loadImage("menu/star.png");
             this.loadImage("battle/waiting.png");
             this.loadImage("battle/shiplist-background.png");
             this.loadImage("battle/shiplist-own.png");
