@@ -2,15 +2,12 @@
 
 module SpaceTac.View {
     export class Preload extends BaseView {
-        private preloadBar: Phaser.Sprite;
+        private preloadBar: Phaser.Image;
 
         preload() {
             // Add preload sprite
-            this.add.text(this.getMidWidth(), this.getMidHeight() - 40, "... Loading ...", { align: "center", font: "bold 20px Arial", fill: "#c0c0c0" })
-                .anchor.set(0.5, 0.5);
-            this.preloadBar = this.add.sprite(0, 0, "preload-bar");
-            this.preloadBar.anchor.set(0.5, 0.5);
-            this.preloadBar.position.set(this.getMidWidth(), this.getMidHeight());
+            let bg = this.add.image(678, 426, "preload-background");
+            this.preloadBar = this.add.image(684, bg.y + 166, "preload-bar");
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load images
@@ -75,6 +72,7 @@ module SpaceTac.View {
             // Load musics
             this.loadSound("music/walking-along.mp3");
             this.loadSound("music/full-on.mp3");
+            this.load.start();
         }
 
         create() {

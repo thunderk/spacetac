@@ -1,5 +1,9 @@
 /// <reference path="../typings/index.d.ts"/>
 
+if (typeof window != "undefined") {
+    (<any>window).describe = (<any>window).describe || function () { };
+}
+
 module SpaceTac {
     // Router between game views
     export class GameUI extends Phaser.Game {

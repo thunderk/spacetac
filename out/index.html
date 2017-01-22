@@ -23,23 +23,17 @@
 </head>
 
 <body>
-
     <div id="-space-tac" class="game"></div>
 
-    <script src="vendor/jasmine-core/lib/jasmine-core/jasmine.js"></script>
-    <script src="vendor/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
-    <script src="vendor/jasmine-core/lib/jasmine-core/boot.js"></script>
-    <script src="vendor/phaser/build/phaser.js"></script>
+    <script src="vendor/phaser/build/phaser.min.js"></script>
     <script src="build.js"></script>
 
     <script>
-        var currentWindowOnload = window.onload;
         window.oncontextmenu = function (e) { e.preventDefault(); };
         window.onload = function () {
             new SpaceTac.GameUI();
         };
     </script>
-
 </body>
 
 </html>
