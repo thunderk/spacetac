@@ -7,28 +7,26 @@ module SpaceTac.View {
         button_load_game: Phaser.Button;
 
         create() {
-            // Title
-            var text = new Phaser.Text(this.game, this.getMidWidth(), this.getHeight() * 0.4, "SpaceTac",
-                {align: "center", font: "bold 42px Arial", fill: "#4050f2"});
-            text.anchor.set(0.5, 0.5);
-            this.add.existing(text);
+            this.game.stage.backgroundColor = "#000000";
 
             // Menu buttons
-            var basex = this.getMidWidth();
-            var y = Math.floor(this.getHeight() * 0.6);
-            var space = this.getWidth() * 0.2;
-            this.button_new_game = this.addButton(basex - space, y, "New Game", this.onNewGame);
-            this.button_quick_battle = this.addButton(basex, y, "Quick Battle", this.onQuickBattle);
-            this.button_load_game = this.addButton(basex + space, y, "Load Game", this.onLoadGame);
+            this.button_new_game = this.addButton(322, 674, "New Game", this.onNewGame);
+            this.button_load_game = this.addButton(960, 674, "Load Game", this.onLoadGame);
+            this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", this.onQuickBattle);
+
+            // Title
+            let title = new Phaser.Image(this.game, 960, 225, "menu-title");
+            title.anchor.set(0.5, 0);
+            this.add.existing(title);
         }
 
         addButton(x: number, y: number, caption: string, callback: Function): Phaser.Button {
-            var button = this.add.button(x, y, "menu-button", callback, this);
-            button.anchor.set(0.5, 0.5);
+            var button = this.add.button(x - 20, y + 20, "menu-button", callback, this);
+            button.anchor.set(0.5, 0);
             button.input.useHandCursor = true;
 
-            var text = new Phaser.Text(this.game, 0, 0, caption,
-                {align: "center", font: "bold 20px Arial", fill: "#303030"});
+            var text = new Phaser.Text(this.game, 0, 76, caption,
+                { align: "center", font: "bold 40pt Arial", fill: "#529aee" });
             text.anchor.set(0.5, 0.5);
             button.addChild(text);
 
@@ -62,10 +60,10 @@ module SpaceTac.View {
             } else {
                 var error = this.game.add.text(this.button_load_game.x, this.button_load_game.y + 40,
                     "No saved game found",
-                    {font: "bold 16px Arial", fill: "#e04040"});
+                    { font: "bold 16px Arial", fill: "#e04040" });
                 error.anchor.set(0.5, 0.5);
                 var tween = this.game.tweens.create(error);
-                tween.to({y: error.y + 100, alpha: 0}, 1000, Phaser.Easing.Exponential.In);
+                tween.to({ y: error.y + 100, alpha: 0 }, 1000, Phaser.Easing.Exponential.In);
                 tween.onComplete.addOnce(() => {
                     error.destroy();
                 });

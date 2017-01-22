@@ -14,6 +14,7 @@ module SpaceTac.View {
             this.load.setPreloadSprite(this.preloadBar);
 
             // Load images
+            this.loadImage("menu/title.png");
             this.loadImage("menu/button.png");
             this.loadImage("battle/waiting.png");
             this.loadImage("battle/shiplist-background.png");
