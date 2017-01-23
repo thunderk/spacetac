@@ -142,7 +142,7 @@ module SpaceTac.View {
             }
         }
 
-        // Temporary effect on ship added, changed or removed
+        // Sticky effect on ship added, changed or removed
         private processEffectEvent(event: Game.BaseLogEvent): void {
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {

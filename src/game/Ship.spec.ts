@@ -119,15 +119,15 @@ module SpaceTac.Game.Specs {
             expect(battle.log.events.length).toBe(0);
         });
 
-        it("sets and logs temporary effects", function () {
+        it("sets and logs sticky effects", function () {
             var ship = new Ship();
             var battle = new Battle(ship.fleet);
 
-            var effect = new TemporaryEffect("test", 2);
+            var effect = new StickyEffect("test", 2);
 
-            ship.addTemporaryEffect(effect);
+            ship.addStickyEffect(effect);
 
-            expect(ship.temporary_effects).toEqual([effect]);
+            expect(ship.sticky_effects).toEqual([effect]);
             expect(battle.log.events).toEqual([
                 new EffectAddedEvent(ship, effect)
             ]);
@@ -136,25 +136,25 @@ module SpaceTac.Game.Specs {
             battle.log.clear();
             ship.endTurn();
 
-            expect(ship.temporary_effects).toEqual([new TemporaryEffect("test", 1)]);
+            expect(ship.sticky_effects).toEqual([new StickyEffect("test", 1)]);
             expect(battle.log.events).toEqual([
-                new EffectDurationChangedEvent(ship, new TemporaryEffect("test", 1), 2)
+                new EffectDurationChangedEvent(ship, new StickyEffect("test", 1), 2)
             ]);
 
             ship.startTurn();
             battle.log.clear();
             ship.endTurn();
 
-            expect(ship.temporary_effects).toEqual([]);
+            expect(ship.sticky_effects).toEqual([]);
             expect(battle.log.events).toEqual([
-                new EffectRemovedEvent(ship, new TemporaryEffect("test", 1))
+                new EffectRemovedEvent(ship, new StickyEffect("test", 1))
             ]);
 
             ship.startTurn();
             battle.log.clear();
             ship.endTurn();
 
-            expect(ship.temporary_effects).toEqual([]);
+            expect(ship.sticky_effects).toEqual([]);
             expect(battle.log.events).toEqual([]);
         });
 

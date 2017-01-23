@@ -102,7 +102,7 @@ module SpaceTac.View {
                 this.attr_gravity.setText(ship.cap_gravity.current.toString());
                 this.attr_time.setText(ship.cap_time.current.toString());
                 this.active_effects.removeAll(true);
-                ship.temporary_effects.forEach((effect, index) => {
+                ship.sticky_effects.forEach((effect, index) => {
                     this.addEffect(effect, index);
                 });
 
@@ -112,8 +112,8 @@ module SpaceTac.View {
             }
         }
 
-        // Add a temporary effect display
-        addEffect(effect: Game.TemporaryEffect, index = 0) {
+        // Add a sticky effect display
+        addEffect(effect: Game.StickyEffect, index = 0) {
             var effect_group = new Phaser.Image(this.game, 27, 243 + 60 * index, "battle-ship-tooltip-effect");
             this.active_effects.addChild(effect_group);
 

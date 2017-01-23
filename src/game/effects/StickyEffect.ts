@@ -2,7 +2,7 @@
 
 module SpaceTac.Game {
     // Base class for actions that will stick to a target for a number of rounds
-    export class TemporaryEffect extends BaseEffect {
+    export class StickyEffect extends BaseEffect {
         // Duration, in number of turns
         duration: number;
 
@@ -14,7 +14,7 @@ module SpaceTac.Game {
         }
 
         applyOnShip(ship: Ship): boolean {
-            ship.addTemporaryEffect(this);
+            ship.addStickyEffect(this);
             this.singleApply(ship, true);
             return true;
         }

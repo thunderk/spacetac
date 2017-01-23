@@ -14,9 +14,7 @@
         "sourceMap": true,
         "target": "es5"
     },
-    "exclude": [
-        "out",
-        "coverage",
-        "node_modules"
+    "include": [
+        "src"
     ]
 }

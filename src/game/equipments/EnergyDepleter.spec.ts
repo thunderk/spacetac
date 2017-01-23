@@ -10,13 +10,13 @@ module SpaceTac.Game.Specs {
             spyOn(equipment.action, "canBeUsed").and.returnValue(true);
 
             expect(target.ap_current.current).toBe(7);
-            expect(target.temporary_effects).toEqual([]);
+            expect(target.sticky_effects).toEqual([]);
 
             // Attribute is immediately limited
             equipment.action.apply(null, ship, Target.newFromShip(target));
 
             expect(target.ap_current.current).toBe(4);
-            expect(target.temporary_effects).toEqual([
+            expect(target.sticky_effects).toEqual([
                 new AttributeLimitEffect(AttributeCode.AP, 1, 4)
             ]);
 
@@ -25,7 +25,7 @@ module SpaceTac.Game.Specs {
             target.startTurn();
 
             expect(target.ap_current.current).toBe(4);
-            expect(target.temporary_effects).toEqual([
+            expect(target.sticky_effects).toEqual([
                 new AttributeLimitEffect(AttributeCode.AP, 1, 4)
             ]);
 
@@ -33,7 +33,7 @@ module SpaceTac.Game.Specs {
             target.endTurn();
 
             expect(target.ap_current.current).toBe(6);
-            expect(target.temporary_effects).toEqual([]);
+            expect(target.sticky_effects).toEqual([]);
         });
     });
 }

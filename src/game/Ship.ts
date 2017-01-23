@@ -43,8 +43,8 @@ module SpaceTac.Game {
         // Number of shield points (a shield can absorb some damage to protect the hull)
         shield: Attribute;
 
-        // Sticky temporary effects
-        temporary_effects: TemporaryEffect[];
+        // Sticky effects that applies a given number of times
+        sticky_effects: StickyEffect[];
 
         // Capabilities level
         cap_material: Attribute;
@@ -86,7 +86,7 @@ module SpaceTac.Game {
             this.cap_human = this.newAttribute(AttributeCode.Cap_Human);
             this.cap_time = this.newAttribute(AttributeCode.Cap_Time);
             this.cap_gravity = this.newAttribute(AttributeCode.Cap_Gravity);
-            this.temporary_effects = [];
+            this.sticky_effects = [];
             this.slots = [];
 
             this.arena_x = 0;
@@ -235,7 +235,7 @@ module SpaceTac.Game {
             this.updateAttributes();
 
             // Apply sticky effects
-            this.temporary_effects.forEach((effect: TemporaryEffect) => {
+            this.sticky_effects.forEach((effect: StickyEffect) => {
                 effect.singleApply(this, false);
             });
         }
@@ -253,7 +253,7 @@ module SpaceTac.Game {
 
             // Decrement sticky effects duration
             let removed_effects: EffectRemovedEvent[] = [];
-            this.temporary_effects = this.temporary_effects.filter((effect: TemporaryEffect): boolean => {
+            this.sticky_effects = this.sticky_effects.filter((effect: StickyEffect): boolean => {
                 if (effect.duration <= 1) {
                     removed_effects.push(new EffectRemovedEvent(this, effect));
                     return false;
@@ -261,17 +261,17 @@ module SpaceTac.Game {
                     return true;
                 }
             });
-            this.temporary_effects.forEach(effect => {
+            this.sticky_effects.forEach(effect => {
                 effect.duration -= 1;
                 this.addBattleEvent(new EffectDurationChangedEvent(this, effect, effect.duration + 1));
             });
             removed_effects.forEach(effect => this.addBattleEvent(effect));
         }
 
-        // Add a temporary effect
+        // Add a sticky effect
         //  A copy of the effect will be used
-        addTemporaryEffect(effect: TemporaryEffect, log: boolean = true): void {
-            this.temporary_effects.push(Tools.copyObject(effect));
+        addStickyEffect(effect: StickyEffect, log: boolean = true): void {
+            this.sticky_effects.push(Tools.copyObject(effect));
             if (log) {
                 this.addBattleEvent(new EffectAddedEvent(this, effect));
             }

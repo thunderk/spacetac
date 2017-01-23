@@ -1,9 +1,9 @@
-/// <reference path="TemporaryEffect.ts"/>
+/// <reference path="StickyEffect.ts"/>
 
 module SpaceTac.Game {
     // Hard limitation on attribute value
     //  For example, this could be used to slow a target by limiting its action points
-    export class AttributeLimitEffect extends TemporaryEffect {
+    export class AttributeLimitEffect extends StickyEffect {
         // Affected attribute
         attrcode: AttributeCode;
 

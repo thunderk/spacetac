@@ -2,7 +2,7 @@
 
 module SpaceTac.Game {
     // Base class for effects of actions
-    //  Effects can be permanent or temporary (for a number of turns)
+    // Effects are typically one shot, but sticky effects can be used to apply effects over a period
     export class BaseEffect extends Serializable {
         // Identifier code for the type of effect
         code: string;
