@@ -252,18 +252,20 @@ module SpaceTac.Game {
             this.recoverActionPoints();
 
             // Decrement sticky effects duration
+            let removed_effects: EffectRemovedEvent[] = [];
             this.temporary_effects = this.temporary_effects.filter((effect: TemporaryEffect): boolean => {
                 if (effect.duration <= 1) {
-                    this.addBattleEvent(new EffectRemovedEvent(this, effect));
+                    removed_effects.push(new EffectRemovedEvent(this, effect));
                     return false;
                 } else {
                     return true;
                 }
             });
-            this.temporary_effects.forEach((effect: TemporaryEffect) => {
+            this.temporary_effects.forEach(effect => {
                 effect.duration -= 1;
                 this.addBattleEvent(new EffectDurationChangedEvent(this, effect, effect.duration + 1));
             });
+            removed_effects.forEach(effect => this.addBattleEvent(effect));
         }
 
         // Add a temporary effect

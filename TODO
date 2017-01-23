@@ -6,6 +6,7 @@
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: apply safety distances to move actions
+* AI: bully AI crashes when winning a battle (trying to move toward null ship!)
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle
