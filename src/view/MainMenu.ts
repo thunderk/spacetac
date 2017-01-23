@@ -2,6 +2,7 @@
 
 module SpaceTac.View {
     export class MainMenu extends BaseView {
+        group: Phaser.Group;
         button_new_game: Phaser.Button;
         button_quick_battle: Phaser.Button;
         button_load_game: Phaser.Button;
@@ -20,19 +21,23 @@ module SpaceTac.View {
                 this.tweens.create(star).to({ x: -30 }, 30000 * x / fade).to({ x: 1950 }, 0.00001).to({ x: 1920 * x }, 30000 * (1 - x) / fade).loop().start();
             }
 
+            this.group = this.add.group();
+            this.group.x = 5000;
+
             // Menu buttons
             this.button_new_game = this.addButton(322, 674, "New Game", this.onNewGame);
             this.button_load_game = this.addButton(960, 674, "Load Game", this.onLoadGame);
             this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", this.onQuickBattle);
 
             // Title
-            let title = new Phaser.Image(this.game, 960, 225, "menu-title");
+            let title = this.add.image(960, 225, "menu-title", 0, this.group);
             title.anchor.set(0.5, 0);
-            this.add.existing(title);
+
+            this.tweens.create(this.group).to({ x: 0 }, 3000, Phaser.Easing.Circular.Out).start();
         }
 
         addButton(x: number, y: number, caption: string, callback: Function): Phaser.Button {
-            var button = this.add.button(x - 20, y + 20, "menu-button", callback, this);
+            var button = this.add.button(x - 20, y + 20, "menu-button", callback, this, null, null, null, null, this.group);
             button.anchor.set(0.5, 0);
             button.input.useHandCursor = true;
 
@@ -40,6 +45,15 @@ module SpaceTac.View {
                 { align: "center", font: "bold 40pt Arial", fill: "#529aee" });
             text.anchor.set(0.5, 0.5);
             button.addChild(text);
+
+            button.onInputOver.add(() => {
+                button.loadTexture("menu-button-hover");
+                text.fill = "#54b9ff";
+            });
+            button.onInputOut.add(() => {
+                button.loadTexture("menu-button");
+                text.fill = "#529aee";
+            });
 
             return button;
         }
