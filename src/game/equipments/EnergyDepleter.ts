@@ -10,7 +10,7 @@ module SpaceTac.Game.Equipments {
             this.ap_usage = new IntegerRange(4, 5);
             this.min_level = new IntegerRange(1, 3);
 
-            this.addSticky(new AttributeLimitEffect(AttributeCode.AP), 4, 3, 1, 2);
+            this.addSticky(new AttributeLimitEffect(AttributeCode.AP), 4, 3, 1, 2, true);
         }
     }
 }

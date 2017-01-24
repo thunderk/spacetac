@@ -223,6 +223,7 @@ module SpaceTac.Game {
             this.initializeActionPoints();
         }
 
+
         // Method called at the start of this ship turn
         startTurn(): void {
             if (this.playing) {
@@ -235,9 +236,8 @@ module SpaceTac.Game {
             this.updateAttributes();
 
             // Apply sticky effects
-            this.sticky_effects.forEach((effect: StickyEffect) => {
-                effect.singleApply(this, false);
-            });
+            this.sticky_effects.forEach(effect => effect.startTurn(this));
+            this.cleanStickyEffects();
         }
 
         // Method called at the end of this ship turn
@@ -251,30 +251,30 @@ module SpaceTac.Game {
             // Recover action points for next turn
             this.recoverActionPoints();
 
-            // Decrement sticky effects duration
-            let removed_effects: EffectRemovedEvent[] = [];
-            this.sticky_effects = this.sticky_effects.filter((effect: StickyEffect): boolean => {
-                if (effect.duration <= 1) {
-                    removed_effects.push(new EffectRemovedEvent(this, effect));
-                    return false;
-                } else {
-                    return true;
-                }
-            });
-            this.sticky_effects.forEach(effect => {
-                effect.duration -= 1;
-                this.addBattleEvent(new EffectDurationChangedEvent(this, effect, effect.duration + 1));
-            });
-            removed_effects.forEach(effect => this.addBattleEvent(effect));
+            // Apply sticky effects
+            this.sticky_effects.forEach(effect => effect.endTurn(this));
+            this.cleanStickyEffects();
         }
 
-        // Add a sticky effect
-        //  A copy of the effect will be used
-        addStickyEffect(effect: StickyEffect, log: boolean = true): void {
-            this.sticky_effects.push(Tools.copyObject(effect));
+        /**
+         * Register a sticky effect
+         * 
+         * Pay attention to pass a copy, not the original equipment effect, because it will be modified
+         */
+        addStickyEffect(effect: StickyEffect, log = true): void {
+            this.sticky_effects.push(effect);
             if (log) {
                 this.addBattleEvent(new EffectAddedEvent(this, effect));
             }
+        }
+
+        /**
+         * Clean sticky effects that are no longer active
+         */
+        cleanStickyEffects() {
+            let [active, ended] = Tools.binpartition(this.sticky_effects, effect => effect.duration > 0);
+            this.sticky_effects = active;
+            ended.forEach(effect => this.addBattleEvent(new EffectRemovedEvent(this, effect)));
         }
 
         // Move toward a location

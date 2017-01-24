@@ -44,7 +44,7 @@ module SpaceTac.Game.Specs {
             expect(equipment.getActionDescription()).toEqual("- 50 damage on all ships in 20km of impact");
 
             equipment.blast = 0;
-            equipment.target_effects.push(new AttributeLimitEffect(AttributeCode.Shield, 3, 200));
+            equipment.target_effects.push(new StickyEffect(new AttributeLimitEffect(AttributeCode.Shield, 200), 3));
             expect(equipment.getActionDescription()).toEqual("- 50 damage on target\n- limit shield to 200 for 3 turns on target");
         });
     });

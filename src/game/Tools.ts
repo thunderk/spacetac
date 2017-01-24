@@ -3,7 +3,7 @@ module SpaceTac.Game {
     export class Tools {
 
         // Copy an object (only a shallow copy of immediate properties)
-        static copyObject<T> (object: T): T {
+        static copyObject<T>(object: T): T {
             var objectCopy = <T>Object.create(object.constructor.prototype);
 
             for (var key in object) {
@@ -24,6 +24,14 @@ module SpaceTac.Game {
                 }
             }
             return result;
+        }
+
+        // Partition a list by a predicate, returning the items that pass the predicate, then the ones that don't pass it
+        static binpartition<T>(array: T[], predicate: (T) => boolean): [T[], T[]] {
+            let pass = [];
+            let fail = [];
+            array.forEach(item => (predicate(item) ? pass : fail).push(item));
+            return [pass, fail];
         }
     }
 }

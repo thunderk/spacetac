@@ -149,9 +149,9 @@ module SpaceTac.Game {
         }
 
         // Convenience function to add a sticking effect on target
-        addSticky(effect: StickyEffect, min_value: number, max_value: number = null,
-            min_duration: number = 1, max_duration: number = null): void {
-            var template = new EffectTemplate(effect);
+        addSticky(effect: BaseEffect, min_value: number, max_value: number = null,
+            min_duration: number = 1, max_duration: number = null, on_stick = false, on_turn_start = false): void {
+            var template = new EffectTemplate(new StickyEffect(effect, 0, on_stick, on_turn_start));
             template.addModifier("value", new IntegerRange(min_value, max_value));
             template.addModifier("duration", new IntegerRange(min_duration, max_duration));
             this.target_effects.push(template);

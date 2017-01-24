@@ -14,7 +14,7 @@ module SpaceTac.Game.Specs {
     }
 
     describe("Tools", () => {
-        it("copies full javascript objects", () => {
+        it("copies full javascript objects", function () {
             var ini = new TestObj();
 
             var cop = Tools.copyObject(ini);
@@ -25,10 +25,14 @@ module SpaceTac.Game.Specs {
             expect(cop.get()).toEqual("test");
         });
 
-        it("merges objects", () => {
+        it("merges objects", function () {
             expect(Tools.merge({}, {})).toEqual({});
             expect(Tools.merge({ "a": 1 }, { "b": 2 })).toEqual({ "a": 1, "b": 2 });
             expect(Tools.merge({ "a": 1 }, { "a": 3, "b": 2 })).toEqual({ "a": 3, "b": 2 });
+        });
+
+        it("partitions arrays by a predicate", function () {
+            expect(Tools.binpartition([1, 2, 3, 4], i => i % 2 == 0)).toEqual([[2, 4], [1, 3]]);
         });
     });
 }

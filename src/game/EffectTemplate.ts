@@ -35,11 +35,7 @@ module SpaceTac.Game {
 
         // Generate an effect with a given power
         generateFixed(power: number): BaseEffect {
-            var effect = Tools.copyObject(this.effect);
-            this.modifiers.forEach((modifier: EffectTemplateModifier) => {
-                effect[modifier.name] = modifier.range.getProportional(power);
-            });
-            return effect;
+            return this.effect.getModifiedCopy(this.modifiers, power);
         }
     }
 }

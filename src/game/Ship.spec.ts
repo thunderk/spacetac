@@ -123,22 +123,20 @@ module SpaceTac.Game.Specs {
             var ship = new Ship();
             var battle = new Battle(ship.fleet);
 
-            var effect = new StickyEffect("test", 2);
+            ship.addStickyEffect(new StickyEffect(new BaseEffect("test"), 2, false, true));
 
-            ship.addStickyEffect(effect);
-
-            expect(ship.sticky_effects).toEqual([effect]);
+            expect(ship.sticky_effects).toEqual([new StickyEffect(new BaseEffect("test"), 2, false, true)]);
             expect(battle.log.events).toEqual([
-                new EffectAddedEvent(ship, effect)
+                new EffectAddedEvent(ship, new StickyEffect(new BaseEffect("test"), 2, false, true))
             ]);
 
             ship.startTurn();
             battle.log.clear();
             ship.endTurn();
 
-            expect(ship.sticky_effects).toEqual([new StickyEffect("test", 1)]);
+            expect(ship.sticky_effects).toEqual([new StickyEffect(new BaseEffect("test"), 1, false, true)]);
             expect(battle.log.events).toEqual([
-                new EffectDurationChangedEvent(ship, new StickyEffect("test", 1), 2)
+                new EffectDurationChangedEvent(ship, new StickyEffect(new BaseEffect("test"), 1, false, true), 2)
             ]);
 
             ship.startTurn();
@@ -147,7 +145,8 @@ module SpaceTac.Game.Specs {
 
             expect(ship.sticky_effects).toEqual([]);
             expect(battle.log.events).toEqual([
-                new EffectRemovedEvent(ship, new StickyEffect("test", 1))
+                new EffectDurationChangedEvent(ship, new StickyEffect(new BaseEffect("test"), 0, false, true), 1),
+                new EffectRemovedEvent(ship, new StickyEffect(new BaseEffect("test"), 0, false, true))
             ]);
 
             ship.startTurn();

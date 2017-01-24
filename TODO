@@ -1,6 +1,5 @@
 * Use succession's tools and serializer
 * Effect should be random in a range (eg. "damage target 50-75")
-* Rewrite sticky effects to be more flexible (should be able to stick any effect)
 * Add auto-move to attack
 * Add equipment info (or summary) in ship tooltip
 * Handle effects overflowing ship tooltip when too numerous

@@ -14,6 +14,17 @@ module SpaceTac.Game {
             this.code = code;
         }
 
+        /**
+         * Get a copy, modified by template modifiers
+         */
+        getModifiedCopy(modifiers: EffectTemplateModifier[], power: number): BaseEffect {
+            let result = Tools.copyObject(this);
+            modifiers.forEach(modifier => {
+                result[modifier.name] = modifier.range.getProportional(power);
+            });
+            return result;
+        }
+
         // Apply ponctually the effect on a given ship
         //  Return true if the effect could be applied
         applyOnShip(ship: Ship): boolean {
@@ -23,6 +34,11 @@ module SpaceTac.Game {
         // Return true if the effect is beneficial to the ship, false if it's a drawback
         isBeneficial(): boolean {
             return false;
+        }
+
+        // Get a full code, that can be used to identify this effect (for example: "attrlimit-aprecovery")
+        getFullCode(): string {
+            return this.code;
         }
 
         // Return a human readable description

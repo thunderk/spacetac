@@ -17,19 +17,18 @@ module SpaceTac.Game.Specs {
 
             expect(target.ap_current.current).toBe(4);
             expect(target.sticky_effects).toEqual([
-                new AttributeLimitEffect(AttributeCode.AP, 1, 4)
+                new StickyEffect(new AttributeLimitEffect(AttributeCode.AP, 4), 1, true, false)
             ]);
 
             // Attribute is limited for one turn, and prevents AP recovery
             target.ap_current.set(6);
+            target.recoverActionPoints();
             target.startTurn();
 
             expect(target.ap_current.current).toBe(4);
-            expect(target.sticky_effects).toEqual([
-                new AttributeLimitEffect(AttributeCode.AP, 1, 4)
-            ]);
+            expect(target.sticky_effects).toEqual([]);
 
-            // Attribute vanishes before the end of turn, so AP recovery happens
+            // Effect vanished, so AP recovery happens
             target.endTurn();
 
             expect(target.ap_current.current).toBe(6);
