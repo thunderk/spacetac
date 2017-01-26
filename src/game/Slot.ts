@@ -1,6 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Types of slots
     export enum SlotType {
         Armor,

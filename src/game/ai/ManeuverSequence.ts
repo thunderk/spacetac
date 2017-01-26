@@ -1,4 +1,4 @@
-module SpaceTac.Game.AI {
+module TS.SpaceTac.Game.AI {
     // A chain of Maneuver to execute sequentially
     export class ManeuverSequence {
         // Concerned ship

@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Tooltip to display action information
     export class ActionTooltip extends Phaser.Sprite {
         icon: Phaser.Image | null;

@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("Equipment", () => {
         it("checks capabilities requirements", function () {
             var equipment = new Equipment();

@@ -1,6 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // A fleet of ships
     export class Fleet extends Serializable {
         // Fleet owner

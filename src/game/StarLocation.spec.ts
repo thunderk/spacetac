@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("StarLocation", () => {
         it("removes generated encounters that lose", function () {
             var location = new StarLocation(null, StarLocationType.PLANET, 0, 0);

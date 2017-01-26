@@ -1,6 +1,6 @@
 /// <reference path="BaseLogEvent.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Event logged when a weapon is used on a target
     export class FireEvent extends BaseLogEvent {
         // Weapon used

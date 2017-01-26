@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // A model of ship
     //  It defines the ship looks, and available slots for equipment
     export class ShipModel {

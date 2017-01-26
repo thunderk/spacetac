@@ -1,6 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // One player (human or IA)
     export class Player extends Serializable {
         // Universe in which we are playing

@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // A single displayed message
     class Message extends Phaser.Group {
         text: Phaser.Text;

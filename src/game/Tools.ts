@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Generic tools functions
     export class Tools {
 

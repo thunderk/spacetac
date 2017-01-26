@@ -1,5 +1,5 @@
 /// <reference path="AbstractAI.ts"/>
-module SpaceTac.Game.AI {
+module TS.SpaceTac.Game.AI {
     // Combination of a move action and a fire action
     export class BullyManeuver {
         // Move action to position the ship before firing

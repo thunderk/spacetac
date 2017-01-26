@@ -1,6 +1,6 @@
 /// <reference path="BaseLogEvent.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Event logged when the battle ended
     //  This is always the last event of a battle log
     export class EndBattleEvent extends BaseLogEvent {

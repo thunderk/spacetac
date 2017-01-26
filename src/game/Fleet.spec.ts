@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     describe("Fleet", function () {
         it("get average level", function () {
             var fleet = new Fleet();

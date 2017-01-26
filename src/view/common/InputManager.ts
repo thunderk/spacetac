@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Manager for keyboard input / bindings
     //  Action callbacks will receive the view as 'this' context
     export class InputManager {

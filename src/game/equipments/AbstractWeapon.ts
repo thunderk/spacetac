@@ -1,6 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
-module SpaceTac.Game.Equipments {
+module TS.SpaceTac.Game.Equipments {
     // Base convenience class for weapons
     export class AbstractWeapon extends LootTemplate {
         // Boolean set to true if the weapon can target space

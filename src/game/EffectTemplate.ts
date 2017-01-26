@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Modifier for a value of a BaseEffect subclass
     export class EffectTemplateModifier {
         // Value name

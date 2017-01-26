@@ -1,6 +1,6 @@
 /// <reference path="BaseEffect.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     /**
      * Wrapper around another effect, to make it stick to a ship.
      * 

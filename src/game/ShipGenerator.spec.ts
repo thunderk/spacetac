@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("ShipGenerator", function () {
         it("can use ship model", function () {
             var gen = new ShipGenerator();

@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // unit testing utilities
     export class TestTools {
 

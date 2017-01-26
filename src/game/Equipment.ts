@@ -1,6 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Piece of equipment to attach in slots
     export class Equipment extends Serializable {
         // Actual slot this equipment is attached to

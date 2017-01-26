@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("EnergyDepleter", () => {
         it("limits target's AP", () => {
             var template = new Equipments.EnergyDepleter();

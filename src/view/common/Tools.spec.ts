@@ -1,4 +1,4 @@
-module SpaceTac.View.Specs {
+module TS.SpaceTac.View.Specs {
     describe("Tools", () => {
         it("normalizes angles", function () {
             expect(Tools.normalizeAngle(0)).toEqual(0);

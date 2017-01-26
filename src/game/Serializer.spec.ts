@@ -1,6 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     export class SerializableTestObj3 extends Serializable {
         a: boolean;
         b: SerializableTestObj1;

@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Targetting system
     //  Allows to pick a target for an action
     export class Targetting {

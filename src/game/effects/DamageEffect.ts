@@ -1,6 +1,6 @@
 /// <reference path="BaseEffect.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Apply damage to a ship
     export class DamageEffect extends BaseEffect {
         // Base damage points

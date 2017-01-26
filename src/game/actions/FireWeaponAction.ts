@@ -1,6 +1,6 @@
 /// <reference path="BaseAction.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Action to fire a weapon on another ship, or in space
     export class FireWeaponAction extends BaseAction {
         // Boolean set to true if the weapon can target space

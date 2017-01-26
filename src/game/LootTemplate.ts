@@ -1,6 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Template used to generate a loot equipment
     export class LootTemplate extends Serializable {
         // Type of slot this equipment will fit in

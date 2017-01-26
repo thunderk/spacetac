@@ -1,6 +1,6 @@
 /// <reference path="BaseEffect.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Hard limitation on attribute value
     //  For example, this could be used to slow a target by limiting its action points
     export class AttributeLimitEffect extends BaseEffect {

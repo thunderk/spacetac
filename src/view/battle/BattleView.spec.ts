@@ -1,6 +1,6 @@
 /// <reference path="../TestGame.ts"/>
 
-module SpaceTac.View.Specs {
+module TS.SpaceTac.View.Specs {
     describe("BattleView", () => {
         inbattleview_it("forwards events in targetting mode", (battleview: BattleView) => {
             expect(battleview.targetting).toBeNull();

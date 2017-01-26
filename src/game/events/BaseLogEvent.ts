@@ -1,6 +1,6 @@
 /// <reference path="../Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Base class for a BattleLog event
     export class BaseLogEvent extends Serializable {
         // Code of the event (its type)

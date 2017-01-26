@@ -1,6 +1,6 @@
 /// <reference path="../BaseView.ts"/>
 
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Interactive view of a Battle
     export class BattleView extends BaseView {
 

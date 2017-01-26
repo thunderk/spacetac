@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Graphical representation of a battle
     //  This is the area in the BattleView that will display ships with their real positions
     export class Arena extends Phaser.Group {

@@ -1,6 +1,6 @@
 /// <reference path="BaseLogEvent.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Event logged when a sticky effect is added to a ship
     export class EffectDurationChangedEvent extends BaseLogEvent {
         // Pointer to the effect

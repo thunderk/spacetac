@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("StarLink", () => {
         it("checks link intersection", () => {
             var star1 = new Star(null, 0, 0);

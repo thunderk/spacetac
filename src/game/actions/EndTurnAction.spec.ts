@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("EndTurnAction", () => {
         it("can't be applied to non-playing ship", () => {
             var battle = Battle.newQuickRandom();

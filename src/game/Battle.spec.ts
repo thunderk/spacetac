@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     describe("Battle", function () {
         it("defines play order by initiative throws", function () {
             var fleet1 = new Fleet(null);

@@ -1,6 +1,6 @@
 /// <reference path="LootTemplate.ts" />
 
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     class TestTemplate extends LootTemplate {
         constructor() {
             super(SlotType.Shield, "Hexagrid Shield");

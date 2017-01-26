@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Processor of battle log events
     //  This will process incoming battle events, and update the battleview accordingly
     export class LogProcessor {

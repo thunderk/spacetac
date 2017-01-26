@@ -1,6 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Log of a battle
     //  This keeps track of all events in a battle
     //  It also allows to register a callback to receive these events

@@ -1,6 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
-module SpaceTac.Game.Equipments {
+module TS.SpaceTac.Game.Equipments {
     export class BasicPowerCore extends LootTemplate {
         constructor() {
             super(SlotType.Power, "Basic Power Core");

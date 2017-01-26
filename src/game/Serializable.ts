@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Base class for serializable objects
     export class Serializable {
         static _next_sid: number = 0;

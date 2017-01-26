@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Group to display a star system
     export class StarSystemDisplay extends Phaser.Image {
         starsystem: Game.Star;

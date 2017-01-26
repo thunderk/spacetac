@@ -1,6 +1,6 @@
 /// <reference path="BaseView.ts"/>
 
-module SpaceTac.View {
+module TS.SpaceTac.View {
     export class Preload extends BaseView {
         private preloadBar: Phaser.Image;
 

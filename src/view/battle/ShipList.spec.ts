@@ -1,6 +1,6 @@
 /// <reference path="../TestGame.ts"/>
 
-module SpaceTac.View.Specs {
+module TS.SpaceTac.View.Specs {
     describe("ShipList", () => {
         inbattleview_it("handles play position of ships", (battleview: BattleView) => {
             var list = battleview.ship_list;

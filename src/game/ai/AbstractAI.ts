@@ -1,6 +1,6 @@
 /// <reference path="../Serializable.ts"/>
 
-module SpaceTac.Game.AI {
+module TS.SpaceTac.Game.AI {
     // Base class for all Artificial Intelligence interaction
     export class AbstractAI extends Serializable {
         // The fleet controlled by this AI

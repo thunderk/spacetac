@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     describe("Attribute", function () {
         it("is initially not limited", function () {
             var attr = new Attribute();

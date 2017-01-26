@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Tooltip to display ship information
     export class ShipTooltip extends Phaser.Sprite {
         battleview: BattleView;

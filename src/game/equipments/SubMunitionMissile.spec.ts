@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("SubMunitionMissile", () => {
         it("hits several targets in circle", () => {
             var battle = TestTools.createBattle(1, 2);

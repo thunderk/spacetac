@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Serializer to cascade through Serializable objects
     export class Serializer {
         // Mapping of IDs to objects
@@ -29,7 +29,7 @@ module SpaceTac.Game {
                 }
                 return result;
             } else {
-                return this.collectSerializableClasses(SpaceTac.Game, "SpaceTac.Game");
+                return this.collectSerializableClasses(TS.SpaceTac.Game, "SpaceTac.Game");
             }
         }
 

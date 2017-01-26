@@ -1,6 +1,6 @@
 /// <reference path="AbstractWeapon.ts"/>
 
-module SpaceTac.Game.Equipments {
+module TS.SpaceTac.Game.Equipments {
     export class GatlingGun extends AbstractWeapon {
         constructor() {
             super("Gatling Gun", 50, 100);

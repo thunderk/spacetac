@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("Target", () => {
         it("initializes from ship or location", () => {
             var target: Target;

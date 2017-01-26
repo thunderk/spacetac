@@ -1,4 +1,4 @@
-module SpaceTac.View.Specs {
+module TS.SpaceTac.View.Specs {
     describe("Targetting", () => {
         it("broadcasts hovering and selection events", () => {
             var targetting = new Targetting(null);

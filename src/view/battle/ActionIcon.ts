@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Icon to activate a ship capability (move, fire...)
     export class ActionIcon extends Phaser.Button {
         // Link to the parent bar

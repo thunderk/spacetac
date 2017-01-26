@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("EffectTemplate", () => {
         it("interpolates between weak and strong effects", () => {
             var base_effect = new AttributeMaxEffect(AttributeCode.Hull, 6);

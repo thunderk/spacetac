@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     function applyGameSteps(session: GameSession): void {
         var battle = session.getBattle();
         battle.advanceToNextShip();

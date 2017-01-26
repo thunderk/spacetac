@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     describe("AttributeCollection", function () {
         it("sets and gets an attribute value", function () {
             var coll = new AttributeCollection();

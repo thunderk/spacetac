@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Equipment generator from loot templates
     export class LootGenerator {
         // List of available templates
@@ -21,9 +21,9 @@ module SpaceTac.Game {
         // Fill the list of templates
         populate(): void {
             var templates: LootTemplate[] = [];
-            for (var template_name in SpaceTac.Game.Equipments) {
+            for (var template_name in TS.SpaceTac.Game.Equipments) {
                 if (template_name) {
-                    var template_class = SpaceTac.Game.Equipments[template_name];
+                    var template_class = TS.SpaceTac.Game.Equipments[template_name];
                     var template: LootTemplate = new template_class();
                     templates.push(template);
                 }

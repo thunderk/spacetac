@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // A unique name generator
     export class NameGenerator {
         // List of available choices

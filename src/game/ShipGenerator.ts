@@ -1,4 +1,4 @@
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Generator of random ship
     export class ShipGenerator {
         // Random number generator used

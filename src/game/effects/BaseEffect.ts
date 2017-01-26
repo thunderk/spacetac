@@ -1,6 +1,6 @@
 /// <reference path="../Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Base class for effects of actions
     // Effects are typically one shot, but sticky effects can be used to apply effects over a period
     export class BaseEffect extends Serializable {

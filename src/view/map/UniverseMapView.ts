@@ -1,6 +1,6 @@
 /// <reference path="../BaseView.ts"/>
 
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Interactive map of the universe
     export class UniverseMapView extends BaseView {
         // Displayed universe

@@ -1,6 +1,6 @@
 /// <reference path="Serializable.ts"/>
 
-module SpaceTac.Game {
+module TS.SpaceTac.Game {
     // Random generator, used in all throws
     export class RandomGenerator extends Serializable {
         // Array of next values, empty for a correct generator

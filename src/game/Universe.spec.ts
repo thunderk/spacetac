@@ -1,4 +1,4 @@
-module SpaceTac.Game.Specs {
+module TS.SpaceTac.Game.Specs {
     describe("Universe", () => {
         it("generates star systems", () => {
             var universe = new Universe();

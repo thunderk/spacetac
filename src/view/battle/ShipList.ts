@@ -1,4 +1,4 @@
-module SpaceTac.View {
+module TS.SpaceTac.View {
     // Bar with all playing ships, by play order
     export class ShipList extends Phaser.Image {
         // Link to the parent battleview
