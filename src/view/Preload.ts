@@ -56,12 +56,11 @@ module SpaceTac.View {
             this.loadImage("battle/weapon/bullet.png");
             this.loadImage("common/standard-bar-background.png");
             this.loadImage("common/standard-bar-foreground.png");
-            this.loadImage("map/star-icon.png");
-            this.loadImage("map/fleet-icon.png");
-            this.loadImage("map/planet-icon.png");
-            this.loadImage("map/warp-icon.png");
-            this.loadImage("map/button-back.png");
-            this.loadImage("map/button-jump.png");
+            this.loadImage("map/starsystem-background.png");
+            this.loadImage("map/zoom-in.png");
+            this.loadImage("map/zoom-out.png");
+            this.loadImage("map/star.png");
+            this.loadImage("map/planet.png");
 
             // Load ships
             this.loadShip("scout");

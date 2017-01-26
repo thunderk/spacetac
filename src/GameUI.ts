@@ -30,7 +30,6 @@ module SpaceTac {
             this.state.add('router', View.Router);
             this.state.add('battle', View.BattleView);
             this.state.add('universe', View.UniverseMapView);
-            this.state.add('starsystem', View.StarSystemView);
 
             this.state.start('boot');
         }
