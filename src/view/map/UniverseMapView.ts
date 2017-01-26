@@ -12,6 +12,7 @@ module SpaceTac.View {
         // Star systems
         group: Phaser.Group;
         starsystems: StarSystemDisplay[] = [];
+        starlinks: Phaser.Graphics[] = [];
 
         // Zoom level
         zoom = 0;
@@ -30,6 +31,18 @@ module SpaceTac.View {
 
             this.group = new Phaser.Group(this.game);
             this.add.existing(this.group);
+
+            this.starlinks = this.universe.starlinks.map(starlink => {
+                let loc1 = starlink.first.getWarpLocationTo(starlink.second);
+                let loc2 = starlink.second.getWarpLocationTo(starlink.first);
+
+                let result = new Phaser.Graphics(this.game);
+                result.lineStyle(0.005, 0x8bbeff);
+                result.moveTo(starlink.first.x - 0.5 + loc1.x, starlink.first.y - 0.5 + loc1.y);
+                result.lineTo(starlink.second.x - 0.5 + loc2.x, starlink.second.y - 0.5 + loc2.y);
+                return result;
+            });
+            this.starlinks.forEach(starlink => this.group.addChild(starlink));
 
             this.starsystems = this.universe.stars.map(star => new StarSystemDisplay(this, star));
             this.starsystems.forEach(starsystem => this.group.addChild(starsystem));
@@ -63,8 +76,8 @@ module SpaceTac.View {
         // Set the camera to center on a target, and to display a given span in height
         setCamera(x: number, y: number, span: number) {
             let scale = 1000 / span;
-            this.tweens.create(this.group.position).to({ x: 960 - x * scale, y: 540 - y * scale }).start();
-            this.tweens.create(this.group.scale).to({ x: scale, y: scale }).start();
+            this.tweens.create(this.group.position).to({ x: 960 - x * scale, y: 540 - y * scale }, 500, Phaser.Easing.Cubic.InOut).start();
+            this.tweens.create(this.group.scale).to({ x: scale, y: scale }, 500, Phaser.Easing.Cubic.InOut).start();
         }
 
         setZoom(level: number) {
@@ -73,6 +86,7 @@ module SpaceTac.View {
                 this.setCamera(0, 0, this.universe.radius * 2);
                 this.zoom = 0;
             } else if (level == 1) {
+                // TODO Zoom to next-jump accessible
                 this.setCamera(current_star.x, current_star.y, this.universe.radius * 0.5);
                 this.zoom = 1;
             } else {

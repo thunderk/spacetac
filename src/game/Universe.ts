@@ -17,7 +17,7 @@ module SpaceTac.Game {
 
             this.stars = [];
             this.starlinks = [];
-            this.radius = 50;
+            this.radius = 5;
         }
 
         // Generates a universe, with star systems and such
@@ -26,6 +26,8 @@ module SpaceTac.Game {
 
             var links = this.getPotentialLinks();
             this.starlinks = this.filterCrossingLinks(links);
+
+            this.generateWarpLocations(random);
 
             this.stars.forEach((star: Star) => {
                 star.generate(random);
@@ -76,7 +78,7 @@ module SpaceTac.Game {
 
         // Filter a list of potential links to avoid crossing ones
         filterCrossingLinks(links: StarLink[]): StarLink[] {
-            var result : StarLink[] = [];
+            var result: StarLink[] = [];
 
             links.forEach((link1: StarLink) => {
                 var crossed = false;
@@ -93,6 +95,18 @@ module SpaceTac.Game {
             return result;
         }
 
+        // Generate warp locations for the links between stars
+        generateWarpLocations(random = new RandomGenerator()) {
+            this.starlinks.forEach(link => {
+                let warp1 = link.first.generateWarpLocationTo(link.second, random);
+                let warp2 = link.second.generateWarpLocationTo(link.first, random);
+
+                warp1.setJumpDestination(warp2);
+                warp2.setJumpDestination(warp1);
+            });
+
+        }
+
         // Get the star nearest to another
         getNearestTo(star: Star, others: Star[] = null): Star {
             if (others === null) {
@@ -105,7 +119,7 @@ module SpaceTac.Game {
                 var nearest: Star = null;
                 others.forEach((istar: Star) => {
                     if (istar !== star) {
-                    var dist = star.getDistanceTo(istar);
+                        var dist = star.getDistanceTo(istar);
                         if (dist < mindist) {
                             nearest = istar;
                             mindist = dist;

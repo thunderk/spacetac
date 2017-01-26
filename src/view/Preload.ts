@@ -59,8 +59,12 @@ module SpaceTac.View {
             this.loadImage("map/starsystem-background.png");
             this.loadImage("map/zoom-in.png");
             this.loadImage("map/zoom-out.png");
-            this.loadImage("map/star.png");
-            this.loadImage("map/planet.png");
+            this.loadImage("map/location-star.png");
+            this.loadImage("map/location-planet.png");
+            this.loadImage("map/location-warp.png");
+            this.loadImage("map/state-unknown.png");
+            this.loadImage("map/state-enemy.png");
+            this.loadImage("map/state-clear.png");
 
             // Load ships
             this.loadShip("scout");
