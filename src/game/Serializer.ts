@@ -21,7 +21,7 @@ module TS.SpaceTac.Game {
                         var obj = container[obj_name];
                         var obj_path = path + "." + obj_name;
                         if (typeof obj === "object") {
-                            result = Tools.merge(result, this.collectSerializableClasses(obj, obj_path));
+                            result = merge(result, this.collectSerializableClasses(obj, obj_path));
                         } else if (typeof obj === "function" && obj.prototype instanceof Serializable) {
                             result[obj_path] = obj;
                         }

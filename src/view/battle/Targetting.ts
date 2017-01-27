@@ -156,7 +156,7 @@ module TS.SpaceTac.View {
             this.target_corrected = target;
             this.blast_radius = blast_radius;
             if (dispatch) {
-                this.target_initial = target ? Game.Tools.copyObject(target) : null;
+                this.target_initial = target ? copy(target) : null;
                 this.targetHovered.dispatch(this.target_corrected);
             }
             this.update();

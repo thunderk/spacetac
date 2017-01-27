@@ -9,7 +9,7 @@ module TS.SpaceTac.Game {
         constructor(ship: Ship, attribute: Attribute) {
             super("attr", ship);
 
-            this.attribute = Tools.copyObject(attribute);
+            this.attribute = copy(attribute);
         }
     }
 }

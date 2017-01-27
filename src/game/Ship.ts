@@ -272,7 +272,7 @@ module TS.SpaceTac.Game {
          * Clean sticky effects that are no longer active
          */
         cleanStickyEffects() {
-            let [active, ended] = Tools.binpartition(this.sticky_effects, effect => effect.duration > 0);
+            let [active, ended] = binpartition(this.sticky_effects, effect => effect.duration > 0);
             this.sticky_effects = active;
             ended.forEach(effect => this.addBattleEvent(new EffectRemovedEvent(this, effect)));
         }

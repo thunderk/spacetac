@@ -30,7 +30,7 @@ module TS.SpaceTac.Game {
         }
 
         getModifiedCopy(modifiers: EffectTemplateModifier[], power: number): BaseEffect {
-            let [current, base] = Tools.binpartition(modifiers, modifier => modifier.name == "duration");
+            let [current, base] = binpartition(modifiers, modifier => modifier.name == "duration");
             let result = <StickyEffect>super.getModifiedCopy(current, power);
             result.base = result.base.getModifiedCopy(base, power);
             return result;

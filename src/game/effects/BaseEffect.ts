@@ -18,7 +18,7 @@ module TS.SpaceTac.Game {
          * Get a copy, modified by template modifiers
          */
         getModifiedCopy(modifiers: EffectTemplateModifier[], power: number): BaseEffect {
-            let result = Tools.copyObject(this);
+            let result = copy(this);
             modifiers.forEach(modifier => {
                 result[modifier.name] = modifier.range.getProportional(power);
             });
