@@ -28,7 +28,7 @@ module TS.SpaceTac.Game {
         encounter: Fleet;
         encounter_gen: boolean;
 
-        constructor(star: Star, type: StarLocationType, x: number = 0, y: number = 0) {
+        constructor(star: Star, type: StarLocationType = StarLocationType.PLANET, x: number = 0, y: number = 0) {
             super();
 
             this.star = star || new Star();

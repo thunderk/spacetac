@@ -17,14 +17,21 @@ module TS.SpaceTac.View {
 
             // Show locations
             starsystem.locations.forEach(location => {
+                let location_sprite: Phaser.Image | null = null;
+
                 if (location.type == Game.StarLocationType.STAR) {
-                    this.addImage(location.x, location.y, "map-location-star");
+                    location_sprite = this.addImage(location.x, location.y, "map-location-star");
                 } else if (location.type == Game.StarLocationType.PLANET) {
-                    let planet = this.addImage(location.x, location.y, "map-location-planet");
-                    planet.rotation = Math.atan2(location.y, location.x);
+                    location_sprite = this.addImage(location.x, location.y, "map-location-planet");
+                    location_sprite.rotation = Math.atan2(location.y, location.x);
                     this.addCircle(Math.sqrt(location.x * location.x + location.y * location.y), 1);
                 } else if (location.type == Game.StarLocationType.WARP) {
-                    let warp = this.addImage(location.x, location.y, "map-location-warp");
+                    location_sprite = this.addImage(location.x, location.y, "map-location-warp");
+                }
+
+                if (location_sprite) {
+                    let key = parent.player.hasVisitedLocation(location) ? (location.encounter ? "map-state-enemy" : "map-state-clear") : "map-state-unknown";
+                    this.addImage(location.x + 0.005, location.y + 0.005, key);
                 }
             });
         }

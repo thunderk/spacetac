@@ -28,7 +28,7 @@ module TS.SpaceTac.Game {
         // Set the current location of the fleet
         setLocation(location: StarLocation): void {
             this.location = location;
-            this.player.setVisited(this.location.star);
+            this.player.setVisited(this.location);
 
             // Check encounter
             var battle = this.location.enterLocation(this.player.fleet);

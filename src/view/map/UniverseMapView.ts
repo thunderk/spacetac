@@ -67,8 +67,10 @@ module TS.SpaceTac.View {
 
         // Reveal the whole map (this is a cheat)
         revealAll(): void {
-            this.universe.stars.forEach((star: Game.Star) => {
-                this.player.setVisited(star);
+            this.universe.stars.forEach(star => {
+                star.locations.forEach(location => {
+                    this.player.setVisited(location);
+                });
             });
             // TODO Redraw
         }

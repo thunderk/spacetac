@@ -13,7 +13,7 @@ module TS.SpaceTac.Game {
         ai: AI.AbstractAI;
 
         // List of visited star systems
-        visited: Star[];
+        visited: StarLocation[] = [];
 
         // Create a player, with an empty fleet
         constructor(universe: Universe = new Universe()) {
@@ -22,7 +22,6 @@ module TS.SpaceTac.Game {
             this.universe = universe;
             this.fleet = new Fleet(this);
             this.ai = null;
-            this.visited = [];
         }
 
         // Create a quick random player, with a fleet, for testing purposes
@@ -50,16 +49,25 @@ module TS.SpaceTac.Game {
             return player;
         }
 
-        // Check if the player has visited a given star system
-        hasVisited(star: Star): boolean {
-            return this.visited.indexOf(star) >= 0;
+        /**
+         * Return true if the player has visited at least one location in a given system.
+         */
+        hasVisitedSystem(system: Star): boolean {
+            return any(this.visited, location => location.star == system);
         }
 
-        // Set a star system as visited
-        setVisited(star: Star): void {
-            if (!this.hasVisited(star)) {
-                this.visited.push(star);
-            }
+        /**
+         * Return true if the player has visited a given star location.
+         */
+        hasVisitedLocation(location: StarLocation): boolean {
+            return contains(this.visited, location);
+        }
+
+        /**
+         * Set a star location as visited.
+         */
+        setVisited(location: StarLocation): void {
+            add(this.visited, location);
         }
 
         // Get currently played battle, null when none is in progress
