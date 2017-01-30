@@ -1,4 +1,5 @@
 /// <reference path="battle/BattleView.ts"/>
+/// <reference path="map/UniverseMapView.ts"/>
 
 module TS.SpaceTac.View.Specs {
     // Test game wrapper (use instead of jasmine 'it')
@@ -41,5 +42,15 @@ module TS.SpaceTac.View.Specs {
         ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
             func(battleview);
         }, battleview, player, battle);
+    }
+
+    // Test game wrapper, with a map initialized on a random universe
+    export function inmapview_it(desc: string, func: (mapview: UniverseMapView) => void) {
+        var mapview = new UniverseMapView();
+        var session = new Game.GameSession();
+        session.startNewGame();
+        ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
+            func(mapview);
+        }, mapview, session.universe, session.player);
     }
 }

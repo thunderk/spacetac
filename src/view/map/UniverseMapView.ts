@@ -14,6 +14,9 @@ module TS.SpaceTac.View {
         starsystems: StarSystemDisplay[] = [];
         starlinks: Phaser.Graphics[] = [];
 
+        // Fleets
+        player_fleet: FleetDisplay;
+
         // Zoom level
         zoom = 0;
 
@@ -44,8 +47,12 @@ module TS.SpaceTac.View {
             });
             this.starlinks.forEach(starlink => this.group.addChild(starlink));
 
+            this.player_fleet = new FleetDisplay(this, this.player.fleet);
+
             this.starsystems = this.universe.stars.map(star => new StarSystemDisplay(this, star));
             this.starsystems.forEach(starsystem => this.group.addChild(starsystem));
+
+            this.group.addChild(this.player_fleet);
 
             this.setZoom(2);
             this.add.button(1830, 100, "map-zoom-in", () => this.setZoom(this.zoom + 1)).anchor.set(0.5, 0.5);
@@ -63,6 +70,11 @@ module TS.SpaceTac.View {
             this.player = null;
 
             super.shutdown();
+        }
+
+        // Update info on all star systems (fog of war, available data...)
+        updateInfo() {
+            this.starsystems.forEach(system => system.updateInfo());
         }
 
         // Reveal the whole map (this is a cheat)
