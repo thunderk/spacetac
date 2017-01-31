@@ -31,6 +31,9 @@ module TS.SpaceTac.View {
 
             this.ship = ship;
 
+            this.active_effects = new Phaser.Group(this.game);
+            this.addChild(this.active_effects);
+
             this.layer_portrait = new Phaser.Image(this.game, 8, 8, "ship-" + ship.model + "-portrait", 0);
             this.layer_portrait.scale.set(0.3, 0.3);
             this.addChild(this.layer_portrait);
@@ -52,9 +55,6 @@ module TS.SpaceTac.View {
             this.energy = ValueBar.newStyled(this.game, "battle-shiplist-energy", 106, 39, true);
             this.addChild(this.energy);
 
-            this.active_effects = new Phaser.Group(this.game);
-            this.addChild(this.active_effects);
-
             this.updateAttributes();
             this.updateEffects();
 
@@ -75,7 +75,7 @@ module TS.SpaceTac.View {
             var spacing = (8 * (count - 1) > 72) ? 72 / (count - 1) : 8;
             this.ship.sticky_effects.forEach((effect, index) => {
                 var x = 46 - (count - 1) * spacing / 2 + index * spacing;
-                var badge = new Phaser.Image(this.game, x, 85, `battle-shiplist-effect-${effect.isBeneficial() ? "good" : "bad"}`);
+                var badge = new Phaser.Image(this.game, x, 46, `battle-shiplist-effect-${effect.isBeneficial() ? "good" : "bad"}`);
                 badge.anchor.set(0.5, 0.5);
                 this.active_effects.addChild(badge);
             });

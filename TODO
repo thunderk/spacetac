@@ -1,7 +1,8 @@
-* Use succession's tools and serializer
+* Allow to cancel last moves
 * Effect should be random in a range (eg. "damage target 50-75")
 * Add auto-move to attack
 * Add equipment info (or summary) in ship tooltip
+* Escape key should cancel selected action
 * Handle effects overflowing ship tooltip when too numerous
 * Proper arena scaling (not graphical, only space coordinates)
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
