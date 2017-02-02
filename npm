@@ -9,6 +9,6 @@ which python3 > /dev/null 2>&1 || ( npm "$@" && exit 0 )
 dir=$(dirname $0)
 
 test -x "${dir}/.env/bin/nodeenv" || ( virtualenv -p python3 "${dir}/.env" && "${dir}/.env/bin/pip" install --upgrade nodeenv )
-test -f "${dir}/.env/node/bin/activate" || "${dir}/.env/bin/nodeenv" --node=latest --force "${dir}/.env/node"
+test -f "${dir}/.env/node/bin/activate" || "${dir}/.env/bin/nodeenv" --node=6.9.5 --force "${dir}/.env/node"
 PATH="${dir}/.env/node/bin:${PATH}" npm "$@"
 
