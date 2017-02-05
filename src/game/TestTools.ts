@@ -21,10 +21,10 @@ module TS.SpaceTac.Game {
         }
 
         // Get or add an equipment of a given slot type
-        static getOrGenEquipment(ship: Ship, slot: SlotType, template: LootTemplate): Equipment {
+        static getOrGenEquipment(ship: Ship, slot: SlotType, template: LootTemplate, force_generate = false): Equipment {
             var equipped = ship.listEquipment(slot);
             var equipment: Equipment;
-            if (equipped.length === 0) {
+            if (force_generate || equipped.length === 0) {
                 equipment = template.generateFixed(0);
                 ship.addSlot(slot).attach(equipment);
             } else {
@@ -36,7 +36,7 @@ module TS.SpaceTac.Game {
 
         // Add an engine, allowing a ship to move *distance*, for each action points
         static addEngine(ship: Ship, distance: number): Equipment {
-            var equipment = this.getOrGenEquipment(ship, SlotType.Engine, new Equipments.ConventionalEngine());
+            var equipment = this.getOrGenEquipment(ship, SlotType.Engine, new Equipments.ConventionalEngine(), true);
             equipment.ap_usage = 1;
             equipment.distance = distance;
             return equipment;

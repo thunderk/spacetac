@@ -128,6 +128,7 @@ module TS.SpaceTac.View {
             while (this.ap_indicators.length < count) {
                 let indicator = new Phaser.Image(this.battleview.game, 0, 0, "battle-arena-ap-indicator");
                 indicator.anchor.set(0.5, 0.5);
+                indicator.scale.set(0.5, 0.5);
                 this.battleview.arena.addChild(indicator);
                 this.ap_indicators.push(indicator);
             }
