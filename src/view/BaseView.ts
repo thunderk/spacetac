@@ -36,6 +36,16 @@ module TS.SpaceTac.View {
 
             // Input manager
             this.inputs = new InputManager(this);
+
+            // Browser console variable (for debugging purpose)
+            if (typeof window != "undefined") {
+                let session = this.gameui.session;
+                if (session) {
+                    (<any>window).universe = session.universe;
+                    (<any>window).player = session.player;
+                    (<any>window).battle = session.player.getBattle();
+                }
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ module TS.SpaceTac.View {
             var session = ui.session;
 
             if (!session) {
-                // No universe, go back to main menu
+                // No session, go back to main menu
                 this.game.state.start("mainmenu", true, false);
             } else if (session.getBattle()) {
                 // A battle is raging, go to it
@@ -14,9 +14,12 @@ module TS.SpaceTac.View {
             } else if (ui.getFocusedStar()) {
                 // Go to the focused star system
                 this.game.state.start("starsystem", true, false, ui.star, session.player);
-            } else {
+            } else if (session.hasUniverse()) {
                 // Go to the universe map
                 this.game.state.start("universe", true, false, session.universe, session.player);
+            } else {
+                // No battle, no universe, go back to menu
+                this.game.state.start("mainmenu", true, false);
             }
         }
     }

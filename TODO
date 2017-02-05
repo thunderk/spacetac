@@ -1,3 +1,4 @@
+* Add drones to apply temporary zone effects
 * Allow to cancel last moves
 * Effect should be random in a range (eg. "damage target 50-75")
 * Add an overload/cooling system
@@ -14,3 +15,5 @@
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle
+* Map : restore ability to jump to other systems
+* Map : add stores

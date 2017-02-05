@@ -53,10 +53,6 @@ module TS.SpaceTac.View {
             this.ship_hovered = null;
             this.log_processor = null;
             this.background = null;
-
-            if (typeof window != "undefined") {
-                (<any>window).battle = this.battle;
-            }
         }
 
         // Create view graphics

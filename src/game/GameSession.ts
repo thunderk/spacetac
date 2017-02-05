@@ -55,5 +55,12 @@ module TS.SpaceTac.Game {
         getBattle(): Battle {
             return this.player.getBattle();
         }
+
+        /**
+         * Return true if the session has a universe to explore
+         */
+        hasUniverse(): boolean {
+            return this.universe.stars.length > 0;
+        }
     }
 }
