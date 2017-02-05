@@ -74,7 +74,7 @@ module TS.SpaceTac.Game {
             expect(battle.log.events[1].code).toEqual("attr");
             expect(battle.log.events[1].ship).toBe(ship);
             expect((<AttributeChangeEvent>battle.log.events[1]).attribute).toEqual(
-                new Attribute(AttributeCode.AP, 0, 20));
+                new Attribute(AttributeCode.Power, 0, 20));
         });
 
         it("can't move too much near another ship", function () {

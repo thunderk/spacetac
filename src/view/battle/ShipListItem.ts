@@ -87,7 +87,7 @@ module TS.SpaceTac.View {
                 this.hull.setValue(attribute.current, attribute.maximal);
             } else if (attribute.code === Game.AttributeCode.Shield) {
                 this.shield.setValue(attribute.current, attribute.maximal);
-            } else if (attribute.code === Game.AttributeCode.AP) {
+            } else if (attribute.code === Game.AttributeCode.Power) {
                 this.energy.setValue(attribute.current, attribute.maximal);
             }
         }

@@ -105,6 +105,9 @@ module TS.SpaceTac.View {
                 ship.sticky_effects.forEach((effect, index) => {
                     this.addEffect(effect, index);
                 });
+                ship.listEquipment(Game.SlotType.Weapon).forEach((equipment, index) => {
+                    this.addEquipment(equipment, ship.sticky_effects.length + index);
+                });
 
                 Animation.fadeIn(this.game, this, 200, 0.9);
             } else {
@@ -112,18 +115,46 @@ module TS.SpaceTac.View {
             }
         }
 
-        // Add a sticky effect display
+        /**
+         * Add a sticky effect display
+         */
         addEffect(effect: Game.StickyEffect, index = 0) {
-            var effect_group = new Phaser.Image(this.game, 27, 243 + 60 * index, "battle-ship-tooltip-effect");
+            let effect_group = new Phaser.Image(this.game, 27, 243 + 60 * index, "battle-ship-tooltip-effect");
             this.active_effects.addChild(effect_group);
 
-            var effect_icon = new Phaser.Image(this.game, 30, effect_group.height / 2, `battle-effect-${effect.getFullCode()}`);
+            if (effect.base instanceof Game.AttributeLimitEffect) {
+                let attr_name = Game.AttributeCode[effect.base.attrcode].toLowerCase().replace('_', '');
+                let attr_icon = new Phaser.Image(this.game, 30, effect_group.height / 2, `battle-attributes-${attr_name}`);
+                attr_icon.anchor.set(0.5, 0.5);
+                attr_icon.scale.set(0.17, 0.17);
+                effect_group.addChild(attr_icon);
+
+                let effect_icon = new Phaser.Image(this.game, 30, effect_group.height / 2, "battle-attributes-effect-limit");
+                effect_icon.anchor.set(0.5, 0.5);
+                effect_icon.scale.set(0.17, 0.17);
+                effect_group.addChild(effect_icon);
+            }
+
+            let text = `${effect.getDescription()} (${effect.duration} turns)`;
+            let color = effect.isBeneficial() ? "afe9c6" : "#e9afaf";
+            let effect_text = new Phaser.Text(this.game, 60, effect_group.height / 2, text, { font: "16pt Arial", fill: color });
+            effect_text.anchor.set(0, 0.5);
+            effect_group.addChild(effect_text);
+        }
+
+        /**
+         * Add an equipment action display
+         */
+        addEquipment(equipment: Game.Equipment, index = 0) {
+            let effect_group = new Phaser.Image(this.game, 27, 243 + 60 * index, "battle-ship-tooltip-effect");
+            this.active_effects.addChild(effect_group);
+
+            let effect_icon = new Phaser.Image(this.game, 30, effect_group.height / 2, `battle-actions-${equipment.action.code}`);
             effect_icon.anchor.set(0.5, 0.5);
+            effect_icon.scale.set(0.17, 0.17);
             effect_group.addChild(effect_icon);
 
-            var text = `${effect.getDescription()} (${effect.duration} turns)`;
-            var color = effect.isBeneficial() ? "afe9c6" : "#e9afaf";
-            var effect_text = new Phaser.Text(this.game, 60, effect_group.height / 2, text, { font: "16pt Arial", fill: color });
+            let effect_text = new Phaser.Text(this.game, 60, effect_group.height / 2, equipment.name, { font: "16pt Arial", fill: "#ffffff" });
             effect_text.anchor.set(0, 0.5);
             effect_group.addChild(effect_text);
         }

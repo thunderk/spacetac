@@ -65,13 +65,13 @@ module TS.SpaceTac.Game.Specs {
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment();
             equipment.slot = slot.type;
-            equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.AP, 4));
+            equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.Power, 4));
             slot.attach(equipment);
 
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment();
             equipment.slot = slot.type;
-            equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.AP, 5));
+            equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.Power, 5));
             slot.attach(equipment);
 
             ship.updateAttributes();

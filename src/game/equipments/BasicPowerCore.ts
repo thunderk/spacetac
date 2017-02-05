@@ -8,9 +8,9 @@ module TS.SpaceTac.Game.Equipments {
             this.min_level = new IntegerRange(1, 1);
 
             this.addPermanentAttributeMaxEffect(AttributeCode.Initiative, 1);
-            this.addPermanentAttributeMaxEffect(AttributeCode.AP, 8);
-            this.addPermanentAttributeValueEffect(AttributeCode.AP_Initial, 5);
-            this.addPermanentAttributeValueEffect(AttributeCode.AP_Recovery, 4);
+            this.addPermanentAttributeMaxEffect(AttributeCode.Power, 8);
+            this.addPermanentAttributeValueEffect(AttributeCode.Power_Initial, 5);
+            this.addPermanentAttributeValueEffect(AttributeCode.Power_Recovery, 4);
         }
     }
 }

@@ -1,16 +1,16 @@
 /// <reference path="AbstractWeapon.ts"/>
 
 module TS.SpaceTac.Game.Equipments {
-    export class EnergyDepleter extends AbstractWeapon {
+    export class PowerDepleter extends AbstractWeapon {
         constructor() {
-            super("Energy Depleter");
+            super("Power Depleter");
 
             this.setRange(200, 300, false);
 
             this.ap_usage = new IntegerRange(4, 5);
             this.min_level = new IntegerRange(1, 3);
 
-            this.addSticky(new AttributeLimitEffect(AttributeCode.AP), 4, 3, 1, 2, true);
+            this.addSticky(new AttributeLimitEffect(AttributeCode.Power), 4, 3, 1, 2, true);
         }
     }
 }

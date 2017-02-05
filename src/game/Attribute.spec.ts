@@ -16,9 +16,9 @@ module TS.SpaceTac.Game {
                 AttributeCode.Initiative,
                 AttributeCode.Hull,
                 AttributeCode.Shield,
-                AttributeCode.AP,
-                AttributeCode.AP_Recovery,
-                AttributeCode.AP_Initial,
+                AttributeCode.Power,
+                AttributeCode.Power_Recovery,
+                AttributeCode.Power_Initial,
                 AttributeCode.Cap_Material,
                 AttributeCode.Cap_Energy,
                 AttributeCode.Cap_Electronics,
@@ -31,7 +31,7 @@ module TS.SpaceTac.Game {
 
         it("gets human readable name", function () {
             expect(ATTRIBUTE_NAMES[AttributeCode.Initiative]).toEqual("initiative");
-            expect(ATTRIBUTE_NAMES[AttributeCode.AP]).toEqual("power");
+            expect(ATTRIBUTE_NAMES[AttributeCode.Power]).toEqual("power");
         });
 
         it("applies minimal and maximal value", function () {

@@ -1,7 +1,7 @@
 module TS.SpaceTac.Game.Specs {
-    describe("EnergyDepleter", () => {
+    describe("PowerDepleter", () => {
         it("limits target's AP", () => {
-            var template = new Equipments.EnergyDepleter();
+            var template = new Equipments.PowerDepleter();
             var equipment = template.generateFixed(0);
 
             var ship = new Ship();
@@ -17,7 +17,7 @@ module TS.SpaceTac.Game.Specs {
 
             expect(target.ap_current.current).toBe(4);
             expect(target.sticky_effects).toEqual([
-                new StickyEffect(new AttributeLimitEffect(AttributeCode.AP, 4), 1, true, false)
+                new StickyEffect(new AttributeLimitEffect(AttributeCode.Power, 4), 1, true, false)
             ]);
 
             // Attribute is limited for one turn, and prevents AP recovery

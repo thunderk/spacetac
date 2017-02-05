@@ -75,9 +75,9 @@ module TS.SpaceTac.Game {
             this.alive = true;
             this.initiative = this.newAttribute(AttributeCode.Initiative);
             this.initiative.setMaximal(1);
-            this.ap_current = this.newAttribute(AttributeCode.AP);
-            this.ap_initial = this.newAttribute(AttributeCode.AP_Initial);
-            this.ap_recover = this.newAttribute(AttributeCode.AP_Recovery);
+            this.ap_current = this.newAttribute(AttributeCode.Power);
+            this.ap_initial = this.newAttribute(AttributeCode.Power_Initial);
+            this.ap_recover = this.newAttribute(AttributeCode.Power_Recovery);
             this.hull = this.newAttribute(AttributeCode.Hull);
             this.shield = this.newAttribute(AttributeCode.Shield);
             this.cap_material = this.newAttribute(AttributeCode.Cap_Material);
@@ -375,7 +375,7 @@ module TS.SpaceTac.Game {
                 new_attrs.addValue(effect.attrcode, effect.value);
             });
             this.initiative.setMaximal(new_attrs.getValue(AttributeCode.Initiative));
-            this.ap_current.setMaximal(new_attrs.getValue(AttributeCode.AP));
+            this.ap_current.setMaximal(new_attrs.getValue(AttributeCode.Power));
             this.hull.setMaximal(new_attrs.getValue(AttributeCode.Hull));
             this.shield.setMaximal(new_attrs.getValue(AttributeCode.Shield));
 
@@ -384,8 +384,8 @@ module TS.SpaceTac.Game {
             this.collectEffects("attr").forEach((effect: AttributeMaxEffect) => {
                 new_attrs.addValue(effect.attrcode, effect.value);
             });
-            this.ap_initial.set(new_attrs.getValue(AttributeCode.AP_Initial));
-            this.ap_recover.set(new_attrs.getValue(AttributeCode.AP_Recovery));
+            this.ap_initial.set(new_attrs.getValue(AttributeCode.Power_Initial));
+            this.ap_recover.set(new_attrs.getValue(AttributeCode.Power_Recovery));
         }
 
         // Fully restore hull and shield

@@ -49,12 +49,12 @@ module TS.SpaceTac.Game {
             equipment.permanent_effects.forEach((effect: BaseEffect) => {
                 if (effect.code === "attrmax") {
                     var meffect = <AttributeMaxEffect>effect;
-                    if (meffect.attrcode === AttributeCode.AP) {
+                    if (meffect.attrcode === AttributeCode.Power) {
                         meffect.value = points;
                     }
                 } else if (effect.code === "attr") {
                     var veffect = <AttributeValueEffect>effect;
-                    if (veffect.attrcode === AttributeCode.AP_Recovery) {
+                    if (veffect.attrcode === AttributeCode.Power_Recovery) {
                         veffect.value = recovery;
                     }
                 }

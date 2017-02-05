@@ -6,20 +6,20 @@ module TS.SpaceTac.Game {
         // Initiative level
         Initiative,
 
-        // Hull points (similar to health points in other games)
+        // Hull points (similar to health points or HP in other games)
         Hull,
 
         // Damage the shield can take
         Shield,
 
-        // Current level of action points
-        AP,
+        // Power available to make actions (similar to action points or AP in other games)
+        Power,
 
-        // Action points recovered by turn
-        AP_Recovery,
+        // Power recovered each turn
+        Power_Recovery,
 
-        // Starting action points in a battle
-        AP_Initial,
+        // Starting power in a battle
+        Power_Initial,
 
         // Capability level in materials
         Cap_Material,
@@ -61,7 +61,7 @@ module TS.SpaceTac.Game {
 
     // Value computed from equipment
     //  This value can be altered by effects
-    //  Example attributes are health points, action points recovery...
+    //  Example attributes are health points, power recovery...
     export class Attribute extends Serializable {
         // Identifying code of this attribute
         code: AttributeCode;

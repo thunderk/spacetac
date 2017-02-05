@@ -236,7 +236,7 @@ module TS.SpaceTac.Game.AI.Specs {
 
             expect(battle.log.events[0]).toEqual(new MoveEvent(ship1, 2, 0));
             expect(battle.log.events[1]).toEqual(new AttributeChangeEvent(ship1,
-                new Attribute(AttributeCode.AP, 2, 10)));
+                new Attribute(AttributeCode.Power, 2, 10)));
 
             expect(battle.log.events[2]).toEqual(new FireEvent(ship1, weapon, Target.newFromShip(ship2)));
             expect(battle.log.events[3]).toEqual(new AttributeChangeEvent(ship2,
@@ -245,7 +245,7 @@ module TS.SpaceTac.Game.AI.Specs {
                 new Attribute(AttributeCode.Hull, 5)));
             expect(battle.log.events[5]).toEqual(new DamageEvent(ship2, 10, 10));
             expect(battle.log.events[6]).toEqual(new AttributeChangeEvent(ship1,
-                new Attribute(AttributeCode.AP, 1, 10)));
+                new Attribute(AttributeCode.Power, 1, 10)));
         });
     });
 }
