@@ -212,5 +212,40 @@ module TS.SpaceTac.Game {
             var result = battle.collectShipsInCircle(Target.newFromLocation(5, 8), 3);
             expect(result).toEqual([ship2, ship3]);
         });
+
+        it("adds and remove drones", function () {
+            let battle = new Battle();
+            let ship = new Ship();
+            let drone = new Drone(ship);
+
+            expect(battle.drones).toEqual([]);
+            expect(battle.log.events).toEqual([]);
+
+            battle.addDrone(drone);
+
+            expect(battle.drones).toEqual([drone]);
+            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone)]);
+
+            battle.addDrone(drone);
+
+            expect(battle.drones).toEqual([drone]);
+            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone)]);
+
+            battle.removeDrone(drone);
+
+            expect(battle.drones).toEqual([]);
+            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone), new DroneDestroyedEvent(drone)]);
+
+            battle.removeDrone(drone);
+
+            expect(battle.drones).toEqual([]);
+            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone), new DroneDestroyedEvent(drone)]);
+
+            // check initial log fill
+            battle.drones = [drone];
+            battle.log.events = [];
+            battle.injectInitialEvents();
+            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone)]);
+        });
     });
 }

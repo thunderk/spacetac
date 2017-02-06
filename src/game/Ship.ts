@@ -277,6 +277,16 @@ module TS.SpaceTac.Game {
             ended.forEach(effect => this.addBattleEvent(new EffectRemovedEvent(this, effect)));
         }
 
+        /**
+         * Check if the ship is inside a given circular area
+         */
+        isInCircle(x: number, y: number, radius: number): boolean {
+            let dx = this.arena_x - x;
+            let dy = this.arena_y - y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            return distance <= radius;
+        }
+
         // Move toward a location
         //  This does not check or consume action points
         moveTo(x: number, y: number, log: boolean = true): void {

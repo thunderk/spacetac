@@ -22,6 +22,9 @@ module TS.SpaceTac.Game {
         playing_ship_index: number;
         playing_ship: Ship;
 
+        // List of deployed drones
+        drones: Drone[] = [];
+
         // Boolean indicating if its the first turn
         first_turn: boolean;
 
@@ -239,6 +242,11 @@ module TS.SpaceTac.Game {
                 log.add(new MoveEvent(ship, ship.arena_x, ship.arena_y));
             });
 
+            // Simulate drones deployment
+            this.drones.forEach(drone => {
+                log.add(new DroneDeployedEvent(drone));
+            });
+
             // Simulate game turn
             if (this.playing_ship) {
                 log.add(new ShipChangeEvent(this.playing_ship, this.playing_ship));
@@ -259,6 +267,28 @@ module TS.SpaceTac.Game {
             for (var i = 0; i < fleet.ships.length; i++) {
                 fleet.ships[i].setArenaPosition(x + i * dx * spacing, y + i * dy * spacing);
                 fleet.ships[i].setArenaFacingAngle(facing_angle);
+            }
+        }
+
+        /**
+         * Add a drone to the battle
+         */
+        addDrone(drone: Drone, log = true) {
+            if (add(this.drones, drone)) {
+                if (log) {
+                    this.log.add(new DroneDeployedEvent(drone));
+                }
+            }
+        }
+
+        /**
+         * Remove a drone from the battle
+         */
+        removeDrone(drone: Drone, log = true) {
+            if (remove(this.drones, drone)) {
+                if (log) {
+                    this.log.add(new DroneDestroyedEvent(drone));
+                }
             }
         }
     }

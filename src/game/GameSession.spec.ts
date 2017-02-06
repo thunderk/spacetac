@@ -10,6 +10,7 @@ module TS.SpaceTac.Game.Specs {
         it("serializes to a string", () => {
             var session = new GameSession();
             session.startQuickBattle(true);
+            // TODO AI sometimes starts playing in background...
 
             // Dump and reload
             var dumped = session.saveToString();

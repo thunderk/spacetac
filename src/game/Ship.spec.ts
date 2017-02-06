@@ -254,5 +254,19 @@ module TS.SpaceTac.Game.Specs {
             ship.recoverActionPoints();
             expect(ship.ap_current.current).toBe(8);
         });
+
+        it("checks if a ship is inside a given circle", function () {
+            let ship = new Ship();
+            ship.arena_x = 5;
+            ship.arena_y = 8;
+
+            expect(ship.isInCircle(5, 8, 0)).toBe(true);
+            expect(ship.isInCircle(5, 8, 1)).toBe(true);
+            expect(ship.isInCircle(5, 7, 1)).toBe(true);
+            expect(ship.isInCircle(6, 9, 1.7)).toBe(true);
+            expect(ship.isInCircle(5, 8.1, 0)).toBe(false);
+            expect(ship.isInCircle(5, 7, 0.9)).toBe(false);
+            expect(ship.isInCircle(12, -4, 5)).toBe(false);
+        });
     });
 }
