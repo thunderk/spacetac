@@ -65,8 +65,8 @@ module TS.SpaceTac.View {
         // Update the action points indicator
         updateActionPoints(): void {
             if (this.ship) {
-                this.actionpoints.setValue(this.ship.ap_current.current, this.ship.ap_current.maximal);
-                this.actionpointstemp.setValue(this.ship.ap_current.current, this.ship.ap_current.maximal);
+                this.actionpoints.setValue(this.ship.values.power.get(), this.ship.attributes.power_capacity.get());
+                this.actionpointstemp.setValue(this.ship.values.power.get(), this.ship.attributes.power_capacity.get());
                 this.actionpoints.visible = true;
                 this.actionpointstemp.visible = true;
             } else {
@@ -78,7 +78,7 @@ module TS.SpaceTac.View {
         // Update fading flags
         //  ap_usage is the consumption of currently selected action
         updateFadings(ap_usage: number): void {
-            var remaining_ap = this.ship.ap_current.current - ap_usage;
+            var remaining_ap = this.ship.values.power.get() - ap_usage;
             if (remaining_ap < 0) {
                 remaining_ap = 0;
             }
@@ -86,7 +86,7 @@ module TS.SpaceTac.View {
             this.actions.forEach((icon: ActionIcon) => {
                 icon.updateFadingStatus(remaining_ap);
             });
-            this.actionpointstemp.setValue(remaining_ap, this.ship.ap_current.maximal);
+            this.actionpointstemp.setValue(remaining_ap, this.ship.attributes.power_capacity.get());
         }
 
         // Set action icons from selected ship

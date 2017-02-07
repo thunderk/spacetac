@@ -84,7 +84,7 @@ module TS.SpaceTac.Game {
 
             // Sort by throw result
             play_order.sort(function (ship1: Ship, ship2: Ship) {
-                return (ship2.initiative.current - ship1.initiative.current);
+                return (ship2.play_priority - ship1.play_priority);
             });
             this.play_order = play_order;
         }

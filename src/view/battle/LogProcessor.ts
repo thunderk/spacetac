@@ -40,8 +40,8 @@ module TS.SpaceTac.View {
                 case "move":
                     this.processMoveEvent(<Game.MoveEvent>event);
                     break;
-                case "attr":
-                    this.processAttributeChangedEvent(<Game.AttributeChangeEvent>event);
+                case "value":
+                    this.processValueChangedEvent(<Game.ValueChangeEvent>event);
                     break;
                 case "death":
                     this.processDeathEvent(<Game.DeathEvent>event);
@@ -97,12 +97,13 @@ module TS.SpaceTac.View {
             }
         }
 
-        // Ship attribute changed
-        private processAttributeChangedEvent(event: Game.AttributeChangeEvent): void {
+        // Ship value changed
+        private processValueChangedEvent(event: Game.ValueChangeEvent): void {
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {
-                item.attributeChanged(event.attribute);
+                item.updateAttributes();
             }
+            // TODO Update tooltip
         }
 
         // A ship died

@@ -29,7 +29,7 @@ module TS.SpaceTac.Game {
         min_level: number;
 
         // Minimal attribute to be able to equip this equipment
-        requirements: Attribute[];
+        requirements: { [key: string]: number };
 
         // Action associated with this equipment
         action: BaseAction;
@@ -45,7 +45,7 @@ module TS.SpaceTac.Game {
             this.slot = slot;
             this.code = code;
             this.name = code;
-            this.requirements = [];
+            this.requirements = {};
             this.permanent_effects = [];
             this.target_effects = [];
         }
@@ -57,8 +57,8 @@ module TS.SpaceTac.Game {
                 return false;
             } else {
                 var able = true;
-                this.requirements.forEach((cap: Attribute) => {
-                    if (ship.attributes.getValue(cap.code) < cap.current) {
+                iteritems(this.requirements, (attr, minvalue) => {
+                    if (ship.getAttribute(<keyof ShipAttributes>attr) < minvalue) {
                         able = false;
                     }
                 });

@@ -31,7 +31,7 @@ module TS.SpaceTac.Game {
 
             // Check AP usage
             if (remaining_ap === null) {
-                remaining_ap = ship.ap_current.current;
+                remaining_ap = ship.values.power.get();
             }
             var ap_usage = this.equipment ? this.equipment.ap_usage : 0;
             return remaining_ap >= ap_usage;

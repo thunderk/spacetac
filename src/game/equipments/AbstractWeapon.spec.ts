@@ -32,7 +32,7 @@ module TS.SpaceTac.Game.Specs {
 
         it("can't fire without sufficient AP", function () {
             var ship = new Ship();
-            ship.ap_current.set(3);
+            ship.values.power.set(3);
 
             var weapon = new Equipments.AbstractWeapon("Super Fire Weapon", 50);
 
@@ -104,15 +104,15 @@ module TS.SpaceTac.Game.Specs {
             var fleet2 = new Fleet(new Player());
 
             var ship1 = new Ship(fleet1);
-            ship1.ap_current.set(50);
+            ship1.values.power.set(50);
 
             var ship2 = new Ship(fleet2);
-            ship2.hull.setMaximal(100);
-            ship2.shield.setMaximal(30);
+            ship2.setAttribute("hull_capacity", 100);
+            ship2.setAttribute("shield_capacity", 30);
             ship2.restoreHealth();
 
-            expect(ship2.hull.current).toEqual(100);
-            expect(ship2.shield.current).toEqual(30);
+            expect(ship2.values.hull.get()).toEqual(100);
+            expect(ship2.values.shield.get()).toEqual(30);
 
             var weapon = new Equipments.AbstractWeapon("Super Fire Weapon", 20);
             weapon.ap_usage = new IntegerRange(1, 1);
@@ -120,19 +120,19 @@ module TS.SpaceTac.Game.Specs {
             var equipment = weapon.generateFixed(0);
 
             equipment.action.apply(null, ship1, Target.newFromShip(ship2));
-            expect(ship2.hull.current).toEqual(100);
-            expect(ship2.shield.current).toEqual(10);
-            expect(ship1.ap_current.current).toEqual(49);
+            expect(ship2.values.hull.get()).toEqual(100);
+            expect(ship2.values.shield.get()).toEqual(10);
+            expect(ship1.values.power.get()).toEqual(49);
 
             equipment.action.apply(null, ship1, Target.newFromShip(ship2));
-            expect(ship2.hull.current).toEqual(90);
-            expect(ship2.shield.current).toEqual(0);
-            expect(ship1.ap_current.current).toEqual(48);
+            expect(ship2.values.hull.get()).toEqual(90);
+            expect(ship2.values.shield.get()).toEqual(0);
+            expect(ship1.values.power.get()).toEqual(48);
 
             equipment.action.apply(null, ship1, Target.newFromShip(ship2));
-            expect(ship2.hull.current).toEqual(70);
-            expect(ship2.shield.current).toEqual(0);
-            expect(ship1.ap_current.current).toEqual(47);
+            expect(ship2.values.hull.get()).toEqual(70);
+            expect(ship2.values.shield.get()).toEqual(0);
+            expect(ship1.values.power.get()).toEqual(47);
         });
     });
 }

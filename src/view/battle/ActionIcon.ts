@@ -143,7 +143,7 @@ module TS.SpaceTac.View {
             }
             this.setSelected(false);
             this.updateActiveStatus();
-            this.updateFadingStatus(this.ship.ap_current.current);
+            this.updateFadingStatus(this.ship.values.power.get());
             this.battleview.arena.range_hint.clearPrimary();
         }
 

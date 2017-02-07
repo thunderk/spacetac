@@ -1,89 +1,103 @@
+/// <reference path="ShipAttribute.ts"/>
+/// <reference path="ShipValue.ts"/>
+
 module TS.SpaceTac.Game {
-    // A single ship in a Fleet
+
+    /**
+     * Set of ShipAttribute for a ship
+     */
+    export class ShipAttributes {
+        // Attribute controlling the play order
+        initiative = new ShipAttribute("initiative")
+        // Maximal hull value
+        hull_capacity = new ShipAttribute("hull capacity")
+        // Maximal shield value
+        shield_capacity = new ShipAttribute("shield capacity")
+        // Maximal power value
+        power_capacity = new ShipAttribute("power capacity")
+        // Initial power value at the start of a battle
+        power_initial = new ShipAttribute("initial power")
+        // Power value recovered each turn
+        power_recovery = new ShipAttribute("power recovery")
+        // Skills
+        skill_material = new ShipAttribute("material skill")
+        skill_energy = new ShipAttribute("energy skill")
+        skill_electronics = new ShipAttribute("electronics skill")
+        skill_human = new ShipAttribute("human skill")
+        skill_time = new ShipAttribute("time skill")
+        skill_gravity = new ShipAttribute("gravity skill")
+    }
+
+    /**
+     * Set of ShipValue for a ship
+     */
+    export class ShipValues {
+        hull = new ShipValue("hull")
+        shield = new ShipValue("shield")
+        power = new ShipValue("power")
+    }
+
+    /**
+     * Static attributes and values object for name queries
+     */
+    export const SHIP_ATTRIBUTES = new ShipAttributes();
+    export const SHIP_VALUES = new ShipValues();
+
+    /**
+     * A single ship in a fleet
+     */
     export class Ship {
         // Fleet this ship is a member of
-        fleet: Fleet;
+        fleet: Fleet
 
         // Level of this ship
-        level: number;
+        level: number
 
         // Name of the ship
-        name: string;
+        name: string
 
         // Code of the ShipModel used to create it
-        model: string;
+        model: string
 
         // Flag indicating if the ship is alive
-        alive: boolean;
+        alive: boolean
 
         // Position in the arena
-        arena_x: number;
-        arena_y: number;
+        arena_x: number
+        arena_y: number
 
         // Facing direction in the arena
-        arena_angle: number;
-
-        // Initiative (high numbers will allow this ship to play sooner)
-        initiative: Attribute;
-
-        // Current number of action points
-        ap_current: Attribute;
-
-        // Initial number of action points, at the start of a battle
-        ap_initial: Attribute;
-
-        // Number of action points recovered by turn
-        ap_recover: Attribute;
-
-        // Number of hull points (once it reaches 0, the ship is dead)
-        hull: Attribute;
-
-        // Number of shield points (a shield can absorb some damage to protect the hull)
-        shield: Attribute;
+        arena_angle: number
 
         // Sticky effects that applies a given number of times
-        sticky_effects: StickyEffect[];
-
-        // Capabilities level
-        cap_material: Attribute;
-        cap_energy: Attribute;
-        cap_electronics: Attribute;
-        cap_human: Attribute;
-        cap_time: Attribute;
-        cap_gravity: Attribute;
+        sticky_effects: StickyEffect[]
 
         // List of slots, able to contain equipment
-        slots: Slot[];
+        slots: Slot[]
 
-        // Collection of available attributes
-        attributes: AttributeCollection;
+        // Ship attributes
+        attributes = new ShipAttributes()
+
+        // Ship values
+        values = new ShipValues()
 
         // Boolean set to true if the ship is currently playing its turn
-        playing = false;
+        playing = false
+
+        // Priority in play_order
+        play_priority = 0;
 
         // Create a new ship inside a fleet
         constructor(fleet: Fleet = null, name: string = null) {
-            this.attributes = new AttributeCollection();
             this.fleet = fleet || new Fleet();
             this.level = 1;
             this.name = name;
             this.model = "default";
             this.alive = true;
-            this.initiative = this.newAttribute(AttributeCode.Initiative);
-            this.initiative.setMaximal(1);
-            this.ap_current = this.newAttribute(AttributeCode.Power);
-            this.ap_initial = this.newAttribute(AttributeCode.Power_Initial);
-            this.ap_recover = this.newAttribute(AttributeCode.Power_Recovery);
-            this.hull = this.newAttribute(AttributeCode.Hull);
-            this.shield = this.newAttribute(AttributeCode.Shield);
-            this.cap_material = this.newAttribute(AttributeCode.Cap_Material);
-            this.cap_energy = this.newAttribute(AttributeCode.Cap_Energy);
-            this.cap_electronics = this.newAttribute(AttributeCode.Cap_Electronics);
-            this.cap_human = this.newAttribute(AttributeCode.Cap_Human);
-            this.cap_time = this.newAttribute(AttributeCode.Cap_Time);
-            this.cap_gravity = this.newAttribute(AttributeCode.Cap_Gravity);
             this.sticky_effects = [];
             this.slots = [];
+
+            this.attributes.initiative.set(1);  // TODO Should not be needed
 
             this.arena_x = 0;
             this.arena_y = 0;
@@ -97,13 +111,8 @@ module TS.SpaceTac.Game {
         // Returns true if the ship is able to play
         //  If *check_ap* is true, ap_current=0 will make this function return false
         isAbleToPlay(check_ap: boolean = true): boolean {
-            var ap_checked = !check_ap || this.ap_current.current > 0;
+            var ap_checked = !check_ap || this.values.power.get() > 0;
             return this.alive && ap_checked;
-        }
-
-        // Create and register an attribute
-        newAttribute(code: AttributeCode): Attribute {
-            return this.attributes.getRawAttr(code);
         }
 
         // Set position in the arena
@@ -125,7 +134,7 @@ module TS.SpaceTac.Game {
 
         // Make an initiative throw, to resolve play order in a battle
         throwInitiative(gen: RandomGenerator): void {
-            this.initiative.set(gen.throw(this.initiative.maximal));
+            this.play_priority = gen.throw(this.attributes.initiative.get());
         }
 
         // Return the player owning this ship
@@ -171,28 +180,68 @@ module TS.SpaceTac.Game {
         }
 
         /**
-         * Set an attribute value
+         * Get a ship value
+         */
+        getValue(name: keyof ShipValues): number {
+            return this.values[name].get();
+        }
+
+        /**
+         * Set a ship value
          * 
          * If *offset* is true, the value will be added to current value.
          * If *log* is true, an attribute event will be added to the battle log
          * 
-         * Returns true if the attribute changed.
+         * Returns true if the value changed.
          */
-        setAttribute(attr: Attribute | AttributeCode, value: number, offset = false, log = true): boolean {
-            if (!(attr instanceof Attribute)) {
-                attr = this.attributes.getRawAttr(attr);
-            }
-
-            var changed: boolean;
+        setValue(name: keyof ShipValues, value: number, offset = false, log = true): boolean {
+            let changed: boolean;
+            let val = this.values[name];
 
             if (offset) {
-                changed = attr.add(value);
+                changed = val.add(value);
             } else {
-                changed = attr.set(value);
+                changed = val.set(value);
             }
 
             if (changed && log) {
-                this.addBattleEvent(new AttributeChangeEvent(this, attr));
+                this.addBattleEvent(new ValueChangeEvent(this, val));
+            }
+
+            return changed;
+        }
+
+        /**
+         * Get a ship attribute's current value
+         */
+        getAttribute(name: keyof ShipAttributes): number {
+            return this.attributes[name].get();
+        }
+
+        /**
+         * Set a ship attribute
+         * 
+         * If *log* is true, an attribute event will be added to the battle log
+         * 
+         * Returns true if the value changed.
+         */
+        setAttribute(name: keyof ShipAttributes, value: number, log = true): boolean {
+            let changed: boolean;
+            let attr = this.attributes[name];
+
+            changed = attr.set(value);
+
+            // TODO more generic
+            if (name == "power_capacity") {
+                this.values.power.setMaximal(attr.get());
+            } else if (name == "shield_capacity") {
+                this.values.shield.setMaximal(attr.get());
+            } else if (name == "hull_capacity") {
+                this.values.hull.setMaximal(attr.get());
+            }
+
+            if (changed && log) {
+                this.addBattleEvent(new ValueChangeEvent(this, attr));
             }
 
             return changed;
@@ -203,9 +252,9 @@ module TS.SpaceTac.Game {
         //  If no value is provided, the attribute ap_initial will be used
         initializeActionPoints(value: number = null): void {
             if (value === null) {
-                value = this.ap_initial.current;
+                value = this.attributes.power_initial.get();
             }
-            this.setAttribute(this.ap_current, value);
+            this.setValue("power", value);
         }
 
         // Recover action points
@@ -213,14 +262,14 @@ module TS.SpaceTac.Game {
         //  If no value is provided, the current attribute ap_recovery will be used
         recoverActionPoints(value: number = null): void {
             if (value === null) {
-                value = this.ap_recover.current;
+                value = this.attributes.power_recovery.get();
             }
-            this.setAttribute(this.ap_current, value, true);
+            this.setValue("power", value, true);
         }
 
         // Consumes action points
         useActionPoints(value: number): void {
-            this.setAttribute(this.ap_current, -value, true);
+            this.setValue("power", -value, true);
         }
 
         // Method called at the start of battle
@@ -256,6 +305,7 @@ module TS.SpaceTac.Game {
             this.playing = false;
 
             // Recover action points for next turn
+            this.updateAttributes();
             this.recoverActionPoints();
 
             // Apply sticky effects
@@ -317,14 +367,14 @@ module TS.SpaceTac.Game {
 
         // Apply damages to hull and/or shield
         addDamage(hull: number, shield: number, log: boolean = true): void {
-            this.setAttribute(this.shield, -shield, true, log);
-            this.setAttribute(this.hull, -hull, true, log);
+            this.setValue("shield", -shield, true, log);
+            this.setValue("hull", -hull, true, log);
 
             if (log) {
                 this.addBattleEvent(new DamageEvent(this, hull, shield));
             }
 
-            if (this.hull.current === 0) {
+            if (this.values.hull.get() === 0) {
                 // Ship is dead
                 this.setDead(log);
             }
@@ -384,44 +434,46 @@ module TS.SpaceTac.Game {
 
         // Update attributes, taking into account attached equipment and active effects
         updateAttributes(): void {
-            // TODO Something more generic
-
-            // Compute new maximal values for attributes
-            var new_attrs = new AttributeCollection();
-            this.collectEffects("attrmax").forEach((effect: AttributeMaxEffect) => {
-                new_attrs.addValue(effect.attrcode, effect.value);
+            // Sum all attribute effects
+            var new_attrs = new ShipAttributes();
+            this.collectEffects("attr").forEach((effect: AttributeEffect) => {
+                new_attrs[effect.attrcode].add(effect.value);
             });
-            this.initiative.setMaximal(new_attrs.getValue(AttributeCode.Initiative));
-            this.ap_current.setMaximal(new_attrs.getValue(AttributeCode.Power));
-            this.hull.setMaximal(new_attrs.getValue(AttributeCode.Hull));
-            this.shield.setMaximal(new_attrs.getValue(AttributeCode.Shield));
 
-            // Compute new current values for attributes
-            new_attrs = new AttributeCollection();
-            this.collectEffects("attr").forEach((effect: AttributeMaxEffect) => {
-                new_attrs.addValue(effect.attrcode, effect.value);
+            // Apply limit attributes
+            this.collectEffects("attrlimit").forEach((effect: AttributeLimitEffect) => {
+                new_attrs[effect.attrcode].setMaximal(effect.value);
             });
-            this.ap_initial.set(new_attrs.getValue(AttributeCode.Power_Initial));
-            this.ap_recover.set(new_attrs.getValue(AttributeCode.Power_Recovery));
+
+            // TODO better typing
+            iteritems(<any>new_attrs, (key, value) => {
+                this.setAttribute(<keyof ShipAttributes>key, (<ShipAttribute>value).get());
+            });
         }
 
         // Fully restore hull and shield
         restoreHealth(): void {
-            this.hull.set(this.hull.maximal);
-            this.shield.set(this.shield.maximal);
+            this.values.hull.set(this.attributes.hull_capacity.get());
+            this.values.shield.set(this.attributes.shield_capacity.get());
         }
 
         // Collect all effects to apply for updateAttributes
-        private collectEffects(code: string = null): BaseEffect[] {
+        private collectEffects(code: string): BaseEffect[] {
             var result: BaseEffect[] = [];
 
-            this.slots.forEach((slot: Slot) => {
+            this.slots.forEach(slot => {
                 if (slot.attached) {
-                    slot.attached.permanent_effects.forEach((effect: BaseEffect) => {
-                        if (effect.code === code) {
+                    slot.attached.permanent_effects.forEach(effect => {
+                        if (effect.code == code) {
                             result.push(effect);
                         }
                     });
+                }
+            });
+
+            this.sticky_effects.forEach(effect => {
+                if (effect.base.code == code) {
+                    result.push(effect.base);
                 }
             });
 

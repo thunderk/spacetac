@@ -10,7 +10,7 @@ module TS.SpaceTac.Game.Equipments {
             this.distance = new Range(100, 100);
             this.ap_usage = new IntegerRange(1);
 
-            this.addPermanentAttributeMaxEffect(AttributeCode.Initiative, 1);
+            this.addAttributeEffect("initiative", 1);
         }
 
         protected getActionForEquipment(equipment: Equipment): BaseAction {

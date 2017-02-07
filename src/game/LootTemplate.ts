@@ -7,8 +7,8 @@ module TS.SpaceTac.Game {
         // Base name that will be given to generated equipment
         name: string;
 
-        // Capability requirement ranges (indexed by AttributeCode)
-        requirements: IntegerRange[];
+        // Capability requirement ranges (indexed by attributes)
+        requirements: { [key: string]: IntegerRange };
 
         // Distance to target
         distance: Range;
@@ -35,7 +35,7 @@ module TS.SpaceTac.Game {
         constructor(slot: SlotType, name: string) {
             this.slot = slot;
             this.name = name;
-            this.requirements = [];
+            this.requirements = {};
             this.distance = new Range(0, 0);
             this.blast = new Range(0, 0);
             this.duration = new IntegerRange(0, 0);
@@ -46,7 +46,7 @@ module TS.SpaceTac.Game {
         }
 
         // Set a capability requirement
-        addRequirement(capability: AttributeCode, min: number, max: number = null): void {
+        addRequirement(capability: keyof ShipAttributes, min: number, max: number = null): void {
             this.requirements[capability] = new IntegerRange(min, max);
         }
 
@@ -73,9 +73,9 @@ module TS.SpaceTac.Game {
 
             result.action = this.getActionForEquipment(result);
 
-            this.requirements.forEach((requirement: IntegerRange, index: AttributeCode) => {
+            iteritems(this.requirements, (key: string, requirement: IntegerRange) => {
                 if (requirement) {
-                    result.requirements.push(new Attribute(index, requirement.getProportional(power)));
+                    result.requirements[key] = requirement.getProportional(power);
                 }
             });
 
@@ -124,23 +124,23 @@ module TS.SpaceTac.Game {
             }
         }
 
-        // Convenience function to add a permanent attribute effect on equipment
-        addPermanentAttributeValueEffect(code: AttributeCode, min: number, max: number = null): void {
-            var template = new EffectTemplate(new AttributeValueEffect(code, 0));
+        // Convenience function to add an attribute effect on equipment
+        addAttributeEffect(code: keyof ShipAttributes, min: number, max: number = null): void {
+            var template = new EffectTemplate(new AttributeEffect(code, 0));
             template.addModifier("value", new IntegerRange(min, max));
             this.permanent_effects.push(template);
         }
 
-        // Convenience function to add a permanent attribute max effect on equipment
-        addPermanentAttributeMaxEffect(code: AttributeCode, min: number, max: number = null): void {
-            var template = new EffectTemplate(new AttributeMaxEffect(code, 0));
+        // Convenience function to add a permanent attribute limit effect on equipment
+        addAttributeLimitEffect(code: keyof ShipAttributes, min: number, max: number = null): void {
+            var template = new EffectTemplate(new AttributeLimitEffect(code, 0));
             template.addModifier("value", new IntegerRange(min, max));
             this.permanent_effects.push(template);
         }
 
-        // Convenience function to add an offset effect on attribute value
-        addAttributeAddEffect(code: AttributeCode, min: number, max: number | null = null): void {
-            let template = new EffectTemplate(new AttributeAddEffect(code, 0));
+        // Convenience function to add a value effect on equipment
+        addValueEffectOnTarget(code: keyof ShipValues, min: number, max: number = null): void {
+            var template = new EffectTemplate(new ValueEffect(code, 0));
             template.addModifier("value", new IntegerRange(min, max));
             this.target_effects.push(template);
         }

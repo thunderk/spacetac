@@ -43,8 +43,8 @@ module TS.SpaceTac.Game.AI.Specs {
             engine.ap_usage = 3;
             engine.distance = 1;
             ship.addSlot(SlotType.Engine).attach(engine);
-            ship.ap_current.setMaximal(10);
-            ship.ap_current.set(8);
+            ship.values.power.setMaximal(10);
+            ship.values.power.set(8);
             var enemy = new Ship();
             var ai = new BullyAI(ship.fleet);
             ai.ship = ship;
@@ -54,7 +54,7 @@ module TS.SpaceTac.Game.AI.Specs {
             weapon.distance = 3;
 
             // enemy in range, the ship can fire without moving
-            ship.ap_current.set(8);
+            ship.values.power.set(8);
             ship.arena_x = 1;
             ship.arena_y = 0;
             enemy.arena_x = 3;
@@ -65,7 +65,7 @@ module TS.SpaceTac.Game.AI.Specs {
             expect(result.fire.equipment).toBe(weapon);
 
             // enemy out of range, but moving can bring it in range
-            ship.ap_current.set(8);
+            ship.values.power.set(8);
             ship.arena_x = 1;
             ship.arena_y = 0;
             enemy.arena_x = 6;
@@ -77,7 +77,7 @@ module TS.SpaceTac.Game.AI.Specs {
 
             // enemy out of range, but moving can bring it in range, except for the safety margin
             ai.move_margin = 0.1;
-            ship.ap_current.set(8);
+            ship.values.power.set(8);
             ship.arena_x = 1;
             ship.arena_y = 0;
             enemy.arena_x = 6;
@@ -87,7 +87,7 @@ module TS.SpaceTac.Game.AI.Specs {
             ai.move_margin = 0;
 
             // enemy totally out of range
-            ship.ap_current.set(8);
+            ship.values.power.set(8);
             ship.arena_x = 1;
             ship.arena_y = 0;
             enemy.arena_x = 30;
@@ -96,7 +96,7 @@ module TS.SpaceTac.Game.AI.Specs {
             expect(result).toBeNull();
 
             // enemy in range but not enough AP to fire
-            ship.ap_current.set(1);
+            ship.values.power.set(1);
             ship.arena_x = 1;
             ship.arena_y = 0;
             enemy.arena_x = 3;
@@ -105,7 +105,7 @@ module TS.SpaceTac.Game.AI.Specs {
             expect(result).toBeNull();
 
             // can move in range of enemy, but not enough AP to fire
-            ship.ap_current.set(7);
+            ship.values.power.set(7);
             ship.arena_x = 1;
             ship.arena_y = 0;
             enemy.arena_x = 6;
@@ -115,7 +115,7 @@ module TS.SpaceTac.Game.AI.Specs {
 
             // no engine, can't move
             ship.slots[0].attached.detach();
-            ship.ap_current.set(8);
+            ship.values.power.set(8);
             ship.arena_x = 1;
             ship.arena_y = 0;
             enemy.arena_x = 6;
@@ -152,8 +152,8 @@ module TS.SpaceTac.Game.AI.Specs {
             weapon2.ap_usage = 1;
             ai.ship.addSlot(SlotType.Weapon).attach(weapon2);
 
-            ai.ship.ap_current.setMaximal(10);
-            ai.ship.ap_current.set(8);
+            ai.ship.values.power.setMaximal(10);
+            ai.ship.values.power.set(8);
 
             result = ai.listAllManeuvers();
             expect(result.length).toBe(3);
@@ -219,11 +219,11 @@ module TS.SpaceTac.Game.AI.Specs {
             weapon.action = new FireWeaponAction(weapon);
             ai.ship.addSlot(SlotType.Weapon).attach(weapon);
 
-            ai.ship.ap_current.setMaximal(10);
-            ai.ship.ap_current.set(6);
+            ai.ship.values.power.setMaximal(10);
+            ai.ship.values.power.set(6);
 
-            ship2.hull.set(15);
-            ship2.shield.set(10);
+            ship2.values.hull.set(15);
+            ship2.values.shield.set(10);
 
             var move = ai.checkBullyManeuver(ship2, weapon);
             expect(move).not.toBeNull();
@@ -235,17 +235,17 @@ module TS.SpaceTac.Game.AI.Specs {
             expect(battle.log.events.length).toBe(7);
 
             expect(battle.log.events[0]).toEqual(new MoveEvent(ship1, 2, 0));
-            expect(battle.log.events[1]).toEqual(new AttributeChangeEvent(ship1,
-                new Attribute(AttributeCode.Power, 2, 10)));
+            expect(battle.log.events[1]).toEqual(new ValueChangeEvent(ship1,
+                new ShipValue("power", 2, 10)));
 
             expect(battle.log.events[2]).toEqual(new FireEvent(ship1, weapon, Target.newFromShip(ship2)));
-            expect(battle.log.events[3]).toEqual(new AttributeChangeEvent(ship2,
-                new Attribute(AttributeCode.Shield, 0)));
-            expect(battle.log.events[4]).toEqual(new AttributeChangeEvent(ship2,
-                new Attribute(AttributeCode.Hull, 5)));
+            expect(battle.log.events[3]).toEqual(new ValueChangeEvent(ship2,
+                new ShipValue("shield", 0)));
+            expect(battle.log.events[4]).toEqual(new ValueChangeEvent(ship2,
+                new ShipValue("hull", 5)));
             expect(battle.log.events[5]).toEqual(new DamageEvent(ship2, 10, 10));
-            expect(battle.log.events[6]).toEqual(new AttributeChangeEvent(ship1,
-                new Attribute(AttributeCode.Power, 1, 10)));
+            expect(battle.log.events[6]).toEqual(new ValueChangeEvent(ship1,
+                new ShipValue("power", 1, 10)));
         });
     });
 }

@@ -58,7 +58,7 @@ module TS.SpaceTac.Game {
                 new DroneDeployedEvent(drone)
             ]);
 
-            expect(ship.ap_current.current).toEqual(1);
+            expect(ship.values.power.get()).toEqual(1);
         });
     });
 }

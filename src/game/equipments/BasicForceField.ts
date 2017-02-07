@@ -7,7 +7,7 @@ module TS.SpaceTac.Game.Equipments {
 
             this.min_level = new IntegerRange(1, 3);
 
-            this.addPermanentAttributeMaxEffect(AttributeCode.Shield, 100, 200);
+            this.addAttributeEffect("shield_capacity", 100, 200);
         }
     }
 }

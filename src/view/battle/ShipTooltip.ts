@@ -92,15 +92,15 @@ module TS.SpaceTac.View {
 
                 // Fill info
                 this.title.setText(ship.name);
-                this.attr_hull.setText(ship.hull.current.toString());
-                this.attr_shield.setText(ship.shield.current.toString());
-                this.attr_power.setText(ship.ap_current.current.toString());
-                this.attr_materials.setText(ship.cap_material.current.toString());
-                this.attr_electronics.setText(ship.cap_electronics.current.toString());
-                this.attr_energy.setText(ship.cap_energy.current.toString());
-                this.attr_human.setText(ship.cap_human.current.toString());
-                this.attr_gravity.setText(ship.cap_gravity.current.toString());
-                this.attr_time.setText(ship.cap_time.current.toString());
+                this.attr_hull.setText(ship.values.hull.get().toString());
+                this.attr_shield.setText(ship.values.shield.get().toString());
+                this.attr_power.setText(ship.values.power.get().toString());
+                this.attr_materials.setText(ship.attributes.skill_material.get().toString());
+                this.attr_electronics.setText(ship.attributes.skill_electronics.get().toString());
+                this.attr_energy.setText(ship.attributes.skill_energy.get().toString());
+                this.attr_human.setText(ship.attributes.skill_human.get().toString());
+                this.attr_gravity.setText(ship.attributes.skill_gravity.get().toString());
+                this.attr_time.setText(ship.attributes.skill_time.get().toString());
                 this.active_effects.removeAll(true);
                 ship.sticky_effects.forEach((effect, index) => {
                     this.addEffect(effect, index);
@@ -123,7 +123,7 @@ module TS.SpaceTac.View {
             this.active_effects.addChild(effect_group);
 
             if (effect.base instanceof Game.AttributeLimitEffect) {
-                let attr_name = Game.AttributeCode[effect.base.attrcode].toLowerCase().replace('_', '');
+                let attr_name = effect.base.attrcode.replace('_', '');
                 let attr_icon = new Phaser.Image(this.game, 30, effect_group.height / 2, `battle-attributes-${attr_name}`);
                 attr_icon.anchor.set(0.5, 0.5);
                 attr_icon.scale.set(0.17, 0.17);

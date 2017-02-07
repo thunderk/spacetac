@@ -4,14 +4,14 @@ module TS.SpaceTac.View {
         // Reference to the ship game object
         ship: Game.Ship;
 
-        // Energy display
-        energy: ValueBar;
-
         // Hull display
         hull: ValueBar;
 
         // Shield display
         shield: ValueBar;
+
+        // Power display
+        power: ValueBar;
 
         // Portrait
         layer_portrait: Phaser.Image;
@@ -52,8 +52,8 @@ module TS.SpaceTac.View {
             this.shield = ValueBar.newStyled(this.game, "battle-shiplist-shield", 98, 39, true);
             this.addChild(this.shield);
 
-            this.energy = ValueBar.newStyled(this.game, "battle-shiplist-energy", 106, 39, true);
-            this.addChild(this.energy);
+            this.power = ValueBar.newStyled(this.game, "battle-shiplist-energy", 106, 39, true);
+            this.addChild(this.power);
 
             this.updateAttributes();
             this.updateEffects();
@@ -63,9 +63,9 @@ module TS.SpaceTac.View {
 
         // Update attributes from associated ship
         updateAttributes() {
-            this.attributeChanged(this.ship.hull);
-            this.attributeChanged(this.ship.shield);
-            this.attributeChanged(this.ship.ap_current);
+            this.hull.setValue(this.ship.values.hull.get(), this.ship.attributes.hull_capacity.get());
+            this.shield.setValue(this.ship.values.shield.get(), this.ship.attributes.shield_capacity.get());
+            this.power.setValue(this.ship.values.power.get(), this.ship.attributes.power_capacity.get());
         }
 
         // Update effects applied on the ship
@@ -79,17 +79,6 @@ module TS.SpaceTac.View {
                 badge.anchor.set(0.5, 0.5);
                 this.active_effects.addChild(badge);
             });
-        }
-
-        // Called when an attribute for this ship changed through the battle log
-        attributeChanged(attribute: Game.Attribute): void {
-            if (attribute.code === Game.AttributeCode.Hull) {
-                this.hull.setValue(attribute.current, attribute.maximal);
-            } else if (attribute.code === Game.AttributeCode.Shield) {
-                this.shield.setValue(attribute.current, attribute.maximal);
-            } else if (attribute.code === Game.AttributeCode.Power) {
-                this.energy.setValue(attribute.current, attribute.maximal);
-            }
         }
 
         // Flash a damage indicator

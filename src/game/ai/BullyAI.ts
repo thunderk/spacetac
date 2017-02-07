@@ -105,7 +105,7 @@ module TS.SpaceTac.Game.AI {
             var distance = target.getDistanceTo(Target.newFromShip(this.ship));
             var move: Target;
             var engine: Equipment;
-            var remaining_ap = this.ship.ap_current.current;
+            var remaining_ap = this.ship.values.power.get();
             if (distance <= weapon.distance) {
                 // No need to move
                 move = null;

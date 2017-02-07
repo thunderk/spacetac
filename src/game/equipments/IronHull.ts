@@ -7,7 +7,7 @@ module TS.SpaceTac.Game.Equipments {
 
             this.min_level = new IntegerRange(1, 3);
 
-            this.addPermanentAttributeMaxEffect(AttributeCode.Hull, 100, 200);
+            this.addAttributeEffect("hull_capacity", 100, 200);
         }
     }
 }

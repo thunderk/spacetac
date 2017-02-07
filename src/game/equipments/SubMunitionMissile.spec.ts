@@ -21,17 +21,17 @@ module TS.SpaceTac.Game.Specs {
             (<DamageEffect>equipment.target_effects[0]).value = 20;
 
             var checkHP = (h1: number, s1: number, h2: number, s2: number, h3: number, s3: number): void => {
-                expect(ship.hull.current).toBe(h1);
-                expect(ship.shield.current).toBe(s1);
-                expect(enemy1.hull.current).toBe(h2);
-                expect(enemy1.shield.current).toBe(s2);
-                expect(enemy2.hull.current).toBe(h3);
-                expect(enemy2.shield.current).toBe(s3);
+                expect(ship.values.hull.get()).toBe(h1);
+                expect(ship.values.shield.get()).toBe(s1);
+                expect(enemy1.values.hull.get()).toBe(h2);
+                expect(enemy1.values.shield.get()).toBe(s2);
+                expect(enemy2.values.hull.get()).toBe(h3);
+                expect(enemy2.values.shield.get()).toBe(s3);
             };
             checkHP(50, 30, 50, 30, 50, 30);
 
             battle.log.clear();
-            battle.log.addFilter("attr");
+            battle.log.addFilter("value");
 
             // Fire at a ship
             var t = Target.newFromShip(enemy1);

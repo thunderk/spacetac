@@ -4,8 +4,8 @@ module TS.SpaceTac.Game {
             var ship = new Ship();
             var battle = new Battle(ship.fleet);
             battle.playing_ship = ship;
-            ship.ap_current.setMaximal(20);
-            ship.ap_current.set(6);
+            ship.values.power.setMaximal(20);
+            ship.values.power.set(6);
             ship.arena_x = 0;
             ship.arena_y = 0;
             var engine = new Equipment();
@@ -21,7 +21,7 @@ module TS.SpaceTac.Game {
             result = action.checkTarget(battle, ship, Target.newFromLocation(0, 8));
             expect(result).toEqual(Target.newFromLocation(0, 3));
 
-            ship.ap_current.set(0);
+            ship.values.power.set(0);
             result = action.checkTarget(battle, ship, Target.newFromLocation(0, 8));
             expect(result).toBeNull();
         });
@@ -41,8 +41,8 @@ module TS.SpaceTac.Game {
         it("applies to ship location, battle log and AP", function () {
             var ship = new Ship();
             var battle = new Battle(ship.fleet);
-            ship.ap_current.setMaximal(20);
-            ship.ap_current.set(5);
+            ship.values.power.setMaximal(20);
+            ship.values.power.set(5);
             ship.arena_x = 0;
             ship.arena_y = 0;
             var engine = new Equipment();
@@ -55,13 +55,13 @@ module TS.SpaceTac.Game {
             expect(result).toBe(true);
             expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
             expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
-            expect(ship.ap_current.current).toEqual(0);
+            expect(ship.values.power.get()).toEqual(0);
 
             result = action.apply(battle, ship, Target.newFromLocation(10, 10));
             expect(result).toBe(false);
             expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
             expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
-            expect(ship.ap_current.current).toEqual(0);
+            expect(ship.values.power.get()).toEqual(0);
 
             expect(battle.log.events.length).toBe(2);
 
@@ -71,10 +71,10 @@ module TS.SpaceTac.Game {
             expect(battle.log.events[0].target.x).toBeCloseTo(3.535533, 0.00001);
             expect(battle.log.events[0].target.y).toBeCloseTo(3.535533, 0.00001);
 
-            expect(battle.log.events[1].code).toEqual("attr");
+            expect(battle.log.events[1].code).toEqual("value");
             expect(battle.log.events[1].ship).toBe(ship);
-            expect((<AttributeChangeEvent>battle.log.events[1]).attribute).toEqual(
-                new Attribute(AttributeCode.Power, 0, 20));
+            expect((<ValueChangeEvent>battle.log.events[1]).value).toEqual(
+                new ShipValue("power", 0, 20));
         });
 
         it("can't move too much near another ship", function () {

@@ -47,8 +47,8 @@ module TS.SpaceTac.View.Specs {
             battleview.battle.playing_ship = ship;
             battleview.player = ship.getPlayer();
 
-            ship.ap_current.setMaximal(10);
-            ship.ap_current.set(9);
+            ship.setAttribute("power_capacity", 10);
+            ship.setValue("power", 9);
             bar.setShip(ship);
 
             expect(bar.actions.length).toBe(4);
@@ -75,19 +75,19 @@ module TS.SpaceTac.View.Specs {
             bar.actionEnded();
 
             // Not enough AP for both weapons
-            ship.ap_current.set(7);
+            ship.setValue("power", 7);
             bar.actions[2].processClick();
             checkFading([1, 2], [0, 3]);
             bar.actionEnded();
 
             // Not enough AP to move
-            ship.ap_current.set(3);
+            ship.setValue("power", 3);
             bar.actions[1].processClick();
             checkFading([0, 1, 2], [3]);
             bar.actionEnded();
 
             // Dynamic AP usage for move actions
-            ship.ap_current.set(6);
+            ship.setValue("power", 6);
             bar.actions[0].processClick();
             checkFading([], [0, 1, 2, 3]);
             bar.actions[0].processHover(Game.Target.newFromLocation(2, 8));

@@ -6,22 +6,22 @@ module TS.SpaceTac.Game {
             var action = new BaseAction("test", "Test", false, equipment);
             var ship = new Ship();
             ship.addSlot(SlotType.Armor).attach(equipment);
-            ship.ap_current.setMaximal(10);
+            ship.values.power.setMaximal(10);
 
             expect(action.canBeUsed(null, ship)).toBe(false);
 
-            ship.ap_current.set(5);
+            ship.values.power.set(5);
 
             expect(action.canBeUsed(null, ship)).toBe(true);
             expect(action.canBeUsed(null, ship, 4)).toBe(true);
             expect(action.canBeUsed(null, ship, 3)).toBe(true);
             expect(action.canBeUsed(null, ship, 2)).toBe(false);
 
-            ship.ap_current.set(3);
+            ship.values.power.set(3);
 
             expect(action.canBeUsed(null, ship)).toBe(true);
 
-            ship.ap_current.set(2);
+            ship.values.power.set(2);
 
             expect(action.canBeUsed(null, ship)).toBe(false);
         });

@@ -23,13 +23,13 @@ module TS.SpaceTac.Game.Specs {
 
             var equipment = new Equipment();
             equipment.slot = SlotType.Shield;
-            equipment.requirements.push(new Attribute(AttributeCode.Cap_Gravity, 5));
+            equipment.requirements["skill_gravity"] = 5;
 
             expect(slot.attached).toBeNull();
             slot.attach(equipment);
             expect(slot.attached).toBeNull();
 
-            ship.cap_gravity.set(6);
+            ship.attributes.skill_gravity.set(6);
 
             slot.attach(equipment);
             expect(slot.attached).toBe(equipment);

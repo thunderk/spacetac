@@ -4,7 +4,7 @@ module TS.SpaceTac.Game.Equipments {
             let template = new RepairDrone();
 
             let equipment = template.generateFixed(0);
-            expect(equipment.target_effects).toEqual([new AttributeAddEffect(AttributeCode.Hull, 10)]);
+            expect(equipment.target_effects).toEqual([new ValueEffect("hull", 10)]);
         });
     });
 }

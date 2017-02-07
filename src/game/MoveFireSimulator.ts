@@ -63,7 +63,7 @@ module TS.SpaceTac.Game {
             let dy = target.y - this.ship.arena_y;
             let distance = Math.sqrt(dx * dx + dy * dy);
             let result = new MoveFireResult();
-            let ap = this.ship.ap_current.current;
+            let ap = this.ship.values.power.get();
 
             if (distance > action.getRangeRadius(this.ship)) {
                 result.need_move = true;

@@ -65,32 +65,32 @@ module TS.SpaceTac.Game.Specs {
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment();
             equipment.slot = slot.type;
-            equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.Power, 4));
+            equipment.permanent_effects.push(new AttributeEffect("power_capacity", 4));
             slot.attach(equipment);
 
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment();
             equipment.slot = slot.type;
-            equipment.permanent_effects.push(new AttributeMaxEffect(AttributeCode.Power, 5));
+            equipment.permanent_effects.push(new AttributeEffect("power_capacity", 5));
             slot.attach(equipment);
 
             ship.updateAttributes();
-            expect(ship.ap_current.maximal).toBe(9);
+            expect(ship.attributes.power_capacity.get()).toBe(9);
         });
 
         it("repairs hull and recharges shield", function () {
             var ship = new Ship(null, "Test");
 
-            ship.hull.setMaximal(120);
-            ship.shield.setMaximal(150);
+            ship.setAttribute("hull_capacity", 120);
+            ship.setAttribute("shield_capacity", 150);
 
-            expect(ship.hull.current).toEqual(0);
-            expect(ship.shield.current).toEqual(0);
+            expect(ship.values.hull.get()).toEqual(0);
+            expect(ship.values.shield.get()).toEqual(0);
 
             ship.restoreHealth();
 
-            expect(ship.hull.current).toEqual(120);
-            expect(ship.shield.current).toEqual(150);
+            expect(ship.values.hull.get()).toEqual(120);
+            expect(ship.values.shield.get()).toEqual(150);
         });
 
         it("applies and logs hull and shield damage", function () {
@@ -98,24 +98,24 @@ module TS.SpaceTac.Game.Specs {
             var battle = new Battle(fleet);
             var ship = new Ship(fleet);
 
-            ship.hull.setMaximal(50);
-            ship.shield.setMaximal(100);
+            ship.setAttribute("hull_capacity", 50);
+            ship.setAttribute("shield_capacity", 100);
             ship.restoreHealth();
             battle.log.clear();
 
             ship.addDamage(10, 20);
-            expect(ship.hull.current).toEqual(40);
-            expect(ship.shield.current).toEqual(80);
+            expect(ship.values.hull.get()).toEqual(40);
+            expect(ship.values.shield.get()).toEqual(80);
             expect(battle.log.events.length).toBe(3);
-            expect(battle.log.events[0]).toEqual(new AttributeChangeEvent(ship, ship.shield));
-            expect(battle.log.events[1]).toEqual(new AttributeChangeEvent(ship, ship.hull));
+            expect(battle.log.events[0]).toEqual(new ValueChangeEvent(ship, ship.values.shield));
+            expect(battle.log.events[1]).toEqual(new ValueChangeEvent(ship, ship.values.hull));
             expect(battle.log.events[2]).toEqual(new DamageEvent(ship, 10, 20));
 
             battle.log.clear();
 
             ship.addDamage(15, 25, false);
-            expect(ship.hull.current).toEqual(25);
-            expect(ship.shield.current).toEqual(55);
+            expect(ship.values.hull.get()).toEqual(25);
+            expect(ship.values.shield.get()).toEqual(55);
             expect(battle.log.events.length).toBe(0);
         });
 
@@ -164,13 +164,13 @@ module TS.SpaceTac.Game.Specs {
 
             expect(ship.alive).toBe(true);
 
-            ship.hull.set(10);
+            ship.values.hull.set(10);
             battle.log.clear();
             ship.addDamage(5, 0);
 
             expect(ship.alive).toBe(true);
             expect(battle.log.events.length).toBe(2);
-            expect(battle.log.events[0].code).toEqual("attr");
+            expect(battle.log.events[0].code).toEqual("value");
             expect(battle.log.events[1].code).toEqual("damage");
 
             battle.log.clear();
@@ -178,7 +178,7 @@ module TS.SpaceTac.Game.Specs {
 
             expect(ship.alive).toBe(false);
             expect(battle.log.events.length).toBe(3);
-            expect(battle.log.events[0].code).toEqual("attr");
+            expect(battle.log.events[0].code).toEqual("value");
             expect(battle.log.events[1].code).toEqual("damage");
             expect(battle.log.events[2].code).toEqual("death");
         });
@@ -189,12 +189,12 @@ module TS.SpaceTac.Game.Specs {
             expect(ship.isAbleToPlay()).toBe(false);
             expect(ship.isAbleToPlay(false)).toBe(true);
 
-            ship.ap_current.set(5);
+            ship.values.power.set(5);
 
             expect(ship.isAbleToPlay()).toBe(true);
             expect(ship.isAbleToPlay(false)).toBe(true);
 
-            ship.hull.set(10);
+            ship.values.hull.set(10);
             ship.addDamage(8, 0);
 
             expect(ship.isAbleToPlay()).toBe(true);
@@ -243,16 +243,17 @@ module TS.SpaceTac.Game.Specs {
 
             var power_core_template = new Equipments.BasicPowerCore();
             ship.addSlot(SlotType.Power).attach(power_core_template.generateFixed(0));
+            ship.updateAttributes();
 
-            expect(ship.ap_current.current).toBe(0);
+            expect(ship.values.power.get()).toBe(0);
             ship.initializeActionPoints();
-            expect(ship.ap_current.current).toBe(5);
-            ship.ap_current.set(2);
-            expect(ship.ap_current.current).toBe(2);
+            expect(ship.values.power.get()).toBe(5);
+            ship.values.power.set(2);
+            expect(ship.values.power.get()).toBe(2);
             ship.recoverActionPoints();
-            expect(ship.ap_current.current).toBe(6);
+            expect(ship.values.power.get()).toBe(6);
             ship.recoverActionPoints();
-            expect(ship.ap_current.current).toBe(8);
+            expect(ship.values.power.get()).toBe(8);
         });
 
         it("checks if a ship is inside a given circle", function () {

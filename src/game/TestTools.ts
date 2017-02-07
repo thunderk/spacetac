@@ -46,23 +46,18 @@ module TS.SpaceTac.Game {
         static setShipAP(ship: Ship, points: number, recovery: number = 0): void {
             var equipment = this.getOrGenEquipment(ship, SlotType.Power, new Equipments.BasicPowerCore());
 
-            equipment.permanent_effects.forEach((effect: BaseEffect) => {
-                if (effect.code === "attrmax") {
-                    var meffect = <AttributeMaxEffect>effect;
-                    if (meffect.attrcode === AttributeCode.Power) {
-                        meffect.value = points;
-                    }
-                } else if (effect.code === "attr") {
-                    var veffect = <AttributeValueEffect>effect;
-                    if (veffect.attrcode === AttributeCode.Power_Recovery) {
-                        veffect.value = recovery;
+            equipment.permanent_effects.forEach(effect => {
+                if (effect instanceof AttributeEffect) {
+                    if (effect.attrcode === "power_capacity") {
+                        effect.value = points;
+                    } else if (effect.attrcode === "power_recovery") {
+                        effect.value = recovery;
                     }
                 }
             });
 
-            ship.ap_current.setMaximal(points);
-            ship.ap_current.set(points);
-            ship.ap_recover.set(recovery);
+            ship.updateAttributes();
+            ship.setValue("power", points);
         }
 
         // Set a ship hull and shield points, adding/updating an equipment if needed
@@ -70,19 +65,17 @@ module TS.SpaceTac.Game {
             var armor = TestTools.getOrGenEquipment(ship, SlotType.Armor, new Equipments.IronHull());
             var shield = TestTools.getOrGenEquipment(ship, SlotType.Shield, new Equipments.BasicForceField());
 
-            armor.permanent_effects.forEach((effect: BaseEffect) => {
-                if (effect.code === "attrmax") {
-                    var meffect = <AttributeMaxEffect>effect;
-                    if (meffect.attrcode === AttributeCode.Hull) {
-                        meffect.value = hull_points;
+            armor.permanent_effects.forEach(effect => {
+                if (effect instanceof AttributeEffect) {
+                    if (effect.attrcode === "hull_capacity") {
+                        effect.value = hull_points;
                     }
                 }
             });
             shield.permanent_effects.forEach((effect: BaseEffect) => {
-                if (effect.code === "attrmax") {
-                    var meffect = <AttributeMaxEffect>effect;
-                    if (meffect.attrcode === AttributeCode.Shield) {
-                        meffect.value = shield_points;
+                if (effect instanceof AttributeEffect) {
+                    if (effect.attrcode === "shield_capacity") {
+                        effect.value = shield_points;
                     }
                 }
             });
