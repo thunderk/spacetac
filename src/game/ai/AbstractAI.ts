@@ -1,8 +1,6 @@
-/// <reference path="../Serializable.ts"/>
-
 module TS.SpaceTac.Game.AI {
     // Base class for all Artificial Intelligence interaction
-    export class AbstractAI extends Serializable {
+    export class AbstractAI {
         // The fleet controlled by this AI
         fleet: Fleet;
 
@@ -25,8 +23,6 @@ module TS.SpaceTac.Game.AI {
         private workqueue: Function[];
 
         constructor(fleet: Fleet) {
-            super();
-
             this.fleet = fleet;
             this.async = true;
             this.workqueue = [];

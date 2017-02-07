@@ -1,5 +1,3 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     export enum StarLocationType {
         STAR,
@@ -10,7 +8,7 @@ module TS.SpaceTac.Game {
     }
 
     // Point of interest in a star system
-    export class StarLocation extends Serializable {
+    export class StarLocation {
         // Parent star system
         star: Star;
 
@@ -29,8 +27,6 @@ module TS.SpaceTac.Game {
         encounter_gen: boolean;
 
         constructor(star: Star, type: StarLocationType = StarLocationType.PLANET, x: number = 0, y: number = 0) {
-            super();
-
             this.star = star || new Star();
             this.type = type;
             this.x = x;

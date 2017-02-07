@@ -1,15 +1,11 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // An hyperspace link between two star systems
-    export class StarLink extends Serializable {
+    export class StarLink {
         // Stars
         first: Star;
         second: Star;
 
         constructor(first: Star, second: Star) {
-            super();
-
             this.first = first;
             this.second = second;
         }

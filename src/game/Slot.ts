@@ -1,5 +1,3 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // Types of slots
     export enum SlotType {
@@ -11,7 +9,7 @@ module TS.SpaceTac.Game {
     }
 
     // Slot to attach an equipment to a ship
-    export class Slot extends Serializable {
+    export class Slot {
         // Link to the ship
         ship: Ship;
 
@@ -23,8 +21,6 @@ module TS.SpaceTac.Game {
 
         // Create an empty slot for a ship
         constructor(ship: Ship, type: SlotType) {
-            super();
-
             this.ship = ship;
             this.type = type;
             this.attached = null;

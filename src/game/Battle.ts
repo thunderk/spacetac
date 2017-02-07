@@ -1,8 +1,6 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // A turn-based battle between fleets
-    export class Battle extends Serializable {
+    export class Battle {
         // Flag indicating if the battle is ended
         ended: boolean;
 
@@ -34,8 +32,6 @@ module TS.SpaceTac.Game {
 
         // Create a battle between two fleets
         constructor(fleet1: Fleet = null, fleet2: Fleet = null) {
-            super();
-
             this.log = new BattleLog();
             this.fleets = [fleet1 || new Fleet(), fleet2 || new Fleet()];
             this.play_order = [];

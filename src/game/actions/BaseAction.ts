@@ -1,8 +1,6 @@
-/// <reference path="../Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // Base class for action definitions
-    export class BaseAction extends Serializable {
+    export class BaseAction {
         // Identifier code for the type of action
         code: string;
 
@@ -17,8 +15,6 @@ module TS.SpaceTac.Game {
 
         // Create the action
         constructor(code: string, name: string, needs_target: boolean, equipment: Equipment = null) {
-            super();
-
             this.code = code;
             this.name = name;
             this.needs_target = needs_target;

@@ -1,8 +1,6 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // Result of an ended battle
-    export class BattleOutcome extends Serializable {
+    export class BattleOutcome {
         // Indicates if the battle is a draw (no winner)
         draw: boolean;
 
@@ -13,8 +11,6 @@ module TS.SpaceTac.Game {
         loot: Equipment[];
 
         constructor(winner: Fleet) {
-            super();
-
             this.winner = winner;
             this.draw = winner ? false : true;
             this.loot = [];

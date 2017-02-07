@@ -1,8 +1,6 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // Main game universe
-    export class Universe extends Serializable {
+    export class Universe {
         // List of star systems
         stars: Star[];
 
@@ -13,8 +11,6 @@ module TS.SpaceTac.Game {
         radius: number;
 
         constructor() {
-            super();
-
             this.stars = [];
             this.starlinks = [];
             this.radius = 5;

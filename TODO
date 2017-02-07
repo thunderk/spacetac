@@ -1,3 +1,4 @@
+* Restore serialization
 * Refactor attribute effects (add/sub, value/max, temporary/permanent)
 * Drones: add hooks on events
 * Drones: add sprite, radius and tooltip

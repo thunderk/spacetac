@@ -1,8 +1,6 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // A fleet of ships
-    export class Fleet extends Serializable {
+    export class Fleet {
         // Fleet owner
         player: Player;
 
@@ -17,8 +15,6 @@ module TS.SpaceTac.Game {
 
         // Create a fleet, bound to a player
         constructor(player: Player = null) {
-            super();
-
             this.player = player || new Player();
             this.ships = [];
             this.location = null;

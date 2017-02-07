@@ -1,8 +1,6 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // A game session, binding a universe and a player
-    export class GameSession extends Serializable {
+    export class GameSession {
         // Game universe
         universe: Universe;
 
@@ -10,8 +8,6 @@ module TS.SpaceTac.Game {
         player: Player;
 
         constructor() {
-            super();
-
             this.universe = new Universe();
             this.player = new Player(this.universe);
         }

@@ -1,5 +1,3 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // Code to identify
     export enum AttributeCode {
@@ -62,7 +60,7 @@ module TS.SpaceTac.Game {
     // Value computed from equipment
     //  This value can be altered by effects
     //  Example attributes are health points, power recovery...
-    export class Attribute extends Serializable {
+    export class Attribute {
         // Identifying code of this attribute
         code: AttributeCode;
 
@@ -74,8 +72,6 @@ module TS.SpaceTac.Game {
 
         // Create an attribute
         constructor(code: AttributeCode = AttributeCode.Misc, current: number = 0, maximal: number = null) {
-            super();
-
             this.code = code;
             this.maximal = maximal;
             this.current = current;

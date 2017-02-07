@@ -1,8 +1,6 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // A single ship in a Fleet
-    export class Ship extends Serializable {
+    export class Ship {
         // Fleet this ship is a member of
         fleet: Fleet;
 
@@ -65,8 +63,6 @@ module TS.SpaceTac.Game {
 
         // Create a new ship inside a fleet
         constructor(fleet: Fleet = null, name: string = null) {
-            super();
-
             this.attributes = new AttributeCollection();
             this.fleet = fleet || new Fleet();
             this.level = 1;

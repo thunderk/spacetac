@@ -1,5 +1,3 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // Find the nearest intersection between a line and a circle
     //  Circle is supposed to be centered at (0,0)
@@ -19,7 +17,7 @@ module TS.SpaceTac.Game {
 
     // Target for a capability
     //  This could be a location in space, or a ship
-    export class Target extends Serializable {
+    export class Target {
         // Coordinates of the target
         x: number;
         y: number;
@@ -29,8 +27,6 @@ module TS.SpaceTac.Game {
 
         // Standard constructor
         constructor(x: number, y: number, ship: Ship) {
-            super();
-
             this.x = x;
             this.y = y;
             this.ship = ship;

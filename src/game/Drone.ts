@@ -1,10 +1,8 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     /**
      * Drones are static objects that apply effects in a circular zone around themselves.
      */
-    export class Drone extends Serializable {
+    export class Drone {
         // Ship that deployed the drone
         owner: Ship;
 
@@ -26,8 +24,6 @@ module TS.SpaceTac.Game {
         inside_at_start: Ship[] = [];
 
         constructor(owner: Ship) {
-            super();
-
             this.owner = owner;
         }
 

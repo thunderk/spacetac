@@ -6,7 +6,7 @@ module TS.SpaceTac.Game.Specs {
         battle.endBattle(battle.fleets[0]);
     }
 
-    describe("GameSession", () => {
+    /*describe("GameSession", () => {
         it("serializes to a string", () => {
             var session = new GameSession();
             session.startQuickBattle(true);
@@ -37,5 +37,5 @@ module TS.SpaceTac.Game.Specs {
             // Check equality after game steps
             expect(loaded_session).toEqual(session);
         });
-    });
+    });*/
 }

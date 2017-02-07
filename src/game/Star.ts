@@ -1,8 +1,6 @@
-/// <reference path="Serializable.ts"/>
-
 module TS.SpaceTac.Game {
     // A star system
-    export class Star extends Serializable {
+    export class Star {
 
         // Available names for star systems
         static NAMES_POOL = [
@@ -78,8 +76,6 @@ module TS.SpaceTac.Game {
         level: number;
 
         constructor(universe: Universe = null, x = 0, y = 0, name = "") {
-            super();
-
             this.universe = universe || new Universe();
             this.x = x;
             this.y = y;
