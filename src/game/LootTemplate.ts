@@ -141,6 +141,13 @@ module TS.SpaceTac.Game {
             this.permanent_effects.push(template);
         }
 
+        // Convenience function to add an offset effect on attribute value
+        addAttributeAddEffect(code: AttributeCode, min: number, max: number | null = null): void {
+            let template = new EffectTemplate(new AttributeAddEffect(code, 0));
+            template.addModifier("value", new IntegerRange(min, max));
+            this.target_effects.push(template);
+        }
+
         // Convenience function to add a "damage on target" effect
         addDamageOnTargetEffect(min: number, max: number = null): void {
             var template = new EffectTemplate(new DamageEffect(0));
@@ -155,6 +162,13 @@ module TS.SpaceTac.Game {
             template.addModifier("value", new IntegerRange(min_value, max_value));
             template.addModifier("duration", new IntegerRange(min_duration, max_duration));
             this.target_effects.push(template);
+        }
+
+        /**
+         * Set the power consumption
+         */
+        setPowerConsumption(minimal: number, maximal: number | null = null) {
+            this.ap_usage = new IntegerRange(minimal, maximal);
         }
 
         // Method to reimplement to assign an action to a generated equipment

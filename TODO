@@ -1,4 +1,7 @@
-* Add drones to apply temporary zone effects
+* Refactor attribute effects (add/sub, value/max, temporary/permanent)
+* Drones: add hooks on events
+* Drones: add sprite, radius and tooltip
+* Repair drone: add graphics
 * Allow to cancel last moves
 * Effect should be random in a range (eg. "damage target 50-75")
 * Add an overload/cooling system

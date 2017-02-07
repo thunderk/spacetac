@@ -22,7 +22,7 @@ module TS.SpaceTac.Game {
         populate(): void {
             var templates: LootTemplate[] = [];
             for (var template_name in TS.SpaceTac.Game.Equipments) {
-                if (template_name) {
+                if (template_name && template_name.indexOf("Abstract") != 0) {
                     var template_class = TS.SpaceTac.Game.Equipments[template_name];
                     var template: LootTemplate = new template_class();
                     templates.push(template);

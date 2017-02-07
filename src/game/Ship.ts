@@ -174,10 +174,19 @@ module TS.SpaceTac.Game {
             }
         }
 
-        // Set an attribute value
-        //  If offset is true, the value will be added to current value
-        //  If log is true, an attribute event will be added to the battle log
-        setAttribute(attr: Attribute, value: number, offset: boolean = false, log: boolean = true) {
+        /**
+         * Set an attribute value
+         * 
+         * If *offset* is true, the value will be added to current value.
+         * If *log* is true, an attribute event will be added to the battle log
+         * 
+         * Returns true if the attribute changed.
+         */
+        setAttribute(attr: Attribute | AttributeCode, value: number, offset = false, log = true): boolean {
+            if (!(attr instanceof Attribute)) {
+                attr = this.attributes.getRawAttr(attr);
+            }
+
             var changed: boolean;
 
             if (offset) {
@@ -189,6 +198,8 @@ module TS.SpaceTac.Game {
             if (changed && log) {
                 this.addBattleEvent(new AttributeChangeEvent(this, attr));
             }
+
+            return changed;
         }
 
         // Initialize the action points counter
