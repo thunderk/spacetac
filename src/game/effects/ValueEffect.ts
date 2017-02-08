@@ -31,5 +31,10 @@ module TS.SpaceTac.Game {
         getFullCode(): string {
             return `${this.code}-${this.valuetype}`;
         }
+
+        getDescription(): string {
+            let attrname = SHIP_VALUES[this.valuetype].name;
+            return `${attrname} ${this.value > 0 ? "+" : "-"}${Math.abs(this.value)}`;
+        }
     }
 }

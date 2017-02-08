@@ -81,7 +81,7 @@ module TS.SpaceTac.Game {
             } else {
                 var result: string[] = [];
                 this.target_effects.forEach(effect => {
-                    let suffix = this.blast ? `on all ships in ${this.blast}km of impact` : "on target";
+                    let suffix = this.blast ? `in ${this.blast}km radius` : "on target";
                     if (effect instanceof StickyEffect) {
                         suffix = `for ${effect.duration} turn${effect.duration > 1 ? "s" : ""} ${suffix}`;
                     }

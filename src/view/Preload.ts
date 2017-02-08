@@ -53,6 +53,7 @@ module TS.SpaceTac.View {
             this.loadImage("battle/actions/fire-gatlinggun.png");
             this.loadImage("battle/actions/fire-powerdepleter.png");
             this.loadImage("battle/actions/fire-submunitionmissile.png");
+            this.loadImage("battle/actions/deploy-repairdrone.png");
             this.loadImage("battle/weapon/bullet.png");
             this.loadImage("battle/attributes/power.png");
             this.loadImage("battle/attributes/effect-increase.png");

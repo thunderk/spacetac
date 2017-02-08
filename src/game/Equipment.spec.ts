@@ -41,7 +41,7 @@ module TS.SpaceTac.Game.Specs {
             expect(equipment.getActionDescription()).toEqual("- 50 damage on target");
 
             equipment.blast = 20;
-            expect(equipment.getActionDescription()).toEqual("- 50 damage on all ships in 20km of impact");
+            expect(equipment.getActionDescription()).toEqual("- 50 damage in 20km radius");
 
             equipment.blast = 0;
             equipment.target_effects.push(new StickyEffect(new AttributeLimitEffect("shield_capacity", 200), 3));
