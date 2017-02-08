@@ -3,6 +3,9 @@ module TS.SpaceTac.Game {
      * Drones are static objects that apply effects in a circular zone around themselves.
      */
     export class Drone {
+        // Code of the drone
+        code: string;
+
         // Ship that deployed the drone
         owner: Ship;
 
@@ -23,8 +26,9 @@ module TS.SpaceTac.Game {
         // Ships starting their turn the radius
         inside_at_start: Ship[] = [];
 
-        constructor(owner: Ship) {
+        constructor(owner: Ship, code = "drone") {
             this.owner = owner;
+            this.code = code;
         }
 
         /**
@@ -56,16 +60,20 @@ module TS.SpaceTac.Game {
 
         /**
          * Called when a ship turn starts
-         * 
-         * Returns false if the drone should be destroyed
          */
-        onTurnStart(ship: Ship): boolean {
+        onTurnStart(ship: Ship) {
             if (ship == this.owner) {
-                if (this.duration <= 1) {
-                    return false;
-                } else {
-                    this.duration--;
+                this.duration--;
+            }
+
+            if (this.duration <= 0) {
+                if (this.owner) {
+                    let battle = this.owner.getBattle();
+                    if (battle) {
+                        battle.removeDrone(this);
+                    }
                 }
+                return;
             }
 
             if (ship.isInCircle(this.x, this.y, this.radius)) {
@@ -74,14 +82,13 @@ module TS.SpaceTac.Game {
             } else {
                 remove(this.inside_at_start, ship);
             }
-            return true;
         }
 
         /**
          * Called when a ship turn ends
          */
         onTurnEnd(ship: Ship) {
-            if (ship.isInCircle(this.x, this.y, this.radius) && contains(this.inside_at_start, ship)) {
+            if (this.duration > 0 && ship.isInCircle(this.x, this.y, this.radius) && contains(this.inside_at_start, ship)) {
                 this.singleApply(ship);
             }
         }
@@ -90,7 +97,7 @@ module TS.SpaceTac.Game {
          * Called after a ship moved
          */
         onShipMove(ship: Ship) {
-            if (ship.isInCircle(this.x, this.y, this.radius)) {
+            if (this.duration > 0 && ship.isInCircle(this.x, this.y, this.radius)) {
                 if (add(this.inside, ship)) {
                     this.singleApply(ship);
                 }

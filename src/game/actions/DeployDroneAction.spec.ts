@@ -35,6 +35,7 @@ module TS.SpaceTac.Game {
             battle.playing_ship = ship;
             TestTools.setShipAP(ship, 3);
             let equipment = new Equipment();
+            equipment.code = "testdrone";
             equipment.distance = 8;
             equipment.ap_usage = 2;
             equipment.duration = 2;
@@ -48,6 +49,7 @@ module TS.SpaceTac.Game {
             expect(battle.drones.length).toBe(1);
 
             let drone = battle.drones[0];
+            expect(drone.code).toEqual("testdrone");
             expect(drone.duration).toEqual(2);
             expect(drone.owner).toBe(ship);
             expect(drone.x).toEqual(5);

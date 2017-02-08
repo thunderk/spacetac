@@ -21,15 +21,40 @@ After making changes to sources, you need to recompile:
 
     npm run build
 
-## Attributes
+## Ships
 
-* **Initiative** - Ability to play before other ships in the play order
+### In-combat values (HSP)
+
+In combat, a ship's vitals are represented by the HSP system (Hull-Shield-Power):
+
 * **Hull** - Amout of damage that a ship can receive before having to shut down all its systems
 * **Shield** - Amount of damage that the shield equipments may absorb to protect the Hull
 * **Power** - Available action points (some actions require more power than others)
+
+These values will be changed by various effects (usage of equipments, sustained damage...).
+
+### Attributes
+
+Attributes represent a ship's ability to use its HSP system:
+
+* **Initiative** - Ability to play before other ships in the play order
+* **Hull capacity** - Maximal Hull value (when the battle starts)
+* **Shield capacity** - Maximal Shield value (when the battle starts)
+* **Power capacity** - Maximal Power value
+* **Initial power** - Power immediately available at the start of battle
 * **Power recovery** - Power generated at the end of a ship's turn
 
-## Skills
+These attributes are the sum of all currently applied effects (being permanent by an equipped item,
+or a temporary effect caused by a weapon or a drone).
+
+For example, a ship that equips a power generator with "power recovery +3", but has a sticky effect
+of "power recovery -1" from a previous weapon hit, will have an effective power recovery of 2.
+
+Attributes may also be upgraded permanently during level up.
+
+### Skills
+
+Skills represent a ship's ability to use equipments:
 
 * **Materials** - Usage of physical materials such as bullets, shells...
 * **Electronics** - Components of computers and communication
@@ -37,6 +62,16 @@ After making changes to sources, you need to recompile:
 * **Human** - Management of a human team and resources
 * **Gravity** - Interaction with gravitational forces
 * **Time** - Manipulation of time
+
+Each equipment has minimal skill requirements to be used. For example, a weapon may require "materials >= 2"
+and "energy >= 3" to be equipped. A ship that does not meet these requirements will not be able to use 
+the equipment.
+
+As for attributes, skill values are controlled by equipments, effects and level up.
+
+If an equipped item has a requirement of "time >= 2", that the ship has time skill of exactly 2, and that a
+temporary effect of "time -1" is active, the requirement is no longer fulfilled and the equipped item
+is then temporarily disabled (no more effects and cannot be used), until the "time -1" effect is lifted.
 
 ## Drones
 
@@ -49,6 +84,9 @@ Drone effects are applied :
 * On any ship inside the zone at the start and end of its turn (there and staying there)
 
 Drones are fully autonomous, and once deployed, are not controlled by their owner ship.
+
+They are small and cannot be the direct target of weapons. They are not affected by area effects,
+except for area damage and area effects specifically designed for drones.
 
 A drone lasts for a given number of turns, counting down each time its owner's turn starts. 
 When reaching the number of turns, the drone is destroyed (before the owner's turn is started).

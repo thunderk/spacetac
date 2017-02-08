@@ -15,7 +15,10 @@ module TS.SpaceTac.View {
         private battleview: BattleView;
 
         // List of ship sprites
-        private ship_sprites: ArenaShip[];
+        private ship_sprites: ArenaShip[] = [];
+
+        // List of drone sprites
+        private drone_sprites: ArenaDrone[] = [];
 
         // Currently hovered ship
         private hovered: ArenaShip;
@@ -27,7 +30,6 @@ module TS.SpaceTac.View {
             super(battleview.game);
 
             this.battleview = battleview;
-            this.ship_sprites = [];
             this.playing = null;
             this.hovered = null;
             this.range_hint = null;
@@ -128,6 +130,31 @@ module TS.SpaceTac.View {
             this.playing = arena_ship;
 
             this.battleview.gameui.audio.playOnce("battle-ship-change");
+        }
+
+        // Spawn a new drone
+        addDrone(drone: Game.Drone): void {
+            if (!any(this.drone_sprites, sprite => sprite.drone == drone)) {
+                let sprite = new ArenaDrone(this.battleview, drone);
+                this.addChild(sprite);
+                this.drone_sprites.push(sprite);
+
+                sprite.position.set(drone.owner.arena_x, drone.owner.arena_y);
+                this.game.tweens.create(sprite.position).to({ x: drone.x, y: drone.y }, 1800, Phaser.Easing.Sinusoidal.InOut, true, 200);
+            } else {
+                console.error("Drone added twice to arena", drone);
+            }
+        }
+
+        // Remove a destroyed drone
+        removeDrone(drone: Game.Drone): void {
+            let sprite = first(this.drone_sprites, sprite => sprite.drone == drone);
+            if (sprite) {
+                remove(this.drone_sprites, sprite);
+                sprite.destroy();
+            } else {
+                console.error("Drone not found in arena for removal", drone);
+            }
         }
     }
 }

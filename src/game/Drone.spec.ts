@@ -110,14 +110,18 @@ module TS.SpaceTac.Game {
             let [drone, effect] = newTestDrone(0, 0, 5, owner);
             drone.duration = 2;
 
-            let result = drone.onTurnStart(other);
-            expect(result).toBe(true);
-            result = drone.onTurnStart(owner);
-            expect(result).toBe(true);
-            result = drone.onTurnStart(other);
-            expect(result).toBe(true);
-            result = drone.onTurnStart(owner);
-            expect(result).toBe(false);
+            let battle = new Battle();
+            spyOn(owner, "getBattle").and.returnValue(battle);
+            let removeDrone = spyOn(battle, "removeDrone").and.callThrough();
+
+            drone.onTurnStart(other);
+            expect(removeDrone).not.toHaveBeenCalled();
+            drone.onTurnStart(owner);
+            expect(removeDrone).not.toHaveBeenCalled();
+            drone.onTurnStart(other);
+            expect(removeDrone).not.toHaveBeenCalled();
+            drone.onTurnStart(owner);
+            expect(removeDrone).toHaveBeenCalledWith(drone);
         });
     });
 }

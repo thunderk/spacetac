@@ -15,6 +15,7 @@ module TS.SpaceTac.Game.Equipments {
 
             expect(battle.drones.length).toBe(1);
             let drone = battle.drones[0];
+            expect(drone.duration).toBe(1);
             ship.setAttribute("hull_capacity", 100);
             ship.setValue("hull", 85);
             drone.singleApply(ship);

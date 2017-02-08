@@ -1,6 +1,10 @@
 * Restore serialization
-* Drones: add sprite, radius and tooltip
+* Drones: add tooltip
+* Drones: add hull points and take area damage
+* Organize arena objects and information in layers
 * Allow to cancel last moves
+* Add more visual effects to weapons, hits and explosions
+* Add keyboard shortcuts for actions
 * Effect should be random in a range (eg. "damage target 50-75")
 * Add an overload/cooling system
 * Add auto-move to attack
@@ -19,4 +23,4 @@
 * Add a victory screen, with loot display
 * Add retreat from battle
 * Map : restore ability to jump to other systems
-* Map : add stores
+* Map : add stores and shipyards

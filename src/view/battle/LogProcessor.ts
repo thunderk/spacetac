@@ -30,33 +30,26 @@ module TS.SpaceTac.View {
         processBattleEvent(event: Game.BaseLogEvent) {
             console.log("Battle event", event);
 
-            switch (event.code) {
-                case "ship_change":
-                    this.processShipChangeEvent(<Game.ShipChangeEvent>event);
-                    break;
-                case "damage":
-                    this.processDamageEvent(<Game.DamageEvent>event);
-                    break;
-                case "move":
-                    this.processMoveEvent(<Game.MoveEvent>event);
-                    break;
-                case "value":
-                    this.processValueChangedEvent(<Game.ValueChangeEvent>event);
-                    break;
-                case "death":
-                    this.processDeathEvent(<Game.DeathEvent>event);
-                    break;
-                case "fire":
-                    this.processFireEvent(<Game.FireEvent>event);
-                    break;
-                case "endbattle":
-                    this.processEndBattleEvent(<Game.EndBattleEvent>event);
-                    break;
-                case "effectadd":
-                case "effectduration":
-                case "effectdel":
-                    this.processEffectEvent(event);
-                    break;
+            if (event instanceof Game.ShipChangeEvent) {
+                this.processShipChangeEvent(event);
+            } else if (event instanceof Game.MoveEvent) {
+                this.processMoveEvent(event);
+            } else if (event instanceof Game.ValueChangeEvent) {
+                this.processValueChangedEvent(event);
+            } else if (event instanceof Game.DeathEvent) {
+                this.processDeathEvent(event);
+            } else if (event instanceof Game.FireEvent) {
+                this.processFireEvent(event);
+            } else if (event instanceof Game.DamageEvent) {
+                this.processDamageEvent(event);
+            } else if (event instanceof Game.EndBattleEvent) {
+                this.processEndBattleEvent(event);
+            } else if (event instanceof Game.DroneDeployedEvent) {
+                this.processDroneDeployedEvent(event);
+            } else if (event instanceof Game.DroneDestroyedEvent) {
+                this.processDroneDestroyedEvent(event);
+            } else if (event.code == "effectadd" || event.code == "effectduration" || event.code == "effectdel") {
+                this.processEffectEvent(event);
             }
         }
 
@@ -149,6 +142,16 @@ module TS.SpaceTac.View {
             if (item) {
                 item.updateEffects();
             }
+        }
+
+        // New drone deployed
+        private processDroneDeployedEvent(event: Game.DroneDeployedEvent): void {
+            this.view.arena.addDrone(event.drone);
+        }
+
+        // Drone destroyed
+        private processDroneDestroyedEvent(event: Game.DroneDestroyedEvent): void {
+            this.view.arena.removeDrone(event.drone);
         }
     }
 }

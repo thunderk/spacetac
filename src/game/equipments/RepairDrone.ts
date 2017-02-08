@@ -10,6 +10,7 @@ module TS.SpaceTac.Game.Equipments {
 
             this.min_level = new IntegerRange(1, 4);
 
+            this.setLifetime(1, 1);
             this.setDeployDistance(50, 100);
             this.setEffectRadius(40, 80);
             this.setPowerConsumption(4, 5);

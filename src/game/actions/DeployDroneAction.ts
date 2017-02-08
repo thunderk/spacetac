@@ -16,7 +16,7 @@ module TS.SpaceTac.Game {
         }
 
         protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
-            let drone = new Drone(ship);
+            let drone = new Drone(ship, this.equipment.code);
             drone.x = target.x;
             drone.y = target.y;
             drone.radius = this.equipment.blast;
