@@ -271,6 +271,7 @@ module TS.SpaceTac.Game {
          */
         addDrone(drone: Drone, log = true) {
             if (add(this.drones, drone)) {
+                drone.onDeploy(this.play_order);
                 if (log) {
                     this.log.add(new DroneDeployedEvent(drone));
                 }

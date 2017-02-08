@@ -217,6 +217,7 @@ module TS.SpaceTac.Game {
             let battle = new Battle();
             let ship = new Ship();
             let drone = new Drone(ship);
+            let onDeploy = spyOn(drone, "onDeploy");
 
             expect(battle.drones).toEqual([]);
             expect(battle.log.events).toEqual([]);
@@ -225,11 +226,13 @@ module TS.SpaceTac.Game {
 
             expect(battle.drones).toEqual([drone]);
             expect(battle.log.events).toEqual([new DroneDeployedEvent(drone)]);
+            expect(onDeploy).toHaveBeenCalledTimes(1);
 
             battle.addDrone(drone);
 
             expect(battle.drones).toEqual([drone]);
             expect(battle.log.events).toEqual([new DroneDeployedEvent(drone)]);
+            expect(onDeploy).toHaveBeenCalledTimes(1);
 
             battle.removeDrone(drone);
 

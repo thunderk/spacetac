@@ -1,5 +1,4 @@
 * Restore serialization
-* Drones: add hooks on game events
 * Drones: add sprite, radius and tooltip
 * Allow to cancel last moves
 * Effect should be random in a range (eg. "damage target 50-75")

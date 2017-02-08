@@ -269,5 +269,44 @@ module TS.SpaceTac.Game.Specs {
             expect(ship.isInCircle(5, 7, 0.9)).toBe(false);
             expect(ship.isInCircle(12, -4, 5)).toBe(false);
         });
+
+        it("broadcasts to drones", function () {
+            let battle = new Battle();
+            let fleet = new Fleet();
+            fleet.setBattle(battle);
+            let ship = new Ship(fleet);
+            let drone = new Drone(ship);
+
+            let onTurnStart = spyOn(drone, "onTurnStart");
+            let onTurnEnd = spyOn(drone, "onTurnEnd");
+            let onShipMove = spyOn(drone, "onShipMove");
+
+            battle.addDrone(drone);
+
+            expect(onTurnStart).toHaveBeenCalledTimes(0);
+            expect(onTurnEnd).toHaveBeenCalledTimes(0);
+            expect(onShipMove).toHaveBeenCalledTimes(0);
+
+            ship.startTurn();
+
+            expect(onTurnStart).toHaveBeenCalledTimes(1);
+            expect(onTurnStart).toHaveBeenCalledWith(ship);
+            expect(onTurnEnd).toHaveBeenCalledTimes(0);
+            expect(onShipMove).toHaveBeenCalledTimes(0);
+
+            ship.moveTo(10, 10);
+
+            expect(onTurnStart).toHaveBeenCalledTimes(1);
+            expect(onTurnEnd).toHaveBeenCalledTimes(0);
+            expect(onShipMove).toHaveBeenCalledTimes(1);
+            expect(onShipMove).toHaveBeenCalledWith(ship);
+
+            ship.endTurn();
+
+            expect(onTurnStart).toHaveBeenCalledTimes(1);
+            expect(onTurnEnd).toHaveBeenCalledTimes(1);
+            expect(onTurnEnd).toHaveBeenCalledWith(ship);
+            expect(onShipMove).toHaveBeenCalledTimes(1);
+        });
     });
 }
