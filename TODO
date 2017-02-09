@@ -24,5 +24,7 @@
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle
-* Map : restore ability to jump to other systems
+* Map : restore fog of war
+* Map : add information on current star/location + information on hovered location
 * Map : add stores and shipyards
+* Map : remove jump links that crosses the radius of other systems

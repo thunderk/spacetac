@@ -44,6 +44,7 @@ module TS.SpaceTac.UI {
                     (<any>window).universe = session.universe;
                     (<any>window).player = session.player;
                     (<any>window).battle = session.player.getBattle();
+                    (<any>window).view = this;
                 }
             }
         }

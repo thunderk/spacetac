@@ -1,7 +1,9 @@
 /// <reference path="../BaseView.ts"/>
 
 module TS.SpaceTac.UI {
-    // Interactive map of the universe
+    /**
+     * Interactive map of the universe
+     */
     export class UniverseMapView extends BaseView {
         // Displayed universe
         universe: Universe;
@@ -17,10 +19,15 @@ module TS.SpaceTac.UI {
         // Fleets
         player_fleet: FleetDisplay;
 
+        // Button to jump to another system
+        button_jump: Phaser.Button;
+
         // Zoom level
         zoom = 0;
 
-        // Init the view, binding it to a universe
+        /**
+         * Init the view, binding it to a universe
+         */
         init(universe: Universe, player: Player) {
             super.init();
 
@@ -28,7 +35,9 @@ module TS.SpaceTac.UI {
             this.player = player;
         }
 
-        // Create view graphics
+        /**
+         * Create view graphics
+         */
         create() {
             super.create();
 
@@ -54,6 +63,11 @@ module TS.SpaceTac.UI {
 
             this.group.addChild(this.player_fleet);
 
+            this.button_jump = new Phaser.Button(this.game, 0, 0, "map-button-jump", () => this.doJump());
+            this.button_jump.anchor.set(0.5, 0.5);
+            this.button_jump.visible = false;
+            this.group.addChild(this.button_jump);
+
             this.setZoom(2);
             this.add.button(1830, 100, "map-zoom-in", () => this.setZoom(this.zoom + 1)).anchor.set(0.5, 0.5);
             this.add.button(1830, 980, "map-zoom-out", () => this.setZoom(this.zoom - 1)).anchor.set(0.5, 0.5);
@@ -62,9 +76,13 @@ module TS.SpaceTac.UI {
 
             // Inputs
             this.inputs.bindCheat(Phaser.Keyboard.R, "Reveal whole map", this.revealAll);
+
+            this.updateInfo();
         }
 
-        // Leaving the view, unbind and destroy
+        /**
+         * Leaving the view, unbind and destroy
+         */
         shutdown() {
             this.universe = null;
             this.player = null;
@@ -72,12 +90,26 @@ module TS.SpaceTac.UI {
             super.shutdown();
         }
 
-        // Update info on all star systems (fog of war, available data...)
+        /**
+         * Update info on all star systems (fog of war, available data...)
+         */
         updateInfo() {
             this.starsystems.forEach(system => system.updateInfo());
+
+            let location = this.player.fleet.location;
+            if (location.type == StarLocationType.WARP) {
+                let angle = Math.atan2(location.y, location.x);
+                this.button_jump.scale.set(location.star.radius * 0.002, location.star.radius * 0.002);
+                this.button_jump.position.set(location.star.x + location.x + 0.02 * Math.cos(angle), location.star.y + location.y + 0.02 * Math.sin(angle));
+                Animation.setVisibility(this.game, this.button_jump, true, 300);
+            } else {
+                Animation.setVisibility(this.game, this.button_jump, false, 300);
+            }
         }
 
-        // Reveal the whole map (this is a cheat)
+        /**
+         * Reveal the whole map (this is a cheat)
+         */
         revealAll(): void {
             this.universe.stars.forEach(star => {
                 star.locations.forEach(location => {
@@ -87,13 +119,18 @@ module TS.SpaceTac.UI {
             // TODO Redraw
         }
 
-        // Set the camera to center on a target, and to display a given span in height
-        setCamera(x: number, y: number, span: number) {
+        /**
+         * Set the camera to center on a target, and to display a given span in height
+         */
+        setCamera(x: number, y: number, span: number, duration = 500, easing = Phaser.Easing.Cubic.InOut) {
             let scale = 1000 / span;
-            this.tweens.create(this.group.position).to({ x: 960 - x * scale, y: 540 - y * scale }, 500, Phaser.Easing.Cubic.InOut).start();
-            this.tweens.create(this.group.scale).to({ x: scale, y: scale }, 500, Phaser.Easing.Cubic.InOut).start();
+            this.tweens.create(this.group.position).to({ x: 960 - x * scale, y: 540 - y * scale }, duration, easing).start();
+            this.tweens.create(this.group.scale).to({ x: scale, y: scale }, duration, easing).start();
         }
 
+        /**
+         * Set the current zoom level (0, 1 or 2)
+         */
         setZoom(level: number) {
             let current_star = this.player.fleet.location.star;
             if (level <= 0) {
@@ -106,6 +143,21 @@ module TS.SpaceTac.UI {
             } else {
                 this.setCamera(current_star.x, current_star.y, current_star.radius * 2);
                 this.zoom = 2;
+            }
+        }
+
+        /**
+         * Do the jump animation to another system
+         */
+        doJump() {
+            if (this.player.fleet.location.type == StarLocationType.WARP && this.player.fleet.location.jump_dest) {
+                Animation.setVisibility(this.game, this.button_jump, false, 300);
+
+                let dest_location = this.player.fleet.location.jump_dest;
+                let dest_star = dest_location.star;
+                this.player_fleet.moveToLocation(dest_location, 3, duration => {
+                    this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, Phaser.Easing.Cubic.Out);
+                });
             }
         }
     }

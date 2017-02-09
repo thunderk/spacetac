@@ -64,6 +64,7 @@ module TS.SpaceTac.UI {
             this.loadImage("map/starsystem-background.png");
             this.loadImage("map/zoom-in.png");
             this.loadImage("map/zoom-out.png");
+            this.loadImage("map/button-jump.png");
             this.loadImage("map/location-star.png");
             this.loadImage("map/location-planet.png");
             this.loadImage("map/location-warp.png");

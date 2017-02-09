@@ -19,6 +19,10 @@ module TS.SpaceTac {
         x: number;
         y: number;
 
+        // Absolute location in the universe
+        universe_x: number;
+        universe_y: number;
+
         // Destination for jump, if its a WARP location
         jump_dest: StarLocation;
 
@@ -31,6 +35,8 @@ module TS.SpaceTac {
             this.type = type;
             this.x = x;
             this.y = y;
+            this.universe_x = star.x + this.x;
+            this.universe_y = star.y + this.y;
             this.jump_dest = null;
 
             this.encounter = null;

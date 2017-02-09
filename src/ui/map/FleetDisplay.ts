@@ -47,8 +47,9 @@ module TS.SpaceTac.UI {
             while (target >= this.rotation) {
                 target -= PI2;
             }
+            target -= PI2;
             let distance = Math.abs(target - this.rotation) / PI2;
-            this.tween = this.game.tweens.create(this).to({ rotation: target }, 30000 * distance / speed, ease ? Phaser.Easing.Cubic.In : Phaser.Easing.Linear.None);
+            this.tween = this.game.tweens.create(this).to({ rotation: target }, 15000 * distance / speed, ease ? Phaser.Easing.Cubic.In : Phaser.Easing.Linear.None);
             if (then) {
                 this.tween.onComplete.addOnce(then);
             }
@@ -67,14 +68,18 @@ module TS.SpaceTac.UI {
         /**
          * Make the fleet move to another location in the same system
          */
-        moveToLocation(location: StarLocation) {
+        moveToLocation(location: StarLocation, speed = 1, on_leave: (duration: number) => any | null = null) {
             if (location != this.fleet.location) {
-                let dx = location.x - this.fleet.location.x;
-                let dy = location.y - this.fleet.location.y;
+                let dx = location.universe_x - this.fleet.location.universe_x;
+                let dy = location.universe_y - this.fleet.location.universe_y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 let angle = Math.atan2(dx, dy);
                 this.goToOrbitPoint(angle - Math.PI / 2, 20, () => {
-                    let tween = this.game.tweens.create(this.position).to({ x: this.x + dx, y: this.y + dy }, 10000 * distance, Phaser.Easing.Cubic.Out);
+                    let duration = 10000 * distance / speed;
+                    if (on_leave) {
+                        on_leave(duration);
+                    }
+                    let tween = this.game.tweens.create(this.position).to({ x: this.x + dx, y: this.y + dy }, duration, Phaser.Easing.Cubic.Out);
                     tween.onComplete.addOnce(() => {
                         this.fleet.setLocation(location);
                         if (this.fleet.battle) {
