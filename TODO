@@ -1,6 +1,9 @@
 * Restore serialization
 * Drones: add tooltip
 * Drones: add hull points and take area damage
+* Drones: change the sprite angle for deploy animation
+* Better display of effects over ship sprite (repairs, sticky effects...)
+* Add a battle log display
 * Organize arena objects and information in layers
 * Allow to cancel last moves
 * Add more visual effects to weapons, hits and explosions
