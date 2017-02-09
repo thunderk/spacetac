@@ -1,4 +1,4 @@
-module TS.SpaceTac.AI.Specs {
+module TS.SpaceTac.Specs {
     describe("BullyAI", function () {
         it("lists enemies", function () {
             var battle = new Battle();

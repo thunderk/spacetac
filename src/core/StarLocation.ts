@@ -54,7 +54,7 @@ module TS.SpaceTac {
                     var fleet_generator = new FleetGenerator(random);
                     var ship_count = random.throwInt(1, 5);
                     this.encounter = fleet_generator.generate(this.star.level, null, ship_count);
-                    this.encounter.player.ai = new AI.BullyAI(this.encounter);
+                    this.encounter.player.ai = new BullyAI(this.encounter);
                 }
             }
 

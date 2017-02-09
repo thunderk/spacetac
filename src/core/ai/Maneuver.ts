@@ -1,4 +1,4 @@
-module TS.SpaceTac.AI {
+module TS.SpaceTac {
     // Ship maneuver for an artifical intelligence
     //   A maneuver is like a human player action, choosing an equipment and using it
     export class Maneuver {

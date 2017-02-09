@@ -19,8 +19,8 @@ module TS.SpaceTac {
             this.filters = [];
         }
 
-        postSerialize(fields: any): void {
-            fields.subscribers = [];
+        postUnserialize(): void {
+            this.subscribers = [];
         }
 
         // Clear the stored events

@@ -1,4 +1,4 @@
-module TS.SpaceTac.AI {
+module TS.SpaceTac {
     // Base class for all Artificial Intelligence interaction
     export class AbstractAI {
         // The fleet controlled by this AI
@@ -29,8 +29,8 @@ module TS.SpaceTac.AI {
             this.random = new RandomGenerator();
         }
 
-        postSerialize(fields: any): void {
-            fields.workqueue = [];
+        postUnserialize(): void {
+            this.workqueue = [];
         }
 
         // Play a ship turn

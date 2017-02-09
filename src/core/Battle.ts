@@ -52,7 +52,7 @@ module TS.SpaceTac {
 
             var result = new Battle(player1.fleet, player2.fleet);
             if (with_ai) {
-                player2.ai = new AI.BullyAI(player2.fleet);
+                player2.ai = new BullyAI(player2.fleet);
             }
             result.start();
             return result;

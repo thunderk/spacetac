@@ -8,7 +8,7 @@ module TS.SpaceTac {
         fleet: Fleet;
 
         // AI playing (null for human player)
-        ai: AI.AbstractAI;
+        ai: AbstractAI;
 
         // List of visited star systems
         visited: StarLocation[] = [];
