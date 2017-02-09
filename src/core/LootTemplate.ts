@@ -124,41 +124,50 @@ module TS.SpaceTac {
             }
         }
 
-        // Convenience function to add an attribute effect on equipment
-        addAttributeEffect(code: keyof ShipAttributes, min: number, max: number = null): void {
-            var template = new EffectTemplate(new AttributeEffect(code, 0));
-            template.addModifier("value", new IntegerRange(min, max));
-            this.permanent_effects.push(template);
+        /**
+         * Convenience function to add a modulated effect to the equipment
+         */
+        addEffect(effect: BaseEffect, min_value: number, max_value: number = null, target = true) {
+            var template = new EffectTemplate(effect);
+            template.addModifier("value", new IntegerRange(min_value, max_value));
+            if (target) {
+                this.target_effects.push(template);
+            } else {
+                this.permanent_effects.push(template);
+            }
         }
 
-        // Convenience function to add a permanent attribute limit effect on equipment
-        addAttributeLimitEffect(code: keyof ShipAttributes, min: number, max: number = null): void {
-            var template = new EffectTemplate(new AttributeLimitEffect(code, 0));
-            template.addModifier("value", new IntegerRange(min, max));
-            this.permanent_effects.push(template);
-        }
-
-        // Convenience function to add a value effect on equipment
-        addValueEffectOnTarget(code: keyof ShipValues, min: number, max: number = null): void {
-            var template = new EffectTemplate(new ValueEffect(code, 0));
-            template.addModifier("value", new IntegerRange(min, max));
-            this.target_effects.push(template);
-        }
-
-        // Convenience function to add a "damage on target" effect
-        addDamageOnTargetEffect(min: number, max: number = null): void {
-            var template = new EffectTemplate(new DamageEffect(0));
-            template.addModifier("value", new IntegerRange(min, max));
-            this.target_effects.push(template);
-        }
-
-        // Convenience function to add a sticking effect on target
-        addSticky(effect: BaseEffect, min_value: number, max_value: number = null,
-            min_duration: number = 1, max_duration: number = null, on_stick = false, on_turn_start = false): void {
+        /**
+         * Convenience function to add a modulated sticky effect to the equipment
+         */
+        addStickyEffect(effect: BaseEffect, min_value: number, max_value: number = null, min_duration: number = 1,
+            max_duration: number = null, on_stick = false, on_turn_start = false, target = true): void {
             var template = new EffectTemplate(new StickyEffect(effect, 0, on_stick, on_turn_start));
             template.addModifier("value", new IntegerRange(min_value, max_value));
             template.addModifier("duration", new IntegerRange(min_duration, max_duration));
-            this.target_effects.push(template);
+            if (target) {
+                this.target_effects.push(template);
+            } else {
+                this.permanent_effects.push(template);
+            }
+        }
+
+        /**
+         * Convenience function to add damage on target, immediate or over time
+         */
+        addDamage(min_value: number, max_value: number | null = null, min_duration: number | null = null, max_duration: number | null = null) {
+            if (min_duration != null) {
+                this.addStickyEffect(new DamageEffect(), min_value, max_value, min_duration, max_duration, true, false, true);
+            } else {
+                this.addEffect(new DamageEffect(), min_value, max_value, true);
+            }
+        }
+
+        /**
+         * Convenience function to add an attribute on the ship that equips the loot
+         */
+        increaseAttribute(attribute: keyof ShipAttributes, min_value: number, max_value: number | null = null) {
+            this.addEffect(new AttributeEffect(attribute), min_value, max_value, false);
         }
 
         /**

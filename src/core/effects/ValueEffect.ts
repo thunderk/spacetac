@@ -13,7 +13,7 @@ module TS.SpaceTac {
         // Value to add (or subtract if negative)
         value: number;
 
-        constructor(valuetype: keyof ShipValues, value: number) {
+        constructor(valuetype: keyof ShipValues, value: number = 0) {
             super("value");
 
             this.valuetype = valuetype;

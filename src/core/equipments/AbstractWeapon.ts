@@ -12,7 +12,7 @@ module TS.SpaceTac.Equipments {
             this.can_target_space = false;
 
             if (min_damage > 0 || (max_damage != null && max_damage > 0)) {
-                this.addDamageOnTargetEffect(min_damage, max_damage);
+                this.addDamage(min_damage, max_damage);
             }
         }
 

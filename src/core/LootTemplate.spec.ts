@@ -94,15 +94,30 @@ module TS.SpaceTac.Specs {
             expect(result.max).toBeCloseTo(0.5, 0.000001);
         });
 
-        it("adds damage on target effects", () => {
-            var template = new LootTemplate(SlotType.Weapon, "Bulletator");
-            template.addDamageOnTargetEffect(80, 120);
+        it("adds modulated effects", () => {
+            let template = new LootTemplate(SlotType.Weapon, "Bulletator");
+            template.addEffect(new DamageEffect(), 5, 10, true);
 
-            var result = template.generateFixed(0.5);
-            expect(result.target_effects.length).toBe(1);
-            var effect = <DamageEffect>result.target_effects[0];
-            expect(effect.code).toEqual("damage");
-            expect(effect.value).toEqual(100);
+            expect(template.generateFixed(0).target_effects).toEqual([new DamageEffect(5)]);
+            expect(template.generateFixed(1).target_effects).toEqual([new DamageEffect(10)]);
+
+            template.addEffect(new AttributeEffect("initiative"), 1, 2, false);
+
+            expect(template.generateFixed(0).permanent_effects).toEqual([new AttributeEffect("initiative", 1)]);
+            expect(template.generateFixed(1).permanent_effects).toEqual([new AttributeEffect("initiative", 2)]);
+        });
+
+        it("adds modulated sticky effects", () => {
+            let template = new LootTemplate(SlotType.Weapon, "Bulletator");
+            template.addStickyEffect(new DamageEffect(), 5, 10, 1, 2, true, false, true);
+
+            expect(template.generateFixed(0).target_effects).toEqual([new StickyEffect(new DamageEffect(5), 1, true, false)]);
+            expect(template.generateFixed(1).target_effects).toEqual([new StickyEffect(new DamageEffect(10), 2, true, false)]);
+
+            template.addStickyEffect(new AttributeLimitEffect("power_recovery"), 1, 2, 1, null, false, true, false);
+
+            expect(template.generateFixed(0).permanent_effects).toEqual([new StickyEffect(new AttributeLimitEffect("power_recovery", 1), 1, false, true)]);
+            expect(template.generateFixed(1).permanent_effects).toEqual([new StickyEffect(new AttributeLimitEffect("power_recovery", 2), 1, false, true)]);
         });
     });
 }

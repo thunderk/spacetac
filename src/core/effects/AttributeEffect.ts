@@ -13,7 +13,7 @@ module TS.SpaceTac {
         // Base value
         value: number;
 
-        constructor(attrcode: keyof ShipAttributes, value: number) {
+        constructor(attrcode: keyof ShipAttributes, value = 0) {
             super("attr");
 
             this.attrcode = attrcode;

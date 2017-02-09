@@ -10,7 +10,7 @@ module TS.SpaceTac.Equipments {
             this.distance = new Range(100, 100);
             this.ap_usage = new IntegerRange(1);
 
-            this.addAttributeEffect("initiative", 1);
+            this.increaseAttribute("initiative", 1);
         }
 
         protected getActionForEquipment(equipment: Equipment): BaseAction {

@@ -23,6 +23,12 @@ module TS.SpaceTac.Specs {
             expect(t1.getDistanceTo(t2)).toBeCloseTo(Math.sqrt(2), 0.00001);
         });
 
+        it("gets angle to another target", () => {
+            var t1 = Target.newFromLocation(2, 3);
+            var t2 = Target.newFromLocation(4, 5);
+            expect(t1.getAngleTo(t2)).toBeCloseTo(Math.PI / 4, 0.0000001);
+        });
+
         it("checks if a target is in range of another", () => {
             var t1 = Target.newFromLocation(5, 4);
             expect(t1.isInRange(7, 3, 2)).toBe(false);

@@ -157,17 +157,6 @@ module TS.SpaceTac {
             return result;
         }
 
-        // Find an unbound warp location to bind, null if none found
-        findUnboundWarp(): StarLocation {
-            var result: StarLocation = null;
-            this.locations.forEach((location: StarLocation) => {
-                if (location.type === StarLocationType.WARP && !location.jump_dest) {
-                    result = location;
-                }
-            });
-            return result;
-        }
-
         // Check if a location is far enough from all other ones
         private checkMinDistance(loc: StarLocation, others: StarLocation[]): boolean {
             return others.every((iloc: StarLocation): boolean => {

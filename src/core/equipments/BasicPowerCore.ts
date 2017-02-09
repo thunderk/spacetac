@@ -7,10 +7,10 @@ module TS.SpaceTac.Equipments {
 
             this.min_level = new IntegerRange(1, 1);
 
-            this.addAttributeEffect("initiative", 1);
-            this.addAttributeEffect("power_capacity", 8);
-            this.addAttributeEffect("power_initial", 5);
-            this.addAttributeEffect("power_recovery", 4);
+            this.increaseAttribute("initiative", 1);
+            this.increaseAttribute("power_capacity", 8);
+            this.increaseAttribute("power_initial", 5);
+            this.increaseAttribute("power_recovery", 4);
         }
     }
 }

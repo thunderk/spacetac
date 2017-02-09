@@ -15,7 +15,7 @@ module TS.SpaceTac.Equipments {
             this.setEffectRadius(40, 80);
             this.setPowerConsumption(4, 5);
 
-            this.addValueEffectOnTarget("hull", 10, 20);
+            this.addEffect(new ValueEffect("hull"), 10, 20);
         }
     }
 }

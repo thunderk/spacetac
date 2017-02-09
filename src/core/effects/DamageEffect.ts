@@ -10,7 +10,7 @@ module TS.SpaceTac {
         // Base damage points
         value: number;
 
-        constructor(value: number) {
+        constructor(value: number = 0) {
             super("damage");
 
             this.value = value;

@@ -13,5 +13,40 @@ module TS.SpaceTac {
             fleet.ships[2].level = 7;
             expect(fleet.getLevel()).toEqual(4);
         });
+
+        it("changes location, only using jumps to travel between systems", function () {
+            let fleet = new Fleet();
+            let system1 = new Star();
+            let system2 = new Star();
+            let jump1 = new StarLocation(system1, StarLocationType.WARP);
+            let jump2 = new StarLocation(system2, StarLocationType.WARP);
+            jump1.setJumpDestination(jump2);
+            jump2.setJumpDestination(jump1);
+            let other1 = new StarLocation(system1, StarLocationType.PLANET);
+
+            let result = fleet.setLocation(other1);
+            expect(result).toBe(true);
+            expect(fleet.location).toBe(other1);
+
+            result = fleet.setLocation(jump2);
+            expect(result).toBe(false);
+            expect(fleet.location).toBe(other1);
+
+            result = fleet.setLocation(jump1);
+            expect(result).toBe(true);
+            expect(fleet.location).toBe(jump1);
+
+            result = fleet.setLocation(jump2);
+            expect(result).toBe(true);
+            expect(fleet.location).toBe(jump2);
+
+            result = fleet.setLocation(other1);
+            expect(result).toBe(false);
+            expect(fleet.location).toBe(jump2);
+
+            result = fleet.setLocation(jump1);
+            expect(result).toBe(true);
+            expect(fleet.location).toBe(jump1);
+        });
     });
 }

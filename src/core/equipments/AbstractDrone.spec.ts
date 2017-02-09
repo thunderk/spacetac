@@ -17,7 +17,7 @@ module TS.SpaceTac.Equipments {
             template.setDeployDistance(100, 200);
             template.setEffectRadius(50, 100);
             template.setLifetime(2, 3);
-            template.addDamageOnTargetEffect(20, 30);
+            template.addDamage(20, 30);
             template.setPowerConsumption(3, 5);
 
             let equipment = template.generateFixed(0);

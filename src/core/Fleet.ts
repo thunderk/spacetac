@@ -1,5 +1,7 @@
 module TS.SpaceTac {
-    // A fleet of ships
+    /**
+     * A fleet of ships, all belonging to the same player
+     */
     export class Fleet {
         // Fleet owner
         player: Player;
@@ -21,8 +23,16 @@ module TS.SpaceTac {
             this.battle = null;
         }
 
-        // Set the current location of the fleet
-        setLocation(location: StarLocation): void {
+        /**
+         * Set the current location of the fleet
+         * 
+         * Returns true on success
+         */
+        setLocation(location: StarLocation, force = false): boolean {
+            if (!force && this.location && location.star != this.location.star && (this.location.type != StarLocationType.WARP || this.location.jump_dest != location)) {
+                return false;
+            }
+
             this.location = location;
             this.player.setVisited(this.location);
 
@@ -31,6 +41,8 @@ module TS.SpaceTac {
             if (battle) {
                 this.player.setBattle(battle);
             }
+
+            return true;
         }
 
         // Add a ship in this fleet
@@ -69,16 +81,6 @@ module TS.SpaceTac {
                 }
             });
             return (count > 0);
-        }
-
-        // Use the current warp location to make a jump to another star
-        jump(): boolean {
-            if (this.location && this.location.type === StarLocationType.WARP && this.location.jump_dest) {
-                this.player.fleet.setLocation(this.player.fleet.location.jump_dest);
-                return true;
-            } else {
-                return false;
-            }
         }
     }
 }
