@@ -35,8 +35,8 @@ module TS.SpaceTac {
             this.type = type;
             this.x = x;
             this.y = y;
-            this.universe_x = star.x + this.x;
-            this.universe_y = star.y + this.y;
+            this.universe_x = this.star.x + this.x;
+            this.universe_y = this.star.y + this.y;
             this.jump_dest = null;
 
             this.encounter = null;

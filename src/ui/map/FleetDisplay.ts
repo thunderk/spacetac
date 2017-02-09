@@ -39,7 +39,7 @@ module TS.SpaceTac.UI {
         /**
          * Animate to a given position in orbit of its current star location
          */
-        goToOrbitPoint(angle: number, speed = 1, then: Function | null = null, ease = false) {
+        goToOrbitPoint(angle: number, speed = 1, fullturns = 0, then: Function | null = null, ease = false) {
             this.tween.stop(false);
             this.rotation %= PI2;
 
@@ -47,9 +47,9 @@ module TS.SpaceTac.UI {
             while (target >= this.rotation) {
                 target -= PI2;
             }
-            target -= PI2;
+            target -= PI2 * fullturns;
             let distance = Math.abs(target - this.rotation) / PI2;
-            this.tween = this.game.tweens.create(this).to({ rotation: target }, 15000 * distance / speed, ease ? Phaser.Easing.Cubic.In : Phaser.Easing.Linear.None);
+            this.tween = this.game.tweens.create(this).to({ rotation: target }, 30000 * distance / speed, ease ? Phaser.Easing.Cubic.In : Phaser.Easing.Linear.None);
             if (then) {
                 this.tween.onComplete.addOnce(then);
             }
@@ -60,7 +60,7 @@ module TS.SpaceTac.UI {
          * Make the fleet loop in orbit
          */
         loopOrbit() {
-            this.goToOrbitPoint(this.rotation + PI2, 1, () => {
+            this.goToOrbitPoint(this.rotation + PI2, 1, 0, () => {
                 this.loopOrbit();
             });
         }
@@ -74,7 +74,7 @@ module TS.SpaceTac.UI {
                 let dy = location.universe_y - this.fleet.location.universe_y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 let angle = Math.atan2(dx, dy);
-                this.goToOrbitPoint(angle - Math.PI / 2, 20, () => {
+                this.goToOrbitPoint(angle - Math.PI / 2, 40, 1, () => {
                     let duration = 10000 * distance / speed;
                     if (on_leave) {
                         on_leave(duration);
