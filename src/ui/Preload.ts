@@ -90,16 +90,16 @@ module TS.SpaceTac.UI {
             this.game.state.start("mainmenu");
         }
 
-        private loadShip(name: string) {
+        loadShip(name: string) {
             this.loadImage("ship/" + name + "/sprite.png");
             this.loadImage("ship/" + name + "/portrait.png");
         }
 
-        private loadImage(path: string) {
+        loadImage(path: string) {
             this.load.image(path.replace(/\//g, "-").replace(".png", "").replace(".jpg", ""), "assets/images/" + path);
         }
 
-        private loadSound(path: string) {
+        loadSound(path: string) {
             var key = path.replace(/\//g, "-").replace(".wav", "").replace(".mp3", "");
             this.load.audio(key, "assets/sounds/" + path);
         }

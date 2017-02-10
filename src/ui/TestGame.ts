@@ -3,13 +3,16 @@
 
 module TS.SpaceTac.UI.Specs {
     // Test game wrapper (use instead of jasmine 'it')
-    export function ingame_it(desc: string, func: (game: Phaser.Game, state: Phaser.State) => void,
+    export function ingame_it(desc: string, func: (game: MainUI, state: Phaser.State) => void,
         state: Phaser.State = null, ...stateargs: any[]) {
         it(desc, (done: () => void) => {
             spyOn(console, "log").and.stub();
             spyOn(console, "warn").and.stub();
 
             var game = new MainUI(true);
+
+            spyOn(game.load, 'image').and.stub();
+            spyOn(game.load, 'audio').and.stub();
 
             if (!state) {
                 state = new Phaser.State();

@@ -2,18 +2,18 @@ module TS.SpaceTac.UI {
     // Utility functions for sounds
     export class Audio {
 
-        private game: Phaser.Game;
+        private game: MainUI;
 
         private music: Phaser.Sound;
 
-        constructor(game: Phaser.Game) {
+        constructor(game: MainUI) {
             this.game = game;
             this.music = null;
         }
 
         // Check if the sound system is up and running
         isActive(): boolean {
-            return this.game.sound.context ? true : false;
+            return !this.game.headless && this.game.sound.context;
         }
 
         // Play a ponctual sound

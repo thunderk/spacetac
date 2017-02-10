@@ -6,14 +6,23 @@
     <title>SpaceTac - Unit tests</title>
 
     <link rel="stylesheet" href="vendor/jasmine-core/lib/jasmine-core/jasmine.css">
+    <style>
+    canvas {
+        display: none;
+    }
+    </style>
 </head>
 
 <body>
-    <script src="vendor/jasmine-core/lib/jasmine-core/jasmine.js"></script>
-    <script src="vendor/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
-    <script src="vendor/jasmine-core/lib/jasmine-core/boot.js"></script>
-    <script src="vendor/phaser/build/phaser.min.js"></script>
-    <script src="build.js"></script>
+    <div style="display: none; visibility: hidden; height: 0; overflow: hidden;">
+<div id="-space-tac" class="game"></div>
+</div>
+
+<script src="vendor/jasmine-core/lib/jasmine-core/jasmine.js"></script>
+<script src="vendor/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
+<script src="vendor/jasmine-core/lib/jasmine-core/boot.js"></script>
+<script src="vendor/phaser/build/phaser.min.js"></script>
+<script src="build.js"></script>
 </body>
 
 </html>
