@@ -16,29 +16,37 @@ module TS.SpaceTac.UI {
         // Frame to indicate the owner of the ship, and if it is playing
         frame: Phaser.Image;
 
+        // Effects display
+        effects: Phaser.Group;
+
         // Create a ship sprite usable in the Arena
-        constructor(battleview: BattleView, ship: Ship) {
-            super(battleview.game);
+        constructor(parent: Arena, ship: Ship) {
+            super(parent.game);
+            let battleview = parent.battleview;
 
             this.ship = ship;
             this.enemy = this.ship.getPlayer() != battleview.player;
 
             // Add ship sprite
-            this.sprite = new Phaser.Button(battleview.game, 0, 0, "ship-" + ship.model + "-sprite");
+            this.sprite = new Phaser.Button(this.game, 0, 0, "ship-" + ship.model + "-sprite");
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.addChild(this.sprite);
 
             // Add playing effect
-            this.frame = new Phaser.Image(battleview.game, 0, 0, `battle-arena-ship-normal-${this.enemy ? "enemy" : "own"}`, 0);
+            this.frame = new Phaser.Image(this.game, 0, 0, `battle-arena-ship-normal-${this.enemy ? "enemy" : "own"}`, 0);
             this.frame.anchor.set(0.5, 0.5);
             this.addChild(this.frame);
 
             // Add hover effect
-            this.hover = new Phaser.Image(battleview.game, 0, 0, "battle-arena-ship-hover", 0);
+            this.hover = new Phaser.Image(this.game, 0, 0, "battle-arena-ship-hover", 0);
             this.hover.anchor.set(0.5, 0.5);
             this.hover.visible = false;
             this.addChild(this.hover);
+
+            // Effects display
+            this.effects = new Phaser.Group(this.game);
+            this.addChild(this.effects);
 
             // Handle input on ship sprite
             Tools.setHoverClick(this.sprite, () => battleview.cursorOnShip(ship), () => battleview.cursorOffShip(ship), () => battleview.cursorClicked());
@@ -75,33 +83,28 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Briefly display the damage done to the ship
-        displayDamage(hull: number, shield: number) {
-            if (hull > 0) {
-                var hull_text = new Phaser.Text(this.game, -20, -20, Math.round(hull).toString(),
-                    { font: "bold 16pt Arial", align: "center", fill: "#eb4e4a" });
-                hull_text.anchor.set(0.5, 0.5);
-                this.addChild(hull_text);
-                this.animateDamageText(hull_text);
-            }
-            if (shield > 0) {
-                var shield_text = new Phaser.Text(this.game, 20, -20, Math.round(shield).toString(),
-                    { font: "bold 16pt Arial", align: "center", fill: "#2ad8dc" });
-                shield_text.anchor.set(0.5, 0.5);
-                this.addChild(shield_text);
-                this.animateDamageText(shield_text);
-            }
+        /**
+         * Briefly show an effect on this ship
+         */
+        displayEffect(message: string, beneficial: boolean) {
+            let text = new Phaser.Text(this.game, 0, 20 * this.effects.children.length, message, { font: "14pt Arial", fill: beneficial ? "#afe9c6" : "#e9afaf" });
+            this.effects.addChild(text);
+
+            this.effects.position.set(-this.effects.width / 2, this.sprite.height * 0.7);
+
+            this.game.tweens.removeFrom(this.effects);
+            this.effects.alpha = 1;
+            let tween = this.game.tweens.create(this.effects).to({ alpha: 0 }, 500).delay(1000).start();
+            tween.onComplete.addOnce(() => this.effects.removeAll(true));
         }
 
-        private animateDamageText(text: Phaser.Text) {
-            text.alpha = 0;
-            var tween = this.game.tweens.create(text);
-            tween.to({ alpha: 1 }, 100, Phaser.Easing.Circular.In, false, 400);
-            tween.to({ y: -50, alpha: 0 }, 1000, Phaser.Easing.Circular.In, false, 1000);
-            tween.onComplete.addOnce(() => {
-                text.destroy();
-            });
-            tween.start();
+        /**
+         * Display interesting changes in ship values
+         */
+        displayValueChanged(event: ValueChangeEvent) {
+            let diff = event.diff;
+            let name = event.value.name;
+            this.displayEffect(`${name} ${diff < 0 ? "-" : "+"}${Math.abs(diff)}`, diff >= 0);
         }
     }
 }

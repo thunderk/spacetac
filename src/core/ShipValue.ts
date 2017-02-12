@@ -36,13 +36,13 @@ module TS.SpaceTac {
         /**
          * Set an absolute value
          * 
-         * Returns true if the value changed
+         * Returns the variation in value
          */
-        set(value: number): boolean {
+        set(value: number): number {
             var old_value = this.current;
             this.current = value;
             this.fix();
-            return this.current !== old_value;
+            return this.current - old_value;
         }
 
         /** 
@@ -50,11 +50,11 @@ module TS.SpaceTac {
          * 
          * Returns true if the value changed
          */
-        add(value: number): boolean {
+        add(value: number): number {
             var old_value = this.current;
             this.current += value;
             this.fix();
-            return this.current !== old_value;
+            return this.current - old_value;
         }
 
         /**

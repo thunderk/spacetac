@@ -72,10 +72,6 @@ module TS.SpaceTac.UI {
 
         // Damage to ship
         private processDamageEvent(event: DamageEvent): void {
-            var sprite = this.view.arena.findShipSprite(event.ship);
-            if (sprite) {
-                sprite.displayDamage(event.hull, event.shield);
-            }
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {
                 item.setDamageHit();
@@ -92,10 +88,14 @@ module TS.SpaceTac.UI {
 
         // Ship value changed
         private processValueChangedEvent(event: ValueChangeEvent): void {
+            var sprite = this.view.arena.findShipSprite(event.ship);
+            sprite.displayValueChanged(event);
+
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {
                 item.updateAttributes();
             }
+
             // TODO Update tooltip
         }
 

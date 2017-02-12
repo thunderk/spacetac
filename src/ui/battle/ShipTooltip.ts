@@ -136,7 +136,7 @@ module TS.SpaceTac.UI {
             }
 
             let text = `${effect.getDescription()} (${effect.duration} turns)`;
-            let color = effect.isBeneficial() ? "afe9c6" : "#e9afaf";
+            let color = effect.isBeneficial() ? "#afe9c6" : "#e9afaf";
             let effect_text = new Phaser.Text(this.game, 60, effect_group.height / 2, text, { font: "16pt Arial", fill: color });
             effect_text.anchor.set(0, 0.5);
             effect_group.addChild(effect_text);

@@ -107,8 +107,8 @@ module TS.SpaceTac.Specs {
             expect(ship.values.hull.get()).toEqual(40);
             expect(ship.values.shield.get()).toEqual(80);
             expect(battle.log.events.length).toBe(3);
-            expect(battle.log.events[0]).toEqual(new ValueChangeEvent(ship, ship.values.shield));
-            expect(battle.log.events[1]).toEqual(new ValueChangeEvent(ship, ship.values.hull));
+            expect(battle.log.events[0]).toEqual(new ValueChangeEvent(ship, ship.values.shield, -20));
+            expect(battle.log.events[1]).toEqual(new ValueChangeEvent(ship, ship.values.hull, -10));
             expect(battle.log.events[2]).toEqual(new DamageEvent(ship, 10, 20));
 
             battle.log.clear();

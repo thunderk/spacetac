@@ -2,6 +2,9 @@ module TS.SpaceTac.UI {
     // Graphical representation of a battle
     //  This is the area in the BattleView that will display ships with their real positions
     export class Arena extends Phaser.Group {
+        // Link to battleview
+        battleview: BattleView;
+
         // Arena background
         background: Phaser.Button;
 
@@ -10,9 +13,6 @@ module TS.SpaceTac.UI {
 
         // Input callback to receive mouse move events
         private input_callback: any;
-
-        // Link to battleview
-        private battleview: BattleView;
 
         // List of ship sprites
         private ship_sprites: ArenaShip[] = [];
@@ -75,8 +75,8 @@ module TS.SpaceTac.UI {
         // Initialize state (create sprites)
         init(): void {
             // Add ship sprites
-            this.battleview.battle.play_order.forEach((ship: Ship) => {
-                var sprite = new ArenaShip(this.battleview, ship);
+            this.battleview.battle.play_order.forEach(ship => {
+                var sprite = new ArenaShip(this, ship);
                 this.addChild(sprite);
                 this.ship_sprites.push(sprite);
             });
@@ -92,6 +92,7 @@ module TS.SpaceTac.UI {
             var sprite = this.findShipSprite(ship);
             if (sprite) {
                 sprite.alpha = 0.5;
+                sprite.displayEffect("Emergency Stasis", false);
             }
         }
 

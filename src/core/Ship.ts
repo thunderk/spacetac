@@ -195,20 +195,20 @@ module TS.SpaceTac {
          * Returns true if the value changed.
          */
         setValue(name: keyof ShipValues, value: number, offset = false, log = true): boolean {
-            let changed: boolean;
+            let diff = 0;
             let val = this.values[name];
 
             if (offset) {
-                changed = val.add(value);
+                diff = val.add(value);
             } else {
-                changed = val.set(value);
+                diff = val.set(value);
             }
 
-            if (changed && log) {
-                this.addBattleEvent(new ValueChangeEvent(this, val));
+            if (log && diff != 0) {
+                this.addBattleEvent(new ValueChangeEvent(this, val, diff));
             }
 
-            return changed;
+            return diff != 0;
         }
 
         /**
@@ -226,10 +226,8 @@ module TS.SpaceTac {
          * Returns true if the value changed.
          */
         setAttribute(name: keyof ShipAttributes, value: number, log = true): boolean {
-            let changed: boolean;
             let attr = this.attributes[name];
-
-            changed = attr.set(value);
+            let diff = attr.set(value);
 
             // TODO more generic
             if (name == "power_capacity") {
@@ -240,11 +238,11 @@ module TS.SpaceTac {
                 this.values.hull.setMaximal(attr.get());
             }
 
-            if (changed && log) {
-                this.addBattleEvent(new ValueChangeEvent(this, attr));
+            if (log && diff != 0) {
+                this.addBattleEvent(new ValueChangeEvent(this, attr, diff));
             }
 
-            return changed;
+            return diff != 0;
         }
 
         // Initialize the action points counter

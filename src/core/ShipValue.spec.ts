@@ -39,34 +39,34 @@ module TS.SpaceTac {
             expect(attr.get()).toBe(50);
         });
 
-        it("tells if value changed", function () {
-            var result: boolean;
+        it("tells the value variation", function () {
+            var result: number;
             var attr = new ShipValue("test", 50, 100);
             expect(attr.get()).toBe(50);
 
             result = attr.set(51);
-            expect(result).toBe(true);
+            expect(result).toBe(1);
 
             result = attr.set(51);
-            expect(result).toBe(false);
+            expect(result).toBe(0);
 
             result = attr.add(1);
-            expect(result).toBe(true);
+            expect(result).toBe(1);
 
             result = attr.add(0);
-            expect(result).toBe(false);
+            expect(result).toBe(0);
 
             result = attr.add(1000);
-            expect(result).toBe(true);
+            expect(result).toBe(48);
 
             result = attr.add(2000);
-            expect(result).toBe(false);
+            expect(result).toBe(0);
 
             result = attr.set(-500);
-            expect(result).toBe(true);
+            expect(result).toBe(-100);
 
             result = attr.add(-600);
-            expect(result).toBe(false);
+            expect(result).toBe(0);
         });
     });
 }

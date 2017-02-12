@@ -235,17 +235,13 @@ module TS.SpaceTac.Specs {
             expect(battle.log.events.length).toBe(7);
 
             expect(battle.log.events[0]).toEqual(new MoveEvent(ship1, 2, 0));
-            expect(battle.log.events[1]).toEqual(new ValueChangeEvent(ship1,
-                new ShipValue("power", 2, 10)));
+            expect(battle.log.events[1]).toEqual(new ValueChangeEvent(ship1, new ShipValue("power", 2, 10), -4));
 
             expect(battle.log.events[2]).toEqual(new FireEvent(ship1, weapon, Target.newFromShip(ship2)));
-            expect(battle.log.events[3]).toEqual(new ValueChangeEvent(ship2,
-                new ShipValue("shield", 0)));
-            expect(battle.log.events[4]).toEqual(new ValueChangeEvent(ship2,
-                new ShipValue("hull", 5)));
+            expect(battle.log.events[3]).toEqual(new ValueChangeEvent(ship2, new ShipValue("shield", 0), -10));
+            expect(battle.log.events[4]).toEqual(new ValueChangeEvent(ship2, new ShipValue("hull", 5), -10));
             expect(battle.log.events[5]).toEqual(new DamageEvent(ship2, 10, 10));
-            expect(battle.log.events[6]).toEqual(new ValueChangeEvent(ship1,
-                new ShipValue("power", 1, 10)));
+            expect(battle.log.events[6]).toEqual(new ValueChangeEvent(ship1, new ShipValue("power", 1, 10), -1));
         });
     });
 }

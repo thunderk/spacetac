@@ -27,11 +27,16 @@ After making changes to sources, you need to recompile:
 
 In combat, a ship's vitals are represented by the HSP system (Hull-Shield-Power):
 
-* **Hull** - Amout of damage that a ship can receive before having to shut down all its systems
+* **Hull** - Amount of damage that a ship can sustain before having to engage emergency stasis
 * **Shield** - Amount of damage that the shield equipments may absorb to protect the Hull
 * **Power** - Available action points (some actions require more power than others)
 
 These values will be changed by various effects (usage of equipments, sustained damage...).
+
+Once the Hull of a ship is fully damaged (Hull=0), the ship engages its ESP, or Emergency
+Statis Protocol. This protocol activates a statis field that protects the ship for the
+remaining of the battle, preventing any further damage, but rendering it fully inoperent.
+For battle purpose, the ship is to be considered "dead".
 
 ### Attributes
 
@@ -67,11 +72,11 @@ Each equipment has minimal skill requirements to be used. For example, a weapon 
 and "energy >= 3" to be equipped. A ship that does not meet these requirements will not be able to use 
 the equipment.
 
-As for attributes, skill values are controlled by equipments, effects and level up.
+Like for attributes, skill values are controlled by equipments, effects and level up.
 
-If an equipped item has a requirement of "time >= 2", that the ship has time skill of exactly 2, and that a
-temporary effect of "time -1" is active, the requirement is no longer fulfilled and the equipped item
-is then temporarily disabled (no more effects and cannot be used), until the "time -1" effect is lifted.
+If an equipped item has a requirement of "time skill >= 2", that the ship has "time skill" of exactly 2, and 
+that a temporary effect of "time skill -1" is active, the requirement is no longer fulfilled and the equipped 
+item is then temporarily disabled (no more effects and cannot be used), until the "time skill -1" effect is lifted.
 
 ## Drones
 
