@@ -6,11 +6,9 @@
 * Organize arena objects and information in layers
 * Allow to cancel last moves
 * Add more visual effects to weapons, hits and explosions
-* Add keyboard shortcuts for actions
 * Effect should be random in a range (eg. "damage target 50-75")
 * Add an overload/cooling system
 * Add auto-move to attack
-* Escape key should cancel selected action
 * Merge identical sticky effects
 * Handle effects overflowing ship tooltip when too numerous
 * Proper arena scaling (not graphical, only space coordinates)

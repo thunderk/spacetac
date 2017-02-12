@@ -43,7 +43,7 @@ module TS.SpaceTac.UI {
             this.ship = ship;
             this.action = action;
 
-            bar.addChild(this);
+            bar.group.addChild(this);
 
             // Active layer
             this.active = false;
@@ -85,6 +85,9 @@ module TS.SpaceTac.UI {
 
         // Process a click event on the action icon
         processClick(): void {
+            if (!this.bar.interactive) {
+                return;
+            }
             if (!this.action.canBeUsed(this.battleview.battle, this.ship)) {
                 return;
             }

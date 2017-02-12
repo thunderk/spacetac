@@ -1,14 +1,17 @@
 module TS.SpaceTac.UI {
     // Tooltip to display action information
     export class ActionTooltip extends Phaser.Sprite {
+        bar: ActionBar;
         icon: Phaser.Image | null;
         main_title: Phaser.Text;
         sub_title: Phaser.Text;
         cost: Phaser.Text;
         description: Phaser.Text;
+        shortcut: Phaser.Text;
 
         constructor(parent: ActionBar) {
             super(parent.game, 0, 0, "battle-action-tooltip");
+            this.bar = parent;
             this.visible = false;
 
             this.icon = null;
@@ -29,6 +32,10 @@ module TS.SpaceTac.UI {
             this.description.wordWrap = true;
             this.description.wordWrapWidth = 476;
             this.addChild(this.description);
+
+            this.shortcut = new Phaser.Text(this.game, this.width - 5, this.height - 5, "", { font: "12pt Arial", fill: "#aaaaaa" });
+            this.shortcut.anchor.set(1, 1);
+            this.addChild(this.shortcut);
         }
 
         // Set current action to display, null to hide
@@ -51,6 +58,17 @@ module TS.SpaceTac.UI {
                 }
                 this.cost.setText(cost);
                 this.description.setText(action.action.equipment ? action.action.equipment.getActionDescription() : "");
+
+                let position = this.bar.actions.indexOf(action);
+                if (action.action instanceof EndTurnAction) {
+                    this.shortcut.setText("[ space ]");
+                } else if (position == 9) {
+                    this.shortcut.setText("[ 0 ]");
+                } else if (position >= 0 && position < 9) {
+                    this.shortcut.setText(`[ ${position + 1} ]`);
+                } else {
+                    this.shortcut.setText("");
+                }
 
                 Animation.fadeIn(this.game, this, 200, 0.9);
             } else {

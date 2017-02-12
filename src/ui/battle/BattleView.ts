@@ -40,9 +40,6 @@ module TS.SpaceTac.UI {
         // True if player interaction is allowed
         interacting: boolean;
 
-        // Indicator of interaction disabled
-        icon_waiting: Phaser.Image;
-
         // Init the view, binding it to a specific battle
         init(player: Player, battle: Battle) {
             super.init();
@@ -79,12 +76,6 @@ module TS.SpaceTac.UI {
             this.ship_list = new ShipList(this);
             this.ship_tooltip = new ShipTooltip(this);
 
-            this.icon_waiting = new Phaser.Image(this.game, this.getWidth() / 2, 50, "battle-waiting", 0);
-            this.icon_waiting.anchor.set(0.5, 0.5);
-            this.icon_waiting.scale.set(0.5, 0.5);
-            game.add.existing(this.icon_waiting);
-            game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
-
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
 
@@ -95,7 +86,6 @@ module TS.SpaceTac.UI {
             this.gameui.audio.startMusic("full-on");
 
             // Key mapping
-            this.inputs.bind(Phaser.Keyboard.SPACEBAR, "End turn", this.onSpaceKeyPressed);
             this.inputs.bindCheat(Phaser.Keyboard.W, "Win current battle", () => {
                 this.battle.endBattle(this.player.fleet);
             });
@@ -136,13 +126,6 @@ module TS.SpaceTac.UI {
                 text.destroy();
             });
             text_anim.start();
-        }
-
-        // Listener for space key events
-        onSpaceKeyPressed(): void {
-            if (this.battle.playing_ship && this.battle.playing_ship.getPlayer() === this.player) {
-                this.battle.advanceToNextShip();
-            }
         }
 
         // Method called when cursor starts hovering over a ship (or its icon)
@@ -192,9 +175,8 @@ module TS.SpaceTac.UI {
         //  Disable interaction when it is the AI turn, or when the current ship can't play
         setInteractionEnabled(enabled: boolean): void {
             this.exitTargettingMode();
+            this.action_bar.setInteractive(enabled);
             this.interacting = enabled;
-
-            Animation.setVisibility(this.game, this.icon_waiting, !this.interacting, 100);
         }
 
         // Enter targetting mode

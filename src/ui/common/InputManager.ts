@@ -20,6 +20,8 @@ module TS.SpaceTac.UI {
             this.cheats_enabled = true;
             this.cheat = false;
 
+            this.input.reset(true);
+
             // Default mappings
             this.bind(Phaser.Keyboard.S, "Quick save", () => {
                 this.game.saveGame();
@@ -34,6 +36,7 @@ module TS.SpaceTac.UI {
             this.bind(Phaser.Keyboard.NUMPAD_ADD, null, () => {
                 if (this.cheats_enabled) {
                     this.cheat = !this.cheat;
+                    this.game.displayMessage(this.cheat ? "Cheats enabled" : "Cheats disabled");
                 }
             });
         }

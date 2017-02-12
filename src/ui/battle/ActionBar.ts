@@ -5,6 +5,7 @@ module TS.SpaceTac.UI {
         battleview: BattleView;
 
         // List of action icons
+        group: Phaser.Group;
         actions: ActionIcon[];
 
         // Progress bar displaying action points
@@ -14,8 +15,14 @@ module TS.SpaceTac.UI {
         // Tooltip to display hovered action info
         tooltip: ActionTooltip;
 
+        // Indicator of interaction disabled
+        icon_waiting: Phaser.Image;
+
         // Current ship, whose actions are displayed
         ship: Ship;
+
+        // Interactivity
+        interactive = false;
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
@@ -38,9 +45,56 @@ module TS.SpaceTac.UI {
             this.actionpointstemp.setBarImage("battle-actionpointsfull");
             this.addChild(this.actionpointstemp);
 
+            // Group for actions
+            this.group = new Phaser.Group(this.game);
+            this.addChild(this.group);
+
+            // Waiting icon
+            this.icon_waiting = new Phaser.Image(this.game, this.width / 2, 50, "battle-waiting", 0);
+            this.icon_waiting.anchor.set(0.5, 0.5);
+            this.icon_waiting.scale.set(0.5, 0.5);
+            this.game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
+            this.addChild(this.icon_waiting);
+
             // Tooltip
             this.tooltip = new ActionTooltip(this);
             this.addChild(this.tooltip);
+
+            // Key bindings
+            battleview.inputs.bind(Phaser.Keyboard.ESC, "Cancel action", () => this.actionEnded());
+            battleview.inputs.bind(Phaser.Keyboard.SPACEBAR, "End turn", () => this.keyActionPressed(-1));
+            battleview.inputs.bind(Phaser.Keyboard.ONE, "Action 1", () => this.keyActionPressed(0));
+            battleview.inputs.bind(Phaser.Keyboard.TWO, "Action 2", () => this.keyActionPressed(1));
+            battleview.inputs.bind(Phaser.Keyboard.THREE, "Action 3", () => this.keyActionPressed(2));
+            battleview.inputs.bind(Phaser.Keyboard.FOUR, "Action 4", () => this.keyActionPressed(3));
+            battleview.inputs.bind(Phaser.Keyboard.FIVE, "Action 5", () => this.keyActionPressed(4));
+            battleview.inputs.bind(Phaser.Keyboard.SIX, "Action 6", () => this.keyActionPressed(5));
+            battleview.inputs.bind(Phaser.Keyboard.SEVEN, "Action 7", () => this.keyActionPressed(6));
+            battleview.inputs.bind(Phaser.Keyboard.EIGHT, "Action 8", () => this.keyActionPressed(7));
+            battleview.inputs.bind(Phaser.Keyboard.NINE, "Action 9", () => this.keyActionPressed(8));
+            battleview.inputs.bind(Phaser.Keyboard.ZERO, "Action 10", () => this.keyActionPressed(9));
+        }
+
+        /**
+         * Set the interactivity state
+         */
+        setInteractive(interactive: boolean) {
+            this.interactive = interactive;
+
+            Animation.setVisibility(this.game, this.icon_waiting, !this.interactive, 100);
+        }
+
+        /**
+         * Called when an action shortcut key is pressed
+         */
+        keyActionPressed(position: number) {
+            if (this.interactive) {
+                if (position < 0) {
+                    this.actions[this.actions.length - 1].processClick();
+                } else if (position < this.actions.length) {
+                    this.actions[position].processClick();
+                }
+            }
         }
 
         // Clear the action icons
