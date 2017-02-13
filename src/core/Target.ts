@@ -23,10 +23,10 @@ module TS.SpaceTac {
         y: number;
 
         // If the target is a ship, this attribute will be set
-        ship: Ship;
+        ship: Ship | null;
 
         // Standard constructor
-        constructor(x: number, y: number, ship: Ship) {
+        constructor(x: number, y: number, ship: Ship | null = null) {
             this.x = x;
             this.y = y;
             this.ship = ship;

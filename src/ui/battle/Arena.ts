@@ -25,6 +25,9 @@ module TS.SpaceTac.UI {
         // Currently playing ship
         private playing: ArenaShip;
 
+        // Layer for particles
+        layer_weapon_effects: Phaser.Group;
+
         // Create a graphical arena for ship sprites to fight in a 2D space
         constructor(battleview: BattleView) {
             super(battleview.game);
@@ -80,6 +83,9 @@ module TS.SpaceTac.UI {
                 this.addChild(sprite);
                 this.ship_sprites.push(sprite);
             });
+
+            this.layer_weapon_effects = new Phaser.Group(this.game);
+            this.addChild(this.layer_weapon_effects);
         }
 
         // Get the current MainUI instance

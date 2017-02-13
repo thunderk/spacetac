@@ -54,7 +54,10 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/actions/fire-powerdepleter.png");
             this.loadImage("battle/actions/fire-submunitionmissile.png");
             this.loadImage("battle/actions/deploy-repairdrone.png");
-            this.loadImage("battle/weapon/bullet.png");
+            this.loadImage("battle/weapon/default.png");
+            this.loadImage("battle/weapon/bullets.png");
+            this.loadImage("battle/weapon/hot.png");
+            this.loadImage("battle/weapon/shield-impact.png");
             this.loadImage("battle/attributes/power.png");
             this.loadImage("battle/attributes/powercapacity.png");
             this.loadImage("battle/attributes/effect-increase.png");

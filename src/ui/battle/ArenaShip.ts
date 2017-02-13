@@ -68,18 +68,24 @@ module TS.SpaceTac.UI {
         }
 
         // Move the sprite to a location
-        moveTo(x: number, y: number, facing_angle: number, animate: boolean = true) {
+        moveTo(x: number, y: number, facing_angle: number, animate: boolean = true, on_complete: Function | null = null) {
             if (animate) {
                 var tween_group = this.game.tweens.create(this);
                 var tween_sprite = this.game.tweens.create(this.sprite);
                 tween_group.to({ x: x, y: y });
                 tween_group.start();
                 Tools.rotationTween(tween_sprite, facing_angle);
+                if (on_complete) {
+                    tween_sprite.onComplete.addOnce(on_complete);
+                }
                 tween_sprite.start();
             } else {
                 this.x = x;
                 this.y = y;
                 this.sprite.rotation = facing_angle;
+                if (on_complete) {
+                    on_complete();
+                }
             }
         }
 
@@ -90,7 +96,7 @@ module TS.SpaceTac.UI {
             let text = new Phaser.Text(this.game, 0, 20 * this.effects.children.length, message, { font: "14pt Arial", fill: beneficial ? "#afe9c6" : "#e9afaf" });
             this.effects.addChild(text);
 
-            this.effects.position.set(-this.effects.width / 2, this.sprite.height * 0.7);
+            this.effects.position.set(-this.effects.width / 2, this.sprite.height * 0.8);
 
             this.game.tweens.removeFrom(this.effects);
             this.effects.alpha = 1;
