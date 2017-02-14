@@ -355,20 +355,35 @@ module TS.SpaceTac {
             return distance <= radius;
         }
 
+        /**
+         * Rotate the ship in place to face a direction
+         */
+        rotate(angle: number, log = true) {
+            if (angle != this.arena_angle) {
+                this.setArenaFacingAngle(angle);
+
+                if (log) {
+                    this.addBattleEvent(new MoveEvent(this, this.arena_x, this.arena_y));
+                }
+            }
+        }
+
         // Move toward a location
         //  This does not check or consume action points
         moveTo(x: number, y: number, log: boolean = true): void {
-            var angle = Math.atan2(y - this.arena_y, x - this.arena_x);
-            this.setArenaFacingAngle(angle);
+            if (x != this.arena_x || y != this.arena_y) {
+                var angle = Math.atan2(y - this.arena_y, x - this.arena_x);
+                this.setArenaFacingAngle(angle);
 
-            this.setArenaPosition(x, y);
+                this.setArenaPosition(x, y);
 
-            if (log) {
-                this.addBattleEvent(new MoveEvent(this, x, y));
+                if (log) {
+                    this.addBattleEvent(new MoveEvent(this, x, y));
+                }
+
+                // Broadcast to drones
+                this.forEachDrone(drone => drone.onShipMove(this));
             }
-
-            // Broadcast to drones
-            this.forEachDrone(drone => drone.onShipMove(this));
         }
 
         // Set the death status on this ship

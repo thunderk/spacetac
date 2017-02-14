@@ -39,6 +39,9 @@ module TS.SpaceTac {
             var affected: Ship[] = [];
             var blast = this.getBlastRadius(ship);
 
+            // Face the target
+            ship.rotate(Target.newFromShip(ship).getAngleTo(target));
+
             // Collect affected ships
             if (blast) {
                 affected = affected.concat(battle.collectShipsInCircle(target, blast));

@@ -10,6 +10,9 @@ module TS.SpaceTac {
         // Target of the event
         target: Target;
 
+        // Boolean at true if the event is used to set initial battle conditions
+        initial = false;
+
         constructor(code: string, ship: Ship = null, target: Target = null) {
             this.code = code;
             this.ship = ship;

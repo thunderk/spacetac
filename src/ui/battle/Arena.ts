@@ -98,7 +98,7 @@ module TS.SpaceTac.UI {
             var sprite = this.findShipSprite(ship);
             if (sprite) {
                 sprite.alpha = 0.5;
-                sprite.displayEffect("Emergency Stasis", false);
+                sprite.displayEffect("stasis", false);
             }
         }
 
@@ -139,8 +139,12 @@ module TS.SpaceTac.UI {
             this.battleview.gameui.audio.playOnce("battle-ship-change");
         }
 
-        // Spawn a new drone
-        addDrone(drone: Drone): void {
+        /**
+         * Spawn a new drone
+         * 
+         * Return the duration of deploy animation
+         */
+        addDrone(drone: Drone): number {
             if (!any(this.drone_sprites, sprite => sprite.drone == drone)) {
                 let sprite = new ArenaDrone(this.battleview, drone);
                 this.addChild(sprite);
@@ -148,8 +152,12 @@ module TS.SpaceTac.UI {
 
                 sprite.position.set(drone.owner.arena_x, drone.owner.arena_y);
                 this.game.tweens.create(sprite.position).to({ x: drone.x, y: drone.y }, 1800, Phaser.Easing.Sinusoidal.InOut, true, 200);
+                this.game.tweens.create(sprite.radius.scale).from({ x: 0.01, y: 0.01 }, 1800, Phaser.Easing.Linear.None, true, 200);
+
+                return 2000;
             } else {
                 console.error("Drone added twice to arena", drone);
+                return 0;
             }
         }
 

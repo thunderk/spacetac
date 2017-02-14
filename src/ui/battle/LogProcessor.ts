@@ -14,20 +14,51 @@ module TS.SpaceTac.UI {
         // Subscription identifier
         private subscription: any;
 
-        // Create a log processor, linked to a battleview
+        // Delay before processing next events
+        private delayed = false;
+
+        // Processing queue, when delay is active
+        private queue: BaseLogEvent[] = [];
+
         constructor(view: BattleView) {
             this.view = view;
             this.battle = view.battle;
             this.log = view.battle.log;
 
-            this.subscription = this.log.subscribe((event: BaseLogEvent) => {
-                this.processBattleEvent(event);
-            });
+            this.subscription = this.log.subscribe(event => this.processBattleEvent(event));
             this.battle.injectInitialEvents();
         }
 
-        // Process a BaseLogEvent
+        /**
+         * Introduce a delay in event processing
+         */
+        delayNextEvents(duration: number) {
+            if (duration > 0 && !this.view.gameui.headless) {
+                this.delayed = true;
+                setTimeout(() => this.processQueued(), duration);
+            }
+        }
+
+        /**
+         * Process the events queued due to a delay
+         */
+        processQueued() {
+            let events = acopy(this.queue);
+            this.queue = [];
+            this.delayed = false;
+
+            events.forEach(event => this.processBattleEvent(event));
+        }
+
+        /**
+         * Process a single event
+         */
         processBattleEvent(event: BaseLogEvent) {
+            if (this.delayed) {
+                this.queue.push(event);
+                return;
+            }
+
             console.log("Battle event", event);
 
             if (event instanceof ShipChangeEvent) {
@@ -82,7 +113,8 @@ module TS.SpaceTac.UI {
         private processMoveEvent(event: MoveEvent): void {
             var sprite = this.view.arena.findShipSprite(event.ship);
             if (sprite) {
-                sprite.moveTo(event.target.x, event.target.y, event.facing_angle, true);
+                let duration = sprite.moveTo(event.target.x, event.target.y, event.facing_angle, !event.initial);
+                this.delayNextEvents(duration);
             }
         }
 
@@ -113,13 +145,10 @@ module TS.SpaceTac.UI {
             var source = Target.newFromShip(event.ship);
             var destination = event.target;
 
-            // Face the target
-            var attacker = this.view.arena.findShipSprite(event.ship);
-            var angle = source.getAngleTo(destination);
-            attacker.moveTo(source.x, source.y, angle, true);
-
             var effect = new WeaponEffect(this.view.arena, source, destination, event.weapon.code);
-            effect.start();
+            let duration = effect.start();
+
+            this.delayNextEvents(duration);
         }
 
         // Battle ended (victory or defeat)
@@ -146,7 +175,8 @@ module TS.SpaceTac.UI {
 
         // New drone deployed
         private processDroneDeployedEvent(event: DroneDeployedEvent): void {
-            this.view.arena.addDrone(event.drone);
+            let duration = this.view.arena.addDrone(event.drone);
+            this.delayNextEvents(duration);
         }
 
         // Drone destroyed

@@ -43,10 +43,16 @@ module TS.SpaceTac.UI {
             this.effect = this.getEffectForWeapon(weapon);
         }
 
-        // Start the visual effect
-        start(): void {
+        /**
+         * Start the visual effect
+         * 
+         * Returns the duration of the effect.
+         */
+        start(): number {
             if (this.effect) {
-                this.effect.call(this);
+                return this.effect.call(this);
+            } else {
+                return 0;
             }
         }
 
@@ -87,14 +93,33 @@ module TS.SpaceTac.UI {
             emitter.setRotation(0, 0);
             emitter.setXSpeed(-Math.cos(angle) * 20, -Math.cos(angle) * 80);
             emitter.setYSpeed(-Math.sin(angle) * 20, -Math.sin(angle) * 80);
-            emitter.start(false, 200, 30, duration / 30);
+            emitter.start(false, 200, 30, duration * 0.8 / 30);
+            this.layer.addChild(emitter);
+        }
+
+        /**
+         * Add a hull impact effect on a ship
+         */
+        hullImpactEffect(from: Point, ship: Point, delay: number, duration: number) {
+            let angle = Math.atan2(from.y - ship.y, from.x - ship.x);
+
+            let emitter = this.ui.add.emitter(ship.x + Math.cos(angle) * 10, ship.y + Math.sin(angle) * 10, 30);
+            emitter.minParticleScale = 1.0;
+            emitter.maxParticleScale = 2.0;
+            emitter.gravity = 0;
+            emitter.makeParticles("battle-weapon-hot");
+            emitter.setSize(15, 15);
+            emitter.setRotation(0, 0);
+            emitter.setXSpeed(-Math.cos(angle) * 120, -Math.cos(angle) * 260);
+            emitter.setYSpeed(-Math.sin(angle) * 120, -Math.sin(angle) * 260);
+            emitter.start(false, 200, 30, duration * 0.8 / 30);
             this.layer.addChild(emitter);
         }
 
         /**
          * Default firing effect
          */
-        defaultEffect(): void {
+        defaultEffect(): number {
             var missile = new Phaser.Sprite(this.ui, this.source.x, this.source.y, "battle-weapon-default");
             missile.anchor.set(0.5, 0.5);
             missile.rotation = this.source.getAngleTo(this.destination);
@@ -106,12 +131,14 @@ module TS.SpaceTac.UI {
                 missile.destroy();
             });
             tween.start();
+
+            return 1000;
         }
 
         /**
          * Submachine gun effect (quick chain of small bullets)
          */
-        gunEffect(): void {
+        gunEffect(): number {
             this.ui.audio.playOnce("battle-weapon-bullets");
 
             let has_shield = this.destination.ship && this.destination.ship.getValue("shield") > 0;
@@ -129,12 +156,20 @@ module TS.SpaceTac.UI {
             emitter.setXSpeed(Math.cos(angle) * speed, Math.cos(angle) * speed);
             emitter.setYSpeed(Math.sin(angle) * speed, Math.sin(angle) * speed);
             emitter.makeParticles(["battle-weapon-bullets"]);
-            emitter.start(false, 1000 * (distance - 50 - (has_shield ? 80 : 40)) / speed, 50, 10);
+            let guard = 50 + (has_shield ? 80 : 40);
+            if (guard + 1 > distance) {
+                guard = distance - 1;
+            }
+            emitter.start(false, 1000 * (distance - guard) / speed, 50, 10);
             this.layer.addChild(emitter);
 
             if (has_shield) {
                 this.shieldImpactEffect(this.source, this.destination, 100, 800);
+            } else {
+                this.hullImpactEffect(this.source, this.destination, 100, 800);
             }
+
+            return 1000;
         }
     }
 }

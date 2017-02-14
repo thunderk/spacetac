@@ -234,18 +234,24 @@ module TS.SpaceTac {
             var log = this.log;
 
             // Simulate initial ship placement
-            this.play_order.forEach((ship: Ship) => {
-                log.add(new MoveEvent(ship, ship.arena_x, ship.arena_y));
+            this.play_order.forEach(ship => {
+                let event = new MoveEvent(ship, ship.arena_x, ship.arena_y);
+                event.initial = true;
+                log.add(event);
             });
 
             // Simulate drones deployment
             this.drones.forEach(drone => {
-                log.add(new DroneDeployedEvent(drone));
+                let event = new DroneDeployedEvent(drone);
+                event.initial = true;
+                log.add(event);
             });
 
             // Simulate game turn
             if (this.playing_ship) {
-                log.add(new ShipChangeEvent(this.playing_ship, this.playing_ship));
+                let event = new ShipChangeEvent(this.playing_ship, this.playing_ship);
+                event.initial = true;
+                log.add(event);
             }
         }
 
@@ -271,10 +277,10 @@ module TS.SpaceTac {
          */
         addDrone(drone: Drone, log = true) {
             if (add(this.drones, drone)) {
-                drone.onDeploy(this.play_order);
                 if (log) {
                     this.log.add(new DroneDeployedEvent(drone));
                 }
+                drone.onDeploy(this.play_order);
             }
         }
 

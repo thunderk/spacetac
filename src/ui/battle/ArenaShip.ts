@@ -19,6 +19,10 @@ module TS.SpaceTac.UI {
         // Effects display
         effects: Phaser.Group;
 
+        // Previous position
+        private prevx;
+        private prevy;
+
         // Create a ship sprite usable in the Arena
         constructor(parent: Arena, ship: Ship) {
             super(parent.game);
@@ -52,7 +56,17 @@ module TS.SpaceTac.UI {
             Tools.setHoverClick(this.sprite, () => battleview.cursorOnShip(ship), () => battleview.cursorOffShip(ship), () => battleview.cursorClicked());
 
             // Set location
+            this.prevx = ship.arena_x;
+            this.prevy = ship.arena_y;
             this.position.set(ship.arena_x, ship.arena_y);
+        }
+
+        update() {
+            if (this.prevx != this.x || this.prevy != this.y) {
+                this.sprite.rotation = Math.atan2(this.y - this.prevy, this.x - this.prevx);
+            }
+            this.prevx = this.x;
+            this.prevy = this.y;
         }
 
         // Set the hovered state on this ship
@@ -67,25 +81,36 @@ module TS.SpaceTac.UI {
             this.frame.loadTexture(`battle-arena-ship-${playing ? "playing" : "normal"}-${this.enemy ? "enemy" : "own"}`);
         }
 
-        // Move the sprite to a location
-        moveTo(x: number, y: number, facing_angle: number, animate: boolean = true, on_complete: Function | null = null) {
+        /**
+         * Move the sprite to a location
+         * 
+         * Return the duration of animation
+         */
+        moveTo(x: number, y: number, facing_angle: number, animate = true): number {
             if (animate) {
-                var tween_group = this.game.tweens.create(this);
-                var tween_sprite = this.game.tweens.create(this.sprite);
-                tween_group.to({ x: x, y: y });
-                tween_group.start();
-                Tools.rotationTween(tween_sprite, facing_angle);
-                if (on_complete) {
-                    tween_sprite.onComplete.addOnce(on_complete);
+                if (x == this.x && y == this.y) {
+                    let tween = this.game.tweens.create(this.sprite);
+                    let duration = Animation.rotationTween(tween, facing_angle, 0.3);
+                    tween.start();
+                    return duration;
+                } else {
+                    let distance = Target.newFromLocation(this.x, this.y).getDistanceTo(Target.newFromLocation(x, y));
+                    var tween = this.game.tweens.create(this);
+                    let duration = Math.sqrt(distance / 1000) * 3000;
+                    let curve_force = distance * 0.4;
+                    tween.to({
+                        x: [this.x + Math.cos(this.sprite.rotation) * curve_force, x - Math.cos(facing_angle) * curve_force, x],
+                        y: [this.y + Math.sin(this.sprite.rotation) * curve_force, y - Math.sin(facing_angle) * curve_force, y]
+                    }, duration, Phaser.Easing.Sinusoidal.InOut);
+                    tween.interpolation((v, k) => Phaser.Math.bezierInterpolation(v, k));
+                    tween.start();
+                    return duration;
                 }
-                tween_sprite.start();
             } else {
                 this.x = x;
                 this.y = y;
                 this.sprite.rotation = facing_angle;
-                if (on_complete) {
-                    on_complete();
-                }
+                return 0;
             }
         }
 

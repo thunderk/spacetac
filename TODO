@@ -1,9 +1,13 @@
 * Ensure that tweens and particle emitters get destroyed once animation is done
-* Stop processing the log during a ship move animation, or a weapon animation
+* Highlight ships that will be included as target of current action
+* Fix action tooltip sometimes not being hidden when the mouse goes out of action icon
+* Quick loading does not cancel pending "setTimeout"s.
 * Drones: add tooltip
 * Drones: add hull points and take area damage
 * Drones: change the sprite angle for deploy animation
 * Drones: add animation for each activation
+* Drones: fix not being removed when owner is in statis (owner's turn is skipped)
+* Do not apply effects on ships in stasis
 * Add a battle log display
 * Organize arena objects and information in layers
 * Prevent arena effects information (eg. "shield -36") to overflow out of the arena
@@ -23,13 +27,14 @@
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: apply safety distances to move actions
 * AI: bully AI crashes when winning a battle (trying to move toward null ship!)
+* AI: sometimes faces a cardinal point, then is stuck in an infinite thinking loop
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle
-* Map : restore fog of war
-* Map : add information on current star/location + information on hovered location
-* Map : add stores and shipyards
-* Map : remove jump links that cross the radius of other systems
-* Map : improve performance
-* Menu : fix background stars aggregating at right side when the game is not focused
+* Map: restore fog of war
+* Map: add information on current star/location + information on hovered location
+* Map: add stores and shipyards
+* Map: remove jump links that cross the radius of other systems
+* Map: improve performance
+* Menu: fix background stars aggregating at right side when the game is not focused
 * Multiplayer

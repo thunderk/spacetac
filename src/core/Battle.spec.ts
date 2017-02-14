@@ -248,7 +248,9 @@ module TS.SpaceTac {
             battle.drones = [drone];
             battle.log.events = [];
             battle.injectInitialEvents();
-            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone)]);
+            let expected = new DroneDeployedEvent(drone);
+            expected.initial = true;
+            expect(battle.log.events).toEqual([expected]);
         });
     });
 }

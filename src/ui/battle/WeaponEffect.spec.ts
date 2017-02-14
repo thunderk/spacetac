@@ -21,6 +21,7 @@ module TS.SpaceTac.UI.Specs {
             let effect = new WeaponEffect(battleview.arena, new Target(10, 0), Target.newFromShip(ship), "test");
 
             let mock_shield_impact = spyOn(effect, "shieldImpactEffect").and.stub();
+            let mock_hull_impact = spyOn(effect, "hullImpactEffect").and.stub();
 
             effect.gunEffect();
 
@@ -29,11 +30,14 @@ module TS.SpaceTac.UI.Specs {
 
             expect(layer.children[0] instanceof Phaser.Particles.Arcade.Emitter).toBe(true);
             expect(mock_shield_impact).toHaveBeenCalledTimes(0);
+            expect(mock_hull_impact).toHaveBeenCalledTimes(1);
+            expect(mock_hull_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 10, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800);
 
             TestTools.setShipHP(ship, 10, 10);
             effect.gunEffect();
             expect(mock_shield_impact).toHaveBeenCalledTimes(1);
             expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 10, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800);
+            expect(mock_hull_impact).toHaveBeenCalledTimes(1);
         });
     });
 }

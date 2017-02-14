@@ -8,10 +8,10 @@ module TS.SpaceTac.Specs {
             TestTools.setShipAP(ship, 100);
             TestTools.setShipHP(ship, 50, 30);
             var enemy1 = battle.fleets[1].ships[0];
-            enemy1.setArenaPosition(0, 1);
+            enemy1.setArenaPosition(1, 0);
             TestTools.setShipHP(enemy1, 50, 30);
             var enemy2 = battle.fleets[1].ships[1];
-            enemy2.setArenaPosition(0, 2);
+            enemy2.setArenaPosition(2, 0);
             TestTools.setShipHP(enemy2, 50, 30);
 
             var template = new Equipments.SubMunitionMissile();
@@ -47,7 +47,7 @@ module TS.SpaceTac.Specs {
             battle.log.clear();
 
             // Fire in space
-            t = Target.newFromLocation(0, 2.4);
+            t = Target.newFromLocation(2.4, 0);
             expect(equipment.action.canBeUsed(battle, ship)).toBe(true);
             equipment.action.apply(battle, ship, t);
             checkHP(50, 10, 40, 0, 40, 0);
@@ -59,7 +59,7 @@ module TS.SpaceTac.Specs {
             battle.log.clear();
 
             // Fire far away
-            t = Target.newFromLocation(0, 5);
+            t = Target.newFromLocation(5, 0);
             expect(equipment.action.canBeUsed(battle, ship)).toBe(true);
             equipment.action.apply(battle, ship, t);
             checkHP(50, 10, 40, 0, 40, 0);
