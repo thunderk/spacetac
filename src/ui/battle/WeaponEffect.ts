@@ -28,19 +28,19 @@ module TS.SpaceTac.UI {
         // Targetted ship
         private destination: Target;
 
-        // Weapon class code (e.g. GatlingGun, ...)
-        private weapon: string;
+        // Weapon used
+        private weapon: Equipment;
 
         // Effect in use
         private effect: Function;
 
-        constructor(arena: Arena, source: Target, destination: Target, weapon: string) {
+        constructor(arena: Arena, source: Target, destination: Target, weapon: Equipment) {
             this.ui = arena.getGame();
             this.layer = arena.layer_weapon_effects;
             this.source = source;
             this.destination = destination;
             this.weapon = weapon;
-            this.effect = this.getEffectForWeapon(weapon);
+            this.effect = this.getEffectForWeapon(weapon.code);
         }
 
         /**
@@ -50,19 +50,21 @@ module TS.SpaceTac.UI {
          */
         start(): number {
             if (this.effect) {
-                return this.effect.call(this);
+                return this.effect();
             } else {
                 return 0;
             }
         }
 
-        // Get the function that will be called to start the visual effect
+        /**
+         * Get the function that will be called to start the visual effect
+         */
         getEffectForWeapon(weapon: string): Function {
             switch (weapon) {
                 case "gatlinggun":
-                    return this.gunEffect;
+                    return this.gunEffect.bind(this);
                 default:
-                    return this.defaultEffect;
+                    return this.defaultEffect.bind(this);
             }
         }
 
@@ -120,19 +122,31 @@ module TS.SpaceTac.UI {
          * Default firing effect
          */
         defaultEffect(): number {
-            var missile = new Phaser.Sprite(this.ui, this.source.x, this.source.y, "battle-weapon-default");
+            let missile = new Phaser.Image(this.ui, this.source.x, this.source.y, "battle-weapon-default");
             missile.anchor.set(0.5, 0.5);
             missile.rotation = this.source.getAngleTo(this.destination);
             this.layer.addChild(missile);
 
-            var tween = this.ui.tweens.create(missile);
+            let tween = this.ui.tweens.create(missile);
             tween.to({ x: this.destination.x, y: this.destination.y }, 1000);
             tween.onComplete.addOnce(() => {
                 missile.destroy();
+                if (this.weapon.blast) {
+                    let blast = new Phaser.Image(this.ui, this.destination.x, this.destination.y, "battle-weapon-blast");
+                    let scaling = this.weapon.blast * 2 / (blast.width * 0.9);
+                    blast.anchor.set(0.5, 0.5);
+                    blast.scale.set(0.001, 0.001);
+                    let tween1 = this.ui.tweens.create(blast.scale).to({ x: scaling, y: scaling }, 1500, Phaser.Easing.Quintic.Out);
+                    tween1.onComplete.addOnce(() => blast.destroy());
+                    tween1.start();
+                    let tween2 = this.ui.tweens.create(blast).to({ alpha: 0 }, 1450, Phaser.Easing.Quadratic.In);
+                    tween2.start();
+                    this.layer.addChild(blast);
+                }
             });
             tween.start();
 
-            return 1000;
+            return 1000 + (this.weapon.blast ? 1500 : 0);
         }
 
         /**

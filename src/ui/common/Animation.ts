@@ -1,5 +1,7 @@
 module TS.SpaceTac.UI {
-    // Utility functions for animation
+    /**
+     * Utility functions for animation
+     */
     export class Animation {
 
         // Display an object, fading in using opacity

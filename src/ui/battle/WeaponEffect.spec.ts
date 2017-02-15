@@ -1,7 +1,7 @@
 module TS.SpaceTac.UI.Specs {
     describe("WeaponEffect", () => {
         inbattleview_it("displays shield hit effect", (battleview) => {
-            let effect = new WeaponEffect(battleview.arena, new Target(0, 0), new Target(0, 0), "test");
+            let effect = new WeaponEffect(battleview.arena, new Target(0, 0), new Target(0, 0), new Equipment());
             effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1000, 3000);
 
             let layer = battleview.arena.layer_weapon_effects;
@@ -18,7 +18,7 @@ module TS.SpaceTac.UI.Specs {
             let ship = new Ship();
             ship.setArenaPosition(50, 30);
             TestTools.setShipHP(ship, 10, 0);
-            let effect = new WeaponEffect(battleview.arena, new Target(10, 0), Target.newFromShip(ship), "test");
+            let effect = new WeaponEffect(battleview.arena, new Target(10, 0), Target.newFromShip(ship), new Equipment());
 
             let mock_shield_impact = spyOn(effect, "shieldImpactEffect").and.stub();
             let mock_hull_impact = spyOn(effect, "hullImpactEffect").and.stub();

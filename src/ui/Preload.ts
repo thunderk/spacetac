@@ -58,6 +58,7 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/weapon/bullets.png");
             this.loadImage("battle/weapon/hot.png");
             this.loadImage("battle/weapon/shield-impact.png");
+            this.loadImage("battle/weapon/blast.png");
             this.loadImage("battle/attributes/power.png");
             this.loadImage("battle/attributes/powercapacity.png");
             this.loadImage("battle/attributes/effect-increase.png");
