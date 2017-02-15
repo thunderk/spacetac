@@ -170,7 +170,9 @@ module TS.SpaceTac.UI {
 
         // Set the current target ship (when hovered)
         setTargetShip(ship: Ship, dispatch: boolean = true): void {
-            this.setTarget(Target.newFromShip(ship), dispatch);
+            if (ship.alive) {
+                this.setTarget(Target.newFromShip(ship), dispatch);
+            }
         }
 
         // Set the current target in space (when hovered)

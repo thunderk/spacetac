@@ -44,6 +44,7 @@ module TS.SpaceTac {
          * This does not check if the ships are in range.
          */
         apply(ships: Ship[], log = true) {
+            ships = ships.filter(ship => ship.alive);
             if (ships.length > 0) {
                 let battle = this.owner.getBattle();
                 if (battle && log) {

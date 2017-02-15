@@ -108,10 +108,10 @@ module TS.SpaceTac {
         }
 
         // Collect all ships within a given radius of a target
-        collectShipsInCircle(center: Target, radius: number): Ship[] {
+        collectShipsInCircle(center: Target, radius: number, alive_only = false): Ship[] {
             var result: Ship[] = [];
-            this.play_order.forEach((ship: Ship) => {
-                if (Target.newFromShip(ship).getDistanceTo(center) <= radius) {
+            this.play_order.forEach(ship => {
+                if ((ship.alive || !alive_only) && Target.newFromShip(ship).getDistanceTo(center) <= radius) {
                     result.push(ship);
                 }
             });
@@ -238,6 +238,15 @@ module TS.SpaceTac {
                 let event = new MoveEvent(ship, ship.arena_x, ship.arena_y);
                 event.initial = true;
                 log.add(event);
+            });
+
+            // Indicate emergency stasis
+            this.play_order.forEach(ship => {
+                if (!ship.alive) {
+                    let event = new DeathEvent(ship);
+                    event.initial = true;
+                    log.add(event);
+                }
             });
 
             // Simulate drones deployment

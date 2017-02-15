@@ -75,6 +75,7 @@ module TS.SpaceTac.UI {
             this.action_bar = new ActionBar(this);
             this.ship_list = new ShipList(this);
             this.ship_tooltip = new ShipTooltip(this);
+            this.add.existing(this.ship_tooltip);
 
             // Start processing the battle log
             this.log_processor = new LogProcessor(this);
@@ -130,7 +131,9 @@ module TS.SpaceTac.UI {
 
         // Method called when cursor starts hovering over a ship (or its icon)
         cursorOnShip(ship: Ship): void {
-            this.setShipHovered(ship);
+            if (!this.targetting || ship.alive) {
+                this.setShipHovered(ship);
+            }
         }
 
         // Method called when cursor stops hovering over a ship (or its icon)

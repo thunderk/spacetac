@@ -161,11 +161,13 @@ module TS.SpaceTac {
         getAvailableActions(): BaseAction[] {
             var actions: BaseAction[] = [];
 
-            this.slots.forEach((slot: Slot) => {
-                if (slot.attached && slot.attached.action) {
-                    actions.push(slot.attached.action);
-                }
-            });
+            if (this.alive) {
+                this.slots.forEach((slot: Slot) => {
+                    if (slot.attached && slot.attached.action) {
+                        actions.push(slot.attached.action);
+                    }
+                });
+            }
 
             actions.push(new EndTurnAction());
             return actions;
@@ -259,10 +261,12 @@ module TS.SpaceTac {
         //  This should be called once at the end of a turn
         //  If no value is provided, the current attribute ap_recovery will be used
         recoverActionPoints(value: number = null): void {
-            if (value === null) {
-                value = this.attributes.power_recovery.get();
+            if (this.alive) {
+                if (value === null) {
+                    value = this.attributes.power_recovery.get();
+                }
+                this.setValue("power", value, true);
             }
-            this.setValue("power", value, true);
         }
 
         // Consumes action points
@@ -293,15 +297,17 @@ module TS.SpaceTac {
             }
             this.playing = true;
 
-            // Recompute attributes
-            this.updateAttributes();
+            if (this.alive) {
+                // Recompute attributes
+                this.updateAttributes();
 
-            // Apply sticky effects
-            this.sticky_effects.forEach(effect => effect.startTurn(this));
-            this.cleanStickyEffects();
+                // Apply sticky effects
+                this.sticky_effects.forEach(effect => effect.startTurn(this));
+                this.cleanStickyEffects();
 
-            // Broadcast to drones
-            this.forEachDrone(drone => drone.onTurnStart(this));
+                // Broadcast to drones
+                this.forEachDrone(drone => drone.onTurnStart(this));
+            }
         }
 
         // Method called at the end of this ship turn
@@ -312,16 +318,18 @@ module TS.SpaceTac {
             }
             this.playing = false;
 
-            // Broadcast to drones
-            this.forEachDrone(drone => drone.onTurnEnd(this));
+            if (this.alive) {
+                // Broadcast to drones
+                this.forEachDrone(drone => drone.onTurnEnd(this));
 
-            // Recover action points for next turn
-            this.updateAttributes();
-            this.recoverActionPoints();
+                // Recover action points for next turn
+                this.updateAttributes();
+                this.recoverActionPoints();
 
-            // Apply sticky effects
-            this.sticky_effects.forEach(effect => effect.endTurn(this));
-            this.cleanStickyEffects();
+                // Apply sticky effects
+                this.sticky_effects.forEach(effect => effect.endTurn(this));
+                this.cleanStickyEffects();
+            }
         }
 
         /**
@@ -330,9 +338,11 @@ module TS.SpaceTac {
          * Pay attention to pass a copy, not the original equipment effect, because it will be modified
          */
         addStickyEffect(effect: StickyEffect, log = true): void {
-            this.sticky_effects.push(effect);
-            if (log) {
-                this.addBattleEvent(new EffectAddedEvent(this, effect));
+            if (this.alive) {
+                this.sticky_effects.push(effect);
+                if (log) {
+                    this.addBattleEvent(new EffectAddedEvent(this, effect));
+                }
             }
         }
 
@@ -389,6 +399,9 @@ module TS.SpaceTac {
         // Set the death status on this ship
         setDead(log: boolean = true): void {
             this.alive = false;
+            this.values.hull.set(0);
+            this.values.shield.set(0);
+            this.values.power.set(0);
             if (log) {
                 this.addBattleEvent(new DeathEvent(this));
             }
@@ -463,27 +476,31 @@ module TS.SpaceTac {
 
         // Update attributes, taking into account attached equipment and active effects
         updateAttributes(): void {
-            // Sum all attribute effects
-            var new_attrs = new ShipAttributes();
-            this.collectEffects("attr").forEach((effect: AttributeEffect) => {
-                new_attrs[effect.attrcode].add(effect.value);
-            });
+            if (this.alive) {
+                // Sum all attribute effects
+                var new_attrs = new ShipAttributes();
+                this.collectEffects("attr").forEach((effect: AttributeEffect) => {
+                    new_attrs[effect.attrcode].add(effect.value);
+                });
 
-            // Apply limit attributes
-            this.collectEffects("attrlimit").forEach((effect: AttributeLimitEffect) => {
-                new_attrs[effect.attrcode].setMaximal(effect.value);
-            });
+                // Apply limit attributes
+                this.collectEffects("attrlimit").forEach((effect: AttributeLimitEffect) => {
+                    new_attrs[effect.attrcode].setMaximal(effect.value);
+                });
 
-            // TODO better typing
-            iteritems(<any>new_attrs, (key, value) => {
-                this.setAttribute(<keyof ShipAttributes>key, (<ShipAttribute>value).get());
-            });
+                // TODO better typing
+                iteritems(<any>new_attrs, (key, value) => {
+                    this.setAttribute(<keyof ShipAttributes>key, (<ShipAttribute>value).get());
+                });
+            }
         }
 
         // Fully restore hull and shield
         restoreHealth(): void {
-            this.values.hull.set(this.attributes.hull_capacity.get());
-            this.values.shield.set(this.attributes.shield_capacity.get());
+            if (this.alive) {
+                this.values.hull.set(this.attributes.hull_capacity.get());
+                this.values.shield.set(this.attributes.shield_capacity.get());
+            }
         }
 
         // Collect all effects to apply for updateAttributes

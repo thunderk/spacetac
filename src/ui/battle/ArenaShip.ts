@@ -10,6 +10,9 @@ module TS.SpaceTac.UI {
         // Ship sprite
         sprite: Phaser.Button;
 
+        // Statis effect
+        stasis: Phaser.Image;
+
         // Hover effect
         hover: Phaser.Image;
 
@@ -33,6 +36,12 @@ module TS.SpaceTac.UI {
             this.sprite.anchor.set(0.5, 0.5);
             this.addChild(this.sprite);
 
+            // Add ship sprite
+            this.stasis = new Phaser.Image(this.game, 0, 0, "battle-arena-stasis");
+            this.stasis.anchor.set(0.5, 0.5);
+            this.stasis.visible = false;
+            this.addChild(this.stasis);
+
             // Add playing effect
             this.frame = new Phaser.Image(this.game, 0, 0, `battle-arena-ship-normal-${this.enemy ? "enemy" : "own"}`, 0);
             this.frame.anchor.set(0.5, 0.5);
@@ -55,14 +64,6 @@ module TS.SpaceTac.UI {
             this.position.set(ship.arena_x, ship.arena_y);
         }
 
-        update() {
-            /*if (this.prevx != this.x || this.prevy != this.y) {
-                this.sprite.rotation = Math.atan2(this.y - this.prevy, this.x - this.prevx);
-            }
-            this.prevx = this.x;
-            this.prevy = this.y;*/
-        }
-
         // Set the hovered state on this ship
         //  This will toggle the hover effect
         setHovered(hovered: boolean) {
@@ -73,6 +74,17 @@ module TS.SpaceTac.UI {
         //  This will toggle the "playing" indicator
         setPlaying(playing: boolean) {
             this.frame.loadTexture(`battle-arena-ship-${playing ? "playing" : "normal"}-${this.enemy ? "enemy" : "own"}`);
+        }
+
+        /**
+         * Activate the dead effect (stasis)
+         */
+        setDead(dead = true) {
+            if (dead) {
+                this.displayEffect("stasis", false);
+            }
+            this.frame.alpha = dead ? 0.5 : 1.0;
+            Animation.setVisibility(this.game, this.stasis, dead, 400);
         }
 
         /**

@@ -44,8 +44,8 @@ module TS.SpaceTac {
 
             // Collect affected ships
             if (blast) {
-                affected = affected.concat(battle.collectShipsInCircle(target, blast));
-            } else if (target.ship) {
+                affected = affected.concat(battle.collectShipsInCircle(target, blast, true));
+            } else if (target.ship && target.ship.alive) {
                 affected.push(target.ship);
             }
 

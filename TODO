@@ -6,12 +6,10 @@
 * Drones: add hull points and take area damage
 * Drones: fix not being removed when owner is in statis (owner's turn is skipped)
 * More sound effects
-* Do not apply effects on ships in stasis
 * Add a battle log display
 * Organize arena objects and information in layers
 * Prevent arena effects information (eg. "shield -36") to overflow out of the arena
 * Allow to cancel last moves
-* Identify ships in emergency stasis more clearly
 * Effect should be random in a range (eg. "damage target 50-75")
 * Add an overload/cooling system
 * Add auto-move to attack

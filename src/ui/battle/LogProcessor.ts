@@ -140,6 +140,10 @@ module TS.SpaceTac.UI {
             }
             this.view.arena.markAsDead(event.ship);
             this.view.ship_list.markAsDead(event.ship);
+
+            if (!event.initial) {
+                this.delayNextEvents(1000);
+            }
         }
 
         // Weapon used
@@ -177,7 +181,7 @@ module TS.SpaceTac.UI {
 
         // New drone deployed
         private processDroneDeployedEvent(event: DroneDeployedEvent): void {
-            let duration = this.view.arena.addDrone(event.drone);
+            let duration = this.view.arena.addDrone(event.drone, !event.initial);
             this.delayNextEvents(duration);
         }
 

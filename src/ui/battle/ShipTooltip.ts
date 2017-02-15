@@ -1,7 +1,8 @@
 module TS.SpaceTac.UI {
     // Tooltip to display ship information
-    export class ShipTooltip extends Phaser.Sprite {
+    export class ShipTooltip extends Phaser.Group {
         battleview: BattleView;
+        background: Phaser.Image;
         title: Phaser.Text;
         attr_hull: Phaser.Text;
         attr_shield: Phaser.Text;
@@ -13,11 +14,15 @@ module TS.SpaceTac.UI {
         attr_gravity: Phaser.Text;
         attr_time: Phaser.Text;
         active_effects: Phaser.Group;
+        stasis: Phaser.Image;
 
         constructor(parent: BattleView) {
-            super(parent.game, 0, 0, "battle-ship-tooltip-own");
+            super(parent.game);
             this.visible = false;
             this.battleview = parent;
+
+            this.background = new Phaser.Image(this.game, 0, 0, "battle-ship-tooltip-own");
+            this.addChild(this.background);
 
             this.title = new Phaser.Text(this.game, 250, 10, "", { font: "24pt Arial", fill: "#ffffff" });
             this.title.anchor.set(0.5, 0);
@@ -59,17 +64,19 @@ module TS.SpaceTac.UI {
             this.attr_time.anchor.set(0.5, 0.5);
             this.addChild(this.attr_time);
 
+            this.stasis = new Phaser.Image(this.game, 16, 55, "battle-ship-tooltip-stasis");
+            this.stasis.visible = false;
+            this.addChild(this.stasis);
+
             this.active_effects = new Phaser.Group(this.game);
             this.addChild(this.active_effects);
-
-            parent.ui.add(this);
         }
 
         // Set current ship to display, null to hide
         setShip(ship: Ship | null): void {
             if (ship) {
                 var enemy = ship.getPlayer() != this.battleview.player;
-                this.loadTexture(`battle-ship-tooltip-${enemy ? "enemy" : "own"}`);
+                this.background.loadTexture(`battle-ship-tooltip-${enemy ? "enemy" : "own"}`);
 
                 // Find ship sprite to position next to it
                 var sprite = this.battleview.arena.findShipSprite(ship);
@@ -109,7 +116,9 @@ module TS.SpaceTac.UI {
                     this.addEquipment(equipment, ship.sticky_effects.length + index);
                 });
 
-                Animation.fadeIn(this.game, this, 200, 0.9);
+                this.stasis.visible = !ship.alive;
+
+                Animation.fadeIn(this.game, this, 200);
             } else {
                 Animation.fadeOut(this.game, this, 200);
             }

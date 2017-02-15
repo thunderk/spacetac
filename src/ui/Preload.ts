@@ -43,11 +43,13 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/ship-tooltip-own.png");
             this.loadImage("battle/ship-tooltip-enemy.png");
             this.loadImage("battle/ship-tooltip-effect.png");
+            this.loadImage("battle/ship-tooltip-stasis.png");
             this.loadImage("battle/arena/ship-hover.png");
             this.loadImage("battle/arena/ship-normal-enemy.png");
             this.loadImage("battle/arena/ship-normal-own.png");
             this.loadImage("battle/arena/ship-playing-enemy.png");
             this.loadImage("battle/arena/ship-playing-own.png");
+            this.loadImage("battle/arena/stasis.png");
             this.loadImage("battle/actions/move.png");
             this.loadImage("battle/actions/endturn.png");
             this.loadImage("battle/actions/fire-gatlinggun.png");

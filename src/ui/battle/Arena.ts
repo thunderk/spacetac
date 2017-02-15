@@ -97,8 +97,7 @@ module TS.SpaceTac.UI {
         markAsDead(ship: Ship): void {
             var sprite = this.findShipSprite(ship);
             if (sprite) {
-                sprite.alpha = 0.5;
-                sprite.displayEffect("stasis", false);
+                sprite.setDead(true);
             }
         }
 
