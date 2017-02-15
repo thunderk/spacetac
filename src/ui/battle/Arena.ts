@@ -140,21 +140,37 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Find an ArenaDrone displaying a Drone.
+         */
+        findDrone(drone: Drone): ArenaDrone | null {
+            return first(this.drone_sprites, sprite => sprite.drone == drone);
+        }
+
+        /**
          * Spawn a new drone
          * 
          * Return the duration of deploy animation
          */
-        addDrone(drone: Drone): number {
-            if (!any(this.drone_sprites, sprite => sprite.drone == drone)) {
+        addDrone(drone: Drone, animate = true): number {
+            if (!this.findDrone(drone)) {
                 let sprite = new ArenaDrone(this.battleview, drone);
+                let angle = Math.atan2(drone.y - drone.owner.arena_y, drone.x - drone.owner.arena_x);
                 this.addChild(sprite);
                 this.drone_sprites.push(sprite);
 
-                sprite.position.set(drone.owner.arena_x, drone.owner.arena_y);
-                this.game.tweens.create(sprite.position).to({ x: drone.x, y: drone.y }, 1800, Phaser.Easing.Sinusoidal.InOut, true, 200);
-                this.game.tweens.create(sprite.radius.scale).from({ x: 0.01, y: 0.01 }, 1800, Phaser.Easing.Linear.None, true, 200);
+                if (animate) {
+                    sprite.position.set(drone.owner.arena_x, drone.owner.arena_y);
+                    sprite.rotation = drone.owner.arena_angle;
+                    let move_duration = Animation.moveInSpace(sprite, drone.x, drone.y, angle);
+                    this.game.tweens.create(sprite.radius).from({ alpha: 0 }, 500, Phaser.Easing.Cubic.In, true, move_duration);
 
-                return 2000;
+                    return move_duration + 500;
+                } else {
+                    sprite.position.set(drone.x, drone.y);
+                    sprite.rotation = angle;
+                    return 0;
+                }
+
             } else {
                 console.error("Drone added twice to arena", drone);
                 return 0;
@@ -163,7 +179,7 @@ module TS.SpaceTac.UI {
 
         // Remove a destroyed drone
         removeDrone(drone: Drone): void {
-            let sprite = first(this.drone_sprites, sprite => sprite.drone == drone);
+            let sprite = this.findDrone(drone);
             if (sprite) {
                 remove(this.drone_sprites, sprite);
                 sprite.destroy();

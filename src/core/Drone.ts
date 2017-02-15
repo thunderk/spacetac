@@ -32,30 +32,32 @@ module TS.SpaceTac {
         }
 
         /**
-         * Call a function for each ship in radius.
+         * Filter the list of ships in radius.
          */
-        forEachInRadius(ships: Ship[], callback: (ship: Ship) => any) {
-            ships.forEach(ship => {
-                if (ship.isInCircle(this.x, this.y, this.radius)) {
-                    callback(ship);
-                }
-            });
+        filterShipsInRadius(ships: Ship[]): Ship[] {
+            return ships.filter(ship => ship.isInCircle(this.x, this.y, this.radius));
         }
 
         /**
-         * Apply the effects on a single ship.
+         * Apply the effects on a list of ships
          * 
-         * This does not check if the ship is in range.
+         * This does not check if the ships are in range.
          */
-        singleApply(ship: Ship) {
-            this.effects.forEach(effect => effect.applyOnShip(ship));
+        apply(ships: Ship[], log = true) {
+            if (ships.length > 0) {
+                let battle = this.owner.getBattle();
+                if (battle && log) {
+                    battle.log.add(new DroneAppliedEvent(this, ships));
+                }
+                ships.forEach(ship => this.effects.forEach(effect => effect.applyOnShip(ship)));
+            }
         }
 
         /**
          * Called when the drone is first deployed.
          */
         onDeploy(ships: Ship[]) {
-            this.forEachInRadius(ships, ship => this.singleApply(ship));
+            this.apply(this.filterShipsInRadius(ships));
         }
 
         /**
@@ -89,7 +91,7 @@ module TS.SpaceTac {
          */
         onTurnEnd(ship: Ship) {
             if (this.duration > 0 && ship.isInCircle(this.x, this.y, this.radius) && contains(this.inside_at_start, ship)) {
-                this.singleApply(ship);
+                this.apply([ship]);
             }
         }
 
@@ -99,7 +101,7 @@ module TS.SpaceTac {
         onShipMove(ship: Ship) {
             if (this.duration > 0 && ship.isInCircle(this.x, this.y, this.radius)) {
                 if (add(this.inside, ship)) {
-                    this.singleApply(ship);
+                    this.apply([ship]);
                 }
             } else {
                 remove(this.inside, ship);

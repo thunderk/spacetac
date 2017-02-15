@@ -18,9 +18,9 @@ module TS.SpaceTac.Equipments {
             expect(drone.duration).toBe(1);
             ship.setAttribute("hull_capacity", 100);
             ship.setValue("hull", 85);
-            drone.singleApply(ship);
+            drone.apply([ship]);
             expect(ship.getValue("hull")).toBe(95);
-            drone.singleApply(ship);
+            drone.apply([ship]);
             expect(ship.getValue("hull")).toBe(100);
         });
     });

@@ -123,5 +123,22 @@ module TS.SpaceTac {
             drone.onTurnStart(owner);
             expect(removeDrone).toHaveBeenCalledWith(drone);
         });
+
+        it("logs each activation", function () {
+            let battle = new Battle();
+            let ship = new Ship();
+            ship.fleet.setBattle(battle);
+            let other = new Ship();
+
+            let drone = new Drone(ship);
+            drone.apply([ship, other]);
+            drone.apply([]);
+            drone.apply([other]);
+
+            expect(battle.log.events).toEqual([
+                new DroneAppliedEvent(drone, [ship, other]),
+                new DroneAppliedEvent(drone, [other])
+            ]);
+        });
     });
 }

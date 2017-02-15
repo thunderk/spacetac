@@ -161,15 +161,13 @@ module TS.SpaceTac.UI {
             this.ship_hovered = ship;
             this.arena.setShipHovered(ship);
             this.ship_list.setHovered(ship);
+            this.ship_tooltip.setShip(ship);
             if (this.targetting) {
                 if (ship) {
                     this.targetting.setTargetShip(ship);
                 } else {
                     this.targetting.unsetTarget();
                 }
-                this.ship_tooltip.setShip(null);
-            } else {
-                this.ship_tooltip.setShip(ship);
             }
         }
 

@@ -79,6 +79,8 @@ module TS.SpaceTac.UI {
                 this.processDroneDeployedEvent(event);
             } else if (event instanceof DroneDestroyedEvent) {
                 this.processDroneDestroyedEvent(event);
+            } else if (event instanceof DroneAppliedEvent) {
+                this.processDroneAppliedEvent(event);
             } else if (event.code == "effectadd" || event.code == "effectduration" || event.code == "effectdel") {
                 this.processEffectEvent(event);
             }
@@ -182,6 +184,15 @@ module TS.SpaceTac.UI {
         // Drone destroyed
         private processDroneDestroyedEvent(event: DroneDestroyedEvent): void {
             this.view.arena.removeDrone(event.drone);
+        }
+
+        // Drone applied
+        private processDroneAppliedEvent(event: DroneAppliedEvent): void {
+            let drone = this.view.arena.findDrone(event.drone);
+            if (drone) {
+                let duration = drone.setApplied();
+                this.delayNextEvents(duration);
+            }
         }
     }
 }
