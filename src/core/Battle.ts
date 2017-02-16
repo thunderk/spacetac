@@ -63,8 +63,8 @@ module TS.SpaceTac {
         canPlay(player: Player): boolean {
             if (this.ended) {
                 return false;
-            } else if (this.playing_ship.getPlayer() === player) {
-                return this.playing_ship.isAbleToPlay();
+            } else if (this.playing_ship && this.playing_ship.getPlayer() == player) {
+                return this.playing_ship.isAbleToPlay(false);
             } else {
                 return false;
             }

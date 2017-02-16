@@ -252,5 +252,21 @@ module TS.SpaceTac {
             expected.initial = true;
             expect(battle.log.events).toEqual([expected]);
         });
+
+        it("checks if a player is able to play", function () {
+            let battle = new Battle();
+            let player = new Player();
+
+            expect(battle.canPlay(player)).toBe(false);
+
+            let ship = new Ship();
+            battle.playing_ship = ship;
+
+            expect(battle.canPlay(player)).toBe(false);
+
+            ship.fleet.player = player;
+
+            expect(battle.canPlay(player)).toBe(true);
+        });
     });
 }

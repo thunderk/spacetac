@@ -80,7 +80,7 @@ module TS.SpaceTac.UI {
             Tools.setHoverClick(this, show_info, hide_info, () => this.processClick());
 
             // Initialize
-            this.updateActiveStatus();
+            this.updateActiveStatus(true);
         }
 
         // Process a click event on the action icon
@@ -157,10 +157,10 @@ module TS.SpaceTac.UI {
         }
 
         // Update the active status, from the action canBeUsed result
-        updateActiveStatus(): void {
+        updateActiveStatus(force = false): void {
             var old_active = this.active;
             this.active = this.action.canBeUsed(this.battleview.battle, this.ship);
-            if (this.active != old_active) {
+            if (force || (this.active != old_active)) {
                 Animation.setVisibility(this.game, this.layer_active, this.active, 500);
                 this.game.tweens.create(this.layer_icon).to({ alpha: this.active ? 1 : 0.3 }, 500).start();
                 this.input.useHandCursor = this.active;
