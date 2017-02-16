@@ -9,8 +9,8 @@ module TS.SpaceTac.Equipments {
 
             this.increaseAttribute("initiative", 1);
             this.increaseAttribute("power_capacity", 8);
-            this.increaseAttribute("power_initial", 5);
-            this.increaseAttribute("power_recovery", 4);
+            this.increaseAttribute("power_initial", 4);
+            this.increaseAttribute("power_recovery", 3);
         }
     }
 }

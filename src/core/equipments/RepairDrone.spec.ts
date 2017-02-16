@@ -4,7 +4,7 @@ module TS.SpaceTac.Equipments {
             let template = new RepairDrone();
 
             let equipment = template.generateFixed(0);
-            expect(equipment.target_effects).toEqual([new ValueEffect("hull", 10)]);
+            expect(equipment.target_effects).toEqual([new ValueEffect("hull", 30)]);
 
             let battle = new Battle();
             let ship = new Ship();
@@ -15,11 +15,11 @@ module TS.SpaceTac.Equipments {
 
             expect(battle.drones.length).toBe(1);
             let drone = battle.drones[0];
-            expect(drone.duration).toBe(1);
+            expect(drone.duration).toBe(2);
             ship.setAttribute("hull_capacity", 100);
-            ship.setValue("hull", 85);
+            ship.setValue("hull", 55);
             drone.apply([ship]);
-            expect(ship.getValue("hull")).toBe(95);
+            expect(ship.getValue("hull")).toBe(85);
             drone.apply([ship]);
             expect(ship.getValue("hull")).toBe(100);
         });

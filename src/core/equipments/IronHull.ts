@@ -7,7 +7,7 @@ module TS.SpaceTac.Equipments {
 
             this.min_level = new IntegerRange(1, 3);
 
-            this.increaseAttribute("hull_capacity", 100, 200);
+            this.increaseAttribute("hull_capacity", 200, 300);
         }
     }
 }

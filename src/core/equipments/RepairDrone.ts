@@ -10,12 +10,12 @@ module TS.SpaceTac.Equipments {
 
             this.min_level = new IntegerRange(1, 4);
 
-            this.setLifetime(1, 1);
-            this.setDeployDistance(50, 100);
-            this.setEffectRadius(40, 80);
+            this.setLifetime(2, 3);
+            this.setDeployDistance(150, 200);
+            this.setEffectRadius(60, 180);
             this.setPowerConsumption(4, 5);
 
-            this.addEffect(new ValueEffect("hull"), 10, 20);
+            this.addEffect(new ValueEffect("hull"), 30, 60);
         }
     }
 }

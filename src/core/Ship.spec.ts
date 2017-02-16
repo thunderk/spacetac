@@ -247,9 +247,9 @@ module TS.SpaceTac.Specs {
 
             expect(ship.values.power.get()).toBe(0);
             ship.initializeActionPoints();
-            expect(ship.values.power.get()).toBe(5);
-            ship.values.power.set(2);
-            expect(ship.values.power.get()).toBe(2);
+            expect(ship.values.power.get()).toBe(4);
+            ship.values.power.set(3);
+            expect(ship.values.power.get()).toBe(3);
             ship.recoverActionPoints();
             expect(ship.values.power.get()).toBe(6);
             ship.recoverActionPoints();

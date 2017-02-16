@@ -5,8 +5,8 @@ module TS.SpaceTac.Equipments {
         constructor() {
             super("SubMunition Missile", 30, 50);
 
-            this.setRange(350, 400, true);
-            this.setBlast(150, 200);
+            this.setRange(300, 400, true);
+            this.setBlast(100, 150);
 
             this.ap_usage = new IntegerRange(4, 5);
             this.min_level = new IntegerRange(1, 3);

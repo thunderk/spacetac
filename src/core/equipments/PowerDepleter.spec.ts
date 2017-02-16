@@ -17,15 +17,24 @@ module TS.SpaceTac.Specs {
 
             expect(target.values.power.get()).toBe(4);
             expect(target.sticky_effects).toEqual([
-                new StickyEffect(new AttributeLimitEffect("power_capacity", 4), 1, true, false)
+                new StickyEffect(new AttributeLimitEffect("power_capacity", 4), 2, true, false)
             ]);
 
-            // Attribute is limited for one turn, and prevents AP recovery
+            // Attribute is limited for two turns, and prevents AP recovery
             target.values.power.set(6);
             target.recoverActionPoints();
             target.startTurn();
 
             expect(target.values.power.get()).toBe(4);
+            expect(target.sticky_effects).toEqual([
+                new StickyEffect(new AttributeLimitEffect("power_capacity", 4), 1, true, false)
+            ]);
+
+            target.endTurn();
+            target.recoverActionPoints();
+            expect(target.values.power.get()).toBe(4);
+            target.startTurn();
+
             expect(target.sticky_effects).toEqual([]);
 
             // Effect vanished, so AP recovery happens

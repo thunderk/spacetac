@@ -1,7 +1,11 @@
 * Ensure that tweens and particle emitters get destroyed once animation is done
 * Highlight ships that will be included as target of current action
 * Fix action tooltip sometimes not being hidden when the mouse goes out of action icon
-* Quick loading does not cancel pending "setTimeout"s.
+* Do not focus on ship while targetting for area effects (dissociate hover and target)
+* Active effects are not enough visible in ship list (maybe better in arena ?)
+* Discrete power display, instead of the continuous power bar
+* When actions are inavailable at turn start, icon border is faded but not the icon itself (as it is when it fades during turn)
+* Changing active view does not cancel pending "setTimeout"s.
 * Drones: add tooltip
 * Drones: add hull points and take area damage
 * Drones: fix not being removed when owner is in statis (owner's turn is skipped)

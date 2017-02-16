@@ -22,7 +22,7 @@ module TS.SpaceTac {
             // TODO Store in cache
             var result = [];
 
-            result.push(new ShipModel("scout", 1, SlotType.Armor, SlotType.Engine, SlotType.Power, SlotType.Weapon));
+            result.push(new ShipModel("scout", 1, SlotType.Armor, SlotType.Engine, SlotType.Power, SlotType.Power, SlotType.Weapon));
 
             result.push(new ShipModel("whirlwind", 1, SlotType.Armor, SlotType.Engine, SlotType.Power, SlotType.Shield,
                 SlotType.Weapon, SlotType.Weapon));
