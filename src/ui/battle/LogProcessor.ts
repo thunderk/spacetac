@@ -35,7 +35,7 @@ module TS.SpaceTac.UI {
         delayNextEvents(duration: number) {
             if (duration > 0 && !this.view.gameui.headless) {
                 this.delayed = true;
-                setTimeout(() => this.processQueued(), duration);
+                this.view.timer.schedule(duration, () => this.processQueued());
             }
         }
 
@@ -100,7 +100,21 @@ module TS.SpaceTac.UI {
             this.view.ship_list.setPlaying(event.target.ship);
             this.view.action_bar.setShip(event.target.ship);
 
-            this.view.setInteractionEnabled(this.battle.canPlay(this.view.player));
+            if (this.battle.canPlay(this.view.player)) {
+                // Player turn
+                this.view.setInteractionEnabled(true);
+            } else {
+                this.view.setInteractionEnabled(false);
+                if (event.ship.isAbleToPlay()) {
+                    // AI turn
+                    this.battle.playAI();
+                } else {
+                    // Ship unable to play, skip turn
+                    this.view.timer.schedule(2000, () => {
+                        this.battle.advanceToNextShip();
+                    });
+                }
+            }
         }
 
         // Damage to ship

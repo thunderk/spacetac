@@ -65,7 +65,7 @@ module TS.SpaceTac {
 
         // List all weapons
         listAllWeapons(): Equipment[] {
-            return this.ship.listEquipment(SlotType.Weapon);
+            return this.ship.listEquipment(SlotType.Weapon).filter(equipement => any(equipement.target_effects, effect => effect instanceof DamageEffect));
         }
 
         // List all available maneuvers for the playing ship
@@ -101,7 +101,7 @@ module TS.SpaceTac {
         //   Returns the BullyManeuver, or null if impossible to fire
         checkBullyManeuver(enemy: Ship, weapon: Equipment): BullyManeuver {
             // Check if enemy in range
-            var target = Target.newFromShip(enemy);
+            var target = weapon.blast ? Target.newFromLocation(enemy.arena_x, enemy.arena_y) : Target.newFromShip(enemy);
             var distance = target.getDistanceTo(Target.newFromShip(this.ship));
             var move: Target;
             var engine: Equipment;

@@ -22,7 +22,7 @@ module TS.SpaceTac.UI {
             };
 
             obj.onInputOver.add(() => {
-                enternext = setTimeout(enter, hovertime);
+                enternext = Timer.global.schedule(hovertime, enter);
                 hovered = true;
             });
 
@@ -34,7 +34,7 @@ module TS.SpaceTac.UI {
 
             obj.onInputDown.add(() => {
                 holdstart = new Date();
-                enternext = setTimeout(enter, holdtime);
+                enternext = Timer.global.schedule(holdtime, enter);
             });
 
             obj.onInputUp.add(() => {

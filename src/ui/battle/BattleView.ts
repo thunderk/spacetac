@@ -50,6 +50,8 @@ module TS.SpaceTac.UI {
             this.ship_hovered = null;
             this.log_processor = null;
             this.background = null;
+
+            this.battle.timer = this.timer;
         }
 
         // Create view graphics

@@ -7,9 +7,6 @@ module TS.SpaceTac {
         // Current fleet
         fleet: Fleet;
 
-        // AI playing (null for human player)
-        ai: AbstractAI;
-
         // List of visited star systems
         visited: StarLocation[] = [];
 
@@ -17,7 +14,6 @@ module TS.SpaceTac {
         constructor(universe: Universe = new Universe()) {
             this.universe = universe;
             this.fleet = new Fleet(this);
-            this.ai = null;
         }
 
         // Create a quick random player, with a fleet, for testing purposes

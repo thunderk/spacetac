@@ -23,12 +23,12 @@ module TS.SpaceTac {
         // List of deployed drones
         drones: Drone[] = [];
 
-        // Boolean indicating if its the first turn
-        first_turn: boolean;
-
         // Size of the battle area
         width = 1000
         height = 500
+
+        // Timer to use for scheduled things
+        timer = Timer.global;
 
         // Create a battle between two fleets
         constructor(fleet1: Fleet = null, fleet2: Fleet = null) {
@@ -37,7 +37,6 @@ module TS.SpaceTac {
             this.play_order = [];
             this.playing_ship_index = null;
             this.playing_ship = null;
-            this.first_turn = true;
             this.ended = false;
 
             this.fleets.forEach((fleet: Fleet) => {
@@ -46,15 +45,14 @@ module TS.SpaceTac {
         }
 
         // Create a quick random battle, for testing purposes
-        static newQuickRandom(with_ai: boolean = false): Battle {
+        static newQuickRandom(start = true): Battle {
             var player1 = Player.newQuickRandom("John");
             var player2 = Player.newQuickRandom("Carl");
 
             var result = new Battle(player1.fleet, player2.fleet);
-            if (with_ai) {
-                player2.ai = new BullyAI(player2.fleet);
+            if (start) {
+                result.start();
             }
-            result.start();
             return result;
         }
 
@@ -91,7 +89,6 @@ module TS.SpaceTac {
 
         // Defines the initial ship positions of all engaged fleets
         placeShips(): void {
-            this.first_turn = true;
             this.placeFleetShips(this.fleets[0], this.width * 0.05, this.height * 0.5, 0);
             this.placeFleetShips(this.fleets[1], this.width * 0.95, this.height * 0.5, Math.PI);
         }
@@ -173,44 +170,32 @@ module TS.SpaceTac {
                 this.playing_ship_index = null;
                 this.playing_ship = null;
             } else {
-                var i = 0;
-                do {
-                    if (this.playing_ship_index == null) {
-                        this.playing_ship_index = 0;
-                    } else {
-                        this.playing_ship_index += 1;
-                    }
-                    if (this.playing_ship_index >= this.play_order.length) {
-                        this.playing_ship_index = 0;
-                        this.first_turn = false;
-                    }
-                    this.playing_ship = this.play_order[this.playing_ship_index];
-                    i++;
-                } while (!this.playing_ship.alive && i < 1000);
-
-                if (i >= 1000) {
-                    throw new Error("Infinite loop in advanceToNextShip");
+                if (this.playing_ship_index == null) {
+                    this.playing_ship_index = 0;
+                } else {
+                    this.playing_ship_index = (this.playing_ship_index + 1) % this.play_order.length;
                 }
+                this.playing_ship = this.play_order[this.playing_ship_index];
             }
 
             if (this.playing_ship) {
                 this.playing_ship.startTurn();
-
-                if (!this.playing_ship.isAbleToPlay()) {
-                    // If the ship is not able to play, wait a little, then advance to the next one
-                    setTimeout(() => {
-                        this.playing_ship.endTurn();
-                        this.advanceToNextShip(log);
-                    }, 2000);
-                } else if (this.playing_ship.getPlayer().ai) {
-                    // If the ship is managed by an AI, let it get to work
-                    this.playing_ship.getPlayer().ai.playShip(this.playing_ship);
-                }
             }
 
             if (log) {
                 this.log.add(new ShipChangeEvent(previous_ship, this.playing_ship));
             }
+        }
+
+        /**
+         * Make an AI play the current ship
+         */
+        playAI(ai: AbstractAI | null = null) {
+            if (!ai) {
+                // TODO Use an AI adapted to the fleet
+                ai = new BullyAI(this.playing_ship.fleet);
+            }
+            ai.playShip(this.playing_ship, this.timer);
         }
 
         // Start the battle

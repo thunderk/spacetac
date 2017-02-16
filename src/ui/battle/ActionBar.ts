@@ -147,7 +147,7 @@ module TS.SpaceTac.UI {
         setShip(ship: Ship): void {
             this.clearAll();
 
-            if (ship.getPlayer() === this.battleview.player) {
+            if (ship.getPlayer() === this.battleview.player && ship.alive) {
                 var actions = ship.getAvailableActions();
                 actions.forEach((action: BaseAction) => {
                     this.addAction(ship, action);

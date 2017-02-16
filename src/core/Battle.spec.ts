@@ -103,13 +103,13 @@ module TS.SpaceTac {
             expect(battle.playing_ship).toBe(ship2);
             expect(battle.playing_ship_index).toBe(0);
 
-            // A dead ship is skipped
-            ship1.alive = false;
+            // A dead ship is not skipped
+            ship1.setDead();
 
             battle.advanceToNextShip();
 
-            expect(battle.playing_ship).toBe(ship3);
-            expect(battle.playing_ship_index).toBe(2);
+            expect(battle.playing_ship).toBe(ship1);
+            expect(battle.playing_ship_index).toBe(1);
         });
 
         it("calls startTurn on ships", function () {

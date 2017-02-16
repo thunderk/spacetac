@@ -1,13 +1,11 @@
-* Ensure that tweens and particle emitters get destroyed once animation is done
+* Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Fix action tooltip sometimes not being hidden when the mouse goes out of action icon
 * Do not focus on ship while targetting for area effects (dissociate hover and target)
 * Active effects are not enough visible in ship list (maybe better in arena ?)
 * Discrete power display, instead of the continuous power bar
-* Changing active view does not cancel pending "setTimeout"s.
 * Drones: add tooltip
 * Drones: add hull points and take area damage
-* Drones: fix not being removed when owner is in statis (owner's turn is skipped)
 * More sound effects
 * Add a battle log display
 * Organize arena objects and information in layers
@@ -20,13 +18,12 @@
 * Handle effects overflowing ship tooltip when too numerous
 * Proper arena scaling (not graphical, only space coordinates)
 * Add a fleet evaluator to make balanced fleets
-* Fix AI playing in background in GameSession.spec.ts
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: apply safety distances to move actions
 * AI: bully AI crashes when winning a battle (trying to move toward null ship!)
-* AI: sometimes faces a cardinal point, then is stuck in an infinite thinking loop
+* AI: use support equipments (repair drones...)
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle

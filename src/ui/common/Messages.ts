@@ -3,16 +3,14 @@ module TS.SpaceTac.UI {
     class Message extends Phaser.Group {
         text: Phaser.Text;
 
-        constructor(parent: Phaser.Group, text: string, duration: number) {
-            super(parent.game);
+        constructor(parent: Messages, text: string, duration: number) {
+            super(parent.container.game);
 
-            this.text = new Phaser.Text(parent.game, 0, 0, text,
+            this.text = new Phaser.Text(this.game, 0, 0, text,
                 { font: "bold 14px Arial", fill: "#90FEE3" });
             this.addChild(this.text);
 
-            setTimeout(() => {
-                this.hide();
-            }, duration);
+            parent.parent.timer.schedule(duration, () => this.hide());
         }
 
         // Hide the message
@@ -29,10 +27,10 @@ module TS.SpaceTac.UI {
     // Visual notifications of game-related messages (eg. "Game saved"...)
     export class Messages {
         // Link to parent view
-        private parent: BaseView;
+        parent: BaseView;
 
         // Main group to hold the visual messages
-        private container: Phaser.Group;
+        container: Phaser.Group;
 
         constructor(parent: BaseView) {
             this.parent = parent;
@@ -47,7 +45,7 @@ module TS.SpaceTac.UI {
                 child.y += 30;
             }, this);
 
-            var message = new Message(this.container, text, duration);
+            var message = new Message(this, text, duration);
             this.container.addChild(message);
 
             this.parent.world.bringToTop(this.container);

@@ -25,16 +25,19 @@ module TS.SpaceTac.Specs {
             var result = ai.listAllWeapons();
             expect(result.length).toBe(0);
 
-            var weapon1 = new Equipment(SlotType.Weapon);
+            var weapon1 = new Equipment(SlotType.Weapon, "weapon1");
+            weapon1.target_effects.push(new DamageEffect(50));
             ai.ship.addSlot(SlotType.Weapon).attach(weapon1);
-            var weapon2 = new Equipment(SlotType.Weapon);
+            var weapon2 = new Equipment(SlotType.Weapon, "weapon2");
+            weapon2.target_effects.push(new DamageEffect(100));
             ai.ship.addSlot(SlotType.Weapon).attach(weapon2);
+            var weapon3 = new Equipment(SlotType.Weapon, "weapon3");
+            ai.ship.addSlot(SlotType.Weapon).attach(weapon3);
+
             ai.ship.addSlot(SlotType.Shield).attach(new Equipment(SlotType.Shield));
 
             result = ai.listAllWeapons();
-            expect(result.length).toBe(2);
-            expect(result[0]).toBe(weapon1);
-            expect(result[1]).toBe(weapon2);
+            expect(result).toEqual([weapon1, weapon2]);
         });
 
         it("checks a firing possibility", function () {
@@ -146,10 +149,12 @@ module TS.SpaceTac.Specs {
             var weapon1 = new Equipment(SlotType.Weapon);
             weapon1.distance = 50;
             weapon1.ap_usage = 1;
+            weapon1.target_effects.push(new DamageEffect(10));
             ai.ship.addSlot(SlotType.Weapon).attach(weapon1);
             var weapon2 = new Equipment(SlotType.Weapon);
             weapon2.distance = 10;
             weapon2.ap_usage = 1;
+            weapon2.target_effects.push(new DamageEffect(5));
             ai.ship.addSlot(SlotType.Weapon).attach(weapon2);
 
             ai.ship.values.power.setMaximal(10);

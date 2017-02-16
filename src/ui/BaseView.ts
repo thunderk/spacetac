@@ -1,5 +1,7 @@
 module TS.SpaceTac.UI {
-    // Base class for all game views
+    /**
+     * Base class for all game views
+     */
     export class BaseView extends Phaser.State {
         // Link to the root UI
         gameui: MainUI;
@@ -9,6 +11,9 @@ module TS.SpaceTac.UI {
 
         // Input and key bindings
         inputs: InputManager;
+
+        // Timing
+        timer: Timer;
 
         // Get the size of display
         getWidth(): number {
@@ -24,12 +29,14 @@ module TS.SpaceTac.UI {
             return this.getHeight() / 2;
         }
 
-        // Init the view
         init(...args: any[]) {
             this.gameui = <MainUI>this.game;
+            this.timer = new Timer();
+            if (this.gameui.headless) {
+                this.timer.makeSynchronous();
+            }
         }
 
-        // Create view graphics
         create() {
             // Notifications
             this.messages = new Messages(this);
@@ -47,6 +54,14 @@ module TS.SpaceTac.UI {
                     (<any>window).view = this;
                 }
             }
+
+            super.create();
+        }
+
+        shutdown() {
+            super.shutdown();
+
+            this.timer.cancelAll(true);
         }
     }
 }

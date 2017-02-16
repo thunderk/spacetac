@@ -11,8 +11,10 @@ module TS.SpaceTac.UI.Specs {
 
             var game = new MainUI(true);
 
-            spyOn(game.load, 'image').and.stub();
-            spyOn(game.load, 'audio').and.stub();
+            if (game.load) {
+                spyOn(game.load, 'image').and.stub();
+                spyOn(game.load, 'audio').and.stub();
+            }
 
             if (!state) {
                 state = new Phaser.State();

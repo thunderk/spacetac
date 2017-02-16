@@ -16,6 +16,9 @@ module TS.SpaceTac {
         // Random generator, if needed
         random: RandomGenerator;
 
+        // Timer for scheduled calls
+        timer = Timer.global;
+
         // Queue of work items to process
         //  Work items will be called successively, leaving time for other processing between them.
         //  So work items should always be as short as possible.
@@ -29,32 +32,29 @@ module TS.SpaceTac {
             this.random = new RandomGenerator();
         }
 
-        postUnserialize(): void {
-            this.workqueue = [];
-        }
-
         // Play a ship turn
         //  This will start asynchronous work. The AI will then call action methods, then advanceToNextShip to
         //  indicate it has finished.
-        playShip(ship: Ship): void {
+        playShip(ship: Ship, timer: Timer | null = null): void {
             this.ship = ship;
             this.workqueue = [];
             this.started = (new Date()).getTime();
+            if (timer) {
+                this.timer = timer;
+            }
             this.initWork();
-            this.processNextWorkItem();
+            if (this.workqueue.length > 0) {
+                this.processNextWorkItem();
+            }
         }
 
         // Add a work item to the work queue
-        addWorkItem(item: Function, delay: number = null): void {
+        addWorkItem(item: Function, delay = 100): void {
             if (!this.async) {
                 if (item) {
                     item();
                 }
                 return;
-            }
-
-            if (!delay) {
-                delay = 100;
             }
 
             var wrapped = () => {
@@ -63,9 +63,7 @@ module TS.SpaceTac {
                 }
                 this.processNextWorkItem();
             };
-            this.workqueue.push(() => {
-                setTimeout(wrapped, delay);
-            });
+            this.workqueue.push(() => this.timer.schedule(delay, wrapped));
         }
 
         // Initially fill the work queue.
@@ -74,32 +72,51 @@ module TS.SpaceTac {
             // Abstract method
         }
 
+        /**
+         * Get the time spent thinking by the AI.
+         */
+        private getDuration() {
+            return (new Date()).getTime() - this.started;
+        }
+
         // Process the next work item
         private processNextWorkItem(): void {
             if (this.workqueue.length > 0) {
-                // Take the first item
-                var item = this.workqueue.shift();
-                item();
+                if (this.getDuration() >= 10000) {
+                    console.warn("AI take too long to play, forcing turn end");
+                    this.effectiveEndTurn();
+                } else {
+                    // Take the first item
+                    var item = this.workqueue.shift();
+                    item();
+                }
             } else {
                 this.endTurn();
             }
         }
 
-        // Called when we want to end the ship turn
-        private endTurn(): void {
-            if (this.async) {
-                var duration = (new Date()).getTime() - this.started;
-                if (duration < 2000) {
-                    // Delay, as to make the AI not too fast to play
-                    setTimeout(() => {
-                        this.endTurn();
-                    }, 2000 - duration);
-                    return;
-                }
-            }
+        /**
+         * Effectively end the current ship's turn
+         */
+        private effectiveEndTurn() {
             this.ship.endTurn();
             this.ship = null;
             this.fleet.battle.advanceToNextShip();
+        }
+
+        /**
+         * Called when we want the AI decides to end the ship turn
+         */
+        private endTurn(): void {
+            if (this.async) {
+                var duration = this.getDuration();
+                if (duration < 2000) {
+                    // Delay, as to make the AI not too fast to play
+                    this.timer.schedule(2000 - duration, () => this.effectiveEndTurn());
+                    return;
+                }
+            }
+            this.effectiveEndTurn();
         }
     }
 }
