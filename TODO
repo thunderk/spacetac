@@ -31,6 +31,7 @@
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle
+* Map: current fleet position is not visible enough
 * Map: restore fog of war
 * Map: add information on current star/location + information on hovered location
 * Map: add stores and shipyards
