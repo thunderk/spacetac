@@ -33,6 +33,7 @@ module TS.SpaceTac.UI {
             });
 
             obj.onInputDown.add(() => {
+                prevententer();
                 holdstart = new Date();
                 enternext = Timer.global.schedule(holdtime, enter);
             });

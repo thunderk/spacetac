@@ -1,6 +1,5 @@
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
-* Fix action tooltip sometimes not being hidden when the mouse goes out of action icon
 * Do not focus on ship while targetting for area effects (dissociate hover and target)
 * Active effects are not enough visible in ship list (maybe better in arena ?)
 * Discrete power display, instead of the continuous power bar
