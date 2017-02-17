@@ -16,7 +16,7 @@ module TS.SpaceTac.UI {
 
             let prevententer = () => {
                 if (enternext != null) {
-                    clearTimeout(enternext);
+                    Timer.global.cancel(enternext);
                     enternext = null;
                 }
             };
