@@ -52,6 +52,8 @@ module TS.SpaceTac.UI {
             this.background = null;
 
             this.battle.timer = this.timer;
+
+            this.log_processor = new LogProcessor(this);
         }
 
         // Create view graphics
@@ -79,9 +81,6 @@ module TS.SpaceTac.UI {
             this.ship_tooltip = new ShipTooltip(this);
             this.add.existing(this.ship_tooltip);
 
-            // Start processing the battle log
-            this.log_processor = new LogProcessor(this);
-
             // "Battle" animation
             this.displayFightMessage();
 
@@ -92,6 +91,9 @@ module TS.SpaceTac.UI {
             this.inputs.bindCheat(Phaser.Keyboard.W, "Win current battle", () => {
                 this.battle.endBattle(this.player.fleet);
             });
+
+            // Inject initial events in battle to populate the LogProcessor
+            this.battle.injectInitialEvents();
         }
 
         // Leaving the view, we unbind the battle
@@ -180,7 +182,6 @@ module TS.SpaceTac.UI {
         //  Disable interaction when it is the AI turn, or when the current ship can't play
         setInteractionEnabled(enabled: boolean): void {
             this.exitTargettingMode();
-            this.action_bar.setInteractive(enabled);
             this.interacting = enabled;
         }
 

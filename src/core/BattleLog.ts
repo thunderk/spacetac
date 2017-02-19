@@ -1,4 +1,9 @@
 module TS.SpaceTac {
+    /**
+     * Function called to inform subscribers of new events.
+     */
+    export type LogSubscriber = (event: BaseLogEvent) => any;
+
     // Log of a battle
     //  This keeps track of all events in a battle
     //  It also allows to register a callback to receive these events
@@ -7,7 +12,7 @@ module TS.SpaceTac {
         events: BaseLogEvent[];
 
         // List of subscribers
-        private subscribers: Function[];
+        private subscribers: LogSubscriber[];
 
         // List of event codes to ignore
         private filters: string[];
@@ -43,7 +48,7 @@ module TS.SpaceTac {
 
             this.events.push(event);
 
-            this.subscribers.forEach((subscriber: Function) => {
+            this.subscribers.forEach(subscriber => {
                 subscriber(event);
             });
         }
@@ -54,14 +59,14 @@ module TS.SpaceTac {
         }
 
         // Subscribe a callback to receive further events
-        subscribe(callback: (event: BaseLogEvent) => void): Function {
+        subscribe(callback: LogSubscriber): LogSubscriber {
             this.subscribers.push(callback);
             return callback;
         }
 
         // Unsubscribe a callback
         //  Pass the value returned by 'subscribe' as argument
-        unsubscribe(callback: Function): void {
+        unsubscribe(callback: LogSubscriber): void {
             var index = this.subscribers.indexOf(callback);
             if (index >= 0) {
                 this.subscribers.splice(index, 1);

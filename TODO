@@ -2,7 +2,7 @@
 * Highlight ships that will be included as target of current action
 * Do not focus on ship while targetting for area effects (dissociate hover and target)
 * Active effects are not enough visible in ship list (maybe better in arena ?)
-* Discrete power display, instead of the continuous power bar
+* All things displayed in battle should be updated from BattleLog, not from current state
 * Drones: add tooltip
 * Drones: add hull points and take area damage
 * More sound effects

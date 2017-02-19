@@ -59,7 +59,7 @@ module TS.SpaceTac.UI {
                 this.cost.setText(cost);
                 this.description.setText(action.action.equipment ? action.action.equipment.getActionDescription() : "");
 
-                let position = this.bar.actions.indexOf(action);
+                let position = this.bar.action_icons.indexOf(action);
                 if (action.action instanceof EndTurnAction) {
                     this.shortcut.setText("[ space ]");
                 } else if (position == 9) {

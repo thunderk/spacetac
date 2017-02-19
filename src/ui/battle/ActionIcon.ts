@@ -43,7 +43,7 @@ module TS.SpaceTac.UI {
             this.ship = ship;
             this.action = action;
 
-            bar.group.addChild(this);
+            bar.actions.addChild(this);
 
             // Active layer
             this.active = false;
@@ -104,7 +104,7 @@ module TS.SpaceTac.UI {
             this.battleview.arena.range_hint.setPrimary(this.ship, this.action);
 
             // Update fading statuses
-            this.bar.updateFadings(this.action.getActionPointsUsage(this.battleview.battle, this.ship, null));
+            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.battleview.battle, this.ship, null));
 
             // Set the selected state
             this.setSelected(true);
@@ -129,7 +129,7 @@ module TS.SpaceTac.UI {
         processHover(target: Target): void {
             target = this.action.checkTarget(this.battleview.battle, this.ship, target);
             this.targetting.setTarget(target, false, this.action.getBlastRadius(this.ship));
-            this.bar.updateFadings(this.action.getActionPointsUsage(this.battleview.battle, this.ship, target));
+            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.battleview.battle, this.ship, target));
         }
 
         // Called when a target is selected

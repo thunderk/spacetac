@@ -890,11 +890,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.79411404"
-     inkscape:cx="713.78747"
-     inkscape:cy="706.929"
+     inkscape:zoom="3.1764562"
+     inkscape:cx="257.62353"
+     inkscape:cy="1025.9327"
      inkscape:document-units="px"
-     inkscape:current-layer="layer32"
+     inkscape:current-layer="layer8"
      showgrid="false"
      units="px"
      showguides="true"
@@ -1789,13 +1789,34 @@
          style="display:inline">
         <path
            style="opacity:1;fill:#ffdd4b;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5649)"
-           d="M 206.22794,119.86752 H 1891.0512 l 16.8238,-12.12184 H 189.40423 Z"
+           d="m 197.49714,119.86752 h 51.83694 l 5.86374,-12.12184 h -51.83694 z"
            id="rect4437"
            inkscape:connector-curvature="0"
            sodipodi:nodetypes="ccccc"
-           inkscape:export-filename="/tmp/export.png"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/power-available.png"
            inkscape:export-xdpi="90"
-           inkscape:export-ydpi="90" />
+           inkscape:export-ydpi="90"
+           transform="matrix(0.98149613,0,0,1.5780874,-2.5439867,-65.79016)" />
+        <path
+           transform="matrix(0.98149613,0,0,1.5780874,52.760346,-65.79016)"
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/power-using.png"
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path4925"
+           d="m 197.49714,119.86752 h 51.83694 l 5.86374,-12.12184 h -51.83694 z"
+           style="opacity:1;fill:#f8f0b5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           transform="matrix(0.98149613,0,0,1.5780874,108.06471,-65.79016)"
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/power-used.png"
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path4927"
+           d="m 197.49714,119.86752 h 51.83694 l 5.86374,-12.12184 h -51.83694 z"
+           style="opacity:1;fill:#6b6443;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5649)" />
       </g>
     </g>
     <g
@@ -2124,7 +2145,7 @@
          inkscape:label="Action icon active"
          style="display:inline">
         <ellipse
-           style="opacity:1;fill:#97d3fb;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;"
+           style="opacity:1;fill:#97d3fb;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            id="path10840"
            cx="285.67114"
            cy="-51.10569"

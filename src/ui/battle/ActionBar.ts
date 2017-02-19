@@ -5,12 +5,11 @@ module TS.SpaceTac.UI {
         battleview: BattleView;
 
         // List of action icons
-        group: Phaser.Group;
-        actions: ActionIcon[];
+        actions: Phaser.Group;
+        action_icons: ActionIcon[];
 
-        // Progress bar displaying action points
-        actionpoints: ValueBar;
-        actionpointstemp: ValueBar;
+        // Power bar
+        power: Phaser.Group;
 
         // Tooltip to display hovered action info
         tooltip: ActionTooltip;
@@ -20,6 +19,8 @@ module TS.SpaceTac.UI {
 
         // Current ship, whose actions are displayed
         ship: Ship;
+        ship_power_capacity: number;
+        ship_power_value: number;
 
         // Interactivity
         interactive = false;
@@ -29,7 +30,7 @@ module TS.SpaceTac.UI {
             super(battleview.game);
 
             this.battleview = battleview;
-            this.actions = [];
+            this.action_icons = [];
             this.ship = null;
 
             battleview.ui.add(this);
@@ -37,17 +38,13 @@ module TS.SpaceTac.UI {
             // Background
             this.addChild(new Phaser.Image(this.game, 0, 0, "battle-actionbar", 0));
 
-            // Action points progress bar
-            this.actionpoints = new ValueBar(this.game, 190, 108, "battle-actionpointsempty");
-            this.actionpoints.setBarImage("battle-actionpointspart");
-            this.addChild(this.actionpoints);
-            this.actionpointstemp = new ValueBar(this.game, 190, 108, "battle-actionpointsnone");
-            this.actionpointstemp.setBarImage("battle-actionpointsfull");
-            this.addChild(this.actionpointstemp);
+            // Power bar
+            this.power = this.game.add.group();
+            this.addChild(this.power);
 
             // Group for actions
-            this.group = new Phaser.Group(this.game);
-            this.addChild(this.group);
+            this.actions = new Phaser.Group(this.game);
+            this.addChild(this.actions);
 
             // Waiting icon
             this.icon_waiting = new Phaser.Image(this.game, this.width / 2, 50, "battle-waiting", 0);
@@ -73,6 +70,23 @@ module TS.SpaceTac.UI {
             battleview.inputs.bind(Phaser.Keyboard.EIGHT, "Action 8", () => this.keyActionPressed(7));
             battleview.inputs.bind(Phaser.Keyboard.NINE, "Action 9", () => this.keyActionPressed(8));
             battleview.inputs.bind(Phaser.Keyboard.ZERO, "Action 10", () => this.keyActionPressed(9));
+
+            // Log processing
+            battleview.log_processor.register(event => {
+                if (event instanceof ShipChangeEvent) {
+                    this.setShip(event.new_ship);
+                } else if (event instanceof ValueChangeEvent) {
+                    if (event.ship == this.ship) {
+                        if (event.value.name == SHIP_ATTRIBUTES.power_capacity.name) {
+                            this.ship_power_capacity = event.value.get();
+                            this.updatePower();
+                        } else if (event.value.name == SHIP_VALUES.power.name) {
+                            this.ship_power_value = event.value.get();
+                            this.updatePower();
+                        }
+                    }
+                }
+            });
         }
 
         /**
@@ -90,60 +104,86 @@ module TS.SpaceTac.UI {
         keyActionPressed(position: number) {
             if (this.interactive) {
                 if (position < 0) {
-                    this.actions[this.actions.length - 1].processClick();
-                } else if (position < this.actions.length) {
-                    this.actions[position].processClick();
+                    this.action_icons[this.action_icons.length - 1].processClick();
+                } else if (position < this.action_icons.length) {
+                    this.action_icons[position].processClick();
                 }
             }
         }
 
         // Clear the action icons
         clearAll(): void {
-            this.actions.forEach((action: ActionIcon) => {
+            this.action_icons.forEach((action: ActionIcon) => {
                 action.destroy();
             });
-            this.actions = [];
+            this.action_icons = [];
             this.tooltip.setAction(null);
         }
 
         // Add an action icon
         addAction(ship: Ship, action: BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, 192 + this.actions.length * 88, 8, ship, action);
-            this.actions.push(icon);
+            var icon = new ActionIcon(this, 192 + this.action_icons.length * 88, 8, ship, action);
+            this.action_icons.push(icon);
 
             this.tooltip.bringToTop();
 
             return icon;
         }
 
-        // Update the action points indicator
-        updateActionPoints(): void {
-            if (this.ship) {
-                this.actionpoints.setValue(this.ship.values.power.get(), this.ship.attributes.power_capacity.get());
-                this.actionpointstemp.setValue(this.ship.values.power.get(), this.ship.attributes.power_capacity.get());
-                this.actionpoints.visible = true;
-                this.actionpointstemp.visible = true;
-            } else {
-                this.actionpoints.visible = false;
-                this.actionpointstemp.visible = false;
+        /**
+         * Update the power indicator
+         */
+        updatePower(selected_action = 0): void {
+            let current_power = this.power.children.length;
+            let power_capacity = this.ship_power_capacity;
+
+            if (current_power > power_capacity) {
+                range(current_power - power_capacity).forEach(i => this.power.removeChildAt(current_power - 1 - i));
+                //this.power.removeChildren(ship_power, current_power);  // TODO bugged in phaser 2.6
+            } else if (power_capacity > current_power) {
+                range(power_capacity - current_power).forEach(i => this.game.add.image(190 + (current_power + i) * 56, 104, "battle-power-used", 0, this.power));
             }
+
+            let power_value = this.ship_power_value;
+            let remaining_power = power_value - selected_action;
+            this.power.children.forEach((obj, idx) => {
+                let img = <Phaser.Image>obj;
+                let key: string;
+                if (idx < remaining_power) {
+                    key = "battle-power-available";
+                } else if (idx < power_value) {
+                    key = "battle-power-using";
+                } else {
+                    key = "battle-power-used"
+                }
+                img.name = key;
+                img.loadTexture(key);
+            });
         }
 
-        // Update fading flags
-        //  ap_usage is the consumption of currently selected action
-        updateFadings(ap_usage: number): void {
-            var remaining_ap = this.ship.values.power.get() - ap_usage;
+        /**
+         * Set current action power usage.
+         * 
+         * When an action is selected, this will fade the icons not available after the action would be done.
+         * This will also highlight power usage in the power bar.
+         * 
+         * *power_usage* is the consumption of currently selected action.
+         */
+        updateSelectedActionPower(power_usage: number): void {
+            var remaining_ap = this.ship.values.power.get() - power_usage;
             if (remaining_ap < 0) {
                 remaining_ap = 0;
             }
 
-            this.actions.forEach((icon: ActionIcon) => {
+            this.action_icons.forEach((icon: ActionIcon) => {
                 icon.updateFadingStatus(remaining_ap);
             });
-            this.actionpointstemp.setValue(remaining_ap, this.ship.attributes.power_capacity.get());
+            this.updatePower(power_usage);
         }
 
-        // Set action icons from selected ship
+        /**
+         * Set the bar to display a given ship
+         */
         setShip(ship: Ship): void {
             this.clearAll();
 
@@ -154,13 +194,18 @@ module TS.SpaceTac.UI {
                 });
 
                 this.ship = ship;
+                this.ship_power_capacity = ship.getAttribute("power_capacity");
+                this.ship_power_value = ship.getValue("power");
                 this.game.tweens.create(this).to({ "alpha": 1 }, 400).start();
             } else {
                 this.ship = null;
+                this.ship_power_capacity = 0;
+                this.ship_power_value = 0;
                 this.game.tweens.create(this).to({ "alpha": 0.5 }, 400).start();
             }
 
-            this.updateActionPoints();
+            this.updatePower();
+            this.setInteractive(this.ship != null);
         }
 
         // Called by an action icon when the action is selected
@@ -169,8 +214,9 @@ module TS.SpaceTac.UI {
 
         // Called by an action icon when the action has been applied
         actionEnded(): void {
-            this.updateActionPoints();
-            this.actions.forEach((action: ActionIcon) => {
+            // TODO Lock interactivity until animation is ended
+            this.updatePower();
+            this.action_icons.forEach((action: ActionIcon) => {
                 action.resetState();
             });
             this.battleview.exitTargettingMode();

@@ -20,13 +20,25 @@ module TS.SpaceTac.UI {
         // Processing queue, when delay is active
         private queue: BaseLogEvent[] = [];
 
+        // Forward events to other subscribers
+        private forwarding: LogSubscriber[] = [];
+
         constructor(view: BattleView) {
             this.view = view;
             this.battle = view.battle;
             this.log = view.battle.log;
 
             this.subscription = this.log.subscribe(event => this.processBattleEvent(event));
-            this.battle.injectInitialEvents();
+        }
+
+        /**
+         * Register a sub-subscriber.
+         * 
+         * The difference with registering directly to the BattleLog is that events may be delayed
+         * for animations.
+         */
+        register(callback: LogSubscriber) {
+            this.forwarding.push(callback);
         }
 
         /**
@@ -60,6 +72,8 @@ module TS.SpaceTac.UI {
             }
 
             console.log("Battle event", event);
+
+            this.forwarding.forEach(subscriber => subscriber(event));
 
             if (event instanceof ShipChangeEvent) {
                 this.processShipChangeEvent(event);
@@ -98,7 +112,6 @@ module TS.SpaceTac.UI {
         private processShipChangeEvent(event: ShipChangeEvent): void {
             this.view.arena.setShipPlaying(event.target.ship);
             this.view.ship_list.setPlaying(event.target.ship);
-            this.view.action_bar.setShip(event.target.ship);
 
             if (this.battle.canPlay(this.view.player)) {
                 // Player turn
@@ -137,7 +150,9 @@ module TS.SpaceTac.UI {
         // Ship value changed
         private processValueChangedEvent(event: ValueChangeEvent): void {
             var sprite = this.view.arena.findShipSprite(event.ship);
-            sprite.displayValueChanged(event);
+            if (sprite) {
+                sprite.displayValueChanged(event);
+            }
 
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {

@@ -36,10 +36,9 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/action-active.png");
             this.loadImage("battle/action-selected.png");
             this.loadImage("battle/action-tooltip.png");
-            this.loadImage("battle/actionpointsnone.png");
-            this.loadImage("battle/actionpointsempty.png");
-            this.loadImage("battle/actionpointsfull.png");
-            this.loadImage("battle/actionpointspart.png");
+            this.loadImage("battle/power-available.png");
+            this.loadImage("battle/power-using.png");
+            this.loadImage("battle/power-used.png");
             this.loadImage("battle/ship-tooltip-own.png");
             this.loadImage("battle/ship-tooltip-enemy.png");
             this.loadImage("battle/ship-tooltip-effect.png");
