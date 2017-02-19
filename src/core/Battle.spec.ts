@@ -35,7 +35,7 @@ module TS.SpaceTac {
             var ship4 = new Ship(fleet2, "F2S1");
             var ship5 = new Ship(fleet2, "F2S2");
 
-            var battle = new Battle(fleet1, fleet2);
+            var battle = new Battle(fleet1, fleet2, 1000, 500);
             battle.placeShips();
 
             expect(ship1.arena_x).toBeCloseTo(50, 0.0001);

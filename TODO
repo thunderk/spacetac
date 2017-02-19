@@ -15,7 +15,6 @@
 * Add auto-move to attack
 * Merge identical sticky effects
 * Handle effects overflowing ship tooltip when too numerous
-* Proper arena scaling (not graphical, only space coordinates)
 * Add a fleet evaluator to make balanced fleets
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not

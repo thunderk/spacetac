@@ -24,20 +24,22 @@ module TS.SpaceTac {
         drones: Drone[] = [];
 
         // Size of the battle area
-        width = 1000
-        height = 500
+        width: number
+        height: number
 
         // Timer to use for scheduled things
         timer = Timer.global;
 
         // Create a battle between two fleets
-        constructor(fleet1: Fleet = null, fleet2: Fleet = null) {
+        constructor(fleet1: Fleet = null, fleet2: Fleet = null, width = 1780, height = 948) {
             this.log = new BattleLog();
             this.fleets = [fleet1 || new Fleet(), fleet2 || new Fleet()];
             this.play_order = [];
             this.playing_ship_index = null;
             this.playing_ship = null;
             this.ended = false;
+            this.width = width;
+            this.height = height;
 
             this.fleets.forEach((fleet: Fleet) => {
                 fleet.setBattle(this);

@@ -7,7 +7,7 @@ module TS.SpaceTac.Equipments {
             super(SlotType.Engine, "Conventional Engine");
 
             this.min_level = new IntegerRange(1, 1);
-            this.distance = new Range(100, 100);
+            this.distance = new Range(200, 200);
             this.ap_usage = new IntegerRange(1);
 
             this.increaseAttribute("initiative", 1);
