@@ -6,8 +6,8 @@ module TS.SpaceTac.Specs {
 
             var ship = new Ship();
             var target = new Ship();
+            TestTools.setShipAP(ship, 50);
             TestTools.setShipAP(target, 7, 2);
-            spyOn(equipment.action, "canBeUsed").and.returnValue(true);
 
             expect(target.values.power.get()).toBe(7);
             expect(target.sticky_effects).toEqual([]);

@@ -5,10 +5,9 @@ module TS.SpaceTac {
             super("endturn", "End ship's turn", false);
         }
 
-        protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
+        protected customApply(battle: Battle, ship: Ship, target: Target) {
             ship.endTurn();
             battle.advanceToNextShip();
-            return true;
         }
     }
 }

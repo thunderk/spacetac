@@ -269,9 +269,18 @@ module TS.SpaceTac {
             }
         }
 
-        // Consumes action points
-        useActionPoints(value: number): void {
-            this.setValue("power", -value, true);
+        /**
+         * Consumes action points
+         * 
+         * Return true if it was possible, false if there wasn't enough points.
+         */
+        useActionPoints(value: number): boolean {
+            if (this.getValue("power") >= value) {
+                this.setValue("power", -value, true);
+                return true;
+            } else {
+                return false;
+            }
         }
 
         // Call a method for each drone of the battlefield

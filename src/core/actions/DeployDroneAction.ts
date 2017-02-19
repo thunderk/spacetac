@@ -15,7 +15,7 @@ module TS.SpaceTac {
             return target;
         }
 
-        protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
+        protected customApply(battle: Battle, ship: Ship, target: Target) {
             let drone = new Drone(ship, this.equipment.code);
             drone.x = target.x;
             drone.y = target.y;
@@ -23,7 +23,6 @@ module TS.SpaceTac {
             drone.effects = this.equipment.target_effects;
             drone.duration = this.equipment.duration;
             battle.addDrone(drone);
-            return true;
         }
     }
 }

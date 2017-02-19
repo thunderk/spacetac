@@ -35,7 +35,7 @@ module TS.SpaceTac {
             }
         }
 
-        protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
+        protected customApply(battle: Battle, ship: Ship, target: Target) {
             var affected: Ship[] = [];
             var blast = this.getBlastRadius(ship);
 
@@ -58,8 +58,6 @@ module TS.SpaceTac {
                     effect.applyOnShip(affship);
                 });
             });
-
-            return true;
         }
     }
 }

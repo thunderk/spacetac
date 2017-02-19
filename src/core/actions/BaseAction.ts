@@ -100,23 +100,20 @@ module TS.SpaceTac {
                     return false;
                 }
 
-                var cost = this.getActionPointsUsage(battle, ship, target);
-                if (this.customApply(battle, ship, target)) {
-                    if (cost > 0) {
-                        ship.useActionPoints(cost);
-                    }
-                    return true;
-                } else {
+                let cost = this.getActionPointsUsage(battle, ship, target);
+                if (!ship.useActionPoints(cost)) {
                     return false;
                 }
+
+                this.customApply(battle, ship, target);
+                return true;
             } else {
                 return false;
             }
         }
 
         // Method to reimplement to apply a action
-        protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
-            return false;
+        protected customApply(battle: Battle, ship: Ship, target: Target) {
         }
     }
 }

@@ -59,9 +59,8 @@ module TS.SpaceTac {
             return target;
         }
 
-        protected customApply(battle: Battle, ship: Ship, target: Target): boolean {
+        protected customApply(battle: Battle, ship: Ship, target: Target) {
             ship.moveTo(target.x, target.y);
-            return true;
         }
     }
 }
