@@ -1,6 +1,9 @@
 module TS.SpaceTac.UI.Specs {
-    describe("WeaponEffect", () => {
-        inbattleview_it("displays shield hit effect", (battleview) => {
+    describe("WeaponEffect", function () {
+        let testgame = setupBattleview();
+
+        it("displays shield hit effect", function () {
+            let battleview = testgame.battleview;
             let effect = new WeaponEffect(battleview.arena, new Target(0, 0), new Target(0, 0), new Equipment());
             effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1000, 3000);
 
@@ -14,7 +17,8 @@ module TS.SpaceTac.UI.Specs {
             expect(layer.children[1] instanceof Phaser.Particles.Arcade.Emitter).toBe(true);
         });
 
-        inbattleview_it("displays gatling gun effect", (battleview) => {
+        it("displays gatling gun effect", function () {
+            let battleview = testgame.battleview;
             let ship = new Ship();
             ship.setArenaPosition(50, 30);
             TestTools.setShipHP(ship, 10, 0);

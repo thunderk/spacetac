@@ -12,7 +12,7 @@ module TS.SpaceTac.UI {
         private log: BattleLog;
 
         // Subscription identifier
-        private subscription: any;
+        private subscription: any = null;
 
         // Delay before processing next events
         private delayed = false;
@@ -27,8 +27,14 @@ module TS.SpaceTac.UI {
             this.view = view;
             this.battle = view.battle;
             this.log = view.battle.log;
+        }
 
+        /**
+         * Start log processing
+         */
+        start() {
             this.subscription = this.log.subscribe(event => this.processBattleEvent(event));
+            this.battle.injectInitialEvents();
         }
 
         /**

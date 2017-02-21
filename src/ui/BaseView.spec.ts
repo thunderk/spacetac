@@ -2,15 +2,12 @@
 /// <reference path="BaseView.ts" />
 
 module TS.SpaceTac.UI.Specs {
-    function inview_it(desc: string, func: (view: BaseView) => void) {
-        var view = new BaseView();
-        ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
-            func(view);
-        }, view);
-    }
+    describe("BaseView", function () {
+        let testgame = setupEmptyView();
 
-    describe("BaseView", () => {
-        inview_it("initializes variables", function (view) {
+        it("initializes variables", function () {
+            let view = <BaseView>testgame.ui.state.getCurrentState();
+
             expect(view.messages instanceof Messages).toBe(true);
             expect(view.inputs instanceof InputManager).toBe(true);
 

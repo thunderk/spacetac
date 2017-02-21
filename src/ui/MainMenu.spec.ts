@@ -2,15 +2,12 @@
 /// <reference path="MainMenu.ts" />
 
 module TS.SpaceTac.UI.Specs {
-    function inview_it(desc: string, func: (view: MainMenu) => void) {
-        var view = new MainMenu();
-        ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
-            func(view);
-        }, view);
-    }
-
     describe("MainMenu", () => {
-        inview_it("adds moving stars, a title and three buttons", function (view) {
+        let testgame = setupSingleView(testgame => [new MainMenu(), []]);
+
+        it("adds moving stars, a title and three buttons", function () {
+            let view = <MainMenu>testgame.ui.state.getCurrentState();
+
             expect(view.world.children.length).toBe(301);
 
             let group = <Phaser.Group>view.world.children[300];

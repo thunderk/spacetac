@@ -1,5 +1,7 @@
 module TS.SpaceTac.UI.Specs {
-    describe("Tools", () => {
+    describe("Tools", function () {
+        let testgame = setupEmptyView();
+
         it("normalizes angles", function () {
             expect(Tools.normalizeAngle(0)).toEqual(0);
             expect(Tools.normalizeAngle(0.1)).toBeCloseTo(0.1, 0.000001);
@@ -9,9 +11,9 @@ module TS.SpaceTac.UI.Specs {
             expect(Tools.normalizeAngle(-Math.PI - 0.5)).toBeCloseTo(Math.PI - 0.5, 0.000001);
         });
 
-        ingame_it("handles hover and click on desktops and mobile targets", function (game) {
+        it("handles hover and click on desktops and mobile targets", function () {
             let newButton: () => [Phaser.Button, any] = () => {
-                var button = new Phaser.Button(game);
+                var button = new Phaser.Button(testgame.ui);
                 var funcs = {
                     enter: () => null,
                     leave: () => null,

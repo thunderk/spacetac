@@ -1,7 +1,9 @@
 module TS.SpaceTac.UI.Specs {
-    describe("ValueBar", () => {
-        ingame_it("computes proportional value", (game: Phaser.Game) => {
-            var bar = ValueBar.newStandard(game, 0, 0);
+    describe("ValueBar", function () {
+        let testgame = setupEmptyView();
+
+        it("computes proportional value", function () {
+            var bar = ValueBar.newStandard(testgame.ui, 0, 0);
 
             expect(bar.getProportionalValue()).toBe(0);
 

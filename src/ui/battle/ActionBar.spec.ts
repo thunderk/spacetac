@@ -1,9 +1,11 @@
 /// <reference path="../TestGame.ts"/>
 
 module TS.SpaceTac.UI.Specs {
-    describe("ActionBar", () => {
-        inbattleview_it("lists available actions for selected ship", (battleview: BattleView) => {
-            var bar = battleview.action_bar;
+    describe("ActionBar", function () {
+        let testgame = setupBattleview();
+
+        it("lists available actions for selected ship", function () {
+            var bar = testgame.battleview.action_bar;
 
             // Ship not owned by current battleview player
             var ship = new Ship();
@@ -11,7 +13,7 @@ module TS.SpaceTac.UI.Specs {
             expect(bar.action_icons.length).toBe(0);
 
             // Ship with no equipment (only endturn action)
-            battleview.player = ship.getPlayer();
+            testgame.battleview.player = ship.getPlayer();
             bar.setShip(ship);
             expect(bar.action_icons.length).toBe(1);
             expect(bar.action_icons[0].action.code).toEqual("endturn");
@@ -29,7 +31,8 @@ module TS.SpaceTac.UI.Specs {
             expect(bar.action_icons[1].action.code).toEqual("fire-gatlinggun");
         });
 
-        inbattleview_it("mark actions that would become unavailable after use", (battleview: BattleView) => {
+        it("mark actions that would become unavailable after use", function () {
+            let battleview = testgame.battleview;
             var bar = battleview.action_bar;
             var ship = new Ship();
             ship.arena_x = 1;
@@ -101,8 +104,8 @@ module TS.SpaceTac.UI.Specs {
             bar.actionEnded();
         });
 
-        inbattleview_it("updates power points display", battleview => {
-            let bar = battleview.action_bar;
+        it("updates power points display", function () {
+            let bar = testgame.battleview.action_bar;
 
             function check(available = 0, using = 0, used = 0) {
                 expect(bar.power.children.length).toBe(available + using + used);
@@ -125,7 +128,7 @@ module TS.SpaceTac.UI.Specs {
             check();
 
             // owned ship
-            ship.fleet = battleview.player.fleet;
+            ship.fleet = testgame.battleview.player.fleet;
             bar.setShip(ship);
             check(8);
 

@@ -1,8 +1,10 @@
 module TS.SpaceTac.UI.Specs {
     describe("Animation", () => {
-        ingame_it("animates rotation", function (game) {
+        let testgame = setupEmptyView();
+
+        it("animates rotation", function () {
             let obj = { rotation: -Math.PI * 2.5 };
-            let tween = game.tweens.create(obj);
+            let tween = testgame.ui.tweens.create(obj);
             let result = Animation.rotationTween(tween, Math.PI * 0.25, 1, Phaser.Easing.Linear.None);
             expect(result).toEqual(750);
             expect(tween.generateData(4)).toEqual([

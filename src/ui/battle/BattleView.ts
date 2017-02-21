@@ -92,8 +92,8 @@ module TS.SpaceTac.UI {
                 this.battle.endBattle(this.player.fleet);
             });
 
-            // Inject initial events in battle to populate the LogProcessor
-            this.battle.injectInitialEvents();
+            // Start processing the log
+            this.log_processor.start();
         }
 
         // Leaving the view, we unbind the battle

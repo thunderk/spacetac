@@ -1,8 +1,11 @@
 /// <reference path="../TestGame.ts"/>
 
 module TS.SpaceTac.UI.Specs {
-    describe("ActionTooltip", () => {
-        inbattleview_it("displays action information", (battleview: BattleView) => {
+    describe("ActionTooltip", function () {
+        let testgame = setupBattleview();
+
+        it("displays action information", () => {
+            let battleview = testgame.battleview;
             let bar = battleview.action_bar;
             let tooltip = bar.tooltip;
 

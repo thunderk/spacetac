@@ -2,7 +2,7 @@
 * Highlight ships that will be included as target of current action
 * Do not focus on ship while targetting for area effects (dissociate hover and target)
 * Active effects are not enough visible in ship list (maybe better in arena ?)
-* All things displayed in battle should be updated from BattleLog, not from current state
+* All things displayed in battle should be updated from LogProcess forwarding, not from current game state
 * Drones: add tooltip
 * Drones: add hull points and take area damage
 * More sound effects
@@ -11,7 +11,8 @@
 * Prevent arena effects information (eg. "shield -36") to overflow out of the arena
 * Allow to cancel last moves
 * Effect should be random in a range (eg. "damage target 50-75")
-* Add an overload/cooling system
+* Add critical hit/miss
+* Add an overheat/cooling system
 * Add auto-move to attack
 * Merge identical sticky effects
 * Handle effects overflowing ship tooltip when too numerous
@@ -32,6 +33,12 @@
 * Map: remove jump links that cross the radius of other systems
 * Map: improve performance
 * Menu: fix background stars aggregating at right side when the game is not focused
+* Tutorial
+* Campaign save slots
 * Missions/quests system
 * Main story arc
+
+Later, if possible:
 * Multiplayer
+* Saving to external file
+* Saving to cloud

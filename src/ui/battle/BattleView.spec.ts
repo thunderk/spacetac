@@ -1,8 +1,11 @@
 /// <reference path="../TestGame.ts"/>
 
 module TS.SpaceTac.UI.Specs {
-    describe("BattleView", () => {
-        inbattleview_it("forwards events in targetting mode", (battleview: BattleView) => {
+    describe("BattleView", function () {
+        let testgame = setupBattleview();
+
+        it("forwards events in targetting mode", function () {
+            let battleview = testgame.battleview;
             expect(battleview.targetting).toBeNull();
 
             battleview.cursorInSpace(5, 5);

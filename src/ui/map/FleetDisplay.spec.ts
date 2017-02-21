@@ -1,6 +1,9 @@
 module TS.SpaceTac.UI.Specs {
-    describe("FleetDisplay", () => {
-        inmapview_it("orbits the fleet around its current location", mapview => {
+    describe("FleetDisplay", function () {
+        let testgame = setupMapview();
+
+        it("orbits the fleet around its current location", function () {
+            let mapview = testgame.mapview;
             let fleet = mapview.player_fleet;
 
             fleet.loopOrbit();

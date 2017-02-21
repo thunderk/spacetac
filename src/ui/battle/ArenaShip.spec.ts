@@ -1,10 +1,12 @@
 /// <reference path="../TestGame.ts"/>
 
 module TS.SpaceTac.UI.Specs {
-    describe("ArenaShip", () => {
-        inbattleview_it("adds effects display", (battleview: BattleView) => {
-            let ship = battleview.battle.playing_ship;
-            let sprite = battleview.arena.findShipSprite(ship);
+    describe("ArenaShip", function () {
+        let testgame = setupBattleview();
+
+        it("adds effects display", function () {
+            let ship = testgame.battleview.battle.playing_ship;
+            let sprite = testgame.battleview.arena.findShipSprite(ship);
 
             expect(sprite.effects.children.length).toBe(0);
 

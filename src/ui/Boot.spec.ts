@@ -2,17 +2,12 @@
 /// <reference path="Boot.ts" />
 
 module TS.SpaceTac.UI.Specs {
-    function inview_it(desc: string, func: (view: Boot) => void) {
-        var view = new Boot();
-        ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
-            func(view);
-        }, view);
-    }
-
     describe("Boot", () => {
-        inview_it("places empty loading background", function (view) {
-            expect(view.world.children.length).toBe(1);
-            expect(view.world.children[0] instanceof Phaser.Image).toBe(true);
+        let testgame = setupSingleView(testgame => [new Boot(), []]);
+
+        it("places empty loading background", function () {
+            expect(testgame.ui.world.children.length).toBe(1);
+            expect(testgame.ui.world.children[0] instanceof Phaser.Image).toBe(true);
         });
     });
 }

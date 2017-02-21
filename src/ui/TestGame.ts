@@ -2,60 +2,91 @@
 /// <reference path="map/UniverseMapView.ts"/>
 
 module TS.SpaceTac.UI.Specs {
-    // Test game wrapper (use instead of jasmine 'it')
-    export function ingame_it(desc: string, func: (game: MainUI, state: Phaser.State) => void,
-        state: Phaser.State = null, ...stateargs: any[]) {
-        it(desc, (done: () => void) => {
+    /**
+     * Class to hold references to test objects (used as singleton in "describe" blocks)
+     * 
+     * Attributes should only be accessed from inside corresponding "it" blocks (they are initialized by the setup).
+     */
+    export class TestGame {
+        ui: MainUI;
+        battleview: BattleView;
+        mapview: UniverseMapView;
+    }
+
+    /**
+     * Setup a headless test UI, with a single view started.
+     */
+    export function setupSingleView(buildView: (testgame: TestGame) => [Phaser.State, any[]]) {
+        let testgame = new TestGame();
+
+        beforeEach(function (done) {
             spyOn(console, "log").and.stub();
             spyOn(console, "warn").and.stub();
 
-            var game = new MainUI(true);
+            testgame.ui = new MainUI(true);
 
-            if (game.load) {
-                spyOn(game.load, 'image').and.stub();
-                spyOn(game.load, 'audio').and.stub();
+            if (testgame.ui.load) {
+                spyOn(testgame.ui.load, 'image').and.stub();
+                spyOn(testgame.ui.load, 'audio').and.stub();
             }
 
-            if (!state) {
-                state = new Phaser.State();
-            }
+            let [state, stateargs] = buildView(testgame);
 
-            var orig_create = state.create;
-            state.create = function () {
-                orig_create.apply(state);
-                func(game, state);
+            let orig_create = bound(state, "create");
+            spyOn(state, "create").and.callFake(() => {
+                orig_create();
                 done();
-                setTimeout(() => {
-                    game.destroy();
-                }, 1000);
-            };
+            });
 
-            game.state.add("test", state);
-            var args = stateargs.slice(0);
-            args.unshift(true);
-            args.unshift(true);
-            args.unshift("test");
-            game.state.start.apply(game.state, args);
+            testgame.ui.state.add("test", state);
+            testgame.ui.state.start("test", true, false, ...stateargs);
+        });
+
+        afterEach(function () {
+            let ui = testgame.ui;
+            window.requestAnimationFrame(() => ui.destroy());
+
+            testgame.ui = null;
+            testgame.battleview = null;
+            testgame.mapview = null;
+        });
+
+        return testgame;
+    }
+
+    /**
+     * Test setup of an empty BaseView
+     */
+    export function setupEmptyView(): TestGame {
+        return setupSingleView(testgame => [new BaseView(), []]);
+    }
+
+    /**
+     * Test setup of a battleview bound to a battle, to be called inside a "describe" block.
+     */
+    export function setupBattleview(): TestGame {
+        return setupSingleView(testgame => {
+            testgame.battleview = new BattleView();
+
+            let battle = Battle.newQuickRandom();
+            let player = battle.playing_ship.getPlayer();
+
+            return [testgame.battleview, [player, battle]];
         });
     }
 
-    // Test game wrapper, with a battleview initialized on a random battle
-    export function inbattleview_it(desc: string, func: (battleview: BattleView) => void) {
-        var battleview = new BattleView();
-        var battle = Battle.newQuickRandom();
-        var player = battle.playing_ship.getPlayer();
-        ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
-            func(battleview);
-        }, battleview, player, battle);
-    }
+    /**
+     * Test setup of a mapview bound to a universe, to be called inside a "describe" block.
+     */
+    export function setupMapview(): TestGame {
+        return setupSingleView(testgame => {
+            testgame.mapview = new UniverseMapView();
 
-    // Test game wrapper, with a map initialized on a random universe
-    export function inmapview_it(desc: string, func: (mapview: UniverseMapView) => void) {
-        var mapview = new UniverseMapView();
-        var session = new GameSession();
-        session.startNewGame();
-        ingame_it(desc, (game: Phaser.Game, state: Phaser.State) => {
-            func(mapview);
-        }, mapview, session.universe, session.player);
+            let mapview = new UniverseMapView();
+            let session = new GameSession();
+            session.startNewGame();
+
+            return [testgame.mapview, [session.universe, session.player]];
+        });
     }
 }

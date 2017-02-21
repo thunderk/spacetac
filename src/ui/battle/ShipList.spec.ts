@@ -1,8 +1,11 @@
 /// <reference path="../TestGame.ts"/>
 
 module TS.SpaceTac.UI.Specs {
-    describe("ShipList", () => {
-        inbattleview_it("handles play position of ships", (battleview: BattleView) => {
+    describe("ShipList", function () {
+        let testgame = setupBattleview();
+
+        it("handles play position of ships", function () {
+            let battleview = testgame.battleview;
             var list = battleview.ship_list;
 
             expect(battleview.battle.play_order.length).toBe(8);

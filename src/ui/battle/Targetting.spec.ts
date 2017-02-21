@@ -1,6 +1,8 @@
 module TS.SpaceTac.UI.Specs {
-    describe("Targetting", () => {
-        it("broadcasts hovering and selection events", () => {
+    describe("Targetting", function () {
+        let testgame = setupBattleview();
+
+        it("broadcasts hovering and selection events", function () {
             var targetting = new Targetting(null);
 
             var hovered: Target[] = [];
@@ -21,7 +23,8 @@ module TS.SpaceTac.UI.Specs {
             expect(selected).toEqual([Target.newFromLocation(1, 2)]);
         });
 
-        inbattleview_it("displays action point indicators", (battleview) => {
+        it("displays action point indicators", function () {
+            let battleview = testgame.battleview;
             let source = new Phaser.Group(battleview.game, battleview.arena);
             source.position.set(0, 0);
 
