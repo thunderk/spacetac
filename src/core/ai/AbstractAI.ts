@@ -1,14 +1,11 @@
 module TS.SpaceTac {
     // Base class for all Artificial Intelligence interaction
     export class AbstractAI {
-        // The fleet controlled by this AI
-        fleet: Fleet;
+        // Name of the AI
+        name: string;
 
         // Current ship being played
         ship: Ship;
-
-        // Set this to false to force synchronous behavior (playShip will block until finished)
-        async: boolean;
 
         // Time at which work as started
         started: number;
@@ -17,7 +14,7 @@ module TS.SpaceTac {
         random: RandomGenerator;
 
         // Timer for scheduled calls
-        timer = Timer.global;
+        timer: Timer;
 
         // Queue of work items to process
         //  Work items will be called successively, leaving time for other processing between them.
@@ -25,45 +22,43 @@ module TS.SpaceTac {
         //  When the queue is empty, the ship will end its turn.
         private workqueue: Function[];
 
-        constructor(fleet: Fleet) {
-            this.fleet = fleet;
-            this.async = true;
+        constructor(ship: Ship, timer = Timer.global, name: string = null) {
+            this.name = name || classname(this);
+            this.ship = ship;
             this.workqueue = [];
             this.random = new RandomGenerator();
+            this.timer = timer;
         }
 
         // Play a ship turn
         //  This will start asynchronous work. The AI will then call action methods, then advanceToNextShip to
         //  indicate it has finished.
-        playShip(ship: Ship, timer: Timer | null = null): void {
-            this.ship = ship;
+        play(): void {
             this.workqueue = [];
             this.started = (new Date()).getTime();
-            if (timer) {
-                this.timer = timer;
-            }
             this.initWork();
             if (this.workqueue.length > 0) {
                 this.processNextWorkItem();
+            } else {
+                this.endTurn();
             }
         }
 
         // Add a work item to the work queue
         addWorkItem(item: Function, delay = 100): void {
-            if (!this.async) {
+            if (this.timer.isSynchronous()) {
                 if (item) {
                     item();
                 }
-                return;
+            } else {
+                var wrapped = () => {
+                    if (item) {
+                        item();
+                    }
+                    this.processNextWorkItem();
+                };
+                this.workqueue.push(() => this.timer.schedule(delay, wrapped));
             }
-
-            var wrapped = () => {
-                if (item) {
-                    item();
-                }
-                this.processNextWorkItem();
-            };
-            this.workqueue.push(() => this.timer.schedule(delay, wrapped));
         }
 
         // Initially fill the work queue.
@@ -99,24 +94,22 @@ module TS.SpaceTac {
          * Effectively end the current ship's turn
          */
         private effectiveEndTurn() {
-            this.ship.endTurn();
-            this.ship = null;
-            this.fleet.battle.advanceToNextShip();
+            if (this.ship.playing) {
+                let battle = this.ship.getBattle();
+                this.ship.endTurn();
+                this.ship = null;
+                if (battle) {
+                    battle.advanceToNextShip();
+                }
+            }
         }
 
         /**
          * Called when we want the AI decides to end the ship turn
          */
         private endTurn(): void {
-            if (this.async) {
-                var duration = this.getDuration();
-                if (duration < 2000) {
-                    // Delay, as to make the AI not too fast to play
-                    this.timer.schedule(2000 - duration, () => this.effectiveEndTurn());
-                    return;
-                }
-            }
-            this.effectiveEndTurn();
+            // Delay, as to make the AI not too fast to play
+            this.timer.schedule(2000 - this.getDuration(), () => this.effectiveEndTurn());
         }
     }
 }

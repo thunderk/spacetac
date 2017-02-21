@@ -9,8 +9,7 @@ module TS.SpaceTac.Specs {
             var random = new RandomGenerator(0, 0.5, 1);
             battle.throwInitiative(random);
 
-            var ai = new BullyAI(battle.fleets[0]);
-            ai.ship = battle.fleets[0].ships[0];
+            var ai = new BullyAI(battle.fleets[0].ships[0], Timer.synchronous);
 
             var result = ai.listAllEnemies();
             expect(result).toEqual([battle.fleets[1].ships[1], battle.fleets[1].ships[0]]);
@@ -19,7 +18,7 @@ module TS.SpaceTac.Specs {
         it("lists weapons", function () {
             var ship = new Ship();
 
-            var ai = new BullyAI(ship.fleet);
+            var ai = new BullyAI(ship, Timer.synchronous);
             ai.ship = ship;
 
             var result = ai.listAllWeapons();
@@ -49,7 +48,7 @@ module TS.SpaceTac.Specs {
             ship.values.power.setMaximal(10);
             ship.values.power.set(8);
             var enemy = new Ship();
-            var ai = new BullyAI(ship.fleet);
+            var ai = new BullyAI(ship, Timer.synchronous);
             ai.ship = ship;
             ai.move_margin = 0;
             var weapon = new Equipment(SlotType.Weapon);
@@ -140,7 +139,7 @@ module TS.SpaceTac.Specs {
             battle.fleets[1].addShip(ship3);
             battle.throwInitiative(new RandomGenerator(1, 0.5, 0));
 
-            var ai = new BullyAI(ship1.fleet);
+            var ai = new BullyAI(ship1, Timer.synchronous);
             ai.ship = ship1;
 
             var result = ai.listAllManeuvers();
@@ -166,9 +165,7 @@ module TS.SpaceTac.Specs {
 
         it("gets a fallback maneuver", function () {
             var battle = TestTools.createBattle(1, 3);
-            var ai = new BullyAI(battle.fleets[0]);
-            ai.async = false;
-            ai.ship = battle.fleets[0].ships[0];
+            var ai = new BullyAI(battle.fleets[0].ships[0], Timer.synchronous);
 
             TestTools.setShipAP(ai.ship, 5);
             var engine = TestTools.addEngine(ai.ship, 100);
@@ -206,10 +203,8 @@ module TS.SpaceTac.Specs {
             ship2.setArenaPosition(8, 0);
             battle.fleets[1].addShip(ship2);
 
-            var ai = new BullyAI(ship1.fleet);
+            var ai = new BullyAI(ship1, Timer.synchronous);
             ai.move_margin = 0;
-            ai.async = false;
-            ai.ship = ship1;
 
             var engine = new Equipment(SlotType.Engine);
             engine.distance = 1;

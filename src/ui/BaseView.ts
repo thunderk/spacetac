@@ -31,10 +31,7 @@ module TS.SpaceTac.UI {
 
         init(...args: any[]) {
             this.gameui = <MainUI>this.game;
-            this.timer = new Timer();
-            if (this.gameui.headless) {
-                this.timer.makeSynchronous();
-            }
+            this.timer = new Timer(this.gameui.headless);
         }
 
         create() {

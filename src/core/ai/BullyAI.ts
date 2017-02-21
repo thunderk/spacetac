@@ -23,13 +23,7 @@ module TS.SpaceTac {
     // Basic Artificial Intelligence, with a tendency to move forward and shoot the nearest enemy
     export class BullyAI extends AbstractAI {
         // Safety margin in moves to account for floating-point rounding errors
-        move_margin: number;
-
-        constructor(fleet: Fleet) {
-            super(fleet);
-
-            this.move_margin = 0.1;
-        }
+        move_margin = 0.1;
 
         protected initWork(): void {
             this.addWorkItem(() => {
@@ -54,7 +48,7 @@ module TS.SpaceTac {
         listAllEnemies(): Ship[] {
             var result: Ship[] = [];
 
-            this.fleet.battle.play_order.forEach((ship: Ship) => {
+            this.ship.getBattle().play_order.forEach((ship: Ship) => {
                 if (ship.alive && ship.getPlayer() !== this.ship.getPlayer()) {
                     result.push(ship);
                 }
@@ -159,7 +153,7 @@ module TS.SpaceTac {
             if (distance > safety_distance) { // Don't move too close
                 target = target.constraintInRange(this.ship.arena_x, this.ship.arena_y,
                     (distance - safety_distance) * APPROACH_FACTOR);
-                target = engine.action.checkLocationTarget(this.fleet.battle, this.ship, target);
+                target = engine.action.checkLocationTarget(this.ship.getBattle(), this.ship, target);
                 return new BullyManeuver(new Maneuver(this.ship, engine, target));
             } else {
                 return null;
@@ -183,16 +177,18 @@ module TS.SpaceTac {
 
         // Effectively apply the chosen maneuver
         applyManeuver(maneuver: BullyManeuver): void {
-            if (maneuver.move) {
-                this.addWorkItem(() => {
-                    maneuver.move.apply();
-                }, 500);
-            }
+            if (maneuver) {
+                if (maneuver.move) {
+                    this.addWorkItem(() => {
+                        maneuver.move.apply();
+                    }, 500);
+                }
 
-            if (maneuver.fire) {
-                this.addWorkItem(() => {
-                    maneuver.fire.apply();
-                }, 1500);
+                if (maneuver.fire) {
+                    this.addWorkItem(() => {
+                        maneuver.fire.apply();
+                    }, 1500);
+                }
             }
 
             this.addWorkItem(null, 1500);

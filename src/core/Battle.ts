@@ -16,6 +16,9 @@ module TS.SpaceTac {
         // List of ships, sorted by their initiative throw
         play_order: Ship[];
 
+        // Current turn
+        turn: number;
+
         // Current ship whose turn it is to play
         playing_ship_index: number;
         playing_ship: Ship;
@@ -181,6 +184,9 @@ module TS.SpaceTac {
             }
 
             if (this.playing_ship) {
+                if (this.playing_ship_index == 0) {
+                    this.turn += 1;
+                }
                 this.playing_ship.startTurn();
             }
 
@@ -195,9 +201,9 @@ module TS.SpaceTac {
         playAI(ai: AbstractAI | null = null) {
             if (!ai) {
                 // TODO Use an AI adapted to the fleet
-                ai = new BullyAI(this.playing_ship.fleet);
+                ai = new BullyAI(this.playing_ship, this.timer);
             }
-            ai.playShip(this.playing_ship, this.timer);
+            ai.play();
         }
 
         // Start the battle
@@ -205,6 +211,7 @@ module TS.SpaceTac {
         //  This will not add any event to the battle log
         start(): void {
             this.ended = false;
+            this.turn = 0;
             this.placeShips();
             this.throwInitiative();
             this.play_order.forEach((ship: Ship) => {

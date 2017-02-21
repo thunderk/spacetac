@@ -91,6 +91,12 @@ module TS.SpaceTac.UI {
             this.inputs.bindCheat(Phaser.Keyboard.W, "Win current battle", () => {
                 this.battle.endBattle(this.player.fleet);
             });
+            this.inputs.bindCheat(Phaser.Keyboard.A, "Use AI to play", () => {
+                if (this.interacting) {
+                    this.setInteractionEnabled(false);
+                    this.battle.playAI(new TacticalAI(this.battle.playing_ship));
+                }
+            });
 
             // Start processing the log
             this.log_processor.start();
