@@ -19,7 +19,10 @@ module TS.SpaceTac {
 
         // Apply the maneuver in current battle
         apply(): void {
-            this.equipment.action.apply(this.ship.getBattle(), this.ship, this.target);
+            let result = this.equipment.action.apply(this.ship.getBattle(), this.ship, this.target);
+            if (!result) {
+                console.warn("AI could not apply maneuver", this);
+            }
         }
     }
 }

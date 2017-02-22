@@ -94,6 +94,10 @@ module TS.SpaceTac {
          * Effectively end the current ship's turn
          */
         private effectiveEndTurn() {
+            if (this.workqueue.length > 0) {
+                console.error(`${this.name} ends turn, but there is pending work`);
+            }
+
             if (this.ship.playing) {
                 let battle = this.ship.getBattle();
                 this.ship.endTurn();
@@ -101,6 +105,8 @@ module TS.SpaceTac {
                 if (battle) {
                     battle.advanceToNextShip();
                 }
+            } else {
+                console.error(`${this.name} tries to end turn of another ship`);
             }
         }
 

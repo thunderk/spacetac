@@ -46,11 +46,13 @@ module TS.SpaceTac {
         }
 
         // Add a ship in this fleet
-        addShip(ship: Ship): void {
-            if (this.ships.indexOf(ship) < 0) {
-                this.ships.push(ship);
+        addShip(ship: Ship): Ship {
+            if (ship.fleet && ship.fleet != this) {
+                remove(ship.fleet.ships, ship);
             }
+            add(this.ships, ship);
             ship.fleet = this;
+            return ship;
         }
 
         // Set the current battle

@@ -61,6 +61,13 @@ module TS.SpaceTac {
             return result;
         }
 
+        /**
+         * Return an iterator over all ships engaged in the battle
+         */
+        iships(): Iterator<Ship> {
+            return ichainit(imap(iarray(this.fleets), fleet => iarray(fleet.ships)));
+        }
+
         // Check if a player is able to play
         //  This can be used by the UI to determine if player interaction is allowed
         canPlay(player: Player): boolean {
