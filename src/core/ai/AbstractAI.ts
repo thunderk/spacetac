@@ -30,17 +30,24 @@ module TS.SpaceTac {
             this.timer = timer;
         }
 
+        toString = () => this.name;
+
         // Play a ship turn
         //  This will start asynchronous work. The AI will then call action methods, then advanceToNextShip to
         //  indicate it has finished.
         play(): void {
             this.workqueue = [];
             this.started = (new Date()).getTime();
-            this.initWork();
-            if (this.workqueue.length > 0) {
-                this.processNextWorkItem();
+
+            if (!this.ship.playing) {
+                console.error(`${this.name} tries to play a ship out of turn`);
             } else {
-                this.endTurn();
+                this.initWork();
+                if (this.workqueue.length > 0) {
+                    this.processNextWorkItem();
+                } else {
+                    this.endTurn();
+                }
             }
         }
 

@@ -28,7 +28,7 @@
     "karma-phantomjs-launcher": "~1.0",
     "remap-istanbul": "~0.8",
     "live-server": "~1.2",
-    "typescript": "~2.1",
+    "typescript": "~2.2",
     "typings": "~1.4"
   }
 }

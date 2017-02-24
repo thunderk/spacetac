@@ -14,7 +14,7 @@ module TS.SpaceTac.Specs {
         }
 
         // producer of FixedManeuver from a list of scores
-        let producer = (...scores: number[]) => iarray(scores.map(score => new FixedManeuver(score)));
+        let producer = (...scores: number[]) => imap(iarray(scores), score => new FixedManeuver(score));
         let applied = [];
 
         beforeEach(function () {
@@ -27,11 +27,12 @@ module TS.SpaceTac.Specs {
             ai.producers.push(producer(1, -8, 4));
             ai.producers.push(producer(3, 7, 0, 6, 1));
 
+            ai.ship.playing = true;
             ai.play();
             expect(applied).toEqual([7]);
         });
 
-        it("produces direct weapon hits", function () {
+        it("produces direct weapon shots", function () {
             let battle = new Battle();
             let ship0a = battle.fleets[0].addShip(new Ship(null, "0A"));
             let ship0b = battle.fleets[0].addShip(new Ship(null, "0B"));

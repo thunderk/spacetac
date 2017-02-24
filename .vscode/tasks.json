@@ -11,14 +11,14 @@
             "taskName": "build",
             "isBuildCommand": true,
             "isTestCommand": false,
-            "showOutput": "always",
+            "showOutput": "never",
             "problemMatcher": "$tsc"
         },
         {
             "taskName": "test",
             "isBuildCommand": false,
             "isTestCommand": true,
-            "showOutput": "always",
+            "showOutput": "silent",
             "problemMatcher": "$tsc"
         }
     ]

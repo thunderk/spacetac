@@ -2,7 +2,7 @@
 /// <reference path="Maneuver.ts"/>
 module TS.SpaceTac {
 
-    type TacticalProducer = () => Maneuver | null;
+    type TacticalProducer = Iterator<Maneuver>;
     type TacticalEvaluator = (Maneuver) => number;
 
     /**
@@ -47,8 +47,9 @@ module TS.SpaceTac {
             }
 
             // Produce a maneuver
+            let maneuver: Maneuver;
             let producer = this.producers.shift();
-            let maneuver = producer();
+            [maneuver, producer] = producer();
 
             if (maneuver) {
                 this.producers.push(producer);
