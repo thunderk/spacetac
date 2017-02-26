@@ -9,7 +9,7 @@ module TS.SpaceTac {
 
         // Construct a basic loot generator
         //  The list of templates will be automatically populated
-        constructor(random: RandomGenerator = new RandomGenerator(), populate: boolean = true) {
+        constructor(random = RandomGenerator.global, populate: boolean = true) {
             this.templates = [];
             this.random = random;
 

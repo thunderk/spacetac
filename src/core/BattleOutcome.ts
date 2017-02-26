@@ -24,7 +24,7 @@ module TS.SpaceTac {
                     if (!ship.alive) {
                         if (ship.fleet === this.winner) {
                             // Member of the winner fleet, salvage a number of equipments
-                            var count = random.throwInt(0, ship.getEquipmentCount());
+                            var count = random.randInt(0, ship.getEquipmentCount());
                             while (count > 0) {
                                 var salvaged = ship.getRandomEquipment(random);
                                 salvaged.detach();
@@ -33,7 +33,7 @@ module TS.SpaceTac {
                             }
 
                         } else {
-                            var luck = random.throw();
+                            var luck = random.random();
                             if (luck > 0.9) {
                                 // Salvage a supposedly transported item
                                 var transported = this.generateLootItem(random, ship.level);

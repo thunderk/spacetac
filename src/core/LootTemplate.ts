@@ -51,9 +51,8 @@ module TS.SpaceTac {
         }
 
         // Generate a random equipment with this template
-        generate(random: RandomGenerator = null): Equipment {
-            random = random || new RandomGenerator();
-            var power = random.throw();
+        generate(random = RandomGenerator.global): Equipment {
+            var power = random.random();
             return this.generateFixed(power);
         }
 
@@ -114,10 +113,10 @@ module TS.SpaceTac {
 
         // Generate an equipment that will have its level requirement in the given range
         //  May return null if level range is not compatible with the template
-        generateInLevelRange(level: IntegerRange, random: RandomGenerator = new RandomGenerator()): Equipment {
+        generateInLevelRange(level: IntegerRange, random = RandomGenerator.global): Equipment {
             var random_range = this.getPowerRangeForLevel(level);
             if (random_range) {
-                var power = random.throw() * (random_range.max - random_range.min) + random_range.min;
+                var power = random.random() * (random_range.max - random_range.min) + random_range.min;
                 return this.generateFixed(power);
             } else {
                 return null;

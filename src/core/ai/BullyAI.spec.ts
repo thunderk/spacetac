@@ -6,7 +6,7 @@ module TS.SpaceTac.Specs {
             battle.fleets[1].addShip(new Ship(null, "1-0"));
             battle.fleets[1].addShip(new Ship(null, "1-1"));
 
-            var random = new RandomGenerator(0, 0.5, 1);
+            var random = new SkewedRandomGenerator([0, 0.5, 1]);
             battle.throwInitiative(random);
 
             var ai = new BullyAI(battle.fleets[0].ships[0], Timer.synchronous);
@@ -137,7 +137,7 @@ module TS.SpaceTac.Specs {
             var ship3 = new Ship();
             ship3.setArenaPosition(11, 15);
             battle.fleets[1].addShip(ship3);
-            battle.throwInitiative(new RandomGenerator(1, 0.5, 0));
+            battle.throwInitiative(new SkewedRandomGenerator([1, 0.5, 0]));
 
             var ai = new BullyAI(ship1, Timer.synchronous);
             ai.ship = ship1;

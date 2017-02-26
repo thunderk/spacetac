@@ -227,12 +227,12 @@ module TS.SpaceTac.Specs {
             ship.addSlot(SlotType.Shield);
             ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
 
-            var random = new RandomGenerator(0.2);
+            var random = new SkewedRandomGenerator([0.2]);
             var picked = ship.getRandomEquipment(random);
             expect(picked).not.toBeNull();
             expect(picked).toBe(ship.slots[0].attached);
 
-            random.forceNextValue(1);
+            random = new SkewedRandomGenerator([0.999999]);
             picked = ship.getRandomEquipment(random);
             expect(picked).not.toBeNull();
             expect(picked).toBe(ship.slots[2].attached);

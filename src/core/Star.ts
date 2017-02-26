@@ -98,21 +98,21 @@ module TS.SpaceTac {
         }
 
         // Generate the contents of this star system
-        generate(random: RandomGenerator = new RandomGenerator()): void {
-            var location_count = random.throwInt(2, 10);
+        generate(random = RandomGenerator.global): void {
+            var location_count = random.randInt(2, 10);
             this.name = random.choice(Star.NAMES_POOL);
             this.generateLocations(location_count, random);
         }
 
         // Generate points of interest (*count* doesn't include the star and warp locations)
-        generateLocations(count: number, random = new RandomGenerator()): void {
+        generateLocations(count: number, random = RandomGenerator.global): void {
             while (count--) {
                 this.generateOneLocation(StarLocationType.PLANET, this.locations, this.radius * 0.2, this.radius * 0.7, random);
             }
         }
 
         // Generate a warp location to another star (to be bound later)
-        generateWarpLocationTo(other: Star, random = new RandomGenerator()): StarLocation {
+        generateWarpLocationTo(other: Star, random = RandomGenerator.global): StarLocation {
             let fav_phi = Math.atan2(other.y - this.y, other.x - this.x);
             var warp = this.generateOneLocation(StarLocationType.WARP, this.locations, this.radius * 0.8, this.radius * 1, random, fav_phi);
             return warp;
@@ -167,8 +167,8 @@ module TS.SpaceTac {
         // Generate a single location
         private generateOneLocation(type: StarLocationType, others: StarLocation[], radius_min: number, radius_max: number, random: RandomGenerator, fav_phi: number | null = null): StarLocation {
             do {
-                var phi = fav_phi ? (fav_phi + random.throw(0.4) - 0.2) : random.throw(Math.PI * 2);
-                var r = random.throw(radius_max - radius_min) + radius_min;
+                var phi = fav_phi ? (fav_phi + random.random() * 0.4 - 0.2) : (random.random() * Math.PI * 2);
+                var r = random.random() * (radius_max - radius_min) + radius_min;
                 var result = new StarLocation(this, type, r * Math.cos(phi), r * Math.sin(phi));
             } while (!this.checkMinDistance(result, others));
 

@@ -3,7 +3,7 @@ module TS.SpaceTac.Specs {
         it("removes generated encounters that lose", function () {
             var location = new StarLocation(null, StarLocationType.PLANET, 0, 0);
             var fleet = new Fleet();
-            var random = new RandomGenerator(0);
+            var random = new SkewedRandomGenerator([0]);
             var battle = location.enterLocation(fleet, random);
 
             expect(location.encounter).not.toBeNull();
@@ -17,7 +17,7 @@ module TS.SpaceTac.Specs {
         it("leaves generated encounters that win", function () {
             var location = new StarLocation(null, StarLocationType.PLANET, 0, 0);
             var fleet = new Fleet();
-            var random = new RandomGenerator(0);
+            var random = new SkewedRandomGenerator([0]);
             var battle = location.enterLocation(fleet, random);
 
             expect(location.encounter).not.toBeNull();

@@ -134,7 +134,7 @@ module TS.SpaceTac {
 
         // Make an initiative throw, to resolve play order in a battle
         throwInitiative(gen: RandomGenerator): void {
-            this.play_priority = gen.throw(this.attributes.initiative.get());
+            this.play_priority = gen.random() * this.attributes.initiative.get();
         }
 
         // Return the player owning this ship
@@ -463,12 +463,12 @@ module TS.SpaceTac {
         }
 
         // Get a random attached equipment, null if no equipment is attached
-        getRandomEquipment(random: RandomGenerator = new RandomGenerator()): Equipment {
+        getRandomEquipment(random = RandomGenerator.global): Equipment {
             var count = this.getEquipmentCount();
             if (count === 0) {
                 return null;
             } else {
-                var picked = random.throwInt(0, count - 1);
+                var picked = random.randInt(0, count - 1);
                 var result: Equipment = null;
                 var index = 0;
                 this.slots.forEach((slot: Slot) => {

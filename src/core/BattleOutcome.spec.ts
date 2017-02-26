@@ -33,10 +33,10 @@ module TS.SpaceTac.Specs {
             var battle = new Battle(fleet1, fleet2);
             var outcome = new BattleOutcome(fleet1);
 
-            var random = new RandomGenerator(
+            var random = new SkewedRandomGenerator([
                 0,      // leave first ship alone
                 0.45,   // take 2 equipments from the 4 of second ship
-                1,      //  - take last equipment
+                0.999,  //  - take last equipment
                 0,      //  - take first equipment
                 0.6,    // standard loot on first ship of second fleet
                 0,      //  - take first equipment
@@ -45,8 +45,8 @@ module TS.SpaceTac.Specs {
                 0,      //  - lower end of level range (dead ship has 5, so range is 4-6)
                 0,      //  - take first generated equipment (there is only one anyway)
                 0.96,   // lucky loot on fourth ship
-                1       //  - higher end of level range
-            );
+                0.999   //  - higher end of level range
+            ]);
 
             // Force lucky finds with one template
             var looter = new LootGenerator(random, false);

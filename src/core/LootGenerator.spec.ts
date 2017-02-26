@@ -14,7 +14,7 @@ module TS.SpaceTac.Specs {
         it("generates items within a given level range", () => {
             var generator = new LootGenerator();
             generator.templates = [new TestTemplate()];
-            generator.random.forceNextValue(0.5);
+            generator.random = new SkewedRandomGenerator([0.5]);
 
             var equipment = generator.generate(new IntegerRange(3, 6));
 

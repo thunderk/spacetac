@@ -52,13 +52,13 @@ module TS.SpaceTac {
 
         // Call this when first probing a location to generate the possible encounter
         //  Returns the encountered fleet, null if no encounter happens
-        tryGenerateEncounter(random: RandomGenerator = new RandomGenerator()): Fleet {
+        tryGenerateEncounter(random = RandomGenerator.global): Fleet {
             if (!this.encounter_gen) {
                 this.encounter_gen = true;
 
-                if (random.throw() < 0.8) {
+                if (random.random() < 0.8) {
                     var fleet_generator = new FleetGenerator(random);
-                    var ship_count = random.throwInt(1, 5);
+                    var ship_count = random.randInt(1, 5);
                     this.encounter = fleet_generator.generate(this.star.level, null, ship_count);
                 }
             }
@@ -69,7 +69,7 @@ module TS.SpaceTac {
         // Call this when entering a location to generate the possible encounter
         //  *fleet* is the player fleet, entering the location
         //  Returns the engaged battle, null if no encounter happens
-        enterLocation(fleet: Fleet, random: RandomGenerator = new RandomGenerator()): Battle {
+        enterLocation(fleet: Fleet, random = RandomGenerator.global): Battle {
             var encounter = this.tryGenerateEncounter(random);
             if (encounter) {
                 var battle = new Battle(fleet, encounter);

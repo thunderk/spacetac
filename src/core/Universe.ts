@@ -37,8 +37,8 @@ module TS.SpaceTac {
             var names = new NameGenerator(Star.NAMES_POOL);
 
             while (count) {
-                var x = random.throw() * this.radius * 2.0 - this.radius;
-                var y = random.throw() * this.radius * 2.0 - this.radius;
+                var x = random.random() * this.radius * 2.0 - this.radius;
+                var y = random.random() * this.radius * 2.0 - this.radius;
                 var star = new Star(this, x, y);
 
                 var nearest = this.getNearestTo(star, result);

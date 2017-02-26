@@ -18,7 +18,7 @@ module TS.SpaceTac {
             var battle = new Battle(fleet1, fleet2);
             expect(battle.play_order.length).toBe(0);
 
-            var gen = new RandomGenerator(1.0, 0.1, 1.0, 0.2, 0.6);
+            var gen = new SkewedRandomGenerator([1.0, 0.1, 1.0, 0.2, 0.6]);
             battle.throwInitiative(gen);
 
             expect(battle.play_order.length).toBe(5);
@@ -77,7 +77,7 @@ module TS.SpaceTac {
             expect(battle.playing_ship_index).toBeNull();
 
             // Force play order
-            var gen = new RandomGenerator(0.1, 0.2, 0.0);
+            var gen = new SkewedRandomGenerator([0.1, 0.2, 0.0]);
             battle.throwInitiative(gen);
 
             expect(battle.playing_ship).toBeNull();
@@ -127,7 +127,7 @@ module TS.SpaceTac {
             spyOn(ship3, "startTurn").and.callThrough();
 
             // Force play order
-            var gen = new RandomGenerator(0.3, 0.2, 0.1);
+            var gen = new SkewedRandomGenerator([0.3, 0.2, 0.1]);
             battle.throwInitiative(gen);
 
             battle.advanceToNextShip();
@@ -207,7 +207,7 @@ module TS.SpaceTac {
             ship4.setArenaPosition(12, 12);
 
             var battle = new Battle(fleet1);
-            battle.throwInitiative(new RandomGenerator(5, 4, 3, 2));
+            battle.throwInitiative(new SkewedRandomGenerator([5, 4, 3, 2]));
 
             var result = battle.collectShipsInCircle(Target.newFromLocation(5, 8), 3);
             expect(result).toEqual([ship2, ship3]);
