@@ -31,25 +31,5 @@ module TS.SpaceTac.Specs {
             ai.play();
             expect(applied).toEqual([7]);
         });
-
-        it("produces direct weapon shots", function () {
-            let battle = new Battle();
-            let ship0a = battle.fleets[0].addShip(new Ship(null, "0A"));
-            let ship0b = battle.fleets[0].addShip(new Ship(null, "0B"));
-            let ship1a = battle.fleets[1].addShip(new Ship(null, "1A"));
-            let ship1b = battle.fleets[1].addShip(new Ship(null, "1B"));
-
-            let result = imaterialize(produceDirectWeapon(ship0a, battle));
-            expect(result.length).toBe(0);
-
-            let weapon1 = ship0a.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            let weapon2 = ship0a.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            result = imaterialize(produceDirectWeapon(ship0a, battle));
-            expect(result.length).toBe(4);
-            expect(result).toContain(new Maneuver(ship0a, weapon1, Target.newFromShip(ship1a)));
-            expect(result).toContain(new Maneuver(ship0a, weapon1, Target.newFromShip(ship1b)));
-            expect(result).toContain(new Maneuver(ship0a, weapon2, Target.newFromShip(ship1a)));
-            expect(result).toContain(new Maneuver(ship0a, weapon2, Target.newFromShip(ship1b)));
-        });
     });
 }

@@ -35,29 +35,29 @@ module TS.SpaceTac {
             }
         }
 
-        protected customApply(battle: Battle, ship: Ship, target: Target) {
-            var affected: Ship[] = [];
-            var blast = this.getBlastRadius(ship);
+        /**
+         * Collect the effects applied by this action
+         */
+        getEffects(battle: Battle, ship: Ship, target: Target): [Ship, BaseEffect][] {
+            let result: [Ship, BaseEffect][] = [];
+            let blast = this.getBlastRadius(ship);
+            let ships = blast ? battle.collectShipsInCircle(target, blast, true) : ((target.ship && target.ship.alive) ? [target.ship] : []);
+            ships.forEach(ship => {
+                this.equipment.target_effects.forEach(effect => result.push([ship, effect]));
+            });
+            return result;
+        }
 
+        protected customApply(battle: Battle, ship: Ship, target: Target) {
             // Face the target
             ship.rotate(Target.newFromShip(ship).getAngleTo(target));
-
-            // Collect affected ships
-            if (blast) {
-                affected = affected.concat(battle.collectShipsInCircle(target, blast, true));
-            } else if (target.ship && target.ship.alive) {
-                affected.push(target.ship);
-            }
 
             // Fire event
             ship.addBattleEvent(new FireEvent(ship, this.equipment, target));
 
-            // Apply all target effects
-            affected.forEach((affship: Ship) => {
-                this.equipment.target_effects.forEach((effect: BaseEffect) => {
-                    effect.applyOnShip(affship);
-                });
-            });
+            // Apply effects
+            let effects = this.getEffects(battle, ship, target);
+            effects.forEach(([ship, effect]) => effect.applyOnShip(ship));
         }
     }
 }

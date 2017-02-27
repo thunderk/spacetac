@@ -2,8 +2,8 @@
 /// <reference path="Maneuver.ts"/>
 module TS.SpaceTac {
 
-    type TacticalProducer = Iterator<Maneuver>;
-    type TacticalEvaluator = (Maneuver) => number;
+    export type TacticalProducer = Iterator<Maneuver>;
+    export type TacticalEvaluator = (Maneuver) => number;
 
     /**
      * AI that applies a set of tactical rules
@@ -39,35 +39,39 @@ module TS.SpaceTac {
         }
 
         /**
-         * Single unit of work => produce a single maneuver and evaluate it
+         * Single unit of work => produce a batch of maneuvers and evaluate them
+         * 
+         * The best produced maneuver (highest evaluation score) is kept to be played.
+         * If two maneuvers have nearly the same score, the best one is randomly chosen.
          */
         private unitWork() {
-            if (this.producers.length == 0) {
-                return;
-            }
+            let done = 0;
 
-            // Produce a maneuver
-            let maneuver: Maneuver;
-            let producer = this.producers.shift();
-            [maneuver, producer] = producer();
+            while (done < 1000 && this.producers.length > 0) {
+                // Produce a maneuver
+                let maneuver: Maneuver;
+                let producer = this.producers.shift();
+                [maneuver, producer] = producer();
 
-            if (maneuver) {
-                this.producers.push(producer);
+                if (maneuver) {
+                    this.producers.push(producer);
 
-                // Evaluate the maneuver
-                let score = this.evaluate(maneuver);
-                if (score > this.best_score) {
-                    this.best = maneuver;
-                    this.best_score = score;
+                    // Evaluate the maneuver
+                    let score = this.evaluate(maneuver);
+                    //console.log(maneuver, score);
+                    if ((Math.abs(score - this.best_score) < 0.0001 && this.random.bool()) || score > this.best_score) {
+                        this.best = maneuver;
+                        this.best_score = score;
+                    }
                 }
+
+                done += 1;
             }
 
-            // Continue or stop ?
-            if (this.producers.length > 0) {
+            // Continue or stop
+            if (this.producers.length > 0 && this.getDuration() < 3000) {
                 this.addWorkItem(() => this.unitWork());
             } else if (this.best) {
-                // TODO Also apply after a certain time of not finding better
-                // TODO If not in range for action, make an approach move
                 this.best.apply();
             }
         }
@@ -76,22 +80,25 @@ module TS.SpaceTac {
          * Setup the default set of maneuver producers
          */
         private setupDefaultProducers() {
-            this.producers.push(produceDirectWeapon(this.ship, this.ship.getBattle()));
+            let producers = [
+                TacticalAIHelpers.produceDirectShots,
+                TacticalAIHelpers.produceBlastShots,
+                TacticalAIHelpers.produceRandomMoves,
+            ]
+            producers.forEach(producer => this.producers.push(producer(this.ship, this.ship.getBattle())));
         }
 
         /**
          * Setup the default set of maneuver evaluators
          */
         private setupDefaultEvaluators() {
+            let scaled = (evaluator: (...args) => number, factor: number) => (...args) => factor * evaluator(...args);
+            let evaluators = [
+                scaled(TacticalAIHelpers.evaluateTurnCost, 1),
+                scaled(TacticalAIHelpers.evaluateDamageToEnemy, 30),
+                scaled(TacticalAIHelpers.evaluateClustering, 3),
+            ]
+            evaluators.forEach(evaluator => this.evaluators.push((maneuver: Maneuver) => evaluator(this.ship, this.ship.getBattle(), maneuver)));
         }
-    }
-
-    /**
-     * Produce all "direct hit" weapon shots.
-     */
-    export function produceDirectWeapon(ship: Ship, battle: Battle): TacticalProducer {
-        let enemies = ifilter(battle.iships(), iship => iship.getPlayer() != ship.getPlayer());
-        let weapons = iarray(ship.listEquipment(SlotType.Weapon));
-        return imap(icombine(enemies, weapons), ([enemy, weapon]) => new Maneuver(ship, weapon, Target.newFromShip(enemy)));
     }
 }

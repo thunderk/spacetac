@@ -26,7 +26,7 @@ module TS.SpaceTac {
             this.name = name || classname(this);
             this.ship = ship;
             this.workqueue = [];
-            this.random = new RandomGenerator();
+            this.random = RandomGenerator.global;
             this.timer = timer;
         }
 
@@ -77,7 +77,7 @@ module TS.SpaceTac {
         /**
          * Get the time spent thinking by the AI.
          */
-        private getDuration() {
+        protected getDuration() {
             return (new Date()).getTime() - this.started;
         }
 

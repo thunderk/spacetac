@@ -69,10 +69,11 @@ module TS.SpaceTac {
             console.log(`${this.ai1.name} vs ${this.ai2.name} ...`);
 
             let battle = Battle.newQuickRandom();
-            let playing = battle.playing_ship;
 
             while (!battle.ended && battle.turn < 100) {
                 //console.debug(`Turn ${battle.turn} - Ship ${battle.play_order.indexOf(playing)}`);
+
+                let playing = battle.playing_ship;
                 let ai = (playing.fleet == battle.fleets[0]) ? this.ai1 : this.ai2;
                 ai.timer = Timer.synchronous;
                 ai.ship = playing;
@@ -82,7 +83,6 @@ module TS.SpaceTac {
                     console.error(`${ai.name} did not end its turn !`);
                     battle.advanceToNextShip();
                 }
-                playing = battle.playing_ship;
             }
 
             if (battle.ended && !battle.outcome.draw) {

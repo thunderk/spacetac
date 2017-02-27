@@ -68,6 +68,13 @@ module TS.SpaceTac {
             return ichainit(imap(iarray(this.fleets), fleet => iarray(fleet.ships)));
         }
 
+        /**
+         * Return an iterator over ships enemy of a player
+         */
+        ienemies(player: Player, alive_only = false): Iterator<Ship> {
+            return ifilter(this.iships(), ship => ship.getPlayer() != player && (ship.alive || !alive_only));
+        }
+
         // Check if a player is able to play
         //  This can be used by the UI to determine if player interaction is allowed
         canPlay(player: Player): boolean {
@@ -118,13 +125,7 @@ module TS.SpaceTac {
 
         // Collect all ships within a given radius of a target
         collectShipsInCircle(center: Target, radius: number, alive_only = false): Ship[] {
-            var result: Ship[] = [];
-            this.play_order.forEach(ship => {
-                if ((ship.alive || !alive_only) && Target.newFromShip(ship).getDistanceTo(center) <= radius) {
-                    result.push(ship);
-                }
-            });
-            return result;
+            return imaterialize(ifilter(this.iships(), ship => (ship.alive || !alive_only) && Target.newFromShip(ship).getDistanceTo(center) <= radius));
         }
 
         // Ends a battle and sets the outcome
@@ -221,9 +222,7 @@ module TS.SpaceTac {
             this.turn = 0;
             this.placeShips();
             this.throwInitiative();
-            this.play_order.forEach((ship: Ship) => {
-                ship.startBattle();
-            });
+            iforeach(this.iships(), ship => ship.startBattle());
             this.advanceToNextShip();
         }
 

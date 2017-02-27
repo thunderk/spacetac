@@ -46,7 +46,7 @@ module TS.SpaceTac {
         }
 
         // Add a ship in this fleet
-        addShip(ship: Ship): Ship {
+        addShip(ship = new Ship()): Ship {
             if (ship.fleet && ship.fleet != this) {
                 remove(ship.fleet.ships, ship);
             }

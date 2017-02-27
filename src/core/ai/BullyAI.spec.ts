@@ -45,8 +45,7 @@ module TS.SpaceTac.Specs {
             engine.ap_usage = 3;
             engine.distance = 1;
             ship.addSlot(SlotType.Engine).attach(engine);
-            ship.values.power.setMaximal(10);
-            ship.values.power.set(8);
+            TestTools.setShipAP(ship, 10);
             var enemy = new Ship();
             var ai = new BullyAI(ship, Timer.synchronous);
             ai.ship = ship;
@@ -54,6 +53,7 @@ module TS.SpaceTac.Specs {
             var weapon = new Equipment(SlotType.Weapon);
             weapon.ap_usage = 2;
             weapon.distance = 3;
+            ship.addSlot(SlotType.Weapon).attach(weapon);
 
             // enemy in range, the ship can fire without moving
             ship.values.power.set(8);

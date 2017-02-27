@@ -48,6 +48,7 @@ module TS.SpaceTac {
             this.requirements = {};
             this.permanent_effects = [];
             this.target_effects = [];
+            this.action = new BaseAction("nothing", "Do nothing", false);
         }
 
         // Returns true if the equipment can be equipped on a ship

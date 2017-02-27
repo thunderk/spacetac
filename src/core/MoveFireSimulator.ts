@@ -3,7 +3,7 @@ module TS.SpaceTac {
     /**
      * A single action in the sequence result from the simulator
      */
-    type MoveFirePart = {
+    export type MoveFirePart = {
         action: BaseAction
         target: Target
         ap: number
@@ -12,7 +12,7 @@ module TS.SpaceTac {
     /**
      * A simulation result
      */
-    class MoveFireResult {
+    export class MoveFireResult {
         // Simulation success, false only if no route can be found
         success = false
         // Ideal successive parts to make the full move+fire
@@ -64,10 +64,11 @@ module TS.SpaceTac {
             let distance = Math.sqrt(dx * dx + dy * dy);
             let result = new MoveFireResult();
             let ap = this.ship.values.power.get();
+            let action_radius = action.getRangeRadius(this.ship);
 
-            if (distance > action.getRangeRadius(this.ship)) {
+            if (action instanceof MoveAction || distance > action_radius) {
                 result.need_move = true;
-                let move_distance = distance - action.getRangeRadius(this.ship);
+                let move_distance = action instanceof MoveAction ? distance : distance - action_radius;
                 let move_target = new Target(this.ship.arena_x + dx * move_distance / distance, this.ship.arena_y + dy * move_distance / distance, null);
                 let engine = this.findBestEngine();
                 if (engine) {
@@ -82,7 +83,7 @@ module TS.SpaceTac {
                 }
             }
 
-            if (distance <= action.getRangeRadius(this.ship)) {
+            if (distance <= action_radius) {
                 result.success = true;
                 if (!(action instanceof MoveAction)) {
                     result.need_fire = true;

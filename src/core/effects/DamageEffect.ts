@@ -16,7 +16,10 @@ module TS.SpaceTac {
             this.value = value;
         }
 
-        applyOnShip(ship: Ship): boolean {
+        /**
+         * Get the effective damage done to both shield and hull (in this order)
+         */
+        getEffectiveDamage(ship: Ship): [number, number] {
             var damage = this.value;
             var hull: number;
             var shield: number;
@@ -36,7 +39,11 @@ module TS.SpaceTac {
                 hull = damage;
             }
 
-            // Effective damages on ship
+            return [shield, hull];
+        }
+
+        applyOnShip(ship: Ship): boolean {
+            let [shield, hull] = this.getEffectiveDamage(ship);
             ship.addDamage(hull, shield);
 
             return true;

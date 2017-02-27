@@ -42,6 +42,19 @@ module TS.SpaceTac {
             return equipment;
         }
 
+        /**
+         * Add a weapon to a ship
+         */
+        static addWeapon(ship: Ship, damage = 100, power_usage = 1, max_distance = 100, blast = 0): Equipment {
+            var equipment = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
+            equipment.action = new FireWeaponAction(equipment, blast != 0, "Test Weapon");
+            equipment.ap_usage = power_usage;
+            equipment.blast = blast;
+            equipment.distance = max_distance;
+            equipment.target_effects.push(new DamageEffect(damage));
+            return equipment;
+        }
+
         // Set a ship action points, adding/updating an equipment if needed
         static setShipAP(ship: Ship, points: number, recovery: number = 0): void {
             var equipment = this.getOrGenEquipment(ship, SlotType.Power, new Equipments.BasicPowerCore());
