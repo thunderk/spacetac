@@ -87,8 +87,11 @@ module TS.SpaceTac {
         // Priority in play_order
         play_priority = 0;
 
+        // Upgrade points available
+        upgrade_points = 0;
+
         // Create a new ship inside a fleet
-        constructor(fleet: Fleet = null, name: string = null) {
+        constructor(fleet: Fleet = null, name = "Ship") {
             this.fleet = fleet || new Fleet();
             this.level = 1;
             this.name = name;

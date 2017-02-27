@@ -1,6 +1,7 @@
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
-* Do not focus on ship while targetting for area effects (dissociate hover and target)
+* Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)
+* Controls: fix hover not working when mouse goes rapidly over and out of a ship
 * Active effects are not enough visible in ship list (maybe better in arena ?)
 * All things displayed in battle should be updated from LogProcess forwarding, not from current game state
 * Drones: add tooltip
@@ -21,8 +22,12 @@
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: apply safety distances to move actions
-* AI: bully AI crashes when winning a battle (trying to move toward null ship!)
 * AI: use support equipments (repair drones...)
+* AI: fix not being able to apply simulated maneuver
+* TacticalAI: allow to play several moves in the same turn
+* TacticalAI: add pauses to not play too quickly
+* TacticalAI: replace BullyAI
+* AIDuel: fix first AI always winning when two identical AIs are selected
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle
@@ -39,6 +44,7 @@
 * Main story arc
 
 Later, if possible:
+* Replays
 * Multiplayer
 * Saving to external file
 * Saving to cloud

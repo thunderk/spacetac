@@ -9,6 +9,7 @@ module TS.SpaceTac.UI.Specs {
      */
     export class TestGame {
         ui: MainUI;
+        baseview: BaseView;
         battleview: BattleView;
         mapview: UniverseMapView;
     }
@@ -47,6 +48,7 @@ module TS.SpaceTac.UI.Specs {
             window.requestAnimationFrame(() => ui.destroy());
 
             testgame.ui = null;
+            testgame.baseview = null;
             testgame.battleview = null;
             testgame.mapview = null;
         });
@@ -58,7 +60,10 @@ module TS.SpaceTac.UI.Specs {
      * Test setup of an empty BaseView
      */
     export function setupEmptyView(): TestGame {
-        return setupSingleView(testgame => [new BaseView(), []]);
+        return setupSingleView(testgame => {
+            testgame.baseview = new BaseView();
+            return [testgame.baseview, []];
+        });
     }
 
     /**

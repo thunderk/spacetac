@@ -16,9 +16,12 @@
    viewBox="0 0 507.99999 285.75001"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.1 unknown"
+   inkscape:version="0.92.0 r15299"
    sodipodi:docname="character.svg"
-   enable-background="new">
+   enable-background="new"
+   inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/close.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
   <defs
      id="defs2">
     <inkscape:tag
@@ -43,6 +46,9 @@
       <inkscape:tagref
          xlink:href="#g6665"
          id="tagref15396" />
+      <inkscape:tagref
+         xlink:href="#text6771"
+         id="tagref5459" />
     </inkscape:tag>
     <linearGradient
        id="linearGradient9404"
@@ -533,11 +539,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="784.30382"
-     inkscape:cy="504.96432"
+     inkscape:zoom="1.979899"
+     inkscape:cx="759.55392"
+     inkscape:cy="1033.5346"
      inkscape:document-units="px"
-     inkscape:current-layer="g6709"
+     inkscape:current-layer="g4578"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1037"
@@ -602,7 +608,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -703,21 +709,21 @@
       </g>
     </g>
     <rect
-       style="fill:#d45500;fill-opacity:1;stroke:none;stroke-width:0.79374999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#132d2c;fill-opacity:1;stroke:none;stroke-width:0.79374999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect6763"
        width="187.85416"
        height="164.41963"
        x="320.14584"
        y="11.249985" />
     <rect
-       style="fill:#fff6d5;fill-opacity:1;stroke:none;stroke-width:0.79375005;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#222222;fill-opacity:1;stroke:none;stroke-width:0.79375005;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect6765"
        width="187.85416"
        height="121.33036"
        x="320.14584"
        y="175.66963" />
     <rect
-       style="fill:#502d16;fill-opacity:1;stroke:none;stroke-width:0.79375005;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:#13191a;fill-opacity:1;stroke:none;stroke-width:0.79375005;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter9551)"
        id="rect6767"
        width="157.61607"
        height="94.872032"
@@ -763,14 +769,14 @@
        inkscape:tile-h="43.273309"
        inkscape:tile-x0="262.01311"
        inkscape:tile-y0="-56.545273"
-       style="stroke:none">
+       style="stroke:none;filter:url(#filter7193)">
       <rect
          y="21.455339"
          x="334.13098"
          height="48.75893"
          width="48.75893"
          id="rect6785"
-         style="fill:#2b1100;fill-opacity:1;stroke:none;stroke-width:0.79375005;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.79375005;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <g
        id="g6865"
@@ -951,23 +957,29 @@
          x="398.43564"
          y="26.543592"
          style="fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px">Cargo</tspan></text>
-    <circle
-       style="fill:#cdcdcd;fill-opacity:1;stroke:none;stroke-width:0.79374999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="path7854"
-       cx="508"
-       cy="11.249985"
-       r="20.847025" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333397px;line-height:6.61458349px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';letter-spacing:0px;word-spacing:0px;fill:#ff000d;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="495.25046"
-       y="23.850527"
-       id="text7862"><tspan
-         sodipodi:role="line"
-         id="tspan7860"
-         x="495.25046"
+    <g
+       id="g5454"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/close.png"
+       inkscape:export-xdpi="91.800003"
+       inkscape:export-ydpi="91.800003">
+      <circle
+         r="20.847025"
+         cy="11.249985"
+         cx="508"
+         id="path7854"
+         style="fill:#3e3e3e;fill-opacity:1;stroke:#c1c1c1;stroke-width:0.79374999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter7193)" />
+      <text
+         id="text7862"
          y="23.850527"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#ff000d;fill-opacity:1;stroke-width:0.26458335px">X</tspan></text>
+         x="495.25046"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333397px;line-height:6.61458349px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';letter-spacing:0px;word-spacing:0px;fill:#ff000d;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7193)"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#ff000d;fill-opacity:1;stroke-width:0.26458335px"
+           y="23.850527"
+           x="495.25046"
+           id="tspan7860"
+           sodipodi:role="line">X</tspan></text>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"

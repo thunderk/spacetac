@@ -34,6 +34,9 @@ module TS.SpaceTac.UI {
         // Ship tooltip
         ship_tooltip: ShipTooltip;
 
+        // Character sheet
+        character_sheet: CharacterSheet;
+
         // Subscription to the battle log
         log_processor: LogProcessor;
 
@@ -80,6 +83,8 @@ module TS.SpaceTac.UI {
             this.ship_list = new ShipList(this);
             this.ship_tooltip = new ShipTooltip(this);
             this.add.existing(this.ship_tooltip);
+            this.character_sheet = new CharacterSheet(this);
+            this.add.existing(this.character_sheet);
 
             // "Battle" animation
             this.displayFightMessage();
@@ -166,6 +171,8 @@ module TS.SpaceTac.UI {
         cursorClicked(): void {
             if (this.targetting) {
                 this.targetting.validate();
+            } else if (this.ship_hovered) {
+                this.character_sheet.show(this.ship_hovered);
             }
         }
 

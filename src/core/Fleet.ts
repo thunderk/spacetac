@@ -15,6 +15,9 @@ module TS.SpaceTac {
         // Current battle in which the fleet is engaged (null if not fighting)
         battle: Battle;
 
+        // Amount of credits available
+        credits = 0;
+
         // Create a fleet, bound to a player
         constructor(player: Player = null) {
             this.player = player || new Player();

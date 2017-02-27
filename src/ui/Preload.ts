@@ -77,6 +77,12 @@ module TS.SpaceTac.UI {
             this.loadImage("map/state-unknown.png");
             this.loadImage("map/state-enemy.png");
             this.loadImage("map/state-clear.png");
+            this.loadImage("character/sheet.png");
+            this.loadImage("character/close.png");
+            this.loadImage("character/ship.png");
+            this.loadImage("character/ship-selected.png");
+            this.loadImage("character/cargo-slot.png");
+            this.loadImage("character/equipment-slot.png");
 
             // Load ships
             this.loadShip("scout");
