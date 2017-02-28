@@ -4,9 +4,9 @@ module TS.SpaceTac.UI.Specs {
 
         it("displays fleet and ship information", function () {
             let view = testgame.baseview;
-            let sheet = new CharacterSheet(view);
+            let sheet = new CharacterSheet(view, -1000);
 
-            expect(sheet.x).toEqual(-sheet.width);
+            expect(sheet.x).toEqual(-1000);
 
             let fleet = new Fleet();
             let ship1 = fleet.addShip();

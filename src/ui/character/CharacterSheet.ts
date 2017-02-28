@@ -3,6 +3,10 @@ module TS.SpaceTac.UI {
      * Character sheet, displaying ship characteristics
      */
     export class CharacterSheet extends Phaser.Image {
+        // X positions
+        xshown: number;
+        xhidden: number;
+
         // Currently displayed fleet
         fleet: Fleet;
 
@@ -27,10 +31,12 @@ module TS.SpaceTac.UI {
         // Attributes and skills
         attributes: { [key: string]: Phaser.Text } = {};
 
-        constructor(view: BaseView) {
+        constructor(view: BaseView, xhidden = -2000, xshown = 0) {
             super(view.game, 0, 0, "character-sheet");
 
-            this.x = -this.width;
+            this.x = xhidden;
+            this.xshown = xshown;
+            this.xhidden = xhidden;
             this.inputEnabled = true;
 
             let close_button = new Phaser.Button(this.game, view.getWidth(), 0, "character-close", () => this.hide());
@@ -136,17 +142,24 @@ module TS.SpaceTac.UI {
             this.updateFleet(ship.fleet);
 
             if (animate) {
-                this.game.tweens.create(this).to({ x: 0 }, 800, Phaser.Easing.Circular.InOut, true);
+                this.game.tweens.create(this).to({ x: this.xshown }, 800, Phaser.Easing.Circular.InOut, true);
             } else {
-                this.x = 0;
+                this.x = this.xshown;
             }
         }
 
         /**
          * Hide the sheet
          */
-        hide() {
-            this.game.tweens.create(this).to({ x: -this.width }, 800, Phaser.Easing.Circular.InOut, true);
+        hide(animate = true) {
+            this.portraits.children.forEach((portrait: Phaser.Button) => portrait.loadTexture("character-ship"));
+
+            if (animate) {
+                this.game.tweens.create(this).to({ x: this.xhidden }, 800, Phaser.Easing.Circular.InOut, true);
+            } else {
+                this.x = this.xhidden;
+            }
+
         }
     }
 }

@@ -83,7 +83,7 @@ module TS.SpaceTac.UI {
             this.ship_list = new ShipList(this);
             this.ship_tooltip = new ShipTooltip(this);
             this.add.existing(this.ship_tooltip);
-            this.character_sheet = new CharacterSheet(this);
+            this.character_sheet = new CharacterSheet(this, -this.getWidth());
             this.add.existing(this.character_sheet);
 
             // "Battle" animation

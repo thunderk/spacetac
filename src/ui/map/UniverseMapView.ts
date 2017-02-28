@@ -22,6 +22,9 @@ module TS.SpaceTac.UI {
         // Button to jump to another system
         button_jump: Phaser.Button;
 
+        // Character sheet
+        character_sheet: CharacterSheet;
+
         // Zoom level
         zoom = 0;
 
@@ -69,8 +72,13 @@ module TS.SpaceTac.UI {
             this.group.addChild(this.button_jump);
 
             this.setZoom(2);
-            this.add.button(1830, 100, "map-zoom-in", () => this.setZoom(this.zoom + 1)).anchor.set(0.5, 0.5);
-            this.add.button(1830, 980, "map-zoom-out", () => this.setZoom(this.zoom - 1)).anchor.set(0.5, 0.5);
+            this.add.button(1520, 100, "map-zoom-in", () => this.setZoom(this.zoom + 1)).anchor.set(0.5, 0.5);
+            this.add.button(1520, 980, "map-zoom-out", () => this.setZoom(this.zoom - 1)).anchor.set(0.5, 0.5);
+
+            this.character_sheet = new CharacterSheet(this, this.getWidth() - 307);
+            this.character_sheet.show(this.player.fleet.ships[0], false);
+            this.character_sheet.hide(false);
+            this.add.existing(this.character_sheet);
 
             this.gameui.audio.startMusic("walking-along");
 
@@ -124,7 +132,7 @@ module TS.SpaceTac.UI {
          */
         setCamera(x: number, y: number, span: number, duration = 500, easing = Phaser.Easing.Cubic.InOut) {
             let scale = 1000 / span;
-            this.tweens.create(this.group.position).to({ x: 960 - x * scale, y: 540 - y * scale }, duration, easing).start();
+            this.tweens.create(this.group.position).to({ x: 800 - x * scale, y: 540 - y * scale }, duration, easing).start();
             this.tweens.create(this.group.scale).to({ x: scale, y: scale }, duration, easing).start();
         }
 
