@@ -22,6 +22,9 @@ module TS.SpaceTac.UI {
         // Ship upgrade points
         ship_upgrades: Phaser.Text;
 
+        // Ship slots
+        ship_slots: Phaser.Group;
+
         // Fleet's portraits
         portraits: Phaser.Group;
 
@@ -54,6 +57,10 @@ module TS.SpaceTac.UI {
             this.ship_upgrades = new Phaser.Text(this.game, 1066, 1054, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
             this.ship_upgrades.anchor.set(0.5, 0.5);
             this.addChild(this.ship_upgrades);
+
+            this.ship_slots = new Phaser.Group(this.game);
+            this.ship_slots.position.set(372, 120);
+            this.addChild(this.ship_slots);
 
             this.portraits = new Phaser.Group(this.game);
             this.portraits.position.set(152, 0);
@@ -139,6 +146,14 @@ module TS.SpaceTac.UI {
                 }
             });
 
+            let slotsinfo = CharacterSheet.getSlotPositions(ship.slots.length, 800, 454, 200, 200);
+            this.ship_slots.removeAll(true);
+            ship.slots.forEach((slot, idx) => {
+                let slot_display = new CharacterSlot(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y, slot.type);
+                slot_display.scale.set(slotsinfo.scaling, slotsinfo.scaling);
+                this.ship_slots.addChild(slot_display);
+            });
+
             this.updateFleet(ship.fleet);
 
             if (animate) {
@@ -159,7 +174,33 @@ module TS.SpaceTac.UI {
             } else {
                 this.x = this.xhidden;
             }
+        }
 
+        /**
+         * Get the positions and scaling for slots, to fit in ship_slots group.
+         */
+        static getSlotPositions(count: number, areawidth: number, areaheight: number, slotwidth: number, slotheight: number): { positions: { x: number, y: number }[], scaling: number } {
+            // Find grid size
+            let rows = 2;
+            let columns = 3;
+            while (count > rows * columns) {
+                rows += 1;
+                columns += 1;
+            }
+
+            // Find scaling
+            let scaling = 1;
+            while (slotwidth * scaling > areawidth || slotheight * scaling > areaheight) {
+                scaling *= 0.99;
+            }
+
+            // Position
+            let positions = range(count).map(i => {
+                let row = Math.floor(i / columns);
+                let column = i % columns;
+                return { x: column * (areawidth - slotwidth * scaling) / (columns - 1), y: row * (areaheight - slotheight * scaling) / (rows - 1) };
+            });
+            return { positions: positions, scaling: scaling };
         }
     }
 }
