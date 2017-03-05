@@ -308,5 +308,92 @@ module TS.SpaceTac.Specs {
             expect(onTurnEnd).toHaveBeenCalledWith(ship);
             expect(onShipMove).toHaveBeenCalledTimes(1);
         });
+
+        it("stores items in cargo space", function () {
+            let ship = new Ship();
+            let equipment1 = new Equipment();
+            let equipment2 = new Equipment();
+
+            let result = ship.addCargo(equipment1);
+            expect(result).toBe(false);
+            expect(ship.cargo).toEqual([]);
+
+            ship.setCargoSpace(1);
+
+            result = ship.addCargo(equipment1);
+            expect(result).toBe(true);
+            expect(ship.cargo).toEqual([equipment1]);
+
+            result = ship.addCargo(equipment1);
+            expect(result).toBe(false);
+            expect(ship.cargo).toEqual([equipment1]);
+
+            result = ship.addCargo(equipment2);
+            expect(result).toBe(false);
+            expect(ship.cargo).toEqual([equipment1]);
+
+            ship.setCargoSpace(2);
+
+            result = ship.addCargo(equipment2);
+            expect(result).toBe(true);
+            expect(ship.cargo).toEqual([equipment1, equipment2]);
+
+            ship.setCargoSpace(1);
+
+            expect(ship.cargo).toEqual([equipment1]);
+
+            ship.setCargoSpace(2);
+
+            expect(ship.cargo).toEqual([equipment1]);
+        });
+
+        it("equips items from cargo", function () {
+            let ship = new Ship();
+            let equipment = new Equipment(SlotType.Weapon);
+            let slot = ship.addSlot(SlotType.Weapon);
+            expect(ship.listEquipment()).toEqual([]);
+
+            let result = ship.equip(equipment);
+            expect(result).toBe(false);
+            expect(ship.listEquipment()).toEqual([]);
+
+            ship.setCargoSpace(1);
+            ship.addCargo(equipment);
+
+            result = ship.equip(equipment);
+            expect(result).toBe(true);
+            expect(ship.listEquipment(SlotType.Weapon)).toEqual([equipment]);
+            expect(equipment.attached_to).toEqual(slot);
+        });
+
+        it("removes equipped items", function () {
+            let ship = new Ship();
+            let equipment = new Equipment(SlotType.Weapon);
+            let slot = ship.addSlot(SlotType.Weapon);
+            slot.attach(equipment);
+
+            expect(ship.listEquipment()).toEqual([equipment]);
+            expect(slot.attached).toBe(equipment);
+            expect(equipment.attached_to).toBe(slot);
+
+            let result = ship.unequip(equipment);
+            expect(result).toBe(false);
+            expect(ship.listEquipment()).toEqual([equipment]);
+            expect(ship.cargo).toEqual([]);
+
+            ship.setCargoSpace(10);
+
+            result = ship.unequip(equipment);
+            expect(result).toBe(true);
+            expect(ship.listEquipment()).toEqual([]);
+            expect(ship.cargo).toEqual([equipment]);
+            expect(slot.attached).toBe(null);
+            expect(equipment.attached_to).toBe(null);
+
+            result = ship.unequip(equipment);
+            expect(result).toBe(false);
+            expect(ship.listEquipment()).toEqual([]);
+            expect(ship.cargo).toEqual([equipment]);
+        });
     });
 }

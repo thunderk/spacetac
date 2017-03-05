@@ -1,4 +1,9 @@
 module TS.SpaceTac.UI {
+    export type CharacterEquipmentDrop = {
+        message: string
+        callback: (equipment: Equipment) => any
+    }
+
     /**
      * Character sheet, displaying ship characteristics
      */
@@ -30,6 +35,9 @@ module TS.SpaceTac.UI {
 
         // Fleet's portraits
         portraits: Phaser.Group;
+
+        // Layer for draggable equipments
+        equipments: Phaser.Group;
 
         // Credits
         credits: Phaser.Text;
@@ -76,6 +84,9 @@ module TS.SpaceTac.UI {
             this.credits = new Phaser.Text(this.game, 136, 38, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
             this.credits.anchor.set(0.5, 0.5);
             this.addChild(this.credits);
+
+            this.equipments = new Phaser.Group(this.game);
+            this.addChild(this.equipments);
 
             let x1 = 664;
             let x2 = 1066;
@@ -142,6 +153,8 @@ module TS.SpaceTac.UI {
         show(ship: Ship, animate = true) {
             this.ship = ship;
 
+            this.equipments.removeAll(true);
+
             this.ship_name.setText(ship.name);
             this.ship_level.setText(ship.level.toString());
             this.ship_upgrades.setText(ship.upgrade_points.toString());
@@ -162,7 +175,8 @@ module TS.SpaceTac.UI {
 
                 if (slot.attached) {
                     let equipment = new CharacterEquipment(this, slot.attached);
-                    slot_display.setEquipment(equipment);
+                    this.equipments.addChild(equipment);
+                    slot_display.snapEquipment(equipment);
                 }
             });
 
@@ -172,6 +186,12 @@ module TS.SpaceTac.UI {
                 let cargo_slot = new CharacterCargo(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y);
                 cargo_slot.scale.set(slotsinfo.scaling, slotsinfo.scaling);
                 this.ship_cargo.addChild(cargo_slot);
+
+                if (idx < this.ship.cargo.length) {
+                    let equipment = new CharacterEquipment(this, this.ship.cargo[idx]);
+                    this.equipments.addChild(equipment);
+                    cargo_slot.snapEquipment(equipment);
+                }
             });
 
             this.updateFleet(ship.fleet);
@@ -194,6 +214,25 @@ module TS.SpaceTac.UI {
             } else {
                 this.x = this.xhidden;
             }
+        }
+
+        /**
+         * Check if an equipment can be dropped somewhere
+         */
+        canDropEquipment(equipment: Equipment, x: number, y: number): CharacterEquipmentDrop | null {
+            let candidates: Iterator<CharacterEquipmentDestination> = ichain(
+                iarray(<CharacterSlot[]>this.ship_slots.children),
+                iarray(<CharacterCargo[]>this.ship_cargo.children)
+            );
+
+            return ifirstmap(candidates, candidate => candidate.canDropEquipment(equipment, x, y));
+        }
+
+        /**
+         * Refresh the sheet display
+         */
+        refresh() {
+            this.show(this.ship);
         }
 
         /**

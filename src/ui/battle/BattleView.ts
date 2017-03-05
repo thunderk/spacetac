@@ -171,8 +171,9 @@ module TS.SpaceTac.UI {
         cursorClicked(): void {
             if (this.targetting) {
                 this.targetting.validate();
-            } else if (this.ship_hovered) {
+            } else if (this.ship_hovered && this.ship_hovered.getPlayer() == this.player) {
                 this.character_sheet.show(this.ship_hovered);
+                this.setShipHovered(null);
             }
         }
 

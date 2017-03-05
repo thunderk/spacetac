@@ -443,26 +443,74 @@ module TS.SpaceTac {
          */
         setCargoSpace(cargo: number) {
             this.cargo_space = cargo;
+            this.cargo.splice(this.cargo_space);
         }
 
-        // Add an empty equipment slot of the given type
+        /**
+         * Add an equipment to cargo space
+         * 
+         * Returns true if successful
+         */
+        addCargo(item: Equipment): boolean {
+            if (this.cargo.length < this.cargo_space) {
+                return add(this.cargo, item);
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Equip an item from cargo to the first available slot
+         * 
+         * Returns true if successful
+         */
+        equip(item: Equipment): boolean {
+            let free_slot = first(this.slots, slot => slot.type == item.slot && !slot.attached);
+
+            if (free_slot && contains(this.cargo, item)) {
+                remove(this.cargo, item);
+                free_slot.attach(item);
+
+                this.updateAttributes();
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Remove an equipped item, returning it to cargo
+         * 
+         * Returns true if successful
+         */
+        unequip(item: Equipment): boolean {
+            if (item.attached_to && item.attached_to.attached == item && this.cargo.length < this.cargo_space) {
+                item.detach();
+                add(this.cargo, item);
+
+                this.updateAttributes();
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Add an empty equipment slot of the given type
+         */
         addSlot(type: SlotType): Slot {
             var result = new Slot(this, type);
             this.slots.push(result);
             return result;
         }
 
-        // List all attached equipments of a given type (all types if null)
-        listEquipment(slottype: SlotType = null): Equipment[] {
-            var result: Equipment[] = [];
-
-            this.slots.forEach((slot: Slot) => {
-                if (slot.type === slottype && slot.attached) {
-                    result.push(slot.attached);
-                }
-            });
-
-            return result;
+        /**
+         * List all equipments attached to slots of a given type (any slot type if null)
+         */
+        listEquipment(slottype: SlotType | null = null): Equipment[] {
+            return this.slots.filter(slot => slot.attached && (slottype == null || slot.type == slottype)).map(slot => slot.attached);
         }
 
         // Get the number of attached equipments
