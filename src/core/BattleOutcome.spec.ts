@@ -15,7 +15,7 @@ module TS.SpaceTac.Specs {
             fleet2.ships[3].level = 5;
 
             fleet1.ships[0].setDead();
-            fleet1.ships[0].addSlot(SlotType.Armor).attach(new Equipment(SlotType.Armor));
+            fleet1.ships[0].addSlot(SlotType.Hull).attach(new Equipment(SlotType.Hull));
             fleet1.ships[1].setDead();
             fleet1.ships[1].addSlot(SlotType.Engine).attach(new Equipment(SlotType.Engine, "1.1.1"));
             fleet1.ships[1].addSlot(SlotType.Engine).attach(new Equipment(SlotType.Engine, "1.1.2"));

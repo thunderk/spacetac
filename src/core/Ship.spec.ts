@@ -211,7 +211,7 @@ module TS.SpaceTac.Specs {
 
             expect(ship.getEquipmentCount()).toBe(0);
 
-            ship.addSlot(SlotType.Armor).attach(new Equipment(SlotType.Armor));
+            ship.addSlot(SlotType.Hull).attach(new Equipment(SlotType.Hull));
             ship.addSlot(SlotType.Shield);
             ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
 
@@ -223,7 +223,7 @@ module TS.SpaceTac.Specs {
 
             expect(ship.getRandomEquipment()).toBe(null);
 
-            ship.addSlot(SlotType.Armor).attach(new Equipment(SlotType.Armor));
+            ship.addSlot(SlotType.Hull).attach(new Equipment(SlotType.Hull));
             ship.addSlot(SlotType.Shield);
             ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
 

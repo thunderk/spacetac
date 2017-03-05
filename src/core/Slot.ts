@@ -1,7 +1,7 @@
 module TS.SpaceTac {
     // Types of slots
     export enum SlotType {
-        Armor,
+        Hull,
         Shield,
         Engine,
         Power,

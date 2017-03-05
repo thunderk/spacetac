@@ -62,6 +62,10 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/weapon/blast.png");
             this.loadImage("battle/attributes/power.png");
             this.loadImage("battle/attributes/powercapacity.png");
+            this.loadImage("battle/attributes/hull.png");
+            this.loadImage("battle/attributes/hullcapacity.png");
+            this.loadImage("battle/attributes/shield.png");
+            this.loadImage("battle/attributes/shieldcapacity.png");
             this.loadImage("battle/attributes/effect-increase.png");
             this.loadImage("battle/attributes/effect-decrease.png");
             this.loadImage("battle/attributes/effect-limit.png");
@@ -84,6 +88,10 @@ module TS.SpaceTac.UI {
             this.loadImage("character/cargo-slot.png");
             this.loadImage("character/equipment-slot.png");
             this.loadImage("character/slot-power.png");
+            this.loadImage("character/slot-hull.png");
+            this.loadImage("character/slot-shield.png");
+            this.loadImage("character/slot-engine.png");
+            this.loadImage("character/slot-weapon.png");
 
             // Load ships
             this.loadShip("scout");

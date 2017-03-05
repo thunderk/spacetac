@@ -12,13 +12,13 @@ module TS.SpaceTac.UI.Specs {
 
                 let fleet = new Fleet();
                 let ship1 = fleet.addShip();
-                ship1.addSlot(SlotType.Armor);
+                ship1.addSlot(SlotType.Hull);
                 ship1.addSlot(SlotType.Engine);
                 ship1.addSlot(SlotType.Shield);
                 ship1.addSlot(SlotType.Weapon);
                 ship1.name = "Ship 1";
                 let ship2 = fleet.addShip();
-                ship2.addSlot(SlotType.Armor);
+                ship2.addSlot(SlotType.Hull);
                 ship2.name = "Ship 2";
 
                 sheet.show(ship1, false);

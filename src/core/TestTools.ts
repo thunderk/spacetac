@@ -75,7 +75,7 @@ module TS.SpaceTac {
 
         // Set a ship hull and shield points, adding/updating an equipment if needed
         static setShipHP(ship: Ship, hull_points: number, shield_points: number): void {
-            var armor = TestTools.getOrGenEquipment(ship, SlotType.Armor, new Equipments.IronHull());
+            var armor = TestTools.getOrGenEquipment(ship, SlotType.Hull, new Equipments.IronHull());
             var shield = TestTools.getOrGenEquipment(ship, SlotType.Shield, new Equipments.BasicForceField());
 
             armor.permanent_effects.forEach(effect => {
