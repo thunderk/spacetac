@@ -25,6 +25,9 @@ module TS.SpaceTac.UI {
         // Ship slots
         ship_slots: Phaser.Group;
 
+        // Ship cargo
+        ship_cargo: Phaser.Group;
+
         // Fleet's portraits
         portraits: Phaser.Group;
 
@@ -61,6 +64,10 @@ module TS.SpaceTac.UI {
             this.ship_slots = new Phaser.Group(this.game);
             this.ship_slots.position.set(372, 120);
             this.addChild(this.ship_slots);
+
+            this.ship_cargo = new Phaser.Group(this.game);
+            this.ship_cargo.position.set(1240, 86);
+            this.addChild(this.ship_cargo);
 
             this.portraits = new Phaser.Group(this.game);
             this.portraits.position.set(152, 0);
@@ -152,6 +159,19 @@ module TS.SpaceTac.UI {
                 let slot_display = new CharacterSlot(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y, slot.type);
                 slot_display.scale.set(slotsinfo.scaling, slotsinfo.scaling);
                 this.ship_slots.addChild(slot_display);
+
+                if (slot.attached) {
+                    let equipment = new CharacterEquipment(this, slot.attached);
+                    slot_display.setEquipment(equipment);
+                }
+            });
+
+            slotsinfo = CharacterSheet.getSlotPositions(ship.cargo_space, 638, 496, 200, 200);
+            this.ship_cargo.removeAll(true);
+            range(ship.cargo_space).forEach(idx => {
+                let cargo_slot = new CharacterCargo(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y);
+                cargo_slot.scale.set(slotsinfo.scaling, slotsinfo.scaling);
+                this.ship_cargo.addChild(cargo_slot);
             });
 
             this.updateFleet(ship.fleet);
@@ -177,7 +197,7 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Get the positions and scaling for slots, to fit in ship_slots group.
+         * Get the positions and scaling for slots, to fit in a rectangle group.
          */
         static getSlotPositions(count: number, areawidth: number, areaheight: number, slotwidth: number, slotheight: number): { positions: { x: number, y: number }[], scaling: number } {
             // Find grid size

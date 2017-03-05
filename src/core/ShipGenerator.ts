@@ -22,6 +22,7 @@ module TS.SpaceTac {
 
             // Apply model
             result.model = model.code;
+            result.setCargoSpace(model.cargo);
             model.slots.forEach((slot: SlotType) => {
                 result.addSlot(slot);
             });

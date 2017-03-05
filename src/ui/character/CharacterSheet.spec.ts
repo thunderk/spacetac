@@ -16,10 +16,12 @@ module TS.SpaceTac.UI.Specs {
                 ship1.addSlot(SlotType.Engine);
                 ship1.addSlot(SlotType.Shield);
                 ship1.addSlot(SlotType.Weapon);
+                ship1.setCargoSpace(3);
                 ship1.name = "Ship 1";
                 let ship2 = fleet.addShip();
                 ship2.addSlot(SlotType.Hull);
                 ship2.name = "Ship 2";
+                ship2.setCargoSpace(2);
 
                 sheet.show(ship1, false);
 
@@ -28,12 +30,14 @@ module TS.SpaceTac.UI.Specs {
 
                 expect(sheet.ship_name.text).toEqual("Ship 1");
                 expect(sheet.ship_slots.length).toBe(4);
+                expect(sheet.ship_cargo.length).toBe(3);
 
                 let portrait = <Phaser.Button>sheet.portraits.getChildAt(1);
                 portrait.onInputUp.dispatch();
 
                 expect(sheet.ship_name.text).toEqual("Ship 2");
                 expect(sheet.ship_slots.length).toBe(1);
+                expect(sheet.ship_cargo.length).toBe(2);
             });
         });
 

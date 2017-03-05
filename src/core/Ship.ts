@@ -75,6 +75,10 @@ module TS.SpaceTac {
         // List of slots, able to contain equipment
         slots: Slot[]
 
+        // Cargo
+        cargo_space: number = 0
+        cargo: Equipment[] = []
+
         // Ship attributes
         attributes = new ShipAttributes()
 
@@ -432,6 +436,13 @@ module TS.SpaceTac {
                 // Ship is dead
                 this.setDead(log);
             }
+        }
+
+        /**
+         * Set the available cargo space.
+         */
+        setCargoSpace(cargo: number) {
+            this.cargo_space = cargo;
         }
 
         // Add an empty equipment slot of the given type

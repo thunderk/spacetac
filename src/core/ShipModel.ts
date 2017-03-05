@@ -8,12 +8,16 @@ module TS.SpaceTac {
         // Minimal level to use this model
         level: number;
 
+        // Cargo space
+        cargo: number;
+
         // Available slots
         slots: SlotType[];
 
-        constructor(code: string, level: number, ...slots: SlotType[]) {
+        constructor(code: string, level: number, cargo: number, ...slots: SlotType[]) {
             this.code = code;
             this.level = level;
+            this.cargo = cargo;
             this.slots = slots;
         }
 
@@ -22,9 +26,9 @@ module TS.SpaceTac {
             // TODO Store in cache
             var result = [];
 
-            result.push(new ShipModel("scout", 1, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Weapon));
+            result.push(new ShipModel("scout", 1, 2, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Weapon));
 
-            result.push(new ShipModel("whirlwind", 1, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+            result.push(new ShipModel("whirlwind", 1, 4, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
                 SlotType.Weapon, SlotType.Weapon));
 
             return result;

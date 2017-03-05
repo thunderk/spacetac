@@ -10,5 +10,13 @@ module TS.SpaceTac.UI {
             sloticon.anchor.set(0.5, 0.5);
             this.addChild(sloticon);
         }
+
+        /**
+         * Set the equipment displayed in the slot
+         */
+        setEquipment(equipment: CharacterEquipment | null) {
+            this.addChild(equipment);
+            equipment.position.set(84, 83);
+        }
     }
 }
