@@ -15,14 +15,14 @@ module TS.SpaceTac {
 
             expect(action.getDistanceByActionPoint(ship)).toBe(0.5);
 
-            var result = action.checkTarget(battle, ship, Target.newFromLocation(0, 2));
+            var result = action.checkTarget(ship, Target.newFromLocation(0, 2));
             expect(result).toEqual(Target.newFromLocation(0, 2));
 
-            result = action.checkTarget(battle, ship, Target.newFromLocation(0, 8));
+            result = action.checkTarget(ship, Target.newFromLocation(0, 8));
             expect(result).toEqual(Target.newFromLocation(0, 3));
 
             ship.values.power.set(0);
-            result = action.checkTarget(battle, ship, Target.newFromLocation(0, 8));
+            result = action.checkTarget(ship, Target.newFromLocation(0, 8));
             expect(result).toBeNull();
         });
 
@@ -31,10 +31,10 @@ module TS.SpaceTac {
             var ship2 = new Ship(null, "Test2");
             var action = new MoveAction(null);
 
-            var result = action.checkTarget(null, ship1, Target.newFromShip(ship1));
+            var result = action.checkTarget(ship1, Target.newFromShip(ship1));
             expect(result).toBeNull();
 
-            result = action.checkTarget(null, ship1, Target.newFromShip(ship2));
+            result = action.checkTarget(ship1, Target.newFromShip(ship2));
             expect(result).toBeNull();
         });
 
@@ -51,13 +51,15 @@ module TS.SpaceTac {
             var action = new MoveAction(engine);
             battle.playing_ship = ship;
 
-            var result = action.apply(battle, ship, Target.newFromLocation(10, 10));
+            spyOn(console, "warn").and.stub();
+
+            var result = action.apply(ship, Target.newFromLocation(10, 10));
             expect(result).toBe(true);
             expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
             expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
             expect(ship.values.power.get()).toEqual(0);
 
-            result = action.apply(battle, ship, Target.newFromLocation(10, 10));
+            result = action.apply(ship, Target.newFromLocation(10, 10));
             expect(result).toBe(false);
             expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
             expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
@@ -89,19 +91,19 @@ module TS.SpaceTac {
             var action = new MoveAction(engine);
             action.safety_distance = 2;
 
-            var result = action.checkLocationTarget(battle, ship, Target.newFromLocation(7, 5));
+            var result = action.checkLocationTarget(ship, Target.newFromLocation(7, 5));
             expect(result).toEqual(Target.newFromLocation(7, 5));
 
-            result = action.checkLocationTarget(battle, ship, Target.newFromLocation(8, 5));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(8, 5));
             expect(result).toEqual(Target.newFromLocation(8, 5));
 
-            result = action.checkLocationTarget(battle, ship, Target.newFromLocation(9, 5));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(9, 5));
             expect(result).toEqual(Target.newFromLocation(8, 5));
 
-            result = action.checkLocationTarget(battle, ship, Target.newFromLocation(10, 5));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(10, 5));
             expect(result).toEqual(Target.newFromLocation(8, 5));
 
-            result = action.checkLocationTarget(battle, ship, Target.newFromLocation(12, 5));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(12, 5));
             expect(result).toEqual(Target.newFromLocation(12, 5));
         });
     });

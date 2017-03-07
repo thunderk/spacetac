@@ -7,10 +7,10 @@ module TS.SpaceTac.Equipments {
             expect(equipment.target_effects).toEqual([new ValueEffect("hull", 30)]);
 
             let battle = new Battle();
-            let ship = new Ship();
+            let ship = battle.fleets[0].addShip();
             battle.playing_ship = ship;
             TestTools.setShipAP(ship, 10);
-            let result = equipment.action.apply(battle, ship, new Target(5, 5, null));
+            let result = equipment.action.apply(ship, new Target(5, 5, null));
             expect(result).toBe(true);
 
             expect(battle.drones.length).toBe(1);

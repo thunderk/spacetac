@@ -39,7 +39,7 @@ module TS.SpaceTac {
             battle.playing_ship = ship;
             fleet.setBattle(battle);
 
-            action.apply(battle, ship, Target.newFromLocation(50, 50));
+            action.apply(ship, Target.newFromLocation(50, 50));
             expect(mock_apply).toHaveBeenCalledTimes(1);
             expect(mock_apply).toHaveBeenCalledWith(ship2);
         });

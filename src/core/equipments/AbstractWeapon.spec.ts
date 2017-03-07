@@ -38,15 +38,15 @@ module TS.SpaceTac.Specs {
 
             weapon.ap_usage = new Range(2);
             var equipment = weapon.generateFixed(0);
-            expect(equipment.action.canBeUsed(null, ship)).toBe(true);
+            expect(equipment.action.checkCannotBeApplied(ship)).toBe(null);
 
             weapon.ap_usage = new Range(3);
             equipment = weapon.generateFixed(0);
-            expect(equipment.action.canBeUsed(null, ship)).toBe(true);
+            expect(equipment.action.checkCannotBeApplied(ship)).toBe(null);
 
             weapon.ap_usage = new Range(4);
             equipment = weapon.generateFixed(0);
-            expect(equipment.action.canBeUsed(null, ship)).toBe(false);
+            expect(equipment.action.checkCannotBeApplied(ship)).toBe("not enough power");
         });
 
         it("can't friendly fire", function () {
@@ -60,9 +60,9 @@ module TS.SpaceTac.Specs {
             weapon.setRange(10, 10);
             var equipment = weapon.generateFixed(0);
 
-            expect(equipment.action.checkShipTarget(null, ship1a, Target.newFromShip(ship2a))).toEqual(
+            expect(equipment.action.checkShipTarget(ship1a, Target.newFromShip(ship2a))).toEqual(
                 Target.newFromShip(ship2a));
-            expect(equipment.action.checkShipTarget(null, ship1a, Target.newFromShip(ship1b))).toBeNull();
+            expect(equipment.action.checkShipTarget(ship1a, Target.newFromShip(ship1b))).toBeNull();
         });
 
         it("can't fire farther than its range", function () {
@@ -78,25 +78,25 @@ module TS.SpaceTac.Specs {
             var equipment = weapon.generateFixed(0);
             expect(equipment.distance).toEqual(10);
 
-            expect(equipment.action.checkLocationTarget(null, ship, Target.newFromLocation(15, 10))).toEqual(
+            expect(equipment.action.checkLocationTarget(ship, Target.newFromLocation(15, 10))).toEqual(
                 Target.newFromLocation(15, 10));
-            expect(equipment.action.checkLocationTarget(null, ship, Target.newFromLocation(30, 10))).toEqual(
+            expect(equipment.action.checkLocationTarget(ship, Target.newFromLocation(30, 10))).toEqual(
                 Target.newFromLocation(20, 10));
 
             // Ship targetting
             var ship2 = new Ship(fleet2);
 
             ship2.setArenaPosition(10, 15);
-            expect(equipment.action.checkShipTarget(null, ship, Target.newFromShip(ship2))).toEqual(
+            expect(equipment.action.checkShipTarget(ship, Target.newFromShip(ship2))).toEqual(
                 Target.newFromShip(ship2));
 
             ship2.setArenaPosition(10, 25);
-            expect(equipment.action.checkShipTarget(null, ship, Target.newFromShip(ship2))).toBeNull();
+            expect(equipment.action.checkShipTarget(ship, Target.newFromShip(ship2))).toBeNull();
 
             // Forbid targetting in space
             weapon.setRange(10, 10, false);
             equipment = weapon.generateFixed(0);
-            expect(equipment.action.checkLocationTarget(null, ship, Target.newFromLocation(15, 10))).toBeNull();
+            expect(equipment.action.checkLocationTarget(ship, Target.newFromLocation(15, 10))).toBeNull();
         });
 
         it("can target an enemy ship and damage it", function () {
@@ -119,17 +119,17 @@ module TS.SpaceTac.Specs {
 
             var equipment = weapon.generateFixed(0);
 
-            equipment.action.apply(null, ship1, Target.newFromShip(ship2));
+            equipment.action.apply(ship1, Target.newFromShip(ship2));
             expect(ship2.values.hull.get()).toEqual(100);
             expect(ship2.values.shield.get()).toEqual(10);
             expect(ship1.values.power.get()).toEqual(49);
 
-            equipment.action.apply(null, ship1, Target.newFromShip(ship2));
+            equipment.action.apply(ship1, Target.newFromShip(ship2));
             expect(ship2.values.hull.get()).toEqual(90);
             expect(ship2.values.shield.get()).toEqual(0);
             expect(ship1.values.power.get()).toEqual(48);
 
-            equipment.action.apply(null, ship1, Target.newFromShip(ship2));
+            equipment.action.apply(ship1, Target.newFromShip(ship2));
             expect(ship2.values.hull.get()).toEqual(70);
             expect(ship2.values.shield.get()).toEqual(0);
             expect(ship1.values.power.get()).toEqual(47);

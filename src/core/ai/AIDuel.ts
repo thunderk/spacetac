@@ -44,14 +44,15 @@ module TS.SpaceTac {
         /**
          * Update the result of a single battle
          */
-        update(winner: AbstractAI | null) {
-            if (winner) {
-                if (winner == this.ai1) {
+        update(winner: number) {
+            if (winner >= 0) {
+                if (winner == 0) {
                     this.win1 += 1;
+                    console.log(` => Player 1 wins (${this.ai1})`);
                 } else {
                     this.win2 += 1;
+                    console.log(` => Player 2 wins (${this.ai2})`);
                 }
-                console.log(` => ${winner.name} wins`);
             } else {
                 this.draw += 1;
                 console.log(" => draw");
@@ -86,9 +87,9 @@ module TS.SpaceTac {
             }
 
             if (battle.ended && !battle.outcome.draw) {
-                this.update(battle.outcome.winner == battle.fleets[0] ? this.ai1 : this.ai2);
+                this.update(battle.fleets.indexOf(battle.outcome.winner));
             } else {
-                this.update(null);
+                this.update(-1);
             }
             if (!this.stopped) {
                 this.scheduled = Timer.global.schedule(100, () => this.next());

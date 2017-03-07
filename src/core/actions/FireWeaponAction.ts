@@ -12,7 +12,7 @@ module TS.SpaceTac {
             this.can_target_space = can_target_space;
         }
 
-        checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
+        checkLocationTarget(ship: Ship, target: Target): Target {
             if (this.can_target_space) {
                 target = target.constraintInRange(ship.arena_x, ship.arena_y, this.equipment.distance);
                 return target;
@@ -21,7 +21,7 @@ module TS.SpaceTac {
             }
         }
 
-        checkShipTarget(battle: Battle, ship: Ship, target: Target): Target {
+        checkShipTarget(ship: Ship, target: Target): Target {
             if (ship.getPlayer() === target.ship.getPlayer()) {
                 // No friendly fire
                 return null;
@@ -48,7 +48,7 @@ module TS.SpaceTac {
             return result;
         }
 
-        protected customApply(battle: Battle, ship: Ship, target: Target) {
+        protected customApply(ship: Ship, target: Target) {
             // Face the target
             ship.rotate(Target.newFromShip(ship).getAngleTo(target));
 
@@ -56,7 +56,7 @@ module TS.SpaceTac {
             ship.addBattleEvent(new FireEvent(ship, this.equipment, target));
 
             // Apply effects
-            let effects = this.getEffects(battle, ship, target);
+            let effects = this.getEffects(ship.getBattle(), ship, target);
             effects.forEach(([ship, effect]) => effect.applyOnShip(ship));
         }
     }

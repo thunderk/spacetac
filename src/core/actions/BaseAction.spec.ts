@@ -8,22 +8,22 @@ module TS.SpaceTac {
             ship.addSlot(SlotType.Hull).attach(equipment);
             ship.values.power.setMaximal(10);
 
-            expect(action.canBeUsed(null, ship)).toBe(false);
+            expect(action.checkCannotBeApplied(ship)).toBe("not enough power");
 
             ship.values.power.set(5);
 
-            expect(action.canBeUsed(null, ship)).toBe(true);
-            expect(action.canBeUsed(null, ship, 4)).toBe(true);
-            expect(action.canBeUsed(null, ship, 3)).toBe(true);
-            expect(action.canBeUsed(null, ship, 2)).toBe(false);
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+            expect(action.checkCannotBeApplied(ship, 4)).toBe(null);
+            expect(action.checkCannotBeApplied(ship, 3)).toBe(null);
+            expect(action.checkCannotBeApplied(ship, 2)).toBe("not enough power");
 
             ship.values.power.set(3);
 
-            expect(action.canBeUsed(null, ship)).toBe(true);
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
 
             ship.values.power.set(2);
 
-            expect(action.canBeUsed(null, ship)).toBe(false);
+            expect(action.checkCannotBeApplied(ship)).toBe("not enough power");
         });
     });
 }

@@ -89,5 +89,14 @@ module TS.SpaceTac.Specs {
                 { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2 }
             ]);
         });
+
+        it("does nothing if trying to move in the same spot", function () {
+            let [ship, simulator, action] = simpleWeaponCase();
+            let result = simulator.simulateAction(ship.listEquipment(SlotType.Engine)[0].action, new Target(ship.arena_x, ship.arena_y, null));
+            expect(result.success).toBe(true);
+            expect(result.need_move).toBe(false);
+            expect(result.need_fire).toBe(false);
+            expect(result.parts).toEqual([]);
+        });
     });
 }

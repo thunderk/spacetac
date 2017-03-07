@@ -153,7 +153,7 @@ module TS.SpaceTac {
             if (distance > safety_distance) { // Don't move too close
                 target = target.constraintInRange(this.ship.arena_x, this.ship.arena_y,
                     (distance - safety_distance) * APPROACH_FACTOR);
-                target = engine.action.checkLocationTarget(this.ship.getBattle(), this.ship, target);
+                target = engine.action.checkLocationTarget(this.ship, target);
                 return new BullyManeuver(new Maneuver(this.ship, engine, target));
             } else {
                 return null;

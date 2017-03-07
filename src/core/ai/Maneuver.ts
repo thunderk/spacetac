@@ -32,8 +32,8 @@ module TS.SpaceTac {
         apply(): void {
             if (this.simulation.success) {
                 this.simulation.parts.forEach(part => {
-                    if (!part.action.apply(this.ship.getBattle(), this.ship, part.target)) {
-                        console.error("AI cannot apply maneuver", this);
+                    if (!part.action.apply(this.ship, part.target)) {
+                        console.error("AI cannot apply maneuver", this, part);
                     }
                 });
             }

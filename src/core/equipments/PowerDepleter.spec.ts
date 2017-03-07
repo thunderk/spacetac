@@ -13,7 +13,7 @@ module TS.SpaceTac.Specs {
             expect(target.sticky_effects).toEqual([]);
 
             // Attribute is immediately limited
-            equipment.action.apply(null, ship, Target.newFromShip(target));
+            equipment.action.apply(ship, Target.newFromShip(target));
 
             expect(target.values.power.get()).toBe(4);
             expect(target.sticky_effects).toEqual([

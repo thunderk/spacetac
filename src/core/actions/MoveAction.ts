@@ -11,19 +11,24 @@ module TS.SpaceTac {
             this.safety_distance = 50;
         }
 
-        canBeUsed(battle: Battle, ship: Ship, remaining_ap: number = null): boolean {
-            if (battle && battle.playing_ship !== ship) {
-                return false;
+        checkCannotBeApplied(ship: Ship, remaining_ap: number = null): string | null {
+            let base = super.checkCannotBeApplied(ship, Infinity);
+            if (base) {
+                return base;
             }
 
             // Check AP usage
             if (remaining_ap === null) {
                 remaining_ap = ship.values.power.get();
             }
-            return remaining_ap > 0.0001;
+            if (remaining_ap > 0.0001) {
+                return null
+            } else {
+                return "not enough power";
+            }
         }
 
-        getActionPointsUsage(battle: Battle, ship: Ship, target: Target): number {
+        getActionPointsUsage(ship: Ship, target: Target): number {
             if (target === null) {
                 return 0;
             }
@@ -43,23 +48,26 @@ module TS.SpaceTac {
             return this.equipment.distance / this.equipment.ap_usage;
         }
 
-        checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
+        checkLocationTarget(ship: Ship, target: Target): Target {
             // Apply maximal distance
             var max_distance = this.getRangeRadius(ship);
             target = target.constraintInRange(ship.arena_x, ship.arena_y, max_distance);
 
             // Apply collision prevention
-            battle.play_order.forEach((iship: Ship) => {
-                if (iship !== ship) {
-                    target = target.moveOutOfCircle(iship.arena_x, iship.arena_y, this.safety_distance,
-                        ship.arena_x, ship.arena_y);
-                }
-            });
+            let battle = ship.getBattle();
+            if (battle) {
+                battle.play_order.forEach((iship: Ship) => {
+                    if (iship !== ship) {
+                        target = target.moveOutOfCircle(iship.arena_x, iship.arena_y, this.safety_distance,
+                            ship.arena_x, ship.arena_y);
+                    }
+                });
+            }
 
             return target;
         }
 
-        protected customApply(battle: Battle, ship: Ship, target: Target) {
+        protected customApply(ship: Ship, target: Target) {
             ship.moveTo(target.x, target.y);
         }
     }

@@ -21,12 +21,18 @@ module TS.SpaceTac {
             this.equipment = equipment;
         }
 
-        // Check basic conditions to know if the ship can use this action at all
-        //  Method to reimplement to set conditions
-        canBeUsed(battle: Battle, ship: Ship, remaining_ap: number = null): boolean {
+        /**
+         * Check basic conditions to know if the ship can use this action at all
+         * 
+         * Method to extend to set conditions
+         * 
+         * Returns an informative message indicating why the action cannot be used, null otherwise
+         */
+        checkCannotBeApplied(ship: Ship, remaining_ap: number = null): string | null {
+            let battle = ship.getBattle();
             if (battle && battle.playing_ship !== ship) {
                 // Ship is not playing
-                return false;
+                return "ship not playing";
             }
 
             // Check AP usage
@@ -34,11 +40,15 @@ module TS.SpaceTac {
                 remaining_ap = ship.values.power.get();
             }
             var ap_usage = this.equipment ? this.equipment.ap_usage : 0;
-            return remaining_ap >= ap_usage;
+            if (remaining_ap >= ap_usage) {
+                return null;
+            } else {
+                return "not enough power";
+            }
         }
 
         // Get the number of action points the action applied to a target would use
-        getActionPointsUsage(battle: Battle, ship: Ship, target: Target): number {
+        getActionPointsUsage(ship: Ship, target: Target): number {
             if (this.equipment) {
                 return this.equipment.ap_usage;
             } else {
@@ -66,14 +76,14 @@ module TS.SpaceTac {
 
         // Method to check if a target is applicable for this action
         //  Will call checkLocationTarget or checkShipTarget by default
-        checkTarget(battle: Battle, ship: Ship, target: Target): Target {
-            if (!this.canBeUsed(battle, ship)) {
+        checkTarget(ship: Ship, target: Target): Target {
+            if (this.checkCannotBeApplied(ship)) {
                 return null;
             } else if (target) {
                 if (target.ship) {
-                    return this.checkShipTarget(battle, ship, target);
+                    return this.checkShipTarget(ship, target);
                 } else {
-                    return this.checkLocationTarget(battle, ship, target);
+                    return this.checkLocationTarget(ship, target);
                 }
             } else {
                 return null;
@@ -82,38 +92,42 @@ module TS.SpaceTac {
 
         // Method to reimplement to check if a space target is applicable
         //  Must return null if the target can't be applied, an altered target, or the original target
-        checkLocationTarget(battle: Battle, ship: Ship, target: Target): Target {
+        checkLocationTarget(ship: Ship, target: Target): Target {
             return null;
         }
 
         // Method to reimplement to check if a ship target is applicable
         //  Must return null if the target can't be applied, an altered target, or the original target
-        checkShipTarget(battle: Battle, ship: Ship, target: Target): Target {
+        checkShipTarget(ship: Ship, target: Target): Target {
             return null;
         }
 
         // Apply an action, returning true if it was successful
-        apply(battle: Battle, ship: Ship, target: Target): boolean {
-            if (this.canBeUsed(battle, ship)) {
-                target = this.checkTarget(battle, ship, target);
+        apply(ship: Ship, target: Target): boolean {
+            let reject = this.checkCannotBeApplied(ship);
+            if (reject == null) {
+                target = this.checkTarget(ship, target);
                 if (!target && this.needs_target) {
+                    console.warn("Action rejected - no target selected", ship, this, target);
                     return false;
                 }
 
-                let cost = this.getActionPointsUsage(battle, ship, target);
+                let cost = this.getActionPointsUsage(ship, target);
                 if (!ship.useActionPoints(cost)) {
+                    console.warn("Action rejected - not enough power", ship, this, target);
                     return false;
                 }
 
-                this.customApply(battle, ship, target);
+                this.customApply(ship, target);
                 return true;
             } else {
+                console.warn(`Action rejected - ${reject}`, ship, this, target);
                 return false;
             }
         }
 
         // Method to reimplement to apply a action
-        protected customApply(battle: Battle, ship: Ship, target: Target) {
+        protected customApply(ship: Ship, target: Target) {
         }
     }
 }

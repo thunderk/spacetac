@@ -59,27 +59,32 @@ module TS.SpaceTac {
          * Simulate a given action on a given valid target.
          */
         simulateAction(action: BaseAction, target: Target): MoveFireResult {
+            let result = new MoveFireResult();
+
             let dx = target.x - this.ship.arena_x;
             let dy = target.y - this.ship.arena_y;
             let distance = Math.sqrt(dx * dx + dy * dy);
-            let result = new MoveFireResult();
+
             let ap = this.ship.values.power.get();
             let action_radius = action.getRangeRadius(this.ship);
 
             if (action instanceof MoveAction || distance > action_radius) {
-                result.need_move = true;
                 let move_distance = action instanceof MoveAction ? distance : distance - action_radius;
-                let move_target = new Target(this.ship.arena_x + dx * move_distance / distance, this.ship.arena_y + dy * move_distance / distance, null);
-                let engine = this.findBestEngine();
-                if (engine) {
-                    result.total_move_ap = engine.action.getActionPointsUsage(this.ship.getBattle(), this.ship, move_target);
-                    result.can_move = ap > 0;
-                    result.can_end_move = result.total_move_ap <= ap;
-                    result.move_location = move_target;
-                    result.parts.push({ action: engine.action, target: move_target, ap: result.total_move_ap });
+                if (move_distance > 0.000001) {
+                    result.need_move = true;
 
-                    ap -= result.total_move_ap;
-                    distance -= move_distance;
+                    let move_target = new Target(this.ship.arena_x + dx * move_distance / distance, this.ship.arena_y + dy * move_distance / distance, null);
+                    let engine = this.findBestEngine();
+                    if (engine) {
+                        result.total_move_ap = engine.action.getActionPointsUsage(this.ship, move_target);
+                        result.can_move = ap > 0;
+                        result.can_end_move = result.total_move_ap <= ap;
+                        result.move_location = move_target;
+                        result.parts.push({ action: engine.action, target: move_target, ap: result.total_move_ap });
+
+                        ap -= result.total_move_ap;
+                        distance -= move_distance;
+                    }
                 }
             }
 
@@ -87,7 +92,7 @@ module TS.SpaceTac {
                 result.success = true;
                 if (!(action instanceof MoveAction)) {
                     result.need_fire = true;
-                    result.total_fire_ap = action.getActionPointsUsage(this.ship.getBattle(), this.ship, target);
+                    result.total_fire_ap = action.getActionPointsUsage(this.ship, target);
                     result.can_fire = result.total_fire_ap <= ap;
                     result.fire_location = target;
                     result.parts.push({ action: action, target: target, ap: result.total_fire_ap });

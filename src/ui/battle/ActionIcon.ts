@@ -88,7 +88,7 @@ module TS.SpaceTac.UI {
             if (!this.bar.interactive) {
                 return;
             }
-            if (!this.action.canBeUsed(this.battleview.battle, this.ship)) {
+            if (this.action.checkCannotBeApplied(this.ship)) {
                 return;
             }
             if (this.selected) {
@@ -104,7 +104,7 @@ module TS.SpaceTac.UI {
             this.battleview.arena.range_hint.setPrimary(this.ship, this.action);
 
             // Update fading statuses
-            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.battleview.battle, this.ship, null));
+            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, null));
 
             // Set the selected state
             this.setSelected(true);
@@ -127,14 +127,14 @@ module TS.SpaceTac.UI {
         // Called when a target is hovered
         //  This will check the target against current action and adjust it if needed
         processHover(target: Target): void {
-            target = this.action.checkTarget(this.battleview.battle, this.ship, target);
+            target = this.action.checkTarget(this.ship, target);
             this.targetting.setTarget(target, false, this.action.getBlastRadius(this.ship));
-            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.battleview.battle, this.ship, target));
+            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, target));
         }
 
         // Called when a target is selected
         processSelection(target: Target): void {
-            if (this.action.apply(this.battleview.battle, this.ship, target)) {
+            if (this.action.apply(this.ship, target)) {
                 this.bar.actionEnded();
             }
         }
@@ -159,7 +159,7 @@ module TS.SpaceTac.UI {
         // Update the active status, from the action canBeUsed result
         updateActiveStatus(force = false): void {
             var old_active = this.active;
-            this.active = this.action.canBeUsed(this.battleview.battle, this.ship);
+            this.active = !this.action.checkCannotBeApplied(this.ship);
             if (force || (this.active != old_active)) {
                 Animation.setVisibility(this.game, this.layer_active, this.active, 500);
                 this.game.tweens.create(this.layer_icon).to({ alpha: this.active ? 1 : 0.3 }, 500).start();
@@ -170,7 +170,7 @@ module TS.SpaceTac.UI {
         // Update the fading status, given an hypothetical remaining AP
         updateFadingStatus(remaining_ap: number): void {
             var old_fading = this.fading;
-            this.fading = this.active && !this.action.canBeUsed(this.battleview.battle, this.ship, remaining_ap);
+            this.fading = this.active && (this.action.checkCannotBeApplied(this.ship, remaining_ap) != null);
             if (this.fading != old_fading) {
                 Animation.setVisibility(this.game, this.layer_active, this.active && !this.fading, 500);
             }

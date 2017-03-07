@@ -5,9 +5,13 @@ module TS.SpaceTac {
             super("endturn", "End ship's turn", false);
         }
 
-        protected customApply(battle: Battle, ship: Ship, target: Target) {
+        protected customApply(ship: Ship, target: Target) {
             ship.endTurn();
-            battle.advanceToNextShip();
+
+            let battle = ship.getBattle();
+            if (battle) {
+                battle.advanceToNextShip();
+            }
         }
     }
 }

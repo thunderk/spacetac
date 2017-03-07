@@ -20,18 +20,18 @@ module TS.SpaceTac {
             equipment.ap_usage = 0;
             let action = new DeployDroneAction(equipment);
 
-            expect(action.checkTarget(null, ship, new Target(8, 0, null))).toEqual(new Target(8, 0, null));
-            expect(action.checkTarget(null, ship, new Target(12, 0, null))).toEqual(new Target(8, 0, null));
+            expect(action.checkTarget(ship, new Target(8, 0, null))).toEqual(new Target(8, 0, null));
+            expect(action.checkTarget(ship, new Target(12, 0, null))).toEqual(new Target(8, 0, null));
 
             let other = new Ship();
             other.setArenaPosition(8, 0);
-            expect(action.checkTarget(null, ship, new Target(8, 0, other))).toBeNull();
+            expect(action.checkTarget(ship, new Target(8, 0, other))).toBeNull();
         });
 
         it("deploys a new drone", function () {
-            let ship = new Ship();
-            ship.setArenaPosition(0, 0);
             let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
+            ship.setArenaPosition(0, 0);
             battle.playing_ship = ship;
             TestTools.setShipAP(ship, 3);
             let equipment = new Equipment();
@@ -43,7 +43,9 @@ module TS.SpaceTac {
             equipment.target_effects.push(new DamageEffect(50));
             let action = new DeployDroneAction(equipment);
 
-            let result = action.apply(battle, ship, new Target(5, 0, null));
+            battle.log.clear();
+            battle.log.addFilter("value");
+            let result = action.apply(ship, new Target(5, 0, null));
 
             expect(result).toBe(true);
             expect(battle.drones.length).toBe(1);

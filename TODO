@@ -1,3 +1,4 @@
+* Enable strict null checking in typescript
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)
@@ -27,7 +28,6 @@
 * TacticalAI: allow to play several moves in the same turn
 * TacticalAI: add pauses to not play too quickly
 * TacticalAI: replace BullyAI
-* AIDuel: fix first AI always winning when two identical AIs are selected
 * Add a defeat screen (game over for now)
 * Add a victory screen, with loot display
 * Add retreat from battle
