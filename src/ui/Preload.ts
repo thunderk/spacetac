@@ -92,6 +92,10 @@ module TS.SpaceTac.UI {
             this.loadImage("character/slot-shield.png");
             this.loadImage("character/slot-engine.png");
             this.loadImage("character/slot-weapon.png");
+            this.loadImage("equipment/ironhull.png");
+            this.loadImage("equipment/basicforcefield.png");
+            this.loadImage("equipment/basicpowercore.png");
+            this.loadImage("equipment/conventionalengine.png");
 
             // Load ships
             this.loadShip("scout");
