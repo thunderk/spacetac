@@ -41,19 +41,13 @@ module TS.SpaceTac.Specs {
 
         it("checks a firing possibility", function () {
             var ship = new Ship();
-            var engine = new Equipment(SlotType.Engine);
-            engine.ap_usage = 3;
-            engine.distance = 1;
-            ship.addSlot(SlotType.Engine).attach(engine);
+            let engine = TestTools.addEngine(ship, 1 / 3);
             TestTools.setShipAP(ship, 10);
             var enemy = new Ship();
             var ai = new BullyAI(ship, Timer.synchronous);
             ai.ship = ship;
             ai.move_margin = 0;
-            var weapon = new Equipment(SlotType.Weapon);
-            weapon.ap_usage = 2;
-            weapon.distance = 3;
-            ship.addSlot(SlotType.Weapon).attach(weapon);
+            let weapon = TestTools.addWeapon(ship, 0, 2, 3);
 
             // enemy in range, the ship can fire without moving
             ship.values.power.set(8);
@@ -62,9 +56,9 @@ module TS.SpaceTac.Specs {
             enemy.arena_x = 3;
             enemy.arena_y = 0;
             var result = ai.checkBullyManeuver(enemy, weapon);
-            expect(result.move).toBeNull();
-            expect(result.fire.target).toEqual(Target.newFromShip(enemy));
-            expect(result.fire.equipment).toBe(weapon);
+            expect(result.simulation.need_move).toBe(false);
+            expect(result.simulation.fire_location).toEqual(Target.newFromShip(enemy));
+            expect(result.equipment).toBe(weapon);
 
             // enemy out of range, but moving can bring it in range
             ship.values.power.set(8);
@@ -73,9 +67,9 @@ module TS.SpaceTac.Specs {
             enemy.arena_x = 6;
             enemy.arena_y = 0;
             result = ai.checkBullyManeuver(enemy, weapon);
-            expect(result.move.target).toEqual(Target.newFromLocation(3, 0));
-            expect(result.fire.target).toEqual(Target.newFromShip(enemy));
-            expect(result.fire.equipment).toBe(weapon);
+            expect(result.simulation.move_location).toEqual(Target.newFromLocation(3, 0));
+            expect(result.simulation.fire_location).toEqual(Target.newFromShip(enemy));
+            expect(result.equipment).toBe(weapon);
 
             // enemy out of range, but moving can bring it in range, except for the safety margin
             ai.move_margin = 0.1;
@@ -145,19 +139,9 @@ module TS.SpaceTac.Specs {
             var result = ai.listAllManeuvers();
             expect(result.length).toBe(0);
 
-            var weapon1 = new Equipment(SlotType.Weapon);
-            weapon1.distance = 50;
-            weapon1.ap_usage = 1;
-            weapon1.target_effects.push(new DamageEffect(10));
-            ai.ship.addSlot(SlotType.Weapon).attach(weapon1);
-            var weapon2 = new Equipment(SlotType.Weapon);
-            weapon2.distance = 10;
-            weapon2.ap_usage = 1;
-            weapon2.target_effects.push(new DamageEffect(5));
-            ai.ship.addSlot(SlotType.Weapon).attach(weapon2);
-
-            ai.ship.values.power.setMaximal(10);
-            ai.ship.values.power.set(8);
+            TestTools.setShipAP(ai.ship, 8);
+            let weapon1 = TestTools.addWeapon(ai.ship, 10, 1, 50);
+            let weapon2 = TestTools.addWeapon(ai.ship, 5, 1, 10);
 
             result = ai.listAllManeuvers();
             expect(result.length).toBe(3);
@@ -188,10 +172,10 @@ module TS.SpaceTac.Specs {
             // Move towards an enemy (up to minimal distance)
             ai.ship.setArenaPosition(30, 0);
             maneuver = ai.getFallbackManeuver();
-            expect(maneuver.move.target).toEqual(Target.newFromLocation(25, 0));
+            expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(25, 0));
             ai.ship.setArenaPosition(25, 0);
             maneuver = ai.getFallbackManeuver();
-            expect(maneuver.move.target).toEqual(Target.newFromLocation(22.5, 0));
+            expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(22.5, 0));
         });
 
         it("applies the chosen move", function () {

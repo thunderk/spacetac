@@ -36,7 +36,7 @@ module TS.SpaceTac.Specs {
             expect(result.total_fire_ap).toBe(3, 'total_fire_ap');
 
             expect(result.parts).toEqual([
-                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3 }
+                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: true }
             ]);
         });
 
@@ -50,7 +50,7 @@ module TS.SpaceTac.Specs {
             expect(result.total_fire_ap).toBe(3, 'total_fire_ap');
 
             expect(result.parts).toEqual([
-                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3 }
+                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: false }
             ]);
         });
 
@@ -67,8 +67,8 @@ module TS.SpaceTac.Specs {
             expect(result.total_fire_ap).toBe(3, 'total_fire_ap');
 
             expect(result.parts).toEqual([
-                { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 1 },
-                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 15, ship.arena_y, null), ap: 3 }
+                { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 1, possible: true },
+                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 15, ship.arena_y, null), ap: 3, possible: true }
             ]);
         });
 
@@ -85,8 +85,8 @@ module TS.SpaceTac.Specs {
             expect(result.total_fire_ap).toBe(2, 'total_fire_ap');
 
             expect(result.parts).toEqual([
-                { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 10, ship.arena_y, null), ap: 2 },
-                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2 }
+                { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 10, ship.arena_y, null), ap: 2, possible: true },
+                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2, possible: false }
             ]);
         });
 

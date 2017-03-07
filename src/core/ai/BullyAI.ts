@@ -1,22 +1,11 @@
 /// <reference path="AbstractAI.ts"/>
+/// <reference path="Maneuver.ts"/>
 module TS.SpaceTac {
-    // Combination of a move action and a fire action
-    export class BullyManeuver {
-        // Move action to position the ship before firing
-        move: Maneuver;
-
-        // Fire action
-        fire: Maneuver;
-
-        constructor(move: Maneuver = null, fire: Maneuver = null) {
-            this.move = move;
-            this.fire = fire;
-        }
-
+    export class BullyManeuver extends Maneuver {
         // Get a sorting score, by distance to another point
         //   Nearest means higher score
         getScoreByDistance(point: Target): number {
-            return -point.getDistanceTo(this.fire.target);
+            return -point.getDistanceTo(this.simulation.fire_location);
         }
     }
 
@@ -93,46 +82,13 @@ module TS.SpaceTac {
 
         // Check if a weapon can be used against an enemy
         //   Returns the BullyManeuver, or null if impossible to fire
-        checkBullyManeuver(enemy: Ship, weapon: Equipment): BullyManeuver {
-            // Check if enemy in range
+        checkBullyManeuver(enemy: Ship, weapon: Equipment): BullyManeuver | null {
             var target = weapon.blast ? Target.newFromLocation(enemy.arena_x, enemy.arena_y) : Target.newFromShip(enemy);
-            var distance = target.getDistanceTo(Target.newFromShip(this.ship));
-            var move: Target;
-            var engine: Equipment;
-            var remaining_ap = this.ship.values.power.get();
-            if (distance <= weapon.distance) {
-                // No need to move
-                move = null;
+            let maneuver = new BullyManeuver(this.ship, weapon, target, this.move_margin);
+            if (maneuver.simulation.can_fire) {
+                return maneuver;
             } else {
-                // Move to be in range, using first engine
-                engine = this.getEngine();
-                if (!engine) {
-                    // No engine available to move
-                    return null;
-                } else {
-                    var move_distance = distance - weapon.distance + this.move_margin;
-                    var move_ap = engine.ap_usage * move_distance / engine.distance;
-                    if (move_ap > remaining_ap) {
-                        // Not enough AP to move in range
-                        return null;
-                    } else {
-                        move = target.constraintInRange(this.ship.arena_x, this.ship.arena_y, move_distance);
-                        remaining_ap -= move_ap;
-                    }
-                }
-            }
-
-            // Check fire
-            if (weapon.ap_usage > remaining_ap) {
-                // Not enough AP to fire
                 return null;
-            } else {
-                var result = new BullyManeuver();
-                if (move) {
-                    result.move = new Maneuver(this.ship, engine, move);
-                }
-                result.fire = new Maneuver(this.ship, weapon, target);
-                return result;
             }
         }
 
@@ -154,7 +110,7 @@ module TS.SpaceTac {
                 target = target.constraintInRange(this.ship.arena_x, this.ship.arena_y,
                     (distance - safety_distance) * APPROACH_FACTOR);
                 target = engine.action.checkLocationTarget(this.ship, target);
-                return new BullyManeuver(new Maneuver(this.ship, engine, target));
+                return new BullyManeuver(this.ship, engine, target);
             } else {
                 return null;
             }
@@ -178,17 +134,9 @@ module TS.SpaceTac {
         // Effectively apply the chosen maneuver
         applyManeuver(maneuver: BullyManeuver): void {
             if (maneuver) {
-                if (maneuver.move) {
-                    this.addWorkItem(() => {
-                        maneuver.move.apply();
-                    }, 500);
-                }
-
-                if (maneuver.fire) {
-                    this.addWorkItem(() => {
-                        maneuver.fire.apply();
-                    }, 1500);
-                }
+                this.addWorkItem(() => {
+                    maneuver.apply();
+                }, 1500);
             }
 
             this.addWorkItem(null, 1500);

@@ -7,6 +7,7 @@ module TS.SpaceTac {
         action: BaseAction
         target: Target
         ap: number
+        possible: boolean
     }
 
     /**
@@ -58,7 +59,7 @@ module TS.SpaceTac {
         /**
          * Simulate a given action on a given valid target.
          */
-        simulateAction(action: BaseAction, target: Target): MoveFireResult {
+        simulateAction(action: BaseAction, target: Target, move_margin = 0): MoveFireResult {
             let result = new MoveFireResult();
 
             let dx = target.x - this.ship.arena_x;
@@ -69,7 +70,7 @@ module TS.SpaceTac {
             let action_radius = action.getRangeRadius(this.ship);
 
             if (action instanceof MoveAction || distance > action_radius) {
-                let move_distance = action instanceof MoveAction ? distance : distance - action_radius;
+                let move_distance = action instanceof MoveAction ? distance : (distance - action_radius + move_margin);
                 if (move_distance > 0.000001) {
                     result.need_move = true;
 
@@ -80,7 +81,8 @@ module TS.SpaceTac {
                         result.can_move = ap > 0;
                         result.can_end_move = result.total_move_ap <= ap;
                         result.move_location = move_target;
-                        result.parts.push({ action: engine.action, target: move_target, ap: result.total_move_ap });
+                        // TODO Split in "this turn" part and "next turn" part if needed
+                        result.parts.push({ action: engine.action, target: move_target, ap: result.total_move_ap, possible: result.can_move });
 
                         ap -= result.total_move_ap;
                         distance -= move_distance;
@@ -95,7 +97,7 @@ module TS.SpaceTac {
                     result.total_fire_ap = action.getActionPointsUsage(this.ship, target);
                     result.can_fire = result.total_fire_ap <= ap;
                     result.fire_location = target;
-                    result.parts.push({ action: action, target: target, ap: result.total_fire_ap });
+                    result.parts.push({ action: action, target: target, ap: result.total_fire_ap, possible: result.can_fire });
                 }
             } else {
                 result.success = false;
