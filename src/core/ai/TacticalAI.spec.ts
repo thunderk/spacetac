@@ -23,7 +23,7 @@ module TS.SpaceTac.Specs {
 
         it("applies the highest evaluated maneuver", function () {
             let ai = new TacticalAI(new Ship(), Timer.synchronous);
-            ai.evaluators.push(maneuver => maneuver.score);
+            ai.evaluators.push(maneuver => (<FixedManeuver>maneuver).score);
             ai.producers.push(producer(1, -8, 4));
             ai.producers.push(producer(3, 7, 0, 6, 1));
 

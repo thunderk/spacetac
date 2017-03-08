@@ -88,10 +88,11 @@ module TS.SpaceTac.Specs {
 
             ship2.setArenaPosition(10, 15);
             expect(equipment.action.checkShipTarget(ship, Target.newFromShip(ship2))).toEqual(
-                Target.newFromShip(ship2));
+                Target.newFromLocation(10, 15));
 
             ship2.setArenaPosition(10, 25);
-            expect(equipment.action.checkShipTarget(ship, Target.newFromShip(ship2))).toBeNull();
+            expect(equipment.action.checkShipTarget(ship, Target.newFromShip(ship2))).toEqual(
+                Target.newFromLocation(10, 20));
 
             // Forbid targetting in space
             weapon.setRange(10, 10, false);

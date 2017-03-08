@@ -15,22 +15,24 @@ module TS.SpaceTac {
         move_margin = 0.1;
 
         protected initWork(): void {
-            this.addWorkItem(() => {
-                var maneuvers = this.listAllManeuvers();
-                var maneuver: BullyManeuver;
+            if (this.ship.getValue("power") > 0) {
+                this.addWorkItem(() => {
+                    var maneuvers = this.listAllManeuvers();
+                    var maneuver: BullyManeuver;
 
-                if (maneuvers.length > 0) {
-                    maneuver = this.pickManeuver(maneuvers);
-                    this.applyManeuver(maneuver);
+                    if (maneuvers.length > 0) {
+                        maneuver = this.pickManeuver(maneuvers);
+                        this.applyManeuver(maneuver);
 
-                    // Try to make another maneuver
-                    this.initWork();
-                } else {
-                    // No bullying available, going to fallback move
-                    maneuver = this.getFallbackManeuver();
-                    this.applyManeuver(maneuver);
-                }
-            });
+                        // Try to make another maneuver
+                        this.initWork();
+                    } else {
+                        // No bullying available, going to fallback move
+                        maneuver = this.getFallbackManeuver();
+                        this.applyManeuver(maneuver);
+                    }
+                });
+            }
         }
 
         // List all enemy ships that can be a target
@@ -83,8 +85,8 @@ module TS.SpaceTac {
         // Check if a weapon can be used against an enemy
         //   Returns the BullyManeuver, or null if impossible to fire
         checkBullyManeuver(enemy: Ship, weapon: Equipment): BullyManeuver | null {
-            var target = weapon.blast ? Target.newFromLocation(enemy.arena_x, enemy.arena_y) : Target.newFromShip(enemy);
-            let maneuver = new BullyManeuver(this.ship, weapon, target, this.move_margin);
+            let maneuver = new BullyManeuver(this.ship, weapon, Target.newFromShip(enemy), this.move_margin);
+            // TODO In case of blast weapon, check that this would be a hit !
             if (maneuver.simulation.can_fire) {
                 return maneuver;
             } else {

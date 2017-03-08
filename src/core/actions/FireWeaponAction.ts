@@ -27,7 +27,9 @@ module TS.SpaceTac {
                 return null;
             } else {
                 // Check if target is in range
-                if (target.isInRange(ship.arena_x, ship.arena_y, this.equipment.distance)) {
+                if (this.can_target_space) {
+                    return this.checkLocationTarget(ship, new Target(target.x, target.y));
+                } else if (target.isInRange(ship.arena_x, ship.arena_y, this.equipment.distance)) {
                     return target;
                 } else {
                     return null;

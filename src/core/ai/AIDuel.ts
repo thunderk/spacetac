@@ -72,9 +72,10 @@ module TS.SpaceTac {
             let battle = Battle.newQuickRandom();
 
             while (!battle.ended && battle.turn < 100) {
-                //console.debug(`Turn ${battle.turn} - Ship ${battle.play_order.indexOf(playing)}`);
-
                 let playing = battle.playing_ship;
+
+                // console.debug(`Turn ${battle.turn} - Ship ${battle.play_order.indexOf(playing)} - Player ${battle.fleets.indexOf(playing.fleet)}`);
+
                 let ai = (playing.fleet == battle.fleets[0]) ? this.ai1 : this.ai2;
                 ai.timer = Timer.synchronous;
                 ai.ship = playing;
@@ -118,6 +119,7 @@ module TS.SpaceTac {
                     AIDuel.current = null;
                     button.textContent = "Start !";
                 } else {
+                    console.clear();
                     let ai1 = parseInt(element.getElementsByTagName("select").item(0).value);
                     let ai2 = parseInt(element.getElementsByTagName("select").item(1).value);
                     AIDuel.current = new AIDuel(ais[ai1], ais[ai2]);

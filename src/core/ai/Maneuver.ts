@@ -17,7 +17,7 @@ module TS.SpaceTac {
         // Result of move-fire simulation
         simulation: MoveFireResult;
 
-        constructor(ship: Ship, equipment: Equipment, target: Target, move_margin = 0) {
+        constructor(ship: Ship, equipment: Equipment, target: Target, move_margin = 0.1) {
             this.ship = ship;
             this.equipment = equipment;
             this.target = target;

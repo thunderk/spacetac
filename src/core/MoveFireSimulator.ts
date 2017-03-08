@@ -97,7 +97,7 @@ module TS.SpaceTac {
                     result.total_fire_ap = action.getActionPointsUsage(this.ship, target);
                     result.can_fire = result.total_fire_ap <= ap;
                     result.fire_location = target;
-                    result.parts.push({ action: action, target: target, ap: result.total_fire_ap, possible: result.can_fire });
+                    result.parts.push({ action: action, target: target, ap: result.total_fire_ap, possible: (!result.need_move || result.can_end_move) && result.can_fire });
                 }
             } else {
                 result.success = false;

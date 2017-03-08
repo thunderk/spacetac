@@ -3,7 +3,7 @@
 module TS.SpaceTac {
 
     export type TacticalProducer = Iterator<Maneuver>;
-    export type TacticalEvaluator = (Maneuver) => number;
+    export type TacticalEvaluator = (maneuver: Maneuver) => number;
 
     /**
      * AI that applies a set of tactical rules
@@ -16,10 +16,13 @@ module TS.SpaceTac {
         producers: TacticalProducer[] = []
         evaluators: TacticalEvaluator[] = []
 
-        best: Maneuver | null = null
-        best_score = -Infinity
+        best: Maneuver | null
+        best_score: number
 
         protected initWork(): void {
+            this.best = null;
+            this.best_score = -Infinity;
+
             if (this.producers.length == 0) {
                 this.setupDefaultProducers();
             }

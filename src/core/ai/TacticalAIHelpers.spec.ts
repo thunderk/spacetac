@@ -125,8 +125,8 @@ module TS.SpaceTac.Specs {
             TestTools.setShipAP(ship, 10);
             let weapon = TestTools.addWeapon(ship, 100, 1, 100, 10);
 
-            let maneuver = new Maneuver(ship, weapon, Target.newFromLocation(200, 0));
-            expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(100, 0));
+            let maneuver = new Maneuver(ship, weapon, Target.newFromLocation(200, 0), 0.5);
+            expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(100.5, 0));
             expect(TacticalAIHelpers.evaluateClustering(ship, battle, maneuver)).toEqual(0);
 
             battle.fleets[1].addShip().setArenaPosition(battle.width, battle.height);

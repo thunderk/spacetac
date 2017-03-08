@@ -22,7 +22,7 @@ module TS.SpaceTac {
                 remaining_ap = ship.values.power.get();
             }
             if (remaining_ap > 0.0001) {
-                return null
+                return null;
             } else {
                 return "not enough power";
             }

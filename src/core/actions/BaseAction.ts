@@ -106,19 +106,19 @@ module TS.SpaceTac {
         apply(ship: Ship, target: Target): boolean {
             let reject = this.checkCannotBeApplied(ship);
             if (reject == null) {
-                target = this.checkTarget(ship, target);
-                if (!target && this.needs_target) {
-                    console.warn("Action rejected - no target selected", ship, this, target);
+                let checked_target = this.checkTarget(ship, target);
+                if (!checked_target && this.needs_target) {
+                    console.warn("Action rejected - invalid target", ship, this, target);
                     return false;
                 }
 
-                let cost = this.getActionPointsUsage(ship, target);
+                let cost = this.getActionPointsUsage(ship, checked_target);
                 if (!ship.useActionPoints(cost)) {
-                    console.warn("Action rejected - not enough power", ship, this, target);
+                    console.warn("Action rejected - not enough power", ship, this, checked_target);
                     return false;
                 }
 
-                this.customApply(ship, target);
+                this.customApply(ship, checked_target);
                 return true;
             } else {
                 console.warn(`Action rejected - ${reject}`, ship, this, target);

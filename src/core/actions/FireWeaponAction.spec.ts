@@ -43,5 +43,29 @@ module TS.SpaceTac {
             expect(mock_apply).toHaveBeenCalledTimes(1);
             expect(mock_apply).toHaveBeenCalledWith(ship2);
         });
+
+        it("transforms ship target in location target, when the weapon has blast radius", function () {
+            let ship1 = new Ship();
+            ship1.setArenaPosition(50, 10);
+            let ship2 = new Ship();
+            ship2.setArenaPosition(150, 10);
+            let weapon = TestTools.addWeapon(ship1, 1, 0, 100, 30);
+
+            let target = weapon.action.checkTarget(ship1, new Target(150, 10));
+            expect(target).toEqual(new Target(150, 10));
+
+            target = weapon.action.checkTarget(ship1, Target.newFromShip(ship2));
+            expect(target).toEqual(new Target(150, 10));
+
+            ship1.setArenaPosition(30, 10);
+
+            target = weapon.action.checkTarget(ship1, Target.newFromShip(ship2));
+            expect(target).toEqual(new Target(130, 10));
+
+            ship1.setArenaPosition(0, 10);
+
+            target = weapon.action.checkTarget(ship1, Target.newFromShip(ship2));
+            expect(target).toEqual(new Target(100, 10));
+        });
     });
 }
