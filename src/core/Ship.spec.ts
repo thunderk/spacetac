@@ -51,6 +51,11 @@ module TS.SpaceTac.Specs {
             equipment.action = new MoveAction(equipment);
             slot.attach(equipment);
 
+            slot = ship.addSlot(SlotType.Weapon);
+            equipment = new Equipment();
+            equipment.slot = slot.type;
+            slot.attach(equipment);
+
             actions = ship.getAvailableActions();
             expect(actions.length).toBe(2);
             expect(actions[0].code).toEqual("move");

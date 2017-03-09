@@ -162,7 +162,7 @@ module TS.SpaceTac {
 
             if (this.alive) {
                 this.slots.forEach((slot: Slot) => {
-                    if (slot.attached && slot.attached.action) {
+                    if (slot.attached && slot.attached.action && slot.attached.action.code != "nothing") {
                         actions.push(slot.attached.action);
                     }
                 });
