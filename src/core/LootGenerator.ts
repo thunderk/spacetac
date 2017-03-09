@@ -39,7 +39,7 @@ module TS.SpaceTac {
             // Generate equipments matching conditions, with each template
             var equipments: Equipment[] = [];
             this.templates.forEach((template: LootTemplate) => {
-                if (slot && slot != template.slot) {
+                if (slot !== null && slot != template.slot) {
                     return;
                 }
 

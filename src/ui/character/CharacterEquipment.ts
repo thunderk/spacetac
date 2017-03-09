@@ -11,8 +11,8 @@ module TS.SpaceTac.UI {
      */
     export class CharacterEquipment extends Phaser.Image {
         constructor(sheet: CharacterSheet, equipment: Equipment) {
-            let action_icon = equipment.action != null && !(equipment.action instanceof MoveAction);
-            super(sheet.game, 0, 0, action_icon ? `battle-actions-${equipment.action.code}` : `equipment-${equipment.code}`);
+            let icon = sheet.game.cache.checkImageKey(`equipment-${equipment.code}`) ? `equipment-${equipment.code}` : `battle-actions-${equipment.action.code}`;
+            super(sheet.game, 0, 0, icon);
 
             this.anchor.set(0.5, 0.5);
             this.scale.set(0.5, 0.5);

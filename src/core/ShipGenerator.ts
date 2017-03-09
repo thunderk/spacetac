@@ -30,7 +30,10 @@ module TS.SpaceTac {
             result.slots.forEach((slot: Slot) => {
                 var equipment = loot.generate(new IntegerRange(level, level), slot.type);
                 if (equipment) {
-                    slot.attach(equipment);
+                    slot.attach(equipment)
+                    if (slot.attached !== equipment) {
+                        console.error("Cannot attach generated equipment to slot", equipment, slot);
+                    }
                 }
             });
 
