@@ -20,8 +20,8 @@ module TS.SpaceTac {
         turn: number;
 
         // Current ship whose turn it is to play
-        playing_ship_index: number;
-        playing_ship: Ship;
+        playing_ship_index: number | null;
+        playing_ship: Ship | null;
 
         // List of deployed drones
         drones: Drone[] = [];
@@ -34,9 +34,9 @@ module TS.SpaceTac {
         timer = Timer.global;
 
         // Create a battle between two fleets
-        constructor(fleet1: Fleet = null, fleet2: Fleet = null, width = 1780, height = 948) {
+        constructor(fleet1 = new Fleet(), fleet2 = new Fleet(), width = 1780, height = 948) {
             this.log = new BattleLog();
-            this.fleets = [fleet1 || new Fleet(), fleet2 || new Fleet()];
+            this.fleets = [fleet1, fleet2];
             this.play_order = [];
             this.playing_ship_index = null;
             this.playing_ship = null;
@@ -129,7 +129,7 @@ module TS.SpaceTac {
         }
 
         // Ends a battle and sets the outcome
-        endBattle(winner: Fleet, log: boolean = true) {
+        endBattle(winner: Fleet | null, log: boolean = true) {
             this.ended = true;
             this.outcome = new BattleOutcome(winner);
             if (winner) {
@@ -153,7 +153,7 @@ module TS.SpaceTac {
                 this.endBattle(null, log);
             } else if (alive_fleets === 1) {
                 // We have a winner
-                var winner: Fleet = null;
+                var winner: Fleet | null = null;
                 this.fleets.forEach((fleet: Fleet) => {
                     if (fleet.isAlive()) {
                         winner = fleet;
@@ -198,7 +198,7 @@ module TS.SpaceTac {
                 this.playing_ship.startTurn();
             }
 
-            if (log) {
+            if (log && previous_ship && this.playing_ship) {
                 this.log.add(new ShipChangeEvent(previous_ship, this.playing_ship));
             }
         }
@@ -207,11 +207,13 @@ module TS.SpaceTac {
          * Make an AI play the current ship
          */
         playAI(ai: AbstractAI | null = null) {
-            if (!ai) {
-                // TODO Use an AI adapted to the fleet
-                ai = new BullyAI(this.playing_ship, this.timer);
+            if (this.playing_ship) {
+                if (!ai) {
+                    // TODO Use an AI adapted to the fleet
+                    ai = new BullyAI(this.playing_ship, this.timer);
+                }
+                ai.play();
             }
-            ai.play();
         }
 
         // Start the battle

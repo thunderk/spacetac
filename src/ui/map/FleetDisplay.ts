@@ -29,7 +29,9 @@ module TS.SpaceTac.UI {
                 sprite.anchor.set(0.5, 0.5);
             });
 
-            this.position.set(fleet.location.star.x + fleet.location.x, fleet.location.star.y + fleet.location.y);
+            if (fleet.location) {
+                this.position.set(fleet.location.star.x + fleet.location.x, fleet.location.star.y + fleet.location.y);
+            }
             this.scale.set(SCALING, SCALING);
 
             this.tween = this.game.tweens.create(this);
@@ -68,8 +70,8 @@ module TS.SpaceTac.UI {
         /**
          * Make the fleet move to another location in the same system
          */
-        moveToLocation(location: StarLocation, speed = 1, on_leave: (duration: number) => any | null = null) {
-            if (location != this.fleet.location) {
+        moveToLocation(location: StarLocation, speed = 1, on_leave: ((duration: number) => any) | null = null) {
+            if (this.fleet.location && location != this.fleet.location) {
                 let dx = location.universe_x - this.fleet.location.universe_x;
                 let dy = location.universe_y - this.fleet.location.universe_y;
                 let distance = Math.sqrt(dx * dx + dy * dy);

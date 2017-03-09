@@ -22,7 +22,7 @@ module TS.SpaceTac {
         //  When the queue is empty, the ship will end its turn.
         private workqueue: Function[];
 
-        constructor(ship: Ship, timer = Timer.global, name: string = null) {
+        constructor(ship: Ship, timer = Timer.global, name?: string) {
             this.name = name || classname(this);
             this.ship = ship;
             this.workqueue = [];
@@ -52,7 +52,7 @@ module TS.SpaceTac {
         }
 
         // Add a work item to the work queue
-        addWorkItem(item: Function, delay = 100): void {
+        addWorkItem(item: Function | null, delay = 100): void {
             if (this.timer.isSynchronous()) {
                 if (item) {
                     item();
@@ -90,7 +90,9 @@ module TS.SpaceTac {
                 } else {
                     // Take the first item
                     var item = this.workqueue.shift();
-                    item();
+                    if (item) {
+                        item();
+                    }
                 }
             } else {
                 this.endTurn();
@@ -108,7 +110,6 @@ module TS.SpaceTac {
             if (this.ship.playing) {
                 let battle = this.ship.getBattle();
                 this.ship.endTurn();
-                this.ship = null;
                 if (battle) {
                     battle.advanceToNextShip();
                 }

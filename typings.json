@@ -1,8 +1,8 @@
 {
-  "name": "succession",
+  "name": "spacetac",
   "dependencies": {},
   "globalDependencies": {
     "jasmine": "registry:dt/jasmine#2.5.0+20161003201800",
-    "phaser": "github:photonstorm/phaser/typescript/typings.json#v2.6.2"
+    "phaser": "github:thunderk/phaser-ce/typescript/typings.json#v2.7.3a"
   }
 }

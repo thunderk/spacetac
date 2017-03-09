@@ -5,12 +5,12 @@ module TS.SpaceTac {
         draw: boolean;
 
         // Victorious fleet
-        winner: Fleet;
+        winner: Fleet | null;
 
         // Retrievable loot
         loot: Equipment[];
 
-        constructor(winner: Fleet) {
+        constructor(winner: Fleet | null) {
             this.winner = winner;
             this.draw = winner ? false : true;
             this.loot = [];
@@ -27,8 +27,10 @@ module TS.SpaceTac {
                             var count = random.randInt(0, ship.getEquipmentCount());
                             while (count > 0) {
                                 var salvaged = ship.getRandomEquipment(random);
-                                salvaged.detach();
-                                this.loot.push(salvaged);
+                                if (salvaged) {
+                                    salvaged.detach();
+                                    this.loot.push(salvaged);
+                                }
                                 count--;
                             }
 
@@ -61,7 +63,7 @@ module TS.SpaceTac {
 
         // Generate a special loot item for the winner fleet
         //  The equipment will be in the dead ship range
-        generateLootItem(random: RandomGenerator, base_level: number): Equipment {
+        generateLootItem(random: RandomGenerator, base_level: number): Equipment | null {
             var generator = this.getLootGenerator(random);
             var level = new IntegerRange(base_level - 1, base_level + 1);
             return generator.generate(level);

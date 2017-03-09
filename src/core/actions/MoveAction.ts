@@ -5,13 +5,16 @@ module TS.SpaceTac {
         // Safety distance from other ships
         safety_distance: number;
 
+        // Equipment cannot be null (engine)
+        equipment: Equipment;
+
         constructor(equipment: Equipment) {
             super("move", "Move", true, equipment);
 
             this.safety_distance = 50;
         }
 
-        checkCannotBeApplied(ship: Ship, remaining_ap: number = null): string | null {
+        checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): string | null {
             let base = super.checkCannotBeApplied(ship, Infinity);
             if (base) {
                 return base;

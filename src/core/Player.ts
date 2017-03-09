@@ -63,10 +63,10 @@ module TS.SpaceTac {
         }
 
         // Get currently played battle, null when none is in progress
-        getBattle(): Battle {
+        getBattle(): Battle | null {
             return this.fleet.battle;
         }
-        setBattle(battle: Battle): void {
+        setBattle(battle: Battle | null): void {
             this.fleet.setBattle(battle);
         }
 

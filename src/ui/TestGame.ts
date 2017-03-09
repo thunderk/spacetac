@@ -45,12 +45,11 @@ module TS.SpaceTac.UI.Specs {
 
         afterEach(function () {
             let ui = testgame.ui;
-            window.requestAnimationFrame(() => ui.destroy());
-
-            testgame.ui = null;
-            testgame.baseview = null;
-            testgame.battleview = null;
-            testgame.mapview = null;
+            window.requestAnimationFrame(() => {
+                if (ui) {
+                    ui.destroy();
+                }
+            });
         });
 
         return testgame;
@@ -74,7 +73,7 @@ module TS.SpaceTac.UI.Specs {
             testgame.battleview = new BattleView();
 
             let battle = Battle.newQuickRandom();
-            let player = battle.playing_ship.getPlayer();
+            let player = battle.playing_ship ? battle.playing_ship.getPlayer() : new Player();
 
             return [testgame.battleview, [player, battle]];
         });

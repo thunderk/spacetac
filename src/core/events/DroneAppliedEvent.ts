@@ -4,7 +4,7 @@ module TS.SpaceTac {
     /**
      * Event logged when a drone applies its effects
      */
-    export class DroneAppliedEvent extends BaseLogEvent {
+    export class DroneAppliedEvent extends BaseLogShipEvent {
         // Pointer to the drone
         drone: Drone;
 

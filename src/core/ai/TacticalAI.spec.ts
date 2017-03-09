@@ -15,7 +15,7 @@ module TS.SpaceTac.Specs {
 
         // producer of FixedManeuver from a list of scores
         let producer = (...scores: number[]) => imap(iarray(scores), score => new FixedManeuver(score));
-        let applied = [];
+        let applied: number[] = [];
 
         beforeEach(function () {
             applied = [];

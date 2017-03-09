@@ -11,10 +11,10 @@ module TS.SpaceTac {
         needs_target: boolean;
 
         // Equipment that triggers this action
-        equipment: Equipment;
+        equipment: Equipment | null;
 
         // Create the action
-        constructor(code: string, name: string, needs_target: boolean, equipment: Equipment = null) {
+        constructor(code: string, name: string, needs_target: boolean, equipment: Equipment | null = null) {
             this.code = code;
             this.name = name;
             this.needs_target = needs_target;
@@ -28,7 +28,7 @@ module TS.SpaceTac {
          * 
          * Returns an informative message indicating why the action cannot be used, null otherwise
          */
-        checkCannotBeApplied(ship: Ship, remaining_ap: number = null): string | null {
+        checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): string | null {
             let battle = ship.getBattle();
             if (battle && battle.playing_ship !== ship) {
                 // Ship is not playing
@@ -48,7 +48,7 @@ module TS.SpaceTac {
         }
 
         // Get the number of action points the action applied to a target would use
-        getActionPointsUsage(ship: Ship, target: Target): number {
+        getActionPointsUsage(ship: Ship, target: Target | null): number {
             if (this.equipment) {
                 return this.equipment.ap_usage;
             } else {
@@ -76,7 +76,7 @@ module TS.SpaceTac {
 
         // Method to check if a target is applicable for this action
         //  Will call checkLocationTarget or checkShipTarget by default
-        checkTarget(ship: Ship, target: Target): Target {
+        checkTarget(ship: Ship, target: Target | null): Target | null {
             if (this.checkCannotBeApplied(ship)) {
                 return null;
             } else if (target) {
@@ -92,18 +92,18 @@ module TS.SpaceTac {
 
         // Method to reimplement to check if a space target is applicable
         //  Must return null if the target can't be applied, an altered target, or the original target
-        checkLocationTarget(ship: Ship, target: Target): Target {
+        checkLocationTarget(ship: Ship, target: Target): Target | null {
             return null;
         }
 
         // Method to reimplement to check if a ship target is applicable
         //  Must return null if the target can't be applied, an altered target, or the original target
-        checkShipTarget(ship: Ship, target: Target): Target {
+        checkShipTarget(ship: Ship, target: Target): Target | null {
             return null;
         }
 
         // Apply an action, returning true if it was successful
-        apply(ship: Ship, target: Target): boolean {
+        apply(ship: Ship, target: Target | null): boolean {
             let reject = this.checkCannotBeApplied(ship);
             if (reject == null) {
                 let checked_target = this.checkTarget(ship, target);
@@ -127,7 +127,7 @@ module TS.SpaceTac {
         }
 
         // Method to reimplement to apply a action
-        protected customApply(ship: Ship, target: Target) {
+        protected customApply(ship: Ship, target: Target | null) {
         }
     }
 }

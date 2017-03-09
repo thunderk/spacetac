@@ -24,7 +24,7 @@ module TS.SpaceTac {
         // Get the default ship model collection available in-game
         static getDefaultCollection(): ShipModel[] {
             // TODO Store in cache
-            var result = [];
+            var result: ShipModel[] = [];
 
             result.push(new ShipModel("scout", 1, 2, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Weapon));
 

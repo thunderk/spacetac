@@ -21,9 +21,9 @@ module TS.SpaceTac.UI {
         private drone_sprites: ArenaDrone[] = [];
 
         // Currently hovered ship
-        private hovered: ArenaShip;
+        private hovered: ArenaShip | null;
         // Currently playing ship
-        private playing: ArenaShip;
+        private playing: ArenaShip | null;
 
         // Layer for particles
         layer_weapon_effects: Phaser.Group;
@@ -35,7 +35,7 @@ module TS.SpaceTac.UI {
             this.battleview = battleview;
             this.playing = null;
             this.hovered = null;
-            this.range_hint = null;
+            this.range_hint = new RangeHint(this);
 
             var offset_x = 133;
             var offset_y = 132;
@@ -60,9 +60,8 @@ module TS.SpaceTac.UI {
             }, null);
 
             this.position.set(offset_x, offset_y);
-            this.addChild(this.background);
 
-            this.range_hint = new RangeHint(this);
+            this.addChild(this.background);
             this.addChild(this.range_hint);
 
             this.init();
@@ -100,8 +99,8 @@ module TS.SpaceTac.UI {
         }
 
         // Find the sprite for a ship
-        findShipSprite(ship: Ship): ArenaShip {
-            var result: ArenaShip = null;
+        findShipSprite(ship: Ship): ArenaShip | null {
+            var result: ArenaShip | null = null;
             this.ship_sprites.forEach((sprite: ArenaShip) => {
                 if (sprite.ship === ship) {
                     result = sprite;
@@ -111,27 +110,36 @@ module TS.SpaceTac.UI {
         }
 
         // Set the hovered state on a ship sprite
-        setShipHovered(ship: Ship): void {
+        setShipHovered(ship: Ship | null): void {
             if (this.hovered) {
                 this.hovered.setHovered(false);
             }
-            var arena_ship = this.findShipSprite(ship);
-            if (arena_ship) {
-                arena_ship.setHovered(true);
+
+            if (ship) {
+                var arena_ship = this.findShipSprite(ship);
+                if (arena_ship) {
+                    arena_ship.setHovered(true);
+                }
+                this.hovered = arena_ship;
+            } else {
+                this.hovered = null;
             }
-            this.hovered = arena_ship;
         }
 
         // Set the playing state on a ship sprite
-        setShipPlaying(ship: Ship): void {
+        setShipPlaying(ship: Ship | null): void {
             if (this.playing) {
                 this.playing.setPlaying(false);
+                this.playing = null;
             }
-            var arena_ship = this.findShipSprite(ship);
-            if (arena_ship) {
-                arena_ship.setPlaying(true);
+
+            if (ship) {
+                var arena_ship = this.findShipSprite(ship);
+                if (arena_ship) {
+                    arena_ship.setPlaying(true);
+                }
+                this.playing = arena_ship;
             }
-            this.playing = arena_ship;
 
             this.battleview.gameui.audio.playOnce("battle-ship-change");
         }

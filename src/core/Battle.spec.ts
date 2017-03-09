@@ -1,8 +1,8 @@
 module TS.SpaceTac {
     describe("Battle", function () {
         it("defines play order by initiative throws", function () {
-            var fleet1 = new Fleet(null);
-            var fleet2 = new Fleet(null);
+            var fleet1 = new Fleet();
+            var fleet2 = new Fleet();
 
             var ship1 = new Ship(fleet1, "F1S1");
             ship1.setAttribute("initiative", 2);
@@ -26,8 +26,8 @@ module TS.SpaceTac {
         });
 
         it("places ships on lines, facing the arena center", function () {
-            var fleet1 = new Fleet(null);
-            var fleet2 = new Fleet(null);
+            var fleet1 = new Fleet();
+            var fleet2 = new Fleet();
 
             var ship1 = new Ship(fleet1, "F1S1");
             var ship2 = new Ship(fleet1, "F1S2");
@@ -60,8 +60,8 @@ module TS.SpaceTac {
         });
 
         it("advances to next ship in play order", function () {
-            var fleet1 = new Fleet(null);
-            var fleet2 = new Fleet(null);
+            var fleet1 = new Fleet();
+            var fleet2 = new Fleet();
 
             var ship1 = new Ship(fleet1, "F1S1");
             var ship2 = new Ship(fleet1, "F1S2");
@@ -113,8 +113,8 @@ module TS.SpaceTac {
         });
 
         it("calls startTurn on ships", function () {
-            var fleet1 = new Fleet(null);
-            var fleet2 = new Fleet(null);
+            var fleet1 = new Fleet();
+            var fleet2 = new Fleet();
 
             var ship1 = new Ship(fleet1, "F1S1");
             var ship2 = new Ship(fleet1, "F1S2");

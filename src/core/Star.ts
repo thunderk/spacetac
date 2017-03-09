@@ -75,7 +75,7 @@ module TS.SpaceTac {
         // Base level for encounters in this system
         level: number;
 
-        constructor(universe: Universe = null, x = 0, y = 0, name = "") {
+        constructor(universe: Universe | null = null, x = 0, y = 0, name = "") {
             this.universe = universe || new Universe();
             this.x = x;
             this.y = y;

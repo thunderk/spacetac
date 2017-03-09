@@ -4,12 +4,12 @@ module TS.SpaceTac {
         // Random generator to use
         random: RandomGenerator;
 
-        constructor(random: RandomGenerator = new RandomGenerator()) {
+        constructor(random = RandomGenerator.global) {
             this.random = random;
         }
 
         // Generate a fleet of a given level
-        generate(level: number, player: Player = null, ship_count: number = 3): Fleet {
+        generate(level: number, player?: Player, ship_count = 3): Fleet {
             var fleet = new Fleet(player);
             var ship_generator = new ShipGenerator(this.random);
 

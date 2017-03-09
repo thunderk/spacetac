@@ -76,18 +76,23 @@ module TS.SpaceTac {
 
                 // console.debug(`Turn ${battle.turn} - Ship ${battle.play_order.indexOf(playing)} - Player ${battle.fleets.indexOf(playing.fleet)}`);
 
-                let ai = (playing.fleet == battle.fleets[0]) ? this.ai1 : this.ai2;
-                ai.timer = Timer.synchronous;
-                ai.ship = playing;
-                ai.play();
+                if (playing) {
+                    let ai = (playing.fleet == battle.fleets[0]) ? this.ai1 : this.ai2;
+                    ai.timer = Timer.synchronous;
+                    ai.ship = playing;
+                    ai.play();
+                } else {
+                    console.error("No ship playing");
+                    break;
+                }
 
                 if (!battle.ended && battle.playing_ship == playing) {
-                    console.error(`${ai.name} did not end its turn !`);
+                    console.error("AI did not end its turn !");
                     battle.advanceToNextShip();
                 }
             }
 
-            if (battle.ended && !battle.outcome.draw) {
+            if (battle.ended && !battle.outcome.draw && battle.outcome.winner) {
                 this.update(battle.fleets.indexOf(battle.outcome.winner));
             } else {
                 this.update(-1);
@@ -101,7 +106,8 @@ module TS.SpaceTac {
          * Setup the duel HTML page
          */
         static setup(element: HTMLElement) {
-            let ais = [new BullyAI(null), new TacticalAI(null), new AbstractAI(null)];
+            let fakeship = new Ship();
+            let ais = [new BullyAI(fakeship), new TacticalAI(fakeship), new AbstractAI(fakeship)];
             ais.forEach((ai, idx) => {
                 let selects = element.getElementsByTagName("select");
                 for (let i = 0; i < selects.length; i++) {
@@ -122,11 +128,12 @@ module TS.SpaceTac {
                     console.clear();
                     let ai1 = parseInt(element.getElementsByTagName("select").item(0).value);
                     let ai2 = parseInt(element.getElementsByTagName("select").item(1).value);
-                    AIDuel.current = new AIDuel(ais[ai1], ais[ai2]);
-                    AIDuel.current.start(() => {
-                        element.getElementsByClassName("win1").item(0).textContent = AIDuel.current.win1.toString();
-                        element.getElementsByClassName("win2").item(0).textContent = AIDuel.current.win2.toString();
-                        element.getElementsByClassName("draw").item(0).textContent = AIDuel.current.draw.toString();
+                    let duel = new AIDuel(ais[ai1], ais[ai2]);
+                    AIDuel.current = duel;
+                    duel.start(() => {
+                        element.getElementsByClassName("win1").item(0).textContent = duel.win1.toString();
+                        element.getElementsByClassName("win2").item(0).textContent = duel.win2.toString();
+                        element.getElementsByClassName("draw").item(0).textContent = duel.draw.toString();
                     });
                     button.textContent = "Stop !";
                 }

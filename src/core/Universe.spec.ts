@@ -60,17 +60,17 @@ module TS.SpaceTac.Specs {
 
             var warps = getWarps(universe.stars[0]);
             expect(warps.length).toBe(2);
-            expect(warps[0].jump_dest.star).toBe(universe.stars[1]);
-            expect(warps[1].jump_dest.star).toBe(universe.stars[2]);
+            expect(nn(warps[0].jump_dest).star).toBe(universe.stars[1]);
+            expect(nn(warps[1].jump_dest).star).toBe(universe.stars[2]);
             expect(universe.stars[0].getWarpLocationTo(universe.stars[1])).toBe(warps[0]);
             expect(universe.stars[0].getWarpLocationTo(universe.stars[2])).toBe(warps[1]);
             warps = getWarps(universe.stars[1]);
             expect(warps.length).toBe(1);
-            expect(warps[0].jump_dest.star).toBe(universe.stars[0]);
+            expect(nn(warps[0].jump_dest).star).toBe(universe.stars[0]);
             expect(universe.stars[1].getWarpLocationTo(universe.stars[2])).toBeNull();
             warps = getWarps(universe.stars[2]);
             expect(warps.length).toBe(1);
-            expect(warps[0].jump_dest.star).toBe(universe.stars[0]);
+            expect(nn(warps[0].jump_dest).star).toBe(universe.stars[0]);
         });
     });
 }

@@ -8,10 +8,10 @@ module TS.SpaceTac.UI {
         ships: ShipListItem[];
 
         // Playing ship
-        playing: ShipListItem;
+        playing: ShipListItem | null;
 
         // Hovered ship
-        hovered: ShipListItem;
+        hovered: ShipListItem | null;
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
@@ -57,8 +57,8 @@ module TS.SpaceTac.UI {
 
         // Find an item for a ship
         //  Returns null if not found
-        findItem(ship: Ship): ShipListItem {
-            var found: ShipListItem = null;
+        findItem(ship: Ship): ShipListItem | null {
+            var found: ShipListItem | null = null;
             this.ships.forEach((item: ShipListItem) => {
                 if (item.ship === ship) {
                     found = item;
@@ -71,7 +71,7 @@ module TS.SpaceTac.UI {
         findPlayPosition(ship: Ship): number {
             var battle = this.battleview.battle;
             var idx = battle.play_order.indexOf(ship);
-            var diff = idx - battle.playing_ship_index;
+            var diff = idx - (battle.playing_ship_index || 0);
             if (diff < 0) {
                 diff += battle.play_order.length;
             }
@@ -100,19 +100,26 @@ module TS.SpaceTac.UI {
         }
 
         // Set the currently playing ship
-        setPlaying(ship: Ship): void {
-            this.playing = this.findItem(ship);
+        setPlaying(ship: Ship | null): void {
+            if (ship) {
+                this.playing = this.findItem(ship);
+            } else {
+                this.playing = null;
+            }
             this.updateItemsLocation();
         }
 
         // Set the currently hovered ship
-        setHovered(ship: Ship): void {
+        setHovered(ship: Ship | null): void {
             if (this.hovered) {
                 this.hovered.setHovered(false);
+                this.hovered = null;
             }
-            this.hovered = this.findItem(ship);
-            if (this.hovered) {
-                this.hovered.setHovered(true);
+            if (ship) {
+                this.hovered = this.findItem(ship);
+                if (this.hovered) {
+                    this.hovered.setHovered(true);
+                }
             }
         }
     }

@@ -10,13 +10,14 @@ module TS.SpaceTac.UI.Specs {
             let tooltip = bar.tooltip;
 
             bar.clearAll();
-            let a1 = bar.addAction(battleview.battle.playing_ship, new MoveAction(new Equipment()));
-            a1.action.equipment.name = "Engine";
+            let ship = nn(battleview.battle.playing_ship);
+            let a1 = bar.addAction(ship, new MoveAction(new Equipment()));
+            nn(a1.action.equipment).name = "Engine";
             a1.action.name = "Move";
-            let a2 = bar.addAction(battleview.battle.playing_ship, new FireWeaponAction(new Equipment()));
-            a2.action.equipment.name = "Weapon";
+            let a2 = bar.addAction(ship, new FireWeaponAction(new Equipment()));
+            nn(a2.action.equipment).name = "Weapon";
             a2.action.name = "Fire";
-            let a3 = bar.addAction(battleview.battle.playing_ship, new EndTurnAction());
+            let a3 = bar.addAction(ship, new EndTurnAction());
             a3.action.name = "End turn";
 
             tooltip.setAction(a1);

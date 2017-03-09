@@ -2,7 +2,7 @@
 
 module TS.SpaceTac {
     // Event logged when a weapon is used on a target
-    export class FireEvent extends BaseLogEvent {
+    export class FireEvent extends BaseLogShipTargetEvent {
         // Weapon used
         weapon: Equipment;
 

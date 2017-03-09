@@ -2,7 +2,7 @@
 
 module TS.SpaceTac {
     // Battle event, when a ship turn ended, and advanced to a new one
-    export class ShipChangeEvent extends BaseLogEvent {
+    export class ShipChangeEvent extends BaseLogShipEvent {
         // Ship that starts playing
         new_ship: Ship;
 

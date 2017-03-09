@@ -72,7 +72,7 @@ module TS.SpaceTac {
                 }
                 let damage = 0;
                 let dead = 0;
-                let effects = action.getEffects(battle, ship, maneuver.target);
+                let effects = action.getEffects(ship, maneuver.target);
                 effects.forEach(([ship, effect]) => {
                     if (effect instanceof DamageEffect && contains(enemies, ship)) {
                         let [shield, hull] = effect.getEffectiveDamage(ship);

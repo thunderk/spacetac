@@ -22,13 +22,13 @@
     "bower": "~1.8",
     "codecov": "~1.0",
     "jasmine": "~2.5",
-    "karma": "~1.4",
+    "karma": "~1.5",
     "karma-coverage": "~1.1",
     "karma-jasmine": "~1.1",
     "karma-phantomjs-launcher": "~1.0",
-    "remap-istanbul": "~0.8",
+    "remap-istanbul": "~0.9",
     "live-server": "~1.2",
     "typescript": "~2.2",
-    "typings": "~1.4"
+    "typings": "~2.1"
   }
 }

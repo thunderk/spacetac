@@ -56,9 +56,13 @@ module TS.SpaceTac.Specs {
             enemy.arena_x = 3;
             enemy.arena_y = 0;
             var result = ai.checkBullyManeuver(enemy, weapon);
-            expect(result.simulation.need_move).toBe(false);
-            expect(result.simulation.fire_location).toEqual(Target.newFromShip(enemy));
-            expect(result.equipment).toBe(weapon);
+            if (result) {
+                expect(result.simulation.need_move).toBe(false);
+                expect(result.simulation.fire_location).toEqual(Target.newFromShip(enemy));
+                expect(result.equipment).toBe(weapon);
+            } else {
+                fail("No maneuver proposed");
+            }
 
             // enemy out of range, but moving can bring it in range
             ship.values.power.set(8);
@@ -67,9 +71,13 @@ module TS.SpaceTac.Specs {
             enemy.arena_x = 6;
             enemy.arena_y = 0;
             result = ai.checkBullyManeuver(enemy, weapon);
-            expect(result.simulation.move_location).toEqual(Target.newFromLocation(3, 0));
-            expect(result.simulation.fire_location).toEqual(Target.newFromShip(enemy));
-            expect(result.equipment).toBe(weapon);
+            if (result) {
+                expect(result.simulation.move_location).toEqual(Target.newFromLocation(3, 0));
+                expect(result.simulation.fire_location).toEqual(Target.newFromShip(enemy));
+                expect(result.equipment).toBe(weapon);
+            } else {
+                fail("No maneuver proposed");
+            }
 
             // enemy out of range, but moving can bring it in range, except for the safety margin
             ai.move_margin = 0.1;
@@ -110,7 +118,7 @@ module TS.SpaceTac.Specs {
             expect(result).toBeNull();
 
             // no engine, can't move
-            ship.slots[0].attached.detach();
+            engine.detach();
             ship.values.power.set(8);
             ship.arena_x = 1;
             ship.arena_y = 0;
@@ -155,7 +163,7 @@ module TS.SpaceTac.Specs {
             var engine = TestTools.addEngine(ai.ship, 100);
             (<MoveAction>engine.action).safety_distance = 20;
 
-            var maneuver: BullyManeuver;
+            var maneuver: BullyManeuver | null;
 
             battle.fleets[1].ships.forEach((ship: Ship) => {
                 ai.ship.setArenaPosition(0, 0);
@@ -172,10 +180,18 @@ module TS.SpaceTac.Specs {
             // Move towards an enemy (up to minimal distance)
             ai.ship.setArenaPosition(30, 0);
             maneuver = ai.getFallbackManeuver();
-            expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(25, 0));
+            if (maneuver) {
+                expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(25, 0));
+            } else {
+                fail("No maneuver proposed");
+            }
             ai.ship.setArenaPosition(25, 0);
             maneuver = ai.getFallbackManeuver();
-            expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(22.5, 0));
+            if (maneuver) {
+                expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(22.5, 0));
+            } else {
+                fail("No maneuver proposed");
+            }
         });
 
         it("applies the chosen move", function () {

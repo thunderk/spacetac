@@ -13,7 +13,7 @@ module TS.SpaceTac {
         }
 
         // Get a new unique name from available choices
-        getName(): string {
+        getName(): string | null {
             if (this.choices.length === 0) {
                 return null;
             }

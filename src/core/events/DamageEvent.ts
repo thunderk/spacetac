@@ -2,7 +2,7 @@
 
 module TS.SpaceTac {
     // Event logged when a ship takes damage
-    export class DamageEvent extends BaseLogEvent {
+    export class DamageEvent extends BaseLogShipEvent {
         // Damage to hull
         hull: number;
 

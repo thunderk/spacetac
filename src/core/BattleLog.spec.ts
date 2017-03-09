@@ -3,7 +3,7 @@
 module TS.SpaceTac {
     // Check a single game log event
     function checkEvent(got: BaseLogEvent, ship: Ship, code: string,
-        target_ship: Ship = null, target_x: number = null, target_y: number = null): void {
+        target_ship: Ship | null = null, target_x: number | null = null, target_y: number | null = null): void {
         if (target_ship) {
             if (target_x === null) {
                 target_x = target_ship.arena_x;
@@ -15,23 +15,27 @@ module TS.SpaceTac {
 
         expect(got.ship).toBe(ship);
         expect(got.code).toEqual(code);
-        expect(got.target.ship).toBe(target_ship);
-        if (target_x === null) {
-            expect(got.target.x).toBeNull();
+        if (got.target) {
+            expect(got.target.ship).toBe(target_ship);
+            if (target_x === null) {
+                expect(got.target.x).toBeNull();
+            } else {
+                expect(got.target.x).toBeCloseTo(target_x, 0.000001);
+            }
+            if (target_y === null) {
+                expect(got.target.y).toBeNull();
+            } else {
+                expect(got.target.y).toBeCloseTo(target_y, 0.000001);
+            }
         } else {
-            expect(got.target.x).toBeCloseTo(target_x, 0.000001);
-        }
-        if (target_y === null) {
-            expect(got.target.y).toBeNull();
-        } else {
-            expect(got.target.y).toBeCloseTo(target_y, 0.000001);
+            fail("Got no target");
         }
     }
 
     // Fake event
     class FakeEvent extends BaseLogEvent {
         constructor() {
-            super("fake");
+            super("fake", new Ship());
         }
     }
 
@@ -68,7 +72,8 @@ module TS.SpaceTac {
         });
 
         it("can receive simulated initial state events", function () {
-            var battle = Battle.newQuickRandom();
+            let battle = Battle.newQuickRandom();
+            let playing = nn(battle.playing_ship);
             battle.log.clear();
             battle.log.addFilter("value");
             expect(battle.log.events.length).toBe(0);
@@ -80,7 +85,7 @@ module TS.SpaceTac {
                 checkEvent(battle.log.events[i], battle.play_order[i], "move", null,
                     battle.play_order[i].arena_x, battle.play_order[i].arena_y);
             }
-            checkEvent(battle.log.events[8], battle.playing_ship, "ship_change", battle.playing_ship);
+            checkEvent(battle.log.events[8], playing, "ship_change", playing);
         });
     });
 }

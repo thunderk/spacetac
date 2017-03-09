@@ -52,12 +52,16 @@ module TS.SpaceTac {
 
             while (done < 1000 && this.producers.length > 0) {
                 // Produce a maneuver
-                let maneuver: Maneuver;
+                let maneuver: Maneuver | null = null;
                 let producer = this.producers.shift();
-                [maneuver, producer] = producer();
+                if (producer) {
+                    [maneuver, producer] = producer();
+                }
 
                 if (maneuver) {
-                    this.producers.push(producer);
+                    if (producer) {
+                        this.producers.push(producer);
+                    }
 
                     // Evaluate the maneuver
                     let score = this.evaluate(maneuver);
@@ -88,7 +92,7 @@ module TS.SpaceTac {
                 TacticalAIHelpers.produceBlastShots,
                 TacticalAIHelpers.produceRandomMoves,
             ]
-            producers.forEach(producer => this.producers.push(producer(this.ship, this.ship.getBattle())));
+            producers.forEach(producer => this.producers.push(producer(this.ship, this.ship.getBattle() || new Battle())));
         }
 
         /**
@@ -101,6 +105,7 @@ module TS.SpaceTac {
                 scaled(TacticalAIHelpers.evaluateDamageToEnemy, 30),
                 scaled(TacticalAIHelpers.evaluateClustering, 3),
             ]
+            // TODO evaluator typing is lost
             evaluators.forEach(evaluator => this.evaluators.push((maneuver: Maneuver) => evaluator(this.ship, this.ship.getBattle(), maneuver)));
         }
     }

@@ -23,7 +23,7 @@ module TS.SpaceTac.UI {
         fading: boolean;
 
         // Current targetting
-        private targetting: Targetting;
+        private targetting: Targetting | null;
 
         // Action icon - image representing the action
         private layer_icon: Phaser.Image;
@@ -101,7 +101,9 @@ module TS.SpaceTac.UI {
             this.bar.actionStarted();
 
             // Update range hint
-            this.battleview.arena.range_hint.setPrimary(this.ship, this.action);
+            if (this.battleview.arena.range_hint) {
+                this.battleview.arena.range_hint.setPrimary(this.ship, this.action);
+            }
 
             // Update fading statuses
             this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, null));
@@ -110,13 +112,18 @@ module TS.SpaceTac.UI {
             this.setSelected(true);
 
             if (this.action.needs_target) {
-                // Switch to targetting mode (will apply action when a target is selected)
-                this.targetting = this.battleview.enterTargettingMode();
-                this.targetting.setSource(this.battleview.arena.findShipSprite(this.ship));
-                this.targetting.targetSelected.add(this.processSelection, this);
-                this.targetting.targetHovered.add(this.processHover, this);
-                if (this.action instanceof MoveAction) {
-                    this.targetting.setApIndicatorsInterval(this.action.getDistanceByActionPoint(this.ship));
+                let sprite = this.battleview.arena.findShipSprite(this.ship);
+                if (sprite) {
+                    // Switch to targetting mode (will apply action when a target is selected)
+                    this.targetting = this.battleview.enterTargettingMode();
+                    if (this.targetting) {
+                        this.targetting.setSource(sprite);
+                        this.targetting.targetSelected.add(this.processSelection, this);
+                        this.targetting.targetHovered.add(this.processHover, this);
+                        if (this.action instanceof MoveAction) {
+                            this.targetting.setApIndicatorsInterval(this.action.getDistanceByActionPoint(this.ship));
+                        }
+                    }
                 }
             } else {
                 // No target needed, apply action immediately
@@ -127,13 +134,15 @@ module TS.SpaceTac.UI {
         // Called when a target is hovered
         //  This will check the target against current action and adjust it if needed
         processHover(target: Target): void {
-            target = this.action.checkTarget(this.ship, target);
-            this.targetting.setTarget(target, false, this.action.getBlastRadius(this.ship));
-            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, target));
+            let correct_target = this.action.checkTarget(this.ship, target);
+            if (this.targetting) {
+                this.targetting.setTarget(correct_target, false, this.action.getBlastRadius(this.ship));
+            }
+            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, correct_target));
         }
 
         // Called when a target is selected
-        processSelection(target: Target): void {
+        processSelection(target: Target | null): void {
             if (this.action.apply(this.ship, target)) {
                 this.bar.actionEnded();
             }

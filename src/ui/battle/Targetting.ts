@@ -3,11 +3,11 @@ module TS.SpaceTac.UI {
     //  Allows to pick a target for an action
     export class Targetting {
         // Initial target (as pointed by the user)
-        target_initial: Target;
+        target_initial: Target | null;
         line_initial: Phaser.Graphics;
 
         // Corrected target (applying action rules)
-        target_corrected: Target;
+        target_corrected: Target | null;
         line_corrected: Phaser.Graphics;
 
         // Circle for effect radius
@@ -25,13 +25,13 @@ module TS.SpaceTac.UI {
         ap_indicators: Phaser.Image[] = [];
 
         // Access to the parent battle view
-        private battleview: BattleView;
+        private battleview: BattleView | null;
 
         // Source of the targetting
-        private source: PIXI.DisplayObject;
+        private source: PIXI.DisplayObject | null;
 
         // Create a default targetting mode
-        constructor(battleview: BattleView) {
+        constructor(battleview: BattleView | null) {
             this.battleview = battleview;
             this.targetHovered = new Phaser.Signal();
             this.targetSelected = new Phaser.Signal();
@@ -116,6 +116,10 @@ module TS.SpaceTac.UI {
 
         // Update the AP indicators display
         updateApIndicators() {
+            if (!this.battleview || !this.source || !this.target_corrected) {
+                return;
+            }
+
             // Get indicator count
             let count = 0;
             let distance = 0;
@@ -139,10 +143,11 @@ module TS.SpaceTac.UI {
 
             // Spread indicators
             if (count > 0 && distance > 0) {
-                let dx = this.ap_interval * (this.target_corrected.x - this.source.x) / distance;
-                let dy = this.ap_interval * (this.target_corrected.y - this.source.y) / distance;
+                let source = this.source;
+                let dx = this.ap_interval * (this.target_corrected.x - source.x) / distance;
+                let dy = this.ap_interval * (this.target_corrected.y - source.y) / distance;
                 this.ap_indicators.forEach((indicator, index) => {
-                    indicator.position.set(this.source.x + dx * index, this.source.y + dy * index);
+                    indicator.position.set(source.x + dx * index, source.y + dy * index);
                 });
             }
         }
@@ -153,7 +158,7 @@ module TS.SpaceTac.UI {
         }
 
         // Set a target from a target object
-        setTarget(target: Target, dispatch: boolean = true, blast_radius: number = 0): void {
+        setTarget(target: Target | null, dispatch: boolean = true, blast_radius: number = 0): void {
             this.target_corrected = target;
             this.blast_radius = blast_radius;
             if (dispatch) {

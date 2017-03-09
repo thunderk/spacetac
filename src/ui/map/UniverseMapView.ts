@@ -6,10 +6,10 @@ module TS.SpaceTac.UI {
      */
     export class UniverseMapView extends BaseView {
         // Displayed universe
-        universe: Universe;
+        universe = new Universe();
 
         // Interacting player
-        player: Player;
+        player = new Player();
 
         // Star systems
         group: Phaser.Group;
@@ -52,9 +52,11 @@ module TS.SpaceTac.UI {
                 let loc2 = starlink.second.getWarpLocationTo(starlink.first);
 
                 let result = new Phaser.Graphics(this.game);
-                result.lineStyle(0.005, 0x8bbeff);
-                result.moveTo(starlink.first.x - 0.5 + loc1.x, starlink.first.y - 0.5 + loc1.y);
-                result.lineTo(starlink.second.x - 0.5 + loc2.x, starlink.second.y - 0.5 + loc2.y);
+                if (loc1 && loc2) {
+                    result.lineStyle(0.005, 0x8bbeff);
+                    result.moveTo(starlink.first.x - 0.5 + loc1.x, starlink.first.y - 0.5 + loc1.y);
+                    result.lineTo(starlink.second.x - 0.5 + loc2.x, starlink.second.y - 0.5 + loc2.y);
+                }
                 return result;
             });
             this.starlinks.forEach(starlink => this.group.addChild(starlink));
@@ -92,8 +94,8 @@ module TS.SpaceTac.UI {
          * Leaving the view, unbind and destroy
          */
         shutdown() {
-            this.universe = null;
-            this.player = null;
+            this.universe = new Universe();
+            this.player = new Player();
 
             super.shutdown();
         }
@@ -105,7 +107,7 @@ module TS.SpaceTac.UI {
             this.starsystems.forEach(system => system.updateInfo());
 
             let location = this.player.fleet.location;
-            if (location.type == StarLocationType.WARP) {
+            if (location && location.type == StarLocationType.WARP) {
                 let angle = Math.atan2(location.y, location.x);
                 this.button_jump.scale.set(location.star.radius * 0.002, location.star.radius * 0.002);
                 this.button_jump.position.set(location.star.x + location.x + 0.02 * Math.cos(angle), location.star.y + location.y + 0.02 * Math.sin(angle));
@@ -140,8 +142,8 @@ module TS.SpaceTac.UI {
          * Set the current zoom level (0, 1 or 2)
          */
         setZoom(level: number) {
-            let current_star = this.player.fleet.location.star;
-            if (level <= 0) {
+            let current_star = this.player.fleet.location ? this.player.fleet.location.star : null;
+            if (!current_star || level <= 0) {
                 this.setCamera(0, 0, this.universe.radius * 2);
                 this.zoom = 0;
             } else if (level == 1) {
@@ -158,7 +160,7 @@ module TS.SpaceTac.UI {
          * Do the jump animation to another system
          */
         doJump() {
-            if (this.player.fleet.location.type == StarLocationType.WARP && this.player.fleet.location.jump_dest) {
+            if (this.player.fleet.location && this.player.fleet.location.type == StarLocationType.WARP && this.player.fleet.location.jump_dest) {
                 Animation.setVisibility(this.game, this.button_jump, false, 300);
 
                 let dest_location = this.player.fleet.location.jump_dest;

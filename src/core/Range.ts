@@ -8,12 +8,12 @@ module TS.SpaceTac {
         max: number;
 
         // Create a range of values
-        constructor(min: number, max: number = null) {
+        constructor(min: number, max: number | null = null) {
             this.set(min, max);
         }
 
         // Change the range
-        set(min: number, max: number = null) {
+        set(min: number, max: number | null = null) {
             this.min = min;
             if (max === null) {
                 this.max = this.min;

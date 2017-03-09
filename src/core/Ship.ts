@@ -95,7 +95,7 @@ module TS.SpaceTac {
         upgrade_points = 0;
 
         // Create a new ship inside a fleet
-        constructor(fleet: Fleet = null, name = "Ship") {
+        constructor(fleet: Fleet | null = null, name = "Ship") {
             this.fleet = fleet || new Fleet();
             this.level = 1;
             this.name = name;
@@ -146,20 +146,12 @@ module TS.SpaceTac {
 
         // Return the player owning this ship
         getPlayer(): Player {
-            if (this.fleet) {
-                return this.fleet.player;
-            } else {
-                return null;
-            }
+            return this.fleet.player;
         }
 
         // get the current battle this ship is engaged in
-        getBattle(): Battle {
-            if (this.fleet) {
-                return this.fleet.battle;
-            } else {
-                return null;
-            }
+        getBattle(): Battle | null {
+            return this.fleet.battle;
         }
 
         // Get the list of actions available
@@ -257,7 +249,7 @@ module TS.SpaceTac {
         // Initialize the action points counter
         //  This should be called once at the start of a battle
         //  If no value is provided, the attribute ap_initial will be used
-        initializeActionPoints(value: number = null): void {
+        initializeActionPoints(value: number | null = null): void {
             if (value === null) {
                 value = this.attributes.power_initial.get();
             }
@@ -267,7 +259,7 @@ module TS.SpaceTac {
         // Recover action points
         //  This should be called once at the end of a turn
         //  If no value is provided, the current attribute ap_recovery will be used
-        recoverActionPoints(value: number = null): void {
+        recoverActionPoints(value: number | null = null): void {
             if (this.alive) {
                 if (value === null) {
                     value = this.attributes.power_recovery.get();
@@ -510,7 +502,7 @@ module TS.SpaceTac {
          * List all equipments attached to slots of a given type (any slot type if null)
          */
         listEquipment(slottype: SlotType | null = null): Equipment[] {
-            return this.slots.filter(slot => slot.attached && (slottype == null || slot.type == slottype)).map(slot => slot.attached);
+            return nna(this.slots.filter(slot => slot.attached && (slottype == null || slot.type == slottype)).map(slot => slot.attached));
         }
 
         // Get the number of attached equipments
@@ -525,13 +517,13 @@ module TS.SpaceTac {
         }
 
         // Get a random attached equipment, null if no equipment is attached
-        getRandomEquipment(random = RandomGenerator.global): Equipment {
+        getRandomEquipment(random = RandomGenerator.global): Equipment | null {
             var count = this.getEquipmentCount();
             if (count === 0) {
                 return null;
             } else {
                 var picked = random.randInt(0, count - 1);
-                var result: Equipment = null;
+                var result: Equipment | null = null;
                 var index = 0;
                 this.slots.forEach((slot: Slot) => {
                     if (slot.attached) {

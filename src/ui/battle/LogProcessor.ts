@@ -101,7 +101,7 @@ module TS.SpaceTac.UI {
                 this.processDroneDestroyedEvent(event);
             } else if (event instanceof DroneAppliedEvent) {
                 this.processDroneAppliedEvent(event);
-            } else if (event.code == "effectadd" || event.code == "effectduration" || event.code == "effectdel") {
+            } else if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent ||  event instanceof EffectDurationChangedEvent) {
                 this.processEffectEvent(event);
             }
         }
@@ -116,8 +116,13 @@ module TS.SpaceTac.UI {
 
         // Playing ship changed
         private processShipChangeEvent(event: ShipChangeEvent): void {
-            this.view.arena.setShipPlaying(event.target.ship);
-            this.view.ship_list.setPlaying(event.target.ship);
+            if (event.target && event.target.ship) {
+                this.view.arena.setShipPlaying(event.target.ship);
+                this.view.ship_list.setPlaying(event.target.ship);
+            } else {
+                this.view.arena.setShipPlaying(null);
+                this.view.ship_list.setPlaying(null);
+            }
 
             if (this.battle.canPlay(this.view.player)) {
                 // Player turn
@@ -196,7 +201,7 @@ module TS.SpaceTac.UI {
         private processEndBattleEvent(event: EndBattleEvent): void {
             this.view.setInteractionEnabled(false);
 
-            if (event.outcome.winner.player === this.view.player) {
+            if (event.outcome.winner && event.outcome.winner.player === this.view.player) {
                 // Victory !
                 // TODO Loot screen
                 this.view.player.exitBattle();
@@ -207,7 +212,7 @@ module TS.SpaceTac.UI {
         }
 
         // Sticky effect on ship added, changed or removed
-        private processEffectEvent(event: BaseLogEvent): void {
+        private processEffectEvent(event: EffectAddedEvent | EffectRemovedEvent | EffectDurationChangedEvent): void {
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {
                 item.updateEffects();

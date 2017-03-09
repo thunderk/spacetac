@@ -33,7 +33,7 @@ module TS.SpaceTac.UI {
             this.bind(Phaser.Keyboard.M, "Toggle sound", () => {
                 this.game.audio.toggleMute();
             });
-            this.bind(Phaser.Keyboard.NUMPAD_ADD, null, () => {
+            this.bind(Phaser.Keyboard.NUMPAD_ADD, "", () => {
                 if (this.cheats_enabled) {
                     this.cheat = !this.cheat;
                     this.game.displayMessage(this.cheat ? "Cheats enabled" : "Cheats disabled");
@@ -48,9 +48,9 @@ module TS.SpaceTac.UI {
 
         // Bind a key to a cheat action
         bindCheat(key: number, desc: string, action: Function): void {
-            this.bind(key, null, () => {
+            this.bind(key, `Cheat: ${desc}`, () => {
                 if (this.cheat) {
-                    console.warn("Cheat ! " + desc);
+                    console.warn(`Cheat ! ${desc}`);
                     action();
                 }
             });

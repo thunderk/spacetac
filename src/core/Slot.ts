@@ -17,7 +17,7 @@ module TS.SpaceTac {
         type: SlotType;
 
         // Currently attached equipment, null if none
-        attached: Equipment;
+        attached: Equipment | null;
 
         // Create an empty slot for a ship
         constructor(ship: Ship, type: SlotType) {
@@ -27,7 +27,7 @@ module TS.SpaceTac {
         }
 
         // Attach an equipment in this slot
-        attach(equipment: Equipment): Equipment | null {
+        attach(equipment: Equipment): Equipment {
             if (this.type === equipment.slot && equipment.canBeEquipped(this.ship)) {
                 this.attached = equipment;
                 equipment.attached_to = this;
@@ -35,11 +35,8 @@ module TS.SpaceTac {
                 if (this.ship) {
                     this.ship.updateAttributes();
                 }
-
-                return equipment;
-            } else {
-                return null;
             }
+            return equipment;
         }
     }
 

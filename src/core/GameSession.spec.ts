@@ -12,7 +12,7 @@ module TS.SpaceTac.Specs {
          * Apply deterministic game steps
          */
         function applyGameSteps(session: GameSession): void {
-            var battle = session.getBattle();
+            var battle = nn(session.getBattle());
             battle.advanceToNextShip();
             // TODO Make some fixed moves (AI?)
             battle.endBattle(battle.fleets[0]);

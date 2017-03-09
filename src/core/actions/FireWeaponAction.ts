@@ -6,14 +6,17 @@ module TS.SpaceTac {
         // Boolean set to true if the weapon can target space
         can_target_space: boolean;
 
+        // Equipment cannot be null
+        equipment: Equipment;
+
         constructor(equipment: Equipment, can_target_space = false, name = "Fire") {
             super("fire-" + equipment.code, name, true, equipment);
 
             this.can_target_space = can_target_space;
         }
 
-        checkLocationTarget(ship: Ship, target: Target): Target {
-            if (this.can_target_space) {
+        checkLocationTarget(ship: Ship, target: Target): Target | null {
+            if (target && this.can_target_space) {
                 target = target.constraintInRange(ship.arena_x, ship.arena_y, this.equipment.distance);
                 return target;
             } else {
@@ -21,8 +24,8 @@ module TS.SpaceTac {
             }
         }
 
-        checkShipTarget(ship: Ship, target: Target): Target {
-            if (ship.getPlayer() === target.ship.getPlayer()) {
+        checkShipTarget(ship: Ship, target: Target): Target | null {
+            if (target.ship && ship.getPlayer() === target.ship.getPlayer()) {
                 // No friendly fire
                 return null;
             } else {
@@ -40,10 +43,11 @@ module TS.SpaceTac {
         /**
          * Collect the effects applied by this action
          */
-        getEffects(battle: Battle, ship: Ship, target: Target): [Ship, BaseEffect][] {
+        getEffects(ship: Ship, target: Target): [Ship, BaseEffect][] {
             let result: [Ship, BaseEffect][] = [];
             let blast = this.getBlastRadius(ship);
-            let ships = blast ? battle.collectShipsInCircle(target, blast, true) : ((target.ship && target.ship.alive) ? [target.ship] : []);
+            let battle = ship.getBattle();
+            let ships = (blast && battle) ? battle.collectShipsInCircle(target, blast, true) : ((target.ship && target.ship.alive) ? [target.ship] : []);
             ships.forEach(ship => {
                 this.equipment.target_effects.forEach(effect => result.push([ship, effect]));
             });
@@ -58,7 +62,7 @@ module TS.SpaceTac {
             ship.addBattleEvent(new FireEvent(ship, this.equipment, target));
 
             // Apply effects
-            let effects = this.getEffects(ship.getBattle(), ship, target);
+            let effects = this.getEffects(ship, target);
             effects.forEach(([ship, effect]) => effect.applyOnShip(ship));
         }
     }

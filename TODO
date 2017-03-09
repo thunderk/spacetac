@@ -1,4 +1,3 @@
-* Enable strict null checking in typescript
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)

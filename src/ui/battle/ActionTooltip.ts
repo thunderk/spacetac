@@ -39,7 +39,7 @@ module TS.SpaceTac.UI {
         }
 
         // Set current action to display, null to hide
-        setAction(action: ActionIcon): void {
+        setAction(action: ActionIcon | null): void {
             if (action) {
                 if (this.icon) {
                     this.icon.destroy(true);

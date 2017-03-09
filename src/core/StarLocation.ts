@@ -24,14 +24,14 @@ module TS.SpaceTac {
         universe_y: number;
 
         // Destination for jump, if its a WARP location
-        jump_dest: StarLocation;
+        jump_dest: StarLocation | null;
 
         // Enemy encounter
-        encounter: Fleet;
+        encounter: Fleet | null;
         encounter_gen: boolean;
 
-        constructor(star: Star, type: StarLocationType = StarLocationType.PLANET, x: number = 0, y: number = 0) {
-            this.star = star || new Star();
+        constructor(star = new Star(), type: StarLocationType = StarLocationType.PLANET, x: number = 0, y: number = 0) {
+            this.star = star;
             this.type = type;
             this.x = x;
             this.y = y;
@@ -52,14 +52,14 @@ module TS.SpaceTac {
 
         // Call this when first probing a location to generate the possible encounter
         //  Returns the encountered fleet, null if no encounter happens
-        tryGenerateEncounter(random = RandomGenerator.global): Fleet {
+        tryGenerateEncounter(random = RandomGenerator.global): Fleet | null {
             if (!this.encounter_gen) {
                 this.encounter_gen = true;
 
                 if (random.random() < 0.8) {
                     var fleet_generator = new FleetGenerator(random);
                     var ship_count = random.randInt(1, 5);
-                    this.encounter = fleet_generator.generate(this.star.level, null, ship_count);
+                    this.encounter = fleet_generator.generate(this.star.level, undefined, ship_count);
                 }
             }
 
@@ -69,7 +69,7 @@ module TS.SpaceTac {
         // Call this when entering a location to generate the possible encounter
         //  *fleet* is the player fleet, entering the location
         //  Returns the engaged battle, null if no encounter happens
-        enterLocation(fleet: Fleet, random = RandomGenerator.global): Battle {
+        enterLocation(fleet: Fleet, random = RandomGenerator.global): Battle | null {
             var encounter = this.tryGenerateEncounter(random);
             if (encounter) {
                 var battle = new Battle(fleet, encounter);

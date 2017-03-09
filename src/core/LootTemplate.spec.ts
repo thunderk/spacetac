@@ -61,7 +61,7 @@ module TS.SpaceTac.Specs {
             var template = new LootTemplate(SlotType.Weapon, "Bulletator");
             template.min_level = new IntegerRange(4, 7);
 
-            var result: Range;
+            var result: any;
 
             result = template.getPowerRangeForLevel(new IntegerRange(4, 7));
             expect(result.min).toBe(0);

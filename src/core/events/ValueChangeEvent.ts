@@ -2,7 +2,7 @@
 
 module TS.SpaceTac {
     // Event logged when a ship value or attribute changed
-    export class ValueChangeEvent extends BaseLogEvent {
+    export class ValueChangeEvent extends BaseLogShipEvent {
         // Saved version of the current value
         value: ShipValue;
 

@@ -2,7 +2,7 @@
 
 module TS.SpaceTac {
     // Event logged when a sticky effect is added to a ship
-    export class EffectDurationChangedEvent extends BaseLogEvent {
+    export class EffectDurationChangedEvent extends BaseLogShipEvent {
         // Pointer to the effect
         effect: StickyEffect;
 

@@ -2,10 +2,10 @@ module TS.SpaceTac {
     // Piece of equipment to attach in slots
     export class Equipment {
         // Actual slot this equipment is attached to
-        attached_to: Slot;
+        attached_to: Slot | null = null;
 
         // Type of slot this equipment can fit in
-        slot: SlotType;
+        slot: SlotType | null;
 
         // Identifiable equipment code (may be used by UI to customize visual effects)
         code: string;
@@ -41,7 +41,7 @@ module TS.SpaceTac {
         target_effects: BaseEffect[];
 
         // Basic constructor
-        constructor(slot: SlotType = null, code: string = null) {
+        constructor(slot: SlotType | null = null, code = "equiment") {
             this.slot = slot;
             this.code = code;
             this.name = code;

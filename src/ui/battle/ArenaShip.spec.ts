@@ -5,8 +5,8 @@ module TS.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("adds effects display", function () {
-            let ship = testgame.battleview.battle.playing_ship;
-            let sprite = testgame.battleview.arena.findShipSprite(ship);
+            let ship = nn(testgame.battleview.battle.playing_ship);
+            let sprite = nn(testgame.battleview.arena.findShipSprite(ship));
 
             expect(sprite.effects.children.length).toBe(0);
 

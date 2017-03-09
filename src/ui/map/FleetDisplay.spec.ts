@@ -11,11 +11,15 @@ module TS.SpaceTac.UI.Specs {
 
             mapview.game.tweens.update();
             let tween = first(mapview.game.tweens.getAll(), tw => tw.target == fleet);
-            let tweendata = tween.generateData(0.1);
-            expect(tweendata.length).toEqual(3);
-            expect(tweendata[0].rotation).toBeCloseTo(-Math.PI * 2 / 3);
-            expect(tweendata[1].rotation).toBeCloseTo(-Math.PI * 4 / 3);
-            expect(tweendata[2].rotation).toBeCloseTo(-Math.PI * 2);
+            if (tween) {
+                let tweendata = tween.generateData(0.1);
+                expect(tweendata.length).toEqual(3);
+                expect(tweendata[0].rotation).toBeCloseTo(-Math.PI * 2 / 3);
+                expect(tweendata[1].rotation).toBeCloseTo(-Math.PI * 4 / 3);
+                expect(tweendata[2].rotation).toBeCloseTo(-Math.PI * 2);
+            } else {
+                fail("No tween found");
+            }
         });
     });
 }

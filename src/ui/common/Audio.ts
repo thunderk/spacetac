@@ -4,7 +4,7 @@ module TS.SpaceTac.UI {
 
         private game: MainUI;
 
-        private music: Phaser.Sound;
+        private music: Phaser.Sound | null;
 
         constructor(game: MainUI) {
             this.game = game;

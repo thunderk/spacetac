@@ -36,7 +36,7 @@ module TS.SpaceTac {
         }
 
         // Get the other side of the link, for a given side
-        getPeer(star: Star): Star {
+        getPeer(star: Star): Star | null {
             if (star === this.first) {
                 return this.second;
             } else if (star === this.second) {

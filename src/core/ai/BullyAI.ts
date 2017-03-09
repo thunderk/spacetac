@@ -18,7 +18,7 @@ module TS.SpaceTac {
             if (this.ship.getValue("power") > 0) {
                 this.addWorkItem(() => {
                     var maneuvers = this.listAllManeuvers();
-                    var maneuver: BullyManeuver;
+                    var maneuver: BullyManeuver | null;
 
                     if (maneuvers.length > 0) {
                         maneuver = this.pickManeuver(maneuvers);
@@ -39,11 +39,14 @@ module TS.SpaceTac {
         listAllEnemies(): Ship[] {
             var result: Ship[] = [];
 
-            this.ship.getBattle().play_order.forEach((ship: Ship) => {
-                if (ship.alive && ship.getPlayer() !== this.ship.getPlayer()) {
-                    result.push(ship);
-                }
-            });
+            let battle = this.ship.getBattle();
+            if (battle) {
+                battle.play_order.forEach((ship: Ship) => {
+                    if (ship.alive && ship.getPlayer() !== this.ship.getPlayer()) {
+                        result.push(ship);
+                    }
+                });
+            }
 
             return result;
         }
@@ -73,7 +76,7 @@ module TS.SpaceTac {
         }
 
         // Get an equipped engine to make a move
-        getEngine(): Equipment {
+        getEngine(): Equipment | null {
             var engines = this.ship.listEquipment(SlotType.Engine);
             if (engines.length === 0) {
                 return null;
@@ -95,7 +98,7 @@ module TS.SpaceTac {
         }
 
         // When no bully action is available, pick a random enemy, and go towards it
-        getFallbackManeuver(): BullyManeuver {
+        getFallbackManeuver(): BullyManeuver | null {
             var enemies = this.listAllEnemies();
             if (enemies.length === 0) {
                 return null;
@@ -107,12 +110,20 @@ module TS.SpaceTac {
             var target = Target.newFromShip(picked);
             var distance = target.getDistanceTo(Target.newFromShip(this.ship));
             var engine = this.getEngine();
-            var safety_distance = (<MoveAction>engine.action).safety_distance;
-            if (distance > safety_distance) { // Don't move too close
-                target = target.constraintInRange(this.ship.arena_x, this.ship.arena_y,
-                    (distance - safety_distance) * APPROACH_FACTOR);
-                target = engine.action.checkLocationTarget(this.ship, target);
-                return new BullyManeuver(this.ship, engine, target);
+            if (engine) {
+                var safety_distance = (<MoveAction>engine.action).safety_distance;
+                if (distance > safety_distance) { // Don't move too close
+                    target = target.constraintInRange(this.ship.arena_x, this.ship.arena_y,
+                        (distance - safety_distance) * APPROACH_FACTOR);
+                    let loctarget = engine.action.checkLocationTarget(this.ship, target);
+                    if (loctarget) {
+                        return new BullyManeuver(this.ship, engine, loctarget);
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return null;
+                }
             } else {
                 return null;
             }
@@ -120,7 +131,7 @@ module TS.SpaceTac {
 
         // Pick a maneuver from a list of available ones
         //  By default, it chooses the nearest enemy
-        pickManeuver(available: BullyManeuver[]): BullyManeuver {
+        pickManeuver(available: BullyManeuver[]): BullyManeuver | null {
             if (available.length === 0) {
                 return null;
             }
@@ -134,7 +145,7 @@ module TS.SpaceTac {
         }
 
         // Effectively apply the chosen maneuver
-        applyManeuver(maneuver: BullyManeuver): void {
+        applyManeuver(maneuver: BullyManeuver | null): void {
             if (maneuver) {
                 this.addWorkItem(() => {
                     maneuver.apply();

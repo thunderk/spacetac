@@ -17,11 +17,14 @@ module TS.SpaceTac.Specs {
             generator.random = new SkewedRandomGenerator([0.5]);
 
             var equipment = generator.generate(new IntegerRange(3, 6));
-
-            expect(equipment.slot).toBe(SlotType.Shield);
-            expect(equipment.name).toEqual("Hexagrid Shield");
-            expect(equipment.min_level).toBe(5);
-            expect(equipment.ap_usage).toBeCloseTo(6.2727, 0.00001);
+            if (equipment) {
+                expect(equipment.slot).toBe(SlotType.Shield);
+                expect(equipment.name).toEqual("Hexagrid Shield");
+                expect(equipment.min_level).toBe(5);
+                expect(equipment.ap_usage).toBeCloseTo(6.2727, 0.00001);
+            } else {
+                fail("No equipment generated");
+            }
         });
     });
 }

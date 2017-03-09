@@ -8,7 +8,7 @@ module TS.SpaceTac.UI {
         circle: Phaser.Graphics;
 
         // Stored information of primary circle, when secondary one overrides it
-        primary: Phaser.Circle;
+        primary: Phaser.Circle | null;
 
         constructor(parent: Arena) {
             super(parent.game, parent);

@@ -10,7 +10,7 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "out": "out/build.js",
-        "strictNullChecks": false,
+        "strictNullChecks": true,
         "sourceMap": true,
         "target": "es5"
     },

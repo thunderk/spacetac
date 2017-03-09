@@ -6,7 +6,7 @@ module TS.SpaceTac.Equipments {
         // Boolean set to true if the weapon can target space
         can_target_space: boolean;
 
-        constructor(name: string, min_damage: number = 0, max_damage: number = null) {
+        constructor(name: string, min_damage: number = 0, max_damage: number | null = null) {
             super(SlotType.Weapon, name);
 
             this.can_target_space = false;
@@ -18,13 +18,13 @@ module TS.SpaceTac.Equipments {
 
         // Set the range for this weapon
         //  Pay attention that *min_distance* means the MAXIMAL reachable distance, but on a low-power loot
-        setRange(min_distance: number, max_distance: number = null, can_target_space: boolean = false): void {
+        setRange(min_distance: number, max_distance: number | null = null, can_target_space = false): void {
             this.distance = new Range(min_distance, max_distance);
             this.can_target_space = can_target_space;
         }
 
         // Set the effect radius (blast) for this weapon
-        setBlast(min_blast: number, max_blast: number = null): void {
+        setBlast(min_blast: number, max_blast: number | null = null): void {
             this.blast = new IntegerRange(min_blast, max_blast);
         }
 

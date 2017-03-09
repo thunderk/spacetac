@@ -29,7 +29,7 @@ module TS.SpaceTac {
         it("forbids targetting a ship", function () {
             var ship1 = new Ship(null, "Test1");
             var ship2 = new Ship(null, "Test2");
-            var action = new MoveAction(null);
+            var action = new MoveAction(new Equipment());
 
             var result = action.checkTarget(ship1, Target.newFromShip(ship1));
             expect(result).toBeNull();
@@ -74,9 +74,10 @@ module TS.SpaceTac {
 
             expect(battle.log.events[1].code).toEqual("move");
             expect(battle.log.events[1].ship).toBe(ship);
-            expect(battle.log.events[1].target.ship).toBeNull();
-            expect(battle.log.events[1].target.x).toBeCloseTo(3.535533, 0.00001);
-            expect(battle.log.events[1].target.y).toBeCloseTo(3.535533, 0.00001);
+            let target: any = battle.log.events[1].target;
+            expect(target.ship).toBeNull();
+            expect(target.x).toBeCloseTo(3.535533, 0.00001);
+            expect(target.y).toBeCloseTo(3.535533, 0.00001);
         });
 
         it("can't move too much near another ship", function () {

@@ -5,6 +5,8 @@ module TS.SpaceTac {
      * Action to deploy a drone in space
      */
     export class DeployDroneAction extends BaseAction {
+        equipment: Equipment;
+
         constructor(equipment: Equipment) {
             super("deploy-" + equipment.code, "Deploy", true, equipment);
         }

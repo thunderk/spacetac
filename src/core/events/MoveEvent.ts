@@ -2,7 +2,7 @@
 
 module TS.SpaceTac {
     // Event logged when a ship moves
-    export class MoveEvent extends BaseLogEvent {
+    export class MoveEvent extends BaseLogShipTargetEvent {
         // New facing angle, in radians
         facing_angle: number;
 

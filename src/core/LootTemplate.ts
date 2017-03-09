@@ -46,7 +46,7 @@ module TS.SpaceTac {
         }
 
         // Set a capability requirement
-        addRequirement(capability: keyof ShipAttributes, min: number, max: number = null): void {
+        addRequirement(capability: keyof ShipAttributes, min: number, max: number | null = null): void {
             this.requirements[capability] = new IntegerRange(min, max);
         }
 
@@ -70,7 +70,10 @@ module TS.SpaceTac {
             result.ap_usage = this.ap_usage.getProportional(power);
             result.min_level = this.min_level.getProportional(power);
 
-            result.action = this.getActionForEquipment(result);
+            let action = this.getActionForEquipment(result)
+            if (action) {
+                result.action = action;
+            }
 
             iteritems(this.requirements, (key: string, requirement: IntegerRange) => {
                 if (requirement) {
@@ -89,7 +92,7 @@ module TS.SpaceTac {
         }
 
         // Find the power range that will result in the level range
-        getPowerRangeForLevel(level: IntegerRange): Range {
+        getPowerRangeForLevel(level: IntegerRange): Range | null {
             if (level.min > this.min_level.max || level.max < this.min_level.min) {
                 return null;
             } else {
@@ -113,7 +116,7 @@ module TS.SpaceTac {
 
         // Generate an equipment that will have its level requirement in the given range
         //  May return null if level range is not compatible with the template
-        generateInLevelRange(level: IntegerRange, random = RandomGenerator.global): Equipment {
+        generateInLevelRange(level: IntegerRange, random = RandomGenerator.global): Equipment | null {
             var random_range = this.getPowerRangeForLevel(level);
             if (random_range) {
                 var power = random.random() * (random_range.max - random_range.min) + random_range.min;
@@ -126,7 +129,7 @@ module TS.SpaceTac {
         /**
          * Convenience function to add a modulated effect to the equipment
          */
-        addEffect(effect: BaseEffect, min_value: number, max_value: number = null, target = true) {
+        addEffect(effect: BaseEffect, min_value: number, max_value: number | null = null, target = true) {
             var template = new EffectTemplate(effect);
             template.addModifier("value", new IntegerRange(min_value, max_value));
             if (target) {
@@ -139,8 +142,8 @@ module TS.SpaceTac {
         /**
          * Convenience function to add a modulated sticky effect to the equipment
          */
-        addStickyEffect(effect: BaseEffect, min_value: number, max_value: number = null, min_duration: number = 1,
-            max_duration: number = null, on_stick = false, on_turn_start = false, target = true): void {
+        addStickyEffect(effect: BaseEffect, min_value: number, max_value: number | null = null, min_duration: number = 1,
+            max_duration: number | null = null, on_stick = false, on_turn_start = false, target = true): void {
             var template = new EffectTemplate(new StickyEffect(effect, 0, on_stick, on_turn_start));
             template.addModifier("value", new IntegerRange(min_value, max_value));
             template.addModifier("duration", new IntegerRange(min_duration, max_duration));
@@ -177,7 +180,7 @@ module TS.SpaceTac {
         }
 
         // Method to reimplement to assign an action to a generated equipment
-        protected getActionForEquipment(equipment: Equipment): BaseAction {
+        protected getActionForEquipment(equipment: Equipment): BaseAction | null {
             return null;
         }
     }

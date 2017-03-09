@@ -18,7 +18,7 @@ module TS.SpaceTac.UI {
         icon_waiting: Phaser.Image;
 
         // Current ship, whose actions are displayed
-        ship: Ship;
+        ship: Ship | null;
         ship_power_capacity: number;
         ship_power_value: number;
 
@@ -170,7 +170,7 @@ module TS.SpaceTac.UI {
          * *power_usage* is the consumption of currently selected action.
          */
         updateSelectedActionPower(power_usage: number): void {
-            var remaining_ap = this.ship.values.power.get() - power_usage;
+            var remaining_ap = this.ship ? (this.ship.values.power.get() - power_usage) : 0;
             if (remaining_ap < 0) {
                 remaining_ap = 0;
             }

@@ -21,8 +21,9 @@ module TS.SpaceTac.Specs {
             let engine2 = TestTools.addEngine(ship, 120);
             let engine3 = TestTools.addEngine(ship, 150);
             let engine4 = TestTools.addEngine(ship, 70);
-            expect(simulator.findBestEngine()).toBe(engine3);
-            expect(simulator.findBestEngine().distance).toBe(150);
+            let best = simulator.findBestEngine();
+            expect(best).toBe(engine3);
+            expect((<Equipment>best).distance).toBe(150);
         });
 
         it("fires directly when in range", function () {
@@ -36,7 +37,7 @@ module TS.SpaceTac.Specs {
             expect(result.total_fire_ap).toBe(3, 'total_fire_ap');
 
             expect(result.parts).toEqual([
-                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: true }
+                { action: jasmine.objectContaining({ code: "fire-equiment" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: true }
             ]);
         });
 
@@ -50,7 +51,7 @@ module TS.SpaceTac.Specs {
             expect(result.total_fire_ap).toBe(3, 'total_fire_ap');
 
             expect(result.parts).toEqual([
-                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: false }
+                { action: jasmine.objectContaining({ code: "fire-equiment" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: false }
             ]);
         });
 
@@ -68,7 +69,7 @@ module TS.SpaceTac.Specs {
 
             expect(result.parts).toEqual([
                 { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 1, possible: true },
-                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 15, ship.arena_y, null), ap: 3, possible: true }
+                { action: jasmine.objectContaining({ code: "fire-equiment" }), target: new Target(ship.arena_x + 15, ship.arena_y, null), ap: 3, possible: true }
             ]);
         });
 
@@ -86,7 +87,7 @@ module TS.SpaceTac.Specs {
 
             expect(result.parts).toEqual([
                 { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 10, ship.arena_y, null), ap: 2, possible: true },
-                { action: jasmine.objectContaining({ code: "fire-null" }), target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2, possible: false }
+                { action: jasmine.objectContaining({ code: "fire-equiment" }), target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2, possible: false }
             ]);
         });
 

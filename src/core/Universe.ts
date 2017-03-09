@@ -46,7 +46,7 @@ module TS.SpaceTac {
                     continue;
                 }
 
-                star.name = names.getName();
+                star.name = names.getName() || "Star";
                 result.push(star);
 
                 count--;
@@ -104,15 +104,12 @@ module TS.SpaceTac {
         }
 
         // Get the star nearest to another
-        getNearestTo(star: Star, others: Star[] = null): Star {
-            if (others === null) {
-                others = this.stars;
-            }
+        getNearestTo(star: Star, others = this.stars): Star | null {
             if (others.length === 0) {
                 return null;
             } else {
                 var mindist = this.radius * 2.0;
-                var nearest: Star = null;
+                var nearest: Star | null = null;
                 others.forEach((istar: Star) => {
                     if (istar !== star) {
                         var dist = star.getDistanceTo(istar);

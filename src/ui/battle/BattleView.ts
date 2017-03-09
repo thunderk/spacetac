@@ -17,10 +17,10 @@ module TS.SpaceTac.UI {
         arena: Arena;
 
         // Background image
-        background: Phaser.Image;
+        background: Phaser.Image | null;
 
         // Targetting mode (null if we're not in this mode)
-        targetting: Targetting;
+        targetting: Targetting | null;
 
         // Ship list
         ship_list: ShipList;
@@ -29,7 +29,7 @@ module TS.SpaceTac.UI {
         action_bar: ActionBar;
 
         // Currently hovered ship
-        ship_hovered: Ship;
+        ship_hovered: Ship | null;
 
         // Ship tooltip
         ship_tooltip: ShipTooltip;
@@ -51,7 +51,6 @@ module TS.SpaceTac.UI {
             this.battle = battle;
             this.targetting = null;
             this.ship_hovered = null;
-            this.log_processor = null;
             this.background = null;
 
             this.battle.timer = this.timer;
@@ -97,7 +96,7 @@ module TS.SpaceTac.UI {
                 this.battle.endBattle(this.player.fleet);
             });
             this.inputs.bindCheat(Phaser.Keyboard.A, "Use AI to play", () => {
-                if (this.interacting) {
+                if (this.interacting && this.battle.playing_ship) {
                     this.setInteractionEnabled(false);
                     this.battle.playAI(new TacticalAI(this.battle.playing_ship));
                 }
@@ -111,22 +110,9 @@ module TS.SpaceTac.UI {
         shutdown() {
             this.exitTargettingMode();
 
-            if (this.log_processor) {
-                this.log_processor.destroy();
-                this.log_processor = null;
-            }
-
-            if (this.ui) {
-                this.ui.destroy();
-                this.ui = null;
-            }
-
-            if (this.arena) {
-                this.arena.destroy();
-                this.arena = null;
-            }
-
-            this.battle = null;
+            this.log_processor.destroy();
+            this.ui.destroy();
+            this.arena.destroy();
 
             super.shutdown();
         }
@@ -178,7 +164,7 @@ module TS.SpaceTac.UI {
         }
 
         // Set the currently hovered ship
-        setShipHovered(ship: Ship): void {
+        setShipHovered(ship: Ship | null): void {
             this.ship_hovered = ship;
             this.arena.setShipHovered(ship);
             this.ship_list.setHovered(ship);
@@ -201,7 +187,7 @@ module TS.SpaceTac.UI {
 
         // Enter targetting mode
         //  While in this mode, the Targetting object will receive hover and click events, and handle them
-        enterTargettingMode(): Targetting {
+        enterTargettingMode(): Targetting | null {
             if (!this.interacting) {
                 return null;
             }
