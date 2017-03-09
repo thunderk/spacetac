@@ -87,7 +87,7 @@ module TS.SpaceTac.UI {
                         if (this.fleet.battle) {
                             this.game.state.start("router");
                         } else {
-                            this.map.updateInfo();
+                            this.map.updateInfo(location.star);
                             this.loopOrbit();
                         }
                     });

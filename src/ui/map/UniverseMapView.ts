@@ -86,8 +86,6 @@ module TS.SpaceTac.UI {
 
             // Inputs
             this.inputs.bindCheat(Phaser.Keyboard.R, "Reveal whole map", this.revealAll);
-
-            this.updateInfo();
         }
 
         /**
@@ -103,11 +101,11 @@ module TS.SpaceTac.UI {
         /**
          * Update info on all star systems (fog of war, available data...)
          */
-        updateInfo() {
-            this.starsystems.forEach(system => system.updateInfo());
+        updateInfo(current_star: Star | null) {
+            this.starsystems.forEach(system => system.updateInfo(this.zoom, system.starsystem == current_star));
 
             let location = this.player.fleet.location;
-            if (location && location.type == StarLocationType.WARP) {
+            if (location && location.type == StarLocationType.WARP && this.zoom >= 2) {
                 let angle = Math.atan2(location.y, location.x);
                 this.button_jump.scale.set(location.star.radius * 0.002, location.star.radius * 0.002);
                 this.button_jump.position.set(location.star.x + location.x + 0.02 * Math.cos(angle), location.star.y + location.y + 0.02 * Math.sin(angle));
@@ -154,6 +152,8 @@ module TS.SpaceTac.UI {
                 this.setCamera(current_star.x, current_star.y, current_star.radius * 2);
                 this.zoom = 2;
             }
+
+            this.updateInfo(current_star);
         }
 
         /**
@@ -166,6 +166,7 @@ module TS.SpaceTac.UI {
                 let dest_location = this.player.fleet.location.jump_dest;
                 let dest_star = dest_location.star;
                 this.player_fleet.moveToLocation(dest_location, 3, duration => {
+                    this.timer.schedule(duration / 2, () => this.updateInfo(dest_star));
                     this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, Phaser.Easing.Cubic.Out);
                 });
             }

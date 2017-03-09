@@ -71,10 +71,14 @@ module TS.SpaceTac.UI {
         /**
          * Update displayed information, and fog of war
          */
-        updateInfo() {
+        updateInfo(level: number, focus: boolean) {
             this.locations.forEach(info => {
                 info[2].loadTexture(this.getVisitedKey(info[0]));
             });
+
+            // LOD
+            let detailed = focus && level == 2;
+            this.children.forEach(child => Animation.setVisibility(this.game, child, detailed, 300));
         }
     }
 }

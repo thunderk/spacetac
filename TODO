@@ -1,3 +1,7 @@
+* Character sheet: allow item moving to another ship
+* Character sheet: add tooltips (on values, slots and equipments)
+* Character sheet: add levelling up (spending of available points)
+* Character sheet: disable interaction during battle (except for loot screen)
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)
@@ -10,7 +14,7 @@
 * Add a battle log display
 * Organize arena objects and information in layers
 * Prevent arena effects information (eg. "shield -36") to overflow out of the arena
-* Allow to cancel last moves
+* Allow to undo last moves
 * Effect should be random in a range (eg. "damage target 50-75")
 * Add critical hit/miss
 * Add an overheat/cooling system
@@ -35,10 +39,11 @@
 * Map: add information on current star/location + information on hovered location
 * Map: add stores and shipyards
 * Map: remove jump links that cross the radius of other systems
-* Map: improve performance
+* Map: disable interaction (zoom, selection) while moving/jumping
 * Menu: fix background stars aggregating at right side when the game is not focused
+* Add ship personality (with icons to identify ?)
 * Tutorial
-* Campaign save slots
+* Campaign save slots, with auto-save
 * Missions/quests system
 * Main story arc
 
