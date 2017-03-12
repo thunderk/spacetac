@@ -59,6 +59,14 @@ module TS.SpaceTac {
         }
 
         /**
+         * Quit the current session, and go back to mainmenu
+         */
+        quitGame() {
+            this.session = new GameSession();
+            this.state.start('router');
+        }
+
+        /**
          * Save current game in local browser storage
          */
         saveGame(name = "spacetac-savegame"): boolean {

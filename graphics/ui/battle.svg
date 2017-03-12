@@ -16,7 +16,7 @@
    viewBox="0 0 1920 1080"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.0 r15299"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="battle.svg"
    inkscape:export-filename="/tmp/whole.png"
    inkscape:export-xdpi="90"
@@ -24,6 +24,54 @@
    style="enable-background:new">
   <defs
      id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient6968">
+      <stop
+         style="stop-color:#f2f3f3;stop-opacity:1"
+         offset="0"
+         id="stop6964" />
+      <stop
+         style="stop-color:#acb6bb;stop-opacity:0"
+         offset="1"
+         id="stop6966" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient6960">
+      <stop
+         style="stop-color:#0000ff;stop-opacity:0"
+         offset="0"
+         id="stop6944" />
+      <stop
+         id="stop6946"
+         offset="0.04601287"
+         style="stop-color:#60caf6;stop-opacity:0" />
+      <stop
+         style="stop-color:#afafc7;stop-opacity:1"
+         offset="0.07668772"
+         id="stop6948" />
+      <stop
+         id="stop6950"
+         offset="0.10912819"
+         style="stop-color:#9191ab;stop-opacity:0" />
+      <stop
+         style="stop-color:#beddf0;stop-opacity:0"
+         offset="0.908674"
+         id="stop6952" />
+      <stop
+         id="stop6954"
+         offset="0.93912303"
+         style="stop-color:#bfbfca;stop-opacity:1" />
+      <stop
+         style="stop-color:#2b2b42;stop-opacity:0"
+         offset="0.96813601"
+         id="stop6956" />
+      <stop
+         style="stop-color:#0000ff;stop-opacity:0"
+         offset="1"
+         id="stop6958" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient4946">
@@ -882,6 +930,81 @@
          in2="SourceGraphic"
          in="colormatrix2" />
     </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6960"
+       id="linearGradient6942"
+       gradientUnits="userSpaceOnUse"
+       x1="761.46185"
+       y1="809.35638"
+       x2="761.46185"
+       y2="858.03815" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6968"
+       id="radialGradient6970"
+       cx="937.35846"
+       cy="242.07848"
+       fx="937.35846"
+       fy="242.07848"
+       r="281.54367"
+       gradientTransform="matrix(1,0,0,0.16177528,0,202.91616)"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter7378"
+       x="-0.14551132"
+       width="1.2910226"
+       y="-0.90730583"
+       height="2.8146117"
+       inkscape:label="Heavy blur">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="34.082986"
+         id="feGaussianBlur7380" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Dialog shadow"
+       id="filter7512">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood7502" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite7504" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="54.5"
+         result="blur"
+         id="feGaussianBlur7506" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset7508" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite7510" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6960"
+       id="linearGradient7522"
+       gradientUnits="userSpaceOnUse"
+       x1="761.46185"
+       y1="809.35638"
+       x2="761.46185"
+       y2="858.03815" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -890,11 +1013,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.1764562"
-     inkscape:cx="257.62353"
-     inkscape:cy="1025.9327"
+     inkscape:zoom="0.5"
+     inkscape:cx="866.36268"
+     inkscape:cy="684.77526"
      inkscape:document-units="px"
-     inkscape:current-layer="layer8"
+     inkscape:current-layer="g7567"
      showgrid="false"
      units="px"
      showguides="true"
@@ -904,7 +1027,8 @@
      inkscape:snap-to-guides="true"
      inkscape:object-nodes="false"
      inkscape:snap-intersection-paths="false"
-     inkscape:object-paths="false">
+     inkscape:object-paths="false"
+     inkscape:snap-global="false">
     <sodipodi:guide
        position="0,0"
        orientation="0,1920"
@@ -958,7 +1082,7 @@
        id="layer31"
        inkscape:label="Arena ships">
       <path
-         style="enable-background:new;display:inline;opacity:1;fill:#038700;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;opacity:1;fill:#038700;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          d="m 696.57273,842.84286 v 70.00391 h 70.00195 v -70.00391 z m 3.35741,3.35937 h 63.28711 v 63.28516 h -63.28711 z"
          id="path4438"
          inkscape:connector-curvature="0"
@@ -967,7 +1091,7 @@
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
       <use
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          x="0"
          y="0"
          xlink:href="#g4184"
@@ -976,7 +1100,7 @@
          width="100%"
          height="100%" />
       <use
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          x="0"
          y="0"
          xlink:href="#use4320"
@@ -985,7 +1109,7 @@
          width="100%"
          height="100%" />
       <path
-         style="enable-background:new;display:inline;opacity:1;fill:#cc0d00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;opacity:1;fill:#cc0d00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          mask="url(#mask5918)"
          d="m 1109.998,812.71289 v 3.28906 H 1180 v -3.28906 z"
          id="path4438-7"
@@ -1006,14 +1130,14 @@
        id="layer30"
        inkscape:label="Targetting display">
       <circle
-         style="enable-background:new;display:inline;opacity:0.573;fill:url(#radialGradient10131);fill-opacity:1;fill-rule:evenodd;stroke:#5e2819;stroke-width:4.21875;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;opacity:0.57300002;fill:url(#radialGradient10131);fill-opacity:1;fill-rule:evenodd;stroke:#5e2819;stroke-width:4.21875;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          id="path8636"
          cx="1515.5656"
          cy="877.29608"
          r="180.31223" />
       <path
          sodipodi:type="star"
-         style="enable-background:new;display:inline;opacity:0.189;fill:#9b5e39;fill-opacity:1;fill-rule:evenodd;stroke:#97442b;stroke-width:4.21875;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;opacity:0.18900003;fill:#9b5e39;fill-opacity:1;fill-rule:evenodd;stroke:#97442b;stroke-width:4.21875;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          id="path11657"
          sodipodi:sides="14"
          sodipodi:cx="1515.5656"
@@ -1029,13 +1153,13 @@
          inkscape:transform-center-x="9.1027796"
          inkscape:transform-center-y="-4.5764601" />
       <circle
-         style="enable-background:new;display:inline;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#c79c71;stroke-width:2.82468748;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.96078431"
+         style="display:inline;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#c79c71;stroke-width:2.82468748;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.96078431;enable-background:new"
          id="path4869"
          cx="1551.4003"
          cy="742.08289"
          r="31.144533" />
       <path
-         style="enable-background:new;display:inline;fill:none;fill-rule:evenodd;stroke:url(#linearGradient9611);stroke-width:5.89960623;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;fill:none;fill-rule:evenodd;stroke:url(#linearGradient9611);stroke-width:5.89960623;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          d="M 732.44478,877.88531 H 1512.2041"
          id="path9595"
          inkscape:connector-curvature="0"
@@ -1046,16 +1170,16 @@
          id="use9628"
          d="m 1133.0389,877.88531 -23.5347,9.28279 3.6495,-9.28279 -3.6495,-9.28279 z"
          inkscape:transform-center-x="-2.67976"
-         style="display:inline;opacity:1;fill:#362c20;fill-opacity:1;fill-rule:evenodd;stroke:#e09c47;stroke-width:2.4309375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new" />
+         style="display:inline;opacity:1;fill:#362c20;fill-opacity:1;fill-rule:evenodd;stroke:#e09c47;stroke-width:2.43093753;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new" />
       <path
-         style="enable-background:new;display:inline;opacity:1;fill:#391b13;fill-opacity:1;fill-rule:evenodd;stroke:#dc6441;stroke-width:2.33156252;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;opacity:1;fill:#391b13;fill-opacity:1;fill-rule:evenodd;stroke:#dc6441;stroke-width:2.33156252;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          inkscape:transform-center-x="-3.93566"
          d="m 1517.8308,877.88531 -34.5651,13.6335 5.3601,-13.6335 -5.3601,-13.6335 z"
          id="path10745"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ccccc" />
       <g
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          id="g9681"
          transform="translate(-16.499158,28.439814)"
          inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ap-indicator.png"
@@ -1077,7 +1201,7 @@
            x="0" />
       </g>
       <use
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          x="0"
          y="0"
          xlink:href="#g9681"
@@ -1086,7 +1210,7 @@
          width="100%"
          height="100%" />
       <use
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          x="0"
          y="0"
          xlink:href="#g9681"
@@ -1095,7 +1219,7 @@
          width="100%"
          height="100%" />
       <use
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          x="0"
          y="0"
          xlink:href="#g9681"
@@ -1104,7 +1228,7 @@
          width="100%"
          height="100%" />
       <use
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          x="0"
          y="0"
          xlink:href="#g9681"
@@ -1113,7 +1237,7 @@
          width="100%"
          height="100%" />
       <use
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          x="0"
          y="0"
          xlink:href="#g9681"
@@ -1122,7 +1246,7 @@
          width="100%"
          height="100%" />
       <use
-         style="enable-background:new;display:inline"
+         style="display:inline;enable-background:new"
          x="0"
          y="0"
          xlink:href="#g9681"
@@ -1133,7 +1257,7 @@
       <g
          transform="translate(618.6426,28.439814)"
          id="g5021"
-         style="display:inline;enable-background:new;filter:url(#filter5041)">
+         style="display:inline;filter:url(#filter5041);enable-background:new">
         <circle
            style="opacity:1;fill:url(#radialGradient5025);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.33156252;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
            id="circle5017"
@@ -1157,7 +1281,7 @@
        transform="translate(0,27.637839)"
        style="display:inline">
       <rect
-         style="opacity:1;fill:#2e3745;fill-opacity:1;fill-rule:evenodd;stroke:#879aaa;stroke-width:2.57355118;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new;"
+         style="opacity:1;fill:#2e3745;fill-opacity:1;fill-rule:evenodd;stroke:#879aaa;stroke-width:2.57355118;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          id="rect9634"
          width="412.237"
          height="221.24873"
@@ -1201,7 +1325,7 @@
            style="font-size:25px;fill:#ffffff;stroke-width:0.9375px">Power available</tspan></text>
       <text
          xml:space="preserve"
-         style="font-style:normal;font-weight:normal;font-size:25px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new;"
+         style="font-style:normal;font-weight:normal;font-size:25px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
          x="925.83331"
          y="710.88422"
          id="text9642"
@@ -1237,7 +1361,7 @@
            style="font-size:25px;fill:#ffffff;stroke-width:0.9375px">Remaining power</tspan></text>
       <g
          transform="translate(0,-27.637839)"
-         style="enable-background:new;"
+         style="enable-background:new"
          id="g4966">
         <path
            style="opacity:1;fill:url(#linearGradient4976);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.27250028;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.96078431"
@@ -2868,6 +2992,203 @@
          cx="-336.58282"
          id="path4178"
          style="opacity:1;fill:#999999;fill-opacity:1;fill-rule:evenodd;stroke:#4f4f4f;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer33"
+     inkscape:label="Endgame"
+     style="display:none">
+    <g
+       inkscape:groupmode="layer"
+       id="layer34"
+       inkscape:label="Victory"
+       style="display:inline">
+      <g
+         id="g7583"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/endgame/dialog.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <path
+           transform="matrix(1.2291274,0,0,1.2291274,-219.96226,-123.14793)"
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="rect4931"
+           d="M 475.82605,190.2261 H 1444.174 l -93.4957,699.5478 H 569.3217 Z"
+           style="fill:#2c393d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7512);enable-background:new" />
+        <path
+           transform="matrix(1.3862872,0,0,1.2126747,-370.83565,-114.23263)"
+           style="fill:#62676a;fill-opacity:1;fill-rule:evenodd;stroke:#374548;stroke-width:3.46125007;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.56808514;filter:url(#filter5827);enable-background:new"
+           d="M 625.84605,300.4776 H 1294.154 l -64.5263,482.7948 H 690.37233 Z"
+           id="path4938"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+      </g>
+      <g
+         id="g7591"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/endgame/title-victory.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
+        <ellipse
+           transform="matrix(1.2291274,0,0,1.2291274,-219.96226,-123.14793)"
+           ry="45.078056"
+           rx="281.07492"
+           cy="242.07848"
+           cx="937.35846"
+           id="path6962"
+           style="fill:url(#radialGradient6970);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7378);enable-background:new" />
+        <text
+           transform="matrix(1.2291274,0,0,1.2291274,-219.96226,-123.14793)"
+           id="text4936"
+           y="270.26086"
+           x="766.79932"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70px;line-height:23.4375px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';letter-spacing:0px;word-spacing:0px;fill:#b9dbdf;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter6668);enable-background:new"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#b9dbdf;fill-opacity:1;stroke-width:0.9375px"
+             y="270.26086"
+             x="766.79932"
+             id="tspan4934"
+             sodipodi:role="line">VICTORY !</tspan></text>
+      </g>
+      <g
+         style="enable-background:new"
+         id="g7282"
+         transform="matrix(1.2291274,0,0,1.2291274,-187.78827,-123.14793)">
+        <g
+           id="g7267"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/endgame/button-loot.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90">
+          <rect
+             style="opacity:1;fill:url(#linearGradient7522);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             id="rect4940"
+             width="257.3623"
+             height="48.402992"
+             x="629.23901"
+             y="809.65155"
+             ry="17.708414" />
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:25px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d9e0e5;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             x="658.41455"
+             y="840.75"
+             id="text4946"><tspan
+               sodipodi:role="line"
+               id="tspan4944"
+               x="658.41455"
+               y="840.75"
+               style="fill:#d9e0e5;fill-opacity:1;stroke-width:0.9375px">Loot equipment</tspan></text>
+        </g>
+        <g
+           id="g7272"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/endgame/button-map.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90">
+          <use
+             x="0"
+             y="0"
+             xlink:href="#rect4940"
+             id="use4948"
+             transform="translate(351.80715)"
+             width="100%"
+             height="100%" />
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:25.00000191px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d9e0e5;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
+             x="1030.522"
+             y="840.75"
+             id="text4946-3"><tspan
+               sodipodi:role="line"
+               id="tspan4944-6"
+               x="1030.522"
+               y="840.75"
+               style="fill:#d9e0e5;fill-opacity:1;stroke-width:0.9375px">Back to map</tspan></text>
+        </g>
+      </g>
+    </g>
+    <g
+       style="display:none"
+       inkscape:label="Defeat"
+       id="g7569"
+       inkscape:groupmode="layer">
+      <use
+         style="display:inline;enable-background:new"
+         x="0"
+         y="0"
+         xlink:href="#g7583"
+         id="use7585"
+         width="100%"
+         height="100%" />
+      <text
+         transform="matrix(1.2291274,0,0,1.2291274,-169.40174,-123.14793)"
+         id="text7547"
+         y="270.26086"
+         x="766.79932"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70px;line-height:23.4375px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';letter-spacing:0px;word-spacing:0px;fill:#dfcab9;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter6021-3);enable-background:new"
+         xml:space="preserve"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/endgame/title-defeat.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:70px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#dfcab9;fill-opacity:1;stroke-width:0.9375px"
+           y="270.26086"
+           x="766.79932"
+           id="tspan7545"
+           sodipodi:role="line">DEFEAT</tspan></text>
+      <g
+         transform="matrix(1.2291274,0,0,1.2291274,-187.78827,-123.14793)"
+         id="g7567"
+         style="enable-background:new">
+        <g
+           id="g7557"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/endgame/button-revert.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90">
+          <rect
+             ry="17.708414"
+             y="809.65155"
+             x="629.23901"
+             height="48.402992"
+             width="257.3623"
+             id="rect7551"
+             style="opacity:1;fill:url(#linearGradient7522);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+          <text
+             id="text7555"
+             y="840.75"
+             x="675.84009"
+             style="font-style:normal;font-weight:normal;font-size:25px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d9e0e5;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               style="fill:#d9e0e5;fill-opacity:1;stroke-width:0.9375px"
+               y="840.75"
+               x="675.84009"
+               id="tspan7553"
+               sodipodi:role="line">Revert battle</tspan></text>
+        </g>
+        <g
+           id="g7565"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/endgame/button-menu.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90">
+          <use
+             height="100%"
+             width="100%"
+             transform="translate(351.80715)"
+             id="use7559"
+             xlink:href="#rect4940"
+             y="0"
+             x="0" />
+          <text
+             id="text7563"
+             y="840.75"
+             x="1040.0679"
+             style="font-style:normal;font-weight:normal;font-size:25.00000191px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d9e0e5;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
+             xml:space="preserve"><tspan
+               style="fill:#d9e0e5;fill-opacity:1;stroke-width:0.9375px"
+               y="840.75"
+               x="1040.0679"
+               id="tspan7561"
+               sodipodi:role="line">Main menu</tspan></text>
+        </g>
+      </g>
     </g>
   </g>
   <g

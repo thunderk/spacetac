@@ -34,6 +34,9 @@ module TS.SpaceTac.UI {
         // Ship tooltip
         ship_tooltip: ShipTooltip;
 
+        // Outcome dialog layer
+        outcome_layer: Phaser.Group;
+
         // Character sheet
         character_sheet: CharacterSheet;
 
@@ -82,6 +85,8 @@ module TS.SpaceTac.UI {
             this.ship_list = new ShipList(this);
             this.ship_tooltip = new ShipTooltip(this);
             this.add.existing(this.ship_tooltip);
+            this.outcome_layer = new Phaser.Group(this.game);
+            this.add.existing(this.outcome_layer);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
             this.add.existing(this.character_sheet);
 
@@ -94,6 +99,9 @@ module TS.SpaceTac.UI {
             // Key mapping
             this.inputs.bindCheat(Phaser.Keyboard.W, "Win current battle", () => {
                 this.battle.endBattle(this.player.fleet);
+            });
+            this.inputs.bindCheat(Phaser.Keyboard.X, "Lose current battle", () => {
+                this.battle.endBattle(first(this.battle.fleets, fleet => fleet.player != this.player));
             });
             this.inputs.bindCheat(Phaser.Keyboard.A, "Use AI to play", () => {
                 if (this.interacting && this.battle.playing_ship) {
@@ -157,7 +165,7 @@ module TS.SpaceTac.UI {
         cursorClicked(): void {
             if (this.targetting) {
                 this.targetting.validate();
-            } else if (this.ship_hovered && this.ship_hovered.getPlayer() == this.player) {
+            } else if (this.ship_hovered && this.ship_hovered.getPlayer() == this.player && this.interacting) {
                 this.character_sheet.show(this.ship_hovered);
                 this.setShipHovered(null);
             }
@@ -206,6 +214,29 @@ module TS.SpaceTac.UI {
                 this.targetting.destroy();
             }
             this.targetting = null;
+        }
+
+        /**
+         * End the battle and show the outcome dialog
+         */
+        endBattle() {
+            if (this.battle.ended) {
+                this.setInteractionEnabled(false);
+
+                let dialog = new OutcomeDialog(this, this.player, this.battle.outcome);
+                dialog.position.set(this.getMidWidth() - dialog.width / 2, this.getMidHeight() - dialog.height / 2);
+                this.outcome_layer.addChild(dialog);
+            } else {
+                console.error("Battle not ended !");
+            }
+        }
+
+        /**
+         * Exit the battle, and go back to map
+         */
+        exitBattle() {
+            this.player.exitBattle();
+            this.game.state.start('router');
         }
     }
 }

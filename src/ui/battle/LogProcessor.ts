@@ -101,7 +101,7 @@ module TS.SpaceTac.UI {
                 this.processDroneDestroyedEvent(event);
             } else if (event instanceof DroneAppliedEvent) {
                 this.processDroneAppliedEvent(event);
-            } else if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent ||  event instanceof EffectDurationChangedEvent) {
+            } else if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent || event instanceof EffectDurationChangedEvent) {
                 this.processEffectEvent(event);
             }
         }
@@ -199,16 +199,7 @@ module TS.SpaceTac.UI {
 
         // Battle ended (victory or defeat)
         private processEndBattleEvent(event: EndBattleEvent): void {
-            this.view.setInteractionEnabled(false);
-
-            if (event.outcome.winner && event.outcome.winner.player === this.view.player) {
-                // Victory !
-                // TODO Loot screen
-                this.view.player.exitBattle();
-                this.view.game.state.start("router");
-            } else {
-                // TODO Game over ?
-            }
+            this.view.endBattle();
         }
 
         // Sticky effect on ship added, changed or removed

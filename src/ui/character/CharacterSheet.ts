@@ -33,6 +33,9 @@ module TS.SpaceTac.UI {
         // Ship cargo
         ship_cargo: Phaser.Group;
 
+        // Loot items
+        loot_items: Phaser.Group;
+
         // Fleet's portraits
         portraits: Phaser.Group;
 
@@ -76,6 +79,10 @@ module TS.SpaceTac.UI {
             this.ship_cargo = new Phaser.Group(this.game);
             this.ship_cargo.position.set(1240, 86);
             this.addChild(this.ship_cargo);
+
+            this.loot_items = new Phaser.Group(this.game);
+            this.loot_items.position.set(1270, 670);
+            this.addChild(this.loot_items);
 
             this.portraits = new Phaser.Group(this.game);
             this.portraits.position.set(152, 0);
@@ -214,6 +221,28 @@ module TS.SpaceTac.UI {
             } else {
                 this.x = this.xhidden;
             }
+        }
+
+        /**
+         * Display the loot section
+         * 
+         * The list of equipments may be altered if items are taken from it
+         */
+        setLoot(loot: Equipment[]) {
+            this.loot_items.removeAll(true);
+
+            let info = CharacterSheet.getSlotPositions(12, 596, 360, 196, 196);
+            range(12).forEach(idx => {
+                let loot_slot = new CharacterCargo(this, info.positions[idx].x, info.positions[idx].y);
+                loot_slot.scale.set(info.scaling, info.scaling);
+                this.loot_items.addChild(loot_slot);
+
+                if (idx < loot.length) {
+                    let equipment = new CharacterEquipment(this, loot[idx]);
+                    this.equipments.addChild(equipment);
+                    loot_slot.snapEquipment(equipment);
+                }
+            });
         }
 
         /**

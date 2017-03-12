@@ -69,6 +69,13 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/attributes/effect-increase.png");
             this.loadImage("battle/attributes/effect-decrease.png");
             this.loadImage("battle/attributes/effect-limit.png");
+            this.loadImage("battle/outcome/dialog.png");
+            this.loadImage("battle/outcome/title-victory.png");
+            this.loadImage("battle/outcome/title-defeat.png");
+            this.loadImage("battle/outcome/button-menu.png");
+            this.loadImage("battle/outcome/button-map.png");
+            this.loadImage("battle/outcome/button-revert.png");
+            this.loadImage("battle/outcome/button-loot.png");
             this.loadImage("common/standard-bar-background.png");
             this.loadImage("common/standard-bar-foreground.png");
             this.loadImage("map/starsystem-background.png");
