@@ -19,7 +19,7 @@ module.exports = function(config) {
     },
 
     files: [
-      'out/vendor/phaser-ce/build/phaser.js',
+      'out/vendor/phaser/build/phaser.js',
       'out/build.js'
     ]
   })
