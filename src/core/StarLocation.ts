@@ -27,8 +27,9 @@ module TS.SpaceTac {
         jump_dest: StarLocation | null;
 
         // Enemy encounter
-        encounter: Fleet | null;
-        encounter_gen: boolean;
+        encounter: Fleet | null = null;
+        encounter_gen = false;
+        encounter_random = RandomGenerator.global;
 
         constructor(star = new Star(), type: StarLocationType = StarLocationType.PLANET, x: number = 0, y: number = 0) {
             this.star = star;
@@ -38,9 +39,6 @@ module TS.SpaceTac {
             this.universe_x = this.star.x + this.x;
             this.universe_y = this.star.y + this.y;
             this.jump_dest = null;
-
-            this.encounter = null;
-            this.encounter_gen = false;
         }
 
         // Set the jump destination of a WARP location
@@ -52,13 +50,13 @@ module TS.SpaceTac {
 
         // Call this when first probing a location to generate the possible encounter
         //  Returns the encountered fleet, null if no encounter happens
-        tryGenerateEncounter(random = RandomGenerator.global): Fleet | null {
+        tryGenerateEncounter(): Fleet | null {
             if (!this.encounter_gen) {
                 this.encounter_gen = true;
 
-                if (random.random() < 0.8) {
-                    var fleet_generator = new FleetGenerator(random);
-                    var ship_count = random.randInt(1, 5);
+                if (this.encounter_random.random() < 0.8) {
+                    var fleet_generator = new FleetGenerator(this.encounter_random);
+                    var ship_count = this.encounter_random.randInt(1, 5);
                     this.encounter = fleet_generator.generate(this.star.level, undefined, ship_count);
                 }
             }
@@ -69,8 +67,8 @@ module TS.SpaceTac {
         // Call this when entering a location to generate the possible encounter
         //  *fleet* is the player fleet, entering the location
         //  Returns the engaged battle, null if no encounter happens
-        enterLocation(fleet: Fleet, random = RandomGenerator.global): Battle | null {
-            var encounter = this.tryGenerateEncounter(random);
+        enterLocation(fleet: Fleet): Battle | null {
+            var encounter = this.tryGenerateEncounter();
             if (encounter) {
                 var battle = new Battle(fleet, encounter);
                 battle.log.subscribe((event: BaseLogEvent) => {

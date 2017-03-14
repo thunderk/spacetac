@@ -292,6 +292,7 @@ module TS.SpaceTac {
 
         // Method called at the start of battle
         startBattle() {
+            this.alive = true;
             this.updateAttributes();
             this.restoreHealth();
             this.initializeActionPoints();

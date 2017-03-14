@@ -70,10 +70,24 @@ module TS.SpaceTac {
             this.fleet.setBattle(battle);
         }
 
-        // Exit the current battle unconditionally, if any
-        //  This does not apply retreat penalties, or battle outcome, only unbind the battle from current session
+        /**
+         * Exit the current battle unconditionally, if any
+         * 
+         * This does not apply retreat penalties, or battle outcome, only unbind the battle from current session
+         */
         exitBattle(): void {
             this.setBattle(null);
+        }
+
+        /**
+         * Revert current battle, and put the player's fleet to its previous location, as if the battle never happened
+         */
+        revertBattle(): void {
+            this.exitBattle();
+
+            if (this.fleet.previous_location) {
+                this.fleet.setLocation(this.fleet.previous_location);
+            }
         }
     }
 }

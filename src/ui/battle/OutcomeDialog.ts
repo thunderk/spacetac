@@ -27,7 +27,7 @@ module TS.SpaceTac.UI {
             } else {
                 this.addChild(new Phaser.Button(this.game, 344, 842, "battle-outcome-button-revert", () => {
                     // Revert just before battle
-                    // TODO
+                    parent.revertBattle();
                 }));
                 this.addChild(new Phaser.Button(this.game, 766, 842, "battle-outcome-button-menu", () => {
                     // Quit the game, and go back to menu

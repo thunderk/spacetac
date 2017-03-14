@@ -4,7 +4,6 @@
 * Character sheet: add levelling up (spending of available points)
 * Character sheet: disable interaction during battle (except for loot screen)
 * Add battle statistics and/or critics in outcome dialog
-* Add battle reverting in defeat outcome dialog
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)

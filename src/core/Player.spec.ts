@@ -36,5 +36,38 @@ module TS.SpaceTac {
 
             checkVisited(true, true, true, true, true, false);
         });
+
+        it("reverts battle", function () {
+            let player = new Player();
+            let star = new Star();
+            let loc1 = new StarLocation(star);
+            loc1.encounter_gen = true;
+            loc1.encounter = null;
+            let loc2 = new StarLocation(star);
+            loc2.encounter_gen = false;
+            loc2.encounter = null;
+            loc2.encounter_random = new SkewedRandomGenerator([0], true);
+
+            player.fleet.setLocation(loc1);
+            expect(player.getBattle()).toBeNull();
+            expect(player.fleet.location).toBe(loc1);
+
+            player.fleet.setLocation(loc2);
+            expect(player.getBattle()).not.toBeNull();
+            expect(player.fleet.location).toBe(loc2);
+            expect(player.hasVisitedLocation(loc2)).toBe(true);
+            let enemy = loc2.encounter;
+
+            player.revertBattle();
+            expect(player.getBattle()).toBeNull();
+            expect(player.fleet.location).toBe(loc1);
+            expect(player.hasVisitedLocation(loc2)).toBe(true);
+
+            player.fleet.setLocation(loc2);
+            expect(player.getBattle()).not.toBeNull();
+            expect(player.fleet.location).toBe(loc2);
+            expect(player.hasVisitedLocation(loc2)).toBe(true);
+            expect(nn(player.getBattle()).fleets[1]).toBe(enemy);
+        });
     });
 }

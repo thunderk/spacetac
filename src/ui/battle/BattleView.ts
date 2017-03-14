@@ -233,6 +233,11 @@ module TS.SpaceTac.UI {
             if (this.battle.ended) {
                 this.setInteractionEnabled(false);
 
+                if (this.battle.outcome.winner == this.player.fleet) {
+                    // In case of victory, generate loot
+                    this.battle.outcome.createLoot(this.battle);
+                }
+
                 let dialog = new OutcomeDialog(this, this.player, this.battle.outcome);
                 dialog.position.set(this.getMidWidth() - dialog.width / 2, this.getMidHeight() - dialog.height / 2);
                 this.outcome_layer.addChild(dialog);
@@ -246,6 +251,14 @@ module TS.SpaceTac.UI {
          */
         exitBattle() {
             this.player.exitBattle();
+            this.game.state.start('router');
+        }
+
+        /**
+         * Revert the battle, and go back to map
+         */
+        revertBattle() {
+            this.player.revertBattle();
             this.game.state.start('router');
         }
     }

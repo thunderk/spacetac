@@ -10,10 +10,11 @@ module TS.SpaceTac {
         ships: Ship[];
 
         // Current fleet location
-        location: StarLocation | null;
+        location: StarLocation | null = null;
+        previous_location: StarLocation | null = null;
 
         // Current battle in which the fleet is engaged (null if not fighting)
-        battle: Battle | null;
+        battle: Battle | null = null;
 
         // Amount of credits available
         credits = 0;
@@ -22,8 +23,6 @@ module TS.SpaceTac {
         constructor(player = new Player()) {
             this.player = player;
             this.ships = [];
-            this.location = null;
-            this.battle = null;
         }
 
         /**
@@ -36,6 +35,7 @@ module TS.SpaceTac {
                 return false;
             }
 
+            this.previous_location = this.location;
             this.location = location;
             this.player.setVisited(this.location);
 
