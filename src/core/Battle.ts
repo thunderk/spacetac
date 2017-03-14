@@ -129,10 +129,10 @@ module TS.SpaceTac {
         }
 
         // Ends a battle and sets the outcome
-        endBattle(winner: Fleet | null, log: boolean = true) {
+        endBattle(winner: Fleet | null, log = true, loot = true) {
             this.ended = true;
             this.outcome = new BattleOutcome(winner);
-            if (winner) {
+            if (loot && winner) {
                 this.outcome.createLoot(this);
             }
             if (log && this.log) {

@@ -16,43 +16,32 @@ module TS.SpaceTac {
             this.loot = [];
         }
 
-        // Create loot from dead ships
-        createLoot(battle: Battle, random: RandomGenerator = new RandomGenerator()): void {
+        /**
+         * Fill loot from defeated fleet
+         */
+        createLoot(battle: Battle, random = RandomGenerator.global): void {
             this.loot = [];
-            battle.fleets.forEach((fleet: Fleet) => {
-                fleet.ships.forEach((ship: Ship) => {
-                    if (!ship.alive) {
-                        if (ship.fleet === this.winner) {
-                            // Member of the winner fleet, salvage a number of equipments
-                            var count = random.randInt(0, ship.getEquipmentCount());
-                            while (count > 0) {
-                                var salvaged = ship.getRandomEquipment(random);
-                                if (salvaged) {
-                                    salvaged.detach();
-                                    this.loot.push(salvaged);
-                                }
-                                count--;
-                            }
 
-                        } else {
-                            var luck = random.random();
-                            if (luck > 0.9) {
-                                // Salvage a supposedly transported item
-                                var transported = this.generateLootItem(random, ship.level);
-                                if (transported) {
-                                    this.loot.push(transported);
-                                }
-                            } else if (luck > 0.5) {
-                                // Salvage one equipped item
-                                var token = ship.getRandomEquipment(random);
-                                if (token) {
-                                    token.detach();
-                                    this.loot.push(token);
-                                }
+            battle.fleets.forEach(fleet => {
+                if (this.winner && this.winner.player != fleet.player) {
+                    fleet.ships.forEach(ship => {
+                        var luck = random.random();
+                        if (luck > 0.9) {
+                            // Salvage a supposedly transported item
+                            var transported = this.generateLootItem(random, ship.level);
+                            if (transported) {
+                                this.loot.push(transported);
+                            }
+                        } else if (luck > 0.5) {
+                            // Salvage one equipped item
+                            var token = ship.getRandomEquipment(random);
+                            if (token) {
+                                token.detach();
+                                this.loot.push(token);
                             }
                         }
-                    }
-                });
+                    });
+                }
             });
         }
 

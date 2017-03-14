@@ -34,7 +34,8 @@ module TS.SpaceTac.UI {
         ship_cargo: Phaser.Group;
 
         // Loot items
-        loot_items: Phaser.Group;
+        loot_slots: Phaser.Group;
+        loot_items: Equipment[] = [];
 
         // Fleet's portraits
         portraits: Phaser.Group;
@@ -80,9 +81,10 @@ module TS.SpaceTac.UI {
             this.ship_cargo.position.set(1240, 86);
             this.addChild(this.ship_cargo);
 
-            this.loot_items = new Phaser.Group(this.game);
-            this.loot_items.position.set(1270, 670);
-            this.addChild(this.loot_items);
+            this.loot_slots = new Phaser.Group(this.game);
+            this.loot_slots.position.set(1270, 670);
+            this.loot_slots.visible = false;
+            this.addChild(this.loot_slots);
 
             this.portraits = new Phaser.Group(this.game);
             this.portraits.position.set(152, 0);
@@ -201,6 +203,8 @@ module TS.SpaceTac.UI {
                 }
             });
 
+            this.updateLoot();
+
             this.updateFleet(ship.fleet);
 
             if (animate) {
@@ -214,6 +218,8 @@ module TS.SpaceTac.UI {
          * Hide the sheet
          */
         hide(animate = true) {
+            this.loot_slots.visible = false;
+
             this.portraits.children.forEach((portrait: Phaser.Button) => portrait.loadTexture("character-ship"));
 
             if (animate) {
@@ -224,21 +230,30 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Display the loot section
+         * Set the list of lootable equipment
          * 
          * The list of equipments may be altered if items are taken from it
          */
         setLoot(loot: Equipment[]) {
-            this.loot_items.removeAll(true);
+            this.loot_items = loot;
+            this.updateLoot();
+            this.loot_slots.visible = true;
+        }
 
-            let info = CharacterSheet.getSlotPositions(12, 596, 360, 196, 196);
+        /**
+         * Update the loot slots
+         */
+        private updateLoot() {
+            this.loot_slots.removeAll(true);
+
+            let info = CharacterSheet.getSlotPositions(12, 588, 354, 196, 196);
             range(12).forEach(idx => {
-                let loot_slot = new CharacterCargo(this, info.positions[idx].x, info.positions[idx].y);
+                let loot_slot = new LootSlot(this, info.positions[idx].x, info.positions[idx].y);
                 loot_slot.scale.set(info.scaling, info.scaling);
-                this.loot_items.addChild(loot_slot);
+                this.loot_slots.addChild(loot_slot);
 
-                if (idx < loot.length) {
-                    let equipment = new CharacterEquipment(this, loot[idx]);
+                if (idx < this.loot_items.length) {
+                    let equipment = new CharacterEquipment(this, this.loot_items[idx]);
                     this.equipments.addChild(equipment);
                     loot_slot.snapEquipment(equipment);
                 }
@@ -251,7 +266,8 @@ module TS.SpaceTac.UI {
         canDropEquipment(equipment: Equipment, x: number, y: number): CharacterEquipmentDrop | null {
             let candidates: Iterator<CharacterEquipmentDestination> = ichain(
                 iarray(<CharacterSlot[]>this.ship_slots.children),
-                iarray(<CharacterCargo[]>this.ship_cargo.children)
+                iarray(<CharacterCargo[]>this.ship_cargo.children),
+                this.loot_slots.visible ? iarray(<LootSlot[]>this.loot_slots.children) : IEMPTY
             );
 
             return ifirstmap(candidates, candidate => candidate.canDropEquipment(equipment, x, y));
@@ -278,7 +294,7 @@ module TS.SpaceTac.UI {
 
             // Find scaling
             let scaling = 1;
-            while (slotwidth * scaling > areawidth || slotheight * scaling > areaheight) {
+            while (slotwidth * scaling * columns > areawidth || slotheight * scaling * rows > areaheight) {
                 scaling *= 0.99;
             }
 

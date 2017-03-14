@@ -39,6 +39,89 @@ module TS.SpaceTac.UI.Specs {
                 expect(sheet.ship_slots.length).toBe(1);
                 expect(sheet.ship_cargo.length).toBe(2);
             });
+
+            it("moves equipment around", function () {
+                let fleet = new Fleet();
+                let ship = fleet.addShip();
+                ship.setCargoSpace(2);
+                let equ1 = TestTools.addEngine(ship, 1);
+                let equ2 = new Equipment(SlotType.Weapon);
+                ship.addCargo(equ2);
+                let equ3 = new Equipment(SlotType.Hull);
+                let equ4 = new Equipment(SlotType.Power);
+                let loot = [equ3, equ4];
+                ship.addSlot(SlotType.Weapon);
+
+                let sheet = new CharacterSheet(testgame.baseview);
+                sheet.show(ship, false);
+
+                expect(sheet.loot_slots.visible).toBe(false);
+                expect(sheet.equipments.children.length).toBe(2);
+
+                sheet.setLoot(loot);
+
+                expect(sheet.loot_slots.visible).toBe(true);
+                expect(sheet.equipments.children.length).toBe(4);
+
+                let findsprite = (equ: Equipment) => nn(first(<CharacterEquipment[]>sheet.equipments.children, sp => sp.equipment == equ));
+                let draddrop = (sp: CharacterEquipment, dest: CharacterCargo | CharacterSlot) => {
+                    let destbounds = dest.getBounds();
+                    /*sp.events.onDragStart.dispatch();
+                    sp.position.set(destbounds.x, destbounds.y);
+                    sp.events.onDragUpdate.dispatch();
+                    sp.events.onDragStop.dispatch();*/
+                    nn(dest.canDropEquipment(sp.equipment, destbounds.x, destbounds.y)).callback(sp.equipment);
+                }
+
+                // Unequip
+                let sprite = findsprite(equ1);
+                expect(equ1.attached_to).not.toBeNull();
+                expect(ship.cargo.length).toBe(1);
+                draddrop(sprite, <CharacterCargo>sheet.ship_cargo.children[0]);
+                expect(equ1.attached_to).toBeNull();
+                expect(ship.cargo.length).toBe(2);
+                expect(ship.cargo).toContain(equ1);
+
+                // Equip
+                sprite = findsprite(equ2);
+                expect(equ2.attached_to).toBeNull();
+                expect(ship.cargo).toContain(equ2);
+                draddrop(sprite, <CharacterSlot>sheet.ship_slots.children[0]);
+                expect(equ2.attached_to).toBe(ship.slots[1]);
+                expect(ship.cargo).not.toContain(equ2);
+
+                // Loot
+                sprite = findsprite(equ3);
+                expect(equ3.attached_to).toBeNull();
+                expect(ship.cargo).not.toContain(equ3);
+                expect(loot).toContain(equ3);
+                draddrop(sprite, <CharacterCargo>sheet.ship_cargo.children[0]);
+                expect(equ3.attached_to).toBeNull();
+                expect(ship.cargo).toContain(equ3);
+                expect(loot).not.toContain(equ3);
+
+                // Can't loop - no cargo space available
+                sprite = findsprite(equ4);
+                expect(ship.cargo).not.toContain(equ4);
+                expect(loot).toContain(equ4);
+                draddrop(sprite, <CharacterCargo>sheet.ship_cargo.children[0]);
+                expect(ship.cargo).not.toContain(equ4);
+                expect(loot).toContain(equ4);
+
+                // Discard
+                sprite = findsprite(equ1);
+                expect(ship.cargo).toContain(equ1);
+                expect(loot).not.toContain(equ1);
+                draddrop(sprite, <CharacterCargo>sheet.ship_cargo.children[0]);
+                expect(equ1.attached_to).toBeNull();
+                expect(loot).not.toContain(equ1);
+
+                // Can't equip - no slot available
+                sprite = findsprite(equ3);
+                expect(equ3.attached_to).toBeNull();
+                draddrop(sprite, <CharacterSlot>sheet.ship_slots.children[0]);
+                expect(equ3.attached_to).toBeNull();
+            });
         });
 
         it("fits slots in area", function () {
@@ -46,6 +129,12 @@ module TS.SpaceTac.UI.Specs {
             expect(result).toEqual({
                 positions: [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 200, y: 0 }, { x: 0, y: 100 }, { x: 100, y: 100 }, { x: 200, y: 100 }],
                 scaling: 1
+            });
+
+            result = CharacterSheet.getSlotPositions(6, 299, 199, 100, 100);
+            expect(result).toEqual({
+                positions: [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 200, y: 0 }, { x: 0, y: 100 }, { x: 100, y: 100 }, { x: 200, y: 100 }],
+                scaling: 0.99
             });
         });
     });

@@ -452,6 +452,15 @@ module TS.SpaceTac {
         }
 
         /**
+         * Remove an item from cargo space
+         * 
+         * Returns true if successful
+         */
+        removeCargo(item: Equipment): boolean {
+            return remove(this.cargo, item);
+        }
+
+        /**
          * Equip an item from cargo to the first available slot
          * 
          * Returns true if successful

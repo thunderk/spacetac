@@ -15,7 +15,7 @@ module TS.SpaceTac.Specs {
             var battle = nn(session.getBattle());
             battle.advanceToNextShip();
             // TODO Make some fixed moves (AI?)
-            battle.endBattle(battle.fleets[0]);
+            battle.endBattle(battle.fleets[0], true, false);
         }
 
         it("serializes to a string", () => {

@@ -98,9 +98,19 @@ module TS.SpaceTac.UI {
 
             // Key mapping
             this.inputs.bindCheat(Phaser.Keyboard.W, "Win current battle", () => {
+                iforeach(this.battle.iships(), ship => {
+                    if (ship.fleet.player != this.player) {
+                        ship.setDead();
+                    }
+                });
                 this.battle.endBattle(this.player.fleet);
             });
             this.inputs.bindCheat(Phaser.Keyboard.X, "Lose current battle", () => {
+                iforeach(this.battle.iships(), ship => {
+                    if (ship.fleet.player == this.player) {
+                        ship.setDead();
+                    }
+                });
                 this.battle.endBattle(first(this.battle.fleets, fleet => fleet.player != this.player));
             });
             this.inputs.bindCheat(Phaser.Keyboard.A, "Use AI to play", () => {

@@ -3,6 +3,8 @@
 * Character sheet: add tooltips (on values, slots and equipments)
 * Character sheet: add levelling up (spending of available points)
 * Character sheet: disable interaction during battle (except for loot screen)
+* Add battle statistics and/or critics in outcome dialog
+* Add battle reverting in defeat outcome dialog
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)
@@ -32,8 +34,6 @@
 * TacticalAI: allow to play several moves in the same turn
 * TacticalAI: add pauses to not play too quickly
 * TacticalAI: replace BullyAI
-* Add a defeat screen (game over for now)
-* Add a victory screen, with loot display
 * Add retreat from battle
 * Map: current fleet position is not visible enough
 * Map: restore fog of war

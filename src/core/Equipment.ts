@@ -51,6 +51,10 @@ module TS.SpaceTac {
             this.action = new BaseAction("nothing", "Do nothing", false);
         }
 
+        jasmineToString() {
+            return this.attached_to ? `${this.attached_to.ship.name} - ${this.name}` : this.name;
+        }
+
         // Returns true if the equipment can be equipped on a ship
         //  This checks *requirements* against the ship capabilities
         canBeEquipped(ship: Ship): boolean {

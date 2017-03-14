@@ -19,7 +19,8 @@ module TS.SpaceTac.UI {
          * Snap the equipment icon inside the slot
          */
         snapEquipment(equipment: CharacterEquipment) {
-            equipment.position.set(this.x + this.parent.x + 84, this.y + this.parent.y + 83);
+            equipment.position.set(this.x + this.parent.x + 84 * this.scale.x, this.y + this.parent.y + 83 * this.scale.y);
+            equipment.setContainerScale(this.scale.x);
         }
 
         /**

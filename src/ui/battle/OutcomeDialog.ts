@@ -13,7 +13,7 @@ module TS.SpaceTac.UI {
             this.addChild(title);
 
             if (victory) {
-                this.addChild(new Phaser.Button(this.game, 350, 842, "battle-outcome-button-loot", () => {
+                this.addChild(new Phaser.Button(this.game, 344, 842, "battle-outcome-button-loot", () => {
                     // Open loot screen
                     if (outcome.winner) {
                         parent.character_sheet.show(outcome.winner.ships[0]);
@@ -25,7 +25,7 @@ module TS.SpaceTac.UI {
                     parent.exitBattle();
                 }));
             } else {
-                this.addChild(new Phaser.Button(this.game, 350, 842, "battle-outcome-button-revert", () => {
+                this.addChild(new Phaser.Button(this.game, 344, 842, "battle-outcome-button-revert", () => {
                     // Revert just before battle
                     // TODO
                 }));
