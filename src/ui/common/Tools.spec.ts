@@ -11,7 +11,7 @@ module TS.SpaceTac.UI.Specs {
             expect(Tools.normalizeAngle(-Math.PI - 0.5)).toBeCloseTo(Math.PI - 0.5, 0.000001);
         });
 
-        it("handles hover and click on desktops and mobile targets", function () {
+        it("handles hover and click on desktops and mobile targets", function (done) {
             let newButton: () => [Phaser.Button, any] = () => {
                 var button = new Phaser.Button(testgame.ui);
                 var funcs = {
@@ -42,6 +42,20 @@ module TS.SpaceTac.UI.Specs {
             expect(funcs.enter).toHaveBeenCalledTimes(1);
             expect(funcs.leave).toHaveBeenCalledTimes(1);
             expect(funcs.click).toHaveBeenCalledTimes(1);
+
+            // Hold to hover on mobile
+            [button, funcs] = newButton();
+            button.onInputDown.dispatch();
+            Timer.global.schedule(150, () => {
+                expect(funcs.enter).toHaveBeenCalledTimes(1);
+                expect(funcs.leave).toHaveBeenCalledTimes(0);
+                expect(funcs.click).toHaveBeenCalledTimes(0);
+                button.onInputUp.dispatch();
+                expect(funcs.enter).toHaveBeenCalledTimes(1);
+                expect(funcs.leave).toHaveBeenCalledTimes(1);
+                expect(funcs.click).toHaveBeenCalledTimes(0);
+                done();
+            });
         });
     });
 }

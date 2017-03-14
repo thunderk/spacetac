@@ -7,7 +7,6 @@
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)
-* Controls: fix hover not working when mouse goes rapidly over and out of a ship
 * Active effects are not enough visible in ship list (maybe better in arena ?)
 * All things displayed in battle should be updated from LogProcess forwarding, not from current game state
 * Drones: add tooltip
