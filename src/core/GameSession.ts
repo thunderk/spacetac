@@ -53,6 +53,26 @@ module TS.SpaceTac {
         }
 
         /**
+         * Set the end of current battle
+         */
+        setBattleEnded() {
+            let battle = this.getBattle();
+
+            if (battle && battle.ended) {
+                if (battle.outcome.winner == this.player.fleet) {
+                    // In case of victory, generate loot
+                    battle.outcome.createLoot(battle);
+
+                    // In case of victorious encounter, clear the encouter
+                    let location = this.player.fleet.location;
+                    if (location) {
+                        location.clearEncounter();
+                    }
+                }
+            }
+        }
+
+        /**
          * Return true if the session has a universe to explore
          */
         hasUniverse(): boolean {

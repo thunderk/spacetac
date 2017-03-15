@@ -239,10 +239,7 @@ module TS.SpaceTac.UI {
             if (this.battle.ended) {
                 this.setInteractionEnabled(false);
 
-                if (this.battle.outcome.winner == this.player.fleet) {
-                    // In case of victory, generate loot
-                    this.battle.outcome.createLoot(this.battle);
-                }
+                this.gameui.session.setBattleEnded();
 
                 let dialog = new OutcomeDialog(this, this.player, this.battle.outcome);
                 dialog.position.set(this.getMidWidth() - dialog.width / 2, this.getMidHeight() - dialog.height / 2);

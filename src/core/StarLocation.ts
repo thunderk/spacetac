@@ -94,5 +94,12 @@ module TS.SpaceTac {
 
             return Math.sqrt(dx * dx + dy * dy);
         }
+
+        /**
+         * Clear an encounter, when the encountered fleet has been defeated
+         */
+        clearEncounter() {
+            this.encounter = null;
+        }
     }
 }

@@ -5,7 +5,6 @@ module TS.SpaceTac.Specs {
          */
         function compare(session1: GameSession, session2: GameSession) {
             expect(session1).toEqual(session2);
-
         }
 
         /**
@@ -18,7 +17,7 @@ module TS.SpaceTac.Specs {
             battle.endBattle(battle.fleets[0]);
         }
 
-        it("serializes to a string", () => {
+        it("serializes to a string", function () {
             var session = new GameSession();
             session.startQuickBattle();
 
@@ -35,6 +34,41 @@ module TS.SpaceTac.Specs {
 
             // Check equality after game steps
             compare(loaded_session, session);
+        });
+
+        it("applies battle outcome to bound player", function () {
+            let session = new GameSession();
+            expect(session.getBattle()).toBeNull();
+
+            // Victory case
+            let location1 = new StarLocation();
+            location1.encounter = new Fleet();
+            session.player.fleet.setLocation(location1);
+            expect(session.getBattle()).not.toBeNull();
+            expect(location1.encounter).not.toBeNull();
+
+            let battle = nn(session.getBattle());
+            battle.endBattle(session.player.fleet);
+            let spyloot = spyOn(battle.outcome, "createLoot").and.stub();
+            session.setBattleEnded();
+            expect(session.getBattle()).not.toBeNull();
+            expect(location1.encounter).toBeNull();
+            expect(spyloot).toHaveBeenCalledTimes(1);
+
+            // Defeat case
+            let location2 = new StarLocation(location1.star);
+            location2.encounter = new Fleet();
+            session.player.fleet.setLocation(location2);
+            expect(session.getBattle()).not.toBeNull();
+            expect(location2.encounter).not.toBeNull();
+
+            battle = nn(session.getBattle());
+            battle.endBattle(null);
+            spyloot = spyOn(battle.outcome, "createLoot").and.stub();
+            session.setBattleEnded();
+            expect(session.getBattle()).not.toBeNull();
+            expect(location2.encounter).not.toBeNull();
+            expect(spyloot).toHaveBeenCalledTimes(0);
         });
     });
 }
