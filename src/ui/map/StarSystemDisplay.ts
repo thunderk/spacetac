@@ -1,6 +1,8 @@
 module TS.SpaceTac.UI {
     // Group to display a star system
     export class StarSystemDisplay extends Phaser.Image {
+        view: UniverseMapView;
+        circles: Phaser.Group;
         starsystem: Star;
         player: Player;
         fleet_display: FleetDisplay;
@@ -8,6 +10,8 @@ module TS.SpaceTac.UI {
 
         constructor(parent: UniverseMapView, starsystem: Star) {
             super(parent.game, starsystem.x, starsystem.y, "map-starsystem-background");
+
+            this.view = parent;
 
             this.anchor.set(0.5, 0.5);
 
@@ -19,6 +23,8 @@ module TS.SpaceTac.UI {
             this.fleet_display = parent.player_fleet;
 
             // Show boundary
+            this.circles = new Phaser.Group(this.game);
+            this.addChild(this.circles);
             this.addCircle(starsystem.radius);
 
             // Show locations
@@ -35,6 +41,17 @@ module TS.SpaceTac.UI {
                 } else if (location.type == StarLocationType.WARP) {
                     location_sprite = this.addImage(location.x, location.y, "map-location-warp", fleet_move);
                 }
+
+                this.view.tooltip.bindDynamicText(<Phaser.Button>location_sprite, () => {
+                    if (location == this.player.fleet.location) {
+                        return "Current fleet location";
+                    } else {
+                        let visited = this.player.hasVisitedLocation(location);
+                        let loctype = StarLocationType[location.type].toLowerCase();
+                        let danger = (visited && location.encounter) ? " [enemy fleet detected !]" : "";
+                        return `${visited ? "Visited" : "Unvisited"} ${loctype} - Move the fleet there${danger}`;
+                    }
+                });
 
                 if (location_sprite) {
                     let key = this.getVisitedKey(location);
@@ -57,7 +74,7 @@ module TS.SpaceTac.UI {
             let circle = this.game.add.graphics(0, 0);
             circle.lineStyle(width, color);
             circle.drawCircle(0, 0, radius * 2 / this.scale.x);
-            this.addChild(circle);
+            this.circles.add(circle);
             return circle;
         }
 

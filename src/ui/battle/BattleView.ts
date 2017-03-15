@@ -10,8 +10,13 @@ module TS.SpaceTac.UI {
         // Interacting player
         player: Player;
 
-        // UI container
-        ui: Phaser.Group;
+        // Layers
+        layer_background: Phaser.Group;
+        layer_arena: Phaser.Group;
+        layer_borders: Phaser.Group;
+        layer_overlay: Phaser.Group;
+        layer_dialogs: Phaser.Group;
+        layer_sheets: Phaser.Group;
 
         // Battleground container
         arena: Arena;
@@ -67,28 +72,31 @@ module TS.SpaceTac.UI {
 
             var game = this.game;
 
+            // Add layers
+            this.layer_background = this.addLayer();
+            this.layer_arena = this.addLayer();
+            this.layer_borders = this.addLayer();
+            this.layer_overlay = this.addLayer();
+            this.layer_dialogs = this.addLayer();
+            this.layer_sheets = this.addLayer();
+
             // Background
-            game.stage.backgroundColor = 0x000000;
             this.background = new Phaser.Image(game, 0, 0, "battle-background", 0);
-            game.add.existing(this.background);
+            this.layer_background.add(this.background);
 
             // Add arena (local map)
             this.arena = new Arena(this);
-            game.add.existing(this.arena);
-
-            // Add UI layer
-            this.ui = new Phaser.Group(game);
-            game.add.existing(this.ui);
+            this.layer_arena.add(this.arena);
 
             // Add UI elements
             this.action_bar = new ActionBar(this);
             this.ship_list = new ShipList(this);
             this.ship_tooltip = new ShipTooltip(this);
-            this.add.existing(this.ship_tooltip);
+            this.layer_overlay.add(this.ship_tooltip);
             this.outcome_layer = new Phaser.Group(this.game);
-            this.add.existing(this.outcome_layer);
+            this.layer_dialogs.add(this.outcome_layer);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
-            this.add.existing(this.character_sheet);
+            this.layer_sheets.add(this.character_sheet);
 
             // "Battle" animation
             this.displayFightMessage();
@@ -129,8 +137,6 @@ module TS.SpaceTac.UI {
             this.exitTargettingMode();
 
             this.log_processor.destroy();
-            this.ui.destroy();
-            this.arena.destroy();
 
             super.shutdown();
         }

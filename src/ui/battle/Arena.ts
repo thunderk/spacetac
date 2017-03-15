@@ -136,6 +136,7 @@ module TS.SpaceTac.UI {
             if (ship) {
                 var arena_ship = this.findShipSprite(ship);
                 if (arena_ship) {
+                    this.bringToTop(arena_ship);
                     arena_ship.setPlaying(true);
                 }
                 this.playing = arena_ship;

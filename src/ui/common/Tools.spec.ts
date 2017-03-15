@@ -2,6 +2,18 @@ module TS.SpaceTac.UI.Specs {
     describe("Tools", function () {
         let testgame = setupEmptyView();
 
+        it("keeps objects inside bounds", function () {
+            let image = testgame.baseview.add.graphics(150, 100);
+            image.beginFill(0xff0000);
+            image.drawEllipse(50, 25, 50, 25);
+            image.endFill();
+
+            Tools.keepInside(image, { x: 0, y: 0, width: 200, height: 200 });
+
+            expect(image.x).toBe(100);
+            expect(image.y).toBe(100);
+        });
+
         it("normalizes angles", function () {
             expect(Tools.normalizeAngle(0)).toEqual(0);
             expect(Tools.normalizeAngle(0.1)).toBeCloseTo(0.1, 0.000001);

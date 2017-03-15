@@ -2,42 +2,44 @@
 
 module TS.SpaceTac.UI {
     export class MainMenu extends BaseView {
-        group: Phaser.Group;
+        layer_stars: Phaser.Group;
+        layer_title: Phaser.Group;
         button_new_game: Phaser.Button;
         button_quick_battle: Phaser.Button;
         button_load_game: Phaser.Button;
 
         create() {
-            this.game.stage.backgroundColor = "#000000";
+            super.create();
+
+            this.layer_stars = this.addLayer();
+            this.layer_title = this.addLayer();
+            this.layer_title.x = 5000;
 
             // Stars
             for (let i = 0; i < 300; i++) {
                 let fade = Math.random() * 0.5 + 0.5;
                 let x = Math.random() * 0.998 + 0.001;
-                let star = this.add.image(1920 * x, Math.random() * 1080, "menu-star");
+                let star = this.add.image(1920 * x, Math.random() * 1080, "menu-star", 0, this.layer_stars);
                 star.anchor.set(0.5, 0.5);
                 star.alpha = 0.7 * fade;
                 star.scale.set(0.1 * fade, 0.1 * fade);
                 this.tweens.create(star).to({ x: -30 }, 30000 * x / fade).to({ x: 1950 }, 0.00001).to({ x: 1920 * x }, 30000 * (1 - x) / fade).loop().start();
             }
 
-            this.group = this.add.group();
-            this.group.x = 5000;
-
             // Menu buttons
-            this.button_new_game = this.addButton(322, 674, "New Game", this.onNewGame);
-            this.button_load_game = this.addButton(960, 674, "Load Game", this.onLoadGame);
-            this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", this.onQuickBattle);
+            this.button_new_game = this.addButton(322, 674, "New Game", "Start a new campaign in a generated universe", this.onNewGame);
+            this.button_load_game = this.addButton(960, 674, "Load Game", "Load a saved campaign", this.onLoadGame);
+            this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", "Play a single generated battle", this.onQuickBattle);
 
             // Title
-            let title = this.add.image(960, 225, "menu-title", 0, this.group);
+            let title = this.add.image(960, 225, "menu-title", 0, this.layer_title);
             title.anchor.set(0.5, 0);
 
-            this.tweens.create(this.group).to({ x: 0 }, 3000, Phaser.Easing.Circular.Out).start();
+            this.tweens.create(this.layer_title).to({ x: 0 }, 3000, Phaser.Easing.Circular.Out).start();
         }
 
-        addButton(x: number, y: number, caption: string, callback: Function): Phaser.Button {
-            var button = this.add.button(x - 20, y + 20, "menu-button", callback, this, null, null, null, null, this.group);
+        addButton(x: number, y: number, caption: string, tooltip: string, callback: Function): Phaser.Button {
+            var button = this.add.button(x - 20, y + 20, "menu-button", callback, this, null, null, null, null, this.layer_title);
             button.anchor.set(0.5, 0);
             button.input.useHandCursor = true;
 
@@ -54,6 +56,8 @@ module TS.SpaceTac.UI {
                 button.loadTexture("menu-button");
                 text.fill = "#529aee";
             });
+
+            this.tooltip.bindStaticText(button, tooltip);
 
             return button;
         }

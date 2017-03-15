@@ -22,7 +22,7 @@ module TS.SpaceTac.UI {
             this.playing = null;
             this.hovered = null;
 
-            battleview.ui.add(this);
+            battleview.layer_borders.add(this);
 
             if (battleview.battle) {
                 this.setShipsFromBattle(battleview.battle);

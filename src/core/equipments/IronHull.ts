@@ -3,7 +3,7 @@
 module TS.SpaceTac.Equipments {
     export class IronHull extends LootTemplate {
         constructor() {
-            super(SlotType.Hull, "IronHull");
+            super(SlotType.Hull, "Iron Hull");
 
             this.min_level = new IntegerRange(1, 3);
 

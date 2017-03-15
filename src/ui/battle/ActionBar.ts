@@ -33,7 +33,7 @@ module TS.SpaceTac.UI {
             this.action_icons = [];
             this.ship = null;
 
-            battleview.ui.add(this);
+            battleview.layer_borders.add(this);
 
             // Background
             this.addChild(new Phaser.Image(this.game, 0, 0, "battle-actionbar", 0));

@@ -13,26 +13,36 @@ module TS.SpaceTac.UI {
             this.addChild(title);
 
             if (victory) {
-                this.addChild(new Phaser.Button(this.game, 344, 842, "battle-outcome-button-loot", () => {
+                let button = new Phaser.Button(this.game, 344, 842, "battle-outcome-button-loot", () => {
                     // Open loot screen
                     if (outcome.winner) {
                         parent.character_sheet.show(outcome.winner.ships[0]);
                         parent.character_sheet.setLoot(outcome.loot);
                     }
-                }));
-                this.addChild(new Phaser.Button(this.game, 766, 842, "battle-outcome-button-map", () => {
+                })
+                parent.tooltip.bindStaticText(button, "Open character sheet to loot equipment from defeated fleet");
+                this.addChild(button);
+
+                button = new Phaser.Button(this.game, 766, 842, "battle-outcome-button-map", () => {
                     // Exit battle and go back to map
                     parent.exitBattle();
-                }));
+                });
+                parent.tooltip.bindStaticText(button, "Exit the battle and go back to the map");
+                this.addChild(button);
             } else {
-                this.addChild(new Phaser.Button(this.game, 344, 842, "battle-outcome-button-revert", () => {
+                let button = new Phaser.Button(this.game, 344, 842, "battle-outcome-button-revert", () => {
                     // Revert just before battle
                     parent.revertBattle();
-                }));
-                this.addChild(new Phaser.Button(this.game, 766, 842, "battle-outcome-button-menu", () => {
+                });
+                parent.tooltip.bindStaticText(button, "Go back to where the fleet was before the battle happened");
+                this.addChild(button);
+
+                button = new Phaser.Button(this.game, 766, 842, "battle-outcome-button-menu", () => {
                     // Quit the game, and go back to menu
                     parent.gameui.quitGame();
-                }));
+                });
+                parent.tooltip.bindStaticText(button, "Quit the game, and go back to main menu");
+                this.addChild(button);
             }
         }
     }

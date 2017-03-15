@@ -8,6 +8,9 @@ module TS.SpaceTac.UI {
      * Character sheet, displaying ship characteristics
      */
     export class CharacterSheet extends Phaser.Image {
+        // Parent view
+        view: BaseView;
+
         // X positions
         xshown: number;
         xhidden: number;
@@ -52,6 +55,8 @@ module TS.SpaceTac.UI {
         constructor(view: BaseView, xhidden = -2000, xshown = 0) {
             super(view.game, 0, 0, "character-sheet");
 
+            this.view = view;
+
             this.x = xhidden;
             this.xshown = xshown;
             this.xhidden = xhidden;
@@ -60,6 +65,7 @@ module TS.SpaceTac.UI {
             let close_button = new Phaser.Button(this.game, view.getWidth(), 0, "character-close", () => this.hide());
             close_button.anchor.set(1, 0);
             this.addChild(close_button);
+            view.tooltip.bindStaticText(close_button, "Close the character sheet");
 
             this.ship_name = new Phaser.Text(this.game, 758, 48, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
             this.ship_name.anchor.set(0.5, 0.5);
@@ -147,6 +153,8 @@ module TS.SpaceTac.UI {
                     let portrait_pic = new Phaser.Image(this.game, 0, 0, `ship-${ship.model}-portrait`);
                     portrait_pic.anchor.set(0.5, 0.5);
                     new_portrait.addChild(portrait_pic);
+
+                    this.view.tooltip.bindDynamicText(new_portrait, () => ship.name);
                 }
             });
 

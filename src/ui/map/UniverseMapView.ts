@@ -11,8 +11,11 @@ module TS.SpaceTac.UI {
         // Interacting player
         player = new Player();
 
+        // Layers
+        layer_universe: Phaser.Group;
+        layer_overlay: Phaser.Group;
+
         // Star systems
-        group: Phaser.Group;
         starsystems: StarSystemDisplay[] = [];
         starlinks: Phaser.Graphics[] = [];
 
@@ -44,8 +47,8 @@ module TS.SpaceTac.UI {
         create() {
             super.create();
 
-            this.group = new Phaser.Group(this.game);
-            this.add.existing(this.group);
+            this.layer_universe = this.addLayer();
+            this.layer_overlay = this.addLayer();
 
             this.starlinks = this.universe.starlinks.map(starlink => {
                 let loc1 = starlink.first.getWarpLocationTo(starlink.second);
@@ -59,33 +62,41 @@ module TS.SpaceTac.UI {
                 }
                 return result;
             });
-            this.starlinks.forEach(starlink => this.group.addChild(starlink));
+            this.starlinks.forEach(starlink => this.layer_universe.add(starlink));
 
             this.player_fleet = new FleetDisplay(this, this.player.fleet);
 
             this.starsystems = this.universe.stars.map(star => new StarSystemDisplay(this, star));
-            this.starsystems.forEach(starsystem => this.group.addChild(starsystem));
+            this.starsystems.forEach(starsystem => this.layer_universe.add(starsystem));
 
-            this.group.addChild(this.player_fleet);
+            this.layer_universe.add(this.player_fleet);
 
             this.button_jump = new Phaser.Button(this.game, 0, 0, "map-button-jump", () => this.doJump());
             this.button_jump.anchor.set(0.5, 0.5);
             this.button_jump.visible = false;
-            this.group.addChild(this.button_jump);
+            this.layer_universe.add(this.button_jump);
+            this.tooltip.bindStaticText(this.button_jump, "Engage warp drive to jump to another star system");
 
-            this.setZoom(2);
-            this.add.button(1520, 100, "map-zoom-in", () => this.setZoom(this.zoom + 1)).anchor.set(0.5, 0.5);
-            this.add.button(1520, 980, "map-zoom-out", () => this.setZoom(this.zoom - 1)).anchor.set(0.5, 0.5);
+            let button = new Phaser.Button(this.game, 1520, 100, "map-zoom-in", () => this.setZoom(this.zoom + 1));
+            button.anchor.set(0.5, 0.5);
+            this.layer_overlay.add(button);
+            this.tooltip.bindStaticText(button, "Zoom in");
+            button = new Phaser.Button(this.game, 1520, 980, "map-zoom-out", () => this.setZoom(this.zoom - 1));
+            button.anchor.set(0.5, 0.5);
+            this.layer_overlay.add(button);
+            this.tooltip.bindStaticText(button, "Zoom out");
 
             this.character_sheet = new CharacterSheet(this, this.getWidth() - 307);
             this.character_sheet.show(this.player.fleet.ships[0], false);
             this.character_sheet.hide(false);
-            this.add.existing(this.character_sheet);
+            this.layer_overlay.add(this.character_sheet);
 
             this.gameui.audio.startMusic("walking-along");
 
             // Inputs
             this.inputs.bindCheat(Phaser.Keyboard.R, "Reveal whole map", this.revealAll);
+
+            this.setZoom(2);
         }
 
         /**
@@ -132,8 +143,8 @@ module TS.SpaceTac.UI {
          */
         setCamera(x: number, y: number, span: number, duration = 500, easing = Phaser.Easing.Cubic.InOut) {
             let scale = 1000 / span;
-            this.tweens.create(this.group.position).to({ x: 800 - x * scale, y: 540 - y * scale }, duration, easing).start();
-            this.tweens.create(this.group.scale).to({ x: scale, y: scale }, duration, easing).start();
+            this.tweens.create(this.layer_universe.position).to({ x: 800 - x * scale, y: 540 - y * scale }, duration, easing).start();
+            this.tweens.create(this.layer_universe.scale).to({ x: scale, y: scale }, duration, easing).start();
         }
 
         /**

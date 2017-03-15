@@ -9,7 +9,7 @@ module TS.SpaceTac.UI {
     /**
      * Display a ship equipment, either attached to a slot, in cargo, or being dragged down
      */
-    export class CharacterEquipment extends Phaser.Image {
+    export class CharacterEquipment extends Phaser.Button {
         equipment: Equipment;
 
         constructor(sheet: CharacterSheet, equipment: Equipment) {
@@ -22,6 +22,9 @@ module TS.SpaceTac.UI {
             this.scale.set(0.5, 0.5);
 
             this.setupDragDrop(sheet);
+
+            // TODO better tooltip
+            sheet.view.tooltip.bindStaticText(this, equipment.name);
         }
 
         /**

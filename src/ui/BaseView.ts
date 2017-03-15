@@ -15,6 +15,12 @@ module TS.SpaceTac.UI {
         // Timing
         timer: Timer;
 
+        // Tooltip
+        tooltip: Tooltip;
+
+        // Layers
+        layers: Phaser.Group;
+
         // Get the size of display
         getWidth(): number {
             return this.game.width || 1280;
@@ -35,11 +41,19 @@ module TS.SpaceTac.UI {
         }
 
         create() {
+            this.game.stage.backgroundColor = 0x000000;
+
+            // View layers
+            this.layers = this.add.group();
+
             // Notifications
             this.messages = new Messages(this);
 
             // Input manager
             this.inputs = new InputManager(this);
+
+            // Tooltip
+            this.tooltip = new Tooltip(this);
 
             // Browser console variable (for debugging purpose)
             if (typeof window != "undefined") {
@@ -59,6 +73,14 @@ module TS.SpaceTac.UI {
             super.shutdown();
 
             this.timer.cancelAll(true);
+        }
+
+        /**
+         * Add a new layer in the view
+         */
+        addLayer(): Phaser.Group {
+            let layer = this.add.group(this.layers);
+            return layer;
         }
     }
 }

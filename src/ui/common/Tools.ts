@@ -1,6 +1,26 @@
 module TS.SpaceTac.UI {
     // Common UI tools functions
     export class Tools {
+        /**
+         * Reposition an object to remain inside a container
+         */
+        static keepInside(obj: Phaser.Button | Phaser.Sprite | Phaser.Image | Phaser.Group | Phaser.Graphics, rect: { x: number, y: number, width: number, height: number }) {
+            let objbounds = obj.getBounds();
+
+            if (obj.y + objbounds.height > rect.height) {
+                obj.y = rect.height - objbounds.height;
+            }
+            if (obj.y < 0) {
+                obj.y = 0;
+            }
+
+            if (obj.x + objbounds.width > rect.width) {
+                obj.x = rect.width - objbounds.width;
+            }
+            if (obj.x < 0) {
+                obj.x = 0;
+            }
+        }
 
         /**
          * Setup a hover/hold/click routine on an object
@@ -37,6 +57,12 @@ module TS.SpaceTac.UI {
                     entercalled = false;
                     leave();
                 }
+            }
+
+            if (obj.events) {
+                obj.events.onDestroy.addOnce(() => {
+                    prevententer();
+                });
             }
 
             obj.onInputOver.add(() => {
