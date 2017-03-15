@@ -105,7 +105,7 @@ module TS.SpaceTac.UI {
             if (this.interactive) {
                 if (position < 0) {
                     this.action_icons[this.action_icons.length - 1].processClick();
-                } else if (position < this.action_icons.length) {
+                } else if (position < this.action_icons.length - 1) {
                     this.action_icons[position].processClick();
                 }
             }
