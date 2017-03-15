@@ -1,0 +1,61 @@
+module TS.SpaceTac.UI {
+    /**
+     * Marker to show current location on the map
+     */
+    export class CurrentLocationMarker extends Phaser.Image {
+        private zoom = -1;
+        private moving = false;
+        private fleet: FleetDisplay;
+
+        constructor(parent: UniverseMapView, fleet: FleetDisplay) {
+            super(parent.game, 0, 0, "map-current-location");
+
+            this.fleet = fleet;
+
+            this.anchor.set(0.5, 0.5);
+            this.alpha = 0;
+        }
+
+        tweenTo(alpha: number, scale: number) {
+            this.game.tweens.removeFrom(this);
+            this.game.tweens.removeFrom(this.scale);
+
+            this.game.tweens.create(this).to({ alpha: alpha }, 500).start();
+            this.game.tweens.create(this.scale).to({ x: scale, y: scale }, 500).start();
+        }
+
+        show() {
+            this.position.set(this.fleet.x, this.fleet.y);
+            let scale = (this.zoom >= 2) ? (this.fleet.scale.x * 4) : 0.002;
+            this.alpha = 0;
+            this.scale.set(scale * 10, scale * 10);
+
+            this.tweenTo(1, scale);
+        }
+
+        hide() {
+            this.tweenTo(0, this.scale.x * 10);
+        }
+
+        setZoom(level: number) {
+            if (level != this.zoom) {
+                this.zoom = level;
+
+                if (!this.moving) {
+                    this.show();
+                }
+            }
+        }
+
+        setFleetMoving(moving: boolean) {
+            if (moving != this.moving) {
+                this.moving = moving;
+                if (moving) {
+                    this.hide();
+                } else {
+                    this.show();
+                }
+            }
+        }
+    }
+}

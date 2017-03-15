@@ -1,7 +1,7 @@
 * UI: Use a common component class, and a layer abstraction
 * Character sheet: allow item moving to another ship
 * Character sheet: add tooltips (on values, slots and equipments)
-* Character sheet: add levelling up (spending of available points)
+* Character sheet: add levelling up (spending of available points) + initial character creation
 * Character sheet: disable interaction during battle (except for loot screen)
 * Add battle statistics and/or critics in outcome dialog
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
@@ -33,7 +33,6 @@
 * TacticalAI: add pauses to not play too quickly
 * TacticalAI: replace BullyAI
 * Add retreat from battle
-* Map: current fleet position is not visible enough
 * Map: restore fog of war
 * Map: add information on current star/location + information on hovered location
 * Map: add stores and shipyards

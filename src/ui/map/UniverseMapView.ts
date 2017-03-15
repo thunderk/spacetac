@@ -22,6 +22,9 @@ module TS.SpaceTac.UI {
         // Fleets
         player_fleet: FleetDisplay;
 
+        // Frame to highlight current location
+        current_location: CurrentLocationMarker;
+
         // Button to jump to another system
         button_jump: Phaser.Button;
 
@@ -71,6 +74,9 @@ module TS.SpaceTac.UI {
 
             this.layer_universe.add(this.player_fleet);
 
+            this.current_location = new CurrentLocationMarker(this, this.player_fleet);
+            this.layer_universe.add(this.current_location);
+
             this.button_jump = new Phaser.Button(this.game, 0, 0, "map-button-jump", () => this.doJump());
             this.button_jump.anchor.set(0.5, 0.5);
             this.button_jump.visible = false;
@@ -113,6 +119,8 @@ module TS.SpaceTac.UI {
          * Update info on all star systems (fog of war, available data...)
          */
         updateInfo(current_star: Star | null) {
+            this.current_location.setZoom(this.zoom);
+
             this.starsystems.forEach(system => system.updateInfo(this.zoom, system.starsystem == current_star));
 
             let location = this.player.fleet.location;

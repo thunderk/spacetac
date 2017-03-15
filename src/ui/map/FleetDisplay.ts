@@ -76,6 +76,7 @@ module TS.SpaceTac.UI {
                 let dy = location.universe_y - this.fleet.location.universe_y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 let angle = Math.atan2(dx, dy);
+                this.map.current_location.setFleetMoving(true);
                 this.goToOrbitPoint(angle - Math.PI / 2, 40, 1, () => {
                     let duration = 10000 * distance / speed;
                     if (on_leave) {
@@ -87,6 +88,7 @@ module TS.SpaceTac.UI {
                         if (this.fleet.battle) {
                             this.game.state.start("router");
                         } else {
+                            this.map.current_location.setFleetMoving(false);
                             this.map.updateInfo(location.star);
                             this.loopOrbit();
                         }
