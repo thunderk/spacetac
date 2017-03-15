@@ -116,25 +116,20 @@ module TS.SpaceTac.UI {
 
         // Playing ship changed
         private processShipChangeEvent(event: ShipChangeEvent): void {
-            if (event.target && event.target.ship) {
-                this.view.arena.setShipPlaying(event.target.ship);
-                this.view.ship_list.setPlaying(event.target.ship);
-            } else {
-                this.view.arena.setShipPlaying(null);
-                this.view.ship_list.setPlaying(null);
-            }
+            this.view.arena.setShipPlaying(event.new_ship);
+            this.view.ship_list.setPlaying(event.new_ship);
 
             if (this.battle.canPlay(this.view.player)) {
                 // Player turn
                 this.view.setInteractionEnabled(true);
             } else {
                 this.view.setInteractionEnabled(false);
-                if (event.ship.isAbleToPlay()) {
+                if (event.new_ship.isAbleToPlay()) {
                     // AI turn
                     this.battle.playAI();
                 } else {
                     // Ship unable to play, skip turn
-                    this.view.timer.schedule(2000, () => {
+                    this.view.timer.schedule(event.new_ship.alive ? 2000 : 500, () => {
                         this.battle.advanceToNextShip();
                     });
                 }
