@@ -28,7 +28,7 @@ module TS.SpaceTac {
                         var luck = random.random();
                         if (luck > 0.9) {
                             // Salvage a supposedly transported item
-                            var transported = this.generateLootItem(random, ship.level);
+                            var transported = this.generateLootItem(random, ship.level.get());
                             if (transported) {
                                 this.loot.push(transported);
                             }

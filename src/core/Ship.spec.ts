@@ -400,5 +400,28 @@ module TS.SpaceTac.Specs {
             expect(ship.listEquipment()).toEqual([]);
             expect(ship.cargo).toEqual([equipment]);
         });
+
+        it("allow skills upgrading from current level", function () {
+            let ship = new Ship();
+            expect(ship.level.get()).toBe(1);
+            expect(ship.getAvailableUpgradePoints()).toBe(10);
+
+            ship.level.forceLevel(2);
+            expect(ship.level.get()).toBe(2);
+            expect(ship.getAvailableUpgradePoints()).toBe(15);
+
+            expect(ship.getAttribute("skill_energy")).toBe(0);
+            ship.upgradeSkill("skill_energy");
+            expect(ship.getAttribute("skill_energy")).toBe(1);
+
+            range(50).forEach(() => ship.upgradeSkill("skill_gravity"));
+            expect(ship.getAttribute("skill_energy")).toBe(1);
+            expect(ship.getAttribute("skill_gravity")).toBe(14);
+            expect(ship.getAvailableUpgradePoints()).toBe(0);
+
+            ship.updateAttributes();
+            expect(ship.getAttribute("skill_energy")).toBe(1);
+            expect(ship.getAttribute("skill_gravity")).toBe(14);
+        });
     });
 }

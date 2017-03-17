@@ -9,8 +9,8 @@ module TS.SpaceTac.Specs {
             fleet2.addShip(new Ship());
             fleet2.addShip(new Ship());
 
-            fleet2.ships[2].level = 5;
-            fleet2.ships[3].level = 5;
+            fleet2.ships[2].level.forceLevel(5);
+            fleet2.ships[3].level.forceLevel(5);
 
             fleet2.ships[0].addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon, "0a"));
             fleet2.ships[0].addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon, "0b"));

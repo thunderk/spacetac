@@ -1,9 +1,10 @@
 * UI: Use a common component class, and a layer abstraction
 * Character sheet: allow item moving to another ship
 * Character sheet: add tooltips (on values, slots and equipments)
-* Character sheet: add levelling up (spending of available points) + initial character creation
+* Character sheet: add initial character creation
 * Character sheet: disable interaction during battle (except for loot screen)
 * Add battle statistics and/or critics in outcome dialog
+* Add battle experience and feedback on level up
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)

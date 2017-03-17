@@ -23,6 +23,14 @@ After making changes to sources, you need to recompile:
 
 ## Ships
 
+### Level and experience
+
+A ship gains experience during battles. When reaching a certain amount of experience points,
+a ship will automatically level up (which is, gain 1 level).
+
+A ship starts at level 1. There is no upper limit to level value (except 99, for display sake,
+but it may not be reached in a classic campaign).
+
 ### In-combat values (HSP)
 
 In combat, a ship's vitals are represented by the HSP system (Hull-Shield-Power):
@@ -55,8 +63,6 @@ or a temporary effect caused by a weapon or a drone).
 For example, a ship that equips a power generator with "power recovery +3", but has a sticky effect
 of "power recovery -1" from a previous weapon hit, will have an effective power recovery of 2.
 
-Attributes may also be upgraded permanently during level up.
-
 ### Skills
 
 Skills represent a ship's ability to use equipments:
@@ -72,7 +78,8 @@ Each equipment has minimal skill requirements to be used. For example, a weapon 
 and "energy >= 3" to be equipped. A ship that does not meet these requirements will not be able to use 
 the equipment.
 
-Like for attributes, skill values are controlled by equipments, effects and level up.
+Skills are defined by the player, using points given while leveling up.
+As for attributes, skill values may also be altered by equipments.
 
 If an equipped item has a requirement of "time skill >= 2", that the ship has "time skill" of exactly 2, and 
 that a temporary effect of "time skill -1" is active, the requirement is no longer fulfilled and the equipped 

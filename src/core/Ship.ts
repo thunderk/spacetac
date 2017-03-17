@@ -4,9 +4,22 @@
 module TS.SpaceTac {
 
     /**
+     * Set of upgradable skills for a ship
+     */
+    export class ShipSkills {
+        // Skills
+        skill_material = new ShipAttribute("material skill")
+        skill_energy = new ShipAttribute("energy skill")
+        skill_electronics = new ShipAttribute("electronics skill")
+        skill_human = new ShipAttribute("human skill")
+        skill_time = new ShipAttribute("time skill")
+        skill_gravity = new ShipAttribute("gravity skill")
+    }
+
+    /**
      * Set of ShipAttribute for a ship
      */
-    export class ShipAttributes {
+    export class ShipAttributes extends ShipSkills {
         // Attribute controlling the play order
         initiative = new ShipAttribute("initiative")
         // Maximal hull value
@@ -19,13 +32,6 @@ module TS.SpaceTac {
         power_initial = new ShipAttribute("initial power")
         // Power value recovered each turn
         power_recovery = new ShipAttribute("power recovery")
-        // Skills
-        skill_material = new ShipAttribute("material skill")
-        skill_energy = new ShipAttribute("energy skill")
-        skill_electronics = new ShipAttribute("electronics skill")
-        skill_human = new ShipAttribute("human skill")
-        skill_time = new ShipAttribute("time skill")
-        skill_gravity = new ShipAttribute("gravity skill")
     }
 
     /**
@@ -40,6 +46,7 @@ module TS.SpaceTac {
     /**
      * Static attributes and values object for name queries
      */
+    export const SHIP_SKILLS = new ShipSkills();
     export const SHIP_ATTRIBUTES = new ShipAttributes();
     export const SHIP_VALUES = new ShipValues();
 
@@ -51,7 +58,8 @@ module TS.SpaceTac {
         fleet: Fleet
 
         // Level of this ship
-        level: number
+        level = new ShipLevel()
+        skills = new ShipSkills()
 
         // Name of the ship
         name: string
@@ -91,13 +99,9 @@ module TS.SpaceTac {
         // Priority in play_order
         play_priority = 0;
 
-        // Upgrade points available
-        upgrade_points = 0;
-
         // Create a new ship inside a fleet
         constructor(fleet: Fleet | null = null, name = "Ship") {
             this.fleet = fleet || new Fleet();
-            this.level = 1;
             this.name = name;
             this.model = "default";
             this.alive = true;
@@ -170,6 +174,24 @@ module TS.SpaceTac {
 
             actions.push(new EndTurnAction());
             return actions;
+        }
+
+        /**
+         * Get the number of upgrade points available to improve skills
+         */
+        getAvailableUpgradePoints(): number {
+            let used = keys(SHIP_SKILLS).map(skill => this.skills[skill].get()).reduce((a, b) => a + b, 0);
+            return this.level.getSkillPoints() - used;
+        }
+
+        /**
+         * Try to upgrade a skill by 1 point
+         */
+        upgradeSkill(skill: keyof ShipSkills) {
+            if (this.getAvailableUpgradePoints() > 0) {
+                this.skills[skill].add(1);
+                this.updateAttributes();
+            }
         }
 
         // Add an event to the battle log, if any
@@ -550,8 +572,16 @@ module TS.SpaceTac {
         // Update attributes, taking into account attached equipment and active effects
         updateAttributes(): void {
             if (this.alive) {
-                // Sum all attribute effects
                 var new_attrs = new ShipAttributes();
+
+                // TODO better typing for iteritems
+
+                // Apply base skills
+                iteritems(<any>this.skills, (key, skill: ShipAttribute) => {
+                    new_attrs[key].add(skill.get());
+                });
+
+                // Sum all attribute effects
                 this.collectEffects("attr").forEach((effect: AttributeEffect) => {
                     new_attrs[effect.attrcode].add(effect.value);
                 });
@@ -561,7 +591,7 @@ module TS.SpaceTac {
                     new_attrs[effect.attrcode].setMaximal(effect.value);
                 });
 
-                // TODO better typing
+                // Set final attributes
                 iteritems(<any>new_attrs, (key, value) => {
                     this.setAttribute(<keyof ShipAttributes>key, (<ShipAttribute>value).get());
                 });

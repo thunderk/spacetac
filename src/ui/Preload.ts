@@ -93,6 +93,7 @@ module TS.SpaceTac.UI {
             this.loadImage("character/close.png");
             this.loadImage("character/ship.png");
             this.loadImage("character/ship-selected.png");
+            this.loadImage("character/skill-upgrade.png");
             this.loadImage("character/cargo-slot.png");
             this.loadImage("character/equipment-slot.png");
             this.loadImage("character/slot-power.png");

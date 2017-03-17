@@ -8,9 +8,9 @@ module TS.SpaceTac {
             fleet.addShip(new Ship());
             fleet.addShip(new Ship());
 
-            fleet.ships[0].level = 2;
-            fleet.ships[1].level = 4;
-            fleet.ships[2].level = 7;
+            fleet.ships[0].level.forceLevel(2);
+            fleet.ships[1].level.forceLevel(4);
+            fleet.ships[2].level.forceLevel(7);
             expect(fleet.getLevel()).toEqual(4);
         });
 

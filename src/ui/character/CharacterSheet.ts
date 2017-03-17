@@ -27,8 +27,9 @@ module TS.SpaceTac.UI {
         // Ship level
         ship_level: Phaser.Text;
 
-        // Ship upgrade points
-        ship_upgrades: Phaser.Text;
+        // Ship skill upgrade
+        ship_upgrade_points: Phaser.Text;
+        ship_upgrades: Phaser.Group;
 
         // Ship slots
         ship_slots: Phaser.Group;
@@ -75,8 +76,11 @@ module TS.SpaceTac.UI {
             this.ship_level.anchor.set(0.5, 0.5);
             this.addChild(this.ship_level);
 
-            this.ship_upgrades = new Phaser.Text(this.game, 1066, 1054, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
-            this.ship_upgrades.anchor.set(0.5, 0.5);
+            this.ship_upgrade_points = new Phaser.Text(this.game, 1066, 1054, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
+            this.ship_upgrade_points.anchor.set(0.5, 0.5);
+            this.addChild(this.ship_upgrade_points);
+
+            this.ship_upgrades = new Phaser.Group(this.game);
             this.addChild(this.ship_upgrades);
 
             this.ship_slots = new Phaser.Group(this.game);
@@ -106,29 +110,40 @@ module TS.SpaceTac.UI {
             let x1 = 664;
             let x2 = 1066;
             let y = 662;
-            this.addAttribute(SHIP_ATTRIBUTES.initiative, x1, y);
-            this.addAttribute(SHIP_ATTRIBUTES.hull_capacity, x1, y + 64);
-            this.addAttribute(SHIP_ATTRIBUTES.shield_capacity, x1, y + 128);
-            this.addAttribute(SHIP_ATTRIBUTES.power_capacity, x1, y + 192);
-            this.addAttribute(SHIP_ATTRIBUTES.power_initial, x1, y + 256);
-            this.addAttribute(SHIP_ATTRIBUTES.power_recovery, x1, y + 320);
-            this.addAttribute(SHIP_ATTRIBUTES.skill_material, x2, y);
-            this.addAttribute(SHIP_ATTRIBUTES.skill_electronics, x2, y + 64);
-            this.addAttribute(SHIP_ATTRIBUTES.skill_energy, x2, y + 128);
-            this.addAttribute(SHIP_ATTRIBUTES.skill_human, x2, y + 192);
-            this.addAttribute(SHIP_ATTRIBUTES.skill_gravity, x2, y + 256);
-            this.addAttribute(SHIP_ATTRIBUTES.skill_time, x2, y + 320);
+            this.addAttribute("initiative", x1, y);
+            this.addAttribute("hull_capacity", x1, y + 64);
+            this.addAttribute("shield_capacity", x1, y + 128);
+            this.addAttribute("power_capacity", x1, y + 192);
+            this.addAttribute("power_initial", x1, y + 256);
+            this.addAttribute("power_recovery", x1, y + 320);
+            this.addAttribute("skill_material", x2, y);
+            this.addAttribute("skill_electronics", x2, y + 64);
+            this.addAttribute("skill_energy", x2, y + 128);
+            this.addAttribute("skill_human", x2, y + 192);
+            this.addAttribute("skill_gravity", x2, y + 256);
+            this.addAttribute("skill_time", x2, y + 320);
         }
 
         /**
          * Add an attribute display
          */
-        private addAttribute(attribute: ShipAttribute, x: number, y: number) {
+        private addAttribute(attribute: keyof ShipAttributes, x: number, y: number) {
             let text = new Phaser.Text(this.game, x, y, "", { align: "center", font: "18pt Arial", fill: "#FFFFFF" });
             text.anchor.set(0.5, 0.5);
             this.addChild(text);
 
-            this.attributes[attribute.name] = text;
+            this.attributes[SHIP_ATTRIBUTES[attribute].name] = text;
+
+            if (SHIP_SKILLS[attribute]) {
+                let button = new Phaser.Button(this.game, x + 54, y - 4, "character-skill-upgrade", () => {
+                    this.ship.upgradeSkill(<keyof ShipSkills>attribute);
+                    this.refresh();
+                });
+                button.anchor.set(0.5, 0.5);
+                this.ship_upgrades.add(button);
+
+                this.view.tooltip.bindStaticText(button, `Spend one point to upgrade ${SHIP_ATTRIBUTES[attribute].name}`);
+            }
         }
 
         /**
@@ -172,9 +187,12 @@ module TS.SpaceTac.UI {
 
             this.equipments.removeAll(true);
 
+            let upgrade_points = ship.getAvailableUpgradePoints();
+
             this.ship_name.setText(ship.name);
-            this.ship_level.setText(ship.level.toString());
-            this.ship_upgrades.setText(ship.upgrade_points.toString());
+            this.ship_level.setText(ship.level.get().toString());
+            this.ship_upgrade_points.setText(upgrade_points.toString());
+            this.ship_upgrades.visible = upgrade_points > 0;
 
             iteritems(<any>ship.attributes, (key, value: ShipAttribute) => {
                 let text = this.attributes[value.name];

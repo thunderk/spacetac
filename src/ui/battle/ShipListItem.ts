@@ -58,6 +58,10 @@ module TS.SpaceTac.UI {
             this.updateAttributes();
             this.updateEffects();
 
+            let level = new Phaser.Text(this.game, 103, 22, `${ship.level.get()}`, { align: "center", font: "bold 10pt Arial", fill: "#000000" });
+            level.anchor.set(0.5, 0.5);
+            this.addChild(level);
+
             Tools.setHoverClick(this, () => list.battleview.cursorOnShip(ship), () => list.battleview.cursorOffShip(ship), () => list.battleview.cursorClicked());
         }
 

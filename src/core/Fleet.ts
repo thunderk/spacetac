@@ -71,10 +71,10 @@ module TS.SpaceTac {
 
             var sum = 0;
             this.ships.forEach((ship: Ship) => {
-                sum += ship.level;
+                sum += ship.level.get();
             });
             var avg = sum / this.ships.length;
-            return Math.round(avg);
+            return Math.floor(avg);
         }
 
         // Check if the fleet still has living ships
