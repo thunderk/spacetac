@@ -1,8 +1,10 @@
+/// <reference path="CharacterEquipment.ts" />
+
 module TS.SpaceTac.UI {
     /**
      * Display a ship cargo slot
      */
-    export class CharacterCargo extends Phaser.Image {
+    export class CharacterCargo extends Phaser.Image implements CharacterEquipmentContainer {
         sheet: CharacterSheet;
 
         constructor(sheet: CharacterSheet, x: number, y: number) {
@@ -12,35 +14,38 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Snap the equipment icon inside the slot
+         * CharacterEquipmentContainer interface
          */
-        snapEquipment(equipment: CharacterEquipment) {
-            equipment.position.set(this.x + this.parent.x + 98 * this.scale.x, this.y + this.parent.y + 98 * this.scale.y);
-            equipment.setContainerScale(this.scale.x);
+        isInside(x: number, y: number): boolean {
+            return this.getBounds().contains(x, y);
         }
-
-        /**
-         * Check if an equipment can be dropped in this slot
-         */
-        canDropEquipment(equipment: Equipment, x: number, y: number): CharacterEquipmentDrop | null {
-            if (this.getBounds().contains(x, y)) {
-                if (contains(this.sheet.loot_items, equipment)) {
-                    return {
-                        message: "Loot",
-                        callback: () => {
-                            if (this.sheet.ship.addCargo(equipment)) {
-                                remove(this.sheet.loot_items, equipment);
-                            }
-                        }
-                    };
+        getEquipmentAnchor(): { x: number, y: number, scale: number } {
+            return {
+                x: this.x + this.parent.x + 98 * this.scale.x,
+                y: this.y + this.parent.y + 98 * this.scale.y,
+                scale: this.scale.x
+            }
+        }
+        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
+            if (this.sheet.ship.getFreeCargoSpace() > 0) {
+                if (test) {
+                    return true;
                 } else {
-                    return {
-                        message: "Unequip",
-                        callback: () => this.sheet.ship.unequip(equipment)
-                    };
+                    return this.sheet.ship.addCargo(equipment.item);
                 }
             } else {
-                return null;
+                return false;
+            }
+        }
+        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
+            if (contains(this.sheet.ship.cargo, equipment.item)) {
+                if (test) {
+                    return true;
+                } else {
+                    return this.sheet.ship.removeCargo(equipment.item);
+                }
+            } else {
+                return false;
             }
         }
     }

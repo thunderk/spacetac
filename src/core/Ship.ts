@@ -454,6 +454,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get cargo space not occupied by items
+         */
+        getFreeCargoSpace(): number {
+            return this.cargo_space - this.cargo.length;
+        }
+
+        /**
          * Set the available cargo space.
          */
         setCargoSpace(cargo: number) {
@@ -488,11 +495,10 @@ module TS.SpaceTac {
          * 
          * Returns true if successful
          */
-        equip(item: Equipment): boolean {
+        equip(item: Equipment, from_cargo = true): boolean {
             let free_slot = first(this.slots, slot => slot.type == item.slot && !slot.attached);
 
-            if (free_slot && contains(this.cargo, item)) {
-                remove(this.cargo, item);
+            if (free_slot && (!from_cargo || remove(this.cargo, item))) {
                 free_slot.attach(item);
 
                 this.updateAttributes();
@@ -508,10 +514,12 @@ module TS.SpaceTac {
          * 
          * Returns true if successful
          */
-        unequip(item: Equipment): boolean {
-            if (item.attached_to && item.attached_to.attached == item && this.cargo.length < this.cargo_space) {
+        unequip(item: Equipment, to_cargo = true): boolean {
+            if (item.attached_to && item.attached_to.attached == item && (!to_cargo || this.cargo.length < this.cargo_space)) {
                 item.detach();
-                add(this.cargo, item);
+                if (to_cargo) {
+                    add(this.cargo, item);
+                }
 
                 this.updateAttributes();
 
@@ -535,6 +543,13 @@ module TS.SpaceTac {
          */
         listEquipment(slottype: SlotType | null = null): Equipment[] {
             return nna(this.slots.filter(slot => slot.attached && (slottype == null || slot.type == slottype)).map(slot => slot.attached));
+        }
+
+        /**
+         * Get the first free slot of a given type, null if none is available
+         */
+        getFreeSlot(type: SlotType): Slot | null {
+            return first(this.slots, slot => slot.type == type && slot.attached == null);
         }
 
         // Get the number of attached equipments

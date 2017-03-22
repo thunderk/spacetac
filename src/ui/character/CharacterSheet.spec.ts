@@ -63,14 +63,9 @@ module TS.SpaceTac.UI.Specs {
                 expect(sheet.loot_slots.visible).toBe(true);
                 expect(sheet.equipments.children.length).toBe(4);
 
-                let findsprite = (equ: Equipment) => nn(first(<CharacterEquipment[]>sheet.equipments.children, sp => sp.equipment == equ));
+                let findsprite = (equ: Equipment) => nn(first(<CharacterEquipment[]>sheet.equipments.children, sp => sp.item == equ));
                 let draddrop = (sp: CharacterEquipment, dest: CharacterCargo | CharacterSlot) => {
-                    let destbounds = dest.getBounds();
-                    /*sp.events.onDragStart.dispatch();
-                    sp.position.set(destbounds.x, destbounds.y);
-                    sp.events.onDragUpdate.dispatch();
-                    sp.events.onDragStop.dispatch();*/
-                    nn(dest.canDropEquipment(sp.equipment, destbounds.x, destbounds.y)).callback(sp.equipment);
+                    sp.applyDragDrop(sp.container, dest, false);
                 }
 
                 // Unequip

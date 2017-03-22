@@ -41,7 +41,7 @@ module TS.SpaceTac {
         target_effects: BaseEffect[];
 
         // Basic constructor
-        constructor(slot: SlotType | null = null, code = "equiment") {
+        constructor(slot: SlotType | null = null, code = "equipment") {
             this.slot = slot;
             this.code = code;
             this.name = code;

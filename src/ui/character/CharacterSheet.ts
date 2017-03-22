@@ -156,21 +156,12 @@ module TS.SpaceTac.UI {
             }
 
             fleet.ships.forEach((ship, idx) => {
-                let portrait = this.portraits.children.length > idx ? this.portraits.getChildAt(idx) : null;
-                let key = ship == this.ship ? "character-ship-selected" : "character-ship";
-                if (portrait instanceof Phaser.Button) {
-                    portrait.loadTexture(key);
-                } else {
-                    let new_portrait = new Phaser.Button(this.game, 0, idx * 320, key, () => this.show(ship));
-                    new_portrait.anchor.set(0.5, 0.5);
-                    this.portraits.addChild(new_portrait);
-
-                    let portrait_pic = new Phaser.Image(this.game, 0, 0, `ship-${ship.model}-portrait`);
-                    portrait_pic.anchor.set(0.5, 0.5);
-                    new_portrait.addChild(portrait_pic);
-
-                    this.view.tooltip.bindDynamicText(new_portrait, () => ship.name);
+                let portrait = this.portraits.children.length > idx ? <CharacterFleetMember>this.portraits.getChildAt(idx) : null;
+                if (!portrait) {
+                    portrait = new CharacterFleetMember(this, 0, idx * 320, ship);
+                    this.portraits.add(portrait);
                 }
+                portrait.setSelected(ship == this.ship);
             });
 
             this.credits.setText(fleet.credits.toString());
@@ -209,9 +200,8 @@ module TS.SpaceTac.UI {
                 this.ship_slots.addChild(slot_display);
 
                 if (slot.attached) {
-                    let equipment = new CharacterEquipment(this, slot.attached);
+                    let equipment = new CharacterEquipment(this, slot.attached, slot_display);
                     this.equipments.addChild(equipment);
-                    slot_display.snapEquipment(equipment);
                 }
             });
 
@@ -223,9 +213,8 @@ module TS.SpaceTac.UI {
                 this.ship_cargo.addChild(cargo_slot);
 
                 if (idx < this.ship.cargo.length) {
-                    let equipment = new CharacterEquipment(this, this.ship.cargo[idx]);
+                    let equipment = new CharacterEquipment(this, this.ship.cargo[idx], cargo_slot);
                     this.equipments.addChild(equipment);
-                    cargo_slot.snapEquipment(equipment);
                 }
             });
 
@@ -274,29 +263,32 @@ module TS.SpaceTac.UI {
 
             let info = CharacterSheet.getSlotPositions(12, 588, 354, 196, 196);
             range(12).forEach(idx => {
-                let loot_slot = new LootSlot(this, info.positions[idx].x, info.positions[idx].y);
+                let loot_slot = new CharacterLootSlot(this, info.positions[idx].x, info.positions[idx].y);
                 loot_slot.scale.set(info.scaling, info.scaling);
                 this.loot_slots.addChild(loot_slot);
 
                 if (idx < this.loot_items.length) {
-                    let equipment = new CharacterEquipment(this, this.loot_items[idx]);
+                    let equipment = new CharacterEquipment(this, this.loot_items[idx], loot_slot);
                     this.equipments.addChild(equipment);
-                    loot_slot.snapEquipment(equipment);
                 }
             });
         }
 
         /**
-         * Check if an equipment can be dropped somewhere
+         * Get an iterator over equipment containers
          */
-        canDropEquipment(equipment: Equipment, x: number, y: number): CharacterEquipmentDrop | null {
-            let candidates: Iterator<CharacterEquipmentDestination> = ichain(
+        iEquipmentContainers(): Iterator<CharacterEquipmentContainer> {
+            let candidates = ichain<CharacterEquipmentContainer>(
+                iarray(<CharacterFleetMember[]>this.portraits.children),
                 iarray(<CharacterSlot[]>this.ship_slots.children),
                 iarray(<CharacterCargo[]>this.ship_cargo.children),
-                this.loot_slots.visible ? iarray(<LootSlot[]>this.loot_slots.children) : IEMPTY
             );
 
-            return ifirstmap(candidates, candidate => candidate.canDropEquipment(equipment, x, y));
+            if (this.loot_slots.visible) {
+                candidates = ichain(candidates, iarray(<CharacterLootSlot[]>this.loot_slots.children));
+            }
+
+            return candidates;
         }
 
         /**

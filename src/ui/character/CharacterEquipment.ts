@@ -1,30 +1,70 @@
 module TS.SpaceTac.UI {
     /**
-     * Interface for any graphical item that may receive an equipment as drop destination
+     * Interface for any graphical area that may contain or receive an equipment
      */
-    export interface CharacterEquipmentDestination {
-        canDropEquipment(equipment: Equipment, x: number, y: number): CharacterEquipmentDrop | null;
+    export interface CharacterEquipmentContainer {
+        /**
+         * Check if a point in the character sheet is inside the container
+         */
+        isInside(x: number, y: number): boolean
+        /**
+         * Get a centric anchor point and scaling to snap the equipment
+         */
+        getEquipmentAnchor(): { x: number, y: number, scale: number }
+        /**
+         * Add an equipment to the container
+         */
+        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean
+        /**
+         * Remove an equipment from the container
+         */
+        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean
     }
 
     /**
      * Display a ship equipment, either attached to a slot, in cargo, or being dragged down
      */
     export class CharacterEquipment extends Phaser.Button {
-        equipment: Equipment;
+        sheet: CharacterSheet
+        item: Equipment
+        container: CharacterEquipmentContainer
+        tooltip: string
 
-        constructor(sheet: CharacterSheet, equipment: Equipment) {
+        constructor(sheet: CharacterSheet, equipment: Equipment, container: CharacterEquipmentContainer) {
             let icon = sheet.game.cache.checkImageKey(`equipment-${equipment.code}`) ? `equipment-${equipment.code}` : `battle-actions-${equipment.action.code}`;
             super(sheet.game, 0, 0, icon);
 
-            this.equipment = equipment;
+            this.sheet = sheet;
+            this.item = equipment;
+            this.container = container;
+            this.tooltip = equipment.name;
+
+            this.container.addEquipment(this, null, false);
 
             this.anchor.set(0.5, 0.5);
-            this.scale.set(0.5, 0.5);
 
             this.setupDragDrop(sheet);
+            this.snapToContainer();
 
-            // TODO better tooltip
-            sheet.view.tooltip.bindStaticText(this, equipment.name);
+            // TODO better tooltip (with equipment characteristics)
+            sheet.view.tooltip.bindDynamicText(this, () => this.tooltip);
+        }
+
+        /**
+         * Find the container under a specific screen location
+         */
+        findContainerAt(x: number, y: number): CharacterEquipmentContainer | null {
+            return ifirst(this.sheet.iEquipmentContainers(), container => container.isInside(x, y));
+        }
+
+        /**
+         * Snap in place to its current container
+         */
+        snapToContainer() {
+            let info = this.container.getEquipmentAnchor();
+            this.position.set(info.x, info.y);
+            this.scale.set(0.5 * info.scale, 0.5 * info.scale);
+            this.alpha = 1.0;
         }
 
         /**
@@ -34,36 +74,46 @@ module TS.SpaceTac.UI {
             this.inputEnabled = true;
             this.input.enableDrag(false, true);
 
-            let origin: [number, number, number, number] | null = null;
-            let drop: CharacterEquipmentDrop | null = null;
             this.events.onDragStart.add(() => {
-                origin = [this.x, this.y, this.scale.x, this.scale.y];
                 this.scale.set(0.5, 0.5);
                 this.alpha = 0.8;
             });
             this.events.onDragUpdate.add(() => {
-                drop = sheet.canDropEquipment(this.equipment, this.x, this.y);
+                let destination = this.findContainerAt(this.x, this.y);
+                if (destination) {
+                    this.applyDragDrop(this.container, destination, true);
+                }
             });
             this.events.onDragStop.add(() => {
-                if (drop) {
-                    drop.callback(this.equipment);
+                let destination = this.findContainerAt(this.x, this.y);
+                if (destination) {
+                    this.applyDragDrop(this.container, destination, false);
                     sheet.refresh();
                 } else {
-                    if (origin) {
-                        this.position.set(origin[0], origin[1]);
-                        this.scale.set(origin[2], origin[3]);
-                        origin = null;
-                    }
-                    this.alpha = 1;
+                    this.snapToContainer();
                 }
             });
         }
 
         /**
-         * Set the scaling of container in which the equipment icon is snapped
+         * Apply drag and drop between two containers
          */
-        setContainerScale(scale: number) {
-            this.scale.set(0.5 * scale, 0.5 * scale);
+        applyDragDrop(source: CharacterEquipmentContainer, destination: CharacterEquipmentContainer, hold: boolean) {
+            if (source.removeEquipment(this, destination, true) && destination.addEquipment(this, source, true)) {
+                if (!hold) {
+                    if (source.removeEquipment(this, destination, false)) {
+                        if (!destination.addEquipment(this, source, false)) {
+                            console.error("Destination container refused to accept equipment", this, source, destination);
+                            // Go back to source
+                            if (!source.addEquipment(this, null, true)) {
+                                console.error("Equipment lost in bad exchange !", this, source, destination);
+                            }
+                        }
+                    } else {
+                        console.error("Source container refused to give away equipment", this, source, destination);
+                    }
+                }
+            }
         }
     }
 }

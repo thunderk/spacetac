@@ -322,12 +322,15 @@ module TS.SpaceTac.Specs {
             let result = ship.addCargo(equipment1);
             expect(result).toBe(false);
             expect(ship.cargo).toEqual([]);
+            expect(ship.getFreeCargoSpace()).toBe(0);
 
             ship.setCargoSpace(1);
+            expect(ship.getFreeCargoSpace()).toBe(1);
 
             result = ship.addCargo(equipment1);
             expect(result).toBe(true);
             expect(ship.cargo).toEqual([equipment1]);
+            expect(ship.getFreeCargoSpace()).toBe(0);
 
             result = ship.addCargo(equipment1);
             expect(result).toBe(false);
@@ -338,18 +341,20 @@ module TS.SpaceTac.Specs {
             expect(ship.cargo).toEqual([equipment1]);
 
             ship.setCargoSpace(2);
+            expect(ship.getFreeCargoSpace()).toBe(1);
 
             result = ship.addCargo(equipment2);
             expect(result).toBe(true);
             expect(ship.cargo).toEqual([equipment1, equipment2]);
+            expect(ship.getFreeCargoSpace()).toBe(0);
 
             ship.setCargoSpace(1);
-
             expect(ship.cargo).toEqual([equipment1]);
+            expect(ship.getFreeCargoSpace()).toBe(0);
 
             ship.setCargoSpace(2);
-
             expect(ship.cargo).toEqual([equipment1]);
+            expect(ship.getFreeCargoSpace()).toBe(1);
         });
 
         it("equips items from cargo", function () {

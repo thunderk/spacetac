@@ -1,8 +1,10 @@
+/// <reference path="CharacterEquipment.ts" />
+
 module TS.SpaceTac.UI {
     /**
      * Display a ship slot, with equipment attached to it
      */
-    export class CharacterSlot extends Phaser.Image {
+    export class CharacterSlot extends Phaser.Image implements CharacterEquipmentContainer {
         sheet: CharacterSheet;
 
         constructor(sheet: CharacterSheet, x: number, y: number, slot: SlotType) {
@@ -16,25 +18,40 @@ module TS.SpaceTac.UI {
             sheet.view.tooltip.bindStaticText(sloticon, `${SlotType[slot]} slot`);
         }
 
-        /**
-         * Snap the equipment icon inside the slot
-         */
-        snapEquipment(equipment: CharacterEquipment) {
-            equipment.position.set(this.x + this.parent.x + 84 * this.scale.x, this.y + this.parent.y + 83 * this.scale.y);
-            equipment.setContainerScale(this.scale.x);
-        }
 
         /**
-         * Check if an equipment can be dropped in this slot
+         * CharacterEquipmentContainer interface
          */
-        canDropEquipment(equipment: Equipment, x: number, y: number): CharacterEquipmentDrop | null {
-            if (this.getBounds().contains(x, y)) {
-                return {
-                    message: "Equip",
-                    callback: () => this.sheet.ship.equip(equipment)
-                };
+        isInside(x: number, y: number): boolean {
+            return this.getBounds().contains(x, y);
+        }
+        getEquipmentAnchor(): { x: number, y: number, scale: number } {
+            return {
+                x: this.x + this.parent.x + 84 * this.scale.x,
+                y: this.y + this.parent.y + 83 * this.scale.y,
+                scale: this.scale.x
+            }
+        }
+        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
+            if (equipment.item.slot !== null && this.sheet.ship.getFreeSlot(equipment.item.slot)) {
+                if (test) {
+                    return true;
+                } else {
+                    return this.sheet.ship.equip(equipment.item, false);
+                }
             } else {
-                return null;
+                return false;
+            }
+        }
+        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
+            if (contains(this.sheet.ship.listEquipment(equipment.item.slot), equipment.item)) {
+                if (test) {
+                    return true;
+                } else {
+                    return this.sheet.ship.unequip(equipment.item, false);
+                }
+            } else {
+                return false;
             }
         }
     }
