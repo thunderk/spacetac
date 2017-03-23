@@ -1,3 +1,4 @@
+/// <reference path="CharacterCargo.ts" />
 /// <reference path="CharacterEquipment.ts" />
 
 module TS.SpaceTac.UI {

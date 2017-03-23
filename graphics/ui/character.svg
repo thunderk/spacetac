@@ -16,7 +16,7 @@
    viewBox="0 0 507.99999 285.75001"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.0 r15299"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="character.svg"
    enable-background="new"
    inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/close.png"
@@ -24,6 +24,22 @@
    inkscape:export-ydpi="96">
   <defs
      id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4790">
+      <stop
+         style="stop-color:#12384b;stop-opacity:1"
+         offset="0"
+         id="stop4786" />
+      <stop
+         id="stop4857"
+         offset="0.11033978"
+         style="stop-color:#163e4e;stop-opacity:1" />
+      <stop
+         style="stop-color:#132d2c;stop-opacity:1"
+         offset="1"
+         id="stop4788" />
+    </linearGradient>
     <inkscape:tag
        id="Définir 3"
        inkscape:label="Dynamic"
@@ -531,6 +547,24 @@
          result="composite2"
          id="feComposite9549" />
     </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4790"
+       id="linearGradient4792"
+       x1="361.74548"
+       y1="225.52148"
+       x2="361.74548"
+       y2="214.65468"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3217523,0,0,0.7757954,-116.27518,50.583778)" />
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter4837"
+       inkscape:label="Color price">
+      <feColorMatrix
+         id="feColorMatrix4839"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 0.8 0 0 0 0 0 1 0 " />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -540,10 +574,10 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="759.55392"
-     inkscape:cy="1033.5346"
+     inkscape:cx="1214.6427"
+     inkscape:cy="366.58654"
      inkscape:document-units="px"
-     inkscape:current-layer="g4578"
+     inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1037"
@@ -729,37 +763,6 @@
        height="94.872032"
        x="334.8869"
        y="188.52083" />
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:10.60999966px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="343.32455"
-       y="204.7738"
-       id="text6771"><tspan
-         sodipodi:role="line"
-         id="tspan6769"
-         x="343.32455"
-         y="204.7738"
-         style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px">Artana come from a long </tspan><tspan
-         sodipodi:role="line"
-         x="343.32455"
-         y="215.3838"
-         style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
-         id="tspan6775">line of merchants, and has</tspan><tspan
-         sodipodi:role="line"
-         x="343.32455"
-         y="225.9938"
-         style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
-         id="tspan6779">always valued peace over</tspan><tspan
-         sodipodi:role="line"
-         x="343.32455"
-         y="236.60381"
-         style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
-         id="tspan6781">brutality. She is pragmatic</tspan><tspan
-         sodipodi:role="line"
-         x="343.32455"
-         y="247.21381"
-         style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
-         id="tspan6783">and resolute.</tspan></text>
     <g
        id="g6788"
        transform="matrix(0.88749508,0,0,0.88749508,157.8634,-65.47073)"
@@ -979,6 +982,128 @@
            x="495.25046"
            id="tspan7860"
            sodipodi:role="line">X</tspan></text>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="ModeArea"
+     style="display:inline">
+    <g
+       inkscape:groupmode="layer"
+       id="layer5"
+       inkscape:label="DescriptionMode"
+       style="display:none">
+      <text
+         transform="translate(0,-11.249983)"
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:10.58333397px;line-height:10.60999966px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="343.32455"
+         y="204.7738"
+         id="text6771"><tspan
+           sodipodi:role="line"
+           id="tspan6769"
+           x="343.32455"
+           y="204.7738"
+           style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px">Artana come from a long </tspan><tspan
+           sodipodi:role="line"
+           x="343.32455"
+           y="215.3838"
+           style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
+           id="tspan6775">line of merchants, and has</tspan><tspan
+           sodipodi:role="line"
+           x="343.32455"
+           y="225.9938"
+           style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
+           id="tspan6779">always valued peace over</tspan><tspan
+           sodipodi:role="line"
+           x="343.32455"
+           y="236.60381"
+           style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
+           id="tspan6781">brutality. She is pragmatic</tspan><tspan
+           sodipodi:role="line"
+           x="343.32455"
+           y="247.21381"
+           style="line-height:10.60999966px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
+           id="tspan6783">and resolute.</tspan></text>
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="layer7"
+       inkscape:label="LootShopMode"
+       style="display:inline">
+      <use
+         style="display:inline;opacity:1"
+         x="0"
+         y="0"
+         xlink:href="#g6788"
+         id="use4760"
+         width="100%"
+         height="100%"
+         transform="translate(-114.65862,228.75806)" />
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot4763"
+         style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:25px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         transform="scale(0.26458334)"><flowRegion
+           id="flowRegion4765"><rect
+             id="rect4767"
+             width="163.64471"
+             height="46.467018"
+             x="1491.9952"
+             y="626.44153" /></flowRegion><flowPara
+           id="flowPara4769" /></flowRoot>      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="387.81439"
+         y="173.22652"
+         id="text4773"><tspan
+           sodipodi:role="line"
+           id="tspan4771"
+           x="387.81439"
+           y="173.22652"
+           style="fill:#ffffff;stroke-width:0.26458335px">Lootable items</tspan></text>
+      <path
+         sodipodi:type="star"
+         style="fill:#267482;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter9551)"
+         id="path4777"
+         sodipodi:sides="3"
+         sodipodi:cx="498.1904"
+         sodipodi:cy="225.08482"
+         sodipodi:r1="5.7819242"
+         sodipodi:r2="2.8909619"
+         sodipodi:arg1="2.0943951"
+         sodipodi:arg2="3.1415927"
+         inkscape:flatsided="true"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m 495.29944,230.09212 0,-10.01459 8.67288,5.00729 z"
+         inkscape:transform-center-x="-1.4454898"
+         inkscape:transform-center-y="3.6247564e-06"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/scroll.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path4777"
+         inkscape:transform-center-x="1.4454903"
+         inkscape:transform-center-y="3.6247564e-06"
+         id="use4779"
+         width="100%"
+         height="100%"
+         transform="matrix(-1,0,0,1,827.29259,0)" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4837)"
+         x="393.87433"
+         y="281.21716"
+         id="text4851"><tspan
+           sodipodi:role="line"
+           id="tspan4849"
+           x="393.87433"
+           y="281.21716"
+           style="fill:#ffffff;stroke-width:0.26458335px">Sell for 150</tspan></text>
     </g>
   </g>
   <g
@@ -1508,37 +1633,40 @@
          d="M 9.0381146,10.399538 H 81.83353 l -2.840798,19.654759 h -67.11382 z"
          style="fill:none;fill-opacity:1;stroke:#b2c0e1;stroke-width:0.25165766;stroke-opacity:0.5362319;filter:url(#filter4674)" />
       <g
-         id="g6698"
-         transform="translate(0,-0.44954215)"
+         id="g4822"
          style="filter:url(#filter7193)">
-        <text
-           xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:12.69999981px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-           x="63.311016"
-           y="25.424089"
-           id="text4555"><tspan
-             sodipodi:role="line"
-             id="tspan4553"
-             x="63.311016"
-             y="25.424089"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:7.61000013px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px">Z</tspan></text>
         <g
-           id="g4563"
-           transform="translate(0.74045089,0.09552719)">
-          <path
-             inkscape:connector-curvature="0"
-             id="path4557"
-             d="M 65.917707,13.659581 V 27.691947"
-             style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.82559979;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-          <use
-             style="stroke-width:1.39999998;stroke-miterlimit:4;stroke-dasharray:none"
-             height="100%"
-             width="100%"
-             transform="translate(2.0039452,0.04724702)"
-             id="use4559"
-             xlink:href="#path4557"
-             y="0"
-             x="0" />
+           transform="translate(0,-0.44954215)"
+           id="g6698">
+          <text
+             id="text4555"
+             y="25.424089"
+             x="63.311016"
+             style="font-style:normal;font-weight:normal;font-size:12.69999981px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:7.61000013px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
+               y="25.424089"
+               x="63.311016"
+               id="tspan4553"
+               sodipodi:role="line">Z</tspan></text>
+          <g
+             transform="translate(0.74045089,0.09552719)"
+             id="g4563">
+            <path
+               style="fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.82559979;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+               d="M 65.917707,13.659581 V 27.691947"
+               id="path4557"
+               inkscape:connector-curvature="0" />
+            <use
+               x="0"
+               y="0"
+               xlink:href="#path4557"
+               id="use4559"
+               transform="translate(2.0039452,0.04724702)"
+               width="100%"
+               height="100%"
+               style="stroke-width:1.39999998;stroke-miterlimit:4;stroke-dasharray:none" />
+          </g>
         </g>
       </g>
       <ellipse
@@ -1566,6 +1694,47 @@
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="ccccc"
          transform="matrix(0.98778177,0,0,0.99708999,0.55514569,0.70711812)" />
+    </g>
+    <g
+       id="g4782"
+       transform="translate(0,-34.783275)">
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="rect4783"
+         d="m 347.46864,217.11316 h 27.82481 l 2.77932,8.5012 h -33.38345 z"
+         style="display:inline;fill:url(#linearGradient4792);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26792371px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter9551)"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/price-tag.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         transform="matrix(1,0,0,-1,0,442.72752)" />
+      <g
+         id="g4835"
+         style="display:inline;filter:url(#filter4837)">
+        <text
+           id="text4796"
+           y="223.86424"
+           x="352.19824"
+           style="font-style:normal;font-weight:normal;font-size:6.3499999px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           xml:space="preserve"><tspan
+             style="font-size:6.3499999px;fill:#ffffff;fill-opacity:1;stroke-width:0.26458335px"
+             y="223.86424"
+             x="352.19824"
+             id="tspan4794"
+             sodipodi:role="line">150</tspan></text>
+      </g>
+      <use
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/price-tag.png"
+         transform="matrix(0.53713219,0,0,0.53713219,334.59484,210.43561)"
+         height="100%"
+         width="100%"
+         id="use4826"
+         xlink:href="#g6698"
+         y="0"
+         x="0"
+         style="display:inline;opacity:1;filter:url(#filter4837)" />
     </g>
   </g>
 </svg>

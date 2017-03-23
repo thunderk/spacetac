@@ -32,6 +32,9 @@ module TS.SpaceTac.UI {
                 scale: this.scale.x
             }
         }
+        getPriceOffset(): number {
+            return 66;
+        }
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
             if (equipment.item.slot !== null && this.sheet.ship.getFreeSlot(equipment.item.slot)) {
                 if (test) {

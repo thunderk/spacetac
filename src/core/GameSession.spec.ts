@@ -70,5 +70,21 @@ module TS.SpaceTac.Specs {
             expect(location2.encounter).not.toBeNull();
             expect(spyloot).toHaveBeenCalledTimes(0);
         });
+
+        it("generates a new campaign", function () {
+            let session = new GameSession();
+
+            session.startNewGame();
+            expect(session.player).not.toBeNull();
+            expect(session.player.fleet.ships.length).toBe(3);
+            expect(session.player.fleet.credits).toBe(500);
+            expect(session.player.universe.stars.length).toBe(50);
+            expect(session.getBattle()).toBeNull();
+            let start_location = nn(session.player.fleet.location);
+            expect(start_location.shop).not.toBeNull();
+            expect(nn(start_location.shop).stock.length).toBe(50);
+            expect(start_location.encounter).toBeNull();
+            expect(start_location.encounter_gen).toBe(true);
+        });
     });
 }

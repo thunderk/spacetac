@@ -89,6 +89,7 @@ module TS.SpaceTac.UI {
             this.loadImage("map/state-unknown.png");
             this.loadImage("map/state-enemy.png");
             this.loadImage("map/state-clear.png");
+            this.loadImage("map/state-shop.png");
             this.loadImage("character/sheet.png");
             this.loadImage("character/close.png");
             this.loadImage("character/ship.png");
@@ -101,6 +102,8 @@ module TS.SpaceTac.UI {
             this.loadImage("character/slot-shield.png");
             this.loadImage("character/slot-engine.png");
             this.loadImage("character/slot-weapon.png");
+            this.loadImage("character/price-tag.png");
+            this.loadImage("character/scroll.png");
             this.loadImage("equipment/ironhull.png");
             this.loadImage("equipment/basicforcefield.png");
             this.loadImage("equipment/basicpowercore.png");

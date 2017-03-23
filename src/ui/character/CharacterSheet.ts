@@ -37,9 +37,15 @@ module TS.SpaceTac.UI {
         // Ship cargo
         ship_cargo: Phaser.Group;
 
+        // Mode title
+        mode_title: Phaser.Text;
+
         // Loot items
         loot_slots: Phaser.Group;
         loot_items: Equipment[] = [];
+
+        // Shop
+        shop: Shop | null = null;
 
         // Fleet's portraits
         portraits: Phaser.Group;
@@ -106,6 +112,10 @@ module TS.SpaceTac.UI {
 
             this.equipments = new Phaser.Group(this.game);
             this.addChild(this.equipments);
+
+            this.mode_title = new Phaser.Text(this.game, 1548, 648, "", { align: "center", font: "18pt Arial", fill: "#FFFFFF" });
+            this.mode_title.anchor.set(0.5, 0.5);
+            this.addChild(this.mode_title);
 
             let x1 = 664;
             let x2 = 1066;
@@ -222,6 +232,10 @@ module TS.SpaceTac.UI {
 
             this.updateFleet(ship.fleet);
 
+            if (this.shop) {
+                this.updatePrices(this.shop);
+            }
+
             if (animate) {
                 this.game.tweens.create(this).to({ x: this.xshown }, 800, Phaser.Easing.Circular.InOut, true);
             } else {
@@ -233,7 +247,10 @@ module TS.SpaceTac.UI {
          * Hide the sheet
          */
         hide(animate = true) {
+            this.loot_items = [];
+            this.shop = null;
             this.loot_slots.visible = false;
+            this.mode_title.visible = false;
 
             this.portraits.children.forEach((portrait: Phaser.Button) => portrait.loadTexture("character-ship"));
 
@@ -248,11 +265,39 @@ module TS.SpaceTac.UI {
          * Set the list of lootable equipment
          * 
          * The list of equipments may be altered if items are taken from it
+         * 
+         * This list will be shown until sheet is closed
          */
         setLoot(loot: Equipment[]) {
             this.loot_items = loot;
             this.updateLoot();
             this.loot_slots.visible = true;
+
+            this.mode_title.setText("Lootable items");
+            this.mode_title.visible = true;
+        }
+
+        /**
+         * Set the displayed shop
+         * 
+         * This shop will be shown until sheet is closed
+         */
+        setShop(shop: Shop) {
+            this.shop = shop;
+            this.updateLoot();
+            this.loot_slots.visible = true;
+
+            this.mode_title.setText("Shop's equipment");
+            this.mode_title.visible = true;
+        }
+
+        /**
+         * Update the price tags on each equipment, for a specific shop
+         */
+        updatePrices(shop: Shop) {
+            this.equipments.children.forEach((equipement: CharacterEquipment) => {
+                equipement.setPrice(shop.getPrice(equipement.item));
+            });
         }
 
         /**
@@ -263,12 +308,15 @@ module TS.SpaceTac.UI {
 
             let info = CharacterSheet.getSlotPositions(12, 588, 354, 196, 196);
             range(12).forEach(idx => {
-                let loot_slot = new CharacterLootSlot(this, info.positions[idx].x, info.positions[idx].y);
+                let loot_slot = this.shop ? new CharacterShopSlot(this, info.positions[idx].x, info.positions[idx].y) : new CharacterLootSlot(this, info.positions[idx].x, info.positions[idx].y);
                 loot_slot.scale.set(info.scaling, info.scaling);
                 this.loot_slots.addChild(loot_slot);
 
                 if (idx < this.loot_items.length) {
                     let equipment = new CharacterEquipment(this, this.loot_items[idx], loot_slot);
+                    this.equipments.addChild(equipment);
+                } else if (this.shop && idx < this.shop.stock.length) {
+                    let equipment = new CharacterEquipment(this, this.shop.stock[idx], loot_slot);
                     this.equipments.addChild(equipment);
                 }
             });

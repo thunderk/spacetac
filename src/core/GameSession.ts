@@ -24,7 +24,7 @@ module TS.SpaceTac {
             return serializer.serialize(this);
         }
 
-        // Generate a real single player game
+        // Generate a real single player game (campaign)
         startNewGame(): void {
             var fleet_generator = new FleetGenerator();
 
@@ -32,12 +32,13 @@ module TS.SpaceTac {
             this.universe.generate();
 
             var start_location = this.universe.stars[0].locations[0];
-            start_location.encounter_gen = true;
-            start_location.encounter = null;
+            start_location.clearEncounter();
+            start_location.addShop(50);
 
             this.player = new Player(this.universe);
             this.player.fleet = fleet_generator.generate(1, this.player);
             this.player.fleet.setLocation(start_location);
+            this.player.fleet.credits = 500;
         }
 
         // Start a new "quick battle" game

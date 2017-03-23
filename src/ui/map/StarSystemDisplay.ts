@@ -30,7 +30,16 @@ module TS.SpaceTac.UI {
             // Show locations
             starsystem.locations.map(location => {
                 let location_sprite: Phaser.Image | null = null;
-                let fleet_move = () => this.fleet_display.moveToLocation(location);
+                let fleet_move = () => {
+                    if (location == this.player.fleet.location) {
+                        if (location.shop) {
+                            this.view.character_sheet.setShop(location.shop);
+                            this.view.character_sheet.show(this.player.fleet.ships[0]);
+                        }
+                    } else {
+                        this.fleet_display.moveToLocation(location);
+                    }
+                }
 
                 if (location.type == StarLocationType.STAR) {
                     location_sprite = this.addImage(location.x, location.y, "map-location-star", fleet_move);
@@ -43,13 +52,15 @@ module TS.SpaceTac.UI {
                 }
 
                 this.view.tooltip.bindDynamicText(<Phaser.Button>location_sprite, () => {
+                    let visited = this.player.hasVisitedLocation(location);
+                    let shop = (visited && !location.encounter && location.shop) ? " (shop present)" : "";
+
                     if (location == this.player.fleet.location) {
-                        return "Current fleet location";
+                        return `Current fleet location${shop}`;
                     } else {
-                        let visited = this.player.hasVisitedLocation(location);
                         let loctype = StarLocationType[location.type].toLowerCase();
                         let danger = (visited && location.encounter) ? " [enemy fleet detected !]" : "";
-                        return `${visited ? "Visited" : "Unvisited"} ${loctype} - Move the fleet there${danger}`;
+                        return `${visited ? "Visited" : "Unvisited"} ${loctype} - Move the fleet there${danger}${shop}`;
                     }
                 });
 
@@ -82,7 +93,17 @@ module TS.SpaceTac.UI {
          * Return the sprite code to use for visited status.
          */
         getVisitedKey(location: StarLocation) {
-            return this.player.hasVisitedLocation(location) ? (location.encounter ? "map-state-enemy" : "map-state-clear") : "map-state-unknown";
+            if (this.player.hasVisitedLocation(location)) {
+                if (location.encounter) {
+                    return "map-state-enemy";
+                } else if (location.shop) {
+                    return "map-state-shop";
+                } else {
+                    return "map-state-clear";
+                }
+            } else {
+                return "map-state-unknown";
+            }
         }
 
         /**

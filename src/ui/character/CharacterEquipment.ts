@@ -12,6 +12,10 @@ module TS.SpaceTac.UI {
          */
         getEquipmentAnchor(): { x: number, y: number, scale: number }
         /**
+         * Get a vertical offset to position the price tag
+         */
+        getPriceOffset(): number
+        /**
          * Add an equipment to the container
          */
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean
@@ -29,6 +33,7 @@ module TS.SpaceTac.UI {
         item: Equipment
         container: CharacterEquipmentContainer
         tooltip: string
+        price: number
 
         constructor(sheet: CharacterSheet, equipment: Equipment, container: CharacterEquipmentContainer) {
             let icon = sheet.game.cache.checkImageKey(`equipment-${equipment.code}`) ? `equipment-${equipment.code}` : `battle-actions-${equipment.action.code}`;
@@ -38,6 +43,7 @@ module TS.SpaceTac.UI {
             this.item = equipment;
             this.container = container;
             this.tooltip = equipment.name;
+            this.price = 0;
 
             this.container.addEquipment(this, null, false);
 
@@ -55,6 +61,28 @@ module TS.SpaceTac.UI {
          */
         findContainerAt(x: number, y: number): CharacterEquipmentContainer | null {
             return ifirst(this.sheet.iEquipmentContainers(), container => container.isInside(x, y));
+        }
+
+        /**
+         * Display a price tag
+         */
+        setPrice(price: number) {
+            if (!price || this.price) {
+                return;
+            }
+            this.price = price;
+
+            let tag = new Phaser.Image(this.game, 0, 0, "character-price-tag");
+            let yoffset = this.container.getPriceOffset();
+            tag.position.set(0, -yoffset * 2 + tag.height);
+            tag.anchor.set(0.5, 0.5);
+            tag.scale.set(2, 2);
+            tag.alpha = 0.85;
+            this.addChild(tag);
+
+            let text = new Phaser.Text(this.game, -10, 4, price.toString(), { align: "center", font: "18pt Arial", fill: "#FFFFCC" });
+            text.anchor.set(0.5, 0.5);
+            tag.addChild(text);
         }
 
         /**

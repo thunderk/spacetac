@@ -31,6 +31,9 @@ module TS.SpaceTac {
         encounter_gen = false;
         encounter_random = RandomGenerator.global;
 
+        // Shop to buy/sell equipment
+        shop: Shop | null = null;
+
         constructor(star = new Star(), type: StarLocationType = StarLocationType.PLANET, x: number = 0, y: number = 0) {
             this.star = star;
             this.type = type;
@@ -39,6 +42,16 @@ module TS.SpaceTac {
             this.universe_x = this.star.x + this.x;
             this.universe_y = this.star.y + this.y;
             this.jump_dest = null;
+        }
+
+        /**
+         * Add a shop in this location
+         */
+        addShop(generate_items = 0) {
+            this.shop = new Shop();
+            if (generate_items) {
+                this.shop.generateStock(generate_items);
+            }
         }
 
         // Set the jump destination of a WARP location
@@ -99,6 +112,7 @@ module TS.SpaceTac {
          * Clear an encounter, when the encountered fleet has been defeated
          */
         clearEncounter() {
+            this.encounter_gen = true;
             this.encounter = null;
         }
     }

@@ -338,9 +338,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="1297.0192"
-     inkscape:cy="519.42484"
+     inkscape:zoom="16"
+     inkscape:cx="992.35147"
+     inkscape:cy="383.97616"
      inkscape:document-units="mm"
      inkscape:current-layer="layer5"
      showgrid="false"
@@ -673,6 +673,59 @@
          width="32.08374"
          id="rect4920"
          style="fill:none;fill-rule:evenodd;stroke:#cdd8e2;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.76382979" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g7279"
+       id="use4605"
+       width="100%"
+       height="100%"
+       transform="rotate(135.15474,292.10549,143.11838)" />
+    <g
+       id="g5470">
+      <use
+         transform="translate(-85.829914,36.267568)"
+         height="100%"
+         width="100%"
+         id="use4607"
+         xlink:href="#path7269"
+         y="0"
+         x="0" />
+      <g
+         style="display:inline;opacity:1"
+         transform="matrix(0.42197579,0,0,0.42197579,234.85646,177.55249)"
+         id="g6698">
+        <text
+           id="text4555"
+           y="25.424089"
+           x="63.311016"
+           style="font-style:normal;font-weight:normal;font-size:12.69999981px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#1951ae;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12.69999981px;line-height:7.61000013px;font-family:'DejaVu Serif';-inkscape-font-specification:'DejaVu Serif';fill:#1951ae;fill-opacity:1;stroke-width:0.26458335px;"
+             y="25.424089"
+             x="63.311016"
+             id="tspan4553"
+             sodipodi:role="line">Z</tspan></text>
+        <g
+           transform="translate(0.74045089,0.09552719)"
+           id="g4563">
+          <path
+             style="fill:none;fill-rule:evenodd;stroke:#1951ae;stroke-width:0.82559979;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             d="M 65.917707,13.659581 V 27.691947"
+             id="path4557"
+             inkscape:connector-curvature="0" />
+          <use
+             x="0"
+             y="0"
+             xlink:href="#path4557"
+             id="use4559"
+             transform="translate(2.0039452,0.04724702)"
+             width="100%"
+             height="100%"
+             style="stroke-width:1.39999998;stroke-miterlimit:4;stroke-dasharray:none" />
+        </g>
+      </g>
     </g>
   </g>
   <g

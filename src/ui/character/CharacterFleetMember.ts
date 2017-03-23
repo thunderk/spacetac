@@ -39,6 +39,9 @@ module TS.SpaceTac.UI {
             // not needed, equipment is never shown snapped in the slot
             return { x: 0, y: 0, scale: 1 };
         }
+        getPriceOffset(): number {
+            return 0;
+        }
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
             if (this.ship != this.sheet.ship && equipment.item.slot !== null) {
                 let slot = this.ship.getFreeSlot(equipment.item.slot);

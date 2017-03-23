@@ -1,7 +1,11 @@
 * UI: Use a common component class, and a layer abstraction
+* UI: Fix tooltip sometimes being enormous
 * Character sheet: add tooltips (on values, slots and equipments)
 * Character sheet: add initial character creation
 * Character sheet: disable interaction during battle (except for loot screen)
+* Character sheet: paginate loot and shop items
+* Character sheet: improve eye-catching for shop and loot section
+* Shops: add equipment pricing, with usage depreciation
 * Add battle statistics and/or critics in outcome dialog
 * Add battle experience and feedback on level up
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
@@ -32,10 +36,9 @@
 * TacticalAI: allow to play several moves in the same turn
 * TacticalAI: add pauses to not play too quickly
 * TacticalAI: replace BullyAI
-* Add retreat from battle
 * Map: restore fog of war
 * Map: add information on current star/location + information on hovered location
-* Map: add stores and shipyards
+* Map: add shops and shipyards
 * Map: remove jump links that cross the radius of other systems
 * Map: disable interaction (zoom, selection) while moving/jumping
 * Menu: fix background stars aggregating at right side when the game is not focused
