@@ -26,6 +26,7 @@ module TS.SpaceTac.UI {
         static fadeOut(game: Phaser.Game, obj: PIXI.DisplayObject, duration: number = 1000): void {
             var tween = game.tweens.create(obj);
             tween.to({ alpha: 0 }, duration);
+            tween.onComplete.addOnce(() => obj.visible = false);
             tween.start();
         }
 

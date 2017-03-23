@@ -6,6 +6,7 @@
 * Character sheet: paginate loot and shop items
 * Character sheet: improve eye-catching for shop and loot section
 * Shops: add equipment pricing, with usage depreciation
+* Fix targetting not resetting when using action shortcuts
 * Add battle statistics and/or critics in outcome dialog
 * Add battle experience and feedback on level up
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
