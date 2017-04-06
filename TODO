@@ -8,7 +8,7 @@
 * Shops: add equipment pricing, with usage depreciation
 * Fix targetting not resetting when using action shortcuts
 * Add battle statistics and/or critics in outcome dialog
-* Add battle experience and feedback on level up
+* Add battle experience
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Highlight ships that will be included as target of current action
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)

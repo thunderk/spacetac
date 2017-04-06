@@ -573,11 +573,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="1214.6427"
-     inkscape:cy="366.58654"
+     inkscape:zoom="0.70000001"
+     inkscape:cx="290.06665"
+     inkscape:cy="536.461"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer3"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1037"
@@ -597,7 +597,9 @@
      showborder="false"
      borderlayer="false"
      inkscape:showpageshadow="true"
-     inkscape:lockguides="true">
+     inkscape:lockguides="true"
+     inkscape:measure-start="168.929,966.071"
+     inkscape:measure-end="228.214,927.143">
     <sodipodi:guide
        position="0,0"
        orientation="0,1920"
@@ -1736,5 +1738,13 @@
          x="0"
          style="display:inline;opacity:1;filter:url(#filter4837)" />
     </g>
+    <path
+       style="fill:#acf1d5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.14867447px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter6359)"
+       d="m 65.881955,40.338793 -5.142337,8.907111 H 63.1036 v 7.769112 h 5.556709 v -7.769112 h 2.363982 z"
+       id="rect4780"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/upgrade-available.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
 </svg>

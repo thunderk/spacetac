@@ -7,6 +7,7 @@ module TS.SpaceTac.UI {
     export class CharacterFleetMember extends Phaser.Button implements CharacterEquipmentContainer {
         sheet: CharacterSheet;
         ship: Ship;
+        levelup: Phaser.Image;
 
         constructor(sheet: CharacterSheet, x: number, y: number, ship: Ship) {
             super(sheet.game, x, y, "character-ship", () => sheet.show(ship));
@@ -19,6 +20,11 @@ module TS.SpaceTac.UI {
             portrait_pic.anchor.set(0.5, 0.5);
             this.addChild(portrait_pic);
 
+            this.levelup = new Phaser.Image(this.game, this.width / 2 - 40, -this.height / 2 + 40, "character-upgrade-available");
+            this.levelup.anchor.set(1, 0);
+            this.levelup.visible = this.ship.getAvailableUpgradePoints() > 0;
+            this.addChild(this.levelup);
+
             sheet.view.tooltip.bindDynamicText(this, () => ship.name);
         }
 
@@ -27,6 +33,7 @@ module TS.SpaceTac.UI {
          */
         setSelected(selected: boolean) {
             this.loadTexture(selected ? "character-ship-selected" : "character-ship");
+            Animation.setVisibility(this.game, this.levelup, this.ship.getAvailableUpgradePoints() > 0, 200);
         }
 
         /**
