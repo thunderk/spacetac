@@ -12,6 +12,9 @@ module TS.SpaceTac.UI {
         // Input and key bindings
         inputs: InputManager;
 
+        // Animations
+        animations: Animations;
+
         // Timing
         timer: Timer;
 
@@ -48,6 +51,9 @@ module TS.SpaceTac.UI {
 
             // Notifications
             this.messages = new Messages(this);
+
+            // Animations
+            this.animations = new Animations(this.game.tweens);
 
             // Input manager
             this.inputs = new InputManager(this);

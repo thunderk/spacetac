@@ -95,7 +95,7 @@ module TS.SpaceTac.UI {
         setInteractive(interactive: boolean) {
             this.interactive = interactive;
 
-            Animation.setVisibility(this.game, this.icon_waiting, !this.interactive, 100);
+            this.battleview.animations.setVisible(this.icon_waiting, !this.interactive, 100);
         }
 
         /**

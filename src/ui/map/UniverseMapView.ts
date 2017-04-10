@@ -128,9 +128,9 @@ module TS.SpaceTac.UI {
                 let angle = Math.atan2(location.y, location.x);
                 this.button_jump.scale.set(location.star.radius * 0.002, location.star.radius * 0.002);
                 this.button_jump.position.set(location.star.x + location.x + 0.02 * Math.cos(angle), location.star.y + location.y + 0.02 * Math.sin(angle));
-                Animation.setVisibility(this.game, this.button_jump, true, 300);
+                this.animations.setVisible(this.button_jump, true, 300);
             } else {
-                Animation.setVisibility(this.game, this.button_jump, false, 300);
+                this.animations.setVisible(this.button_jump, false, 300);
             }
         }
 
@@ -180,7 +180,7 @@ module TS.SpaceTac.UI {
          */
         doJump() {
             if (this.player.fleet.location && this.player.fleet.location.type == StarLocationType.WARP && this.player.fleet.location.jump_dest) {
-                Animation.setVisibility(this.game, this.button_jump, false, 300);
+                this.animations.setVisible(this.button_jump, false, 300);
 
                 let dest_location = this.player.fleet.location.jump_dest;
                 let dest_star = dest_location.star;

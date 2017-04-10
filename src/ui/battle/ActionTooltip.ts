@@ -70,9 +70,9 @@ module TS.SpaceTac.UI {
                     this.shortcut.setText("");
                 }
 
-                Animation.fadeIn(this.game, this, 200, 0.9);
+                this.bar.battleview.animations.show(this, 200, 0.9);
             } else {
-                Animation.fadeOut(this.game, this, 200);
+                this.bar.battleview.animations.hide(this, 200);
             }
         }
     }

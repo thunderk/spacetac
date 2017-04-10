@@ -1,6 +1,9 @@
 module TS.SpaceTac.UI {
     // One item in a ship list (used in BattleView)
     export class ShipListItem extends Phaser.Button {
+        // Reference to the view
+        view: BattleView;
+
         // Reference to the ship game object
         ship: Ship;
 
@@ -28,6 +31,7 @@ module TS.SpaceTac.UI {
         // Create a ship button for the battle ship list
         constructor(list: ShipList, x: number, y: number, ship: Ship, owned: boolean) {
             super(list.battleview.game, x, y, owned ? "battle-shiplist-own" : "battle-shiplist-enemy");
+            this.view = list.battleview;
 
             this.ship = ship;
 
@@ -104,7 +108,7 @@ module TS.SpaceTac.UI {
 
         // Set the hovered status
         setHovered(hovered: boolean) {
-            Animation.setVisibility(this.game, this.layer_hover, hovered, 200);
+            this.view.animations.setVisible(this.layer_hover, hovered, 200);
         }
     }
 }

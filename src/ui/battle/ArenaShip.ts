@@ -1,6 +1,9 @@
 module TS.SpaceTac.UI {
     // Ship sprite in the arena (BattleView)
     export class ArenaShip extends Phaser.Group {
+        // Link to the view
+        battleview: BattleView;
+
         // Link to displayed ship
         ship: Ship;
 
@@ -25,10 +28,10 @@ module TS.SpaceTac.UI {
         // Create a ship sprite usable in the Arena
         constructor(parent: Arena, ship: Ship) {
             super(parent.game);
-            let battleview = parent.battleview;
+            this.battleview = parent.battleview;
 
             this.ship = ship;
-            this.enemy = this.ship.getPlayer() != battleview.player;
+            this.enemy = this.ship.getPlayer() != this.battleview.player;
 
             // Add ship sprite
             this.sprite = new Phaser.Button(this.game, 0, 0, "ship-" + ship.model + "-sprite");
@@ -58,7 +61,11 @@ module TS.SpaceTac.UI {
             this.addChild(this.effects);
 
             // Handle input on ship sprite
-            Tools.setHoverClick(this.sprite, () => battleview.cursorOnShip(ship), () => battleview.cursorOffShip(ship), () => battleview.cursorClicked());
+            Tools.setHoverClick(this.sprite,
+                () => this.battleview.cursorOnShip(ship),
+                () => this.battleview.cursorOffShip(ship),
+                () => this.battleview.cursorClicked()
+            );
 
             // Set location
             this.position.set(ship.arena_x, ship.arena_y);
@@ -67,7 +74,7 @@ module TS.SpaceTac.UI {
         // Set the hovered state on this ship
         //  This will toggle the hover effect
         setHovered(hovered: boolean) {
-            Animation.setVisibility(this.game, this.hover, hovered, 200);
+            this.battleview.animations.setVisible(this.hover, hovered, 200);
         }
 
         // Set the playing state on this ship
@@ -84,7 +91,7 @@ module TS.SpaceTac.UI {
                 this.displayEffect("stasis", false);
             }
             this.frame.alpha = dead ? 0.5 : 1.0;
-            Animation.setVisibility(this.game, this.stasis, dead, 400);
+            this.battleview.animations.setVisible(this.stasis, dead, 400);
         }
 
         /**
@@ -94,7 +101,7 @@ module TS.SpaceTac.UI {
          */
         moveTo(x: number, y: number, facing_angle: number, animate = true): number {
             if (animate) {
-                return Animation.moveInSpace(this, x, y, facing_angle, this.sprite);
+                return Animations.moveInSpace(this, x, y, facing_angle, this.sprite);
             } else {
                 this.x = x;
                 this.y = y;

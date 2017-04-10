@@ -7,35 +7,82 @@ module TS.SpaceTac.UI {
     };
 
     /**
-     * Utility functions for animation
+     * Interface of an object that may be shown/hidden, with opacity transition.
      */
-    export class Animation {
+    interface IAnimationFadeable {
+        alpha: number;
+        visible: boolean;
+    }
 
-        // Display an object, fading in using opacity
-        static fadeIn(game: Phaser.Game, obj: PIXI.DisplayObject, duration: number = 1000, alpha: number = 1): void {
+    /**
+     * Manager of all animations.
+     * 
+     * This is a wrapper around phaser's tweens.
+     */
+    export class Animations {
+        private tweens: Phaser.TweenManager;
+
+        constructor(tweens: Phaser.TweenManager) {
+            this.tweens = tweens;
+        }
+
+        /**
+         * Create a tween on an object.
+         * 
+         * If a previous tween is running for this object, it will be stopped, and a new one will be created.
+         */
+        private createTween(obj: any): Phaser.Tween {
+            this.tweens.removeFrom(obj);
+            let result = this.tweens.create(obj);
+            return result;
+        }
+
+        /**
+         * Simulate the tween currently applied to an object's property
+         * 
+         * This may be heavy work and should only be done in testing code.
+         */
+        simulate(obj: any, property: string, points = 5, duration = 1000): number[] {
+            let tween = first(this.tweens.getAll().concat((<any>this.tweens)._add), tween => tween.target === obj && !tween.pendingDelete);
+            if (tween) {
+                return [obj[property]].concat(tween.generateData(points - 1).map(data => data[property]));
+            } else {
+                return [];
+            }
+        }
+
+        /**
+         * Display an object, with opacity transition
+         */
+        show(obj: IAnimationFadeable, duration = 1000, alpha = 1): void {
             if (!obj.visible) {
                 obj.alpha = 0;
                 obj.visible = true;
             }
-            var tween = game.tweens.create(obj);
+
+            let tween = this.createTween(obj);
             tween.to({ alpha: alpha }, duration);
             tween.start();
         }
 
-        // Hide an object, fading out using opacity
-        static fadeOut(game: Phaser.Game, obj: PIXI.DisplayObject, duration: number = 1000): void {
-            var tween = game.tweens.create(obj);
+        /**
+         * Hide an object, with opacity transition
+         */
+        hide(obj: IAnimationFadeable, duration = 1000): void {
+            let tween = this.createTween(obj);
             tween.to({ alpha: 0 }, duration);
             tween.onComplete.addOnce(() => obj.visible = false);
             tween.start();
         }
 
-        // Set visibility of an object, using either fadeIn or fadeOut
-        static setVisibility(game: Phaser.Game, obj: PIXI.DisplayObject, visible: boolean, duration: number = 1000): void {
+        /**
+         * Set an object visibility, with opacity transition
+         */
+        setVisible(obj: IAnimationFadeable, visible: boolean, duration = 1000): void {
             if (visible) {
-                Animation.fadeIn(game, obj, duration);
+                this.show(obj, duration);
             } else {
-                Animation.fadeOut(game, obj, duration);
+                this.hide(obj, duration);
             }
         }
 
@@ -77,7 +124,7 @@ module TS.SpaceTac.UI {
         static moveInSpace(obj: PhaserGraphics, x: number, y: number, angle: number, rotated_obj = obj): number {
             if (x == obj.x && y == obj.y) {
                 let tween = obj.game.tweens.create(rotated_obj);
-                let duration = Animation.rotationTween(tween, angle, 0.3);
+                let duration = Animations.rotationTween(tween, angle, 0.3);
                 tween.start();
                 return duration;
             } else {

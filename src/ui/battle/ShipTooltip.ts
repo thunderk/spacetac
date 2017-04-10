@@ -118,9 +118,9 @@ module TS.SpaceTac.UI {
 
                 this.stasis.visible = !ship.alive;
 
-                Animation.fadeIn(this.game, this, 200);
+                this.battleview.animations.show(this, 200);
             } else {
-                Animation.fadeOut(this.game, this, 200);
+                this.battleview.animations.hide(this, 200);
             }
         }
 

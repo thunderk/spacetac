@@ -162,7 +162,7 @@ module TS.SpaceTac.UI {
         // Set the selected state on this icon
         setSelected(selected: boolean) {
             this.selected = selected;
-            Animation.setVisibility(this.game, this.layer_selected, this.selected, 300);
+            this.battleview.animations.setVisible(this.layer_selected, this.selected, 300);
         }
 
         // Update the active status, from the action canBeUsed result
@@ -170,7 +170,7 @@ module TS.SpaceTac.UI {
             var old_active = this.active;
             this.active = !this.action.checkCannotBeApplied(this.ship);
             if (force || (this.active != old_active)) {
-                Animation.setVisibility(this.game, this.layer_active, this.active, 500);
+                this.battleview.animations.setVisible(this.layer_active, this.active, 500);
                 this.game.tweens.create(this.layer_icon).to({ alpha: this.active ? 1 : 0.3 }, 500).start();
                 this.input.useHandCursor = this.active;
             }
@@ -181,7 +181,7 @@ module TS.SpaceTac.UI {
             var old_fading = this.fading;
             this.fading = this.active && (this.action.checkCannotBeApplied(this.ship, remaining_ap) != null);
             if (this.fading != old_fading) {
-                Animation.setVisibility(this.game, this.layer_active, this.active && !this.fading, 500);
+                this.battleview.animations.setVisible(this.layer_active, this.active && !this.fading, 500);
             }
         }
     }

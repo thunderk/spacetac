@@ -116,7 +116,7 @@ module TS.SpaceTac.UI {
 
             // LOD
             let detailed = focus && level == 2;
-            this.children.forEach(child => Animation.setVisibility(this.game, child, detailed, 300));
+            this.children.forEach(child => this.view.animations.setVisible(child, detailed, 300));
         }
     }
 }

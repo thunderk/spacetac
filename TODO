@@ -1,5 +1,4 @@
 * UI: Use a common component class, and a layer abstraction
-* UI: Fix tooltip sometimes being enormous
 * Character sheet: add tooltips (on values, slots and equipments)
 * Character sheet: add initial character creation
 * Character sheet: disable interaction during battle (except for loot screen)
@@ -16,6 +15,7 @@
 * All things displayed in battle should be updated from LogProcess forwarding, not from current game state
 * Drones: add tooltip
 * Drones: add hull points and take area damage
+* Show power usage/recovery in action bar, on action hover
 * More sound effects
 * Add a battle log display
 * Organize arena objects and information in layers

@@ -33,7 +33,7 @@ module TS.SpaceTac.UI {
          */
         setSelected(selected: boolean) {
             this.loadTexture(selected ? "character-ship-selected" : "character-ship");
-            Animation.setVisibility(this.game, this.levelup, this.ship.getAvailableUpgradePoints() > 0, 200);
+            this.sheet.view.animations.setVisible(this.levelup, this.ship.getAvailableUpgradePoints() > 0, 200);
         }
 
         /**
