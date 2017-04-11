@@ -20,7 +20,7 @@ module TS.SpaceTac.UI {
             Tools.setHoverClick(obj,
                 // enter
                 () => {
-                    this.container.visible = false;
+                    this.hide();
                     if (func(this.container)) {
                         // position
                         let bounds = obj.getBounds();
@@ -41,16 +41,11 @@ module TS.SpaceTac.UI {
                     }
                 },
                 // leave
-                () => {
-                    this.container.removeAll(true);
-                    this.container.visible = false;
-                },
+                () => this.hide(),
                 // click
-                () => {
-                    this.container.removeAll(true);
-                    this.container.visible = false;
-                }
+                () => this.hide()
             );
+            obj.onInputDown.add(() => this.hide());
         }
 
         /**
@@ -68,6 +63,14 @@ module TS.SpaceTac.UI {
          */
         bindStaticText(obj: Phaser.Button, text: string): void {
             this.bindDynamicText(obj, () => text);
+        }
+
+        /**
+         * Hide the current tooltip
+         */
+        hide(): void {
+            this.container.removeAll(true);
+            this.container.visible = false;
         }
     }
 }
