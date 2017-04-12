@@ -24,6 +24,8 @@ module TS.SpaceTac.UI.Specs {
         });
 
         it("handles hover and click on desktops and mobile targets", function (done) {
+            jasmine.clock().uninstall();
+
             let newButton: () => [Phaser.Button, any] = () => {
                 var button = new Phaser.Button(testgame.ui);
                 var funcs = {

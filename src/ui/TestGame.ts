@@ -24,6 +24,8 @@ module TS.SpaceTac.UI.Specs {
             spyOn(console, "log").and.stub();
             spyOn(console, "warn").and.stub();
 
+            jasmine.clock().install();
+
             testgame.ui = new MainUI(true);
 
             if (testgame.ui.load) {
@@ -50,6 +52,8 @@ module TS.SpaceTac.UI.Specs {
                     ui.destroy();
                 }
             });
+
+            jasmine.clock().uninstall();
         });
 
         return testgame;
