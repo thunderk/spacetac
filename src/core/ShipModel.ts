@@ -31,6 +31,9 @@ module TS.SpaceTac {
             result.push(new ShipModel("whirlwind", 1, 4, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
                 SlotType.Weapon, SlotType.Weapon));
 
+            result.push(new ShipModel("tomahawk", 1, 6, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine, SlotType.Engine,
+                SlotType.Weapon));
+
             return result;
         }
 

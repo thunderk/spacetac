@@ -113,6 +113,7 @@ module TS.SpaceTac.UI {
             // Load ships
             this.loadShip("scout");
             this.loadShip("whirlwind");
+            this.loadShip("tomahawk");
 
             // Load sounds
             this.loadSound("battle/ship-change.wav");

@@ -21,6 +21,13 @@ After making changes to sources, you need to recompile:
 
     npm run build
 
+## Credits
+
+* **[Lemaire Michael](https://thunderk.net/)** - Code and graphics
+* **Forgo Nicolas** - Ship models
+* **[Phaser](http://phaser.io)** - Game engine
+* **[Kevin MacLeod](http://www.incompetech.com/)** - Musics
+
 ## Ships
 
 ### Level and experience
