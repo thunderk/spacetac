@@ -26,6 +26,7 @@ module TS.SpaceTac.UI {
             fleet.ships.forEach((ship, index) => {
                 let offset = LOCATIONS[index];
                 let sprite = this.game.add.image(offset[0], offset[1] + 150, `ship-${ship.model}-sprite`, 0, this);
+                sprite.scale.set(64 / sprite.width);
                 sprite.anchor.set(0.5, 0.5);
             });
 
