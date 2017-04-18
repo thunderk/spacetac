@@ -77,6 +77,7 @@ module TS.SpaceTac {
             expect(battle.playing_ship_index).toBeNull();
 
             // Force play order
+            iforeach(battle.iships(), ship => ship.setAttribute("initiative", 1));
             var gen = new SkewedRandomGenerator([0.1, 0.2, 0.0]);
             battle.throwInitiative(gen);
 

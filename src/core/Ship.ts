@@ -108,8 +108,6 @@ module TS.SpaceTac {
             this.sticky_effects = [];
             this.slots = [];
 
-            this.attributes.initiative.set(1);  // TODO Should not be needed
-
             this.arena_x = 0;
             this.arena_y = 0;
             this.arena_angle = 0;

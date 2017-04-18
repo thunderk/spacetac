@@ -1,15 +1,5 @@
 module TS.SpaceTac {
     /**
-     * Quality of loot.
-     */
-    export enum LootQuality {
-        WEAK,
-        COMMON,
-        FINE,
-        PREMIUM
-    }
-
-    /**
      * A leveled value is either a number multiplied by the level, or a custom iterator
      */
     type LeveledValue = number | Iterator<number>;
@@ -90,29 +80,34 @@ module TS.SpaceTac {
      */
     export class LootTemplate {
         // Type of slot this equipment will fit in
-        slot: SlotType;
+        slot: SlotType
 
         // Base name that will be given to generated equipment
-        name: string;
+        name: string
+
+        // Generic description of the equipment
+        description: string
 
         // Modifiers applied to obtain the "common" equipment, based on level
         protected base_modifiers: ((equipment: Equipment, level: number) => void)[];
 
-        constructor(slot: SlotType, name: string) {
+        constructor(slot: SlotType, name: string, description = "") {
             this.slot = slot;
             this.name = name;
+            this.description = description;
             this.base_modifiers = [];
         }
 
         /**
          * Generate a new equipment of a given level and quality
          */
-        generate(level: number, quality: LootQuality = LootQuality.COMMON, random = RandomGenerator.global): Equipment {
+        generate(level: number, quality = EquipmentQuality.COMMON, random = RandomGenerator.global): Equipment {
             let result = new Equipment();
 
             result.slot_type = this.slot;
             result.code = (this.name || "").toLowerCase().replace(/ /g, "");
             result.name = this.name;
+            result.description = this.description;
 
             this.base_modifiers.forEach(modifier => modifier(result, level));
 

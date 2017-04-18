@@ -92,14 +92,20 @@ module TS.SpaceTac {
             effects.forEach(([ship, effect]) => effect.applyOnShip(ship));
         }
 
-        getEffectsDescription(): string[] {
-            return this.effects.map(effect => {
+        getEffectsDescription(): string {
+            if (this.effects.length == 0) {
+                return "";
+            }
+
+            let desc = `${this.name} (power usage ${this.power}, max range ${this.range}km)`;
+            let effects = this.effects.map(effect => {
                 let suffix = this.blast ? `in ${this.blast}km radius` : "on target";
                 if (effect instanceof StickyEffect) {
                     suffix = `for ${effect.duration} turn${effect.duration > 1 ? "s" : ""} ${suffix}`;
                 }
-                return effect.getDescription() + " " + suffix;
+                return "- " + effect.getDescription() + " " + suffix;
             });
+            return `${desc}:\n${effects.join("\n")}`;
         }
     }
 }

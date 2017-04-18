@@ -1,35 +1,56 @@
 module TS.SpaceTac {
+    /**
+     * Quality of loot.
+     */
+    export enum EquipmentQuality {
+        WEAK,
+        COMMON,
+        FINE,
+        PREMIUM,
+        LEGENDARY
+    }
+
     // Piece of equipment to attach in slots
     export class Equipment {
         // Type of slot this equipment can fit in
-        slot_type: SlotType | null;
+        slot_type: SlotType | null
 
         // Actual slot this equipment is attached to
-        attached_to: Slot | null = null;
+        attached_to: Slot | null = null
 
         // Identifiable equipment code (may be used by UI to customize visual effects)
-        code: string;
+        code: string
 
         // Equipment name
-        name: string;
+        name: string
+
+        // Equipment generic description
+        description: string
+
+        // Indicative equipment level
+        level = 1
+
+        // Indicative equipment quality
+        quality = EquipmentQuality.COMMON
 
         // Minimum skills to be able to equip this
-        requirements: { [key: string]: number };
+        requirements: { [key: string]: number }
 
         // Permanent effects on the ship that equips this
-        effects: BaseEffect[];
+        effects: BaseEffect[]
 
         // Action available when equipped
-        action: BaseAction;
+        action: BaseAction
 
         // Usage made of this equipment (will lower the sell price)
-        usage: number;
+        usage: number
 
         // Basic constructor
         constructor(slot: SlotType | null = null, code = "equipment") {
             this.slot_type = slot;
             this.code = code;
             this.name = code;
+            this.description = "";
             this.requirements = {};
             this.effects = [];
             this.action = new BaseAction("nothing", "Do nothing", false);
@@ -37,6 +58,28 @@ module TS.SpaceTac {
 
         jasmineToString() {
             return this.attached_to ? `${this.attached_to.ship.name} - ${this.name}` : this.name;
+        }
+
+        /**
+         * Get the fully qualified name (e.g. "Level 4 Strong Ray of Death")
+         */
+        getFullName(): string {
+            let name = this.name;
+            if (this.quality != EquipmentQuality.COMMON) {
+                name = capitalize(EquipmentQuality[this.quality].toLowerCase()) + " " + name;
+            }
+            return `Level ${this.level} ${name}`;
+        }
+
+        /**
+         * Get the full textual description for this equipment (without the full name).
+         */
+        getFullDescription(): string {
+            let description = this.getEffectsDescription();
+            if (this.description) {
+                description += "\n\n" + this.description;
+            }
+            return description;
         }
 
         /**
@@ -83,18 +126,19 @@ module TS.SpaceTac {
         /**
          * Get a human readable description of the effects of this equipment
          */
-        getActionDescription(): string {
+        getEffectsDescription(): string {
             let parts: string[] = [];
 
-            this.effects.forEach(effect => {
-                parts.push(`- Equip: ${effect.getDescription()}`);
-            });
+            if (this.effects.length > 0) {
+                parts.push(["When equipped:"].concat(this.effects.map(effect => "- " + effect.getDescription())).join("\n"));
+            }
 
-            this.action.getEffectsDescription().forEach(desc => {
-                parts.push(`- ${this.action.name}: ${desc}`);
-            });
+            let action_desc = this.action.getEffectsDescription();
+            if (action_desc != "") {
+                parts.push(action_desc);
+            }
 
-            return parts.length > 0 ? parts.join("\n") : "does nothing";
+            return parts.length > 0 ? parts.join("\n\n") : "does nothing";
         }
     }
 }

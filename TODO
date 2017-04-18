@@ -1,5 +1,4 @@
 * UI: Use a common component class, and a layer abstraction
-* Character sheet: add tooltips (on values, slots and equipments)
 * Character sheet: add initial character creation
 * Character sheet: disable interaction during battle (except for loot screen)
 * Character sheet: paginate loot and shop items

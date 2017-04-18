@@ -1,7 +1,7 @@
 module TS.SpaceTac.Equipments {
-    describe("BasicPowerCore", function () {
+    describe("NuclearReactor", function () {
         it("generates equipment based on level", function () {
-            let template = new BasicPowerCore();
+            let template = new NuclearReactor();
 
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_energy": 1 });

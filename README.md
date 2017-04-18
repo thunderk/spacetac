@@ -23,8 +23,8 @@ After making changes to sources, you need to recompile:
 
 ## Credits
 
-* **[Lemaire Michael](https://thunderk.net/)** - Code and graphics
-* **Forgo Nicolas** - Ship models
+* **[Michaël Lemaire](https://thunderk.net/)** - Code and graphics
+* **Nicolas Forgo** - Ship models
 * **[Phaser](http://phaser.io)** - Game engine
 * **[Kevin MacLeod](http://www.incompetech.com/)** - Musics
 

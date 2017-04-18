@@ -37,7 +37,7 @@ module TS.SpaceTac {
 
         // Add an engine, allowing a ship to move *distance*, for each action points
         static addEngine(ship: Ship, distance: number): Equipment {
-            var equipment = this.getOrGenEquipment(ship, SlotType.Engine, new Equipments.ConventionalEngine(), true);
+            var equipment = this.getOrGenEquipment(ship, SlotType.Engine, new Equipments.RocketEngine(), true);
             (<MoveAction>equipment.action).distance_per_power = distance;
             return equipment;
         }
@@ -53,7 +53,7 @@ module TS.SpaceTac {
 
         // Set a ship action points, adding/updating an equipment if needed
         static setShipAP(ship: Ship, points: number, recovery: number = 0): void {
-            var equipment = this.getOrGenEquipment(ship, SlotType.Power, new Equipments.BasicPowerCore());
+            var equipment = this.getOrGenEquipment(ship, SlotType.Power, new Equipments.NuclearReactor());
 
             equipment.effects.forEach(effect => {
                 if (effect instanceof AttributeEffect) {
@@ -74,7 +74,7 @@ module TS.SpaceTac {
         // Set a ship hull and shield points, adding/updating an equipment if needed
         static setShipHP(ship: Ship, hull_points: number, shield_points: number): void {
             var armor = TestTools.getOrGenEquipment(ship, SlotType.Hull, new Equipments.IronHull());
-            var shield = TestTools.getOrGenEquipment(ship, SlotType.Shield, new Equipments.BasicForceField());
+            var shield = TestTools.getOrGenEquipment(ship, SlotType.Shield, new Equipments.ForceField());
 
             armor.effects.forEach(effect => {
                 if (effect instanceof AttributeEffect) {

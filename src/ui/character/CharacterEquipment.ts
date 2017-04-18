@@ -32,7 +32,6 @@ module TS.SpaceTac.UI {
         sheet: CharacterSheet
         item: Equipment
         container: CharacterEquipmentContainer
-        tooltip: string
         price: number
 
         constructor(sheet: CharacterSheet, equipment: Equipment, container: CharacterEquipmentContainer) {
@@ -42,7 +41,6 @@ module TS.SpaceTac.UI {
             this.sheet = sheet;
             this.item = equipment;
             this.container = container;
-            this.tooltip = equipment.name;
             this.price = 0;
 
             this.container.addEquipment(this, null, false);
@@ -52,8 +50,7 @@ module TS.SpaceTac.UI {
             this.setupDragDrop(sheet);
             this.snapToContainer();
 
-            // TODO better tooltip (with equipment characteristics)
-            sheet.view.tooltip.bindDynamicText(this, () => this.tooltip);
+            sheet.view.tooltip.bind(this, container => this.fillTooltip(container));
         }
 
         /**
@@ -142,6 +139,15 @@ module TS.SpaceTac.UI {
                     }
                 }
             }
+        }
+
+        /**
+         * Fill a tooltip with equipment data
+         */
+        fillTooltip(container: Phaser.Group): boolean {
+            container.add(new Phaser.Text(container.game, 0, 0, this.item.getFullName(), { font: "bold 20pt Arial", fill: "#cccccc" }));
+            container.add(new Phaser.Text(container.game, 0, 40, this.item.getFullDescription(), { font: "18pt Arial", fill: "#cccccc" }));
+            return true;
         }
     }
 }

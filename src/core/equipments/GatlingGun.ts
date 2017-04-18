@@ -3,7 +3,7 @@
 module TS.SpaceTac.Equipments {
     export class GatlingGun extends LootTemplate {
         constructor() {
-            super(SlotType.Weapon, "Gatling Gun");
+            super(SlotType.Weapon, "Gatling Gun", "Mechanical weapon using loads of metal bullets propelled by guided explosions");
 
             this.setSkillsRequirements({ "skill_material": 1 });
             this.addFireAction(irepeat(3), irepeat(600), 0, [

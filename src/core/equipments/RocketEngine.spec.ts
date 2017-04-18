@@ -1,7 +1,7 @@
 module TS.SpaceTac.Equipments {
-    describe("ConventionalEngine", function () {
+    describe("Rocket Engine", function () {
         it("generates equipment based on level", function () {
-            let template = new ConventionalEngine();
+            let template = new RocketEngine();
 
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_energy": 1 });

@@ -76,5 +76,9 @@ module TS.SpaceTac {
         protected customApply(ship: Ship, target: Target) {
             ship.moveTo(target.x, target.y);
         }
+
+        getEffectsDescription(): string {
+            return `Move: ${this.distance_per_power}km per power point`;
+        }
     }
 }

@@ -32,5 +32,10 @@ module TS.SpaceTac {
         getFullCode(): string {
             return this.code + "-" + this.attrcode;
         }
+
+        getDescription(): string {
+            let attrname = SHIP_ATTRIBUTES[this.attrcode].name;
+            return `${attrname} ${this.value > 0 ? "+" : "-"}${Math.abs(this.value)}`;
+        }
     }
 }

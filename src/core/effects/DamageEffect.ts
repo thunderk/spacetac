@@ -50,7 +50,7 @@ module TS.SpaceTac {
         }
 
         getDescription(): string {
-            return `${this.value} damage`;
+            return `do ${this.value} damage`;
         }
     }
 }

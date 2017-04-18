@@ -106,9 +106,9 @@ module TS.SpaceTac.UI {
             this.loadImage("character/price-tag.png");
             this.loadImage("character/scroll.png");
             this.loadImage("equipment/ironhull.png");
-            this.loadImage("equipment/basicforcefield.png");
-            this.loadImage("equipment/basicpowercore.png");
-            this.loadImage("equipment/conventionalengine.png");
+            this.loadImage("equipment/forcefield.png");
+            this.loadImage("equipment/nuclearreactor.png");
+            this.loadImage("equipment/rocketengine.png");
 
             // Load ships
             this.loadShip("scout");

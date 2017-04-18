@@ -3,7 +3,7 @@
 module TS.SpaceTac.Equipments {
     export class SubMunitionMissile extends LootTemplate {
         constructor() {
-            super(SlotType.Weapon, "SubMunition Missile");
+            super(SlotType.Weapon, "SubMunition Missile", "Explosive missile releasing small shelled payloads, that will in turn explode on impact");
 
             this.setSkillsRequirements({ "skill_material": 1 });
             this.addFireAction(irepeat(4), istep(500, irepeat(20)), istep(150, irepeat(5)), [

@@ -1,9 +1,9 @@
 /// <reference path="../LootTemplate.ts"/>
 
 module TS.SpaceTac.Equipments {
-    export class BasicPowerCore extends LootTemplate {
+    export class NuclearReactor extends LootTemplate {
         constructor() {
-            super(SlotType.Power, "Basic Power Core");
+            super(SlotType.Power, "Nuclear Reactor", "A standard nuclear power core, drawing power from atom fusion cycles");
 
             this.setSkillsRequirements({ "skill_energy": 1 });
             this.addAttributeEffect("initiative", istep(1));

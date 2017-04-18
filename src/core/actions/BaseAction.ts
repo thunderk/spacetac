@@ -119,10 +119,10 @@ module TS.SpaceTac {
         }
 
         /**
-         * Get description of effects (one line per effect)
+         * Get textual description of effects
          */
-        getEffectsDescription(): string[] {
-            return [];
+        getEffectsDescription(): string {
+            return "";
         }
     }
 }

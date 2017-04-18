@@ -5,6 +5,7 @@ module TS.SpaceTac.Specs {
             battle.fleets[0].addShip(new Ship(null, "0-0"));
             battle.fleets[1].addShip(new Ship(null, "1-0"));
             battle.fleets[1].addShip(new Ship(null, "1-1"));
+            iforeach(battle.iships(), ship => ship.setAttribute("initiative", 1));
 
             var random = new SkewedRandomGenerator([0, 0.5, 1]);
             battle.throwInitiative(random);

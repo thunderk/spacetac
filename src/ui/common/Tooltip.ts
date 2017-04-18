@@ -30,7 +30,7 @@ module TS.SpaceTac.UI {
                         let ttbounds = this.container.getBounds();
                         let background = new Phaser.Graphics(this.container.game, 0, 0);
                         this.container.add(background);
-                        background.beginFill(0x202225, 0.8);
+                        background.beginFill(0x202225, 0.9);
                         background.drawRect(-10, -10, ttbounds.width + 20, ttbounds.height + 20);
                         background.endFill();
                         this.container.sendToBack(background);

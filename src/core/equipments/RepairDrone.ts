@@ -6,7 +6,7 @@ module TS.SpaceTac.Equipments {
      */
     export class RepairDrone extends LootTemplate {
         constructor() {
-            super(SlotType.Weapon, "Repair Drone");
+            super(SlotType.Weapon, "Repair Drone", "Drone able to repair small hull breaches, remotely controlled by human pilots");
 
             this.setSkillsRequirements({ "skill_human": 1 });
             this.addDroneAction(irepeat(4), istep(300, irepeat(10)), istep(1, irepeat(0.2)), istep(100, irepeat(10)), [

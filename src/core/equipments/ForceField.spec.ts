@@ -1,7 +1,7 @@
 module TS.SpaceTac.Equipments {
-    describe("BasicForceField", function () {
+    describe("ForceField", function () {
         it("generates equipment based on level", function () {
-            let template = new BasicForceField();
+            let template = new ForceField();
 
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_energy": 1 });
