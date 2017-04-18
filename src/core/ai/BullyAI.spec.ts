@@ -25,10 +25,10 @@ module TS.SpaceTac.Specs {
             expect(result.length).toBe(0);
 
             var weapon1 = new Equipment(SlotType.Weapon, "weapon1");
-            weapon1.target_effects.push(new DamageEffect(50));
+            weapon1.action = new FireWeaponAction(weapon1, 1, 1, 1, [new DamageEffect(50)]);
             ai.ship.addSlot(SlotType.Weapon).attach(weapon1);
             var weapon2 = new Equipment(SlotType.Weapon, "weapon2");
-            weapon2.target_effects.push(new DamageEffect(100));
+            weapon2.action = new FireWeaponAction(weapon1, 1, 1, 1, [new DamageEffect(100)]);
             ai.ship.addSlot(SlotType.Weapon).attach(weapon2);
             var weapon3 = new Equipment(SlotType.Weapon, "weapon3");
             ai.ship.addSlot(SlotType.Weapon).attach(weapon3);
@@ -207,16 +207,11 @@ module TS.SpaceTac.Specs {
             ai.move_margin = 0;
 
             var engine = new Equipment(SlotType.Engine);
-            engine.distance = 1;
-            engine.ap_usage = 2;
-            engine.action = new MoveAction(engine);
+            engine.action = new MoveAction(engine, 0.5);
             ai.ship.addSlot(SlotType.Engine).attach(engine);
 
             var weapon = new Equipment(SlotType.Weapon);
-            weapon.distance = 6;
-            weapon.ap_usage = 1;
-            weapon.target_effects.push(new DamageEffect(20));
-            weapon.action = new FireWeaponAction(weapon);
+            weapon.action = new FireWeaponAction(weapon, 1, 6, 0, [new DamageEffect(20)]);
             ai.ship.addSlot(SlotType.Weapon).attach(weapon);
 
             ai.ship.values.power.setMaximal(10);

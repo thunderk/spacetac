@@ -36,7 +36,7 @@ module TS.SpaceTac.UI {
             return 66;
         }
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
-            if (equipment.item.slot !== null && this.sheet.ship.getFreeSlot(equipment.item.slot)) {
+            if (equipment.item.slot_type !== null && this.sheet.ship.getFreeSlot(equipment.item.slot_type)) {
                 if (test) {
                     return true;
                 } else {
@@ -47,7 +47,7 @@ module TS.SpaceTac.UI {
             }
         }
         removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
-            if (contains(this.sheet.ship.listEquipment(equipment.item.slot), equipment.item)) {
+            if (contains(this.sheet.ship.listEquipment(equipment.item.slot_type), equipment.item)) {
                 if (test) {
                     return true;
                 } else {

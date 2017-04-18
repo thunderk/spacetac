@@ -1,14 +1,14 @@
-/// <reference path="AbstractWeapon.ts"/>
+/// <reference path="../LootTemplate.ts"/>
 
 module TS.SpaceTac.Equipments {
-    export class GatlingGun extends AbstractWeapon {
+    export class GatlingGun extends LootTemplate {
         constructor() {
-            super("Gatling Gun", 50, 100);
+            super(SlotType.Weapon, "Gatling Gun");
 
-            this.setRange(600, 600, false);
-
-            this.ap_usage = new IntegerRange(3, 4);
-            this.min_level = new IntegerRange(1, 3);
+            this.setSkillsRequirements({ "skill_material": 1 });
+            this.addFireAction(irepeat(3), irepeat(600), 0, [
+                new EffectTemplate(new DamageEffect(), { "value": istep(50, irepeat(10)) })
+            ]);
         }
     }
 }

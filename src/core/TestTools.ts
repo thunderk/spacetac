@@ -25,7 +25,8 @@ module TS.SpaceTac {
             var equipped = ship.listEquipment(slot);
             var equipment: Equipment;
             if (force_generate || equipped.length === 0) {
-                equipment = template.generateFixed(0);
+                equipment = template.generate(1);
+                equipment.requirements = {};
                 ship.addSlot(slot).attach(equipment);
             } else {
                 equipment = equipped[0];
@@ -37,8 +38,7 @@ module TS.SpaceTac {
         // Add an engine, allowing a ship to move *distance*, for each action points
         static addEngine(ship: Ship, distance: number): Equipment {
             var equipment = this.getOrGenEquipment(ship, SlotType.Engine, new Equipments.ConventionalEngine(), true);
-            equipment.ap_usage = 1;
-            equipment.distance = distance;
+            (<MoveAction>equipment.action).distance_per_power = distance;
             return equipment;
         }
 
@@ -47,11 +47,7 @@ module TS.SpaceTac {
          */
         static addWeapon(ship: Ship, damage = 100, power_usage = 1, max_distance = 100, blast = 0): Equipment {
             var equipment = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            equipment.action = new FireWeaponAction(equipment, blast != 0, "Test Weapon");
-            equipment.ap_usage = power_usage;
-            equipment.blast = blast;
-            equipment.distance = max_distance;
-            equipment.target_effects.push(new DamageEffect(damage));
+            equipment.action = new FireWeaponAction(equipment, power_usage, max_distance, blast, [new DamageEffect(damage)], "Test Weapon");
             return equipment;
         }
 
@@ -59,12 +55,14 @@ module TS.SpaceTac {
         static setShipAP(ship: Ship, points: number, recovery: number = 0): void {
             var equipment = this.getOrGenEquipment(ship, SlotType.Power, new Equipments.BasicPowerCore());
 
-            equipment.permanent_effects.forEach(effect => {
+            equipment.effects.forEach(effect => {
                 if (effect instanceof AttributeEffect) {
                     if (effect.attrcode === "power_capacity") {
                         effect.value = points;
                     } else if (effect.attrcode === "power_recovery") {
                         effect.value = recovery;
+                    } else if (effect.attrcode === "power_initial") {
+                        effect.value = points;
                     }
                 }
             });
@@ -78,14 +76,14 @@ module TS.SpaceTac {
             var armor = TestTools.getOrGenEquipment(ship, SlotType.Hull, new Equipments.IronHull());
             var shield = TestTools.getOrGenEquipment(ship, SlotType.Shield, new Equipments.BasicForceField());
 
-            armor.permanent_effects.forEach(effect => {
+            armor.effects.forEach(effect => {
                 if (effect instanceof AttributeEffect) {
                     if (effect.attrcode === "hull_capacity") {
                         effect.value = hull_points;
                     }
                 }
             });
-            shield.permanent_effects.forEach((effect: BaseEffect) => {
+            shield.effects.forEach((effect: BaseEffect) => {
                 if (effect instanceof AttributeEffect) {
                     if (effect.attrcode === "shield_capacity") {
                         effect.value = shield_points;

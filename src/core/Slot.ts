@@ -28,7 +28,7 @@ module TS.SpaceTac {
 
         // Attach an equipment in this slot
         attach(equipment: Equipment): Equipment {
-            if (this.type === equipment.slot && equipment.canBeEquipped(this.ship)) {
+            if (this.type === equipment.slot_type && equipment.canBeEquipped(this.ship)) {
                 this.attached = equipment;
                 equipment.attached_to = this;
 

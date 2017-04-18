@@ -19,16 +19,16 @@ module TS.SpaceTac.UI.Specs {
             expect(bar.action_icons[0].action.code).toEqual("endturn");
 
             // Add an engine, with move action
-            ship.addSlot(SlotType.Engine).attach((new Equipments.ConventionalEngine()).generate());
+            TestTools.addEngine(ship, 50);
             bar.setShip(ship);
             expect(bar.action_icons.length).toBe(2);
             expect(bar.action_icons[0].action.code).toEqual("move");
 
             // Add a weapon, with fire action
-            ship.addSlot(SlotType.Weapon).attach((new Equipments.GatlingGun()).generate());
+            TestTools.addWeapon(ship, 10, 1, 100);
             bar.setShip(ship);
             expect(bar.action_icons.length).toBe(3);
-            expect(bar.action_icons[1].action.code).toEqual("fire-gatlinggun");
+            expect(bar.action_icons[1].action.code).toEqual("fire-equipment");
         });
 
         it("mark actions that would become unavailable after use", function () {
@@ -37,16 +37,9 @@ module TS.SpaceTac.UI.Specs {
             var ship = new Ship();
             ship.arena_x = 1;
             ship.arena_y = 8;
-            var engine = (new Equipments.ConventionalEngine()).generate();
-            engine.ap_usage = 8;
-            engine.distance = 4;
-            ship.addSlot(SlotType.Engine).attach(engine);
-            var weapon1 = (new Equipments.GatlingGun()).generate();
-            weapon1.ap_usage = 3;
-            ship.addSlot(SlotType.Weapon).attach(weapon1);
-            var weapon2 = (new Equipments.GatlingGun()).generate();
-            weapon2.ap_usage = 5;
-            ship.addSlot(SlotType.Weapon).attach(weapon2);
+            var engine = TestTools.addEngine(ship, 0.5);
+            var weapon1 = TestTools.addWeapon(ship, 100, 3);
+            var weapon2 = TestTools.addWeapon(ship, 100, 5);
             battleview.battle.playing_ship = ship;
             battleview.player = ship.getPlayer();
 

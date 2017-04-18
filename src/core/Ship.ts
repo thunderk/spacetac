@@ -206,6 +206,10 @@ module TS.SpaceTac {
          * Get a ship value
          */
         getValue(name: keyof ShipValues): number {
+            if (!this.values.hasOwnProperty(name)) {
+                console.error(`No such ship value: ${name}`);
+                return 0;
+            }
             return this.values[name].get();
         }
 
@@ -238,6 +242,10 @@ module TS.SpaceTac {
          * Get a ship attribute's current value
          */
         getAttribute(name: keyof ShipAttributes): number {
+            if (!this.attributes.hasOwnProperty(name)) {
+                console.error(`No such ship attribute: ${name}`);
+                return 0;
+            }
             return this.attributes[name].get();
         }
 
@@ -496,7 +504,7 @@ module TS.SpaceTac {
          * Returns true if successful
          */
         equip(item: Equipment, from_cargo = true): boolean {
-            let free_slot = first(this.slots, slot => slot.type == item.slot && !slot.attached);
+            let free_slot = first(this.slots, slot => slot.type == item.slot_type && !slot.attached);
 
             if (free_slot && (!from_cargo || remove(this.cargo, item))) {
                 free_slot.attach(item);
@@ -627,7 +635,7 @@ module TS.SpaceTac {
 
             this.slots.forEach(slot => {
                 if (slot.attached) {
-                    slot.attached.permanent_effects.forEach(effect => {
+                    slot.attached.effects.forEach(effect => {
                         if (effect.code == code) {
                             result.push(effect);
                         }

@@ -35,8 +35,7 @@ module TS.SpaceTac.Specs {
             // Force lucky finds with one template
             var looter = new LootGenerator(random, false);
             var template = new LootTemplate(SlotType.Power, "Nuclear Reactor");
-            template.min_level.set(3, 7);
-            template.distance.set(0, 5);
+            template.setSkillsRequirements({ "skill_energy": istep(4) });
             looter.templates = [template];
             spyOn(outcome, "getLootGenerator").and.returnValue(looter);
 
@@ -45,11 +44,9 @@ module TS.SpaceTac.Specs {
             expect(outcome.loot.length).toBe(3);
             expect(outcome.loot[0].name).toBe("0a");
             expect(outcome.loot[1].name).toBe("Nuclear Reactor");
-            expect(outcome.loot[1].min_level).toBe(4);
-            expect(outcome.loot[1].distance).toEqual(1);
+            expect(outcome.loot[1].requirements).toEqual({ "skill_energy": 7 });
             expect(outcome.loot[2].name).toBe("Nuclear Reactor");
-            expect(outcome.loot[2].min_level).toBe(6);
-            expect(outcome.loot[2].distance).toBeCloseTo(4, 0.000001);
+            expect(outcome.loot[2].requirements).toEqual({ "skill_energy": 9 });
         });
     });
 }

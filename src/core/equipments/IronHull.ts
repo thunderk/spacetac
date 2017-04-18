@@ -5,9 +5,8 @@ module TS.SpaceTac.Equipments {
         constructor() {
             super(SlotType.Hull, "Iron Hull");
 
-            this.min_level = new IntegerRange(1, 3);
-
-            this.increaseAttribute("hull_capacity", 200, 300);
+            this.setSkillsRequirements({ "skill_material": 1 });
+            this.addAttributeEffect("hull_capacity", istep(200, irepeat(50)));
         }
     }
 }

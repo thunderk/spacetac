@@ -29,13 +29,6 @@ module TS.SpaceTac {
             this.on_turn_end = on_turn_end;
         }
 
-        getModifiedCopy(modifiers: EffectTemplateModifier[], power: number): BaseEffect {
-            let [current, base] = binpartition(modifiers, modifier => modifier.name == "duration");
-            let result = <StickyEffect>super.getModifiedCopy(current, power);
-            result.base = result.base.getModifiedCopy(base, power);
-            return result;
-        }
-
         applyOnShip(ship: Ship): boolean {
             ship.addStickyEffect(new StickyEffect(this.base, this.duration, this.on_stick, this.on_turn_end));
             if (this.on_stick) {

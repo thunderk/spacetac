@@ -50,8 +50,8 @@ module TS.SpaceTac.UI {
             return 0;
         }
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
-            if (this.ship != this.sheet.ship && equipment.item.slot !== null) {
-                let slot = this.ship.getFreeSlot(equipment.item.slot);
+            if (this.ship != this.sheet.ship && equipment.item.slot_type !== null) {
+                let slot = this.ship.getFreeSlot(equipment.item.slot_type);
                 if (slot) {
                     if (test) {
                         return true;

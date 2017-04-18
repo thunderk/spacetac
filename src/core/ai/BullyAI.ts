@@ -53,7 +53,7 @@ module TS.SpaceTac {
 
         // List all weapons
         listAllWeapons(): Equipment[] {
-            return this.ship.listEquipment(SlotType.Weapon).filter(equipement => any(equipement.target_effects, effect => effect instanceof DamageEffect));
+            return this.ship.listEquipment(SlotType.Weapon).filter(equipement => equipement.action instanceof FireWeaponAction && any(equipement.action.effects, effect => effect instanceof DamageEffect));
         }
 
         // List all available maneuvers for the playing ship

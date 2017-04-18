@@ -10,8 +10,9 @@ module TS.SpaceTac {
          * Generate a random stock
          */
         generateStock(items: number) {
+            // TODO other levels
             let generator = new LootGenerator();
-            this.stock = nna(range(items).map(i => generator.generate()));
+            this.stock = nna(range(items).map(i => generator.generate(1)));
 
             this.sortStock();
         }

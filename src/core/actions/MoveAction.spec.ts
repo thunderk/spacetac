@@ -9,9 +9,7 @@ module TS.SpaceTac {
             ship.arena_x = 0;
             ship.arena_y = 0;
             var engine = new Equipment();
-            engine.distance = 1;
-            engine.ap_usage = 2;
-            var action = new MoveAction(engine);
+            var action = new MoveAction(engine, 0.5);
 
             expect(action.getDistanceByActionPoint(ship)).toBe(0.5);
 
@@ -46,9 +44,7 @@ module TS.SpaceTac {
             ship.arena_x = 0;
             ship.arena_y = 0;
             var engine = new Equipment();
-            engine.distance = 1;
-            engine.ap_usage = 1;
-            var action = new MoveAction(engine);
+            var action = new MoveAction(engine, 1);
             battle.playing_ship = ship;
 
             spyOn(console, "warn").and.stub();
@@ -84,12 +80,12 @@ module TS.SpaceTac {
             var battle = TestTools.createBattle(1, 1);
             var ship = battle.fleets[0].ships[0];
             var enemy = battle.fleets[1].ships[0];
-            var engine = TestTools.addEngine(ship, 10);
             TestTools.setShipAP(ship, 100);
             ship.setArenaPosition(5, 5);
             enemy.setArenaPosition(10, 5);
 
-            var action = new MoveAction(engine);
+            var action = new MoveAction(new Equipment());
+            action.distance_per_power = 10;
             action.safety_distance = 2;
 
             var result = action.checkLocationTarget(ship, Target.newFromLocation(7, 5));

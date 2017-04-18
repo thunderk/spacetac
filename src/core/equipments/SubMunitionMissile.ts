@@ -1,15 +1,14 @@
-/// <reference path="AbstractWeapon.ts"/>
+/// <reference path="../LootTemplate.ts"/>
 
 module TS.SpaceTac.Equipments {
-    export class SubMunitionMissile extends AbstractWeapon {
+    export class SubMunitionMissile extends LootTemplate {
         constructor() {
-            super("SubMunition Missile", 30, 50);
+            super(SlotType.Weapon, "SubMunition Missile");
 
-            this.setRange(500, 700, true);
-            this.setBlast(150, 200);
-
-            this.ap_usage = new IntegerRange(4, 5);
-            this.min_level = new IntegerRange(1, 3);
+            this.setSkillsRequirements({ "skill_material": 1 });
+            this.addFireAction(irepeat(4), istep(500, irepeat(20)), istep(150, irepeat(5)), [
+                new EffectTemplate(new DamageEffect(), { "value": istep(30, irepeat(2)) })
+            ]);
         }
     }
 }

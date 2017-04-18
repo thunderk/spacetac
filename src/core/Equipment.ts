@@ -1,11 +1,11 @@
 module TS.SpaceTac {
     // Piece of equipment to attach in slots
     export class Equipment {
+        // Type of slot this equipment can fit in
+        slot_type: SlotType | null;
+
         // Actual slot this equipment is attached to
         attached_to: Slot | null = null;
-
-        // Type of slot this equipment can fit in
-        slot: SlotType | null;
 
         // Identifiable equipment code (may be used by UI to customize visual effects)
         code: string;
@@ -13,41 +13,25 @@ module TS.SpaceTac {
         // Equipment name
         name: string;
 
-        // Maximal distance allowed to target
-        distance: number;
-
-        // Effect area's radius
-        blast: number;
-
-        // Duration
-        duration: number;
-
-        // Action Points usage
-        ap_usage: number;
-
-        // Level requirement
-        min_level: number;
-
-        // Minimal attribute to be able to equip this equipment
+        // Minimum skills to be able to equip this
         requirements: { [key: string]: number };
 
-        // Action associated with this equipment
+        // Permanent effects on the ship that equips this
+        effects: BaseEffect[];
+
+        // Action available when equipped
         action: BaseAction;
 
-        // Permanent effects on the ship that equips the equipment
-        permanent_effects: BaseEffect[];
-
-        // Effects on target
-        target_effects: BaseEffect[];
+        // Usage made of this equipment (will lower the sell price)
+        usage: number;
 
         // Basic constructor
         constructor(slot: SlotType | null = null, code = "equipment") {
-            this.slot = slot;
+            this.slot_type = slot;
             this.code = code;
             this.name = code;
             this.requirements = {};
-            this.permanent_effects = [];
-            this.target_effects = [];
+            this.effects = [];
             this.action = new BaseAction("nothing", "Do nothing", false);
         }
 
@@ -55,8 +39,23 @@ module TS.SpaceTac {
             return this.attached_to ? `${this.attached_to.ship.name} - ${this.name}` : this.name;
         }
 
-        // Returns true if the equipment can be equipped on a ship
-        //  This checks *requirements* against the ship capabilities
+        /**
+         * Get the minimum level at which the requirements in skill may be fulfilled.
+         * 
+         * This is informative and is not directly enforced. It will only be enforced by skills requirements.
+         */
+        getMinimumLevel(): number {
+            let points = sum(values(this.requirements));
+            return ShipLevel.getLevelForPoints(points);
+        }
+
+        /**
+         * Returns true if the equipment can be equipped on a ship.
+         * 
+         * This checks *requirements* against the ship skills.
+         * 
+         * This does not check where the equipment currently is (except if is it already attached and should be detached first).
+         */
         canBeEquipped(ship: Ship): boolean {
             if (this.attached_to) {
                 return false;
@@ -71,7 +70,9 @@ module TS.SpaceTac {
             }
         }
 
-        // Detach from the slot it is attached to
+        /**
+         * Detach from the slot it is attached to
+         */
         detach(): void {
             if (this.attached_to) {
                 this.attached_to.attached = null;
@@ -79,21 +80,21 @@ module TS.SpaceTac {
             }
         }
 
-        // Get a human readable description of the effects of this equipment
+        /**
+         * Get a human readable description of the effects of this equipment
+         */
         getActionDescription(): string {
-            if (this.permanent_effects.length == 0 && this.target_effects.length == 0) {
-                return "does nothing";
-            } else {
-                var result: string[] = [];
-                this.target_effects.forEach(effect => {
-                    let suffix = this.blast ? `in ${this.blast}km radius` : "on target";
-                    if (effect instanceof StickyEffect) {
-                        suffix = `for ${effect.duration} turn${effect.duration > 1 ? "s" : ""} ${suffix}`;
-                    }
-                    result.push("- " + effect.getDescription() + " " + suffix);
-                });
-                return result.join("\n");
-            }
+            let parts: string[] = [];
+
+            this.effects.forEach(effect => {
+                parts.push(`- Equip: ${effect.getDescription()}`);
+            });
+
+            this.action.getEffectsDescription().forEach(desc => {
+                parts.push(`- ${this.action.name}: ${desc}`);
+            });
+
+            return parts.length > 0 ? parts.join("\n") : "does nothing";
         }
     }
 }

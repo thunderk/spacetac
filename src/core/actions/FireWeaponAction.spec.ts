@@ -16,13 +16,9 @@ module TS.SpaceTac {
             let fleet = new Fleet();
             let ship = new Ship(fleet);
             let equipment = new Equipment(SlotType.Weapon, "testweapon");
-            equipment.blast = 10;
-            equipment.ap_usage = 5;
-            equipment.distance = 100;
             let effect = new BaseEffect("testeffect");
             let mock_apply = spyOn(effect, "applyOnShip").and.stub();
-            equipment.target_effects.push(effect);
-            let action = new FireWeaponAction(equipment, true);
+            let action = new FireWeaponAction(equipment, 5, 100, 10, [effect]);
 
             TestTools.setShipAP(ship, 10);
 

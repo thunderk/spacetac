@@ -33,19 +33,38 @@ module TS.SpaceTac.Specs {
         });
 
         it("generates a description of the effects", function () {
-            var equipment = new Equipment();
-            equipment.distance = 3;
+            let equipment = new Equipment();
             expect(equipment.getActionDescription()).toEqual("does nothing");
 
-            equipment.target_effects.push(new DamageEffect(50));
-            expect(equipment.getActionDescription()).toEqual("- 50 damage on target");
+            let action = new FireWeaponAction(equipment, 1, 200, 0, [
+                new DamageEffect(50)
+            ]);
+            equipment.action = action;
+            expect(equipment.getActionDescription()).toEqual("- Fire: 50 damage on target");
 
-            equipment.blast = 20;
-            expect(equipment.getActionDescription()).toEqual("- 50 damage in 20km radius");
+            action.blast = 20;
+            expect(equipment.getActionDescription()).toEqual("- Fire: 50 damage in 20km radius");
 
-            equipment.blast = 0;
-            equipment.target_effects.push(new StickyEffect(new AttributeLimitEffect("shield_capacity", 200), 3));
-            expect(equipment.getActionDescription()).toEqual("- 50 damage on target\n- limit shield capacity to 200 for 3 turns on target");
+            action.blast = 0;
+            action.effects.push(new StickyEffect(new AttributeLimitEffect("shield_capacity", 200), 3));
+            expect(equipment.getActionDescription()).toEqual("- Fire: 50 damage on target\n- Fire: limit shield capacity to 200 for 3 turns on target");
+        });
+
+        it("gets a minimal level, based on skills requirements", function () {
+            let equipment = new Equipment();
+            expect(equipment.getMinimumLevel()).toBe(1);
+
+            equipment.requirements["skill_human"] = 10;
+            expect(equipment.getMinimumLevel()).toBe(1);
+
+            equipment.requirements["skill_time"] = 1;
+            expect(equipment.getMinimumLevel()).toBe(2);
+
+            equipment.requirements["skill_gravity"] = 2;
+            expect(equipment.getMinimumLevel()).toBe(2);
+
+            equipment.requirements["skill_electronics"] = 4;
+            expect(equipment.getMinimumLevel()).toBe(3);
         });
     });
 }

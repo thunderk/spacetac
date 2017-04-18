@@ -51,7 +51,7 @@ module TS.SpaceTac {
             if (engines.length == 0) {
                 return null;
             } else {
-                engines.sort((a, b) => cmp(b.distance, a.distance));
+                engines.sort((a, b) => (a.action instanceof MoveAction && b.action instanceof MoveAction) ? cmp(b.action.distance_per_power, a.action.distance_per_power) : 0);
                 return engines[0];
             }
         }

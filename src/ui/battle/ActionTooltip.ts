@@ -52,11 +52,12 @@ module TS.SpaceTac.UI {
                 this.position.set(action.x, action.y + action.height + 44);
                 this.main_title.setText(action.action.equipment ? action.action.equipment.name : action.action.name);
                 this.sub_title.setText(action.action.equipment ? action.action.name : "");
-                let cost = action.action.equipment ? `Cost: ${action.action.equipment.ap_usage} power` : "";
                 if (action.action instanceof MoveAction) {
-                    cost += ` per ${action.action.equipment.distance}km`;
+                    this.cost.setText(`Cost: 1 power per ${action.action.distance_per_power}km`);
+                } else {
+                    let cost = action.action.getActionPointsUsage(action.ship, null);
+                    this.cost.setText(cost == 0 ? "" : `Cost: ${cost} power`);
                 }
-                this.cost.setText(cost);
                 this.description.setText(action.action.equipment ? action.action.equipment.getActionDescription() : "");
 
                 let position = this.bar.action_icons.indexOf(action);

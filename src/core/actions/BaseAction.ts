@@ -39,7 +39,7 @@ module TS.SpaceTac {
             if (remaining_ap === null) {
                 remaining_ap = ship.values.power.get();
             }
-            var ap_usage = this.equipment ? this.equipment.ap_usage : 0;
+            var ap_usage = this.getActionPointsUsage(ship, null);
             if (remaining_ap >= ap_usage) {
                 return null;
             } else {
@@ -49,29 +49,17 @@ module TS.SpaceTac {
 
         // Get the number of action points the action applied to a target would use
         getActionPointsUsage(ship: Ship, target: Target | null): number {
-            if (this.equipment) {
-                return this.equipment.ap_usage;
-            } else {
-                return 0;
-            }
+            return 0;
         }
 
         // Get the range of this action
         getRangeRadius(ship: Ship): number {
-            if (this.equipment) {
-                return this.equipment.distance;
-            } else {
-                return 0;
-            }
+            return 0;
         }
 
         // Get the effect area radius of this action
         getBlastRadius(ship: Ship): number {
-            if (this.equipment) {
-                return this.equipment.blast;
-            } else {
-                return 0;
-            }
+            return 0;
         }
 
         // Method to check if a target is applicable for this action
@@ -128,6 +116,13 @@ module TS.SpaceTac {
 
         // Method to reimplement to apply a action
         protected customApply(ship: Ship, target: Target | null) {
+        }
+
+        /**
+         * Get description of effects (one line per effect)
+         */
+        getEffectsDescription(): string[] {
+            return [];
         }
     }
 }

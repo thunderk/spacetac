@@ -38,10 +38,10 @@ module TS.SpaceTac {
          */
         static produceBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             // TODO Work with groups of 3, 4 ...
-            let weapons = ifilter(iarray(ship.listEquipment(SlotType.Weapon)), weapon => weapon.blast > 0);
+            let weapons = ifilter(iarray(ship.listEquipment(SlotType.Weapon)), weapon => weapon.action instanceof FireWeaponAction && weapon.action.blast > 0);
             let enemies = battle.ienemies(ship.getPlayer());
             let couples = ifilter(icombine(enemies, enemies), ([e1, e2]) => e1 != e2);
-            let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.blast * 2);
+            let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.action.getBlastRadius(ship) * 2);
             let result = imap(candidates, ([weapon, [e1, e2]]) => new Maneuver(ship, weapon, Target.newFromLocation((e1.arena_x + e2.arena_x) / 2, (e1.arena_y + e2.arena_y) / 2)));
             return result;
         }

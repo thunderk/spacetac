@@ -1,21 +1,17 @@
-/// <reference path="AbstractDrone.ts"/>
+/// <reference path="../LootTemplate.ts"/>
 
 module TS.SpaceTac.Equipments {
     /**
      * Drone that repairs damage done to the hull.
      */
-    export class RepairDrone extends AbstractDrone {
+    export class RepairDrone extends LootTemplate {
         constructor() {
-            super("Repair Drone");
+            super(SlotType.Weapon, "Repair Drone");
 
-            this.min_level = new IntegerRange(1, 4);
-
-            this.setLifetime(1, 2);
-            this.setDeployDistance(300, 400);
-            this.setEffectRadius(100, 200);
-            this.setPowerConsumption(4, 5);
-
-            this.addEffect(new ValueEffect("hull"), 30, 60);
+            this.setSkillsRequirements({ "skill_human": 1 });
+            this.addDroneAction(irepeat(4), istep(300, irepeat(10)), istep(1, irepeat(0.2)), istep(100, irepeat(10)), [
+                new EffectTemplate(new ValueEffect("hull"), { "value": istep(30, irepeat(3)) })
+            ]);
         }
     }
 }

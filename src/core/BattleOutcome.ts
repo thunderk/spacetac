@@ -54,7 +54,7 @@ module TS.SpaceTac {
         //  The equipment will be in the dead ship range
         generateLootItem(random: RandomGenerator, base_level: number): Equipment | null {
             var generator = this.getLootGenerator(random);
-            var level = new IntegerRange(base_level - 1, base_level + 1);
+            var level = random.randInt(Math.max(base_level - 1, 1), base_level + 1);
             return generator.generate(level);
         }
     }

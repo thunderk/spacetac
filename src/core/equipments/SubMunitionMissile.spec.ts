@@ -1,6 +1,26 @@
-module TS.SpaceTac.Specs {
-    describe("SubMunitionMissile", () => {
-        it("hits several targets in circle", () => {
+module TS.SpaceTac.Equipments {
+    describe("SubMunitionMissile", function () {
+        it("generates equipment based on level", function () {
+            let template = new SubMunitionMissile();
+
+            let equipment = template.generate(1);
+            expect(equipment.requirements).toEqual({ "skill_material": 1 });
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 500, 150, [new DamageEffect(30)]));
+
+            equipment = template.generate(2);
+            expect(equipment.requirements).toEqual({ "skill_material": 2 });
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 520, 155, [new DamageEffect(32)]));
+
+            equipment = template.generate(3);
+            expect(equipment.requirements).toEqual({ "skill_material": 3 });
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 540, 160, [new DamageEffect(34)]));
+
+            equipment = template.generate(10);
+            expect(equipment.requirements).toEqual({ "skill_material": 10 });
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 680, 195, [new DamageEffect(48)]));
+        });
+
+        it("hits several targets in circle", function () {
             var battle = TestTools.createBattle(1, 2);
 
             var ship = battle.fleets[0].ships[0];
@@ -15,10 +35,11 @@ module TS.SpaceTac.Specs {
             TestTools.setShipHP(enemy2, 50, 30);
 
             var template = new Equipments.SubMunitionMissile();
-            var equipment = template.generateFixed(0);
-            equipment.distance = 5;
-            equipment.blast = 1.5;
-            (<DamageEffect>equipment.target_effects[0]).value = 20;
+            var equipment = template.generate(1);
+            let action = <FireWeaponAction>equipment.action;
+            action.range = 5;
+            action.blast = 1.5;
+            (<DamageEffect>action.effects[0]).value = 20;
 
             var checkHP = (h1: number, s1: number, h2: number, s2: number, h3: number, s3: number): void => {
                 expect(ship.values.hull.get()).toBe(h1);

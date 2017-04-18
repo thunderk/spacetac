@@ -5,9 +5,7 @@ module TS.SpaceTac.Specs {
             let ship = new Ship();
             TestTools.setShipAP(ship, ship_ap);
             TestTools.addEngine(ship, engine_distance);
-            let action = new FireWeaponAction(new Equipment(), true);
-            action.equipment.distance = distance;
-            action.equipment.ap_usage = weapon_ap;
+            let action = new FireWeaponAction(new Equipment(), weapon_ap, distance);
             let simulator = new MoveFireSimulator(ship);
             return [ship, simulator, action];
         }
@@ -23,7 +21,7 @@ module TS.SpaceTac.Specs {
             let engine4 = TestTools.addEngine(ship, 70);
             let best = simulator.findBestEngine();
             expect(best).toBe(engine3);
-            expect((<Equipment>best).distance).toBe(150);
+            expect((<MoveAction>nn(best).action).distance_per_power).toBe(150);
         });
 
         it("fires directly when in range", function () {

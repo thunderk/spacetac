@@ -47,13 +47,13 @@ module TS.SpaceTac.Specs {
 
             slot = ship.addSlot(SlotType.Engine);
             equipment = new Equipment();
-            equipment.slot = slot.type;
+            equipment.slot_type = slot.type;
             equipment.action = new MoveAction(equipment);
             slot.attach(equipment);
 
             slot = ship.addSlot(SlotType.Weapon);
             equipment = new Equipment();
-            equipment.slot = slot.type;
+            equipment.slot_type = slot.type;
             slot.attach(equipment);
 
             actions = ship.getAvailableActions();
@@ -69,14 +69,14 @@ module TS.SpaceTac.Specs {
 
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment();
-            equipment.slot = slot.type;
-            equipment.permanent_effects.push(new AttributeEffect("power_capacity", 4));
+            equipment.slot_type = slot.type;
+            equipment.effects.push(new AttributeEffect("power_capacity", 4));
             slot.attach(equipment);
 
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment();
-            equipment.slot = slot.type;
-            equipment.permanent_effects.push(new AttributeEffect("power_capacity", 5));
+            equipment.slot_type = slot.type;
+            equipment.effects.push(new AttributeEffect("power_capacity", 5));
             slot.attach(equipment);
 
             ship.updateAttributes();
@@ -246,9 +246,13 @@ module TS.SpaceTac.Specs {
         it("recover action points at end of turn", function () {
             var ship = new Ship();
 
-            var power_core_template = new Equipments.BasicPowerCore();
-            ship.addSlot(SlotType.Power).attach(power_core_template.generateFixed(0));
-            ship.updateAttributes();
+            let power_generator = new Equipment(SlotType.Power);
+            power_generator.effects = [
+                new AttributeEffect("power_capacity", 8),
+                new AttributeEffect("power_recovery", 3),
+                new AttributeEffect("power_initial", 4)
+            ]
+            ship.addSlot(SlotType.Power).attach(power_generator);
 
             expect(ship.values.power.get()).toBe(0);
             ship.initializeActionPoints();

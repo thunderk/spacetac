@@ -1,23 +1,49 @@
 /// <reference path="BaseAction.ts"/>
 
 module TS.SpaceTac {
-    // Action to fire a weapon on another ship, or in space
+    /**
+     * Action to fire a weapon on another ship, or in space
+     */
     export class FireWeaponAction extends BaseAction {
-        // Boolean set to true if the weapon can target space
-        can_target_space: boolean;
+        // Power consumption
+        power: number;
+
+        // Maximal range of the weapon
+        range: number
+
+        // Blast radius
+        blast: number;
+
+        // Effects applied on hit
+        effects: BaseEffect[];
 
         // Equipment cannot be null
         equipment: Equipment;
 
-        constructor(equipment: Equipment, can_target_space = false, name = "Fire") {
+        constructor(equipment: Equipment, power = 1, range = 0, blast = 0, effects: BaseEffect[] = [], name = "Fire") {
             super("fire-" + equipment.code, name, true, equipment);
 
-            this.can_target_space = can_target_space;
+            this.power = power;
+            this.range = range;
+            this.effects = effects;
+            this.blast = blast;
+        }
+
+        getActionPointsUsage(ship: Ship, target: Target | null): number {
+            return this.power;
+        }
+
+        getRangeRadius(ship: Ship): number {
+            return this.range;
+        }
+
+        getBlastRadius(ship: Ship): number {
+            return this.blast;
         }
 
         checkLocationTarget(ship: Ship, target: Target): Target | null {
-            if (target && this.can_target_space) {
-                target = target.constraintInRange(ship.arena_x, ship.arena_y, this.equipment.distance);
+            if (target && this.blast > 0) {
+                target = target.constraintInRange(ship.arena_x, ship.arena_y, this.range);
                 return target;
             } else {
                 return null;
@@ -30,9 +56,9 @@ module TS.SpaceTac {
                 return null;
             } else {
                 // Check if target is in range
-                if (this.can_target_space) {
+                if (this.blast > 0) {
                     return this.checkLocationTarget(ship, new Target(target.x, target.y));
-                } else if (target.isInRange(ship.arena_x, ship.arena_y, this.equipment.distance)) {
+                } else if (target.isInRange(ship.arena_x, ship.arena_y, this.range)) {
                     return target;
                 } else {
                     return null;
@@ -49,7 +75,7 @@ module TS.SpaceTac {
             let battle = ship.getBattle();
             let ships = (blast && battle) ? battle.collectShipsInCircle(target, blast, true) : ((target.ship && target.ship.alive) ? [target.ship] : []);
             ships.forEach(ship => {
-                this.equipment.target_effects.forEach(effect => result.push([ship, effect]));
+                this.effects.forEach(effect => result.push([ship, effect]));
             });
             return result;
         }
@@ -64,6 +90,16 @@ module TS.SpaceTac {
             // Apply effects
             let effects = this.getEffects(ship, target);
             effects.forEach(([ship, effect]) => effect.applyOnShip(ship));
+        }
+
+        getEffectsDescription(): string[] {
+            return this.effects.map(effect => {
+                let suffix = this.blast ? `in ${this.blast}km radius` : "on target";
+                if (effect instanceof StickyEffect) {
+                    suffix = `for ${effect.duration} turn${effect.duration > 1 ? "s" : ""} ${suffix}`;
+                }
+                return effect.getDescription() + " " + suffix;
+            });
         }
     }
 }

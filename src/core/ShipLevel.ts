@@ -23,10 +23,24 @@ module TS.SpaceTac {
         /**
          * Force experience gain, to reach a given level
          */
-        forceLevel(level: number) {
+        forceLevel(level: number): void {
             while (this.level < level) {
-                this.addExperience(this.getNextGoal());
-                this.checkLevelUp();
+                this.forceLevelUp();
+            }
+        }
+
+        /**
+         * Force a level up
+         */
+        forceLevelUp(): void {
+            let old_level = this.level;
+
+            this.addExperience(this.getNextGoal() - this.experience);
+            this.checkLevelUp();
+
+            if (old_level >= this.level) {
+                // security against infinite loops
+                throw new Error("No effective level up");
             }
         }
 
@@ -37,7 +51,7 @@ module TS.SpaceTac {
          */
         checkLevelUp(): boolean {
             let changed = false;
-            while (this.experience > this.getNextGoal()) {
+            while (this.experience >= this.getNextGoal()) {
                 this.level++;
                 changed = true;
             }
@@ -47,7 +61,7 @@ module TS.SpaceTac {
         /**
          * Add experience points
          */
-        addExperience(points: number) {
+        addExperience(points: number): void {
             this.experience += points;
         }
 
@@ -56,6 +70,26 @@ module TS.SpaceTac {
          */
         getSkillPoints(): number {
             return 5 + 5 * this.level;
+        }
+
+        /**
+         * Get the level needed to have a given total of points
+         */
+        static getLevelForPoints(points: number): number {
+            let lev = new ShipLevel();
+            while (lev.getSkillPoints() < points) {
+                lev.forceLevelUp();
+            }
+            return lev.level;
+        }
+
+        /**
+         * Get the points available at a given level
+         */
+        static getPointsForLevel(level: number): number {
+            let lev = new ShipLevel();
+            lev.forceLevel(level);
+            return lev.getSkillPoints();
         }
     }
 }

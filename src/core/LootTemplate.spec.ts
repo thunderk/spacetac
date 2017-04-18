@@ -1,123 +1,84 @@
+/// <reference path="effects/BaseEffect.ts" />
+
 module TS.SpaceTac.Specs {
+    class FakeEffect extends BaseEffect {
+        fakevalue: number
+        constructor(val = 5) {
+            super("fake");
+            this.fakevalue = val;
+        }
+    }
+
     describe("LootTemplate", () => {
-        it("interpolates between weak and strong loot", () => {
-            var template = new LootTemplate(SlotType.Weapon, "Bulletator");
+        it("applies requirements on skills", function () {
+            let template = new LootTemplate(SlotType.Hull, "Hull");
+            template.setSkillsRequirements({ "skill_energy": 1, "skill_gravity": istep(2, istep(1)) });
 
-            template.distance = new Range(1, 3);
-            template.blast = new Range(1, 1);
-            template.duration = new IntegerRange(1, 2);
-            template.ap_usage = new Range(4, 12);
-            template.min_level = new IntegerRange(5, 9);
-            template.addRequirement("skill_energy", 2, 8);
-            template.addRequirement("skill_human", 5);
+            let result = template.generate(1);
+            expect(result.requirements).toEqual({
+                "skill_energy": 1,
+                "skill_gravity": 2
+            });
 
-            var equipment = template.generateFixed(0.0);
-
-            expect(equipment.slot).toEqual(SlotType.Weapon);
-            expect(equipment.code).toEqual("bulletator");
-            expect(equipment.name).toEqual("Bulletator");
-            expect(equipment.distance).toEqual(1);
-            expect(equipment.blast).toEqual(1);
-            expect(equipment.duration).toEqual(1);
-            expect(equipment.ap_usage).toEqual(4);
-            expect(equipment.min_level).toEqual(5);
-            expect(equipment.requirements).toEqual({
+            result = template.generate(2);
+            expect(result.requirements).toEqual({
                 "skill_energy": 2,
-                "skill_human": 5
+                "skill_gravity": 3
             });
 
-            equipment = template.generateFixed(1.0);
-
-            expect(equipment.slot).toEqual(SlotType.Weapon);
-            expect(equipment.code).toEqual("bulletator");
-            expect(equipment.name).toEqual("Bulletator");
-            expect(equipment.distance).toEqual(3);
-            expect(equipment.blast).toEqual(1);
-            expect(equipment.duration).toEqual(2);
-            expect(equipment.ap_usage).toEqual(12);
-            expect(equipment.min_level).toEqual(9);
-            expect(equipment.requirements).toEqual({
-                "skill_energy": 8,
-                "skill_human": 5
-            });
-
-            equipment = template.generateFixed(0.5);
-
-            expect(equipment.slot).toEqual(SlotType.Weapon);
-            expect(equipment.code).toEqual("bulletator");
-            expect(equipment.name).toEqual("Bulletator");
-            expect(equipment.distance).toEqual(2);
-            expect(equipment.blast).toEqual(1);
-            expect(equipment.duration).toEqual(2);
-            expect(equipment.ap_usage).toEqual(8);
-            expect(equipment.min_level).toEqual(7);
-            expect(equipment.requirements).toEqual({
-                "skill_energy": 5,
-                "skill_human": 5
+            result = template.generate(10);
+            expect(result.requirements).toEqual({
+                "skill_energy": 10,
+                "skill_gravity": 47
             });
         });
 
-        it("restricts power range to stay in a level range", () => {
-            var template = new LootTemplate(SlotType.Weapon, "Bulletator");
-            template.min_level = new IntegerRange(4, 7);
+        it("applies attributes permenant effects", function () {
+            let template = new LootTemplate(SlotType.Shield, "Shield");
+            template.addAttributeEffect("shield_capacity", irange(undefined, 50, 10));
 
-            var result: any;
+            let result = template.generate(1);
+            expect(result.effects).toEqual([new AttributeEffect("shield_capacity", 50)]);
 
-            result = template.getPowerRangeForLevel(new IntegerRange(4, 7));
-            expect(result.min).toBe(0);
-            expect(result.max).toBe(1);
-
-            result = template.getPowerRangeForLevel(new IntegerRange(1, 10));
-            expect(result.min).toBe(0);
-            expect(result.max).toBe(1);
-
-            result = template.getPowerRangeForLevel(new IntegerRange(5, 6));
-            expect(result.min).toBeCloseTo(0.25, 0.000001);
-            expect(result.max).toBeCloseTo(0.75, 0.000001);
-
-            result = template.getPowerRangeForLevel(new IntegerRange(5, 12));
-            expect(result.min).toBeCloseTo(0.25, 0.000001);
-            expect(result.max).toBe(1);
-
-            result = template.getPowerRangeForLevel(new IntegerRange(3, 6));
-            expect(result.min).toBe(0);
-            expect(result.max).toBeCloseTo(0.75, 0.000001);
-
-            result = template.getPowerRangeForLevel(new IntegerRange(10, 15));
-            expect(result).toBeNull();
-
-            result = template.getPowerRangeForLevel(new IntegerRange(1, 3));
-            expect(result).toBeNull();
-
-            result = template.getPowerRangeForLevel(new IntegerRange(5, 5));
-            expect(result.min).toBeCloseTo(0.25, 0.000001);
-            expect(result.max).toBeCloseTo(0.5, 0.000001);
+            result = template.generate(2);
+            expect(result.effects).toEqual([new AttributeEffect("shield_capacity", 60)]);
         });
 
-        it("adds modulated effects", () => {
-            let template = new LootTemplate(SlotType.Weapon, "Bulletator");
-            template.addEffect(new DamageEffect(), 5, 10, true);
+        it("adds move actions", function () {
+            let template = new LootTemplate(SlotType.Engine, "Engine");
+            template.addMoveAction(irange(undefined, 100, 10));
 
-            expect(template.generateFixed(0).target_effects).toEqual([new DamageEffect(5)]);
-            expect(template.generateFixed(1).target_effects).toEqual([new DamageEffect(10)]);
+            let result = template.generate(1);
+            expect(result.action).toEqual(new MoveAction(result, 100));
 
-            template.addEffect(new AttributeEffect("initiative"), 1, 2, false);
-
-            expect(template.generateFixed(0).permanent_effects).toEqual([new AttributeEffect("initiative", 1)]);
-            expect(template.generateFixed(1).permanent_effects).toEqual([new AttributeEffect("initiative", 2)]);
+            result = template.generate(2);
+            expect(result.action).toEqual(new MoveAction(result, 110));
         });
 
-        it("adds modulated sticky effects", () => {
-            let template = new LootTemplate(SlotType.Weapon, "Bulletator");
-            template.addStickyEffect(new DamageEffect(), 5, 10, 1, 2, true, false, true);
+        it("adds fire actions", function () {
+            let template = new LootTemplate(SlotType.Weapon, "Weapon");
+            template.addFireAction(istep(1), istep(100), istep(50), [
+                new EffectTemplate(new FakeEffect(3), { "fakevalue": istep(8) })
+            ]);
 
-            expect(template.generateFixed(0).target_effects).toEqual([new StickyEffect(new DamageEffect(5), 1, true, false)]);
-            expect(template.generateFixed(1).target_effects).toEqual([new StickyEffect(new DamageEffect(10), 2, true, false)]);
+            let result = template.generate(1);
+            expect(result.action).toEqual(new FireWeaponAction(result, 1, 100, 50, [new FakeEffect(8)]));
 
-            template.addStickyEffect(new AttributeLimitEffect("power_recovery"), 1, 2, 1, null, false, true, false);
+            result = template.generate(2);
+            expect(result.action).toEqual(new FireWeaponAction(result, 2, 101, 51, [new FakeEffect(9)]));
+        });
 
-            expect(template.generateFixed(0).permanent_effects).toEqual([new StickyEffect(new AttributeLimitEffect("power_recovery", 1), 1, false, true)]);
-            expect(template.generateFixed(1).permanent_effects).toEqual([new StickyEffect(new AttributeLimitEffect("power_recovery", 2), 1, false, true)]);
+        it("adds drone actions", function () {
+            let template = new LootTemplate(SlotType.Weapon, "Weapon");
+            template.addDroneAction(istep(1), istep(100), istep(2), istep(50), [
+                new EffectTemplate(new FakeEffect(3), { "fakevalue": istep(8) })
+            ]);
+
+            let result = template.generate(1);
+            expect(result.action).toEqual(new DeployDroneAction(result, 1, 100, 2, 50, [new FakeEffect(8)]));
+
+            result = template.generate(2);
+            expect(result.action).toEqual(new DeployDroneAction(result, 2, 101, 3, 51, [new FakeEffect(9)]));
         });
     });
 }

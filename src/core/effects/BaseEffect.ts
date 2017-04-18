@@ -10,17 +10,6 @@ module TS.SpaceTac {
             this.code = code;
         }
 
-        /**
-         * Get a copy, modified by template modifiers
-         */
-        getModifiedCopy(modifiers: EffectTemplateModifier[], power: number): BaseEffect {
-            let result = copy(this);
-            modifiers.forEach(modifier => {
-                result[modifier.name] = modifier.range.getProportional(power);
-            });
-            return result;
-        }
-
         // Apply ponctually the effect on a given ship
         //  Return true if the effect could be applied
         applyOnShip(ship: Ship): boolean {

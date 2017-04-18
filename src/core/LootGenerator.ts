@@ -31,29 +31,15 @@ module TS.SpaceTac {
             this.templates = templates;
         }
 
-        // Generate a random equipment
+        // TODO Add generator from skills
+        // TODO Add generator of other qualities
+
+        // Generate a random equipment for a specific level
         //  If slot is specified, it will generate an equipment for this slot type specifically
-        //  If level is specified, it will generate an equipment with level requirement inside this range
         //  If no equipment could be generated from available templates, null is returned
-        generate(level: IntegerRange | null = null, slot: SlotType | null = null): Equipment | null {
+        generate(level: number, slot: SlotType | null = null): Equipment | null {
             // Generate equipments matching conditions, with each template
-            var equipments: Equipment[] = [];
-            this.templates.forEach((template: LootTemplate) => {
-                if (slot !== null && slot != template.slot) {
-                    return;
-                }
-
-                var equipment: Equipment | null;
-                if (level) {
-                    equipment = template.generateInLevelRange(level, this.random);
-                } else {
-                    equipment = template.generate(this.random);
-                }
-
-                if (equipment) {
-                    equipments.push(equipment);
-                }
-            });
+            let equipments = this.templates.filter(template => slot == null || slot == template.slot).map(template => template.generate(level));
 
             // No equipment could be generated with given conditions
             if (equipments.length === 0) {

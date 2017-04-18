@@ -5,8 +5,7 @@ module TS.SpaceTac.Specs {
         constructor() {
             super(SlotType.Shield, "Hexagrid Shield");
 
-            this.min_level = new IntegerRange(2, 100);
-            this.ap_usage = new Range(6, 15);
+            this.setSkillsRequirements({ "skill_time": istep(2) });
         }
     }
 
@@ -16,12 +15,11 @@ module TS.SpaceTac.Specs {
             generator.templates = [new TestTemplate()];
             generator.random = new SkewedRandomGenerator([0.5]);
 
-            var equipment = generator.generate(new IntegerRange(3, 6));
+            var equipment = generator.generate(2);
             if (equipment) {
-                expect(equipment.slot).toBe(SlotType.Shield);
+                expect(equipment.slot_type).toBe(SlotType.Shield);
                 expect(equipment.name).toEqual("Hexagrid Shield");
-                expect(equipment.min_level).toBe(5);
-                expect(equipment.ap_usage).toBeCloseTo(6.2727, 0.00001);
+                expect(equipment.requirements).toEqual({ "skill_time": 3 });
             } else {
                 fail("No equipment generated");
             }

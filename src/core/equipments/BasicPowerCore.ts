@@ -5,12 +5,11 @@ module TS.SpaceTac.Equipments {
         constructor() {
             super(SlotType.Power, "Basic Power Core");
 
-            this.min_level = new IntegerRange(1, 1);
-
-            this.increaseAttribute("initiative", 1);
-            this.increaseAttribute("power_capacity", 8);
-            this.increaseAttribute("power_initial", 4);
-            this.increaseAttribute("power_recovery", 3);
+            this.setSkillsRequirements({ "skill_energy": 1 });
+            this.addAttributeEffect("initiative", istep(1));
+            this.addAttributeEffect("power_capacity", istep(6));
+            this.addAttributeEffect("power_initial", istep(4, irepeat(0.5)));
+            this.addAttributeEffect("power_recovery", istep(3, irepeat(0.3)));
         }
     }
 }

@@ -15,10 +15,7 @@ module TS.SpaceTac {
         it("allows to deploy in range", function () {
             let ship = new Ship();
             ship.setArenaPosition(0, 0);
-            let equipment = new Equipment();
-            equipment.distance = 8;
-            equipment.ap_usage = 0;
-            let action = new DeployDroneAction(equipment);
+            let action = new DeployDroneAction(new Equipment(), 0, 8);
 
             expect(action.checkTarget(ship, new Target(8, 0, null))).toEqual(new Target(8, 0, null));
             expect(action.checkTarget(ship, new Target(12, 0, null))).toEqual(new Target(8, 0, null));
@@ -34,14 +31,8 @@ module TS.SpaceTac {
             ship.setArenaPosition(0, 0);
             battle.playing_ship = ship;
             TestTools.setShipAP(ship, 3);
-            let equipment = new Equipment();
-            equipment.code = "testdrone";
-            equipment.distance = 8;
-            equipment.ap_usage = 2;
-            equipment.duration = 2;
-            equipment.blast = 4;
-            equipment.target_effects.push(new DamageEffect(50));
-            let action = new DeployDroneAction(equipment);
+            let equipment = new Equipment(SlotType.Weapon, "testdrone");
+            let action = new DeployDroneAction(equipment, 2, 8, 2, 4, [new DamageEffect(50)]);
 
             battle.log.clear();
             battle.log.addFilter("value");

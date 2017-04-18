@@ -8,7 +8,7 @@
     "build": "tsc -p .",
     "pretest": "tsc -p .",
     "test": "karma start spec/support/karma.conf.js && remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html",
-    "prestart": "tsc -p .",
+    "prestart": "tsc -p . || true",
     "start": "live-server out --host=127.0.0.1 --port=8012 --ignore=coverage",
     "codecov": "remap-istanbul -i out/coverage/coverage.json -o out/coverage/mapped.json -t json && codecov -f out/coverage/mapped.json"
   },

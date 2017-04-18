@@ -2,8 +2,8 @@ module TS.SpaceTac {
     describe("BaseAction", function () {
         it("check if equipment can be used with remaining AP", function () {
             var equipment = new Equipment(SlotType.Hull);
-            equipment.ap_usage = 3;
             var action = new BaseAction("test", "Test", false, equipment);
+            spyOn(action, "getActionPointsUsage").and.returnValue(3);
             var ship = new Ship();
             ship.addSlot(SlotType.Hull).attach(equipment);
             ship.values.power.setMaximal(10);

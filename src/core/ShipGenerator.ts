@@ -26,9 +26,12 @@ module TS.SpaceTac {
                 result.addSlot(slot);
             });
 
+            // Set all skills to 1 (to be able to use at least basic equipment)
+            keys(result.skills).forEach(skill => result.upgradeSkill(skill));
+
             // Fill equipment slots
             result.slots.forEach((slot: Slot) => {
-                var equipment = loot.generate(new IntegerRange(level, level), slot.type);
+                var equipment = loot.generate(level, slot.type);
                 if (equipment) {
                     slot.attach(equipment)
                     if (slot.attached !== equipment) {

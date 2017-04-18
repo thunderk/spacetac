@@ -5,9 +5,8 @@ module TS.SpaceTac.Equipments {
         constructor() {
             super(SlotType.Shield, "Basic Force Field");
 
-            this.min_level = new IntegerRange(1, 3);
-
-            this.increaseAttribute("shield_capacity", 100, 200);
+            this.setSkillsRequirements({ "skill_energy": 1 });
+            this.addAttributeEffect("shield_capacity", istep(100, irepeat(50)));
         }
     }
 }

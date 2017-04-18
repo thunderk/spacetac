@@ -1,6 +1,8 @@
 module TS.SpaceTac {
     // Action to move to a given location
     export class MoveAction extends BaseAction {
+        // Distance allowed for each power point
+        distance_per_power: number;
 
         // Safety distance from other ships
         safety_distance: number;
@@ -8,9 +10,10 @@ module TS.SpaceTac {
         // Equipment cannot be null (engine)
         equipment: Equipment;
 
-        constructor(equipment: Equipment) {
+        constructor(equipment: Equipment, distance_per_power = 0) {
             super("move", "Move", true, equipment);
 
+            this.distance_per_power = distance_per_power;
             this.safety_distance = 50;
         }
 
@@ -37,18 +40,18 @@ module TS.SpaceTac {
             }
 
             var distance = Target.newFromShip(ship).getDistanceTo(target);
-            return Math.ceil(this.equipment.ap_usage * distance / this.equipment.distance);
+            return Math.ceil(distance / this.distance_per_power);
         }
 
         getRangeRadius(ship: Ship): number {
-            return ship.values.power.get() * this.equipment.distance / this.equipment.ap_usage;
+            return ship.values.power.get() * this.distance_per_power;
         }
 
         /**
          * Get the distance that may be traveled with 1 action point
          */
         getDistanceByActionPoint(ship: Ship): number {
-            return this.equipment.distance / this.equipment.ap_usage;
+            return this.distance_per_power;
         }
 
         checkLocationTarget(ship: Ship, target: Target): Target {

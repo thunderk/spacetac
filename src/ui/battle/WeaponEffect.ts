@@ -127,13 +127,15 @@ module TS.SpaceTac.UI {
             missile.rotation = this.source.getAngleTo(this.destination);
             this.layer.addChild(missile);
 
+            let blast_radius = this.weapon.action.getBlastRadius(this.source.ship || new Ship());
+
             let tween = this.ui.tweens.create(missile);
             tween.to({ x: this.destination.x, y: this.destination.y }, 1000);
             tween.onComplete.addOnce(() => {
                 missile.destroy();
-                if (this.weapon.blast) {
+                if (blast_radius > 0) {
                     let blast = new Phaser.Image(this.ui, this.destination.x, this.destination.y, "battle-weapon-blast");
-                    let scaling = this.weapon.blast * 2 / (blast.width * 0.9);
+                    let scaling = blast_radius * 2 / (blast.width * 0.9);
                     blast.anchor.set(0.5, 0.5);
                     blast.scale.set(0.001, 0.001);
                     let tween1 = this.ui.tweens.create(blast.scale).to({ x: scaling, y: scaling }, 1500, Phaser.Easing.Quintic.Out);
@@ -146,7 +148,7 @@ module TS.SpaceTac.UI {
             });
             tween.start();
 
-            return 1000 + (this.weapon.blast ? 1500 : 0);
+            return 1000 + (blast_radius ? 1500 : 0);
         }
 
         /**

@@ -5,13 +5,13 @@ module TS.SpaceTac.Specs {
             var slot = ship.addSlot(SlotType.Engine);
 
             var equipment = new Equipment();
-            equipment.slot = SlotType.Weapon;
+            equipment.slot_type = SlotType.Weapon;
 
             expect(slot.attached).toBeNull();
             slot.attach(equipment);
             expect(slot.attached).toBeNull();
 
-            equipment.slot = SlotType.Engine;
+            equipment.slot_type = SlotType.Engine;
 
             slot.attach(equipment);
             expect(slot.attached).toBe(equipment);
@@ -22,7 +22,7 @@ module TS.SpaceTac.Specs {
             var slot = ship.addSlot(SlotType.Shield);
 
             var equipment = new Equipment();
-            equipment.slot = SlotType.Shield;
+            equipment.slot_type = SlotType.Shield;
             equipment.requirements["skill_gravity"] = 5;
 
             expect(slot.attached).toBeNull();
