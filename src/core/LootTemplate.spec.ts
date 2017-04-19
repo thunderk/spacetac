@@ -10,6 +10,18 @@ module TS.SpaceTac.Specs {
     }
 
     describe("LootTemplate", () => {
+        it("generates equipment with correct information", function () {
+            let template = new LootTemplate(SlotType.Power, "Power Generator", "A great power generator !");
+            let result = template.generate(2, EquipmentQuality.PREMIUM);
+
+            expect(result.slot_type).toEqual(SlotType.Power);
+            expect(result.code).toEqual("powergenerator");
+            expect(result.name).toEqual("Power Generator");
+            expect(result.level).toEqual(2);
+            expect(result.quality).toEqual(EquipmentQuality.PREMIUM);
+            expect(result.description).toEqual("A great power generator !");
+        });
+
         it("applies requirements on skills", function () {
             let template = new LootTemplate(SlotType.Hull, "Hull");
             template.setSkillsRequirements({ "skill_energy": 1, "skill_gravity": istep(2, istep(1)) });

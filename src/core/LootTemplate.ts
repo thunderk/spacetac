@@ -102,10 +102,10 @@ module TS.SpaceTac {
          * Generate a new equipment of a given level and quality
          */
         generate(level: number, quality = EquipmentQuality.COMMON, random = RandomGenerator.global): Equipment {
-            let result = new Equipment();
+            let result = new Equipment(this.slot, (this.name || "").toLowerCase().replace(/ /g, ""));
 
-            result.slot_type = this.slot;
-            result.code = (this.name || "").toLowerCase().replace(/ /g, "");
+            result.level = level;
+            result.quality = quality;
             result.name = this.name;
             result.description = this.description;
 

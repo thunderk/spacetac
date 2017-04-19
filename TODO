@@ -3,6 +3,8 @@
 * Character sheet: disable interaction during battle (except for loot screen)
 * Character sheet: paginate loot and shop items
 * Character sheet: improve eye-catching for shop and loot section
+* Character sheet: equipping an item without the requirements make it disappear
+* Character sheet: display requirements on equipment tooltips
 * Shops: add equipment pricing, with usage depreciation
 * Add permanent effects to ship models to ease balancing
 * Ships should start battle in formation to force them to move
@@ -17,7 +19,7 @@
 * Drones: add tooltip
 * Drones: add hull points and take area damage
 * Show power usage/recovery in action bar, on action hover
-* More sound effects
+* More sound effects (but battle sounds should be vibration only, we are in space !)
 * Add a battle log display
 * Organize arena objects and information in layers
 * Prevent arena effects information (eg. "shield -36") to overflow out of the arena
@@ -29,6 +31,7 @@
 * Merge identical sticky effects
 * Handle effects overflowing ship tooltip when too numerous
 * Add a fleet evaluator to make balanced fleets
+* Allow to skip animations and AI delays in battle
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
@@ -39,8 +42,9 @@
 * TacticalAI: add pauses to not play too quickly
 * TacticalAI: replace BullyAI
 * Map: restore fog of war
+* Map: a star system should have an average level
 * Map: add information on current star/location + information on hovered location
-* Map: add shops and shipyards
+* Map: generate random shops
 * Map: remove jump links that cross the radius of other systems
 * Map: disable interaction (zoom, selection) while moving/jumping
 * Menu: fix background stars aggregating at right side when the game is not focused
