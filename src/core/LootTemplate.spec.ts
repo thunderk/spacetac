@@ -17,9 +17,18 @@ module TS.SpaceTac.Specs {
             expect(result.slot_type).toEqual(SlotType.Power);
             expect(result.code).toEqual("powergenerator");
             expect(result.name).toEqual("Power Generator");
+            expect(result.price).toEqual(300);
             expect(result.level).toEqual(2);
-            expect(result.quality).toEqual(EquipmentQuality.PREMIUM);
+            expect(result.quality).toEqual(EquipmentQuality.COMMON);
             expect(result.description).toEqual("A great power generator !");
+
+            template.addAttributeEffect("power_capacity", istep(10));
+            result = template.generate(1, EquipmentQuality.COMMON);
+            expect(result.quality).toEqual(EquipmentQuality.COMMON);
+            expect(result.effects).toEqual([new AttributeEffect("power_capacity", 10)]);
+            result = template.generate(1, EquipmentQuality.PREMIUM);
+            expect(result.quality).toEqual(EquipmentQuality.PREMIUM);
+            expect(result.effects).toEqual([new AttributeEffect("power_capacity", 13)]);
         });
 
         it("applies requirements on skills", function () {

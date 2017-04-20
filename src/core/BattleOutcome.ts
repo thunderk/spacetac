@@ -1,5 +1,9 @@
 module TS.SpaceTac {
-    // Result of an ended battle
+    /**
+     * Result of an ended battle
+     * 
+     * This stores the winner, and the retrievable loot
+     */
     export class BattleOutcome {
         // Indicates if the battle is a draw (no winner)
         draw: boolean;
@@ -45,17 +49,40 @@ module TS.SpaceTac {
             });
         }
 
-        // Create a loot generator for lucky loots
+        /**
+         * Create a loot generator for lucky finds
+         */
         getLootGenerator(random: RandomGenerator): LootGenerator {
             return new LootGenerator(random);
         }
 
-        // Generate a special loot item for the winner fleet
-        //  The equipment will be in the dead ship range
+        /**
+         * Generate a loot item for the winner fleet
+         * 
+         * The equipment will be in the dead ship range
+         */
         generateLootItem(random: RandomGenerator, base_level: number): Equipment | null {
-            var generator = this.getLootGenerator(random);
-            var level = random.randInt(Math.max(base_level - 1, 1), base_level + 1);
-            return generator.generate(level);
+            let generator = this.getLootGenerator(random);
+            let level = random.randInt(Math.max(base_level - 1, 1), base_level + 1);
+            let quality = random.random();
+            return generator.generate(level, this.getQuality(quality));
+        }
+
+        /**
+         * Get the quality enum matching a 0-1 value
+         */
+        getQuality(quality: number): EquipmentQuality {
+            if (quality < 0.1) {
+                return EquipmentQuality.WEAK;
+            } else if (quality > 0.99) {
+                return EquipmentQuality.LEGENDARY;
+            } else if (quality > 0.95) {
+                return EquipmentQuality.PREMIUM;
+            } else if (quality > 0.8) {
+                return EquipmentQuality.FINE;
+            } else {
+                return EquipmentQuality.COMMON;
+            }
         }
     }
 }

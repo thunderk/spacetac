@@ -4,7 +4,7 @@ module TS.SpaceTac.Specs {
             let shop = new Shop();
             expect(shop.stock.length).toBe(0);
 
-            shop.generateStock(8);
+            shop.generateStock(8, 1);
             expect(shop.stock.length).toBe(8);
         });
 

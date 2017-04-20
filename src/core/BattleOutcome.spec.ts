@@ -27,15 +27,18 @@ module TS.SpaceTac.Specs {
                 0,      // leave second ship alone
                 0.95,   // lucky loot on third ship
                 0,      //  - lower end of level range (ship has 5, so range is 4-6)
+                0.5,    //  - common quality
                 0,      //  - take first generated equipment (there is only one anyway)
                 0.96,   // lucky loot on fourth ship
-                0.999   //  - higher end of level range
+                0.999,  //  - higher end of level range
+                0.98    //  - premium quality
             ]);
 
             // Force lucky finds with one template
             var looter = new LootGenerator(random, false);
             var template = new LootTemplate(SlotType.Power, "Nuclear Reactor");
             template.setSkillsRequirements({ "skill_energy": istep(4) });
+            template.addAttributeEffect("power_capacity", 1);
             looter.templates = [template];
             spyOn(outcome, "getLootGenerator").and.returnValue(looter);
 
@@ -44,8 +47,12 @@ module TS.SpaceTac.Specs {
             expect(outcome.loot.length).toBe(3);
             expect(outcome.loot[0].name).toBe("0a");
             expect(outcome.loot[1].name).toBe("Nuclear Reactor");
+            expect(outcome.loot[1].level).toBe(4);
+            expect(outcome.loot[1].quality).toBe(EquipmentQuality.COMMON);
             expect(outcome.loot[1].requirements).toEqual({ "skill_energy": 7 });
             expect(outcome.loot[2].name).toBe("Nuclear Reactor");
+            expect(outcome.loot[2].level).toBe(6);
+            expect(outcome.loot[2].quality).toBe(EquipmentQuality.PREMIUM);
             expect(outcome.loot[2].requirements).toEqual({ "skill_energy": 9 });
         });
     });

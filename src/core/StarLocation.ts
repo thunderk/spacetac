@@ -50,7 +50,7 @@ module TS.SpaceTac {
         addShop(generate_items = 0) {
             this.shop = new Shop();
             if (generate_items) {
-                this.shop.generateStock(generate_items);
+                this.shop.generateStock(generate_items, 1);
             }
         }
 

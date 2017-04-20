@@ -5,6 +5,12 @@ module TS.SpaceTac {
     type LeveledValue = number | Iterator<number>;
 
     /**
+     * Modifiers of generated equipment
+     */
+    type QualityModifier = (equipment: Equipment, quality: EquipmentQuality, random: RandomGenerator) => boolean;
+    type CommonModifier = (equipment: Equipment, level: number) => void;
+
+    /**
      * Resolve a leveled value
      */
     function resolveForLevel(value: LeveledValue, level: number): number {
@@ -76,6 +82,84 @@ module TS.SpaceTac {
     }
 
     /**
+     * Generic quality modifier
+     */
+    function standardQualityModifier(equipment: Equipment, quality: EquipmentQuality, random: RandomGenerator): boolean {
+        // Collect available modifiers
+        let modifiers: Function[] = [];
+
+        let factor = 1;
+        if (quality == EquipmentQuality.WEAK) {
+            factor = 0.8;
+        } else if (quality == EquipmentQuality.FINE) {
+            factor = 1.1;
+        } else if (quality == EquipmentQuality.PREMIUM) {
+            factor = 1.3;
+        } else if (quality == EquipmentQuality.LEGENDARY) {
+            factor = 1.6;
+        }
+
+        if (quality == EquipmentQuality.WEAK && any(values(equipment.requirements), value => value > 0)) {
+            modifiers.push(() => {
+                iteritems(copy(equipment.requirements), (skill, value) => {
+                    equipment.requirements[skill] = Math.max(equipment.requirements[skill] + 1, Math.floor(equipment.requirements[skill] / factor));
+                });
+            });
+        }
+
+        function simpleFactor<T>(obj: T, attr: keyof T, inverse = false) {
+            let val = <any>obj[attr];
+            if (val && val > 0) {
+                let nval = Math.round((inverse ? (1 / factor) : factor) * val);
+                if (nval != val) {
+                    modifiers.push(() => (<any>obj)[attr] = nval);
+                }
+            }
+        }
+
+        function effectFactor(effect: BaseEffect) {
+            if (effect instanceof ValueEffect || effect instanceof AttributeEffect) {
+                simpleFactor(effect, 'value');
+            } else if (effect instanceof AttributeLimitEffect) {
+                simpleFactor(effect, 'value', true);
+            } else if (effect instanceof StickyEffect) {
+                simpleFactor(effect, 'duration');
+                effectFactor(effect.base);
+            } else if (effect instanceof DamageEffect) {
+                simpleFactor(effect, 'value');
+            }
+        }
+
+        equipment.effects.forEach(effectFactor);
+
+        if (equipment.action instanceof FireWeaponAction) {
+            simpleFactor(equipment.action, 'blast');
+            simpleFactor(equipment.action, 'range');
+            equipment.action.effects.forEach(effectFactor);
+        }
+
+        if (equipment.action instanceof DeployDroneAction) {
+            simpleFactor(equipment.action, 'deploy_distance');
+            simpleFactor(equipment.action, 'effect_radius');
+            equipment.action.effects.forEach(effectFactor);
+        }
+
+        if (equipment.action instanceof MoveAction) {
+            simpleFactor(equipment.action, 'distance_per_power');
+        }
+
+        // Choose a random one
+        if (modifiers.length > 0) {
+            let chosen = random.choice(modifiers);
+            chosen();
+            equipment.price = Math.ceil(equipment.price * factor * factor);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Template used to generate a loot equipment
      */
     export class LootTemplate {
@@ -88,14 +172,22 @@ module TS.SpaceTac {
         // Generic description of the equipment
         description: string
 
+        // Base price
+        price: LeveledValue
+
         // Modifiers applied to obtain the "common" equipment, based on level
-        protected base_modifiers: ((equipment: Equipment, level: number) => void)[];
+        protected base_modifiers: CommonModifier[]
+
+        // Modifiers applied to "common" equipment to obtain a specific quality
+        protected quality_modifiers: QualityModifier[]
 
         constructor(slot: SlotType, name: string, description = "") {
             this.slot = slot;
             this.name = name;
             this.description = description;
+            this.price = istep(100, istep(200, irepeat(200)));
             this.base_modifiers = [];
+            this.quality_modifiers = [standardQualityModifier];
         }
 
         /**
@@ -105,11 +197,18 @@ module TS.SpaceTac {
             let result = new Equipment(this.slot, (this.name || "").toLowerCase().replace(/ /g, ""));
 
             result.level = level;
-            result.quality = quality;
             result.name = this.name;
             result.description = this.description;
+            result.price = resolveForLevel(this.price, level);
 
             this.base_modifiers.forEach(modifier => modifier(result, level));
+
+            if (quality == EquipmentQuality.COMMON) {
+                result.quality = quality;
+            } else {
+                let quality_applied = this.quality_modifiers.map(modifier => modifier(result, quality, random));
+                result.quality = any(quality_applied, x => x) ? quality : EquipmentQuality.COMMON;
+            }
 
             return result;
         }

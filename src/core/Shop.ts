@@ -8,11 +8,17 @@ module TS.SpaceTac {
 
         /**
          * Generate a random stock
+         * 
+         * *level* is the preferential level, but equipment around it may be generated
          */
-        generateStock(items: number) {
-            // TODO other levels
-            let generator = new LootGenerator();
-            this.stock = nna(range(items).map(i => generator.generate(1)));
+        generateStock(items: number, level: number, random = RandomGenerator.global) {
+            let generator = new LootGenerator(random);
+
+            this.stock = nna(range(items).map(() => {
+                let equlevel = random.weighted(range(level + 3).map(i => i + 1).map(i => (i > level) ? 1 : i)) + 1;
+                let quality = random.weighted([1, 7, 2]);
+                return generator.generate(equlevel, quality);
+            }));
 
             this.sortStock();
         }
@@ -21,15 +27,14 @@ module TS.SpaceTac {
          * Sort the stock by equipment level, then by value
          */
         sortStock() {
-            // TODO
+            this.stock.sort((a, b) => (a.level == b.level) ? cmp(a.getPrice(), b.getPrice()) : cmp(a.level, b.level));
         }
 
         /**
          * Get the buy/sell price for an equipment
          */
         getPrice(equipment: Equipment): number {
-            // TODO
-            return 100;
+            return equipment.getPrice();
         }
 
         /**

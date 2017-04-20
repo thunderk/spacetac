@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>SpaceTac - Loot Generator Samples</title>
+
+    <style>
+        * {
+            margin: 0;
+        }
+        
+        body {
+            background-color: #111;
+            color: #eee;
+        }
+        
+        h1 {
+            font-size: 30px;
+        }
+        
+        h2 {
+            font-size: 22px;
+            margin-top: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="vendor/phaser/build/phaser.min.js"></script>
+    <script src="build.js"></script>
+
+    <div id="loot">
+        <h1>SpaceTac - Loot Generator Samples</h1>
+    </div>
+
+    <script>
+        window.onload = function () {
+            var generator = new TS.SpaceTac.LootGenerator();
+            generator.templates.forEach(function (template) {
+                TS.range(5).forEach(function (level) {
+                    TS.iterenum(TS.SpaceTac.EquipmentQuality, function (quality) {
+                        var loot = template.generate(level + 1, quality);
+
+                        let title = document.createElement("h2");
+                        title.textContent = loot.getFullName() + " (Price " + loot.price.toString() + ")";
+                        document.body.appendChild(title);
+
+                        let description = document.createElement("pre");
+                        description.textContent = loot.getFullDescription();
+                        document.body.appendChild(description);
+                    });
+                });
+            });
+        };
+    </script>
+</body>
+
+</html>

@@ -31,7 +31,7 @@ module TS.SpaceTac {
 
             // Fill equipment slots
             result.slots.forEach((slot: Slot) => {
-                var equipment = loot.generate(level, slot.type);
+                var equipment = loot.generate(level, EquipmentQuality.COMMON, slot.type);
                 if (equipment) {
                     slot.attach(equipment)
                     if (slot.attached !== equipment) {

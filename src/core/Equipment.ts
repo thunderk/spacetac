@@ -25,7 +25,7 @@ module TS.SpaceTac {
         name: string
 
         // Equipment generic description
-        description: string
+        description = ""
 
         // Indicative equipment level
         level = 1
@@ -33,14 +33,17 @@ module TS.SpaceTac {
         // Indicative equipment quality
         quality = EquipmentQuality.COMMON
 
+        // Base price
+        price = 0
+
         // Minimum skills to be able to equip this
-        requirements: { [key: string]: number }
+        requirements: { [key: string]: number } = {}
 
         // Permanent effects on the ship that equips this
-        effects: BaseEffect[]
+        effects: BaseEffect[] = []
 
         // Action available when equipped
-        action: BaseAction
+        action = new BaseAction("nothing", "Do nothing", false)
 
         // Usage made of this equipment (will lower the sell price)
         usage: number
@@ -50,10 +53,6 @@ module TS.SpaceTac {
             this.slot_type = slot;
             this.code = code;
             this.name = code;
-            this.description = "";
-            this.requirements = {};
-            this.effects = [];
-            this.action = new BaseAction("nothing", "Do nothing", false);
         }
 
         jasmineToString() {
@@ -75,9 +74,19 @@ module TS.SpaceTac {
          * Get the full textual description for this equipment (without the full name).
          */
         getFullDescription(): string {
+            let requirements: string[] = [];
+            iteritems(this.requirements, (skill, value) => {
+                if (value > 0) {
+                    requirements.push(`- ${SHIP_ATTRIBUTES[skill].name} ${value}`);
+                }
+            });
+
             let description = this.getEffectsDescription();
             if (this.description) {
                 description += "\n\n" + this.description;
+            }
+            if (requirements.length > 0) {
+                description = "Requires:\n" + requirements.join("\n") + "\n\n" + description;
             }
             return description;
         }
@@ -90,6 +99,13 @@ module TS.SpaceTac {
         getMinimumLevel(): number {
             let points = sum(values(this.requirements));
             return ShipLevel.getLevelForPoints(points);
+        }
+
+        /**
+         * Get the equipment price value.
+         */
+        getPrice(): number {
+            return this.price;
         }
 
         /**
