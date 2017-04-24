@@ -128,8 +128,18 @@ module TS.SpaceTac {
             return imaterialize(ifilter(this.iships(), ship => (ship.alive || !alive_only) && Target.newFromShip(ship).getDistanceTo(center) <= radius));
         }
 
-        // Ends a battle and sets the outcome
+        /**
+         * Ends a battle and sets the outcome
+         */
         endBattle(winner: Fleet | null, log = true) {
+            // Wear down equipment
+            iforeach(this.iships(), ship => {
+                ship.listEquipment().forEach(equipment => {
+                    equipment.addWear(this.turn);
+                });
+            });
+
+            // Prepare broadcast
             this.ended = true;
             this.outcome = new BattleOutcome(winner);
             if (log && this.log) {

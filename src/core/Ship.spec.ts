@@ -103,14 +103,13 @@ module TS.SpaceTac.Specs {
             var battle = new Battle(fleet);
             var ship = new Ship(fleet);
 
-            ship.setAttribute("hull_capacity", 50);
-            ship.setAttribute("shield_capacity", 100);
+            TestTools.setShipHP(ship, 150, 400);
             ship.restoreHealth();
             battle.log.clear();
 
             ship.addDamage(10, 20);
-            expect(ship.values.hull.get()).toEqual(40);
-            expect(ship.values.shield.get()).toEqual(80);
+            expect(ship.values.hull.get()).toEqual(140);
+            expect(ship.values.shield.get()).toEqual(380);
             expect(battle.log.events.length).toBe(3);
             expect(battle.log.events[0]).toEqual(new ValueChangeEvent(ship, ship.values.shield, -20));
             expect(battle.log.events[1]).toEqual(new ValueChangeEvent(ship, ship.values.hull, -10));
@@ -119,9 +118,14 @@ module TS.SpaceTac.Specs {
             battle.log.clear();
 
             ship.addDamage(15, 25, false);
-            expect(ship.values.hull.get()).toEqual(25);
-            expect(ship.values.shield.get()).toEqual(55);
+            expect(ship.values.hull.get()).toEqual(125);
+            expect(ship.values.shield.get()).toEqual(355);
             expect(battle.log.events.length).toBe(0);
+
+            ship.addDamage(125, 355, false);
+            expect(ship.values.hull.get()).toEqual(0);
+            expect(ship.values.shield.get()).toEqual(0);
+            expect(ship.alive).toBe(false);
         });
 
         it("sets and logs sticky effects", function () {

@@ -25,5 +25,20 @@ module TS.SpaceTac {
 
             expect(action.checkCannotBeApplied(ship)).toBe("not enough power");
         });
+
+        it("wears down equipment and power generators", function () {
+            let ship = new Ship();
+            TestTools.setShipAP(ship, 10);
+            let power = ship.listEquipment(SlotType.Power)[0];
+            let equipment = new Equipment(SlotType.Weapon);
+            let action = new BaseAction("test", "Test", false, equipment);
+
+            expect(power.wear).toBe(0);
+            expect(equipment.wear).toBe(0);
+            action.apply(ship, null);
+
+            expect(power.wear).toBe(1);
+            expect(equipment.wear).toBe(1);
+        });
     });
 }

@@ -444,10 +444,19 @@ module TS.SpaceTac {
             }
         }
 
-        // Apply damages to hull and/or shield
+        /**
+         * Apply damages to hull and/or shield
+         * 
+         * Also apply wear to impacted equipment
+         */
         addDamage(hull: number, shield: number, log: boolean = true): void {
-            this.setValue("shield", -shield, true, log);
-            this.setValue("hull", -hull, true, log);
+            if (shield > 0) {
+                this.setValue("shield", -shield, true, log);
+            }
+
+            if (hull > 0) {
+                this.setValue("hull", -hull, true, log);
+            }
 
             if (log) {
                 this.addBattleEvent(new DamageEvent(this, hull, shield));

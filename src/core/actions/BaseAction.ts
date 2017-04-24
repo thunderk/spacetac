@@ -106,6 +106,11 @@ module TS.SpaceTac {
                     return false;
                 }
 
+                if (this.equipment) {
+                    this.equipment.addWear(1);
+                    ship.listEquipment(SlotType.Power).forEach(equipment => equipment.addWear(1));
+                }
+
                 this.customApply(ship, checked_target);
                 return true;
             } else {

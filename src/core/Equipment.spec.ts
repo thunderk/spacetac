@@ -77,5 +77,36 @@ module TS.SpaceTac.Specs {
             equipment.requirements["skill_electronics"] = 4;
             expect(equipment.getMinimumLevel()).toBe(3);
         });
+
+        it("weighs the price, taking wear into account", function () {
+            let equipment = new Equipment();
+            expect(equipment.getPrice()).toBe(0);
+
+            equipment.price = 100;
+            expect(equipment.getPrice()).toBe(100);
+
+            equipment.addWear(1);
+            expect(equipment.getPrice()).toBe(99);
+
+            equipment.addWear(10);
+            expect(equipment.getPrice()).toBe(90);
+
+            equipment.addWear(89);
+            expect(equipment.getPrice()).toBe(50);
+
+            equipment.addWear(400);
+            expect(equipment.getPrice()).toBe(16);
+        });
+
+        it("builds a full textual description", function () {
+            let equipment = new Equipment();
+            equipment.name = "Super Equipment";
+            equipment.requirements["skill_gravity"] = 2;
+            equipment.effects.push(new AttributeEffect("skill_time", 3));
+            equipment.wear = 50;
+
+            let result = equipment.getFullDescription();
+            expect(result).toEqual("Second hand\n\nRequires:\n- gravity skill 2\n\nWhen equipped:\n- time skill +3");
+        });
     });
 }

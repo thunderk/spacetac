@@ -44,7 +44,15 @@ module TS.SpaceTac {
 
         applyOnShip(ship: Ship): boolean {
             let [shield, hull] = this.getEffectiveDamage(ship);
+
             ship.addDamage(hull, shield);
+
+            if (shield > 0) {
+                ship.listEquipment(SlotType.Shield).forEach(equipment => equipment.addWear(Math.ceil(shield * 0.01)));
+            }
+            if (hull > 0) {
+                ship.listEquipment(SlotType.Hull).forEach(equipment => equipment.addWear(Math.ceil(hull * 0.01)));
+            }
 
             return true;
         }

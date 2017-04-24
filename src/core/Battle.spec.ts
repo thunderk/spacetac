@@ -170,6 +170,40 @@ module TS.SpaceTac {
             expect((<EndBattleEvent>battle.log.events[0]).outcome.winner).toBe(fleet2);
         });
 
+        it("wear down equipment at the end of battle", function () {
+            let fleet1 = new Fleet();
+            let ship1a = fleet1.addShip();
+            let equ1a = TestTools.addWeapon(ship1a);
+            let ship1b = fleet1.addShip();
+            let equ1b = TestTools.addWeapon(ship1b);
+            let fleet2 = new Fleet();
+            let ship2a = fleet2.addShip();
+            let equ2a = TestTools.addWeapon(ship2a);
+            let eng2a = TestTools.addEngine(ship2a, 50);
+
+            let battle = new Battle(fleet1, fleet2);
+            battle.start();
+
+            expect(equ1a.wear).toBe(0);
+            expect(equ1b.wear).toBe(0);
+            expect(equ2a.wear).toBe(0);
+            expect(eng2a.wear).toBe(0);
+
+            range(8).forEach(() => battle.advanceToNextShip());
+
+            expect(equ1a.wear).toBe(0);
+            expect(equ1b.wear).toBe(0);
+            expect(equ2a.wear).toBe(0);
+            expect(eng2a.wear).toBe(0);
+
+            battle.endBattle(null);
+
+            expect(equ1a.wear).toBe(3);
+            expect(equ1b.wear).toBe(3);
+            expect(equ2a.wear).toBe(3);
+            expect(eng2a.wear).toBe(3);
+        });
+
         it("handles a draw in end battle", function () {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();

@@ -45,8 +45,8 @@ module TS.SpaceTac {
         // Action available when equipped
         action = new BaseAction("nothing", "Do nothing", false)
 
-        // Usage made of this equipment (will lower the sell price)
-        usage: number
+        // Equipment wear due to usage in battles (will lower the sell price)
+        wear = 0
 
         // Basic constructor
         constructor(slot: SlotType | null = null, code = "equipment") {
@@ -88,6 +88,9 @@ module TS.SpaceTac {
             if (requirements.length > 0) {
                 description = "Requires:\n" + requirements.join("\n") + "\n\n" + description;
             }
+            if (this.wear > 0) {
+                description = (this.wear >= 100 ? "Worn" : "Second hand") + "\n\n" + description;
+            }
             return description;
         }
 
@@ -105,7 +108,7 @@ module TS.SpaceTac {
          * Get the equipment price value.
          */
         getPrice(): number {
-            return this.price;
+            return Math.floor(this.price * 100 / (100 + this.wear));
         }
 
         /**
@@ -155,6 +158,13 @@ module TS.SpaceTac {
             }
 
             return parts.length > 0 ? parts.join("\n\n") : "does nothing";
+        }
+
+        /**
+         * Add equipment wear
+         */
+        addWear(factor: number): void {
+            this.wear += factor;
         }
     }
 }
