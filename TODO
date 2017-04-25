@@ -4,7 +4,7 @@
 * Character sheet: improve eye-catching for shop and loot section
 * Character sheet: highlight allowed destinations during drag-and-drop
 * Add permanent effects to ship models to ease balancing
-* Ships should start battle in formation to force them to move
+* Find incentives to move from starting position
 * Fix targetting not resetting when using action shortcuts
 * Add battle statistics and/or critics in outcome dialog
 * Add battle experience
@@ -40,7 +40,6 @@
 * TacticalAI: add pauses to not play too quickly
 * TacticalAI: replace BullyAI
 * Map: restore fog of war
-* Map: a star system should have an average level
 * Map: add information on current star/location + information on hovered location
 * Map: generate random shops
 * Map: remove jump links that cross the radius of other systems

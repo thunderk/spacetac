@@ -10,28 +10,29 @@ module TS.SpaceTac {
 
         // Generate a ship of a given level
         //  The ship will not be named, nor will be a member of any fleet
-        generate(level: number, model: ShipModel | null = null): Ship {
-            var result = new Ship();
-            var loot = new LootGenerator(this.random);
-
+        generate(level: number, model: ShipModel | null = null, upgrade = false): Ship {
             if (!model) {
                 // Get a random model
                 model = ShipModel.getRandomModel(level, this.random);
             }
 
-            // Apply model
-            result.model = model.code;
-            result.setCargoSpace(model.cargo);
-            model.slots.forEach((slot: SlotType) => {
-                result.addSlot(slot);
-            });
+            var result = new Ship(null, undefined, model);
+            var loot = new LootGenerator(this.random);
 
             // Set all skills to 1 (to be able to use at least basic equipment)
             keys(result.skills).forEach(skill => result.upgradeSkill(skill));
 
+            // Level upgrade
+            result.level.forceLevel(level);
+            if (upgrade) {
+                while (result.getAvailableUpgradePoints() > 0) {
+                    result.upgradeSkill(this.random.choice(keys(SHIP_SKILLS)));
+                }
+            }
+
             // Fill equipment slots
             result.slots.forEach((slot: Slot) => {
-                var equipment = loot.generate(level, EquipmentQuality.COMMON, slot.type);
+                var equipment = loot.generateHighest(result.skills, EquipmentQuality.COMMON, slot.type);
                 if (equipment) {
                     slot.attach(equipment)
                     if (slot.attached !== equipment) {

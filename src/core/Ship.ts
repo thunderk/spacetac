@@ -65,7 +65,7 @@ module TS.SpaceTac {
         name: string
 
         // Code of the ShipModel used to create it
-        model: string
+        model: ShipModel
 
         // Flag indicating if the ship is alive
         alive: boolean
@@ -100,10 +100,9 @@ module TS.SpaceTac {
         play_priority = 0;
 
         // Create a new ship inside a fleet
-        constructor(fleet: Fleet | null = null, name = "Ship") {
+        constructor(fleet: Fleet | null = null, name = "Ship", model = new ShipModel("default", "Default", 1, 0)) {
             this.fleet = fleet || new Fleet();
             this.name = name;
-            this.model = "default";
             this.alive = true;
             this.sticky_effects = [];
             this.slots = [];
@@ -115,6 +114,10 @@ module TS.SpaceTac {
             if (fleet) {
                 fleet.addShip(this);
             }
+
+            this.model = model;
+            this.setCargoSpace(model.cargo);
+            model.slots.forEach(slot => this.addSlot(slot));
         }
 
         // Returns true if the ship is able to play
@@ -532,7 +535,7 @@ module TS.SpaceTac {
         canEquip(item: Equipment): Slot | null {
             let free_slot = first(this.slots, slot => slot.type == item.slot_type && !slot.attached);
             if (free_slot) {
-                if (item.canBeEquipped(this)) {
+                if (item.canBeEquipped(this.attributes)) {
                     return free_slot;
                 } else {
                     return null;

@@ -1,6 +1,9 @@
 module TS.SpaceTac {
     // One player (human or IA)
     export class Player {
+        // Player's name
+        name: string;
+
         // Universe in which we are playing
         universe: Universe;
 
@@ -11,33 +14,17 @@ module TS.SpaceTac {
         visited: StarLocation[] = [];
 
         // Create a player, with an empty fleet
-        constructor(universe: Universe = new Universe()) {
+        constructor(universe: Universe = new Universe(), name = "Player") {
             this.universe = universe;
+            this.name = name;
             this.fleet = new Fleet(this);
         }
 
         // Create a quick random player, with a fleet, for testing purposes
-        static newQuickRandom(name: String): Player {
-            var player = new Player(new Universe());
-            var ship: Ship;
-            var ship_generator = new ShipGenerator();
-
-            ship = ship_generator.generate(1);
-            ship.name = name + "'s First";
-            player.fleet.addShip(ship);
-
-            ship = ship_generator.generate(1);
-            ship.name = name + "'s Second";
-            player.fleet.addShip(ship);
-
-            ship = ship_generator.generate(1);
-            ship.name = name + "'s Third";
-            player.fleet.addShip(ship);
-
-            ship = ship_generator.generate(1);
-            ship.name = name + "'s Fourth";
-            player.fleet.addShip(ship);
-
+        static newQuickRandom(name: string, level = 1, upgrade = false): Player {
+            let player = new Player(new Universe(), name);
+            let generator = new FleetGenerator();
+            player.fleet = generator.generate(level, player, 4, upgrade);
             return player;
         }
 

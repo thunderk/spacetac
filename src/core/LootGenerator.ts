@@ -31,8 +31,6 @@ module TS.SpaceTac {
             this.templates = templates;
         }
 
-        // TODO Add generator from skills
-
         // Generate a random equipment for a specific level
         //  If slot is specified, it will generate an equipment for this slot type specifically
         //  If no equipment could be generated from available templates, null is returned
@@ -47,6 +45,28 @@ module TS.SpaceTac {
 
             // Pick a random equipment
             return this.random.choice(equipments);
+        }
+
+        /**
+         * Generate a random equipment of highest level, from a given set of skills
+         */
+        generateHighest(skills: ShipSkills, quality = EquipmentQuality.COMMON, slot: SlotType | null = null): Equipment | null {
+            let templates = this.templates.filter(template => slot == null || slot == template.slot);
+            let candidates: Equipment[] = [];
+            let level = 1;
+
+            templates.forEach(template => {
+                let equipment = template.generateHighest(skills, quality, this.random);
+                if (equipment && equipment.level >= level) {
+                    if (equipment.level > level) {
+                        candidates.splice(0);
+                        level = equipment.level;
+                    }
+                    candidates.push(equipment);
+                }
+            });
+
+            return (candidates.length == 0) ? null : this.random.choice(candidates);
         }
     }
 }

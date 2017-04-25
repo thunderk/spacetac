@@ -5,6 +5,9 @@ module TS.SpaceTac {
         // Code to identify the model
         code: string;
 
+        // Human-readable model name
+        name: string;
+
         // Minimal level to use this model
         level: number;
 
@@ -14,8 +17,9 @@ module TS.SpaceTac {
         // Available slots
         slots: SlotType[];
 
-        constructor(code: string, level: number, cargo: number, ...slots: SlotType[]) {
+        constructor(code: string, name: string, level: number, cargo: number, ...slots: SlotType[]) {
             this.code = code;
+            this.name = name;
             this.level = level;
             this.cargo = cargo;
             this.slots = slots;
@@ -26,12 +30,12 @@ module TS.SpaceTac {
             // TODO Store in cache
             var result: ShipModel[] = [];
 
-            result.push(new ShipModel("scout", 1, 2, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Weapon));
+            result.push(new ShipModel("scout", "Scout", 1, 2, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Weapon));
 
-            result.push(new ShipModel("whirlwind", 1, 4, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+            result.push(new ShipModel("whirlwind", "Whirlwind", 1, 4, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
                 SlotType.Weapon, SlotType.Weapon));
 
-            result.push(new ShipModel("tomahawk", 1, 6, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine, SlotType.Engine,
+            result.push(new ShipModel("tomahawk", "Tomahawk", 1, 6, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine, SlotType.Engine,
                 SlotType.Weapon));
 
             return result;

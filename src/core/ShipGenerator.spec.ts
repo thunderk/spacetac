@@ -2,9 +2,9 @@ module TS.SpaceTac.Specs {
     describe("ShipGenerator", function () {
         it("can use ship model", function () {
             var gen = new ShipGenerator();
-            var model = new ShipModel("test", 1, 2, SlotType.Shield, SlotType.Weapon, SlotType.Weapon);
+            var model = new ShipModel("test", "Test", 1, 2, SlotType.Shield, SlotType.Weapon, SlotType.Weapon);
             var ship = gen.generate(1, model);
-            expect(ship.model).toBe("test");
+            expect(ship.model).toBe(model);
             expect(ship.cargo_space).toBe(2);
             expect(ship.slots.length).toBe(3);
             expect(ship.slots[0].type).toBe(SlotType.Shield);

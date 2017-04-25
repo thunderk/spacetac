@@ -15,32 +15,32 @@ module TS.SpaceTac.Specs {
             var equipment = new Equipment();
             var ship = new Ship();
 
-            expect(equipment.canBeEquipped(ship)).toBe(true);
+            expect(equipment.canBeEquipped(ship.attributes)).toBe(true);
 
             equipment.requirements["skill_time"] = 2;
 
-            expect(equipment.canBeEquipped(ship)).toBe(false);
+            expect(equipment.canBeEquipped(ship.attributes)).toBe(false);
 
             ship.attributes.skill_time.set(1);
 
-            expect(equipment.canBeEquipped(ship)).toBe(false);
+            expect(equipment.canBeEquipped(ship.attributes)).toBe(false);
 
             ship.attributes.skill_time.set(2);
 
-            expect(equipment.canBeEquipped(ship)).toBe(true);
+            expect(equipment.canBeEquipped(ship.attributes)).toBe(true);
 
             ship.attributes.skill_time.set(3);
 
-            expect(equipment.canBeEquipped(ship)).toBe(true);
+            expect(equipment.canBeEquipped(ship.attributes)).toBe(true);
 
             // Second requirement
             equipment.requirements["skill_material"] = 3;
 
-            expect(equipment.canBeEquipped(ship)).toBe(false);
+            expect(equipment.canBeEquipped(ship.attributes)).toBe(false);
 
             ship.attributes.skill_material.set(4);
 
-            expect(equipment.canBeEquipped(ship)).toBe(true);
+            expect(equipment.canBeEquipped(ship.attributes)).toBe(true);
         });
 
         it("generates a description of the effects", function () {

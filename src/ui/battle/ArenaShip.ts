@@ -34,7 +34,7 @@ module TS.SpaceTac.UI {
             this.enemy = this.ship.getPlayer() != this.battleview.player;
 
             // Add ship sprite
-            this.sprite = new Phaser.Button(this.game, 0, 0, "ship-" + ship.model + "-sprite");
+            this.sprite = new Phaser.Button(this.game, 0, 0, "ship-" + ship.model.code + "-sprite");
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(64 / this.sprite.width);

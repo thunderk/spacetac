@@ -38,7 +38,7 @@ module TS.SpaceTac.UI {
             this.active_effects = new Phaser.Group(this.game);
             this.addChild(this.active_effects);
 
-            this.layer_portrait = new Phaser.Image(this.game, 8, 8, "ship-" + ship.model + "-portrait", 0);
+            this.layer_portrait = new Phaser.Image(this.game, 8, 8, "ship-" + ship.model.code + "-portrait", 0);
             this.layer_portrait.scale.set(0.3, 0.3);
             this.addChild(this.layer_portrait);
 

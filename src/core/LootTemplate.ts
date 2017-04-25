@@ -214,6 +214,26 @@ module TS.SpaceTac {
         }
 
         /**
+         * Generate the highest equipment level, for a given set of skills
+         */
+        generateHighest(skills: ShipSkills, quality = EquipmentQuality.COMMON, random = RandomGenerator.global): Equipment | null {
+            let level = 1;
+            let equipment: Equipment | null = null;
+            let attributes = new ShipAttributes();
+            keys(skills).forEach(skill => attributes[skill].set(skills[skill].get()));
+            do {
+                let nequipment = this.generate(level, quality, random);
+                if (nequipment.canBeEquipped(attributes)) {
+                    equipment = nequipment;
+                } else {
+                    break;
+                }
+                level += 1;
+            } while (level < 100);
+            return equipment;
+        }
+
+        /**
          * Set skill requirements that will be added to each level of equipment.
          */
         setSkillsRequirements(skills: { [skill: string]: LeveledValue }): void {
