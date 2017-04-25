@@ -43,6 +43,9 @@ module TS.SpaceTac.UI {
         // Loot items
         loot_slots: Phaser.Group;
         loot_items: Equipment[] = [];
+        loot_page = 0;
+        loot_next: Phaser.Button;
+        loot_prev: Phaser.Button;
 
         // Shop
         shop: Shop | null = null;
@@ -116,6 +119,15 @@ module TS.SpaceTac.UI {
             this.mode_title = new Phaser.Text(this.game, 1548, 648, "", { align: "center", font: "18pt Arial", fill: "#FFFFFF" });
             this.mode_title.anchor.set(0.5, 0.5);
             this.addChild(this.mode_title);
+
+            this.loot_next = new Phaser.Button(this.game, 1890, 850, "character-scroll", () => this.paginate(1));
+            this.loot_next.anchor.set(0.5, 0.5);
+            this.addChild(this.loot_next);
+
+            this.loot_prev = new Phaser.Button(this.game, 1238, 850, "character-scroll", () => this.paginate(-1));
+            this.loot_prev.anchor.set(0.5, 0.5);
+            this.loot_prev.angle = 180;
+            this.addChild(this.loot_prev);
 
             let x1 = 664;
             let x2 = 1066;
@@ -269,6 +281,8 @@ module TS.SpaceTac.UI {
          * This list will be shown until sheet is closed
          */
         setLoot(loot: Equipment[]) {
+            this.loot_page = 0;
+
             this.loot_items = loot;
             this.updateLoot();
             this.loot_slots.visible = true;
@@ -283,6 +297,8 @@ module TS.SpaceTac.UI {
          * This shop will be shown until sheet is closed
          */
         setShop(shop: Shop) {
+            this.loot_page = 0;
+
             this.shop = shop;
             this.updateLoot();
             this.loot_slots.visible = true;
@@ -301,25 +317,38 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Change the page displayed in loot/shop section
+         */
+        paginate(offset: number) {
+            let items = this.shop ? this.shop.stock : this.loot_items;
+            this.loot_page = clamp(this.loot_page + offset, 0, 1 + Math.floor(items.length / 12));
+            this.refresh();
+        }
+
+        /**
          * Update the loot slots
          */
         private updateLoot() {
+            let per_page = 12;
             this.loot_slots.removeAll(true);
 
             let info = CharacterSheet.getSlotPositions(12, 588, 354, 196, 196);
-            range(12).forEach(idx => {
+            let items = this.shop ? this.shop.stock : this.loot_items;
+            range(per_page).forEach(idx => {
                 let loot_slot = this.shop ? new CharacterShopSlot(this, info.positions[idx].x, info.positions[idx].y) : new CharacterLootSlot(this, info.positions[idx].x, info.positions[idx].y);
                 loot_slot.scale.set(info.scaling, info.scaling);
                 this.loot_slots.addChild(loot_slot);
 
-                if (idx < this.loot_items.length) {
-                    let equipment = new CharacterEquipment(this, this.loot_items[idx], loot_slot);
-                    this.equipments.addChild(equipment);
-                } else if (this.shop && idx < this.shop.stock.length) {
-                    let equipment = new CharacterEquipment(this, this.shop.stock[idx], loot_slot);
+                idx += per_page * this.loot_page;
+
+                if (idx < items.length) {
+                    let equipment = new CharacterEquipment(this, items[idx], loot_slot);
                     this.equipments.addChild(equipment);
                 }
             });
+
+            this.view.animations.setVisible(this.loot_prev, this.loot_page > 0, 200);
+            this.view.animations.setVisible(this.loot_next, (this.loot_page + 1) * per_page < items.length, 200);
         }
 
         /**

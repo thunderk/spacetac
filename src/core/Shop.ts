@@ -64,6 +64,7 @@ module TS.SpaceTac {
         buyFromFleet(equipment: Equipment, fleet: Fleet) {
             let price = this.getPrice(equipment);
             if (add(this.stock, equipment)) {
+                this.sortStock();
                 fleet.credits += price;
                 return true;
             } else {

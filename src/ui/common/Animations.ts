@@ -7,11 +7,19 @@ module TS.SpaceTac.UI {
     };
 
     /**
+     * Interface of an object that may be enabled/disabled.
+     */
+    interface IAnimationEnableable {
+        enabled: boolean
+    }
+
+    /**
      * Interface of an object that may be shown/hidden, with opacity transition.
      */
     interface IAnimationFadeable {
         alpha: number;
         visible: boolean;
+        input?: IAnimationEnableable;
     }
 
     /**
@@ -62,6 +70,10 @@ module TS.SpaceTac.UI {
 
             let tween = this.createTween(obj);
             tween.to({ alpha: alpha }, duration);
+            if (obj.input) {
+                let input = obj.input;
+                tween.onComplete.addOnce(() => input.enabled = true);
+            }
             tween.start();
         }
 
@@ -69,6 +81,10 @@ module TS.SpaceTac.UI {
          * Hide an object, with opacity transition
          */
         hide(obj: IAnimationFadeable, duration = 1000): void {
+            if (obj.input) {
+                obj.input.enabled = false;
+            }
+
             let tween = this.createTween(obj);
             tween.to({ alpha: 0 }, duration);
             tween.onComplete.addOnce(() => obj.visible = false);

@@ -1,7 +1,6 @@
 * UI: Use a common component class, and a layer abstraction
 * Character sheet: add initial character creation
 * Character sheet: disable interaction during battle (except for loot screen)
-* Character sheet: paginate loot and shop items
 * Character sheet: improve eye-catching for shop and loot section
 * Character sheet: highlight allowed destinations during drag-and-drop
 * Add permanent effects to ship models to ease balancing
