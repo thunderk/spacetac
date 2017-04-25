@@ -31,7 +31,7 @@ module TS.SpaceTac {
             this.universe = new Universe();
             this.universe.generate();
 
-            var start_location = this.universe.stars[0].locations[0];
+            var start_location = this.universe.getStartLocation();
             start_location.clearEncounter();
             start_location.addShop(50);
 

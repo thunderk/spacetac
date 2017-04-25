@@ -72,5 +72,38 @@ module TS.SpaceTac.Specs {
             expect(warps.length).toBe(1);
             expect(nn(warps[0].jump_dest).star).toBe(universe.stars[0]);
         });
+
+        it("generates danger gradients", function () {
+            let universe = new Universe();
+
+            universe.stars.push(new Star(universe));
+            universe.stars.push(new Star(universe));
+            universe.stars.push(new Star(universe));
+            universe.stars.push(new Star(universe));
+
+            universe.addLink(universe.stars[0], universe.stars[1]);
+            universe.addLink(universe.stars[0], universe.stars[2]);
+            universe.addLink(universe.stars[3], universe.stars[1]);
+            universe.addLink(universe.stars[3], universe.stars[2]);
+
+            universe.setEncounterLevels(9);
+            expect(universe.stars.map(star => star.level).sort(cmp)).toEqual([1, 5, 5, 9]);
+        });
+
+        it("gets a good start location", function () {
+            let universe = new Universe();
+
+            universe.stars.push(new Star(universe));
+            universe.stars.push(new Star(universe));
+            universe.stars.push(new Star(universe));
+
+            universe.stars[0].level = 8;
+            universe.stars[1].level = 1;
+            universe.stars[2].level = 4;
+
+            universe.stars[1].generateLocations(5);
+
+            expect(universe.getStartLocation()).toBe(universe.stars[1].locations[0]);
+        });
     });
 }
