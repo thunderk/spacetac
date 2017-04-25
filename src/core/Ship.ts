@@ -511,16 +511,34 @@ module TS.SpaceTac {
          * Returns true if successful
          */
         equip(item: Equipment, from_cargo = true): boolean {
-            let free_slot = first(this.slots, slot => slot.type == item.slot_type && !slot.attached);
+            let free_slot = this.canEquip(item);
 
             if (free_slot && (!from_cargo || remove(this.cargo, item))) {
                 free_slot.attach(item);
-
-                this.updateAttributes();
-
-                return true;
+                if (item.attached_to == free_slot && free_slot.attached == item) {
+                    this.updateAttributes();
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
+            }
+        }
+
+        /**
+         * Check if a ship is able to equip en item, and return the slot it may fit in, or null
+         */
+        canEquip(item: Equipment): Slot | null {
+            let free_slot = first(this.slots, slot => slot.type == item.slot_type && !slot.attached);
+            if (free_slot) {
+                if (item.canBeEquipped(this)) {
+                    return free_slot;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
             }
         }
 

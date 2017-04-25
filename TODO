@@ -3,7 +3,7 @@
 * Character sheet: disable interaction during battle (except for loot screen)
 * Character sheet: paginate loot and shop items
 * Character sheet: improve eye-catching for shop and loot section
-* Character sheet: equipping an item without the requirements make it disappear
+* Character sheet: highlight allowed destinations during drag-and-drop
 * Add permanent effects to ship models to ease balancing
 * Ships should start battle in formation to force them to move
 * Fix targetting not resetting when using action shortcuts
@@ -36,6 +36,7 @@
 * AI: apply safety distances to move actions
 * AI: use support equipments (repair drones...)
 * AI: fix not being able to apply simulated maneuver
+* AI: do not always move first, they are defenders
 * TacticalAI: allow to play several moves in the same turn
 * TacticalAI: add pauses to not play too quickly
 * TacticalAI: replace BullyAI
@@ -55,5 +56,6 @@
 Later, if possible:
 * Replays
 * Multiplayer
+* Formation or deployment phase
 * Saving to external file
 * Saving to cloud

@@ -414,6 +414,30 @@ module TS.SpaceTac.Specs {
             expect(ship.cargo).toEqual([equipment]);
         });
 
+        it("checks equipment requirements", function () {
+            let ship = new Ship();
+            let equipment = new Equipment(SlotType.Hull);
+            expect(ship.canEquip(equipment)).toBe(null);
+
+            ship.addSlot(SlotType.Engine);
+            expect(ship.canEquip(equipment)).toBe(null);
+
+            let slot = ship.addSlot(SlotType.Hull);
+            expect(ship.canEquip(equipment)).toBe(slot);
+
+            equipment.requirements["skill_energy"] = 2;
+            expect(ship.canEquip(equipment)).toBe(null);
+
+            ship.upgradeSkill("skill_energy");
+            expect(ship.canEquip(equipment)).toBe(null);
+
+            ship.upgradeSkill("skill_energy");
+            expect(ship.canEquip(equipment)).toBe(slot);
+
+            slot.attach(new Equipment(SlotType.Hull));
+            expect(ship.canEquip(equipment)).toBe(null);
+        });
+
         it("allow skills upgrading from current level", function () {
             let ship = new Ship();
             expect(ship.level.get()).toBe(1);

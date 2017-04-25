@@ -13,6 +13,10 @@ module TS.SpaceTac.UI {
             this.sheet = sheet;
         }
 
+        jasmineToString() {
+            return "CharacterCargo";
+        }
+
         /**
          * CharacterEquipmentContainer interface
          */

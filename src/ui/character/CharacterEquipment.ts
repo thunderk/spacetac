@@ -43,14 +43,16 @@ module TS.SpaceTac.UI {
             this.container = container;
             this.price = 0;
 
-            this.container.addEquipment(this, null, false);
-
             this.anchor.set(0.5, 0.5);
 
             this.setupDragDrop(sheet);
             this.snapToContainer();
 
             sheet.view.tooltip.bind(this, container => this.fillTooltip(container));
+        }
+
+        jasmineToString() {
+            return this.item.jasmineToString();
         }
 
         /**
@@ -103,17 +105,16 @@ module TS.SpaceTac.UI {
                 this.scale.set(0.5, 0.5);
                 this.alpha = 0.8;
             });
-            this.events.onDragUpdate.add(() => {
-                let destination = this.findContainerAt(this.x, this.y);
-                if (destination) {
-                    this.applyDragDrop(this.container, destination, true);
-                }
-            });
             this.events.onDragStop.add(() => {
                 let destination = this.findContainerAt(this.x, this.y);
-                if (destination) {
-                    this.applyDragDrop(this.container, destination, false);
-                    sheet.refresh();
+                if (destination && destination != this.container) {
+                    if (this.applyDragDrop(this.container, destination, false)) {
+                        this.container = destination;
+                        this.snapToContainer();
+                        sheet.refresh();  // TODO Only if required (destination is "virtual")
+                    } else {
+                        this.snapToContainer();
+                    }
                 } else {
                     this.snapToContainer();
                 }
@@ -122,22 +123,33 @@ module TS.SpaceTac.UI {
 
         /**
          * Apply drag and drop between two containers
+         * 
+         * Return true if something changed (or would change, if test=true).
          */
-        applyDragDrop(source: CharacterEquipmentContainer, destination: CharacterEquipmentContainer, hold: boolean) {
-            if (source.removeEquipment(this, destination, true) && destination.addEquipment(this, source, true)) {
-                if (!hold) {
-                    if (source.removeEquipment(this, destination, false)) {
-                        if (!destination.addEquipment(this, source, false)) {
-                            console.error("Destination container refused to accept equipment", this, source, destination);
-                            // Go back to source
-                            if (!source.addEquipment(this, null, true)) {
-                                console.error("Equipment lost in bad exchange !", this, source, destination);
-                            }
-                        }
+        applyDragDrop(source: CharacterEquipmentContainer, destination: CharacterEquipmentContainer, test: boolean): boolean {
+            let possible = source.removeEquipment(this, destination, true) && destination.addEquipment(this, source, true);
+            if (test) {
+                return possible;
+            } else if (possible) {
+                if (source.removeEquipment(this, destination, false)) {
+                    if (destination.addEquipment(this, source, false)) {
+                        return true;
                     } else {
-                        console.error("Source container refused to give away equipment", this, source, destination);
+                        console.error("Destination container refused to accept equipment", this, source, destination);
+                        // Go back to source
+                        if (source.addEquipment(this, null, false)) {
+                            return false;
+                        } else {
+                            console.error("Equipment lost in bad exchange !", this, source, destination);
+                            return true;
+                        }
                     }
+                } else {
+                    console.error("Source container refused to give away equipment", this, source, destination);
+                    return false;
                 }
+            } else {
+                return false;
             }
         }
 

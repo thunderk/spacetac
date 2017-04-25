@@ -24,6 +24,7 @@ After making changes to sources, you need to recompile:
 ## Credits
 
 * **[Michaël Lemaire](https://thunderk.net/)** - Code and graphics
+* **[Matthieu Desprez](https://github.com/edistra)** - Beta testing and ideas
 * **Nicolas Forgo** - Ship models
 * **[Phaser](http://phaser.io)** - Game engine
 * **[Kevin MacLeod](http://www.incompetech.com/)** - Musics
