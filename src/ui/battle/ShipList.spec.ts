@@ -8,8 +8,8 @@ module TS.SpaceTac.UI.Specs {
             let battleview = testgame.battleview;
             var list = battleview.ship_list;
 
-            expect(battleview.battle.play_order.length).toBe(8);
-            expect(list.children.length).toBe(8);
+            expect(battleview.battle.play_order.length).toBe(10);
+            expect(list.children.length).toBe(10);
 
             expect(list.findPlayPosition(battleview.battle.play_order[0])).toBe(0);
             expect(list.findPlayPosition(battleview.battle.play_order[1])).toBe(1);
@@ -18,7 +18,7 @@ module TS.SpaceTac.UI.Specs {
             spyOn(battleview.battle, "playAI").and.stub();
             battleview.battle.advanceToNextShip();
 
-            expect(list.findPlayPosition(battleview.battle.play_order[0])).toBe(7);
+            expect(list.findPlayPosition(battleview.battle.play_order[0])).toBe(9);
             expect(list.findPlayPosition(battleview.battle.play_order[1])).toBe(0);
             expect(list.findPlayPosition(battleview.battle.play_order[2])).toBe(1);
         });

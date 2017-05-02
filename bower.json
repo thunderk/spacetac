@@ -10,6 +10,7 @@
   "private": true,
   "dependencies": {
     "phaser": "2.6.2",
+    "parse": "1.9.2",
     "jasmine-core": "jasmine#^2.5.2",
     "deep-diff": "0.3.0"
   }

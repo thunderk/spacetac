@@ -85,7 +85,7 @@ module TS.SpaceTac.UI {
                 if (position === 0) {
                     item.moveTo(20, 20 - this.y, animate);
                 } else {
-                    item.moveTo(8, 38 + position * 102 - this.y, animate);
+                    item.moveTo(8, 40 + position * 104 - this.y, animate);
                 }
                 this.setChildIndex(item, position);
             });

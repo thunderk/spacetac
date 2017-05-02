@@ -21,10 +21,10 @@ module TS.SpaceTac {
         }
 
         // Create a quick random player, with a fleet, for testing purposes
-        static newQuickRandom(name: string, level = 1, upgrade = false): Player {
+        static newQuickRandom(name: string, level = 1, shipcount = 4, upgrade = false): Player {
             let player = new Player(new Universe(), name);
             let generator = new FleetGenerator();
-            player.fleet = generator.generate(level, player, 4, upgrade);
+            player.fleet = generator.generate(level, player, shipcount, upgrade);
             return player;
         }
 

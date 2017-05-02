@@ -50,9 +50,9 @@ module TS.SpaceTac {
         }
 
         // Create a quick random battle, for testing purposes
-        static newQuickRandom(start = true, level = 1): Battle {
-            var player1 = Player.newQuickRandom("John", level, true);
-            var player2 = Player.newQuickRandom("Carl", level, true);
+        static newQuickRandom(start = true, level = 1, shipcount = 5): Battle {
+            var player1 = Player.newQuickRandom("John", level, shipcount, true);
+            var player2 = Player.newQuickRandom("Carl", level, shipcount, true);
 
             var result = new Battle(player1.fleet, player2.fleet);
             if (start) {

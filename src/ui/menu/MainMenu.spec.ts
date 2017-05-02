@@ -1,4 +1,4 @@
-/// <reference path="TestGame.ts" />
+/// <reference path="../TestGame.ts" />
 /// <reference path="MainMenu.ts" />
 
 module TS.SpaceTac.UI.Specs {

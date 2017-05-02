@@ -15,7 +15,13 @@ module TS.SpaceTac.UI {
             this.loadImage("menu/button.png");
             this.loadImage("menu/button-hover.png");
             this.loadImage("menu/star.png");
-            this.loadImage("battle/waiting.png");
+            this.loadImage("menu/load-bg.png");
+            this.loadImage("common/standard-bar-background.png");
+            this.loadImage("common/standard-bar-foreground.png");
+            this.loadImage("common/waiting.png");
+            this.loadImage("common/arrow.png");
+            this.loadImage("common/button-ok.png");
+            this.loadImage("common/button-cancel.png");
             this.loadImage("battle/shiplist-background.png");
             this.loadImage("battle/shiplist-own.png");
             this.loadImage("battle/shiplist-enemy.png");
@@ -76,8 +82,6 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/outcome/button-map.png");
             this.loadImage("battle/outcome/button-revert.png");
             this.loadImage("battle/outcome/button-loot.png");
-            this.loadImage("common/standard-bar-background.png");
-            this.loadImage("common/standard-bar-foreground.png");
             this.loadImage("map/starsystem-background.png");
             this.loadImage("map/current-location.png");
             this.loadImage("map/zoom-in.png");
@@ -104,7 +108,6 @@ module TS.SpaceTac.UI {
             this.loadImage("character/slot-weapon.png");
             this.loadImage("character/upgrade-available.png");
             this.loadImage("character/price-tag.png");
-            this.loadImage("character/scroll.png");
             this.loadImage("equipment/ironhull.png");
             this.loadImage("equipment/forcefield.png");
             this.loadImage("equipment/nuclearreactor.png");

@@ -6,32 +6,35 @@
     <title>SpaceTac</title>
 
     <style>
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #000000;
-      padding: 0;
-      margin: 0;
-    }
-
-    .game {
-      width: 100%;
-      height: 100vh;
-    }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000000;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .game {
+            width: 100%;
+            height: 100vh;
+        }
     </style>
 </head>
 
 <body>
     <div id="-space-tac" class="game"></div>
 
+    <script src="vendor/parse/parse.min.js"></script>
     <script src="vendor/phaser/build/phaser.min.js"></script>
     <script src="build.js"></script>
 
     <script>
         window.oncontextmenu = function (e) { e.preventDefault(); };
         window.onload = function () {
-            new TS.SpaceTac.MainUI();
+            window.ui = new TS.SpaceTac.MainUI();
+            window.connection = new TS.SpaceTac.Multi.Connection(window.ui);
         };
     </script>
 </body>

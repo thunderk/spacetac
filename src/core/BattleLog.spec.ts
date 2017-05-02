@@ -72,7 +72,7 @@ module TS.SpaceTac {
         });
 
         it("can receive simulated initial state events", function () {
-            let battle = Battle.newQuickRandom();
+            let battle = Battle.newQuickRandom(true, 1, 4);
             let playing = nn(battle.playing_ship);
             battle.log.clear();
             battle.log.addFilter("value");

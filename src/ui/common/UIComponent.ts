@@ -9,7 +9,7 @@ module TS.SpaceTac.UI {
         private width: number;
         private height: number;
 
-        constructor(parent: BaseView | UIComponent, width: number, height: number) {
+        constructor(parent: BaseView | UIComponent, width: number, height: number, background_key: string | null = null) {
             if (parent instanceof UIComponent) {
                 this.view = parent.view;
                 this.parent = parent;
@@ -22,6 +22,10 @@ module TS.SpaceTac.UI {
 
             this.width = width;
             this.height = height;
+
+            if (background_key) {
+                this.container.add(new Phaser.Image(this.view.game, 0, 0, background_key));
+            }
         }
 
         /**
@@ -66,6 +70,13 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Set the position in pixels.
+         */
+        setPosition(x: number, y: number): void {
+            this.container.position.set(x, y);
+        }
+
+        /**
          * Position the component inside the boundaries of its parent.
          * 
          * (0, 0) is the top-left anchoring, (1, 1) is the bottom-right one.
@@ -82,6 +93,16 @@ module TS.SpaceTac.UI {
             } else {
                 this.container.position.set(rx, ry);
             }
+        }
+
+        /**
+         * Add a button in the component, positioning its center.
+         */
+        addButton(x: number, y: number, on_click: Function, bg_normal: string, bg_hover = bg_normal, angle = 0) {
+            let button = new Phaser.Button(this.view.game, x, y, bg_normal, on_click);
+            button.anchor.set(0.5, 0.5);
+            button.angle = angle;
+            this.container.add(button);
         }
     }
 }

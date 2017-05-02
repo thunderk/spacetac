@@ -47,7 +47,7 @@ module TS.SpaceTac.UI {
             this.addChild(this.actions);
 
             // Waiting icon
-            this.icon_waiting = new Phaser.Image(this.game, this.width / 2, 50, "battle-waiting", 0);
+            this.icon_waiting = new Phaser.Image(this.game, this.width / 2, 50, "common-waiting", 0);
             this.icon_waiting.anchor.set(0.5, 0.5);
             this.icon_waiting.scale.set(0.5, 0.5);
             this.game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();

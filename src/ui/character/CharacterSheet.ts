@@ -120,11 +120,11 @@ module TS.SpaceTac.UI {
             this.mode_title.anchor.set(0.5, 0.5);
             this.addChild(this.mode_title);
 
-            this.loot_next = new Phaser.Button(this.game, 1890, 850, "character-scroll", () => this.paginate(1));
+            this.loot_next = new Phaser.Button(this.game, 1890, 850, "common-arrow", () => this.paginate(1));
             this.loot_next.anchor.set(0.5, 0.5);
             this.addChild(this.loot_next);
 
-            this.loot_prev = new Phaser.Button(this.game, 1238, 850, "character-scroll", () => this.paginate(-1));
+            this.loot_prev = new Phaser.Button(this.game, 1238, 850, "common-arrow", () => this.paginate(-1));
             this.loot_prev.anchor.set(0.5, 0.5);
             this.loot_prev.angle = 180;
             this.addChild(this.loot_prev);

@@ -1,12 +1,16 @@
-/// <reference path="BaseView.ts"/>
+/// <reference path="../BaseView.ts"/>
 
 module TS.SpaceTac.UI {
+    /**
+     * Main menu (first interactive screen)
+     */
     export class MainMenu extends BaseView {
         layer_stars: Phaser.Group;
         layer_title: Phaser.Group;
         button_new_game: Phaser.Button;
         button_quick_battle: Phaser.Button;
         button_load_game: Phaser.Button;
+        dialog_load_game: LoadDialog;
 
         create() {
             super.create();
@@ -28,12 +32,17 @@ module TS.SpaceTac.UI {
 
             // Menu buttons
             this.button_new_game = this.addButton(322, 674, "New Game", "Start a new campaign in a generated universe", this.onNewGame);
-            this.button_load_game = this.addButton(960, 674, "Load Game", "Load a saved campaign", this.onLoadGame);
+            this.button_load_game = this.addButton(960, 674, "Load / Join", "Load a saved game or join a friend", this.onLoadGame);
             this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", "Play a single generated battle", this.onQuickBattle);
 
             // Title
             let title = this.add.image(960, 225, "menu-title", 0, this.layer_title);
             title.anchor.set(0.5, 0);
+
+            // Dialogs
+            this.dialog_load_game = new LoadDialog(this);
+            this.dialog_load_game.setPosition(264, 160);
+            this.dialog_load_game.setVisible(false);
 
             this.tweens.create(this.layer_title).to({ x: 0 }, 3000, Phaser.Easing.Circular.Out).start();
         }
@@ -82,22 +91,7 @@ module TS.SpaceTac.UI {
 
         // Called when "Load Game" is clicked
         onLoadGame(): void {
-            var gameui = <MainUI>this.game;
-
-            if (gameui.loadGame()) {
-                this.game.state.start("router");
-            } else {
-                var error = this.game.add.text(this.button_load_game.x, this.button_load_game.y + 40,
-                    "No saved game found",
-                    { font: "bold 16px Arial", fill: "#e04040" });
-                error.anchor.set(0.5, 0.5);
-                var tween = this.game.tweens.create(error);
-                tween.to({ y: error.y + 100, alpha: 0 }, 1000, Phaser.Easing.Exponential.In);
-                tween.onComplete.addOnce(() => {
-                    error.destroy();
-                });
-                tween.start();
-            }
+            this.dialog_load_game.setVisible(true);
         }
     }
 }
