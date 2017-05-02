@@ -16,10 +16,10 @@ module TS.SpaceTac.UI.Specs {
             var result = nn(battleview.enterTargettingMode());
 
             expect(battleview.targetting).toBeTruthy();
-            expect(result).toBe(battleview.targetting);
+            expect(result).toBe(nn(battleview.targetting));
 
             // Collect targetting events
-            var hovered: Target[] = [];
+            var hovered: (Target | null)[] = [];
             var clicked: Target[] = [];
             result.targetHovered.add((target: Target) => {
                 hovered.push(target);

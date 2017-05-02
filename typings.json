@@ -2,7 +2,7 @@
   "name": "spacetac",
   "dependencies": {},
   "globalDependencies": {
-    "jasmine": "registry:dt/jasmine#2.5.0+20161003201800",
+    "jasmine": "registry:dt/jasmine#2.5.2+20170317130948",
     "phaser": "github:thunderk/phaser/typescript/typings.json#v2.6.2a"
   }
 }

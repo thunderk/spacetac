@@ -41,11 +41,8 @@ module TS.SpaceTac {
             let player = new Player();
             let star = new Star();
             let loc1 = new StarLocation(star);
-            loc1.encounter_gen = true;
-            loc1.encounter = null;
+            loc1.clearEncounter();
             let loc2 = new StarLocation(star);
-            loc2.encounter_gen = false;
-            loc2.encounter = null;
             loc2.encounter_random = new SkewedRandomGenerator([0], true);
 
             player.fleet.setLocation(loc1);
@@ -67,7 +64,7 @@ module TS.SpaceTac {
             expect(player.getBattle()).not.toBeNull();
             expect(player.fleet.location).toBe(loc2);
             expect(player.hasVisitedLocation(loc2)).toBe(true);
-            expect(nn(player.getBattle()).fleets[1]).toBe(enemy);
+            expect(nn(player.getBattle()).fleets[1]).toBe(nn(enemy));
         });
     });
 }

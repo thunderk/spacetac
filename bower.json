@@ -6,7 +6,7 @@
     "Michael Lemaire"
   ],
   "license": "MIT",
-  "homepage": "",
+  "homepage": "https://thunderk.net/spacetac/",
   "private": true,
   "dependencies": {
     "phaser": "2.6.2",

@@ -80,7 +80,7 @@ module TS.SpaceTac.UI.Specs {
             equipment.events.onDragStop.dispatch();
             expect(equipment.container).toBe(container2);
             expect(equipment.x).toBe(100);
-            expect(container1.inside).toBe(null);
+            expect(container1.inside).toBeNull();
             expect(container2.inside).toBe(equipment);
             expect(refresh).toHaveBeenCalledTimes(1);
 
