@@ -4,7 +4,7 @@ if (typeof window != "undefined") {
 
 module TS.SpaceTac.Specs {
     class FakeStorage {
-        data = {}
+        data: any = {}
         getItem(name: string) {
             return this.data[name];
         }

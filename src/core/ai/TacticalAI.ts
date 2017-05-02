@@ -99,7 +99,7 @@ module TS.SpaceTac {
          * Setup the default set of maneuver evaluators
          */
         private setupDefaultEvaluators() {
-            let scaled = (evaluator: (...args) => number, factor: number) => (...args) => factor * evaluator(...args);
+            let scaled = (evaluator: (...args: any[]) => number, factor: number) => (...args: any[]) => factor * evaluator(...args);
             let evaluators = [
                 scaled(TacticalAIHelpers.evaluateTurnCost, 1),
                 scaled(TacticalAIHelpers.evaluateDamageToEnemy, 30),

@@ -81,7 +81,7 @@ module TS.SpaceTac.UI {
             return image;
         }
 
-        addCircle(radius, width = 3, color = 0x424242): Phaser.Graphics {
+        addCircle(radius: number, width = 3, color = 0x424242): Phaser.Graphics {
             let circle = this.game.add.graphics(0, 0);
             circle.lineStyle(width, color);
             circle.drawCircle(0, 0, radius * 2 / this.scale.x);

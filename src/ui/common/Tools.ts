@@ -50,7 +50,7 @@ module TS.SpaceTac.UI {
          */
         static setHoverClick(obj: Phaser.Button, enter: Function, leave: Function, click: Function, hovertime = 300, holdtime = 600) {
             let holdstart = new Date();
-            let enternext = null;
+            let enternext: Function | null = null;
             let entercalled = false;
             let cursorinside = false;
 

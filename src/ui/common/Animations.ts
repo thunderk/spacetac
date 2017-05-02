@@ -125,7 +125,7 @@ module TS.SpaceTac.UI {
             let duration = distance * 1000 / speed;
 
             // Update the tween
-            let changes = {};
+            let changes: any = {};
             changes[property] = dest;
             tween.to(changes, duration, easing);
 
@@ -152,7 +152,7 @@ module TS.SpaceTac.UI {
                     x: [obj.x + Math.cos(rotated_obj.rotation) * curve_force, x - Math.cos(angle) * curve_force, x],
                     y: [obj.y + Math.sin(rotated_obj.rotation) * curve_force, y - Math.sin(angle) * curve_force, y]
                 }, duration, Phaser.Easing.Sinusoidal.InOut);
-                tween.interpolation((v, k) => Phaser.Math.bezierInterpolation(v, k));
+                tween.interpolation((v: any, k: any) => Phaser.Math.bezierInterpolation(v, k));
                 let prevx = obj.x;
                 let prevy = obj.y;
                 tween.onUpdateCallback(() => {

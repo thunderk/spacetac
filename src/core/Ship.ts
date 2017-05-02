@@ -628,7 +628,7 @@ module TS.SpaceTac {
                 // TODO better typing for iteritems
 
                 // Apply base skills
-                iteritems(<any>this.skills, (key, skill: ShipAttribute) => {
+                iteritems(<any>this.skills, (key: keyof ShipAttributes, skill: ShipAttribute) => {
                     new_attrs[key].add(skill.get());
                 });
 

@@ -156,7 +156,7 @@ module TS.SpaceTac.UI {
 
             this.attributes[SHIP_ATTRIBUTES[attribute].name] = text;
 
-            if (SHIP_SKILLS[attribute]) {
+            if (SHIP_SKILLS.hasOwnProperty(attribute)) {
                 let button = new Phaser.Button(this.game, x + 54, y - 4, "character-skill-upgrade", () => {
                     this.ship.upgradeSkill(<keyof ShipSkills>attribute);
                     this.refresh();

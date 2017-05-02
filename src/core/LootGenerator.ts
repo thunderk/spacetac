@@ -20,11 +20,12 @@ module TS.SpaceTac {
 
         // Fill the list of templates
         populate(): void {
-            var templates: LootTemplate[] = [];
-            for (var template_name in TS.SpaceTac.Equipments) {
+            let templates: LootTemplate[] = [];
+            let namespace: any = TS.SpaceTac.Equipments;
+            for (var template_name in namespace) {
                 if (template_name && template_name.indexOf("Abstract") != 0) {
-                    var template_class = TS.SpaceTac.Equipments[template_name];
-                    var template: LootTemplate = new template_class();
+                    let template_class = namespace[template_name];
+                    let template: LootTemplate = new template_class();
                     templates.push(template);
                 }
             }
