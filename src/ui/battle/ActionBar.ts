@@ -58,18 +58,28 @@ module TS.SpaceTac.UI {
             this.addChild(this.tooltip);
 
             // Key bindings
-            battleview.inputs.bind(Phaser.Keyboard.ESC, "Cancel action", () => this.actionEnded());
-            battleview.inputs.bind(Phaser.Keyboard.SPACEBAR, "End turn", () => this.keyActionPressed(-1));
-            battleview.inputs.bind(Phaser.Keyboard.ONE, "Action 1", () => this.keyActionPressed(0));
-            battleview.inputs.bind(Phaser.Keyboard.TWO, "Action 2", () => this.keyActionPressed(1));
-            battleview.inputs.bind(Phaser.Keyboard.THREE, "Action 3", () => this.keyActionPressed(2));
-            battleview.inputs.bind(Phaser.Keyboard.FOUR, "Action 4", () => this.keyActionPressed(3));
-            battleview.inputs.bind(Phaser.Keyboard.FIVE, "Action 5", () => this.keyActionPressed(4));
-            battleview.inputs.bind(Phaser.Keyboard.SIX, "Action 6", () => this.keyActionPressed(5));
-            battleview.inputs.bind(Phaser.Keyboard.SEVEN, "Action 7", () => this.keyActionPressed(6));
-            battleview.inputs.bind(Phaser.Keyboard.EIGHT, "Action 8", () => this.keyActionPressed(7));
-            battleview.inputs.bind(Phaser.Keyboard.NINE, "Action 9", () => this.keyActionPressed(8));
-            battleview.inputs.bind(Phaser.Keyboard.ZERO, "Action 10", () => this.keyActionPressed(9));
+            battleview.inputs.bind("Escape", "Cancel action", () => this.actionEnded());
+            battleview.inputs.bind(" ", "End turn", () => this.keyActionPressed(-1));
+            battleview.inputs.bind("Numpad1", "Action 1", () => this.keyActionPressed(0));
+            battleview.inputs.bind("Numpad2", "Action 2", () => this.keyActionPressed(1));
+            battleview.inputs.bind("Numpad3", "Action 3", () => this.keyActionPressed(2));
+            battleview.inputs.bind("Numpad4", "Action 4", () => this.keyActionPressed(3));
+            battleview.inputs.bind("Numpad5", "Action 5", () => this.keyActionPressed(4));
+            battleview.inputs.bind("Numpad6", "Action 6", () => this.keyActionPressed(5));
+            battleview.inputs.bind("Numpad7", "Action 7", () => this.keyActionPressed(6));
+            battleview.inputs.bind("Numpad8", "Action 8", () => this.keyActionPressed(7));
+            battleview.inputs.bind("Numpad9", "Action 9", () => this.keyActionPressed(8));
+            battleview.inputs.bind("Numpad0", "Action 10", () => this.keyActionPressed(9));
+            battleview.inputs.bind("Digit1", "Action 1", () => this.keyActionPressed(0));
+            battleview.inputs.bind("Digit2", "Action 2", () => this.keyActionPressed(1));
+            battleview.inputs.bind("Digit3", "Action 3", () => this.keyActionPressed(2));
+            battleview.inputs.bind("Digit4", "Action 4", () => this.keyActionPressed(3));
+            battleview.inputs.bind("Digit5", "Action 5", () => this.keyActionPressed(4));
+            battleview.inputs.bind("Digit6", "Action 6", () => this.keyActionPressed(5));
+            battleview.inputs.bind("Digit7", "Action 7", () => this.keyActionPressed(6));
+            battleview.inputs.bind("Digit8", "Action 8", () => this.keyActionPressed(7));
+            battleview.inputs.bind("Digit9", "Action 9", () => this.keyActionPressed(8));
+            battleview.inputs.bind("Digit0", "Action 10", () => this.keyActionPressed(9));
 
             // Log processing
             battleview.log_processor.register(event => {

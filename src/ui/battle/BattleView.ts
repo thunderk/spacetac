@@ -105,7 +105,7 @@ module TS.SpaceTac.UI {
             this.gameui.audio.startMusic("full-on");
 
             // Key mapping
-            this.inputs.bindCheat(Phaser.Keyboard.W, "Win current battle", () => {
+            this.inputs.bindCheat("w", "Win current battle", () => {
                 iforeach(this.battle.iships(), ship => {
                     if (ship.fleet.player != this.player) {
                         ship.setDead();
@@ -113,7 +113,7 @@ module TS.SpaceTac.UI {
                 });
                 this.battle.endBattle(this.player.fleet);
             });
-            this.inputs.bindCheat(Phaser.Keyboard.X, "Lose current battle", () => {
+            this.inputs.bindCheat("x", "Lose current battle", () => {
                 iforeach(this.battle.iships(), ship => {
                     if (ship.fleet.player == this.player) {
                         ship.setDead();
@@ -121,7 +121,7 @@ module TS.SpaceTac.UI {
                 });
                 this.battle.endBattle(first(this.battle.fleets, fleet => fleet.player != this.player));
             });
-            this.inputs.bindCheat(Phaser.Keyboard.A, "Use AI to play", () => {
+            this.inputs.bindCheat("a", "Use AI to play", () => {
                 if (this.interacting && this.battle.playing_ship) {
                     this.setInteractionEnabled(false);
                     this.battle.playAI(new TacticalAI(this.battle.playing_ship));

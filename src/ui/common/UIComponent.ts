@@ -1,15 +1,20 @@
 module TS.SpaceTac.UI {
+    export type UIInternalComponent = Phaser.Group | Phaser.Image | Phaser.Button | Phaser.Sprite;
+
     /**
      * Base class for UI components
      */
     export class UIComponent {
-        private view: BaseView;
-        private parent: UIComponent | null;
-        private container: Phaser.Group;
-        private width: number;
-        private height: number;
+        protected readonly view: BaseView;
+        protected readonly parent: UIComponent | null;
+        private readonly container: UIInternalComponent;
+        protected readonly width: number;
+        protected readonly height: number;
 
         constructor(parent: BaseView | UIComponent, width: number, height: number, background_key: string | null = null) {
+            this.width = width;
+            this.height = height;
+
             if (parent instanceof UIComponent) {
                 this.view = parent.view;
                 this.parent = parent;
@@ -18,13 +23,37 @@ module TS.SpaceTac.UI {
                 this.parent = null;
             }
 
-            this.container = this.view.add.group();
-
-            this.width = width;
-            this.height = height;
+            this.container = this.createInternalNode();
+            if (this.parent) {
+                this.parent.addInternalChild(this.container);
+            } else {
+                this.view.add.existing(this.container);
+            }
 
             if (background_key) {
-                this.container.add(new Phaser.Image(this.view.game, 0, 0, background_key));
+                this.addInternalChild(new Phaser.Image(this.view.game, 0, 0, background_key));
+            }
+        }
+
+        get game(): MainUI {
+            return this.view.gameui;
+        }
+
+        /**
+         * Create the internal phaser node
+         */
+        protected createInternalNode(): UIInternalComponent {
+            return new Phaser.Group(this.view.game);
+        }
+
+        /**
+         * Add an other internal component as child
+         */
+        protected addInternalChild(child: UIInternalComponent): void {
+            if (this.container instanceof Phaser.Group) {
+                this.container.add(child);
+            } else {
+                this.container.addChild(child);
             }
         }
 
@@ -102,7 +131,15 @@ module TS.SpaceTac.UI {
             let button = new Phaser.Button(this.view.game, x, y, bg_normal, on_click);
             button.anchor.set(0.5, 0.5);
             button.angle = angle;
-            this.container.add(button);
+            this.addInternalChild(button);
+        }
+
+        /**
+         * Set the keyboard focus on this component.
+         */
+        setKeyboardFocus(on_key: (key: string) => void) {
+            this.view.inputs.grabKeyboard(this, on_key);
+            // TODO release on destroy
         }
     }
 }

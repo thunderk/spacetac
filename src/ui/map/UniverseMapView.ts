@@ -100,7 +100,7 @@ module TS.SpaceTac.UI {
             this.gameui.audio.startMusic("walking-along");
 
             // Inputs
-            this.inputs.bindCheat(Phaser.Keyboard.R, "Reveal whole map", this.revealAll);
+            this.inputs.bindCheat("r", "Reveal whole map", this.revealAll);
 
             this.setZoom(2);
         }

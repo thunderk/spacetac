@@ -12,6 +12,9 @@ module TS.SpaceTac.UI {
             this.addButton(1038, 115, () => null, "common-arrow", "common-arrow", 0);
             this.addButton(1224, 115, () => null, "common-button-cancel");
             this.addButton(1224, 341, () => null, "common-button-cancel");
+
+            let input = new UITextInput(this, 468, 68, 10);
+            input.setPosition(585, 304);
         }
     }
 }

@@ -16,8 +16,8 @@ module TS.SpaceTac.UI {
             this.loadImage("menu/button-hover.png");
             this.loadImage("menu/star.png");
             this.loadImage("menu/load-bg.png");
-            this.loadImage("common/standard-bar-background.png");
-            this.loadImage("common/standard-bar-foreground.png");
+            this.loadImage("common/transparent.png");
+            this.loadImage("common/debug.png");
             this.loadImage("common/waiting.png");
             this.loadImage("common/arrow.png");
             this.loadImage("common/button-ok.png");
