@@ -58,7 +58,7 @@ module TS.SpaceTac.UI {
                     let cost = action.action.getActionPointsUsage(action.ship, null);
                     this.cost.setText(cost == 0 ? "" : `Cost: ${cost} power`);
                 }
-                this.description.setText(action.action.equipment ? action.action.equipment.getEffectsDescription() : "");
+                this.description.setText(action.action.getEffectsDescription());
 
                 let position = this.bar.action_icons.indexOf(action);
                 if (action.action instanceof EndTurnAction) {
