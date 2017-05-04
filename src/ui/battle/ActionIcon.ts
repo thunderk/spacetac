@@ -77,7 +77,7 @@ module TS.SpaceTac.UI {
             };
 
             // Events
-            Tools.setHoverClick(this, show_info, hide_info, () => this.processClick());
+            UITools.setHoverClick(this, show_info, hide_info, () => this.processClick());
 
             // Initialize
             this.updateActiveStatus(true);

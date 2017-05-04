@@ -88,5 +88,32 @@ module TS.SpaceTac.UI {
             let layer = this.add.group(this.layers);
             return layer;
         }
+
+        /**
+         * Get a network connection to the backend server
+         */
+        getConnection(): Multi.Connection {
+            let device_id = this.gameui.getDeviceId();
+            if (device_id) {
+                return new Multi.Connection(device_id, new Multi.ParseRemoteStorage());
+            } else {
+                // TODO Should warn the user !
+                return new Multi.Connection("fake", new Multi.FakeRemoteStorage());
+            }
+        }
+
+        /**
+         * Auto-save current session to cloud
+         * 
+         * This may be called at key points during the gameplay
+         */
+        autoSave(): void {
+            let session = this.gameui.session;
+            let connection = this.getConnection();
+            connection.publish(session, session.getDescription())
+                .then(() => this.messages.addMessage("Auto-saved to cloud"))
+                .catch(console.error)
+            //.catch(() => this.messages.addMessage("Error saving game to cloud"));
+        }
     }
 }

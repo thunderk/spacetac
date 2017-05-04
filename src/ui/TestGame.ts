@@ -12,6 +12,7 @@ module TS.SpaceTac.UI.Specs {
         baseview: BaseView;
         battleview: BattleView;
         mapview: UniverseMapView;
+        multistorage: Multi.FakeRemoteStorage;
     }
 
     /**
@@ -34,6 +35,12 @@ module TS.SpaceTac.UI.Specs {
             }
 
             let [state, stateargs] = buildView(testgame);
+
+            if (state instanceof BaseView) {
+                testgame.multistorage = new Multi.FakeRemoteStorage();
+                let connection = new Multi.Connection(RandomGenerator.global.id(12), testgame.multistorage);
+                spyOn(state, "getConnection").and.returnValue(connection);
+            }
 
             let orig_create = bound(state, "create");
             spyOn(state, "create").and.callFake(() => {

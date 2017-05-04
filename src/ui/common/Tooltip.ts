@@ -37,7 +37,7 @@ module TS.SpaceTac.UI {
                     this.background.endFill();
                 }
 
-                let [x, y] = Tools.positionInside({ x: this.anchorpoint[0], y: this.anchorpoint[1], width: width, height: height }, { x: 0, y: 0, width: this.view.getWidth(), height: this.view.getHeight() });
+                let [x, y] = UITools.positionInside({ x: this.anchorpoint[0], y: this.anchorpoint[1], width: width, height: height }, { x: 0, y: 0, width: this.view.getWidth(), height: this.view.getHeight() });
                 if (x != this.x || y != this.y) {
                     this.position.set(x, y);
                 }
@@ -68,7 +68,7 @@ module TS.SpaceTac.UI {
          * When the component is hovered, the function is called to allow filling the tooltip container
          */
         bind(obj: Phaser.Button, func: (container: Phaser.Group) => boolean): void {
-            Tools.setHoverClick(obj,
+            UITools.setHoverClick(obj,
                 // enter
                 () => {
                     this.hide();

@@ -8,7 +8,7 @@ module TS.SpaceTac.UI {
         private content: Phaser.Text
         private maxlength: number
 
-        constructor(parent: UIComponent, width: number, height: number, maxlength?: number) {
+        constructor(parent: UIComponent, width: number, height: number, maxlength?: number, fontcolor = "#FFFFFF") {
             super(parent, width, height);
 
             let input_bg = new Phaser.Image(this.game, 0, 0, "common-transparent");
@@ -19,7 +19,7 @@ module TS.SpaceTac.UI {
             this.addInternalChild(input_bg);
 
             let fontsize = Math.ceil(height * 0.8);
-            this.content = new Phaser.Text(this.game, width / 2, height / 2, "", { align: "center", font: `${fontsize}px Arial`, fill: "#FFFFFF" });
+            this.content = new Phaser.Text(this.game, width / 2, height / 2, "", { align: "center", font: `${fontsize}px Arial`, fill: fontcolor });
             this.content.anchor.set(0.5, 0.5);
             this.addInternalChild(this.content);
 

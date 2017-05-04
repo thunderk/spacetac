@@ -111,17 +111,17 @@ module TS.SpaceTac.UI {
          */
         static rotationTween(tween: Phaser.Tween, dest: number, speed = 1, easing = Phaser.Easing.Cubic.InOut, property = "rotation"): number {
             // Immediately change the object's current rotation to be in range (-pi,pi)
-            let value = Tools.normalizeAngle(tween.target[property]);
+            let value = UITools.normalizeAngle(tween.target[property]);
             tween.target[property] = value;
 
             // Compute destination angle
-            dest = Tools.normalizeAngle(dest);
+            dest = UITools.normalizeAngle(dest);
             if (value - dest > Math.PI) {
                 dest += 2 * Math.PI;
             } else if (value - dest < -Math.PI) {
                 dest -= 2 * Math.PI;
             }
-            let distance = Math.abs(Tools.normalizeAngle(dest - value)) / Math.PI;
+            let distance = Math.abs(UITools.normalizeAngle(dest - value)) / Math.PI;
             let duration = distance * 1000 / speed;
 
             // Update the tween

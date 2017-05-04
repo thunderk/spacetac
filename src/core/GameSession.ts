@@ -1,15 +1,32 @@
 module TS.SpaceTac {
-    // A game session, binding a universe and a player
+    /**
+     * A game session, binding a universe and a player
+     * 
+     * This represents the current state of game
+     */
     export class GameSession {
+        // "Hopefully"" unique session id
+        id: string
+
         // Game universe
-        universe: Universe;
+        universe: Universe
 
         // Current connected player
-        player: Player;
+        player: Player
 
         constructor() {
+            this.id = RandomGenerator.global.id(20);
             this.universe = new Universe();
             this.player = new Player(this.universe);
+        }
+
+        /**
+         * Get an indicative description of the session (to help identify game saves)
+         */
+        getDescription(): string {
+            let level = this.player.fleet.getLevel();
+            let ships = this.player.fleet.ships.length;
+            return `Level ${level} - ${ships} ships`;
         }
 
         // Load a game state from a string

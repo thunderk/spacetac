@@ -1,42 +1,53 @@
-/// <reference path="Parse.d.ts" />
-
 module TS.SpaceTac.Multi {
     /**
      * Multiplayer connection to a Parse server
      */
     export class Connection {
-        ui: MainUI
+        device_id: string
         serializer = new Serializer(TS.SpaceTac)
-        model_session = Parse.Object.extend("SpaceTacSession")
         token_chars = "abcdefghjkmnpqrstuvwxyz123456789"
+        storage: IRemoteStorage
 
-        constructor(ui: MainUI) {
-            this.ui = ui;
+        constructor(device_id: string, storage: IRemoteStorage) {
+            this.device_id = device_id;
+            this.storage = storage;
+        }
 
-            Parse.initialize("thunderk.net");
-            Parse.serverURL = 'https://rs.thunderk.net/parse';
+        /**
+         * Generate a random token
+         */
+        generateToken(length: number): string {
+            return range(length).map(() => RandomGenerator.global.choice(<any>this.token_chars)).join("");
         }
 
         /**
          * Find an unused session token
          */
-        getUnusedToken(length = 5): string {
-            let token = range(length).map(() => RandomGenerator.global.choice(<any>this.token_chars)).join("");
-            // TODO check if it is unused on server
+        async getUnusedToken(length = 5): Promise<string> {
+            let token = this.generateToken(length);
+            let existing = await this.storage.search("sessioninfo", { token: token });
+            if (existing.length > 0) {
+                token = await this.getUnusedToken(length + 1);
+            }
             return token;
         }
 
         /**
-         * Publish current session to remote server, and return a session token
+         * Publish a session to remote server, and return an invitation token
          */
-        publish(): string {
-            let session = new this.model_session();
-            let token = this.getUnusedToken();
+        async publish(session: GameSession, description: string): Promise<string> {
+            await this.storage.upsert("session", { ref: session.id }, { data: this.serializer.serialize(session) });
 
-            session.set("token", token);
-            session.set("data", this.serializer.serialize(this.ui.session));
+            let now = new Date();
+            let date = now.toISOString().substr(0, 10) + " " + now.toTimeString().substr(0, 5);
+            let info = `${date}\n${description}`;
 
-            session.save();
+            let sessinfo = await this.storage.find("sessioninfo", { ref: session.id, device: this.device_id });
+            let token: string = sessinfo ? sessinfo.token : "";
+            if (token.length == 0) {
+                token = await this.getUnusedToken();
+            }
+            await this.storage.upsert("sessioninfo", { ref: session.id, device: this.device_id, token: token }, { info: info });
 
             return token;
         }
@@ -44,21 +55,35 @@ module TS.SpaceTac.Multi {
         /**
          * Load a session from a remote server, by its token
          */
-        load(token: string): void {
-            let query = new Parse.Query(this.model_session);
-            query.equalTo("token", token);
-            query.find({
-                success: (results: any) => {
-                    if (results.length == 1) {
-                        let data = results[0].get("data");
-                        let session = this.serializer.unserialize(data);
-                        if (session instanceof GameSession) {
-                            this.ui.session = session;
-                            this.ui.state.start('router');
-                        }
-                    }
+        async loadByToken(token: string): Promise<GameSession | null> {
+            let info = await this.storage.find("sessioninfo", { token: token });
+            if (info) {
+                return this.loadById(info.ref);
+            } else {
+                return null;
+            }
+        }
+
+        /**
+         * Load a session from a remote server, by its id
+         */
+        async loadById(id: string): Promise<GameSession | null> {
+            let session = await this.storage.find("session", { ref: id });
+            if (session) {
+                let loaded = this.serializer.unserialize(session.data);
+                if (loaded instanceof GameSession) {
+                    return loaded;
                 }
-            });
+            }
+            return null;
+        }
+
+        /**
+         * List cloud saves, associated with current device
+         */
+        async listSaves(): Promise<{ [id: string]: string }> {
+            let results = await this.storage.search("sessioninfo", { device: this.device_id });
+            return dict(results.map(obj => <[string, string]>[obj.ref, obj.info]));
         }
     }
 }

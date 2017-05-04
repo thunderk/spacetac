@@ -81,6 +81,14 @@ module TS.SpaceTac {
         }
 
         /**
+         * Set the current game session, and redirect to view router
+         */
+        setSession(session: GameSession): void {
+            this.session = session;
+            this.state.start("router");
+        }
+
+        /**
          * Load current game from local browser storage
          */
         loadGame(name = "spacetac-savegame"): boolean {
@@ -97,6 +105,25 @@ module TS.SpaceTac {
             } else {
                 console.error("localStorage not available");
                 return false;
+            }
+        }
+
+        /**
+         * Get an hopefully unique device identifier
+         */
+        getDeviceId(): string | null {
+            if (this.storage) {
+                const key = "spacetac-device-id";
+                let stored = this.storage.getItem(key);
+                if (stored) {
+                    return stored;
+                } else {
+                    let generated = RandomGenerator.global.id(20);
+                    this.storage.setItem(key, generated);
+                    return generated;
+                }
+            } else {
+                return null;
             }
         }
     }

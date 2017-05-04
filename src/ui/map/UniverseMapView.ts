@@ -103,6 +103,9 @@ module TS.SpaceTac.UI {
             this.inputs.bindCheat("r", "Reveal whole map", this.revealAll);
 
             this.setZoom(2);
+
+            // Trigger an auto-save any time we go back to the map
+            this.autoSave();
         }
 
         /**

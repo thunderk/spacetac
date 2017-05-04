@@ -7,7 +7,7 @@ module TS.SpaceTac.UI {
     }
 
     // Common UI tools functions
-    export class Tools {
+    export class UITools {
         /**
          * Get the position of an object, adjusted to remain inside a container
          */
@@ -36,7 +36,7 @@ module TS.SpaceTac.UI {
          */
         static keepInside(obj: Phaser.Button | Phaser.Sprite | Phaser.Image | Phaser.Group | Phaser.Graphics, rect: IBounded) {
             let objbounds = obj.getBounds();
-            let [x, y] = Tools.positionInside({ x: obj.x, y: obj.y, width: objbounds.width, height: objbounds.height }, rect);
+            let [x, y] = UITools.positionInside({ x: obj.x, y: obj.y, width: objbounds.width, height: objbounds.height }, rect);
 
             if (x != obj.x || y != obj.y) {
                 obj.position.set(x, y);

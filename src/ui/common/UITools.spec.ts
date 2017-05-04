@@ -1,5 +1,5 @@
 module TS.SpaceTac.UI.Specs {
-    describe("Tools", function () {
+    describe("UITools", function () {
         let testgame = setupEmptyView();
 
         it("keeps objects inside bounds", function () {
@@ -8,19 +8,19 @@ module TS.SpaceTac.UI.Specs {
             image.drawEllipse(50, 25, 50, 25);
             image.endFill();
 
-            Tools.keepInside(image, { x: 0, y: 0, width: 200, height: 200 });
+            UITools.keepInside(image, { x: 0, y: 0, width: 200, height: 200 });
 
             expect(image.x).toBe(100);
             expect(image.y).toBe(100);
         });
 
         it("normalizes angles", function () {
-            expect(Tools.normalizeAngle(0)).toEqual(0);
-            expect(Tools.normalizeAngle(0.1)).toBeCloseTo(0.1, 0.000001);
-            expect(Tools.normalizeAngle(Math.PI)).toBeCloseTo(Math.PI, 0.000001);
-            expect(Tools.normalizeAngle(Math.PI + 0.5)).toBeCloseTo(-Math.PI + 0.5, 0.000001);
-            expect(Tools.normalizeAngle(-Math.PI)).toBeCloseTo(Math.PI, 0.000001);
-            expect(Tools.normalizeAngle(-Math.PI - 0.5)).toBeCloseTo(Math.PI - 0.5, 0.000001);
+            expect(UITools.normalizeAngle(0)).toEqual(0);
+            expect(UITools.normalizeAngle(0.1)).toBeCloseTo(0.1, 0.000001);
+            expect(UITools.normalizeAngle(Math.PI)).toBeCloseTo(Math.PI, 0.000001);
+            expect(UITools.normalizeAngle(Math.PI + 0.5)).toBeCloseTo(-Math.PI + 0.5, 0.000001);
+            expect(UITools.normalizeAngle(-Math.PI)).toBeCloseTo(Math.PI, 0.000001);
+            expect(UITools.normalizeAngle(-Math.PI - 0.5)).toBeCloseTo(Math.PI - 0.5, 0.000001);
         });
 
         it("handles hover and click on desktops and mobile targets", function (done) {
@@ -36,7 +36,7 @@ module TS.SpaceTac.UI.Specs {
                 spyOn(funcs, "enter");
                 spyOn(funcs, "leave");
                 spyOn(funcs, "click");
-                Tools.setHoverClick(button, funcs.enter, funcs.leave, funcs.click, 50, 100);
+                UITools.setHoverClick(button, funcs.enter, funcs.leave, funcs.click, 50, 100);
                 return [button, funcs];
             }
 

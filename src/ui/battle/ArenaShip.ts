@@ -62,7 +62,7 @@ module TS.SpaceTac.UI {
             this.addChild(this.effects);
 
             // Handle input on ship sprite
-            Tools.setHoverClick(this.sprite,
+            UITools.setHoverClick(this.sprite,
                 () => this.battleview.cursorOnShip(ship),
                 () => this.battleview.cursorOffShip(ship),
                 () => this.battleview.cursorClicked()

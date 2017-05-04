@@ -1,5 +1,5 @@
 // karma.conf.js
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     basePath: '../..',
     frameworks: ['jasmine'],
@@ -12,14 +12,16 @@ module.exports = function(config) {
       'out/build.js': ['coverage']
     },
     coverageReporter: {
-      type : 'json',
-      dir : 'out/coverage/',
+      type: 'json',
+      dir: 'out/coverage/',
       subdir: '.',
       file: 'coverage.json'
     },
 
     files: [
+      'node_modules/babel-polyfill/dist/polyfill.js',
       'out/vendor/phaser/build/phaser.js',
+      'out/vendor/parse/parse.min.js',
       'out/build.js'
     ]
   })

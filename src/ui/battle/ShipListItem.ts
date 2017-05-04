@@ -66,7 +66,7 @@ module TS.SpaceTac.UI {
             level.anchor.set(0.5, 0.5);
             this.addChild(level);
 
-            Tools.setHoverClick(this, () => list.battleview.cursorOnShip(ship), () => list.battleview.cursorOffShip(ship), () => list.battleview.cursorClicked());
+            UITools.setHoverClick(this, () => list.battleview.cursorOnShip(ship), () => list.battleview.cursorOffShip(ship), () => list.battleview.cursorClicked());
         }
 
         // Update attributes from associated ship

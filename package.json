@@ -4,6 +4,7 @@
   "description": "A tactical RPG set in space",
   "main": "src/build.js",
   "scripts": {
+    "shell": "${SHELL} || true",
     "postinstall": "bower install && typings install",
     "build": "tsc -p .",
     "pretest": "tsc -p .",
@@ -19,6 +20,7 @@
   "author": "Michael Lemaire",
   "license": "MIT",
   "devDependencies": {
+    "babel-polyfill": "^6.23.0",
     "bower": "~1.8",
     "codecov": "~2.1",
     "jasmine": "~2.5",
@@ -26,8 +28,8 @@
     "karma-coverage": "~1.1",
     "karma-jasmine": "~1.1",
     "karma-phantomjs-launcher": "~1.0",
-    "remap-istanbul": "~0.9",
     "live-server": "~1.2",
+    "remap-istanbul": "~0.9",
     "typescript": "~2.3",
     "typings": "~2.1"
   }
