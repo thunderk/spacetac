@@ -14,6 +14,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the current experience points
+         */
+        getExperience(): number {
+            return this.experience;
+        }
+
+        /**
          * Get the next experience goal to reach, to gain one level
          */
         getNextGoal(): number {

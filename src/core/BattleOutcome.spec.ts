@@ -55,5 +55,38 @@ module TS.SpaceTac.Specs {
             expect(outcome.loot[2].quality).toBe(EquipmentQuality.PREMIUM);
             expect(outcome.loot[2].requirements).toEqual({ "skill_energy": 9 });
         });
+
+        it("grants experience", function () {
+            let fleet1 = new Fleet();
+            let ship1a = fleet1.addShip(new Ship());
+            ship1a.level.forceLevel(3);
+            let ship1b = fleet1.addShip(new Ship());
+            ship1b.level.forceLevel(4);
+            let fleet2 = new Fleet();
+            let ship2a = fleet2.addShip(new Ship());
+            ship2a.level.forceLevel(6);
+            let ship2b = fleet2.addShip(new Ship());
+            ship2b.level.forceLevel(8);
+            expect(ship1a.level.getExperience()).toEqual(300);
+            expect(ship1b.level.getExperience()).toEqual(600);
+            expect(ship2a.level.getExperience()).toEqual(1500);
+            expect(ship2b.level.getExperience()).toEqual(2800);
+
+            // draw
+            let outcome = new BattleOutcome(null);
+            outcome.grantExperience([fleet1, fleet2]);
+            expect(ship1a.level.getExperience()).toEqual(345);
+            expect(ship1b.level.getExperience()).toEqual(645);
+            expect(ship2a.level.getExperience()).toEqual(1511);
+            expect(ship2b.level.getExperience()).toEqual(2811);
+
+            // win/lose
+            outcome = new BattleOutcome(fleet1);
+            outcome.grantExperience([fleet1, fleet2]);
+            expect(ship1a.level.getExperience()).toEqual(480);
+            expect(ship1b.level.getExperience()).toEqual(780);
+            expect(ship2a.level.getExperience()).toEqual(1518);
+            expect(ship2b.level.getExperience()).toEqual(2818);
+        });
     });
 }

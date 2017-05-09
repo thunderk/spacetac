@@ -132,6 +132,12 @@ module TS.SpaceTac {
          * Ends a battle and sets the outcome
          */
         endBattle(winner: Fleet | null, log = true) {
+            this.ended = true;
+            this.outcome = new BattleOutcome(winner);
+
+            // Apply experience
+            this.outcome.grantExperience(this.fleets);
+
             // Wear down equipment
             iforeach(this.iships(), ship => {
                 ship.listEquipment().forEach(equipment => {
@@ -139,9 +145,7 @@ module TS.SpaceTac {
                 });
             });
 
-            // Prepare broadcast
-            this.ended = true;
-            this.outcome = new BattleOutcome(winner);
+            // Broadcast
             if (log && this.log) {
                 this.log.add(new EndBattleEvent(this.outcome));
             }

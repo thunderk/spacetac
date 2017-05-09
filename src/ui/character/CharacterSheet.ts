@@ -26,6 +26,7 @@ module TS.SpaceTac.UI {
 
         // Ship level
         ship_level: Phaser.Text;
+        ship_experience: ValueBar;
 
         // Ship skill upgrade
         ship_upgrade_points: Phaser.Text;
@@ -84,6 +85,10 @@ module TS.SpaceTac.UI {
             this.ship_level = new Phaser.Text(this.game, 552, 1054, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
             this.ship_level.anchor.set(0.5, 0.5);
             this.addChild(this.ship_level);
+
+            this.ship_experience = new ValueBar(this.game, 516, 1067, "common-transparent");
+            this.ship_experience.setBarImage("character-experience");
+            this.addChild(this.ship_experience);
 
             this.ship_upgrade_points = new Phaser.Text(this.game, 1066, 1054, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
             this.ship_upgrade_points.anchor.set(0.5, 0.5);
@@ -204,6 +209,7 @@ module TS.SpaceTac.UI {
 
             this.ship_name.setText(ship.name);
             this.ship_level.setText(ship.level.get().toString());
+            this.ship_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
             this.ship_upgrade_points.setText(upgrade_points.toString());
             this.ship_upgrades.visible = upgrade_points > 0;
 

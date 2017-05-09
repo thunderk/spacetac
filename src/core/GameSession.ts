@@ -77,6 +77,9 @@ module TS.SpaceTac {
             let battle = this.getBattle();
 
             if (battle && battle.ended) {
+                // Generate experience
+                battle.outcome.grantExperience(battle.fleets);
+
                 if (battle.outcome.winner == this.player.fleet) {
                     // In case of victory, generate loot
                     battle.outcome.createLoot(battle);

@@ -108,6 +108,7 @@ module TS.SpaceTac.UI {
             this.loadImage("character/slot-weapon.png");
             this.loadImage("character/upgrade-available.png");
             this.loadImage("character/price-tag.png");
+            this.loadImage("character/experience.png");
             this.loadImage("equipment/ironhull.png");
             this.loadImage("equipment/forcefield.png");
             this.loadImage("equipment/nuclearreactor.png");

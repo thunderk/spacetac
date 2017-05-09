@@ -573,11 +573,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70000001"
-     inkscape:cx="290.06665"
-     inkscape:cy="536.461"
+     inkscape:zoom="7.919596"
+     inkscape:cx="577.1487"
+     inkscape:cy="39.46876"
      inkscape:document-units="px"
-     inkscape:current-layer="layer3"
+     inkscape:current-layer="layer2"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1037"
@@ -1290,6 +1290,15 @@
            x="169.983"
            id="tspan6629"
            sodipodi:role="line">2</tspan></text>
+      <path
+         style="display:inline;opacity:1;fill:#d7d07d;fill-opacity:1;stroke:none;stroke-width:0.58238131;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter9551)"
+         d="m 517.54102,1067.4453 -0.96875,7.6934 h 72.14257 l -0.96875,-7.6934 z"
+         transform="matrix(0.26458334,0,0,0.26458334,26.987511,0)"
+         id="path4776"
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/experience.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <g
        id="g6064"
