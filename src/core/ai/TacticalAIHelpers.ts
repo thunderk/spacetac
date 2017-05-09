@@ -1,5 +1,16 @@
 module TS.SpaceTac {
     /**
+     * Iterator of a list of "random" arena coordinates, based on a grid
+     */
+    function scanArena(battle: Battle, cells = 10, random = RandomGenerator.global): Iterator<Target> {
+        return imap(irange(cells * cells), cellpos => {
+            let y = Math.floor(cellpos / cells);
+            let x = cellpos - y * cells;
+            return Target.newFromLocation((x + random.random()) * battle.width / cells, (y + random.random()) * battle.height / cells);
+        });
+    }
+
+    /**
      * Standard producers and evaluators for TacticalAI
      * 
      * These are static methods that may be used as base for TacticalAI ruleset.
@@ -9,8 +20,8 @@ module TS.SpaceTac {
          * Produce all "direct hit" weapon shots.
          */
         static produceDirectShots(ship: Ship, battle: Battle): TacticalProducer {
-            let enemies = ifilter(battle.iships(), iship => iship.getPlayer() != ship.getPlayer());
-            let weapons = iarray(ship.listEquipment(SlotType.Weapon));
+            let enemies = ifilter(battle.iships(), iship => iship.alive && iship.getPlayer() !== ship.getPlayer());
+            let weapons = ifilter(iarray(ship.listEquipment(SlotType.Weapon)), weapon => weapon.action instanceof FireWeaponAction);
             return imap(icombine(enemies, weapons), ([enemy, weapon]) => new Maneuver(ship, weapon, Target.newFromShip(enemy)));
         }
 
@@ -23,14 +34,9 @@ module TS.SpaceTac {
                 return IEMPTY;
             }
 
-            return ichainit(imap(irange(iterations), iteration =>
-                imap(irange(cells * cells), cellpos => {
-                    let y = Math.floor(cellpos / cells);
-                    let x = cellpos - y * cells;
-                    let target = Target.newFromLocation((x + random.random()) * battle.width / cells, (y + random.random()) * battle.height / cells);
-                    return new Maneuver(ship, engines[0], target);
-                })
-            ));
+            return ichainit(imap(irange(iterations), iteration => {
+                return imap(scanArena(battle, cells, random), target => new Maneuver(ship, engines[0], target))
+            }));
         }
 
         /**
@@ -39,11 +45,21 @@ module TS.SpaceTac {
         static produceBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             // TODO Work with groups of 3, 4 ...
             let weapons = ifilter(iarray(ship.listEquipment(SlotType.Weapon)), weapon => weapon.action instanceof FireWeaponAction && weapon.action.blast > 0);
-            let enemies = battle.ienemies(ship.getPlayer());
+            let enemies = battle.ienemies(ship.getPlayer(), true);
+            // FIXME This produces duplicates (x, y) and (y, x)
             let couples = ifilter(icombine(enemies, enemies), ([e1, e2]) => e1 != e2);
             let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.action.getBlastRadius(ship) * 2);
             let result = imap(candidates, ([weapon, [e1, e2]]) => new Maneuver(ship, weapon, Target.newFromLocation((e1.arena_x + e2.arena_x) / 2, (e1.arena_y + e2.arena_y) / 2)));
             return result;
+        }
+
+        /**
+         * Produce drone deployments.
+         */
+        static produceDroneDeployments(ship: Ship, battle: Battle): TacticalProducer {
+            let drones = ifilter(iarray(ship.listEquipment(SlotType.Weapon)), weapon => weapon.action instanceof DeployDroneAction);
+            let grid = scanArena(battle);
+            return imap(icombine(grid, drones), ([target, drone]) => new Maneuver(ship, drone, target));
         }
 
         /**
@@ -57,6 +73,20 @@ module TS.SpaceTac {
                 return -1;
             } else {
                 return (ship.getValue("power") - powerusage) / ship.getAttribute("power_capacity");
+            }
+        }
+
+        /**
+         * Evaluate doing nothing, between -1 and 1
+         */
+        static evaluateIdling(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+            let lost = ship.getValue("power") - maneuver.getPowerUsage() + ship.getAttribute("power_recovery") - ship.getAttribute("power_capacity");
+            if (lost > 0) {
+                return -lost / ship.getAttribute("power_capacity");
+            } else if (maneuver.simulation.need_fire) {
+                return 0.5;
+            } else {
+                return 0;
             }
         }
 
@@ -102,7 +132,6 @@ module TS.SpaceTac {
             } else {
                 let factor = max([battle.width, battle.height]) * 0.01;
                 let result = -clamp(sum(distances.map(distance => factor / distance)), 0, 1);
-                //console.log(distances, result);
                 return result;
             }
         }

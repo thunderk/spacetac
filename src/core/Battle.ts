@@ -221,7 +221,7 @@ module TS.SpaceTac {
             if (this.playing_ship) {
                 if (!ai) {
                     // TODO Use an AI adapted to the fleet
-                    ai = new BullyAI(this.playing_ship, this.timer);
+                    ai = new TacticalAI(this.playing_ship, this.timer);
                 }
                 ai.play();
             }

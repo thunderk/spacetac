@@ -32,6 +32,14 @@ module TS.SpaceTac {
             this.ship = ship;
         }
 
+        jasmineToString() {
+            if (this.ship) {
+                return this.ship.jasmineToString();
+            } else {
+                return `(${this.x},${this.y})`;
+            }
+        }
+
         // Constructor to target a single ship
         static newFromShip(ship: Ship): Target {
             return new Target(ship.arena_x, ship.arena_y, ship);
@@ -43,14 +51,14 @@ module TS.SpaceTac {
         }
 
         // Get distance to another target
-        getDistanceTo(other: Target): number {
+        getDistanceTo(other: { x: number, y: number }): number {
             var dx = other.x - this.x;
             var dy = other.y - this.y;
             return Math.sqrt(dx * dx + dy * dy);
         }
 
         // Get the normalized angle, in radians, to another target
-        getAngleTo(other: Target): number {
+        getAngleTo(other: { x: number, y: number }): number {
             var dx = other.x - this.x;
             var dy = other.y - this.y;
             return Math.atan2(dy, dx);

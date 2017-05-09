@@ -26,6 +26,10 @@ module TS.SpaceTac {
             this.simulation = simulator.simulateAction(this.equipment.action, this.target, move_margin);
         }
 
+        jasmineToString() {
+            return `Use ${this.equipment.jasmineToString()} on ${this.target.jasmineToString()}`;
+        }
+
         /**
          * Apply the maneuver in current battle
          */
@@ -48,6 +52,13 @@ module TS.SpaceTac {
             } else {
                 return { x: this.ship.arena_x, y: this.ship.arena_y };
             }
+        }
+
+        /**
+         * Get the total power usage of this maneuver
+         */
+        getPowerUsage(): number {
+            return this.simulation.total_move_ap + this.simulation.total_fire_ap;
         }
     }
 }

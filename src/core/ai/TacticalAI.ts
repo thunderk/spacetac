@@ -90,6 +90,7 @@ module TS.SpaceTac {
             let producers = [
                 TacticalAIHelpers.produceDirectShots,
                 TacticalAIHelpers.produceBlastShots,
+                TacticalAIHelpers.produceDroneDeployments,
                 TacticalAIHelpers.produceRandomMoves,
             ]
             producers.forEach(producer => this.producers.push(producer(this.ship, this.ship.getBattle() || new Battle())));
@@ -103,8 +104,9 @@ module TS.SpaceTac {
             let evaluators = [
                 scaled(TacticalAIHelpers.evaluateTurnCost, 1),
                 scaled(TacticalAIHelpers.evaluateDamageToEnemy, 30),
-                scaled(TacticalAIHelpers.evaluateClustering, 3),
+                scaled(TacticalAIHelpers.evaluateClustering, 8),
                 scaled(TacticalAIHelpers.evaluatePosition, 1),
+                scaled(TacticalAIHelpers.evaluateIdling, 5),
             ]
             // TODO evaluator typing is lost
             evaluators.forEach(evaluator => this.evaluators.push((maneuver: Maneuver) => evaluator(this.ship, this.ship.getBattle(), maneuver)));

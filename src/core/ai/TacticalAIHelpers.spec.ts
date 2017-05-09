@@ -10,8 +10,8 @@ module TS.SpaceTac.Specs {
             let result = imaterialize(TacticalAIHelpers.produceDirectShots(ship0a, battle));
             expect(result.length).toBe(0);
 
-            let weapon1 = ship0a.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            let weapon2 = ship0a.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
+            let weapon1 = TestTools.addWeapon(ship0a, 10);
+            let weapon2 = TestTools.addWeapon(ship0a, 15);
             result = imaterialize(TacticalAIHelpers.produceDirectShots(ship0a, battle));
             expect(result.length).toBe(4);
             expect(result).toContain(new Maneuver(ship0a, weapon1, Target.newFromShip(ship1a)));
@@ -60,6 +60,7 @@ module TS.SpaceTac.Specs {
             result = imaterialize(TacticalAIHelpers.produceBlastShots(ship, battle));
             expect(result).toEqual([
                 new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
+                new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
             ]);
 
             let enemy3 = battle.fleets[1].addShip();
@@ -67,6 +68,7 @@ module TS.SpaceTac.Specs {
 
             result = imaterialize(TacticalAIHelpers.produceBlastShots(ship, battle));
             expect(result).toEqual([
+                new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
                 new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
             ]);
         });
@@ -91,6 +93,28 @@ module TS.SpaceTac.Specs {
 
             maneuver = new Maneuver(ship, weapon, Target.newFromLocation(310, 0));
             expect(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver)).toBe(-1);  // can't do in one turn
+        });
+
+        it("evaluates the drawback of doing nothing", function () {
+            let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
+            TestTools.setShipAP(ship, 10, 5);
+            let engine = TestTools.addEngine(ship, 50);
+            let weapon = TestTools.addWeapon(ship, 10, 2, 100, 10);
+
+            let maneuver = new Maneuver(ship, weapon, Target.newFromLocation(0, 0));
+            expect(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver)).toEqual(-0.3);
+
+            maneuver = new Maneuver(ship, engine, Target.newFromLocation(0, 0));
+            expect(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver)).toEqual(-0.5);
+
+            ship.setValue("power", 2);
+
+            maneuver = new Maneuver(ship, weapon, Target.newFromLocation(0, 0));
+            expect(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver)).toEqual(0.5);
+
+            maneuver = new Maneuver(ship, engine, Target.newFromLocation(0, 0));
+            expect(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver)).toEqual(0);
         });
 
         it("evaluates damage to enemies", function () {

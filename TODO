@@ -34,12 +34,11 @@
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: apply safety distances to move actions
-* AI: use support equipments (repair drones...)
 * AI: fix not being able to apply simulated maneuver
 * AI: do not always move first, they are defenders
-* TacticalAI: allow to play several moves in the same turn
-* TacticalAI: add pauses to not play too quickly
-* TacticalAI: replace BullyAI
+* AI: allow to play several moves in the same turn (with pauses)
+* AI: add combination of random small move and actual maneuver, as producer
+* AI: evaluate based on simulated list of effects
 * Map: restore fog of war
 * Map: add information on current star/location + information on hovered location
 * Map: generate random shops
