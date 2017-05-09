@@ -95,7 +95,7 @@ module TS.SpaceTac {
          */
         static evaluateClustering(ship: Ship, battle: Battle, maneuver: Maneuver): number {
             // TODO Take into account blast radius of in-play weapons
-            let move_location = maneuver.simulation.move_location || Target.newFromShip(ship);
+            let move_location = maneuver.getFinalLocation();
             let distances = imaterialize(imap(ifilter(battle.iships(), iship => iship != ship), iship => Target.newFromShip(iship).getDistanceTo(move_location)));
             if (distances.length == 0) {
                 return 0;
@@ -105,6 +105,16 @@ module TS.SpaceTac {
                 //console.log(distances, result);
                 return result;
             }
+        }
+
+        /**
+         * Evaluate the global positioning of a ship on the arena, between -1 and 1
+         */
+        static evaluatePosition(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+            let pos = maneuver.getFinalLocation();
+            let distance = min([pos.x, pos.y, battle.width - pos.x, battle.height - pos.y]);
+            let factor = min([battle.width / 2, battle.height / 2]);
+            return -1 + 2 * distance / factor;
         }
     }
 }

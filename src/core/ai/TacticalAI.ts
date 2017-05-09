@@ -104,6 +104,7 @@ module TS.SpaceTac {
                 scaled(TacticalAIHelpers.evaluateTurnCost, 1),
                 scaled(TacticalAIHelpers.evaluateDamageToEnemy, 30),
                 scaled(TacticalAIHelpers.evaluateClustering, 3),
+                scaled(TacticalAIHelpers.evaluatePosition, 1),
             ]
             // TODO evaluator typing is lost
             evaluators.forEach(evaluator => this.evaluators.push((maneuver: Maneuver) => evaluator(this.ship, this.ship.getBattle(), maneuver)));

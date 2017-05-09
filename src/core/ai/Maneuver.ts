@@ -38,5 +38,16 @@ module TS.SpaceTac {
                 });
             }
         }
+
+        /**
+         * Get the location of the ship after the action
+         */
+        getFinalLocation(): { x: number, y: number } {
+            if (this.simulation.need_move) {
+                return this.simulation.move_location;
+            } else {
+                return { x: this.ship.arena_x, y: this.ship.arena_y };
+            }
+        }
     }
 }

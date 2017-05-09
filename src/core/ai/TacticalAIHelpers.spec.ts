@@ -141,5 +141,27 @@ module TS.SpaceTac.Specs {
             battle.fleets[0].addShip().setArenaPosition(110, 20);
             expect(TacticalAIHelpers.evaluateClustering(ship, battle, maneuver)).toEqual(-1);
         });
+
+        it("evaluates ship position", function () {
+            let battle = new Battle(undefined, undefined, 200, 100);
+            let ship = battle.fleets[0].addShip();
+            let weapon = TestTools.addWeapon(ship, 1, 1, 400);
+
+            ship.setArenaPosition(0, 0);
+            let maneuver = new Maneuver(ship, weapon, new Target(0, 0), 0);
+            expect(TacticalAIHelpers.evaluatePosition(ship, battle, maneuver)).toEqual(-1);
+
+            ship.setArenaPosition(100, 0);
+            maneuver = new Maneuver(ship, weapon, new Target(0, 0), 0);
+            expect(TacticalAIHelpers.evaluatePosition(ship, battle, maneuver)).toEqual(-1);
+
+            ship.setArenaPosition(100, 10);
+            maneuver = new Maneuver(ship, weapon, new Target(0, 0), 0);
+            expect(TacticalAIHelpers.evaluatePosition(ship, battle, maneuver)).toEqual(-0.6);
+
+            ship.setArenaPosition(100, 50);
+            maneuver = new Maneuver(ship, weapon, new Target(0, 0), 0);
+            expect(TacticalAIHelpers.evaluatePosition(ship, battle, maneuver)).toEqual(1);
+        });
     });
 }
