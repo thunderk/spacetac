@@ -193,5 +193,12 @@ module TS.SpaceTac.UI {
                 console.error("Drone not found in arena for removal", drone);
             }
         }
+
+        /**
+         * Highlight ships that would be the target of current action
+         */
+        highlightTargets(ships: Ship[]): void {
+            this.ship_sprites.forEach(sprite => sprite.setTargetted(contains(ships, sprite.ship)));
+        }
     }
 }

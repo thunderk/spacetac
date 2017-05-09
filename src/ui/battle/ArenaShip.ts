@@ -16,6 +16,9 @@ module TS.SpaceTac.UI {
         // Statis effect
         stasis: Phaser.Image;
 
+        // Target effect
+        target: Phaser.Image;
+
         // Hover effect
         hover: Phaser.Image;
 
@@ -40,11 +43,17 @@ module TS.SpaceTac.UI {
             this.sprite.scale.set(64 / this.sprite.width);
             this.addChild(this.sprite);
 
-            // Add ship sprite
+            // Add stasis effect
             this.stasis = new Phaser.Image(this.game, 0, 0, "battle-arena-stasis");
             this.stasis.anchor.set(0.5, 0.5);
             this.stasis.visible = false;
             this.addChild(this.stasis);
+
+            // Add target effect
+            this.target = new Phaser.Image(this.game, 0, 0, "battle-arena-target");
+            this.target.anchor.set(0.5, 0.5);
+            this.target.visible = false;
+            this.addChild(this.target);
 
             // Add playing effect
             this.frame = new Phaser.Image(this.game, 0, 0, `battle-arena-ship-normal-${this.enemy ? "enemy" : "own"}`, 0);
@@ -75,13 +84,27 @@ module TS.SpaceTac.UI {
         // Set the hovered state on this ship
         //  This will toggle the hover effect
         setHovered(hovered: boolean) {
-            this.battleview.animations.setVisible(this.hover, hovered, 200);
+            if (!this.target.visible) {
+                this.battleview.animations.setVisible(this.hover, hovered, 200);
+            }
         }
 
         // Set the playing state on this ship
         //  This will toggle the "playing" indicator
         setPlaying(playing: boolean) {
             this.frame.loadTexture(`battle-arena-ship-${playing ? "playing" : "normal"}-${this.enemy ? "enemy" : "own"}`);
+        }
+
+        /**
+         * Set the ship as target of current action
+         * 
+         * This will toggle the visibility of target indicator
+         */
+        setTargetted(targetted: boolean): void {
+            if (targetted) {
+                this.battleview.animations.setVisible(this.hover, false, 1);
+            }
+            this.target.visible = targetted;
         }
 
         /**

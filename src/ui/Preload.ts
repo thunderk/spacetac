@@ -55,6 +55,8 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/arena/ship-playing-enemy.png");
             this.loadImage("battle/arena/ship-playing-own.png");
             this.loadImage("battle/arena/stasis.png");
+            this.loadImage("battle/arena/target.png");
+            this.loadImage("battle/arena/blast.png");
             this.loadImage("battle/actions/move.png");
             this.loadImage("battle/actions/endturn.png");
             this.loadImage("battle/actions/fire-gatlinggun.png");

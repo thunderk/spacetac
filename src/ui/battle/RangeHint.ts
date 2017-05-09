@@ -60,10 +60,8 @@ module TS.SpaceTac.UI {
         // Draw a circle, hinting available range
         private draw(circle: Phaser.Circle): void {
             this.circle.clear();
-            this.circle.lineStyle(5, 0x862080, 0.4);
-            this.circle.beginFill(0xD860D0, 0.2);
+            this.circle.lineStyle(5, 0xffffff, 0.2);
             this.circle.drawCircle(circle.x, circle.y, circle.diameter);
-            this.circle.endFill();
             this.circle.visible = true;
         }
     }

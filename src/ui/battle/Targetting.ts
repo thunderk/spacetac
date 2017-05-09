@@ -12,7 +12,7 @@ module TS.SpaceTac.UI {
 
         // Circle for effect radius
         blast_radius: number;
-        blast: Phaser.Graphics;
+        blast: Phaser.Image;
 
         // Signal to receive hovering events
         targetHovered: Phaser.Signal;
@@ -38,7 +38,8 @@ module TS.SpaceTac.UI {
 
             // Visual effects
             if (battleview) {
-                this.blast = new Phaser.Graphics(battleview.game, 0, 0);
+                this.blast = new Phaser.Image(battleview.game, 0, 0, "battle-arena-blast");
+                this.blast.anchor.set(0.5, 0.5);
                 this.blast.visible = false;
                 battleview.arena.add(this.blast);
                 this.line_initial = new Phaser.Graphics(battleview.game, 0, 0);
@@ -68,6 +69,9 @@ module TS.SpaceTac.UI {
                 this.blast.destroy();
             }
             this.ap_indicators.forEach(indicator => indicator.destroy());
+            if (this.battleview) {
+                this.battleview.arena.highlightTargets([]);
+            }
         }
 
         // Set AP indicators to display at fixed interval along the line
@@ -81,7 +85,7 @@ module TS.SpaceTac.UI {
             if (this.battleview) {
                 if (this.source && this.target_initial) {
                     this.line_initial.clear();
-                    this.line_initial.lineStyle(2, 0xFF0000);
+                    this.line_initial.lineStyle(3, 0x666666);
                     this.line_initial.moveTo(this.source.x, this.source.y);
                     this.line_initial.lineTo(this.target_initial.x, this.target_initial.y);
                     this.line_initial.visible = true;
@@ -91,7 +95,7 @@ module TS.SpaceTac.UI {
 
                 if (this.source && this.target_corrected) {
                     this.line_corrected.clear();
-                    this.line_corrected.lineStyle(3, 0x00FF00);
+                    this.line_corrected.lineStyle(6, this.ap_interval ? 0xe09c47 : 0xDC6441);
                     this.line_corrected.moveTo(this.source.x, this.source.y);
                     this.line_corrected.lineTo(this.target_corrected.x, this.target_corrected.y);
                     this.line_corrected.visible = true;
@@ -100,14 +104,16 @@ module TS.SpaceTac.UI {
                 }
 
                 if (this.target_corrected && this.blast_radius) {
-                    this.blast.clear();
-                    this.blast.lineStyle(5, 0x208620, 0.4);
-                    this.blast.beginFill(0x60D860, 0.2);
-                    this.blast.drawCircle(this.target_corrected.x, this.target_corrected.y, this.blast_radius * 2);
-                    this.blast.endFill();
+                    this.blast.position.set(this.target_corrected.x, this.target_corrected.y);
+                    this.blast.scale.set(this.blast_radius * 2 / 365);
                     this.blast.visible = true;
+
+                    let targets = this.battleview.battle.collectShipsInCircle(this.target_corrected, this.blast_radius, true);
+                    this.battleview.arena.highlightTargets(targets);
                 } else {
                     this.blast.visible = false;
+
+                    this.battleview.arena.highlightTargets(this.target_corrected && this.target_corrected.ship ? [this.target_corrected.ship] : []);
                 }
 
                 this.updateApIndicators();
@@ -116,14 +122,14 @@ module TS.SpaceTac.UI {
 
         // Update the AP indicators display
         updateApIndicators() {
-            if (!this.battleview || !this.source || !this.target_corrected) {
+            if (!this.battleview || !this.source) {
                 return;
             }
 
             // Get indicator count
             let count = 0;
             let distance = 0;
-            if (this.line_corrected.visible && this.ap_interval > 0) {
+            if (this.line_corrected.visible && this.ap_interval > 0 && this.target_corrected) {
                 distance = this.target_corrected.getDistanceTo(Target.newFromLocation(this.source.x, this.source.y)) - 0.00001;
                 count = Math.ceil(distance / this.ap_interval);
             }
@@ -132,7 +138,6 @@ module TS.SpaceTac.UI {
             while (this.ap_indicators.length < count) {
                 let indicator = new Phaser.Image(this.battleview.game, 0, 0, "battle-arena-ap-indicator");
                 indicator.anchor.set(0.5, 0.5);
-                indicator.scale.set(0.5, 0.5);
                 this.battleview.arena.addChild(indicator);
                 this.ap_indicators.push(indicator);
             }
@@ -142,7 +147,7 @@ module TS.SpaceTac.UI {
             }
 
             // Spread indicators
-            if (count > 0 && distance > 0) {
+            if (count > 0 && distance > 0 && this.target_corrected) {
                 let source = this.source;
                 let dx = this.ap_interval * (this.target_corrected.x - source.x) / distance;
                 let dy = this.ap_interval * (this.target_corrected.y - source.y) / distance;
