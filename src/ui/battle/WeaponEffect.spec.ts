@@ -5,7 +5,7 @@ module TS.SpaceTac.UI.Specs {
         it("displays shield hit effect", function () {
             let battleview = testgame.battleview;
             let effect = new WeaponEffect(battleview.arena, new Target(0, 0), new Target(0, 0), new Equipment());
-            effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1000, 3000);
+            effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1000, 3000, true);
 
             let layer = battleview.arena.layer_weapon_effects;
             expect(layer.children.length).toBe(2);
@@ -40,7 +40,7 @@ module TS.SpaceTac.UI.Specs {
             TestTools.setShipHP(ship, 10, 10);
             effect.gunEffect();
             expect(mock_shield_impact).toHaveBeenCalledTimes(1);
-            expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 10, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800);
+            expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 10, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800, true);
             expect(mock_hull_impact).toHaveBeenCalledTimes(1);
         });
     });

@@ -19,6 +19,9 @@ module TS.SpaceTac.UI {
         // Link to game
         private ui: MainUI;
 
+        // Link to arena
+        private arena: Arena;
+
         // Display group in which to display the visual effects
         private layer: Phaser.Group;
 
@@ -36,6 +39,7 @@ module TS.SpaceTac.UI {
 
         constructor(arena: Arena, source: Target, destination: Target, weapon: Equipment) {
             this.ui = arena.getGame();
+            this.arena = arena;
             this.layer = arena.layer_weapon_effects;
             this.source = source;
             this.destination = destination;
@@ -71,7 +75,7 @@ module TS.SpaceTac.UI {
         /**
          * Add a shield impact effect on a ship
          */
-        shieldImpactEffect(from: Point, ship: Point, delay: number, duration: number) {
+        shieldImpactEffect(from: Point, ship: Point, delay: number, duration: number, particles = false) {
             let angle = Math.atan2(from.y - ship.y, from.x - ship.x);
 
             let effect = new Phaser.Image(this.ui, ship.x, ship.y, "battle-weapon-shield-impact");
@@ -86,17 +90,19 @@ module TS.SpaceTac.UI {
             tween2.onComplete.addOnce(() => effect.destroy());
             tween1.start();
 
-            let emitter = this.ui.add.emitter(ship.x + Math.cos(angle) * 35, ship.y + Math.sin(angle) * 35, 30);
-            emitter.minParticleScale = 0.7;
-            emitter.maxParticleScale = 1.2;
-            emitter.gravity = 0;
-            emitter.makeParticles("battle-weapon-hot");
-            emitter.setSize(10, 10);
-            emitter.setRotation(0, 0);
-            emitter.setXSpeed(-Math.cos(angle) * 20, -Math.cos(angle) * 80);
-            emitter.setYSpeed(-Math.sin(angle) * 20, -Math.sin(angle) * 80);
-            emitter.start(false, 200, 30, duration * 0.8 / 30);
-            this.layer.addChild(emitter);
+            if (particles) {
+                let emitter = this.ui.add.emitter(ship.x + Math.cos(angle) * 35, ship.y + Math.sin(angle) * 35, 30);
+                emitter.minParticleScale = 0.7;
+                emitter.maxParticleScale = 1.2;
+                emitter.gravity = 0;
+                emitter.makeParticles("battle-weapon-hot");
+                emitter.setSize(10, 10);
+                emitter.setRotation(0, 0);
+                emitter.setXSpeed(-Math.cos(angle) * 20, -Math.cos(angle) * 80);
+                emitter.setYSpeed(-Math.sin(angle) * 20, -Math.sin(angle) * 80);
+                this.arena.battleview.timer.schedule(delay, () => emitter.start(false, 200, 30, duration * 0.8 / 30));
+                this.layer.addChild(emitter);
+            }
         }
 
         /**
@@ -114,7 +120,7 @@ module TS.SpaceTac.UI {
             emitter.setRotation(0, 0);
             emitter.setXSpeed(-Math.cos(angle) * 120, -Math.cos(angle) * 260);
             emitter.setYSpeed(-Math.sin(angle) * 120, -Math.sin(angle) * 260);
-            emitter.start(false, 200, 30, duration * 0.8 / 30);
+            this.arena.battleview.timer.schedule(delay, () => emitter.start(false, 200, 30, duration * 0.8 / 30));
             this.layer.addChild(emitter);
         }
 
@@ -148,6 +154,17 @@ module TS.SpaceTac.UI {
             });
             tween.start();
 
+            if (blast_radius > 0) {
+                let ships = this.arena.getBattle().collectShipsInCircle(this.destination, blast_radius);
+                ships.forEach(ship => {
+                    if (ship.getValue("shield") > 0) {
+                        this.shieldImpactEffect(this.destination, { x: ship.arena_x, y: ship.arena_y }, 1200, 800);
+                    } else {
+                        this.hullImpactEffect(this.destination, { x: ship.arena_x, y: ship.arena_y }, 1200, 400);
+                    }
+                });
+            }
+
             return 1000 + (blast_radius ? 1500 : 0);
         }
 
@@ -180,7 +197,7 @@ module TS.SpaceTac.UI {
             this.layer.addChild(emitter);
 
             if (has_shield) {
-                this.shieldImpactEffect(this.source, this.destination, 100, 800);
+                this.shieldImpactEffect(this.source, this.destination, 100, 800, true);
             } else {
                 this.hullImpactEffect(this.source, this.destination, 100, 800);
             }

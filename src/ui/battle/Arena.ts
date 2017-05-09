@@ -90,6 +90,13 @@ module TS.SpaceTac.UI {
             return this.battleview.gameui;
         }
 
+        /**
+         * Get the current battle displayed
+         */
+        getBattle(): Battle {
+            return this.battleview.battle;
+        }
+
         // Remove a ship sprite
         markAsDead(ship: Ship): void {
             var sprite = this.findShipSprite(ship);
