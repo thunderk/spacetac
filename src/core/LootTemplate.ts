@@ -126,7 +126,8 @@ module TS.SpaceTac {
                 simpleFactor(effect, 'duration');
                 effectFactor(effect.base);
             } else if (effect instanceof DamageEffect) {
-                simpleFactor(effect, 'value');
+                simpleFactor(effect, 'base');
+                simpleFactor(effect, 'span');
             }
         }
 

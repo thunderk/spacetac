@@ -39,5 +39,10 @@ module TS.SpaceTac.Specs {
             expect(shield.wear).toBe(5);
             expect(ship.alive).toBe(false);
         });
+
+        it("gets a textual description", function () {
+            expect(new DamageEffect(10).getDescription()).toEqual("do 10 damage");
+            expect(new DamageEffect(10, 5).getDescription()).toEqual("do 10-15 damage");
+        });
     });
 }

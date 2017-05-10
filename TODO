@@ -23,7 +23,6 @@
 * Organize arena objects and information in layers
 * Prevent arena effects information (eg. "shield -36") to overflow out of the arena
 * Allow to undo last moves
-* Effect should be random in a range (eg. "damage target 50-75")
 * Add critical hit/miss
 * Add an overheat/cooling system
 * Add auto-move to attack

@@ -7,7 +7,7 @@ module TS.SpaceTac.Equipments {
 
             this.setSkillsRequirements({ "skill_material": 1 });
             this.addFireAction(irepeat(3), irepeat(600), 0, [
-                new EffectTemplate(new DamageEffect(), { "value": istep(50, irepeat(10)) })
+                new EffectTemplate(new DamageEffect(), { base: istep(30, irepeat(5)), span: istep(20, irepeat(5)) })
             ]);
         }
     }

@@ -8,19 +8,23 @@ module TS.SpaceTac {
      */
     export class DamageEffect extends BaseEffect {
         // Base damage points
-        value: number;
+        base: number;
 
-        constructor(value: number = 0) {
+        // Range of randomness (effective damage will be between *value* and *value+range*)
+        span: number;
+
+        constructor(value = 0, span = 0) {
             super("damage");
 
-            this.value = value;
+            this.base = value;
+            this.span = span;
         }
 
         /**
          * Get the effective damage done to both shield and hull (in this order)
          */
         getEffectiveDamage(ship: Ship): [number, number] {
-            var damage = this.value;
+            var damage = (this.span > 0) ? RandomGenerator.global.randInt(this.base, this.base + this.span) : this.base;
             var hull: number;
             var shield: number;
 
@@ -58,7 +62,11 @@ module TS.SpaceTac {
         }
 
         getDescription(): string {
-            return `do ${this.value} damage`;
+            if (this.span > 0) {
+                return `do ${this.base}-${this.base + this.span} damage`;
+            } else {
+                return `do ${this.base} damage`;
+            }
         }
     }
 }

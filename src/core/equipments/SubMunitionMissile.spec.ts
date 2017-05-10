@@ -5,19 +5,19 @@ module TS.SpaceTac.Equipments {
 
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_material": 1 });
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 500, 150, [new DamageEffect(30)]));
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 500, 150, [new DamageEffect(30, 2)]));
 
             equipment = template.generate(2);
             expect(equipment.requirements).toEqual({ "skill_material": 2 });
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 520, 155, [new DamageEffect(32)]));
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 520, 155, [new DamageEffect(32, 3)]));
 
             equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_material": 3 });
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 540, 160, [new DamageEffect(34)]));
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 540, 160, [new DamageEffect(34, 4)]));
 
             equipment = template.generate(10);
             expect(equipment.requirements).toEqual({ "skill_material": 10 });
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 680, 195, [new DamageEffect(48)]));
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 680, 195, [new DamageEffect(48, 11)]));
         });
 
         it("hits several targets in circle", function () {
@@ -39,7 +39,8 @@ module TS.SpaceTac.Equipments {
             let action = <FireWeaponAction>equipment.action;
             action.range = 5;
             action.blast = 1.5;
-            (<DamageEffect>action.effects[0]).value = 20;
+            (<DamageEffect>action.effects[0]).base = 20;
+            (<DamageEffect>action.effects[0]).span = 0;
 
             var checkHP = (h1: number, s1: number, h2: number, s2: number, h3: number, s3: number): void => {
                 expect(ship.values.hull.get()).toBe(h1);
