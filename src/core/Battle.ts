@@ -62,6 +62,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the number of turns in a game cycle.
+         */
+        getCycleLength(): number {
+            return this.play_order.length;
+        }
+
+        /**
          * Return an iterator over all ships engaged in the battle
          */
         iships(): Iterator<Ship> {
@@ -178,13 +185,15 @@ module TS.SpaceTac {
         advanceToNextShip(log: boolean = true): void {
             var previous_ship = this.playing_ship;
 
+            if (this.playing_ship && this.playing_ship.playing) {
+                this.playing_ship.endTurn();
+            }
+
             if (this.checkEndBattle(log)) {
                 return;
             }
 
-            if (this.playing_ship && this.playing_ship.playing) {
-                this.playing_ship.endTurn();
-            }
+            this.drones.forEach(drone => drone.activate());
 
             if (this.play_order.length === 0) {
                 this.playing_ship_index = null;
@@ -298,7 +307,6 @@ module TS.SpaceTac {
                 if (log) {
                     this.log.add(new DroneDeployedEvent(drone));
                 }
-                drone.onDeploy(this.play_order);
             }
         }
 

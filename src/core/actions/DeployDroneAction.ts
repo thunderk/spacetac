@@ -52,12 +52,11 @@ module TS.SpaceTac {
         }
 
         protected customApply(ship: Ship, target: Target) {
-            let drone = new Drone(ship, this.equipment.code);
+            let drone = new Drone(ship, this.equipment.code, this.lifetime);
             drone.x = target.x;
             drone.y = target.y;
             drone.radius = this.effect_radius;
             drone.effects = this.effects;
-            drone.duration = this.lifetime;
 
             let battle = ship.getBattle();
             if (battle) {
@@ -66,7 +65,7 @@ module TS.SpaceTac {
         }
 
         getEffectsDescription(): string {
-            let desc = `Deploy drone for ${this.lifetime} turn${this.lifetime > 1 ? "s" : ""} (power usage ${this.power}, max range ${this.deploy_distance}km)`;
+            let desc = `Deploy drone for ${this.lifetime} cycle${this.lifetime > 1 ? "s" : ""} (power usage ${this.power}, max range ${this.deploy_distance}km)`;
             let effects = this.effects.map(effect => {
                 let suffix = `for ships in ${this.effect_radius}km radius`;
                 if (effect instanceof StickyEffect) {

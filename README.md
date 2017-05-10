@@ -96,18 +96,14 @@ item is then temporarily disabled (no more effects and cannot be used), until th
 ## Drones
 
 Drones are static objects, deployed by ships, that apply effects in a circular zone around themselves.
- 
-Drone effects are applied :
 
-* On all ships in the zone at the time the drone is deployed
-* On any ship entering the zone
-* On any ship inside the zone at the start and end of its turn (there and staying there)
+A drone lasts for a given number of battle cycles. For example, if there are 8 ships in play, a 2-cycles
+drone will try to activate 16 times, before being destroyed.
+
+All drones activate between two ship turns. At each activation, the drone effects are applied to any ship
+in the surrounding zone, except if less than a battle cycle passed since last activation for this ship.
 
 Drones are fully autonomous, and once deployed, are not controlled by their owner ship.
 
 They are small and cannot be the direct target of weapons. They are not affected by area effects,
 except for area damage and area effects specifically designed for drones.
-
-A drone lasts for a given number of turns, counting down each time its owner's turn starts. 
-When reaching the number of turns, the drone is destroyed (before the owner's turn is started).
-For example, a drone with 1-turn duration will destroy just before the next turn of its owner.

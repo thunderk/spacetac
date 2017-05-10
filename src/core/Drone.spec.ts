@@ -34,94 +34,78 @@ module TS.SpaceTac {
     }
 
     describe("Drone", function () {
-        it("applies effects on deployment", function () {
-            let ship1 = new Ship(null, "ship1");
+        it("applies effects on all ships inside the radius", function () {
+            let battle = new Battle();
+            let ship1 = new Ship(battle.fleets[0], "ship1");
             ship1.setArenaPosition(0, 0);
-            let ship2 = new Ship(null, "ship2");
+            let ship2 = new Ship(battle.fleets[0], "ship2");
             ship2.setArenaPosition(5, 5);
-            let ship3 = new Ship(null, "ship3");
+            let ship3 = new Ship(battle.fleets[0], "ship3");
             ship3.setArenaPosition(10, 10);
+            let ship4 = new Ship(battle.fleets[0], "ship4");
+            ship4.setArenaPosition(0, 0);
+            ship4.setDead();
             let [drone, effect] = newTestDrone(2, 2, 8, ship1);
 
             expect(effect.getApplyCalls()).toEqual([]);
 
-            drone.onDeploy([ship1, ship2, ship3]);
+            drone.activate();
             expect(effect.getApplyCalls()).toEqual([ship1, ship2]);
         });
 
-        it("applies effects on ships entering the radius", function () {
-            let owner = new Ship(null, "owner");
-            let target = new Ship(null, "target");
-            target.setArenaPosition(10, 10);
-            let [drone, effect] = newTestDrone(0, 0, 5, owner);
+        it("maintains ship application countdown", function () {
+            let battle = new Battle();
+            spyOn(battle, "getCycleLength").and.returnValue(7);
+            let ship = new Ship(battle.fleets[0]);
+            let drone = new Drone(ship, "test", 2);
 
-            expect(effect.getApplyCalls()).toEqual([], "initial");
-
-            drone.onTurnStart(target);
-            expect(effect.getApplyCalls()).toEqual([], "turn start");
-
-            target.setArenaPosition(2, 3);
-            drone.onShipMove(target);
-            expect(effect.getApplyCalls()).toEqual([target], "enter");
-
-            target.setArenaPosition(1, 1);
-            drone.onShipMove(target);
-            expect(effect.getApplyCalls()).toEqual([], "move inside");
-
-            target.setArenaPosition(12, 12);
-            drone.onShipMove(target);
-            expect(effect.getApplyCalls()).toEqual([], "exit");
-
-            target.setArenaPosition(1, 1);
-            drone.onShipMove(target);
-            expect(effect.getApplyCalls()).toEqual([target], "re-enter");
+            expect(drone.getShipCountdown(ship)).toBe(0);
+            drone.startShipCountdown(ship);
+            expect(drone.getShipCountdown(ship)).toBe(7);
         });
 
-        it("applies effects on ships remaining in the radius", function () {
-            let owner = new Ship(null, "owner");
-            let target = new Ship(null, "target");
-            let [drone, effect] = newTestDrone(0, 0, 5, owner);
+        it("applies at most once per battle cycle", function () {
+            let battle = new Battle();
+            let ship1 = new Ship(battle.fleets[0], "ship1");
+            ship1.setArenaPosition(0, 0);
+            let ship2 = new Ship(battle.fleets[1], "ship2");
+            ship2.setArenaPosition(100, 100);
+            battle.throwInitiative();
+            expect(battle.getCycleLength()).toEqual(2);
 
-            target.setArenaPosition(1, 2);
-            drone.onTurnStart(target);
-            expect(effect.getApplyCalls()).toEqual([], "start inside");
+            let [drone, effect] = newTestDrone(2, 2, 8, ship1);
+            expect(effect.getApplyCalls()).toEqual([]);
 
-            target.setArenaPosition(2, 2);
-            drone.onShipMove(target);
-            expect(effect.getApplyCalls()).toEqual([], "move inside");
+            drone.activate();
+            expect(effect.getApplyCalls()).toEqual([ship1]);
 
-            drone.onTurnEnd(target);
-            expect(effect.getApplyCalls()).toEqual([target], "turn end");
+            drone.activate();
+            expect(effect.getApplyCalls()).toEqual([]);
 
-            drone.onTurnStart(target);
-            expect(effect.getApplyCalls()).toEqual([], "second turn start");
+            drone.activate();
+            expect(effect.getApplyCalls()).toEqual([ship1]);
 
-            target.setArenaPosition(12, 12);
-            drone.onShipMove(target);
-            expect(effect.getApplyCalls()).toEqual([], "move out");
+            drone.activate();
+            expect(effect.getApplyCalls()).toEqual([]);
 
-            drone.onTurnEnd(target);
-            expect(effect.getApplyCalls()).toEqual([], "second turn end");
+            drone.activate();
+            expect(effect.getApplyCalls()).toEqual([ship1]);
         });
 
         it("signals the need for destruction after its lifetime", function () {
-            let owner = new Ship(null, "owner");
-            let other = new Ship(null, "other");
-            let [drone, effect] = newTestDrone(0, 0, 5, owner);
-            drone.duration = 2;
-
             let battle = new Battle();
-            spyOn(owner, "getBattle").and.returnValue(battle);
+            let owner = new Ship(battle.fleets[0]);
+            let [drone, effect] = newTestDrone(0, 0, 5, owner);
+            drone.duration = 3;
+
             let removeDrone = spyOn(battle, "removeDrone").and.callThrough();
 
-            drone.onTurnStart(other);
+            drone.activate();
             expect(removeDrone).not.toHaveBeenCalled();
-            drone.onTurnStart(owner);
+            drone.activate();
             expect(removeDrone).not.toHaveBeenCalled();
-            drone.onTurnStart(other);
-            expect(removeDrone).not.toHaveBeenCalled();
-            drone.onTurnStart(owner);
-            expect(removeDrone).toHaveBeenCalledWith(drone);
+            drone.activate();
+            expect(removeDrone).toHaveBeenCalledWith(drone, true);
         });
 
         it("logs each activation", function () {
@@ -144,14 +128,14 @@ module TS.SpaceTac {
         it("builds a textual description", function () {
             let drone = new Drone(new Ship());
             drone.duration = 1;
-            expect(drone.getDescription()).toEqual("For 1 turn:\n• do nothing");
+            expect(drone.getDescription()).toEqual("For 1 activation:\n• do nothing");
 
             drone.duration = 3;
             drone.effects = [
                 new DamageEffect(5),
                 new AttributeEffect("skill_human", 1)
             ]
-            expect(drone.getDescription()).toEqual("For 3 turns:\n• do 5 damage\n• human skill +1");
+            expect(drone.getDescription()).toEqual("For 3 activations:\n• do 5 damage\n• human skill +1");
         });
     });
 }

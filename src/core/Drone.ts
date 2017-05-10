@@ -3,32 +3,34 @@ module TS.SpaceTac {
      * Drones are static objects that apply effects in a circular zone around themselves.
      */
     export class Drone {
+        // Battle in which the drone is deployed
+        battle: Battle;
+
+        // Ship that launched the drone (informative, a drone is autonomous)
+        owner: Ship;
+
         // Code of the drone
         code: string;
-
-        // Ship that deployed the drone
-        owner: Ship;
 
         // Location in arena
         x: number;
         y: number;
         radius: number;
 
-        // Lifetime in number of turns (not including the initial effect on deployment)
-        duration: number = 1;
+        // Remaining lifetime in number of turns
+        duration: number;
 
         // Effects to apply
         effects: BaseEffect[] = [];
 
-        // Ships registered inside the radius
-        inside: Ship[] = [];
+        // Cycle countdown for ships
+        countdown: [Ship, number][] = [];
 
-        // Ships starting their turn the radius
-        inside_at_start: Ship[] = [];
-
-        constructor(owner: Ship, code = "drone") {
+        constructor(owner: Ship, code = "drone", base_duration = 1) {
+            this.battle = owner.getBattle() || new Battle();
             this.owner = owner;
             this.code = code;
+            this.duration = base_duration * this.battle.getCycleLength();
         }
 
         /**
@@ -39,14 +41,46 @@ module TS.SpaceTac {
             if (effects.length == 0) {
                 effects = "• do nothing";
             }
-            return `For ${this.duration} turn${this.duration > 1 ? "s" : ""}:\n${effects}`;
+            return `For ${this.duration} activation${this.duration > 1 ? "s" : ""}:\n${effects}`;
         }
 
         /**
-         * Filter the list of ships in radius.
+         * Get countdown until next activation for a given ship
          */
-        filterShipsInRadius(ships: Ship[]): Ship[] {
-            return ships.filter(ship => ship.isInCircle(this.x, this.y, this.radius));
+        getShipCountdown(ship: Ship): number {
+            let countdown = 0;
+            this.countdown.forEach(([iship, icountdown]) => {
+                if (iship === ship) {
+                    countdown = icountdown;
+                }
+            });
+            return countdown;
+        }
+
+        /**
+         * Start the countdown for a given ship
+         */
+        startShipCountdown(ship: Ship): void {
+            let found = false;
+            this.countdown = this.countdown.map(([iship, countdown]): [Ship, number] => {
+                if (iship === ship) {
+                    found = true;
+                    return [iship, this.battle.getCycleLength()];
+                } else {
+                    return [iship, countdown];
+                }
+            });
+            if (!found) {
+                this.countdown.push([ship, this.battle.getCycleLength()]);
+            }
+        }
+
+        /**
+         * Get the list of affected ships.
+         */
+        getAffectedShips(): Ship[] {
+            let ships = ifilter(this.battle.iships(), ship => ship.alive && ship.isInCircle(this.x, this.y, this.radius) && this.getShipCountdown(ship) == 0);
+            return imaterialize(ships);
         }
 
         /**
@@ -55,68 +89,29 @@ module TS.SpaceTac {
          * This does not check if the ships are in range.
          */
         apply(ships: Ship[], log = true) {
-            ships = ships.filter(ship => ship.alive);
             if (ships.length > 0) {
-                let battle = this.owner.getBattle();
-                if (battle && log) {
-                    battle.log.add(new DroneAppliedEvent(this, ships));
+                if (log) {
+                    this.battle.log.add(new DroneAppliedEvent(this, ships));
                 }
-                ships.forEach(ship => this.effects.forEach(effect => effect.applyOnShip(ship)));
+
+                ships.forEach(ship => {
+                    this.startShipCountdown(ship);
+                    this.effects.forEach(effect => effect.applyOnShip(ship));
+                });
             }
         }
 
         /**
-         * Called when the drone is first deployed.
+         * Activate the drone
          */
-        onDeploy(ships: Ship[]) {
-            this.apply(this.filterShipsInRadius(ships));
-        }
+        activate(log = true) {
+            this.apply(this.getAffectedShips(), log);
 
-        /**
-         * Called when a ship turn starts
-         */
-        onTurnStart(ship: Ship) {
-            if (ship == this.owner) {
-                this.duration--;
-            }
+            this.countdown = this.countdown.map(([ship, countdown]): [Ship, number] => [ship, countdown - 1]).filter(([ship, countdown]) => countdown > 0);
 
-            if (this.duration <= 0) {
-                if (this.owner) {
-                    let battle = this.owner.getBattle();
-                    if (battle) {
-                        battle.removeDrone(this);
-                    }
-                }
-                return;
-            }
-
-            if (ship.isInCircle(this.x, this.y, this.radius)) {
-                add(this.inside, ship);
-                add(this.inside_at_start, ship);
-            } else {
-                remove(this.inside_at_start, ship);
-            }
-        }
-
-        /**
-         * Called when a ship turn ends
-         */
-        onTurnEnd(ship: Ship) {
-            if (this.duration > 0 && ship.isInCircle(this.x, this.y, this.radius) && contains(this.inside_at_start, ship)) {
-                this.apply([ship]);
-            }
-        }
-
-        /**
-         * Called after a ship moved
-         */
-        onShipMove(ship: Ship) {
-            if (this.duration > 0 && ship.isInCircle(this.x, this.y, this.radius)) {
-                if (add(this.inside, ship)) {
-                    this.apply([ship]);
-                }
-            } else {
-                remove(this.inside, ship);
+            this.duration--;
+            if (this.duration == 0) {
+                this.battle.removeDrone(this, log);
             }
         }
     }

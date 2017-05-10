@@ -313,14 +313,6 @@ module TS.SpaceTac {
             }
         }
 
-        // Call a method for each drone of the battlefield
-        forEachDrone(callback: (drone: Drone) => any) {
-            let battle = this.getBattle();
-            if (battle) {
-                battle.drones.forEach(callback);
-            }
-        }
-
         /**
          * Method called at the start of battle
          */
@@ -361,9 +353,6 @@ module TS.SpaceTac {
                 this.sticky_effects.forEach(effect => effect.startTurn(this));
                 this.cleanStickyEffects();
             }
-
-            // Broadcast to drones
-            this.forEachDrone(drone => drone.onTurnStart(this));
         }
 
         // Method called at the end of this ship turn
@@ -373,9 +362,6 @@ module TS.SpaceTac {
                 return;
             }
             this.playing = false;
-
-            // Broadcast to drones
-            this.forEachDrone(drone => drone.onTurnEnd(this));
 
             if (this.alive) {
                 // Recover action points for next turn
@@ -446,9 +432,6 @@ module TS.SpaceTac {
                 if (log) {
                     this.addBattleEvent(new MoveEvent(this, x, y));
                 }
-
-                // Broadcast to drones
-                this.forEachDrone(drone => drone.onShipMove(this));
             }
         }
 

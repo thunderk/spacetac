@@ -283,53 +283,6 @@ module TS.SpaceTac.Specs {
             expect(ship.isInCircle(12, -4, 5)).toBe(false);
         });
 
-        it("broadcasts to drones", function () {
-            let battle = new Battle();
-            let fleet = new Fleet();
-            fleet.setBattle(battle);
-            let ship = new Ship(fleet);
-            let drone = new Drone(ship);
-
-            let onTurnStart = spyOn(drone, "onTurnStart");
-            let onTurnEnd = spyOn(drone, "onTurnEnd");
-            let onShipMove = spyOn(drone, "onShipMove");
-
-            battle.addDrone(drone);
-
-            expect(onTurnStart).toHaveBeenCalledTimes(0);
-            expect(onTurnEnd).toHaveBeenCalledTimes(0);
-            expect(onShipMove).toHaveBeenCalledTimes(0);
-
-            ship.startTurn();
-
-            expect(onTurnStart).toHaveBeenCalledTimes(1);
-            expect(onTurnStart).toHaveBeenCalledWith(ship);
-            expect(onTurnEnd).toHaveBeenCalledTimes(0);
-            expect(onShipMove).toHaveBeenCalledTimes(0);
-
-            ship.moveTo(10, 10);
-
-            expect(onTurnStart).toHaveBeenCalledTimes(1);
-            expect(onTurnEnd).toHaveBeenCalledTimes(0);
-            expect(onShipMove).toHaveBeenCalledTimes(1);
-            expect(onShipMove).toHaveBeenCalledWith(ship);
-
-            ship.endTurn();
-
-            expect(onTurnStart).toHaveBeenCalledTimes(1);
-            expect(onTurnEnd).toHaveBeenCalledTimes(1);
-            expect(onTurnEnd).toHaveBeenCalledWith(ship);
-            expect(onShipMove).toHaveBeenCalledTimes(1);
-
-            ship.setDead();
-            ship.startTurn();
-            ship.endTurn();
-
-            expect(onTurnStart).toHaveBeenCalledTimes(2);
-            expect(onTurnEnd).toHaveBeenCalledTimes(2);
-            expect(onShipMove).toHaveBeenCalledTimes(1);
-        });
-
         it("stores items in cargo space", function () {
             let ship = new Ship();
             let equipment1 = new Equipment();
