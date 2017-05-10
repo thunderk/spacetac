@@ -16,7 +16,6 @@
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)
 * Active effects are not enough visible in ship list (maybe better in arena ?)
 * All things displayed in battle should be updated from LogProcess forwarding, not from current game state
-* Drones: add tooltip
 * Drones: add hull points and take area damage
 * Show power usage/recovery in action bar, on action hover
 * More sound effects (but battle sounds should be vibration only, we are in space !)

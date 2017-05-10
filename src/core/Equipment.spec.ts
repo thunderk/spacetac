@@ -51,14 +51,14 @@ module TS.SpaceTac.Specs {
                 new DamageEffect(50)
             ]);
             equipment.action = action;
-            expect(equipment.getEffectsDescription()).toEqual("Fire (power usage 1, max range 200km):\n- do 50 damage on target");
+            expect(equipment.getEffectsDescription()).toEqual("Fire (power usage 1, max range 200km):\n• do 50 damage on target");
 
             action.blast = 20;
-            expect(equipment.getEffectsDescription()).toEqual("Fire (power usage 1, max range 200km):\n- do 50 damage in 20km radius");
+            expect(equipment.getEffectsDescription()).toEqual("Fire (power usage 1, max range 200km):\n• do 50 damage in 20km radius");
 
             action.blast = 0;
             action.effects.push(new StickyEffect(new AttributeLimitEffect("shield_capacity", 200), 3));
-            expect(equipment.getEffectsDescription()).toEqual("Fire (power usage 1, max range 200km):\n- do 50 damage on target\n- limit shield capacity to 200 for 3 turns on target");
+            expect(equipment.getEffectsDescription()).toEqual("Fire (power usage 1, max range 200km):\n• do 50 damage on target\n• limit shield capacity to 200 for 3 turns on target");
         });
 
         it("gets a minimal level, based on skills requirements", function () {
@@ -106,7 +106,7 @@ module TS.SpaceTac.Specs {
             equipment.wear = 50;
 
             let result = equipment.getFullDescription();
-            expect(result).toEqual("Second hand\n\nRequires:\n- gravity skill 2\n\nWhen equipped:\n- time skill +3");
+            expect(result).toEqual("Second hand\n\nRequires:\n• gravity skill 2\n\nWhen equipped:\n• time skill +3");
         });
     });
 }

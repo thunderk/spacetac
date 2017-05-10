@@ -140,5 +140,18 @@ module TS.SpaceTac {
                 new DroneAppliedEvent(drone, [other])
             ]);
         });
+
+        it("builds a textual description", function () {
+            let drone = new Drone(new Ship());
+            drone.duration = 1;
+            expect(drone.getDescription()).toEqual("For 1 turn:\n• do nothing");
+
+            drone.duration = 3;
+            drone.effects = [
+                new DamageEffect(5),
+                new AttributeEffect("skill_human", 1)
+            ]
+            expect(drone.getDescription()).toEqual("For 3 turns:\n• do 5 damage\n• human skill +1");
+        });
     });
 }

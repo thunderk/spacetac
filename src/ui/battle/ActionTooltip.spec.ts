@@ -30,7 +30,7 @@ module TS.SpaceTac.UI.Specs {
             expect(tooltip.main_title.text).toEqual("Weapon");
             expect(tooltip.sub_title.text).toEqual("Fire");
             expect(tooltip.shortcut.text).toEqual("[ 2 ]");
-            expect(tooltip.description.text).toEqual("Fire (power usage 2, max range 50km):\n- do 12 damage on target");
+            expect(tooltip.description.text).toEqual("Fire (power usage 2, max range 50km):\n• do 12 damage on target");
 
             tooltip.setAction(a3);
             expect(tooltip.main_title.text).toEqual("End turn");

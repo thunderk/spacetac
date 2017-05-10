@@ -103,7 +103,7 @@ module TS.SpaceTac {
                 if (effect instanceof StickyEffect) {
                     suffix = `for ${effect.duration} turn${effect.duration > 1 ? "s" : ""} ${suffix}`;
                 }
-                return "- " + effect.getDescription() + " " + suffix;
+                return "• " + effect.getDescription() + " " + suffix;
             });
             return `${desc}:\n${effects.join("\n")}`;
         }

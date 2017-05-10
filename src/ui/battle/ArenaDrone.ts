@@ -3,11 +3,14 @@ module TS.SpaceTac.UI {
      * Drone sprite in the arena
      */
     export class ArenaDrone extends Phaser.Group {
+        // Link to view
+        view: BattleView;
+
         // Link to displayed drone
         drone: Drone;
 
         // Sprite
-        sprite: Phaser.Image;
+        sprite: Phaser.Button;
 
         // Radius
         radius: Phaser.Graphics;
@@ -18,6 +21,7 @@ module TS.SpaceTac.UI {
         constructor(battleview: BattleView, drone: Drone) {
             super(battleview.game);
 
+            this.view = battleview;
             this.drone = drone;
 
             this.radius = new Phaser.Graphics(this.game, 0, 0);
@@ -35,10 +39,11 @@ module TS.SpaceTac.UI {
             this.activation.visible = false;
             this.addChild(this.activation);
 
-            this.sprite = new Phaser.Image(this.game, 0, 0, `battle-actions-deploy-${drone.code}`);
+            this.sprite = new Phaser.Button(this.game, 0, 0, `battle-actions-deploy-${drone.code}`);
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(0.1, 0.1);
             this.addChild(this.sprite);
+            this.view.tooltip.bindDynamicText(this.sprite, () => this.drone.getDescription());
         }
 
         /**

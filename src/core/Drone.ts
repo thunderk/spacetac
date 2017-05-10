@@ -32,6 +32,17 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get a textual description of this drone
+         */
+        getDescription(): string {
+            let effects = this.effects.map(effect => "• " + effect.getDescription()).join("\n");
+            if (effects.length == 0) {
+                effects = "• do nothing";
+            }
+            return `For ${this.duration} turn${this.duration > 1 ? "s" : ""}:\n${effects}`;
+        }
+
+        /**
          * Filter the list of ships in radius.
          */
         filterShipsInRadius(ships: Ship[]): Ship[] {

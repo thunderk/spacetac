@@ -77,7 +77,7 @@ module TS.SpaceTac {
             let requirements: string[] = [];
             iteritems(this.requirements, (skill: keyof ShipAttributes, value) => {
                 if (value > 0) {
-                    requirements.push(`- ${SHIP_ATTRIBUTES[skill].name} ${value}`);
+                    requirements.push(`• ${SHIP_ATTRIBUTES[skill].name} ${value}`);
                 }
             });
 
@@ -149,7 +149,7 @@ module TS.SpaceTac {
             let parts: string[] = [];
 
             if (this.effects.length > 0) {
-                parts.push(["When equipped:"].concat(this.effects.map(effect => "- " + effect.getDescription())).join("\n"));
+                parts.push(["When equipped:"].concat(this.effects.map(effect => "• " + effect.getDescription())).join("\n"));
             }
 
             let action_desc = this.action.getEffectsDescription();
