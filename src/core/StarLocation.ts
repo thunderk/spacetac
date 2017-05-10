@@ -67,7 +67,7 @@ module TS.SpaceTac {
                 if (this.encounter_random.random() < 0.8) {
                     var fleet_generator = new FleetGenerator(this.encounter_random);
                     var ship_count = this.encounter_random.randInt(1, 5);
-                    this.encounter = fleet_generator.generate(this.star.level, undefined, ship_count, true);
+                    this.encounter = fleet_generator.generate(this.star.level, new Player(this.star.universe, "Enemy"), ship_count, true);
                 }
             }
 
