@@ -63,6 +63,7 @@ module TS.SpaceTac.UI {
                     result.moveTo(starlink.first.x - 0.5 + loc1.x, starlink.first.y - 0.5 + loc1.y);
                     result.lineTo(starlink.second.x - 0.5 + loc2.x, starlink.second.y - 0.5 + loc2.y);
                 }
+                result.data.link = starlink;
                 return result;
             });
             this.starlinks.forEach(starlink => this.layer_universe.add(starlink));
@@ -100,7 +101,7 @@ module TS.SpaceTac.UI {
             this.gameui.audio.startMusic("walking-along");
 
             // Inputs
-            this.inputs.bindCheat("r", "Reveal whole map", this.revealAll);
+            this.inputs.bindCheat("r", "Reveal whole map", () => this.revealAll());
 
             this.setZoom(2);
 
@@ -119,10 +120,22 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Refresh the view
+         */
+        refresh() {
+            this.setZoom(this.zoom);
+        }
+
+        /**
          * Update info on all star systems (fog of war, available data...)
          */
         updateInfo(current_star: Star | null) {
             this.current_location.setZoom(this.zoom);
+
+            this.starlinks.forEach(linkgraphics => {
+                let link = <StarLink>linkgraphics.data.link;
+                linkgraphics.visible = this.player.hasVisitedSystem(link.first) || this.player.hasVisitedSystem(link.second);
+            })
 
             this.starsystems.forEach(system => system.updateInfo(this.zoom, system.starsystem == current_star));
 
@@ -146,7 +159,7 @@ module TS.SpaceTac.UI {
                     this.player.setVisited(location);
                 });
             });
-            // TODO Redraw
+            this.refresh();
         }
 
         /**

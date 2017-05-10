@@ -1,12 +1,13 @@
 module TS.SpaceTac.UI {
     // Group to display a star system
     export class StarSystemDisplay extends Phaser.Image {
-        view: UniverseMapView;
-        circles: Phaser.Group;
-        starsystem: Star;
-        player: Player;
-        fleet_display: FleetDisplay;
-        locations: [StarLocation, Phaser.Image, Phaser.Image][] = [];
+        view: UniverseMapView
+        circles: Phaser.Group
+        starsystem: Star
+        player: Player
+        fleet_display: FleetDisplay
+        locations: [StarLocation, Phaser.Image, Phaser.Image][] = []
+        label: Phaser.Image
 
         constructor(parent: UniverseMapView, starsystem: Star) {
             super(parent.game, starsystem.x, starsystem.y, "map-starsystem-background");
@@ -70,6 +71,14 @@ module TS.SpaceTac.UI {
                     this.locations.push([location, location_sprite, status_badge]);
                 }
             });
+
+            // Show name
+            this.label = new Phaser.Image(this.game, 0, 460, "map-name");
+            this.label.anchor.set(0.5, 0.5);
+            let label_content = new Phaser.Text(this.game, 0, 0, this.starsystem.name, { align: "center", font: `32pt Arial`, fill: "#e2e3b8" })
+            label_content.anchor.set(0.5, 0.5);
+            this.label.addChild(label_content);
+            this.addChild(this.label);
         }
 
         addImage(x: number, y: number, key: string, onclick: Function | null = null): Phaser.Image {
@@ -116,7 +125,22 @@ module TS.SpaceTac.UI {
 
             // LOD
             let detailed = focus && level == 2;
-            this.children.forEach(child => this.view.animations.setVisible(child, detailed, 300));
+            this.children.filter(child => child !== this.label).forEach(child => this.view.animations.setVisible(child, detailed, 300));
+
+            this.updateLabel(level);
+        }
+
+        /**
+         * Update label position and scaling
+         */
+        updateLabel(zoom: number) {
+            this.label.visible = this.player.hasVisitedSystem(this.starsystem);
+
+            let factor = (zoom == 2) ? 1 : (zoom == 1 ? 5 : 15);
+            this.view.tweens.create(this.label.scale).to({ x: factor, y: factor }, 500, Phaser.Easing.Cubic.InOut).start();
+
+            let position = (zoom == 2) ? { x: -460, y: 460 } : { x: 0, y: 100 * factor };
+            this.view.tweens.create(this.label.position).to(position, 500, Phaser.Easing.Cubic.InOut).start();
         }
     }
 }

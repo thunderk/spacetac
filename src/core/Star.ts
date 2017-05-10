@@ -100,7 +100,9 @@ module TS.SpaceTac {
         // Generate the contents of this star system
         generate(random = RandomGenerator.global): void {
             var location_count = random.randInt(2, 10);
-            this.name = random.choice(Star.NAMES_POOL);
+            if (this.name.length == 0) {
+                this.name = random.choice(Star.NAMES_POOL);
+            }
             this.generateLocations(location_count, random);
         }
 

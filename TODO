@@ -7,6 +7,7 @@
 * Character sheet: effective skill is sometimes not updated when upgrading base skill
 * Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
+* Menu: fix background stars aggregating at right side when the game is not focused
 * Add permanent effects to ship models to ease balancing
 * Find incentives to move from starting position
 * Fix targetting not resetting when using action shortcuts
@@ -40,11 +41,8 @@
 * AI: allow to play several moves in the same turn (with pauses)
 * AI: add combination of random small move and actual maneuver, as producer
 * AI: evaluate based on simulated list of effects
-* Map: restore fog of war
-* Map: add information on current star/location + information on hovered location
 * Map: remove jump links that cross the radius of other systems
 * Map: disable interaction (zoom, selection) while moving/jumping
-* Menu: fix background stars aggregating at right side when the game is not focused
 * Add ship personality (with icons to identify ?)
 * Tutorial
 * Missions/quests system
