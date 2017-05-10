@@ -101,5 +101,19 @@ module TS.SpaceTac.Specs {
             result = template.generate(2);
             expect(result.action).toEqual(new DeployDroneAction(result, 2, 101, 3, 51, [new FakeEffect(9)]));
         });
+
+        it("checks the presence of damaging effects", function () {
+            let template = new LootTemplate(SlotType.Weapon, "Weapon");
+            expect(template.hasDamageEffect()).toBe(false);
+
+            template.addAttributeEffect("initiative", 1);
+            expect(template.hasDamageEffect()).toBe(false);
+
+            template.addFireAction(1, 50, 50, [new EffectTemplate(new BaseEffect("test"), {})]);
+            expect(template.hasDamageEffect()).toBe(false);
+
+            template.addFireAction(1, 50, 50, [new EffectTemplate(new DamageEffect(20), {})]);
+            expect(template.hasDamageEffect()).toBe(true);
+        });
     });
 }

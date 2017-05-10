@@ -288,5 +288,18 @@ module TS.SpaceTac {
                 equipment.action = new DeployDroneAction(equipment, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(lifetime, level), resolveForLevel(radius, level), reffects);
             });
         }
+
+        /**
+         * Check if the template has any damage effect (to know if is an offensive weapon)
+         */
+        hasDamageEffect(): boolean {
+            let example = this.generate(1);
+            let action = example.action;
+            if (action instanceof FireWeaponAction || action instanceof DeployDroneAction) {
+                return any(action.effects, effect => effect instanceof DamageEffect || (effect instanceof StickyEffect && effect.base instanceof DamageEffect));
+            } else {
+                return false;
+            }
+        }
     }
 }

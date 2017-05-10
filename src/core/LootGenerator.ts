@@ -1,21 +1,34 @@
 module TS.SpaceTac {
-    // Equipment generator from loot templates
+    /**
+     * Equipment generator from loot templates
+     * 
+     * Loot templates are automatically populated from the "SpaceTac.Equipments" namespace
+     */
     export class LootGenerator {
         // List of available templates
-        templates: LootTemplate[];
+        templates: LootTemplate[]
 
         // Random generator that will be used
-        random: RandomGenerator;
+        random: RandomGenerator
 
-        // Construct a basic loot generator
-        //  The list of templates will be automatically populated
+        // Filter to select a subset of templates
+        templatefilter: (template: LootTemplate) => boolean
+
         constructor(random = RandomGenerator.global, populate: boolean = true) {
             this.templates = [];
             this.random = random;
+            this.templatefilter = () => true;
 
             if (populate) {
                 this.populate();
             }
+        }
+
+        /**
+         * Set the template filter for next generations
+         */
+        setTemplateFilter(filter: (template: LootTemplate) => boolean) {
+            this.templatefilter = filter;
         }
 
         // Fill the list of templates
@@ -37,7 +50,8 @@ module TS.SpaceTac {
         //  If no equipment could be generated from available templates, null is returned
         generate(level: number, quality = EquipmentQuality.COMMON, slot: SlotType | null = null): Equipment | null {
             // Generate equipments matching conditions, with each template
-            let equipments = this.templates.filter(template => slot == null || slot == template.slot).map(template => template.generate(level, quality, this.random));
+            let templates = this.templates.filter(this.templatefilter).filter(template => slot == null || slot == template.slot);
+            let equipments = templates.map(template => template.generate(level, quality, this.random));
 
             // No equipment could be generated with given conditions
             if (equipments.length === 0) {
@@ -52,7 +66,7 @@ module TS.SpaceTac {
          * Generate a random equipment of highest level, from a given set of skills
          */
         generateHighest(skills: ShipSkills, quality = EquipmentQuality.COMMON, slot: SlotType | null = null): Equipment | null {
-            let templates = this.templates.filter(template => slot == null || slot == template.slot);
+            let templates = this.templates.filter(this.templatefilter).filter(template => slot == null || slot == template.slot);
             let candidates: Equipment[] = [];
             let level = 1;
 

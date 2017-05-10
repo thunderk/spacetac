@@ -1,5 +1,7 @@
 module TS.SpaceTac {
-    // Generator of random ship
+    /**
+     * Generator of random ship
+     */
     export class ShipGenerator {
         // Random number generator used
         random: RandomGenerator;
@@ -8,16 +10,21 @@ module TS.SpaceTac {
             this.random = random;
         }
 
-        // Generate a ship of a given level
-        //  The ship will not be named, nor will be a member of any fleet
-        generate(level: number, model: ShipModel | null = null, upgrade = false): Ship {
+        /**
+         * Generate a ship of a givel level.
+         * 
+         * If *upgrade* is true, the ship's upgrade points will be randomly spent before chosing equipment
+         * 
+         * If *force_damage_equipment, at least one "damaging" weapon will be chosen
+         */
+        generate(level: number, model: ShipModel | null = null, upgrade = false, force_damage_equipment = false): Ship {
             if (!model) {
                 // Get a random model
                 model = ShipModel.getRandomModel(level, this.random);
             }
 
-            var result = new Ship(null, undefined, model);
-            var loot = new LootGenerator(this.random);
+            let result = new Ship(null, undefined, model);
+            let loot = new LootGenerator(this.random);
 
             // Set all skills to 1 (to be able to use at least basic equipment)
             keys(result.skills).forEach(skill => result.upgradeSkill(skill));
@@ -31,14 +38,21 @@ module TS.SpaceTac {
             }
 
             // Fill equipment slots
-            result.slots.forEach((slot: Slot) => {
-                var equipment = loot.generateHighest(result.skills, EquipmentQuality.COMMON, slot.type);
+            result.slots.forEach(slot => {
+                if (slot.type == SlotType.Weapon && force_damage_equipment) {
+                    loot.setTemplateFilter(template => template.hasDamageEffect());
+                    force_damage_equipment = false;
+                }
+
+                let equipment = loot.generateHighest(result.skills, EquipmentQuality.COMMON, slot.type);
                 if (equipment) {
                     slot.attach(equipment)
                     if (slot.attached !== equipment) {
                         console.error("Cannot attach generated equipment to slot", equipment, slot);
                     }
                 }
+
+                loot.setTemplateFilter(() => true);
             });
 
             return result;
