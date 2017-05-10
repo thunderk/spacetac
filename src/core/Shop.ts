@@ -3,24 +3,51 @@ module TS.SpaceTac {
      * A shop is a place to buy/sell equipments
      */
     export class Shop {
+        // Average level of equipment
+        private level: number
+
+        // Approximative number of equipments
+        private count: number
+
         // Equipment in stock
-        stock: Equipment[] = [];
+        private stock: Equipment[]
+
+        // Random generator
+        private random: RandomGenerator
+
+        constructor(level = 1, stock: Equipment[] = [], count = 40) {
+            this.level = level;
+            this.stock = stock;
+            this.count = count;
+            this.random = new RandomGenerator();
+        }
+
+        /**
+         * Get available stock to display
+         */
+        getStock() {
+            if (this.stock.length < this.count * 0.5) {
+                let count = this.random.randInt(Math.floor(this.count * 0.8), Math.ceil(this.count * 1.2));
+                this.stock = this.stock.concat(this.generateStock(count - this.stock.length, this.level, this.random));
+                this.sortStock();
+            }
+
+            return this.stock;
+        }
 
         /**
          * Generate a random stock
          * 
          * *level* is the preferential level, but equipment around it may be generated
          */
-        generateStock(items: number, level: number, random = RandomGenerator.global) {
+        private generateStock(items: number, level: number, random = RandomGenerator.global): Equipment[] {
             let generator = new LootGenerator(random);
 
-            this.stock = nna(range(items).map(() => {
+            return nna(range(items).map(() => {
                 let equlevel = random.weighted(range(level + 3).map(i => i + 1).map(i => (i > level) ? 1 : i)) + 1;
                 let quality = random.weighted([1, 7, 2]);
                 return generator.generate(equlevel, quality);
             }));
-
-            this.sortStock();
         }
 
         /**

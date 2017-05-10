@@ -29,6 +29,8 @@ module TS.SpaceTac {
             });
 
             this.setEncounterLevels();
+
+            this.addShops();
         }
 
         // Generate a given number of stars, not too crowded
@@ -172,6 +174,19 @@ module TS.SpaceTac {
 
             // Round levels
             this.stars.forEach(star => star.level = Math.round(star.level));
+        }
+
+        /**
+         * Add random shops
+         */
+        addShops(): void {
+            this.stars.forEach(star => {
+                star.locations.forEach(location => {
+                    if (this.random.random() > 0.6) {
+                        location.addShop(star.level);
+                    }
+                });
+            });
         }
 
         /**

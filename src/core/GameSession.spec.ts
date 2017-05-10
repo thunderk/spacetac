@@ -82,7 +82,7 @@ module TS.SpaceTac.Specs {
             expect(session.getBattle()).toBeNull();
             let start_location = nn(session.player.fleet.location);
             expect(start_location.shop).not.toBeNull();
-            expect(nn(start_location.shop).stock.length).toBe(50);
+            expect(nn(start_location.shop).getStock().length).toBeGreaterThan(20);
             expect(start_location.encounter).toBeNull();
             expect(start_location.encounter_gen).toBe(true);
         });

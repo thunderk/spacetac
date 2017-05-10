@@ -47,11 +47,8 @@ module TS.SpaceTac {
         /**
          * Add a shop in this location
          */
-        addShop(generate_items = 0) {
-            this.shop = new Shop();
-            if (generate_items) {
-                this.shop.generateStock(generate_items, 1);
-            }
+        addShop(level = this.star.level) {
+            this.shop = new Shop(level);
         }
 
         // Set the jump destination of a WARP location

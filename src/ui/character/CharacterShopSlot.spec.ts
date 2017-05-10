@@ -14,8 +14,7 @@ module TS.SpaceTac.UI.Specs {
             ship.addCargo(equ1)
 
             let equ2 = new Equipment(SlotType.Weapon, "equ2");
-            let shop = new Shop();
-            shop.stock = [equ2];
+            let shop = <any>new Shop(1, [equ2], 0);
             spyOn(shop, "getPrice").and.returnValue(120);
             sheet.setShop(shop);
             sheet.show(ship);

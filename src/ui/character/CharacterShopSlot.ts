@@ -7,7 +7,7 @@ module TS.SpaceTac.UI {
     export class CharacterShopSlot extends CharacterLootSlot {
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
             let shop = this.sheet.shop;
-            if (shop && !contains(shop.stock, equipment.item)) {
+            if (shop && !contains(shop.getStock(), equipment.item)) {
                 if (test) {
                     return true;
                 } else {
@@ -20,7 +20,7 @@ module TS.SpaceTac.UI {
 
         removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
             let shop = this.sheet.shop;
-            if (shop && contains(shop.stock, equipment.item)) {
+            if (shop && contains(shop.getStock(), equipment.item)) {
                 let price = shop.getPrice(equipment.item);
                 if (test) {
                     return price <= this.sheet.fleet.credits;

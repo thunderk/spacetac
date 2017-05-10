@@ -2,14 +2,12 @@ module TS.SpaceTac.Specs {
     describe("Shop", () => {
         it("generates a stock", () => {
             let shop = new Shop();
-            expect(shop.stock.length).toBe(0);
-
-            shop.generateStock(8, 1);
-            expect(shop.stock.length).toBe(8);
+            expect((<any>shop).stock.length).toBe(0);
+            expect(shop.getStock().length).toBeGreaterThan(20);
         });
 
         it("buys and sells items", function () {
-            let shop = new Shop();
+            let shop = <any>new Shop();
             let equ1 = new Equipment(SlotType.Shield, "shield");
             equ1.price = 50;
             let equ2 = new Equipment(SlotType.Hull, "hull");

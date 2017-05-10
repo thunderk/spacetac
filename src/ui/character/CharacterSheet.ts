@@ -326,7 +326,7 @@ module TS.SpaceTac.UI {
          * Change the page displayed in loot/shop section
          */
         paginate(offset: number) {
-            let items = this.shop ? this.shop.stock : this.loot_items;
+            let items = this.shop ? this.shop.getStock() : this.loot_items;
             this.loot_page = clamp(this.loot_page + offset, 0, 1 + Math.floor(items.length / 12));
             this.refresh();
         }
@@ -339,7 +339,7 @@ module TS.SpaceTac.UI {
             this.loot_slots.removeAll(true);
 
             let info = CharacterSheet.getSlotPositions(12, 588, 354, 196, 196);
-            let items = this.shop ? this.shop.stock : this.loot_items;
+            let items = this.shop ? this.shop.getStock() : this.loot_items;
             range(per_page).forEach(idx => {
                 let loot_slot = this.shop ? new CharacterShopSlot(this, info.positions[idx].x, info.positions[idx].y) : new CharacterLootSlot(this, info.positions[idx].x, info.positions[idx].y);
                 loot_slot.scale.set(info.scaling, info.scaling);
