@@ -360,10 +360,10 @@ module TS.SpaceTac {
                 // Apply sticky effects
                 this.sticky_effects.forEach(effect => effect.startTurn(this));
                 this.cleanStickyEffects();
-
-                // Broadcast to drones
-                this.forEachDrone(drone => drone.onTurnStart(this));
             }
+
+            // Broadcast to drones
+            this.forEachDrone(drone => drone.onTurnStart(this));
         }
 
         // Method called at the end of this ship turn
@@ -374,10 +374,10 @@ module TS.SpaceTac {
             }
             this.playing = false;
 
-            if (this.alive) {
-                // Broadcast to drones
-                this.forEachDrone(drone => drone.onTurnEnd(this));
+            // Broadcast to drones
+            this.forEachDrone(drone => drone.onTurnEnd(this));
 
+            if (this.alive) {
                 // Recover action points for next turn
                 this.updateAttributes();
                 this.recoverActionPoints();

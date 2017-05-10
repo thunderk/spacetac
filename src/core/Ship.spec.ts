@@ -320,6 +320,14 @@ module TS.SpaceTac.Specs {
             expect(onTurnEnd).toHaveBeenCalledTimes(1);
             expect(onTurnEnd).toHaveBeenCalledWith(ship);
             expect(onShipMove).toHaveBeenCalledTimes(1);
+
+            ship.setDead();
+            ship.startTurn();
+            ship.endTurn();
+
+            expect(onTurnStart).toHaveBeenCalledTimes(2);
+            expect(onTurnEnd).toHaveBeenCalledTimes(2);
+            expect(onShipMove).toHaveBeenCalledTimes(1);
         });
 
         it("stores items in cargo space", function () {
