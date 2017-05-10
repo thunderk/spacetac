@@ -321,12 +321,28 @@ module TS.SpaceTac {
             }
         }
 
-        // Method called at the start of battle
+        /**
+         * Method called at the start of battle
+         */
         startBattle() {
             this.alive = true;
+            this.sticky_effects = [];
             this.updateAttributes();
             this.restoreHealth();
             this.initializeActionPoints();
+        }
+
+        /**
+         * Method called at the end of battle
+         */
+        endBattle(turncount: number) {
+            // Restore as pristine
+            this.startBattle();
+
+            // Wear down equipment
+            this.listEquipment().forEach(equipment => {
+                equipment.addWear(turncount);
+            });
         }
 
         // Method called at the start of this ship turn

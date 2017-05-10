@@ -460,5 +460,29 @@ module TS.SpaceTac.Specs {
             expect(ship.getAttribute("skill_energy")).toBe(1);
             expect(ship.getAttribute("skill_gravity")).toBe(14);
         });
+
+        it("restores as new at the end of battle", function () {
+            let ship = new Ship();
+            TestTools.setShipHP(ship, 10, 20);
+            TestTools.setShipAP(ship, 5, 0);
+            ship.addDamage(5, 5);
+            ship.addStickyEffect(new StickyEffect(new DamageEffect(10), 8));
+            ship.addStickyEffect(new StickyEffect(new AttributeLimitEffect("power_capacity", 3), 12));
+            ship.updateAttributes();
+
+            expect(ship.getValue("hull")).toEqual(5);
+            expect(ship.getValue("shield")).toEqual(15);
+            expect(ship.getValue("power")).toEqual(3);
+            expect(ship.sticky_effects.length).toEqual(2);
+            expect(ship.getAttribute("power_capacity")).toEqual(3);
+
+            ship.endBattle(1);
+
+            expect(ship.getValue("hull")).toEqual(10);
+            expect(ship.getValue("shield")).toEqual(20);
+            expect(ship.getValue("power")).toEqual(5);
+            expect(ship.sticky_effects.length).toEqual(0);
+            expect(ship.getAttribute("power_capacity")).toEqual(5);
+        });
     });
 }

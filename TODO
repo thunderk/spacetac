@@ -1,3 +1,4 @@
+* Drones of dead ships are never destroyed
 * UI: Use a common component class, and a layer abstraction
 * Character sheet: add initial character creation
 * Character sheet: disable interaction during battle (except for loot screen)

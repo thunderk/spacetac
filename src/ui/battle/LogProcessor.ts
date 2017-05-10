@@ -72,6 +72,10 @@ module TS.SpaceTac.UI {
          * Process a single event
          */
         processBattleEvent(event: BaseLogEvent) {
+            if (!this.subscription) {
+                return;
+            }
+
             if (this.delayed) {
                 this.queue.push(event);
                 return;
@@ -111,6 +115,7 @@ module TS.SpaceTac.UI {
             if (this.subscription) {
                 this.log.unsubscribe(this.subscription);
                 this.subscription = null;
+                this.queue = [];
             }
         }
 
@@ -195,6 +200,7 @@ module TS.SpaceTac.UI {
         // Battle ended (victory or defeat)
         private processEndBattleEvent(event: EndBattleEvent): void {
             this.view.endBattle();
+            this.destroy();
         }
 
         // Sticky effect on ship added, changed or removed

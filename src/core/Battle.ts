@@ -138,17 +138,13 @@ module TS.SpaceTac {
             // Apply experience
             this.outcome.grantExperience(this.fleets);
 
-            // Wear down equipment
-            iforeach(this.iships(), ship => {
-                ship.listEquipment().forEach(equipment => {
-                    equipment.addWear(this.turn);
-                });
-            });
-
             // Broadcast
             if (log && this.log) {
                 this.log.add(new EndBattleEvent(this.outcome));
             }
+
+            // Apply to all ships
+            iforeach(this.iships(), ship => ship.endBattle(this.turn));
         }
 
         // Checks end battle conditions, returns true if the battle ended
