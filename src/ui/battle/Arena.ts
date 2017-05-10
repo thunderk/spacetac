@@ -190,12 +190,14 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Remove a destroyed drone
+        /**
+         * Remove a destroyed drone
+         */
         removeDrone(drone: Drone): void {
             let sprite = this.findDrone(drone);
             if (sprite) {
                 remove(this.drone_sprites, sprite);
-                sprite.destroy();
+                sprite.setDestroyed();
             } else {
                 console.error("Drone not found in arena for removal", drone);
             }

@@ -40,13 +40,15 @@
 * AI: evaluate based on simulated list of effects
 * Map: remove jump links that cross the radius of other systems
 * Map: disable interaction (zoom, selection) while moving/jumping
-* Add ship personality (with icons to identify ?)
+* Add ship personality (with icons to identify ?), with reaction to battle and map movements
 * Add factions and reputation
 * Tutorial
 * Missions/quests system
 * Main story arc
 
 Later, if possible:
+* Animated arena background, instead of big picture
+* Dynamic music composition
 * Replays
 * Multiplayer
 * Formation or deployment phase
