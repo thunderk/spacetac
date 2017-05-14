@@ -90,8 +90,13 @@ module TS.SpaceTac.UI {
          */
         bindDynamicText(obj: Phaser.Button, text_getter: () => string): void {
             this.bind(obj, container => {
-                container.add(new Phaser.Text(container.game, 0, 0, text_getter(), { font: "bold 20pt Arial", fill: "#cccccc" }));
-                return true;
+                let content = text_getter();
+                if (content) {
+                    container.add(new Phaser.Text(container.game, 0, 0, content, { font: "bold 20pt Arial", fill: "#cccccc" }));
+                    return true;
+                } else {
+                    return false;
+                }
             });
         }
 

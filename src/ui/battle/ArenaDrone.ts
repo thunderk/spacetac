@@ -17,7 +17,7 @@ module TS.SpaceTac.UI {
 
         // Activation effect
         activation: Phaser.Graphics;
-        
+
         // Destroyed state
         destroyed = false;
 
@@ -46,7 +46,10 @@ module TS.SpaceTac.UI {
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(0.1, 0.1);
             this.addChild(this.sprite);
-            this.view.tooltip.bindDynamicText(this.sprite, () => this.drone.getDescription());
+
+            this.view.tooltip.bindDynamicText(this.sprite, () => {
+                return this.destroyed ? "" : this.drone.getDescription();
+            });
         }
 
         /**
@@ -66,7 +69,7 @@ module TS.SpaceTac.UI {
             tween.start();
             return 500;
         }
-        
+
         /**
          * Set the sprite as destroyed
          */
