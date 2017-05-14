@@ -165,11 +165,6 @@ module TS.SpaceTac.UI {
                 sprite.displayValueChanged(event);
             }
 
-            var item = this.view.ship_list.findItem(event.ship);
-            if (item) {
-                item.updateAttributes();
-            }
-
             // TODO Update tooltip
         }
 
@@ -205,10 +200,7 @@ module TS.SpaceTac.UI {
 
         // Sticky effect on ship added, changed or removed
         private processEffectEvent(event: EffectAddedEvent | EffectRemovedEvent | EffectDurationChangedEvent): void {
-            var item = this.view.ship_list.findItem(event.ship);
-            if (item) {
-                item.updateEffects();
-            }
+            // TODO
         }
 
         // New drone deployed

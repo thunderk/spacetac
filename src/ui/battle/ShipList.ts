@@ -5,6 +5,7 @@ module TS.SpaceTac.UI {
         battleview: BattleView;
 
         // List of ship items
+        ships_container: Phaser.Group;
         ships: ShipListItem[];
 
         // Playing ship
@@ -12,6 +13,9 @@ module TS.SpaceTac.UI {
 
         // Hovered ship
         hovered: ShipListItem | null;
+
+        // Info button
+        info_button: Phaser.Button;
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
@@ -21,6 +25,10 @@ module TS.SpaceTac.UI {
             this.ships = [];
             this.playing = null;
             this.hovered = null;
+
+            this.info_button = new Phaser.Button(this.game, 0, 0, "battle-shiplist-info-button");
+            this.info_button.position.set(0, this.height - this.info_button.height);
+            this.addChild(this.info_button);
 
             battleview.layer_borders.add(this);
 
@@ -83,9 +91,9 @@ module TS.SpaceTac.UI {
             this.ships.forEach((item: ShipListItem) => {
                 var position = this.findPlayPosition(item.ship);
                 if (position === 0) {
-                    item.moveTo(20, 20 - this.y, animate);
+                    item.moveTo(18, 15 - this.y, animate);
                 } else {
-                    item.moveTo(8, 40 + position * 104 - this.y, animate);
+                    item.moveTo(0, 33 + position * 99 - this.y, animate);
                 }
                 this.setChildIndex(item, position);
             });

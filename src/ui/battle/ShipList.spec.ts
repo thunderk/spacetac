@@ -9,7 +9,7 @@ module TS.SpaceTac.UI.Specs {
             var list = battleview.ship_list;
 
             expect(battleview.battle.play_order.length).toBe(10);
-            expect(list.children.length).toBe(10);
+            expect(list.children.length).toBe(11);
 
             expect(list.findPlayPosition(battleview.battle.play_order[0])).toBe(0);
             expect(list.findPlayPosition(battleview.battle.play_order[1])).toBe(1);

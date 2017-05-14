@@ -1057,6 +1057,18 @@
          result="composite2"
          id="feComposite6031-9" />
     </filter>
+    <mask
+       maskUnits="userSpaceOnUse"
+       id="mask4969">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#858585;stroke-width:1.4487896px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="rect4971"
+         width="137.37454"
+         height="71.507271"
+         x="173.67209"
+         y="121.98493"
+         transform="rotate(45)" />
+    </mask>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1066,10 +1078,10 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="813.51344"
-     inkscape:cy="615.62253"
+     inkscape:cx="578.72075"
+     inkscape:cy="593.06898"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer26"
      showgrid="false"
      units="px"
      showguides="false"
@@ -1077,10 +1089,10 @@
      inkscape:bbox-nodes="true"
      inkscape:bbox-paths="true"
      inkscape:snap-to-guides="true"
-     inkscape:object-nodes="false"
+     inkscape:object-nodes="true"
      inkscape:snap-intersection-paths="false"
      inkscape:object-paths="true"
-     inkscape:snap-global="false"
+     inkscape:snap-global="true"
      inkscape:showpageshadow="false"
      showborder="true"
      borderlayer="true" />
@@ -1092,7 +1104,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1233,9 +1245,10 @@
          transform="translate(53.877816)" />
       <path
          style="display:inline;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
-         d="M 359.19306,561.5625 H 248.4375 V 283.12499 H 112.38971"
+         d="M 359.19306,561.5625 H 248.4375 V 283.12499 l -145.74267,-0.16573"
          id="path6124"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cccc" />
       <rect
          y="530.80554"
          x="348.48169"
@@ -1637,7 +1650,7 @@
          height="948.2301"
          x="0"
          y="131.76981"
-         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/shiplist-background.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90" />
     </g>
@@ -1665,7 +1678,7 @@
            width="77.905304"
            id="rect4248"
            style="opacity:1;fill:#43535c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6021-3-2)"
-           inkscape:export-filename="/tmp/export.png"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/shiplist/item-background.png"
            inkscape:export-xdpi="90"
            inkscape:export-ydpi="90"
            transform="matrix(1.100282,0,0,1.100282,-6.0602898,-16.069785)" />
@@ -1807,6 +1820,18 @@
            style="opacity:1;fill:#ff643a;fill-opacity:0.77021275;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5961)"
            sodipodi:type="star" />
       </g>
+      <rect
+         style="fill:none;fill-opacity:0;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect4949"
+         width="85.717804"
+         height="85.717812"
+         x="16.977024"
+         y="240.05305"
+         ry="0"
+         mask="url(#mask4969)"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/shiplist/hover.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
     </g>
   </g>
   <g
@@ -1883,7 +1908,10 @@
       </g>
       <g
          id="g6122"
-         transform="matrix(1.3001708,0,0,1.1990242,-12.304247,-205.15147)">
+         transform="matrix(1.3001708,0,0,1.1990242,-12.304247,-205.15147)"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/shiplist/info-button.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90">
         <rect
            y="1030.9446"
            x="9.9436893"
@@ -1903,7 +1931,7 @@
              id="tspan6262"
              x="44.896412"
              y="1028.4208"
-             style="font-size:32.03655624px;stroke-width:0.75085676px"></tspan></text>
+             style="font-size:32.03655624px;stroke-width:0.75085676px" /></text>
         <g
            id="g6273"
            transform="translate(1.1740712,0.61792396)">
