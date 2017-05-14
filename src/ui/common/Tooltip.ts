@@ -17,6 +17,8 @@ module TS.SpaceTac.UI {
 
             this.content = new Phaser.Group(this.game);
             this.add(this.content);
+
+            this.view.tooltip_layer.add(this);
         }
 
         show(x: number, y: number) {
@@ -51,15 +53,55 @@ module TS.SpaceTac.UI {
     }
 
     /**
+     * Functions used to fill a tooltip content
+     */
+    export class TooltipFiller {
+        private container: TooltipContainer;
+
+        constructor(container: TooltipContainer) {
+            this.container = container;
+        }
+
+        /**
+         * Add an image to the content
+         */
+        addImage(x: number, y: number, key: string, scale = 1) {
+            let image = new Phaser.Image(this.container.game, x, y, key);
+            image.scale.set(scale);
+            this.container.content.add(image);
+        }
+
+        /**
+         * Add a text to the content
+         */
+        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, center = false, bold = false) {
+            let style = { font: `${bold ? "bold " : ""}${size}pt Arial`, fill: color, align: center ? "center" : "left" };
+            let text = new Phaser.Text(this.container.game, x, y, content, style);
+            this.container.content.add(text);
+        }
+    }
+
+    /**
      * Tooltip system, to display information on hover
      */
     export class Tooltip {
-        private view: BaseView;
-        private container: TooltipContainer;
+        protected view: BaseView;
+        protected container: TooltipContainer;
 
         constructor(view: BaseView) {
             this.view = view;
             this.container = new TooltipContainer(view);
+        }
+
+        get ui(): MainUI {
+            return this.view.gameui;
+        }
+
+        /**
+         * Get a tooltip filler
+         */
+        getFiller(): TooltipFiller {
+            return new TooltipFiller(this.container);
         }
 
         /**
@@ -67,12 +109,12 @@ module TS.SpaceTac.UI {
          * 
          * When the component is hovered, the function is called to allow filling the tooltip container
          */
-        bind(obj: Phaser.Button, func: (container: Phaser.Group) => boolean): void {
+        bind(obj: Phaser.Button, func: (filler: TooltipFiller) => boolean): void {
             UITools.setHoverClick(obj,
                 // enter
                 () => {
                     this.hide();
-                    if (func(this.container.content)) {
+                    if (func(this.getFiller())) {
                         let bounds = obj.getBounds();
                         this.container.show(bounds.x + bounds.width + 4, bounds.y + bounds.height + 4);
                     }
@@ -89,10 +131,10 @@ module TS.SpaceTac.UI {
          * Bind to an UI component to display a dynamic text
          */
         bindDynamicText(obj: Phaser.Button, text_getter: () => string): void {
-            this.bind(obj, container => {
+            this.bind(obj, filler => {
                 let content = text_getter();
                 if (content) {
-                    container.add(new Phaser.Text(container.game, 0, 0, content, { font: "bold 20pt Arial", fill: "#cccccc" }));
+                    filler.addText(0, 0, content, "#cccccc", 20, false, true);
                     return true;
                 } else {
                     return false;

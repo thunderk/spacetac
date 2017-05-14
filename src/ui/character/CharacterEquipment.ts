@@ -48,7 +48,7 @@ module TS.SpaceTac.UI {
             this.setupDragDrop(sheet);
             this.snapToContainer();
 
-            sheet.view.tooltip.bind(this, container => this.fillTooltip(container));
+            sheet.view.tooltip.bind(this, filler => this.fillTooltip(filler));
         }
 
         jasmineToString() {
@@ -156,9 +156,9 @@ module TS.SpaceTac.UI {
         /**
          * Fill a tooltip with equipment data
          */
-        fillTooltip(container: Phaser.Group): boolean {
-            container.add(new Phaser.Text(container.game, 0, 0, this.item.getFullName(), { font: "bold 20pt Arial", fill: "#cccccc" }));
-            container.add(new Phaser.Text(container.game, 0, 40, this.item.getFullDescription(), { font: "18pt Arial", fill: "#cccccc" }));
+        fillTooltip(filler: TooltipFiller): boolean {
+            filler.addText(0, 0, this.item.getFullName(), "#cccccc", 20, false, true);
+            filler.addText(0, 40, this.item.getFullDescription(), "#cccccc", 18);
             return true;
         }
     }

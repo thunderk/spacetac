@@ -92,7 +92,6 @@ module TS.SpaceTac.UI {
             this.action_bar = new ActionBar(this);
             this.ship_list = new ShipList(this);
             this.ship_tooltip = new ShipTooltip(this);
-            this.layer_overlay.add(this.ship_tooltip);
             this.outcome_layer = new Phaser.Group(this.game);
             this.layer_dialogs.add(this.outcome_layer);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
@@ -192,7 +191,13 @@ module TS.SpaceTac.UI {
             this.ship_hovered = ship;
             this.arena.setShipHovered(ship);
             this.ship_list.setHovered(ship);
-            this.ship_tooltip.setShip(ship);
+
+            if (ship) {
+                this.ship_tooltip.setShip(ship);
+            } else {
+                this.ship_tooltip.hide();
+            }
+
             if (this.targetting) {
                 if (ship) {
                     this.targetting.setTargetShip(ship);

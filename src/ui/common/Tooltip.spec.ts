@@ -7,9 +7,8 @@ module TS.SpaceTac.UI.Specs {
             spyOn(button, "getBounds").and.returnValue({ x: 100, y: 50, width: 50, height: 25 });
 
             let tooltip = new Tooltip(testgame.baseview);
-            tooltip.bind(button, container => {
-                let image = new Phaser.Image(testgame.ui, 22, 12, "fake");
-                container.add(image);
+            tooltip.bind(button, filler => {
+                filler.addImage(22, 12, "fake");
                 return true;
             });
 

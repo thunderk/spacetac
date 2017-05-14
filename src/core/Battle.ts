@@ -69,6 +69,17 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the number of turns before a specific ship plays (currently playing ship will return 0).
+         */
+        getTurnsBefore(ship: Ship): number {
+            let pos = this.play_order.indexOf(ship) - (this.playing_ship_index || 0);
+            if (pos < 0) {
+                pos += this.play_order.length;
+            }
+            return pos;
+        }
+
+        /**
          * Return an iterator over all ships engaged in the battle
          */
         iships(): Iterator<Ship> {

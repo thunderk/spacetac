@@ -300,5 +300,36 @@ module TS.SpaceTac {
 
             expect(battle.canPlay(player)).toBe(true);
         });
+
+        it("gets the number of turns before a specific ship plays", function () {
+            let battle = new Battle();
+            spyOn(battle, "checkEndBattle").and.returnValue(false);
+            battle.play_order = [new Ship(), new Ship(), new Ship()];
+            battle.advanceToNextShip();
+
+            expect(battle.playing_ship).toBe(battle.play_order[0]);
+            expect(battle.getTurnsBefore(battle.play_order[0])).toBe(0);
+            expect(battle.getTurnsBefore(battle.play_order[1])).toBe(1);
+            expect(battle.getTurnsBefore(battle.play_order[2])).toBe(2);
+
+            battle.advanceToNextShip();
+
+            expect(battle.playing_ship).toBe(battle.play_order[1]);
+            expect(battle.getTurnsBefore(battle.play_order[0])).toBe(2);
+            expect(battle.getTurnsBefore(battle.play_order[1])).toBe(0);
+            expect(battle.getTurnsBefore(battle.play_order[2])).toBe(1);
+
+            battle.advanceToNextShip();
+
+            expect(battle.getTurnsBefore(battle.play_order[0])).toBe(1);
+            expect(battle.getTurnsBefore(battle.play_order[1])).toBe(2);
+            expect(battle.getTurnsBefore(battle.play_order[2])).toBe(0);
+
+            battle.advanceToNextShip();
+
+            expect(battle.getTurnsBefore(battle.play_order[0])).toBe(0);
+            expect(battle.getTurnsBefore(battle.play_order[1])).toBe(1);
+            expect(battle.getTurnsBefore(battle.play_order[2])).toBe(2);
+        });
     });
 }

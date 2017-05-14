@@ -5,6 +5,7 @@
 * Character sheet: highlight allowed destinations during drag-and-drop, with text hints
 * Character sheet: when transferring to another ship, if the item can't be equipped (unmatched requirements), the transfer is cancelled instead of trying cargo
 * Character sheet: effective skill is sometimes not updated when upgrading base skill
+* Character sheet: tooltip to show the sources of attributes
 * Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
 * Menu: fix background stars aggregating at right side when the game is not focused
@@ -27,7 +28,6 @@
 * Add an overheat/cooling system
 * Add auto-move to attack
 * Merge identical sticky effects
-* Handle effects overflowing ship tooltip when too numerous
 * Allow to skip animations and AI delays in battle
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not

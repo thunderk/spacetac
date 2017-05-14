@@ -19,6 +19,7 @@ module TS.SpaceTac.UI {
         timer: Timer;
 
         // Tooltip
+        tooltip_layer: Phaser.Group;
         tooltip: Tooltip;
 
         // Layers
@@ -59,6 +60,7 @@ module TS.SpaceTac.UI {
             this.inputs = new InputManager(this);
 
             // Tooltip
+            this.tooltip_layer = this.add.group();
             this.tooltip = new Tooltip(this);
 
             // Browser console variable (for debugging purpose)
