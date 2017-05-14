@@ -25,9 +25,17 @@ After making changes to sources, you need to recompile:
 
 * **[Michaël Lemaire](https://thunderk.net/)** - Code and graphics
 * **[Matthieu Desprez](https://github.com/edistra)** - Beta testing and ideas
+* **[Viktor Hahn](https://opengameart.org/content/spaceships-6)** - Ship models
+    * This work, made by Viktor Hahn (Viktor.Hahn@web.de), is licensed under the Creative Commons Attribution 3.0 Unported License. http://creativecommons.org/licenses/by/3.0/
 * **Nicolas Forgo** - Ship models
 * **[Phaser](http://phaser.io)** - Game engine
 * **[Kevin MacLeod](http://www.incompetech.com/)** - Musics
+    * "Full On" Kevin MacLeod (incompetech.com)
+    Licensed under Creative Commons: By Attribution 3.0 License
+    http://creativecommons.org/licenses/by/3.0/
+    * "Walking Along" Kevin MacLeod (incompetech.com)
+    Licensed under Creative Commons: By Attribution 3.0 License
+    http://creativecommons.org/licenses/by/3.0/
 
 ## Ships
 

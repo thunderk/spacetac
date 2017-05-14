@@ -32,11 +32,25 @@ module TS.SpaceTac {
 
             result.push(new ShipModel("scout", "Scout", 1, 2, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Weapon));
 
-            result.push(new ShipModel("whirlwind", "Whirlwind", 1, 4, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+            result.push(new ShipModel("breeze", "Breeze", 1, 0, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Engine, SlotType.Weapon));
+
+            result.push(new ShipModel("creeper", "Creeper", 1, 2, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
                 SlotType.Weapon, SlotType.Weapon));
 
-            result.push(new ShipModel("tomahawk", "Tomahawk", 1, 6, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine, SlotType.Engine,
-                SlotType.Weapon));
+            result.push(new ShipModel("whirlwind", "Whirlwind", 1, 8, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+                SlotType.Weapon, SlotType.Weapon, SlotType.Weapon));
+
+            result.push(new ShipModel("tomahawk", "Tomahawk", 1, 8, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine, SlotType.Engine,
+                SlotType.Weapon, SlotType.Weapon));
+
+            result.push(new ShipModel("avenger", "Avenger", 1, 4, SlotType.Hull, SlotType.Shield, SlotType.Shield, SlotType.Power, SlotType.Engine,
+                SlotType.Weapon, SlotType.Weapon));
+
+            result.push(new ShipModel("commodore", "Commodore", 1, 4, SlotType.Hull, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+                SlotType.Weapon, SlotType.Weapon));
+
+            result.push(new ShipModel("falcon", "Falcon", 1, 2, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+                SlotType.Weapon, SlotType.Weapon, SlotType.Weapon, SlotType.Weapon));
 
             return result;
         }
