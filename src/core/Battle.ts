@@ -34,7 +34,7 @@ module TS.SpaceTac {
         timer = Timer.global;
 
         // Create a battle between two fleets
-        constructor(fleet1 = new Fleet(), fleet2 = new Fleet(), width = 1780, height = 948) {
+        constructor(fleet1 = new Fleet(), fleet2 = new Fleet(), width = 1808, height = 948) {
             this.log = new BattleLog();
             this.fleets = [fleet1, fleet2];
             this.play_order = [];

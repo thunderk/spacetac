@@ -37,7 +37,7 @@ module TS.SpaceTac.UI {
             this.hovered = null;
             this.range_hint = new RangeHint(this);
 
-            var offset_x = 133;
+            var offset_x = 112;
             var offset_y = 132;
 
             var background = new Phaser.Button(battleview.game, 0, 0, "battle-arena-background");
