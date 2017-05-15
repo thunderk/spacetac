@@ -28,6 +28,7 @@ module TS.SpaceTac.UI {
 
             this.info_button = new Phaser.Button(this.game, 0, 0, "battle-shiplist-info-button");
             this.info_button.position.set(0, this.height - this.info_button.height);
+            UITools.setHoverClick(this.info_button, () => this.battleview.arena.setHUDMode(true), () => this.battleview.arena.setHUDMode(false), () => null);
             this.addChild(this.info_button);
 
             battleview.layer_borders.add(this);

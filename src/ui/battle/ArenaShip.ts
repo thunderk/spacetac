@@ -19,8 +19,10 @@ module TS.SpaceTac.UI {
         // Target effect
         target: Phaser.Image;
 
-        // Hover effect
-        hover: Phaser.Image;
+        // Hover information
+        info: Phaser.Group;
+        info_hull: ValueBar;
+        info_shield: ValueBar;
 
         // Frame to indicate the owner of the ship, and if it is playing
         frame: Phaser.Image;
@@ -41,34 +43,41 @@ module TS.SpaceTac.UI {
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(64 / this.sprite.width);
-            this.addChild(this.sprite);
+            this.add(this.sprite);
 
             // Add stasis effect
             this.stasis = new Phaser.Image(this.game, 0, 0, "battle-arena-stasis");
             this.stasis.anchor.set(0.5, 0.5);
             this.stasis.visible = false;
-            this.addChild(this.stasis);
+            this.add(this.stasis);
 
             // Add target effect
             this.target = new Phaser.Image(this.game, 0, 0, "battle-arena-target");
             this.target.anchor.set(0.5, 0.5);
             this.target.visible = false;
-            this.addChild(this.target);
+            this.add(this.target);
 
             // Add playing effect
             this.frame = new Phaser.Image(this.game, 0, 0, `battle-arena-ship-normal-${this.enemy ? "enemy" : "own"}`, 0);
             this.frame.anchor.set(0.5, 0.5);
-            this.addChild(this.frame);
+            this.add(this.frame);
 
-            // Add hover effect
-            this.hover = new Phaser.Image(this.game, 0, 0, "battle-arena-ship-hover", 0);
-            this.hover.anchor.set(0.5, 0.5);
-            this.hover.visible = false;
-            this.addChild(this.hover);
+            // Hover informations
+            this.info = new Phaser.Group(this.game);
+            this.info_hull = new ValueBar(this.game, -59, -47, "battle-arena-ship-hull-base", true);
+            this.info_hull.setBarImage("battle-arena-ship-hull-full", 3);
+            this.info_hull.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity"));
+            this.info.add(this.info_hull);
+            this.info_shield = new ValueBar(this.game, 40, -47, "battle-arena-ship-shield-base", true);
+            this.info_shield.setBarImage("battle-arena-ship-shield-full", 3);
+            this.info_shield.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
+            this.info.add(this.info_shield);
+            this.info.visible = false;
+            this.add(this.info);
 
             // Effects display
             this.effects = new Phaser.Group(this.game);
-            this.addChild(this.effects);
+            this.add(this.effects);
 
             // Handle input on ship sprite
             UITools.setHoverClick(this.sprite,
@@ -81,12 +90,13 @@ module TS.SpaceTac.UI {
             this.position.set(ship.arena_x, ship.arena_y);
         }
 
-        // Set the hovered state on this ship
-        //  This will toggle the hover effect
+        /**
+         * Set the hovered state on this ship
+         * 
+         * This will show the information HUD accordingly
+         */
         setHovered(hovered: boolean) {
-            if (!this.target.visible) {
-                this.battleview.animations.setVisible(this.hover, hovered, 200);
-            }
+            this.battleview.animations.setVisible(this.info, hovered, 200);
         }
 
         // Set the playing state on this ship
@@ -101,9 +111,6 @@ module TS.SpaceTac.UI {
          * This will toggle the visibility of target indicator
          */
         setTargetted(targetted: boolean): void {
-            if (targetted) {
-                this.battleview.animations.setVisible(this.hover, false, 1);
-            }
             this.target.visible = targetted;
         }
 
@@ -141,7 +148,7 @@ module TS.SpaceTac.UI {
             let text = new Phaser.Text(this.game, 0, 20 * this.effects.children.length, message, { font: "14pt Arial", fill: beneficial ? "#afe9c6" : "#e9afaf" });
             this.effects.addChild(text);
 
-            this.effects.position.set(-this.effects.width / 2, this.sprite.height * 0.8);
+            this.effects.position.set(-this.effects.width / 2, this.sprite.height * 0.7);
 
             this.game.tweens.removeFrom(this.effects);
             this.effects.alpha = 1;
@@ -156,6 +163,12 @@ module TS.SpaceTac.UI {
             let diff = event.diff;
             let name = event.value.name;
             this.displayEffect(`${name} ${diff < 0 ? "-" : "+"}${Math.abs(diff)}`, diff >= 0);
+
+            if (name == "hull") {
+                this.info_hull.setValue(event.value.get(), this.ship.getAttribute("hull_capacity"));
+            } else if (name == "shield") {
+                this.info_shield.setValue(event.value.get(), this.ship.getAttribute("shield_capacity"));
+            }
         }
     }
 }

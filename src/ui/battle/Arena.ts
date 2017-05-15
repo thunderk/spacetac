@@ -61,8 +61,8 @@ module TS.SpaceTac.UI {
 
             this.position.set(offset_x, offset_y);
 
-            this.addChild(this.background);
-            this.addChild(this.range_hint);
+            this.add(this.background);
+            this.add(this.range_hint);
 
             this.init();
         }
@@ -77,12 +77,12 @@ module TS.SpaceTac.UI {
             // Add ship sprites
             this.battleview.battle.play_order.forEach(ship => {
                 var sprite = new ArenaShip(this, ship);
-                this.addChild(sprite);
+                this.add(sprite);
                 this.ship_sprites.push(sprite);
             });
 
             this.layer_weapon_effects = new Phaser.Group(this.game);
-            this.addChild(this.layer_weapon_effects);
+            this.add(this.layer_weapon_effects);
         }
 
         // Get the current MainUI instance
@@ -168,7 +168,7 @@ module TS.SpaceTac.UI {
             if (!this.findDrone(drone)) {
                 let sprite = new ArenaDrone(this.battleview, drone);
                 let angle = Math.atan2(drone.y - drone.owner.arena_y, drone.x - drone.owner.arena_x);
-                this.addChild(sprite);
+                this.add(sprite);
                 this.drone_sprites.push(sprite);
 
                 if (animate) {
@@ -208,6 +208,16 @@ module TS.SpaceTac.UI {
          */
         highlightTargets(ships: Ship[]): void {
             this.ship_sprites.forEach(sprite => sprite.setTargetted(contains(ships, sprite.ship)));
+        }
+
+        /**
+         * Set the HUD mode (shows information on all ships)
+         */
+        setHUDMode(active: boolean): void {
+            this.ship_sprites.forEach(sprite => sprite.setHovered(active));
+            if (this.battleview.background) {
+                this.battleview.animations.setVisible(this.battleview.background, !active, 200);
+            }
         }
     }
 }

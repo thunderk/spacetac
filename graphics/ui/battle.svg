@@ -1077,11 +1077,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="578.72075"
-     inkscape:cy="593.06898"
+     inkscape:zoom="4"
+     inkscape:cx="394.77432"
+     inkscape:cy="563.06617"
      inkscape:document-units="px"
-     inkscape:current-layer="layer26"
+     inkscape:current-layer="g4971-3"
      showgrid="false"
      units="px"
      showguides="false"
@@ -1092,7 +1092,7 @@
      inkscape:object-nodes="true"
      inkscape:snap-intersection-paths="false"
      inkscape:object-paths="true"
-     inkscape:snap-global="true"
+     inkscape:snap-global="false"
      inkscape:showpageshadow="false"
      showborder="true"
      borderlayer="true" />
@@ -1179,11 +1179,11 @@
        style="display:inline">
       <path
          sodipodi:type="star"
-         style="display:inline;fill:#ffdd4b;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.4464567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
+         style="display:inline;fill:#ffdd4b;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.4464567;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6668);enable-background:new"
          id="path4998"
          sodipodi:sides="3"
          sodipodi:cx="363.86221"
-         sodipodi:cy="602.23376"
+         sodipodi:cy="602.89667"
          sodipodi:r1="5.1498642"
          sodipodi:r2="2.5749321"
          sodipodi:arg1="1.5707963"
@@ -1191,7 +1191,7 @@
          inkscape:flatsided="true"
          inkscape:rounded="0"
          inkscape:randomized="0"
-         d="m 363.86221,607.38363 -4.45991,-7.7248 8.91983,0 z"
+         d="m 363.86221,608.04653 -4.45991,-7.72479 8.91983,0 z"
          inkscape:transform-center-y="1.287466" />
       <use
          style="display:inline;enable-background:new"
@@ -1245,30 +1245,10 @@
          transform="translate(53.877816)" />
       <path
          style="display:inline;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
-         d="M 359.19306,561.5625 H 248.4375 V 283.12499 l -145.74267,-0.16573"
+         d="M 355.83565,561.5625 H 248.4375 V 283.12499 l -145.74267,-0.16573"
          id="path6124"
          inkscape:connector-curvature="0"
          sodipodi:nodetypes="cccc" />
-      <rect
-         y="530.80554"
-         x="348.48169"
-         height="63.022022"
-         width="5.0654392"
-         id="rect4437-3-3-6-3"
-         style="display:inline;opacity:1;fill:#eb4e4a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:19.52019501;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
-         inkscape:export-filename="/tmp/export.png"
-         inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
-      <rect
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         inkscape:export-filename="/tmp/export.png"
-         style="display:inline;opacity:1;fill:#2ad8dc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:19.52019501;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
-         id="rect5911"
-         width="5.0654392"
-         height="63.022022"
-         x="428.36267"
-         y="530.80554" />
       <circle
          r="7.2920384"
          cy="518.39703"
@@ -1292,6 +1272,158 @@
          cx="374.18796"
          cy="518.39703"
          r="7.2920384" />
+      <g
+         id="g5020"
+         transform="translate(-3.98585)">
+        <g
+           transform="translate(9.375)"
+           id="g4971">
+          <path
+             style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#eb4e4a;stroke-width:2.46539116;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             inkscape:transform-center-x="1.4663198"
+             d="m 344.96338,606.73659 -8.79795,-45.17409 8.79795,-45.17408"
+             id="path4952"
+             inkscape:connector-curvature="0"
+             sodipodi:nodetypes="ccc"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-hull-full.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <use
+             x="0"
+             y="0"
+             xlink:href="#path4952"
+             inkscape:transform-center-x="1.4867875"
+             id="use4955"
+             width="100%"
+             height="100%"
+             transform="translate(-1.875)"
+             style="opacity:0.52300002"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-hull-base.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <use
+             x="0"
+             y="0"
+             xlink:href="#path4952"
+             inkscape:transform-center-x="1.4867875"
+             id="use4961"
+             width="100%"
+             height="100%"
+             transform="translate(3.75)"
+             style="opacity:0.52300002"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-hull-base.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <use
+             x="0"
+             y="0"
+             xlink:href="#path4952"
+             inkscape:transform-center-x="1.4867875"
+             id="use4965"
+             width="100%"
+             height="100%"
+             transform="translate(1.875)"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-hull-full.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <path
+             sodipodi:nodetypes="ccc"
+             inkscape:connector-curvature="0"
+             id="path5032"
+             d="m 341.54484,606.73659 -8.79795,-45.17409 8.79795,-45.17408"
+             inkscape:transform-center-x="1.4663198"
+             style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#ebaead;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.75744683"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-hull-base.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <use
+             x="0"
+             y="0"
+             xlink:href="#path5032"
+             inkscape:transform-center-x="1.4663198"
+             id="use5034"
+             width="100%"
+             height="100%"
+             transform="translate(8.8778154)"
+             style="opacity:0.76099997"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-hull-base.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+        </g>
+        <g
+           transform="matrix(-1,0,0,1,780.26995,0.73591)"
+           id="g4971-3"
+           style="display:inline;enable-background:new">
+          <path
+             style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#2ad8dc;stroke-width:2.46539116;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             inkscape:transform-center-x="1.4663198"
+             d="m 344.96338,606.73659 -8.79795,-45.17409 8.79795,-45.17408"
+             id="path4952-6"
+             inkscape:connector-curvature="0"
+             sodipodi:nodetypes="ccc"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-shield-full.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <use
+             x="0"
+             y="0"
+             xlink:href="#path4952-6"
+             inkscape:transform-center-x="1.4867875"
+             id="use4955-7"
+             width="100%"
+             height="100%"
+             transform="translate(-1.875)"
+             style="opacity:0.52300002"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-shield-base.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <use
+             x="0"
+             y="0"
+             xlink:href="#path4952-6"
+             inkscape:transform-center-x="1.4867875"
+             id="use4961-5"
+             width="100%"
+             height="100%"
+             transform="translate(3.75)"
+             style="opacity:0.52300002"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-shield-base.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <use
+             x="0"
+             y="0"
+             xlink:href="#path4952-6"
+             inkscape:transform-center-x="1.4867875"
+             id="use4965-3"
+             width="100%"
+             height="100%"
+             transform="translate(1.875)"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-shield-full.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <path
+             sodipodi:nodetypes="ccc"
+             inkscape:connector-curvature="0"
+             id="path5036"
+             d="m 350.42264,606.73659 -8.79795,-45.17409 8.79795,-45.17408"
+             inkscape:transform-center-x="1.4663198"
+             style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#bceaeb;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.74680852"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-shield-base.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+          <path
+             style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#bceaeb;stroke-width:0.9375;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.44893619"
+             inkscape:transform-center-x="1.4663198"
+             d="m 341.37911,606.73659 -8.79795,-45.17409 8.79795,-45.17408"
+             id="path5038"
+             inkscape:connector-curvature="0"
+             sodipodi:nodetypes="ccc"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ship-shield-base.png"
+             inkscape:export-xdpi="90"
+             inkscape:export-ydpi="90" />
+        </g>
+      </g>
     </g>
     <g
        inkscape:groupmode="layer"

@@ -28,8 +28,6 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/shiplist/hover.png");
             this.loadImage("battle/shiplist/info-button.png");
             this.loadImage("battle/background.jpg");
-            this.loadImage("battle/arena/background.png");
-            this.loadImage("battle/arena/ap-indicator.png");
             this.loadImage("battle/actionbar.png");
             this.loadImage("battle/action-inactive.png");
             this.loadImage("battle/action-active.png");
@@ -38,11 +36,16 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/power-available.png");
             this.loadImage("battle/power-using.png");
             this.loadImage("battle/power-used.png");
-            this.loadImage("battle/arena/ship-hover.png");
+            this.loadImage("battle/arena/background.png");
+            this.loadImage("battle/arena/ap-indicator.png");
             this.loadImage("battle/arena/ship-normal-enemy.png");
             this.loadImage("battle/arena/ship-normal-own.png");
             this.loadImage("battle/arena/ship-playing-enemy.png");
             this.loadImage("battle/arena/ship-playing-own.png");
+            this.loadImage("battle/arena/ship-hull-base.png");
+            this.loadImage("battle/arena/ship-hull-full.png");
+            this.loadImage("battle/arena/ship-shield-base.png");
+            this.loadImage("battle/arena/ship-shield-full.png");
             this.loadImage("battle/arena/stasis.png");
             this.loadImage("battle/arena/target.png");
             this.loadImage("battle/arena/blast.png");
