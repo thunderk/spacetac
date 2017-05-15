@@ -37,6 +37,9 @@ module TS.SpaceTac.UI {
             this.bind("m", "Toggle sound", () => {
                 this.game.audio.toggleMute();
             });
+            this.bind("f", "Toggle fullscreen", () => {
+                view.toggleFullscreen();
+            });
             this.bind("+", "", () => {
                 if (this.cheats_allowed) {
                     this.cheat = !this.cheat;

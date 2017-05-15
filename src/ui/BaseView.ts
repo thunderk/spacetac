@@ -120,5 +120,50 @@ module TS.SpaceTac.UI {
                 .catch(console.error)
             //.catch(() => this.messages.addMessage("Error saving game to cloud"));
         }
+
+        /**
+         * Toggle fullscreen mode.
+         * 
+         * Returns true if the result is fullscreen
+         */
+        toggleFullscreen(active: boolean | null = null): boolean {
+            if (active === false || (active !== true && this.game.scale.isFullScreen)) {
+                this.scale.stopFullScreen();
+                this.setStorage("fullscreen", "false");
+                return false;
+            } else {
+                this.scale.startFullScreen(true);
+                this.setStorage("fullscreen", "true");
+                return true;
+            }
+        }
+
+        /**
+         * Set a value in localStorage, if available
+         */
+        setStorage(key: string, value: string): void {
+            if (typeof localStorage != "undefined") {
+                localStorage.setItem("spacetac-" + key, value);
+            }
+        }
+
+        /**
+         * Get a value from localStorage
+         */
+        getStorage(key: string): string | null {
+            if (typeof localStorage != "undefined") {
+                return localStorage.getItem("spacetac-" + key);
+            } else {
+                return null;
+            }
+        }
+
+        /**
+         * Check if the mouse is inside a given area
+         */
+        isMouseInside(area: IBounded): boolean {
+            let pos = this.input.mousePointer.position;
+            return pos.x >= area.x && pos.x < area.x + area.width && pos.y >= area.y && pos.y < area.y + area.height;
+        }
     }
 }

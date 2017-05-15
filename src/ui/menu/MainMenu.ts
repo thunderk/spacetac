@@ -31,9 +31,14 @@ module TS.SpaceTac.UI {
             }
 
             // Menu buttons
-            this.button_new_game = this.addButton(322, 674, "New Game", "Start a new campaign in a generated universe", this.onNewGame);
-            this.button_load_game = this.addButton(960, 674, "Load / Join", "Load a saved game or join a friend", this.onLoadGame);
-            this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", "Play a single generated battle", this.onQuickBattle);
+            this.button_new_game = this.addButton(322, 674, "New Game", "Start a new campaign in a generated universe", () => this.onNewGame());
+            this.button_load_game = this.addButton(960, 674, "Load / Join", "Load a saved game or join a friend", () => this.onLoadGame());
+            this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", "Play a single generated battle", () => this.onQuickBattle());
+
+            // Fullscreen button
+            let button = new Phaser.Button(this.game, 1815, 15, "menu-button-fullscreen", () => this.toggleFullscreen());
+            this.tooltip.bindStaticText(button, "Toggle full-screen");
+            this.layer_title.add(button);
 
             // Title
             let title = this.add.image(960, 225, "menu-title", 0, this.layer_title);
@@ -48,7 +53,13 @@ module TS.SpaceTac.UI {
         }
 
         addButton(x: number, y: number, caption: string, tooltip: string, callback: Function): Phaser.Button {
-            var button = this.add.button(x - 20, y + 20, "menu-button", callback, this, null, null, null, null, this.layer_title);
+            var button = this.add.button(x - 20, y + 20, "menu-button", () => {
+                let fullscreen = this.getStorage("fullscreen");
+                if (fullscreen == "true") {
+                    this.toggleFullscreen(true);
+                }
+                callback();
+            });
             button.anchor.set(0.5, 0);
             button.input.useHandCursor = true;
 
@@ -67,6 +78,8 @@ module TS.SpaceTac.UI {
             });
 
             this.tooltip.bindStaticText(button, tooltip);
+
+            this.layer_title.add(button);
 
             return button;
         }
