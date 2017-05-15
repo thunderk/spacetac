@@ -14,26 +14,14 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Find ship sprite in the arena, to position next to it
-         */
-        getPosition(ship: Ship): [number, number] {
-            let sprite = this.battleview.arena.findShipSprite(ship);
-            if (sprite) {
-                var x = sprite.worldPosition.x + sprite.width * sprite.worldScale.x * 0.5;
-                var y = sprite.worldPosition.y - sprite.height * sprite.worldScale.y * 0.5;
-                return [x, y];
-            } else {
-                return [0, 0];
-            }
-        }
-
-        /**
          * Set the current ship to display
          */
         setShip(ship: Ship): void {
             this.hide();
 
             let filler = this.getFiller();
+
+            filler.configure(10, 6, { x: 130, y: 140, width: 1920 - 138, height: 1080 - 148 });
 
             filler.addImage(0, 0, `ship-${ship.model.code}-portrait`, 0.5);
 
@@ -73,8 +61,13 @@ module TS.SpaceTac.UI {
                 filler.addText(140, 36, "Emergency Stasis Protocol\nship disabled", "#a899db", 20, true, true);
             }
 
-            let [x, y] = this.getPosition(ship);
-            this.container.show(x, y);
+            let sprite = this.battleview.arena.findShipSprite(ship);
+            if (sprite) {
+                let bounds = sprite.getBounds();
+                bounds.x = sprite.worldPosition.x + sprite.width * sprite.worldScale.x * 0.5;  // TODO Should not be necessary
+                bounds.y = sprite.worldPosition.y - sprite.height * sprite.worldScale.y * 0.5;
+                this.container.show(sprite.getBounds());
+            }
         }
     }
 }

@@ -21,8 +21,8 @@ module TS.SpaceTac.UI.Specs {
             jasmine.clock().tick(1000);
             container.update();
             expect(container.visible).toBe(true);
-            expect(container.x).toEqual(154);
-            expect(container.y).toEqual(79);
+            expect(container.x).toEqual(109);
+            expect(container.y).toEqual(91);
 
             button.onInputOut.dispatch();
             expect(container.visible).toBe(false);

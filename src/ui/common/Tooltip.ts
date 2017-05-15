@@ -4,7 +4,10 @@ module TS.SpaceTac.UI {
         view: BaseView
         background: Phaser.Graphics
         content: Phaser.Group
-        anchorpoint: [number, number] = [0, 0]
+        item: IBounded
+        border = 10
+        margin = 6
+        viewport: IBounded | null = null
 
         constructor(view: BaseView) {
             super(view.game);
@@ -21,25 +24,51 @@ module TS.SpaceTac.UI {
             this.view.tooltip_layer.add(this);
         }
 
-        show(x: number, y: number) {
-            this.anchorpoint = [x, y];
+        show(item: IBounded) {
+            this.item = item;
             this.visible = true;
+            this.update();
+        }
+
+        tryPosition(viewport: IBounded, tooltip: IBounded): [number, number, number] {
+            let [x, y] = UITools.positionInside(tooltip, viewport);
+            let distance = Math.max(Math.abs(x - tooltip.x), Math.abs(y - tooltip.y));
+            if (this.view.isMouseInside({ x: x, y: y, width: tooltip.width, height: tooltip.height })) {
+                distance += 1000;
+            }
+            return [x, y, distance];
+        }
+
+        getBestPosition(item: IBounded, width: number, height: number): [number, number] {
+            let viewport = this.viewport || { x: 0, y: 0, width: this.view.getWidth(), height: this.view.getHeight() };
+            let candidates = [
+                this.tryPosition(viewport, { x: item.x + item.width / 2 - width / 2, y: item.y + item.height + this.margin, width: width, height: height }),
+                this.tryPosition(viewport, { x: item.x + item.width + this.margin, y: item.y + item.height / 2 - height / 2, width: width, height: height }),
+                this.tryPosition(viewport, { x: item.x + item.width / 2 - width / 2, y: item.y - height - this.margin, width: width, height: height }),
+                this.tryPosition(viewport, { x: item.x - width - this.margin, y: item.y + item.height / 2 - height / 2, width: width, height: height }),
+            ]
+            candidates[0][2] -= 1;  // preference to down tooltip on equality
+            let [x, y, distance] = candidates.sort((a, b) => cmp(a[2], b[2]))[0];
+            return [x, y];
         }
 
         update() {
             if (this.visible) {
                 let bounds = this.content.getBounds();
-                let width = bounds.width + 20;
-                let height = bounds.height + 20;
+                let width = bounds.width + 2 * this.border;
+                let height = bounds.height + 2 * this.border;
 
                 if (this.background.width != width || this.background.height != height) {
                     this.background.clear();
+                    this.background.lineStyle(2, 0x404450);
                     this.background.beginFill(0x202225, 0.9);
-                    this.background.drawRect(-10, -10, width, height);
+                    this.background.drawRect(-this.border, -this.border, width, height);
                     this.background.endFill();
                 }
 
-                let [x, y] = UITools.positionInside({ x: this.anchorpoint[0], y: this.anchorpoint[1], width: width, height: height }, { x: 0, y: 0, width: this.view.getWidth(), height: this.view.getHeight() });
+                let [x, y] = this.getBestPosition(this.item, width, height);
+                x += this.border;
+                y += this.border;
                 if (x != this.x || y != this.y) {
                     this.position.set(x, y);
                 }
@@ -48,6 +77,7 @@ module TS.SpaceTac.UI {
 
         hide() {
             this.content.removeAll();
+            this.background.clear();
             this.visible = false;
         }
     }
@@ -63,9 +93,20 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Configure the positioning and base style of the tooltip
+         */
+        configure(border = 10, margin = 6, viewport: IBounded | null = null): void {
+            this.container.border = border;
+            this.container.margin = margin;
+            if (viewport) {
+                this.container.viewport = viewport;
+            }
+        }
+
+        /**
          * Add an image to the content
          */
-        addImage(x: number, y: number, key: string, scale = 1) {
+        addImage(x: number, y: number, key: string, scale = 1): void {
             let image = new Phaser.Image(this.container.game, x, y, key);
             image.scale.set(scale);
             this.container.content.add(image);
@@ -74,7 +115,7 @@ module TS.SpaceTac.UI {
         /**
          * Add a text to the content
          */
-        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, center = false, bold = false) {
+        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, center = false, bold = false): void {
             let style = { font: `${bold ? "bold " : ""}${size}pt Arial`, fill: color, align: center ? "center" : "left" };
             let text = new Phaser.Text(this.container.game, x, y, content, style);
             this.container.content.add(text);
@@ -115,8 +156,7 @@ module TS.SpaceTac.UI {
                 () => {
                     this.hide();
                     if (func(this.getFiller())) {
-                        let bounds = obj.getBounds();
-                        this.container.show(bounds.x + bounds.width + 4, bounds.y + bounds.height + 4);
+                        this.container.show(obj.getBounds());
                     }
                 },
                 // leave

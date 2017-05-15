@@ -1,9 +1,9 @@
 module TS.SpaceTac.UI {
-    interface IBounded {
-        x: number;
-        y: number;
-        width: number;
-        height: number;
+    export type IBounded = {
+        x: number
+        y: number
+        width: number
+        height: number
     }
 
     // Common UI tools functions

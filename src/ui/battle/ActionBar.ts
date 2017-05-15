@@ -50,7 +50,6 @@ module TS.SpaceTac.UI {
             this.icon_waiting = new Phaser.Image(this.game, this.width / 2, 50, "common-waiting", 0);
             this.icon_waiting.anchor.set(0.5, 0.5);
             this.icon_waiting.scale.set(0.5, 0.5);
-            this.game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
             this.addChild(this.icon_waiting);
 
             // Tooltip
@@ -105,7 +104,9 @@ module TS.SpaceTac.UI {
         setInteractive(interactive: boolean) {
             this.interactive = interactive;
 
+            this.game.tweens.removeFrom(this.icon_waiting);
             this.battleview.animations.setVisible(this.icon_waiting, !this.interactive, 100);
+            this.game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
         }
 
         /**
@@ -206,12 +207,10 @@ module TS.SpaceTac.UI {
                 this.ship = ship;
                 this.ship_power_capacity = ship.getAttribute("power_capacity");
                 this.ship_power_value = ship.getValue("power");
-                this.game.tweens.create(this).to({ "alpha": 1 }, 400).start();
             } else {
                 this.ship = null;
                 this.ship_power_capacity = 0;
                 this.ship_power_value = 0;
-                this.game.tweens.create(this).to({ "alpha": 0.5 }, 400).start();
             }
 
             this.updatePower();
