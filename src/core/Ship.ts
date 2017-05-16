@@ -322,6 +322,7 @@ module TS.SpaceTac {
             this.updateAttributes();
             this.restoreHealth();
             this.initializeActionPoints();
+            this.listEquipment().forEach(equipment => equipment.cooldown.reset());
         }
 
         /**
@@ -371,6 +372,9 @@ module TS.SpaceTac {
                 // Apply sticky effects
                 this.sticky_effects.forEach(effect => effect.endTurn(this));
                 this.cleanStickyEffects();
+
+                // Cool down equipment
+                this.listEquipment().forEach(equipment => equipment.cooldown.cool());
             }
         }
 

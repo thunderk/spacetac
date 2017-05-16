@@ -33,7 +33,7 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/action-inactive.png");
             this.loadImage("battle/action-active.png");
             this.loadImage("battle/action-selected.png");
-            this.loadImage("battle/action-tooltip.png");
+            this.loadImage("battle/action-cooldown.png");
             this.loadImage("battle/power-available.png");
             this.loadImage("battle/power-using.png");
             this.loadImage("battle/power-used.png");

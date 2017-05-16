@@ -15,6 +15,7 @@
 * Arena: add sticky effects indicators on ships
 * Arena: add power indicator in ship hover information
 * Arena: temporarily show ship information when it changes
+* Arena: display important changes (damages, effects...) instead of attribute changes
 * Suspend AI operation when the game is paused (window not focused)
 * Add permanent effects to ship models to ease balancing
 * Find incentives to move from starting position
@@ -34,7 +35,6 @@
 * Prevent arena effects information (eg. "shield -36") to overflow out of the arena
 * Allow to undo last moves
 * Add critical hit/miss
-* Add an overheat/cooling system
 * Add auto-move to attack
 * Merge identical sticky effects
 * Allow to skip animations and AI delays in battle

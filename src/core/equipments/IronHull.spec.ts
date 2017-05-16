@@ -9,15 +9,15 @@ module TS.SpaceTac.Equipments {
 
             equipment = template.generate(2);
             expect(equipment.requirements).toEqual({ "skill_material": 2 });
-            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 250)]);
+            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 220)]);
 
             equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_material": 3 });
-            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 300)]);
+            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 240)]);
 
             equipment = template.generate(10);
             expect(equipment.requirements).toEqual({ "skill_material": 10 });
-            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 650)]);
+            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 380)]);
         });
     });
 }

@@ -48,6 +48,9 @@ module TS.SpaceTac {
         // Equipment wear due to usage in battles (will lower the sell price)
         wear = 0
 
+        // Cooldown needed by the equipment
+        cooldown = new Cooldown()
+
         // Basic constructor
         constructor(slot: SlotType | null = null, code = "equipment") {
             this.slot_type = slot;
@@ -87,6 +90,9 @@ module TS.SpaceTac {
             }
             if (requirements.length > 0) {
                 description = "Requires:\n" + requirements.join("\n") + "\n\n" + description;
+            }
+            if (this.cooldown.overheat > 0) {
+                description = `${this.cooldown}\n\n${description}`;
             }
             if (this.wear > 0) {
                 description = (this.wear >= 100 ? "Worn" : "Second hand") + "\n\n" + description;

@@ -6,7 +6,7 @@ module TS.SpaceTac.Equipments {
             super(SlotType.Hull, "Iron Hull", "Protective hull, based on layered iron alloys");
 
             this.setSkillsRequirements({ "skill_material": 1 });
-            this.addAttributeEffect("hull_capacity", istep(200, irepeat(50)));
+            this.addAttributeEffect("hull_capacity", istep(200, irepeat(20)));
         }
     }
 }

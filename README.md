@@ -101,6 +101,25 @@ If an equipped item has a requirement of "time skill >= 2", that the ship has "t
 that a temporary effect of "time skill -1" is active, the requirement is no longer fulfilled and the equipped 
 item is then temporarily disabled (no more effects and cannot be used), until the "time skill -1" effect is lifted.
 
+## Equipments
+
+### Overheat/Cooldown
+
+Equipments may overheat, and need to cooldown for some time, during which it cannot be used.
+
+If an equipment has "overheat 2 / cooldown 3", using it twice in the same turn will cause it to
+overheat. It then cannot be used for the next three turns. Using this equipment only once per turn
+is safe, and will never overheat it.
+
+If an equipment has multiple actions associated, any of these actions will increase the shared heat.
+
+*Not done yet :* Some equipments may have a "cumulative overheat", meaning that the heat is stored between turns, cooling down 1
+point at the end of turn.
+
+*Not done yet :* Some equipments may have a "stacked overheat", which
+is similar to "cumulative overheat", except it does not cool down at
+the end of turn (it will only start cooling down after being overheated).
+
 ## Drones
 
 Drones are static objects, deployed by ships, that apply effects in a circular zone around themselves.
@@ -113,5 +132,7 @@ in the surrounding zone, except if less than a battle cycle passed since last ac
 
 Drones are fully autonomous, and once deployed, are not controlled by their owner ship.
 
-They are small and cannot be the direct target of weapons. They are not affected by area effects,
+They are small and cannot be the direct target of weapons.
+
+*Not done yet :*  They are not affected by area effects,
 except for area damage and area effects specifically designed for drones.

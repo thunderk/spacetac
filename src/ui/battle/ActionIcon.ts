@@ -34,8 +34,11 @@ module TS.SpaceTac.UI {
         // Layer applied when the action is selected
         private layer_selected: Phaser.Image;
 
+        // Cooldown indicators
+        private layer_cooldown: Phaser.Group
+
         // Create an icon for a single ship action
-        constructor(bar: ActionBar, x: number, y: number, ship: Ship, action: BaseAction) {
+        constructor(bar: ActionBar, x: number, y: number, ship: Ship, action: BaseAction, position: number) {
             super(bar.game, x, y, "battle-action-inactive");
 
             this.bar = bar;
@@ -65,22 +68,24 @@ module TS.SpaceTac.UI {
             this.layer_icon.scale.set(0.25, 0.25);
             this.addChild(this.layer_icon);
 
-            let show_info = () => {
-                if (this.bar.ship) {
-                    this.bar.tooltip.setAction(this);
-                    this.battleview.arena.range_hint.setSecondary(this.ship, this.action);
-                }
-            };
-            let hide_info = () => {
-                this.bar.tooltip.setAction(null);
-                this.battleview.arena.range_hint.clearSecondary();
-            };
+            // Cooldown layer
+            this.layer_cooldown = new Phaser.Group(this.game);
+            this.addChild(this.layer_cooldown);
 
             // Events
-            UITools.setHoverClick(this, show_info, hide_info, () => this.processClick());
+            this.battleview.tooltip.bind(this, filler => {
+                ActionTooltip.fill(filler, this.ship, this.action, position);
+                return true;
+            });
+            UITools.setHoverClick(this,
+                () => this.battleview.arena.range_hint.setSecondary(this.ship, this.action),
+                () => this.battleview.arena.range_hint.clearSecondary(),
+                () => this.processClick()
+            );
 
             // Initialize
             this.updateActiveStatus(true);
+            this.updateCooldownStatus();
         }
 
         // Process a click event on the action icon
@@ -154,6 +159,7 @@ module TS.SpaceTac.UI {
                 this.targetting = null;
             }
             this.setSelected(false);
+            this.updateCooldownStatus();
             this.updateActiveStatus();
             this.updateFadingStatus(this.ship.values.power.get());
             this.battleview.arena.range_hint.clearPrimary();
@@ -163,6 +169,24 @@ module TS.SpaceTac.UI {
         setSelected(selected: boolean) {
             this.selected = selected;
             this.battleview.animations.setVisible(this.layer_selected, this.selected, 300);
+        }
+
+        // Update the cooldown status
+        updateCooldownStatus(): void {
+            this.layer_cooldown.removeAll();
+            if (this.action.equipment) {
+                let cooldown = this.action.equipment.cooldown;
+                let count = cooldown.heat ? cooldown.heat : (cooldown.willOverheat() ? cooldown.cooling + 1 : 0);
+                if (count) {
+                    let positions = UITools.evenlySpace(68, 18, count);
+                    range(count).forEach(i => {
+                        let dot = new Phaser.Image(this.game, 10 + positions[i], 10, "battle-action-cooldown");
+                        dot.anchor.set(0.5, 0.5);
+                        dot.alpha = cooldown.heat ? 1 : 0.5;
+                        this.layer_cooldown.add(dot);
+                    });
+                }
+            }
         }
 
         // Update the active status, from the action canBeUsed result
@@ -177,9 +201,10 @@ module TS.SpaceTac.UI {
         }
 
         // Update the fading status, given an hypothetical remaining AP
-        updateFadingStatus(remaining_ap: number): void {
-            var old_fading = this.fading;
-            this.fading = this.active && (this.action.checkCannotBeApplied(this.ship, remaining_ap) != null);
+        updateFadingStatus(remaining_ap: number, action = false): void {
+            let old_fading = this.fading;
+            let overheat = action && (this.action.equipment !== null && this.action.equipment.cooldown.willOverheat());
+            this.fading = this.active && (this.action.checkCannotBeApplied(this.ship, remaining_ap) != null || overheat);
             if (this.fading != old_fading) {
                 this.battleview.animations.setVisible(this.layer_active, this.active && !this.fading, 500);
             }

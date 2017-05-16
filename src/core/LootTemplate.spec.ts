@@ -54,6 +54,23 @@ module TS.SpaceTac.Specs {
             });
         });
 
+        it("applies cooldown", function () {
+            let template = new LootTemplate(SlotType.Weapon, "Weapon");
+            template.setCooldown(istep(1), istep(2));
+
+            let result = template.generate(1);
+            expect(result.cooldown.overheat).toBe(1);
+            expect(result.cooldown.cooling).toBe(2);
+
+            result = template.generate(2);
+            expect(result.cooldown.overheat).toBe(2);
+            expect(result.cooldown.cooling).toBe(3);
+
+            result = template.generate(10);
+            expect(result.cooldown.overheat).toBe(10);
+            expect(result.cooldown.cooling).toBe(11);
+        });
+
         it("applies attributes permenant effects", function () {
             let template = new LootTemplate(SlotType.Shield, "Shield");
             template.addAttributeEffect("shield_capacity", irange(undefined, 50, 10));

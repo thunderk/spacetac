@@ -149,6 +149,11 @@ module TS.SpaceTac {
             simpleFactor(equipment.action, 'distance_per_power');
         }
 
+        if (equipment.cooldown.overheat) {
+            simpleFactor(equipment.cooldown, 'overheat', true);
+            simpleFactor(equipment.cooldown, 'cooling', true);
+        }
+
         // Choose a random one
         if (modifiers.length > 0) {
             let chosen = random.choice(modifiers);
@@ -245,6 +250,15 @@ module TS.SpaceTac {
                         equipment.requirements[skill] = (equipment.requirements[skill] || 0) + resolved;
                     }
                 });
+            });
+        }
+
+        /**
+         * Set the overheat/cooldown
+         */
+        setCooldown(overheat: LeveledValue, cooldown: LeveledValue): void {
+            this.base_modifiers.push((equipment, level) => {
+                equipment.cooldown.configure(resolveForLevel(overheat, level), resolveForLevel(cooldown, level));
             });
         }
 

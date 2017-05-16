@@ -15,6 +15,14 @@ module TS.SpaceTac {
         // Number of turns needed to cooldown when overheated
         cooling = 0
 
+        constructor(overheat = 0, cooling = 0) {
+            this.configure(overheat, cooling);
+        }
+
+        toString(): string {
+            return `Overheat ${this.overheat} / Cooldown ${this.cooling}`;
+        }
+
         /**
          * Check if the equipment can be used in regards to heat
          */
@@ -23,20 +31,37 @@ module TS.SpaceTac {
         }
 
         /**
+         * Check if the equipment would overheat if used
+         */
+        willOverheat(): boolean {
+            return this.overheat > 0 && this.uses + 1 >= this.overheat;
+        }
+
+        /**
+         * Check the number of uses before overheating
+         */
+        getRemainingUses(): number {
+            return this.overheat - this.uses;
+        }
+
+        /**
          * Configure the overheat and cooling
          */
         configure(overheat: number, cooling: number) {
             this.overheat = overheat;
             this.cooling = cooling;
+            this.reset();
         }
 
         /**
          * Use the equipment, increasing the heat
          */
         use(): void {
-            this.uses += 1;
-            if (this.uses >= this.overheat) {
-                this.heat = this.cooling;
+            if (this.overheat) {
+                this.uses += 1;
+                if (this.uses >= this.overheat) {
+                    this.heat = this.cooling + 1;
+                }
             }
         }
 
@@ -48,6 +73,14 @@ module TS.SpaceTac {
             if (this.heat > 0) {
                 this.heat -= 1;
             }
+        }
+
+        /**
+         * Reset the cooldown (typically at the end of turn)
+         */
+        reset(): void {
+            this.uses = 0;
+            this.heat = 0;
         }
     }
 }

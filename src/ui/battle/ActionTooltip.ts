@@ -1,79 +1,74 @@
 module TS.SpaceTac.UI {
-    // Tooltip to display action information
-    export class ActionTooltip extends Phaser.Sprite {
-        bar: ActionBar;
-        icon: Phaser.Image | null;
-        main_title: Phaser.Text;
-        sub_title: Phaser.Text;
-        cost: Phaser.Text;
-        description: Phaser.Text;
-        shortcut: Phaser.Text;
+    /**
+     * Tooltip displaying action information
+     */
+    export class ActionTooltip {
+        /**
+         * Fill the tooltip
+         */
+        static fill(filler: TooltipFiller, ship: Ship, action: BaseAction, position: number) {
+            filler.addImage(0, 0, "battle-actions-" + action.code, 0.5);
 
-        constructor(parent: ActionBar) {
-            super(parent.game, 0, 0, "battle-action-tooltip");
-            this.bar = parent;
-            this.visible = false;
+            filler.addText(150, 0, action.equipment ? action.equipment.name : action.name, "#ffffff", 24);
 
-            this.icon = null;
-
-            this.main_title = new Phaser.Text(this.game, 325, 20, "", { font: "24pt Arial", fill: "#ffffff" });
-            this.main_title.anchor.set(0.5, 0);
-            this.addChild(this.main_title);
-
-            this.sub_title = new Phaser.Text(this.game, 325, 60, "", { font: "22pt Arial", fill: "#ffffff" });
-            this.sub_title.anchor.set(0.5, 0);
-            this.addChild(this.sub_title);
-
-            this.cost = new Phaser.Text(this.game, 325, 100, "", { font: "20pt Arial", fill: "#ffff00" });
-            this.cost.anchor.set(0.5, 0);
-            this.addChild(this.cost);
-
-            this.description = new Phaser.Text(this.game, 21, 144, "", { font: "14pt Arial", fill: "#ffffff" });
-            this.description.wordWrap = true;
-            this.description.wordWrapWidth = 476;
-            this.addChild(this.description);
-
-            this.shortcut = new Phaser.Text(this.game, this.width - 5, this.height - 5, "", { font: "12pt Arial", fill: "#aaaaaa" });
-            this.shortcut.anchor.set(1, 1);
-            this.addChild(this.shortcut);
-        }
-
-        // Set current action to display, null to hide
-        setAction(action: ActionIcon | null): void {
-            if (action) {
-                if (this.icon) {
-                    this.icon.destroy(true);
-                }
-                this.icon = new Phaser.Image(this.game, 76, 72, "battle-actions-" + action.action.code);
-                this.icon.anchor.set(0.5, 0.5);
-                this.icon.scale.set(0.44, 0.44);
-                this.addChild(this.icon);
-
-                this.position.set(action.x, action.y + action.height + 44);
-                this.main_title.setText(action.action.equipment ? action.action.equipment.name : action.action.name);
-                this.sub_title.setText(action.action.equipment ? action.action.name : "");
-                if (action.action instanceof MoveAction) {
-                    this.cost.setText(`Cost: 1 power per ${action.action.distance_per_power}km`);
+            let cost = "";
+            if (action instanceof MoveAction) {
+                if (ship.getValue("power") == 0) {
+                    cost = "Not enough power";
                 } else {
-                    let cost = action.action.getActionPointsUsage(action.ship, null);
-                    this.cost.setText(cost == 0 ? "" : `Cost: ${cost} power`);
+                    cost = `Cost: 1 power per ${action.distance_per_power}km`;
                 }
-                this.description.setText(action.action.getEffectsDescription());
+            } else if (action.equipment) {
+                let power_usage = action.getActionPointsUsage(ship, null);
+                if (power_usage) {
+                    if (ship.getValue("power") < power_usage) {
+                        cost = "Not enough power";
+                    } else {
+                        cost = `Cost: ${power_usage} power`;
+                    }
+                }
+            }
+            if (cost) {
+                filler.addText(150, 50, cost, "#ffdd4b", 20);
+            }
 
-                let position = this.bar.action_icons.indexOf(action);
-                if (action.action instanceof EndTurnAction) {
-                    this.shortcut.setText("[ space ]");
-                } else if (position == 9) {
-                    this.shortcut.setText("[ 0 ]");
-                } else if (position >= 0 && position < 9) {
-                    this.shortcut.setText(`[ ${position + 1} ]`);
+            if (action.equipment && action.equipment.cooldown.overheat) {
+                let cooldown = action.equipment.cooldown;
+                let uses = cooldown.getRemainingUses();
+                let uses_message = "";
+                if (uses == 0) {
+                    uses_message = "Overheated !";
+                    if (cooldown.heat == 1) {
+                        uses_message += " Available next turn";
+                    } else if (cooldown.heat == 2) {
+                        uses_message += " Unavailable next turn";
+                    } else {
+                        uses_message += ` Unavailable next ${cooldown.heat - 1} turns`;
+                    }
                 } else {
-                    this.shortcut.setText("");
+                    uses_message = uses == 1 ? "Overheats if used" : `${uses} uses before overheat`;
+                    if (cooldown.cooling) {
+                        uses_message += ` (for ${cooldown.cooling} turn${cooldown.cooling ? "s" : ""})`;
+                    }
                 }
+                filler.addText(150, 90, uses_message, "#c9604c", 20);
+            }
 
-                this.bar.battleview.animations.show(this, 200, 0.9);
-            } else {
-                this.bar.battleview.animations.hide(this, 200);
+            let description = action.getEffectsDescription();
+            if (description) {
+                filler.addText(0, 150, description, "#ffffff", 14);
+            }
+
+            let shortcut = "";
+            if (action instanceof EndTurnAction) {
+                shortcut = "[ space ]";
+            } else if (position == 9) {
+                shortcut = "[ 0 ]";
+            } else if (position >= 0 && position < 9) {
+                shortcut = `[ ${position + 1} ]`;
+            }
+            if (shortcut) {
+                filler.addText(0, 0, shortcut, "#aaaaaa", 12);
             }
         }
     }

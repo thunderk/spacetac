@@ -11,9 +11,6 @@ module TS.SpaceTac.UI {
         // Power bar
         power: Phaser.Group;
 
-        // Tooltip to display hovered action info
-        tooltip: ActionTooltip;
-
         // Indicator of interaction disabled
         icon_waiting: Phaser.Image;
 
@@ -51,10 +48,6 @@ module TS.SpaceTac.UI {
             this.icon_waiting.anchor.set(0.5, 0.5);
             this.icon_waiting.scale.set(0.5, 0.5);
             this.addChild(this.icon_waiting);
-
-            // Tooltip
-            this.tooltip = new ActionTooltip(this);
-            this.addChild(this.tooltip);
 
             // Key bindings
             battleview.inputs.bind("Escape", "Cancel action", () => this.actionEnded());
@@ -128,15 +121,12 @@ module TS.SpaceTac.UI {
                 action.destroy();
             });
             this.action_icons = [];
-            this.tooltip.setAction(null);
         }
 
         // Add an action icon
         addAction(ship: Ship, action: BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, 192 + this.action_icons.length * 88, 8, ship, action);
+            var icon = new ActionIcon(this, 192 + this.action_icons.length * 88, 8, ship, action, this.action_icons.length);
             this.action_icons.push(icon);
-
-            this.tooltip.bringToTop();
 
             return icon;
         }
@@ -187,7 +177,7 @@ module TS.SpaceTac.UI {
             }
 
             this.action_icons.forEach((icon: ActionIcon) => {
-                icon.updateFadingStatus(remaining_ap);
+                icon.updateFadingStatus(remaining_ap, true);
             });
             this.updatePower(power_usage);
         }

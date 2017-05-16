@@ -2,16 +2,16 @@ module TS.SpaceTac {
     // Base class for action definitions
     export class BaseAction {
         // Identifier code for the type of action
-        code: string;
+        code: string
 
         // Human-readable name
-        name: string;
+        name: string
 
         // Boolean at true if the action needs a target
-        needs_target: boolean;
+        needs_target: boolean
 
         // Equipment that triggers this action
-        equipment: Equipment | null;
+        equipment: Equipment | null
 
         // Create the action
         constructor(code: string, name: string, needs_target: boolean, equipment: Equipment | null = null) {
@@ -40,11 +40,16 @@ module TS.SpaceTac {
                 remaining_ap = ship.values.power.get();
             }
             var ap_usage = this.getActionPointsUsage(ship, null);
-            if (remaining_ap >= ap_usage) {
-                return null;
-            } else {
+            if (remaining_ap < ap_usage) {
                 return "not enough power";
             }
+
+            // Check cooldown
+            if (this.equipment && !this.equipment.cooldown.canUse()) {
+                return "overheated";
+            }
+
+            return null;
         }
 
         // Get the number of action points the action applied to a target would use
@@ -109,6 +114,8 @@ module TS.SpaceTac {
                 if (this.equipment) {
                     this.equipment.addWear(1);
                     ship.listEquipment(SlotType.Power).forEach(equipment => equipment.addWear(1));
+
+                    this.equipment.cooldown.use();
                 }
 
                 this.customApply(ship, checked_target);

@@ -131,5 +131,21 @@ module TS.SpaceTac.UI {
                 return angle;
             }
         }
+
+        /**
+         * Evenly space identical items in a parent
+         * 
+         * Returns the relative position of item's center inside parent_width
+         */
+        static evenlySpace(parent_width: number, item_width: number, item_count: number): number[] {
+            if (item_width * item_count <= parent_width) {
+                let spacing = parent_width / item_count;
+                return range(item_count).map(i => (i + 0.5) * spacing);
+            } else {
+                let breadth = parent_width - item_width;
+                let spacing = breadth / (item_count - 1);
+                return range(item_count).map(i => item_width / 2 + i * spacing);
+            }
+        }
     }
 }

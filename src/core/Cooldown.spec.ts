@@ -4,7 +4,10 @@ module TS.SpaceTac.Specs {
             let cooldown = new Cooldown();
             expect(cooldown.canUse()).toBe(true);
 
-            cooldown.configure(2, 3);
+            cooldown.use();
+            expect(cooldown.canUse()).toBe(true);
+
+            cooldown.configure(2, 2);
             expect(cooldown.canUse()).toBe(true);
 
             cooldown.use();
@@ -21,6 +24,12 @@ module TS.SpaceTac.Specs {
 
             cooldown.cool();
             expect(cooldown.canUse()).toBe(true);
+
+            /*cooldown.configure(1, 0);
+            expect(cooldown.canUse()).toBe(true);
+
+            cooldown.use();
+            expect(cooldown.canUse()).toBe(false);*/
         });
     });
 }

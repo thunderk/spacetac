@@ -104,4 +104,14 @@ module TS.SpaceTac.UI.Specs {
             return [testgame.mapview, [session.universe, session.player]];
         });
     }
+
+    /**
+     * Check a given text node
+     */
+    export function checkText(node: any, content: string): void {
+        expect(node instanceof Phaser.Text).toBe(true);
+
+        let tnode = <Phaser.Text>node;
+        expect(tnode.text).toEqual(content);
+    }
 }

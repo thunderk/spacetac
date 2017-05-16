@@ -67,6 +67,7 @@ module TS.SpaceTac.Equipments {
             expect(battle.log.events[3]).toEqual(new DamageEvent(enemy2, 0, 20));
 
             battle.log.clear();
+            equipment.cooldown.cool();
 
             // Fire in space
             target = Target.newFromLocation(2.4, 0);
@@ -79,6 +80,7 @@ module TS.SpaceTac.Equipments {
             expect(battle.log.events[2]).toEqual(new DamageEvent(enemy2, 10, 10));
 
             battle.log.clear();
+            equipment.cooldown.cool();
 
             // Fire far away
             target = Target.newFromLocation(5, 0);

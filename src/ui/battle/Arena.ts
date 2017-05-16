@@ -219,5 +219,12 @@ module TS.SpaceTac.UI {
                 this.battleview.animations.setVisible(this.battleview.background, !active, 200);
             }
         }
+
+        /**
+         * Get the boundaries of the arena on display
+         */
+        getBoundaries(): IBounded {
+            return { x: 130, y: 140, width: 1920 - 138, height: 1080 - 148 };
+        }
     }
 }

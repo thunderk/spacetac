@@ -35,6 +35,31 @@ module TS.SpaceTac.Specs {
             expect(ship.arena_angle).toBeCloseTo(3.14159265, 0.00001);
         });
 
+        it("applies equipment cooldown", function () {
+            let ship = new Ship();
+            let equipment = new Equipment(SlotType.Weapon);
+            equipment.cooldown.configure(1, 1);
+            ship.addSlot(SlotType.Weapon).attach(equipment);
+
+            expect(equipment.cooldown.canUse()).toBe(true, 1);
+            equipment.cooldown.use();
+            expect(equipment.cooldown.canUse()).toBe(false, 2);
+
+            ship.startBattle();
+            expect(equipment.cooldown.canUse()).toBe(true, 3);
+
+            ship.startTurn();
+            equipment.cooldown.use();
+            expect(equipment.cooldown.canUse()).toBe(false, 4);
+            ship.endTurn();
+            expect(equipment.cooldown.canUse()).toBe(false, 5);
+
+            ship.startTurn();
+            expect(equipment.cooldown.canUse()).toBe(false, 6);
+            ship.endTurn();
+            expect(equipment.cooldown.canUse()).toBe(true, 7);
+        });
+
         it("lists available actions from attached equipment", function () {
             var ship = new Ship(null, "Test");
             var actions: BaseAction[];

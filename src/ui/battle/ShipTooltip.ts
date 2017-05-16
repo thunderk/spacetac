@@ -21,7 +21,7 @@ module TS.SpaceTac.UI {
 
             let filler = this.getFiller();
 
-            filler.configure(10, 6, { x: 130, y: 140, width: 1920 - 138, height: 1080 - 148 });
+            filler.configure(10, 6, this.battleview.arena.getBoundaries());
 
             filler.addImage(0, 0, `ship-${ship.model.code}-portrait`, 0.5);
 

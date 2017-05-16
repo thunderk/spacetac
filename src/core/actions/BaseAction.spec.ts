@@ -26,6 +26,35 @@ module TS.SpaceTac {
             expect(action.checkCannotBeApplied(ship)).toBe("not enough power");
         });
 
+        it("check if equipment can be used with overheat", function () {
+            let equipment = new Equipment();
+            let action = new BaseAction("test", "Test", false, equipment);
+            let ship = new Ship();
+
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+
+            equipment.cooldown.use();
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+
+            equipment.cooldown.configure(2, 2);
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+
+            equipment.cooldown.use();
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+
+            equipment.cooldown.use();
+            expect(action.checkCannotBeApplied(ship)).toBe("overheated");
+
+            equipment.cooldown.cool();
+            expect(action.checkCannotBeApplied(ship)).toBe("overheated");
+
+            equipment.cooldown.cool();
+            expect(action.checkCannotBeApplied(ship)).toBe("overheated");
+
+            equipment.cooldown.cool();
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+        });
+
         it("wears down equipment and power generators", function () {
             let ship = new Ship();
             TestTools.setShipAP(ship, 10);
