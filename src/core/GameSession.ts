@@ -50,7 +50,7 @@ module TS.SpaceTac {
 
             var start_location = this.universe.getStartLocation();
             start_location.clearEncounter();
-            start_location.addShop(50);
+            start_location.addShop();
 
             this.player = new Player(this.universe);
             this.player.fleet = fleet_generator.generate(1, this.player);
