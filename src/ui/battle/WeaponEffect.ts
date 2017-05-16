@@ -155,7 +155,7 @@ module TS.SpaceTac.UI {
             tween.start();
 
             if (blast_radius > 0) {
-                let ships = this.arena.getBattle().collectShipsInCircle(this.destination, blast_radius);
+                let ships = this.arena.getBattle().collectShipsInCircle(this.destination, blast_radius, true);
                 ships.forEach(ship => {
                     if (ship.getValue("shield") > 0) {
                         this.shieldImpactEffect(this.destination, { x: ship.arena_x, y: ship.arena_y }, 1200, 800);

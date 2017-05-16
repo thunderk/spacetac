@@ -6,9 +6,16 @@
 * Character sheet: when transferring to another ship, if the item can't be equipped (unmatched requirements), the transfer is cancelled instead of trying cargo
 * Character sheet: effective skill is sometimes not updated when upgrading base skill
 * Character sheet: tooltip to show the sources of attributes
+* Shops: allow to change/buy ship model
+* Loot: lucky finds should be proportional to cargo space
 * Weapon: shield with toggle effect => absorb damage in an area
 * Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
+* Arena: hide dead drones from tactical view
+* Arena: add sticky effects indicators on ships
+* Arena: add power indicator in ship hover information
+* Arena: temporarily show ship information when it changes
+* Suspend AI operation when the game is paused (window not focused)
 * Add permanent effects to ship models to ease balancing
 * Find incentives to move from starting position
 * Fix targetting not resetting when using action shortcuts
@@ -19,6 +26,7 @@
 * Active effects are not enough visible in ship list (maybe better in arena ?)
 * All things displayed in battle should be updated from LogProcess forwarding, not from current game state
 * Drones: add hull points and take area damage
+* Drones: find a way to avoid arena cluttering
 * Show power usage/recovery in action bar, on action hover
 * More sound effects (but battle sounds should be vibration only, we are in space !)
 * Add a battle log display
