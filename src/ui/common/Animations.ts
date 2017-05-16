@@ -140,7 +140,7 @@ module TS.SpaceTac.UI {
         static moveInSpace(obj: PhaserGraphics, x: number, y: number, angle: number, rotated_obj = obj): number {
             if (x == obj.x && y == obj.y) {
                 let tween = obj.game.tweens.create(rotated_obj);
-                let duration = Animations.rotationTween(tween, angle, 0.3);
+                let duration = Animations.rotationTween(tween, angle, 0.5);
                 tween.start();
                 return duration;
             } else {

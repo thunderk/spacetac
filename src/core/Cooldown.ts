@@ -41,7 +41,7 @@ module TS.SpaceTac {
          * Check the number of uses before overheating
          */
         getRemainingUses(): number {
-            return this.overheat - this.uses;
+            return (this.heat > 0) ? 0 : (this.overheat - this.uses);
         }
 
         /**

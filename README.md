@@ -136,3 +136,18 @@ They are small and cannot be the direct target of weapons.
 
 *Not done yet :*  They are not affected by area effects,
 except for area damage and area effects specifically designed for drones.
+
+## Keyboard shortcuts
+
+### Global
+
+* S - Quick save
+* L - Quick load
+* M - Toggle sound
+* F - Toggle fullscreen
+
+### Battle (arena)
+
+* 1,2,3...0 - Select action
+* Space - End current ship's turn
+* T - Tactical mode for 5 seconds

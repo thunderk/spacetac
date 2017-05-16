@@ -104,6 +104,10 @@ module TS.SpaceTac.UI {
             this.gameui.audio.startMusic("full-on");
 
             // Key mapping
+            this.inputs.bind("t", "Show tactical view", () => {
+                this.arena.setTacticalMode(true);
+                this.timer.schedule(5000, () => this.arena.setTacticalMode(false));
+            });
             this.inputs.bindCheat("w", "Win current battle", () => {
                 iforeach(this.battle.iships(), ship => {
                     if (ship.fleet.player != this.player) {

@@ -51,7 +51,9 @@ module TS.SpaceTac.UI {
                         uses_message += ` (for ${cooldown.cooling} turn${cooldown.cooling ? "s" : ""})`;
                     }
                 }
-                filler.addText(150, 90, uses_message, "#c9604c", 20);
+                if (uses_message) {
+                    filler.addText(150, 90, uses_message, "#c9604c", 20);
+                }
             }
 
             let description = action.getEffectsDescription();

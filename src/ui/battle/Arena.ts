@@ -211,9 +211,9 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Set the HUD mode (shows information on all ships)
+         * Switch the tactical mode (shows information on all ships, and fades background)
          */
-        setHUDMode(active: boolean): void {
+        setTacticalMode(active: boolean): void {
             this.ship_sprites.forEach(sprite => sprite.setHovered(active));
             if (this.battleview.background) {
                 this.battleview.animations.setVisible(this.battleview.background, !active, 200);
