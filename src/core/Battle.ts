@@ -82,15 +82,23 @@ module TS.SpaceTac {
         /**
          * Return an iterator over all ships engaged in the battle
          */
-        iships(): Iterator<Ship> {
-            return ichainit(imap(iarray(this.fleets), fleet => iarray(fleet.ships)));
+        iships(alive_only = false): Iterator<Ship> {
+            let result = ichainit(imap(iarray(this.fleets), fleet => iarray(fleet.ships)));
+            return alive_only ? ifilter(result, ship => ship.alive) : result;
+        }
+
+        /**
+         * Return an iterator over ships allies of (or owned by) a player
+         */
+        iallies(player: Player, alive_only = false): Iterator<Ship> {
+            return ifilter(this.iships(alive_only), ship => ship.getPlayer() === player);
         }
 
         /**
          * Return an iterator over ships enemy of a player
          */
         ienemies(player: Player, alive_only = false): Iterator<Ship> {
-            return ifilter(this.iships(), ship => ship.getPlayer() != player && (ship.alive || !alive_only));
+            return ifilter(this.iships(alive_only), ship => ship.getPlayer() !== player);
         }
 
         // Check if a player is able to play

@@ -104,6 +104,7 @@ module TS.SpaceTac {
             let evaluators = [
                 scaled(TacticalAIHelpers.evaluateTurnCost, 3),
                 scaled(TacticalAIHelpers.evaluateDamageToEnemy, 20),
+                scaled(TacticalAIHelpers.evaluateDamageToAllies, 30),
                 scaled(TacticalAIHelpers.evaluateClustering, 8),
                 scaled(TacticalAIHelpers.evaluatePosition, 1),
                 scaled(TacticalAIHelpers.evaluateIdling, 5),

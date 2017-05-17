@@ -103,33 +103,45 @@ module TS.SpaceTac {
         }
 
         /**
-         * Evaluate the damage done to the enemy, between -1 and 1
+         * Evaluate the damage done to a set of ships, between -1 and 1
          */
-        static evaluateDamageToEnemy(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+        static evaluateDamage(ship: Ship, battle: Battle, maneuver: Maneuver, others: Ship[]): number {
             let action = maneuver.action;
             if (action instanceof FireWeaponAction) {
-                let enemies = imaterialize(battle.ienemies(ship.getPlayer(), true));
-                if (enemies.length == 0) {
-                    return 0;
-                }
                 let damage = 0;
                 let dead = 0;
                 let effects = action.getEffects(ship, maneuver.target);
-                effects.forEach(([ship, effect]) => {
-                    if (effect instanceof DamageEffect && contains(enemies, ship)) {
-                        let [shield, hull] = effect.getEffectiveDamage(ship);
+                effects.forEach(([other, effect]) => {
+                    if (effect instanceof DamageEffect && contains(others, other)) {
+                        let [shield, hull] = effect.getEffectiveDamage(other);
                         damage += shield + hull;
-                        if (hull == ship.getValue("hull")) {
+                        if (hull == other.getValue("hull")) {
                             dead += 1
                         }
                     }
                 });
-                let hp = sum(enemies.map(enemy => enemy.getValue("hull") + enemy.getValue("shield")));
-                let result = (damage ? 0.2 : 0) + 0.3 * (damage / hp) + (dead ? 0.2 : 0) + 0.3 * (dead / enemies.length);
+                let hp = sum(others.map(other => other.getValue("hull") + other.getValue("shield")));
+                let result = (damage ? 0.2 : 0) + 0.3 * (damage / hp) + (dead ? 0.2 : 0) + 0.3 * (dead / others.length);
                 return result;
             } else {
                 return 0;
             }
+        }
+
+        /**
+         * Evaluate the damage done to the enemy, between -1 and 1
+         */
+        static evaluateDamageToEnemy(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+            let enemies = imaterialize(battle.ienemies(ship.getPlayer(), true));
+            return TacticalAIHelpers.evaluateDamage(ship, battle, maneuver, enemies);
+        }
+
+        /**
+         * Evaluate the damage done to allied ships, between -1 and 1
+         */
+        static evaluateDamageToAllies(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+            let allies = imaterialize(battle.iallies(ship.getPlayer(), true));
+            return -TacticalAIHelpers.evaluateDamage(ship, battle, maneuver, allies);
         }
 
         /**
