@@ -13,25 +13,20 @@ module TS.SpaceTac {
      * As much work as possible is done using iterators, without materializing every possibilities.
      */
     export class TacticalAI extends AbstractAI {
-        producers: TacticalProducer[] = []
-        evaluators: TacticalEvaluator[] = []
+        private producers: TacticalProducer[] = []
+        private evaluators: TacticalEvaluator[] = []
 
-        best: Maneuver | null
-        best_score: number
+        private best: Maneuver | null
+        private best_score: number
 
-        protected initWork(): void {
+        protected initWork(delay?: number): void {
             this.best = null;
             this.best_score = -Infinity;
 
-            if (this.producers.length == 0) {
-                this.setupDefaultProducers();
-            }
+            this.producers = this.getDefaultProducers();
+            this.evaluators = this.getDefaultEvaluators();
 
-            if (this.evaluators.length == 0) {
-                this.setupDefaultEvaluators();
-            }
-
-            this.addWorkItem(() => this.unitWork());
+            this.addWorkItem(() => this.unitWork(), delay);
         }
 
         /**
@@ -65,7 +60,7 @@ module TS.SpaceTac {
 
                     // Evaluate the maneuver
                     let score = this.evaluate(maneuver);
-                    //console.log(maneuver, score);
+                    //console.debug("AI evaluation", maneuver, score);
                     if ((Math.abs(score - this.best_score) < 0.0001 && this.random.bool()) || score > this.best_score) {
                         this.best = maneuver;
                         this.best_score = score;
@@ -76,40 +71,46 @@ module TS.SpaceTac {
             }
 
             // Continue or stop
-            if (this.producers.length > 0 && this.getDuration() < 3000) {
+            if (this.producers.length > 0 && this.getDuration() < 8000) {
                 this.addWorkItem(() => this.unitWork());
             } else if (this.best) {
+                console.log("AI maneuver", this.best, this.best_score);
                 this.best.apply();
+                if (this.ship.playing) {
+                    this.initWork(2000);
+                }
             }
         }
 
         /**
-         * Setup the default set of maneuver producers
+         * Get the default set of maneuver producers
          */
-        private setupDefaultProducers() {
+        getDefaultProducers() {
             let producers = [
+                TacticalAIHelpers.produceEndTurn,
                 TacticalAIHelpers.produceDirectShots,
                 TacticalAIHelpers.produceBlastShots,
                 TacticalAIHelpers.produceDroneDeployments,
                 TacticalAIHelpers.produceRandomMoves,
             ]
-            producers.forEach(producer => this.producers.push(producer(this.ship, this.ship.getBattle() || new Battle())));
+            return producers.map(producer => producer(this.ship, this.ship.getBattle() || new Battle()));
         }
 
         /**
-         * Setup the default set of maneuver evaluators
+         * Get the default set of maneuver evaluators
          */
-        private setupDefaultEvaluators() {
+        getDefaultEvaluators() {
             let scaled = (evaluator: (...args: any[]) => number, factor: number) => (...args: any[]) => factor * evaluator(...args);
             let evaluators = [
-                scaled(TacticalAIHelpers.evaluateTurnCost, 1),
-                scaled(TacticalAIHelpers.evaluateDamageToEnemy, 30),
+                scaled(TacticalAIHelpers.evaluateTurnCost, 3),
+                scaled(TacticalAIHelpers.evaluateDamageToEnemy, 20),
                 scaled(TacticalAIHelpers.evaluateClustering, 8),
                 scaled(TacticalAIHelpers.evaluatePosition, 1),
                 scaled(TacticalAIHelpers.evaluateIdling, 5),
             ]
+
             // TODO evaluator typing is lost
-            evaluators.forEach(evaluator => this.evaluators.push((maneuver: Maneuver) => evaluator(this.ship, this.ship.getBattle(), maneuver)));
+            return evaluators.map(evaluator => ((maneuver: Maneuver) => evaluator(this.ship, this.ship.getBattle(), maneuver)));
         }
     }
 }

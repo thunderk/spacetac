@@ -18,14 +18,20 @@ module TS.SpaceTac.Specs {
         let applied: number[] = [];
 
         beforeEach(function () {
+            spyOn(console, "log").and.stub();
             applied = [];
         });
 
         it("applies the highest evaluated maneuver", function () {
             let ai = new TacticalAI(new Ship(), Timer.synchronous);
-            ai.evaluators.push(maneuver => (<FixedManeuver>maneuver).score);
-            ai.producers.push(producer(1, -8, 4));
-            ai.producers.push(producer(3, 7, 0, 6, 1));
+
+            spyOn(ai, "getDefaultProducers").and.returnValue([
+                producer(1, -8, 4),
+                producer(3, 7, 0, 6, 1)
+            ]);
+            spyOn(ai, "getDefaultEvaluators").and.returnValue([
+                (maneuver: Maneuver) => (<FixedManeuver>maneuver).score
+            ]);
 
             ai.ship.playing = true;
             ai.play();

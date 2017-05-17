@@ -25,6 +25,13 @@ module TS.SpaceTac {
      */
     export class TacticalAIHelpers {
         /**
+         * Produce a turn end.
+         */
+        static produceEndTurn(ship: Ship, battle: Battle): TacticalProducer {
+            return isingle(new Maneuver(ship, new EndTurnAction(), Target.newFromShip(ship)));
+        }
+
+        /**
          * Produce all "direct hit" weapon shots.
          */
         static produceDirectShots(ship: Ship, battle: Battle): TacticalProducer {
@@ -118,7 +125,7 @@ module TS.SpaceTac {
                     }
                 });
                 let hp = sum(enemies.map(enemy => enemy.getValue("hull") + enemy.getValue("shield")));
-                let result = 0.5 * (damage / hp) + 0.5 * (dead / enemies.length);
+                let result = (damage ? 0.2 : 0) + 0.3 * (damage / hp) + (dead ? 0.2 : 0) + 0.3 * (dead / enemies.length);
                 return result;
             } else {
                 return 0;

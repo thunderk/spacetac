@@ -186,7 +186,7 @@ module TS.SpaceTac.UI {
             let arena = this.battleview.arena.getBoundaries();
             this.effects.position.set(
                 (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects.width) : (-this.effects.width * 0.5)),
-                (this.ship.arena_y < arena.height * 0.5) ? 40 : (-40 - this.effects.height)
+                (this.ship.arena_y < arena.height * 0.9) ? 40 : (-40 - this.effects.height)
             );
 
             this.game.tweens.removeFrom(this.effects);

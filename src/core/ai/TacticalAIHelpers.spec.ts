@@ -144,11 +144,11 @@ module TS.SpaceTac.Specs {
 
             // one enemy loses half-life
             maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(180, 0));
-            expect(TacticalAIHelpers.evaluateDamageToEnemy(ship, battle, maneuver)).toEqual(0.25);
+            expect(TacticalAIHelpers.evaluateDamageToEnemy(ship, battle, maneuver)).toEqual(0.35);
 
             // one enemy loses half-life, the other one is dead
             maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(280, 0));
-            expect(TacticalAIHelpers.evaluateDamageToEnemy(ship, battle, maneuver)).toEqual(0.625);
+            expect(TacticalAIHelpers.evaluateDamageToEnemy(ship, battle, maneuver)).toEqual(0.775);
         });
 
         it("evaluates ship clustering", function () {

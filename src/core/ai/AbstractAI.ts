@@ -113,8 +113,6 @@ module TS.SpaceTac {
                 if (battle) {
                     battle.advanceToNextShip();
                 }
-            } else {
-                console.error(`${this.name} tries to end turn of another ship`);
             }
         }
 

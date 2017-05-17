@@ -41,11 +41,11 @@
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: apply safety distances to move actions
-* AI: fix not being able to apply simulated maneuver
 * AI: do not always move first, they are defenders
-* AI: allow to play several moves in the same turn (with pauses)
 * AI: add combination of random small move and actual maneuver, as producer
-* AI: evaluate based on simulated list of effects
+* AI: evaluate drone area effects
+* AI: avoid damaging allies
+* AI: produce random blast shots
 * AI: consider overheat/cooldown
 * AI: new duel page with producers/evaluators tweaking
 * Map: remove jump links that cross the radius of other systems
