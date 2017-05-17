@@ -127,7 +127,7 @@ module TS.SpaceTac.UI {
          * This will show the information HUD accordingly
          */
         setHovered(hovered: boolean) {
-            if (hovered) {
+            if (hovered && this.ship.alive) {
                 this.info_toggle.start();
             } else {
                 this.info_toggle.stop();

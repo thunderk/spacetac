@@ -132,6 +132,7 @@ module TS.SpaceTac.UI {
             var sprite = this.findShipSprite(ship);
             if (sprite) {
                 sprite.setDead(true);
+                this.layer_garbage.add(sprite);
             }
         }
 
