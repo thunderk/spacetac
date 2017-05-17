@@ -5,7 +5,7 @@ module TS.SpaceTac.Specs {
         class FixedManeuver extends Maneuver {
             score: number;
             constructor(score: number) {
-                super(new Ship(), new Equipment(), new Target(0, 0));
+                super(new Ship(), new BaseAction("nothing", "Do nothing", true), new Target(0, 0));
                 this.score = score;
             }
             apply() {

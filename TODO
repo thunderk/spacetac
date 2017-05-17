@@ -47,6 +47,7 @@
 * AI: add combination of random small move and actual maneuver, as producer
 * AI: evaluate based on simulated list of effects
 * AI: consider overheat/cooldown
+* AI: new duel page with producers/evaluators tweaking
 * Map: remove jump links that cross the radius of other systems
 * Map: disable interaction (zoom, selection) while moving/jumping
 * Tutorial

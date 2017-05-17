@@ -11,6 +11,14 @@ module TS.SpaceTac {
     }
 
     /**
+     * Get a list of all playable actions (like the actionbar for player) for a ship
+     */
+    function getPlayableActions(ship: Ship): Iterator<BaseAction> {
+        let actions = ship.getAvailableActions();
+        return ifilter(iarray(actions), action => !action.checkCannotBeApplied(ship));
+    }
+
+    /**
      * Standard producers and evaluators for TacticalAI
      * 
      * These are static methods that may be used as base for TacticalAI ruleset.
@@ -21,7 +29,7 @@ module TS.SpaceTac {
          */
         static produceDirectShots(ship: Ship, battle: Battle): TacticalProducer {
             let enemies = ifilter(battle.iships(), iship => iship.alive && iship.getPlayer() !== ship.getPlayer());
-            let weapons = ifilter(iarray(ship.listEquipment(SlotType.Weapon)), weapon => weapon.action instanceof FireWeaponAction);
+            let weapons = ifilter(getPlayableActions(ship), action => action instanceof FireWeaponAction);
             return imap(icombine(enemies, weapons), ([enemy, weapon]) => new Maneuver(ship, weapon, Target.newFromShip(enemy)));
         }
 
@@ -29,13 +37,10 @@ module TS.SpaceTac {
          * Produce random moves inside arena cell
          */
         static produceRandomMoves(ship: Ship, battle: Battle, cells = 10, iterations = 1, random = RandomGenerator.global): TacticalProducer {
-            let engines = ship.listEquipment(SlotType.Engine);
-            if (engines.length == 0) {
-                return IEMPTY;
-            }
-
+            let engines = ifilter(getPlayableActions(ship), action => action instanceof MoveAction);
             return ichainit(imap(irange(iterations), iteration => {
-                return imap(scanArena(battle, cells, random), target => new Maneuver(ship, engines[0], target))
+                let moves = icombine(engines, scanArena(battle, cells, random));
+                return imap(moves, ([engine, target]) => new Maneuver(ship, engine, target));
             }));
         }
 
@@ -44,11 +49,11 @@ module TS.SpaceTac {
          */
         static produceBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             // TODO Work with groups of 3, 4 ...
-            let weapons = ifilter(iarray(ship.listEquipment(SlotType.Weapon)), weapon => weapon.action instanceof FireWeaponAction && weapon.action.blast > 0);
+            let weapons = ifilter(getPlayableActions(ship), action => action instanceof FireWeaponAction && action.blast > 0);
             let enemies = battle.ienemies(ship.getPlayer(), true);
             // FIXME This produces duplicates (x, y) and (y, x)
             let couples = ifilter(icombine(enemies, enemies), ([e1, e2]) => e1 != e2);
-            let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.action.getBlastRadius(ship) * 2);
+            let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.getBlastRadius(ship) * 2);
             let result = imap(candidates, ([weapon, [e1, e2]]) => new Maneuver(ship, weapon, Target.newFromLocation((e1.arena_x + e2.arena_x) / 2, (e1.arena_y + e2.arena_y) / 2)));
             return result;
         }
@@ -57,7 +62,7 @@ module TS.SpaceTac {
          * Produce drone deployments.
          */
         static produceDroneDeployments(ship: Ship, battle: Battle): TacticalProducer {
-            let drones = ifilter(iarray(ship.listEquipment(SlotType.Weapon)), weapon => weapon.action instanceof DeployDroneAction);
+            let drones = ifilter(getPlayableActions(ship), action => action instanceof DeployDroneAction);
             let grid = scanArena(battle);
             return imap(icombine(grid, drones), ([target, drone]) => new Maneuver(ship, drone, target));
         }
@@ -94,7 +99,7 @@ module TS.SpaceTac {
          * Evaluate the damage done to the enemy, between -1 and 1
          */
         static evaluateDamageToEnemy(ship: Ship, battle: Battle, maneuver: Maneuver): number {
-            let action = maneuver.equipment.action;
+            let action = maneuver.action;
             if (action instanceof FireWeaponAction) {
                 let enemies = imaterialize(battle.ienemies(ship.getPlayer(), true));
                 if (enemies.length == 0) {

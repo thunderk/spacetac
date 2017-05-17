@@ -2,14 +2,14 @@ module TS.SpaceTac {
     /**
      * Ship maneuver for an artifical intelligence
      * 
-     * A maneuver is like a human player action, choosing an equipment and using it
+     * A maneuver is like a human player action, choosing an action and using it
      */
     export class Maneuver {
         // Concerned ship
         ship: Ship;
 
-        // Equipment to use
-        equipment: Equipment;
+        // Action to use
+        action: BaseAction;
 
         // Target for the action;
         target: Target;
@@ -17,17 +17,17 @@ module TS.SpaceTac {
         // Result of move-fire simulation
         simulation: MoveFireResult;
 
-        constructor(ship: Ship, equipment: Equipment, target: Target, move_margin = 0.1) {
+        constructor(ship: Ship, action: BaseAction, target: Target, move_margin = 0.1) {
             this.ship = ship;
-            this.equipment = equipment;
+            this.action = action;
             this.target = target;
 
             let simulator = new MoveFireSimulator(this.ship);
-            this.simulation = simulator.simulateAction(this.equipment.action, this.target, move_margin);
+            this.simulation = simulator.simulateAction(this.action, this.target, move_margin);
         }
 
         jasmineToString() {
-            return `Use ${this.equipment.jasmineToString()} on ${this.target.jasmineToString()}`;
+            return `Use ${this.action.code} on ${this.target.jasmineToString()}`;
         }
 
         /**

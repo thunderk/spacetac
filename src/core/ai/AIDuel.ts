@@ -107,7 +107,7 @@ module TS.SpaceTac {
          */
         static setup(element: HTMLElement) {
             let fakeship = new Ship();
-            let ais = [new BullyAI(fakeship), new TacticalAI(fakeship), new AbstractAI(fakeship)];
+            let ais = [new TacticalAI(fakeship), new AbstractAI(fakeship)];
             ais.forEach((ai, idx) => {
                 let selects = element.getElementsByTagName("select");
                 for (let i = 0; i < selects.length; i++) {
