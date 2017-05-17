@@ -6,9 +6,14 @@
 * Character sheet: when transferring to another ship, if the item can't be equipped (unmatched requirements), the transfer is cancelled instead of trying cargo
 * Character sheet: effective skill is sometimes not updated when upgrading base skill
 * Character sheet: tooltip to show the sources of attributes
+* Character sheet: add a "loot all" button
 * Shops: allow to change/buy ship model
 * Loot: lucky finds should be proportional to cargo space
-* Weapon: shield with toggle effect => absorb damage in an area
+* Equipment: no-target actions (direct activation, with confirmation dialog ?)
+* Equipment: toggle actions (AP usage ? time of effect ?)
+* Equipment: add critical hit/miss
+* Equipment: add damage over time effect
+* Equipment: add area effects, without the need of activation/stickyness (eg. damage reduction, attribute modifier...)
 * Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
 * Arena: hide dead drones from tactical view
@@ -16,27 +21,26 @@
 * Arena: add power indicator in ship hover information
 * Arena: temporarily show ship information when it changes
 * Arena: display important changes (damages, effects...) instead of attribute changes
+* Arena: Organize objects and information in layers
+* Arena: Add auto-move to attack
+* Actions: Separate overheat and cooldown display
+* Actions: Show power usage/recovery in power bar, on action hover
+* Actions: Fix targetting not resetting when using keyboard shortcuts
 * Suspend AI operation when the game is paused (window not focused)
 * Add permanent effects to ship models to ease balancing
 * Find incentives to move from starting position
-* Fix targetting not resetting when using action shortcuts
-* Add battle statistics and/or critics in outcome dialog
+* Outcome: Add battle statistics and/or honors
+* Outcome: Disable the loot button if there is no loot
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Controls: Do not focus on ship while targetting for area effects (dissociate hover and target)
 * Controls: Fix hover being stuck when the cursor exits the window
-* Active effects are not enough visible in ship list (maybe better in arena ?)
-* All things displayed in battle should be updated from LogProcess forwarding, not from current game state
 * Drones: add hull points and take area damage
 * Drones: find a way to avoid arena cluttering
-* Show power usage/recovery in action bar, on action hover
 * Add a battle log display
-* Organize arena objects and information in layers
-* Prevent arena effects information (eg. "shield -36") to overflow out of the arena
 * Allow to undo last moves
-* Add critical hit/miss
-* Add auto-move to attack
 * Merge identical sticky effects
 * Allow to skip animations and AI delays in battle
+* Hide enemy information (shield, hull, weapons), until they are in play, or until a "spy" effect is used
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
@@ -46,13 +50,18 @@
 * AI: allow to play several moves in the same turn (with pauses)
 * AI: add combination of random small move and actual maneuver, as producer
 * AI: evaluate based on simulated list of effects
+* AI: consider overheat/cooldown
 * Map: remove jump links that cross the radius of other systems
 * Map: disable interaction (zoom, selection) while moving/jumping
-* Add ship personality (with icons to identify ?), with reaction to battle and map movements
-* Add factions and reputation
 * Tutorial
-* Missions/quests system
-* Main story arc
+* Campaign: Add ship personality (with icons to identify ?), with reaction to battle and map movements
+* Campaign: Add factions and reputation
+* Campaign: Missions/quests system
+* Campaign: Main story arc
+
+Weapon ideas:
+* Shield with toggle effect that absorbs damage in an area
+* Cooldown drone or ability
 
 Later, if possible:
 * Animated arena background, instead of big picture

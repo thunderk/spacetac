@@ -148,7 +148,11 @@ module TS.SpaceTac.UI {
             let text = new Phaser.Text(this.game, 0, 20 * this.effects.children.length, message, { font: "14pt Arial", fill: beneficial ? "#afe9c6" : "#e9afaf" });
             this.effects.addChild(text);
 
-            this.effects.position.set(-this.effects.width / 2, this.sprite.height * 0.7);
+            let arena = this.battleview.arena.getBoundaries();
+            this.effects.position.set(
+                (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects.width) : (-this.effects.width * 0.5)),
+                (this.ship.arena_y < arena.height * 0.5) ? 40 : (-40 - this.effects.height)
+            );
 
             this.game.tweens.removeFrom(this.effects);
             this.effects.alpha = 1;
