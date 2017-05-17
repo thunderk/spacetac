@@ -148,8 +148,6 @@ module TS.SpaceTac.UI {
                 }
                 this.playing = arena_ship;
             }
-
-            this.battleview.gameui.audio.playOnce("battle-ship-change");
         }
 
         /**

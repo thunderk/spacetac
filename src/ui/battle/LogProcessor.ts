@@ -126,15 +126,18 @@ module TS.SpaceTac.UI {
 
             if (this.battle.canPlay(this.view.player)) {
                 // Player turn
+                this.view.gameui.audio.playOnce("battle-ship-change");
                 this.view.setInteractionEnabled(true);
             } else {
                 this.view.setInteractionEnabled(false);
                 if (event.new_ship.isAbleToPlay()) {
                     // AI turn
+                    this.view.gameui.audio.playOnce("battle-ship-change");
                     this.battle.playAI();
+                    this.delayNextEvents(1500);
                 } else {
                     // Ship unable to play, skip turn
-                    this.view.timer.schedule(event.new_ship.alive ? 2000 : 500, () => {
+                    this.view.timer.schedule(event.new_ship.alive ? 2000 : 200, () => {
                         this.battle.advanceToNextShip();
                     });
                 }
@@ -206,12 +209,21 @@ module TS.SpaceTac.UI {
         // New drone deployed
         private processDroneDeployedEvent(event: DroneDeployedEvent): void {
             let duration = this.view.arena.addDrone(event.drone, !event.initial);
+
+            if (duration) {
+                this.view.gameui.audio.playOnce("battle-drone-deploy");
+            }
+
             this.delayNextEvents(duration);
         }
 
         // Drone destroyed
         private processDroneDestroyedEvent(event: DroneDestroyedEvent): void {
             this.view.arena.removeDrone(event.drone);
+            if (!event.initial) {
+                this.view.gameui.audio.playOnce("battle-drone-destroy");
+                this.delayNextEvents(1000);
+            }
         }
 
         // Drone applied
@@ -219,6 +231,11 @@ module TS.SpaceTac.UI {
             let drone = this.view.arena.findDrone(event.drone);
             if (drone) {
                 let duration = drone.setApplied();
+
+                if (duration) {
+                    this.view.gameui.audio.playOnce("battle-drone-activate");
+                }
+
                 this.delayNextEvents(duration);
             }
         }

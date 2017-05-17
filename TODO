@@ -29,7 +29,6 @@
 * Drones: add hull points and take area damage
 * Drones: find a way to avoid arena cluttering
 * Show power usage/recovery in action bar, on action hover
-* More sound effects (but battle sounds should be vibration only, we are in space !)
 * Add a battle log display
 * Organize arena objects and information in layers
 * Prevent arena effects information (eg. "shield -36") to overflow out of the arena

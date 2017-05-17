@@ -128,6 +128,8 @@ module TS.SpaceTac.UI {
          * Default firing effect
          */
         defaultEffect(): number {
+            this.ui.audio.playOnce("battle-weapon-missile-launch");
+
             let missile = new Phaser.Image(this.ui, this.source.x, this.source.y, "battle-weapon-default");
             missile.anchor.set(0.5, 0.5);
             missile.rotation = this.source.getAngleTo(this.destination);
@@ -140,6 +142,8 @@ module TS.SpaceTac.UI {
             tween.onComplete.addOnce(() => {
                 missile.destroy();
                 if (blast_radius > 0) {
+                    this.ui.audio.playOnce("battle-weapon-missile-explosion");
+
                     let blast = new Phaser.Image(this.ui, this.destination.x, this.destination.y, "battle-weapon-blast");
                     let scaling = blast_radius * 2 / (blast.width * 0.9);
                     blast.anchor.set(0.5, 0.5);

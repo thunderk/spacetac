@@ -119,6 +119,11 @@ module TS.SpaceTac.UI {
             // Load sounds
             this.loadSound("battle/ship-change.wav");
             this.loadSound("battle/weapon-bullets.wav");
+            this.loadSound("battle/weapon-missile-launch.wav");
+            this.loadSound("battle/weapon-missile-explosion.wav");
+            this.loadSound("battle/drone-deploy.wav");
+            this.loadSound("battle/drone-destroy.wav");
+            this.loadSound("battle/drone-activate.wav");
 
             // Load musics
             this.loadSound("music/walking-along.mp3");
