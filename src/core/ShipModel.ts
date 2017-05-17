@@ -52,6 +52,20 @@ module TS.SpaceTac {
             result.push(new ShipModel("falcon", "Falcon", 1, 2, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
                 SlotType.Weapon, SlotType.Weapon, SlotType.Weapon, SlotType.Weapon));
 
+            result.push(new ShipModel("flea", "Flea", 1, 0, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Engine, SlotType.Weapon));
+
+            result.push(new ShipModel("jumper", "Jumper", 1, 2, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine, SlotType.Engine,
+                SlotType.Weapon, SlotType.Weapon, SlotType.Weapon));
+
+            result.push(new ShipModel("rhino", "Rhino", 1, 16, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+                SlotType.Weapon));
+
+            result.push(new ShipModel("trapper", "Trapper", 1, 8, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+                SlotType.Weapon, SlotType.Weapon));
+
+            result.push(new ShipModel("xander", "Xander", 1, 8, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
+                SlotType.Weapon, SlotType.Weapon));
+
             return result;
         }
 

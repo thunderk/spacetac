@@ -102,14 +102,19 @@ module TS.SpaceTac.UI {
             this.loadImage("equipment/rocketengine.png");
 
             // Load ships
-            this.loadShip("scout");
-            this.loadShip("breeze");
-            this.loadShip("creeper");
-            this.loadShip("whirlwind");
-            this.loadShip("tomahawk");
             this.loadShip("avenger");
+            this.loadShip("breeze");
             this.loadShip("commodore");
+            this.loadShip("creeper");
             this.loadShip("falcon");
+            this.loadShip("flea");
+            this.loadShip("jumper");
+            this.loadShip("rhino");
+            this.loadShip("scout");
+            this.loadShip("tomahawk");
+            this.loadShip("trapper");
+            this.loadShip("whirlwind");
+            this.loadShip("xander");
 
             // Load sounds
             this.loadSound("battle/ship-change.wav");
