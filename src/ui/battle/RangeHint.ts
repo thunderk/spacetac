@@ -11,7 +11,7 @@ module TS.SpaceTac.UI {
         primary: Phaser.Circle | null;
 
         constructor(parent: Arena) {
-            super(parent.game, parent);
+            super(parent.game);
 
             this.parent = parent;
 

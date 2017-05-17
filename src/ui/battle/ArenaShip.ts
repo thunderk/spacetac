@@ -2,6 +2,7 @@ module TS.SpaceTac.UI {
     // Ship sprite in the arena (BattleView)
     export class ArenaShip extends Phaser.Group {
         // Link to the view
+        arena: Arena
         battleview: BattleView
 
         // Link to displayed ship
@@ -35,6 +36,7 @@ module TS.SpaceTac.UI {
         // Create a ship sprite usable in the Arena
         constructor(parent: Arena, ship: Ship) {
             super(parent.game);
+            this.arena = parent;
             this.battleview = parent.battleview;
 
             this.ship = ship;

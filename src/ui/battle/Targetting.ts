@@ -41,13 +41,13 @@ module TS.SpaceTac.UI {
                 this.blast = new Phaser.Image(battleview.game, 0, 0, "battle-arena-blast");
                 this.blast.anchor.set(0.5, 0.5);
                 this.blast.visible = false;
-                battleview.arena.add(this.blast);
+                battleview.arena.layer_targetting.add(this.blast);
                 this.line_initial = new Phaser.Graphics(battleview.game, 0, 0);
                 this.line_initial.visible = false;
-                battleview.arena.add(this.line_initial);
+                battleview.arena.layer_targetting.add(this.line_initial);
                 this.line_corrected = new Phaser.Graphics(battleview.game, 0, 0);
                 this.line_corrected.visible = false;
-                battleview.arena.add(this.line_corrected);
+                battleview.arena.layer_targetting.add(this.line_corrected);
             }
 
             this.source = null;
@@ -138,7 +138,7 @@ module TS.SpaceTac.UI {
             while (this.ap_indicators.length < count) {
                 let indicator = new Phaser.Image(this.battleview.game, 0, 0, "battle-arena-ap-indicator");
                 indicator.anchor.set(0.5, 0.5);
-                this.battleview.arena.addChild(indicator);
+                this.battleview.arena.layer_targetting.add(indicator);
                 this.ap_indicators.push(indicator);
             }
             while (this.ap_indicators.length > count) {

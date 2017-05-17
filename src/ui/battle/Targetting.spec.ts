@@ -28,8 +28,6 @@ module TS.SpaceTac.UI.Specs {
             let source = new Phaser.Group(battleview.game, battleview.arena);
             source.position.set(0, 0);
 
-            let init_children = battleview.arena.children.length;
-
             let targetting = new Targetting(battleview);
 
             targetting.setSource(source);
@@ -38,12 +36,12 @@ module TS.SpaceTac.UI.Specs {
             targetting.updateApIndicators();
 
             expect(targetting.ap_indicators.length).toBe(0);
-            expect(battleview.arena.children.length).toBe(init_children + 3);
+            expect(battleview.arena.layer_targetting.children.length).toBe(3);
 
             targetting.setApIndicatorsInterval(Math.sqrt(5) * 20);
 
             expect(targetting.ap_indicators.length).toBe(5);
-            expect(battleview.arena.children.length).toBe(init_children + 3 + 5);
+            expect(battleview.arena.layer_targetting.children.length).toBe(3 + 5);
             expect(targetting.ap_indicators[0].position.x).toBe(0);
             expect(targetting.ap_indicators[0].position.y).toBe(0);
             expect(targetting.ap_indicators[1].position.x).toBeCloseTo(40);
@@ -57,15 +55,15 @@ module TS.SpaceTac.UI.Specs {
 
             targetting.setApIndicatorsInterval(1000);
             expect(targetting.ap_indicators.length).toBe(1);
-            expect(battleview.arena.children.length).toBe(init_children + 3 + 1);
+            expect(battleview.arena.layer_targetting.children.length).toBe(3 + 1);
 
             targetting.setApIndicatorsInterval(1);
             expect(targetting.ap_indicators.length).toBe(224);
-            expect(battleview.arena.children.length).toBe(init_children + 3 + 224);
+            expect(battleview.arena.layer_targetting.children.length).toBe(3 + 224);
 
             targetting.destroy();
 
-            expect(battleview.arena.children.length).toBe(init_children);
+            expect(battleview.arena.layer_targetting.children.length).toBe(0);
         });
     });
 }

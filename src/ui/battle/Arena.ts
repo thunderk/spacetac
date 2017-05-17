@@ -1,32 +1,43 @@
 module TS.SpaceTac.UI {
-    // Graphical representation of a battle
-    //  This is the area in the BattleView that will display ships with their real positions
+    /**
+     * Graphical representation of a battle
+     * 
+     * This is the area in the BattleView that will display ships with their real positions
+     */
     export class Arena extends Phaser.Group {
         // Link to battleview
-        battleview: BattleView;
+        battleview: BattleView
 
-        // Arena background
-        background: Phaser.Button;
+        // Boundaries of the arena
+        boundaries: IBounded = { x: 112, y: 132, width: 1808, height: 948 }
 
         // Hint for weapon or move range
-        range_hint: RangeHint;
+        range_hint: RangeHint
+
+        // Input capture
+        private mouse_capture: Phaser.Button
 
         // Input callback to receive mouse move events
-        private input_callback: any;
+        private input_callback: any = null
 
         // List of ship sprites
-        private ship_sprites: ArenaShip[] = [];
+        private ship_sprites: ArenaShip[] = []
 
         // List of drone sprites
-        private drone_sprites: ArenaDrone[] = [];
+        private drone_sprites: ArenaDrone[] = []
 
         // Currently hovered ship
-        private hovered: ArenaShip | null;
+        private hovered: ArenaShip | null
         // Currently playing ship
-        private playing: ArenaShip | null;
+        private playing: ArenaShip | null
 
         // Layer for particles
-        layer_weapon_effects: Phaser.Group;
+        layer_garbage: Phaser.Group
+        layer_hints: Phaser.Group
+        layer_drones: Phaser.Group
+        layer_ships: Phaser.Group
+        layer_weapon_effects: Phaser.Group
+        layer_targetting: Phaser.Group
 
         // Create a graphical arena for ship sprites to fight in a 2D space
         constructor(battleview: BattleView) {
@@ -37,14 +48,20 @@ module TS.SpaceTac.UI {
             this.hovered = null;
             this.range_hint = new RangeHint(this);
 
-            var offset_x = 112;
-            var offset_y = 132;
+            this.position.set(this.boundaries.x, this.boundaries.y);
+
+            this.init();
+        }
+
+        /**
+         * Setup the mouse capture for targetting events
+         */
+        setupMouseCapture() {
+            let battleview = this.battleview;
 
             var background = new Phaser.Button(battleview.game, 0, 0, "battle-arena-background");
-            var expected_width = battleview.getWidth() - offset_x;
-            var expected_height = battleview.getHeight() - offset_y;
-            background.scale.set(expected_width / background.width, expected_height / background.height);
-            this.background = background;
+            background.scale.set(this.boundaries.width / background.width, this.boundaries.height / background.height);
+            this.mouse_capture = background;
 
             // Capture clicks on background
             background.onInputUp.add(() => {
@@ -59,30 +76,43 @@ module TS.SpaceTac.UI {
                 }
             }, null);
 
-            this.position.set(offset_x, offset_y);
-
-            this.add(this.background);
-            this.add(this.range_hint);
-
-            this.init();
+            this.add(this.mouse_capture);
         }
 
         destroy() {
-            this.game.input.deleteMoveCallback(this.input_callback);
+            if (this.input_callback) {
+                this.game.input.deleteMoveCallback(this.input_callback);
+                this.input_callback = null;
+            }
             super.destroy();
         }
 
-        // Initialize state (create sprites)
+        /**
+         * Initialize state (create sprites)
+         */
         init(): void {
-            // Add ship sprites
-            this.battleview.battle.play_order.forEach(ship => {
-                var sprite = new ArenaShip(this, ship);
-                this.add(sprite);
+            this.setupMouseCapture();
+
+            this.layer_garbage = this.add(new Phaser.Group(this.game));
+            this.layer_hints = this.add(new Phaser.Group(this.game));
+            this.layer_drones = this.add(new Phaser.Group(this.game));
+            this.layer_ships = this.add(new Phaser.Group(this.game));
+            this.layer_weapon_effects = this.add(new Phaser.Group(this.game));
+            this.layer_targetting = this.add(new Phaser.Group(this.game));
+
+            this.layer_hints.add(this.range_hint);
+            this.addShipSprites();
+        }
+
+        /**
+         * Add the sprites for all ships
+         */
+        addShipSprites() {
+            iforeach(this.battleview.battle.iships(), ship => {
+                let sprite = new ArenaShip(this, ship);
+                this.layer_ships.add(sprite);
                 this.ship_sprites.push(sprite);
             });
-
-            this.layer_weapon_effects = new Phaser.Group(this.game);
-            this.add(this.layer_weapon_effects);
         }
 
         // Get the current MainUI instance
@@ -126,7 +156,7 @@ module TS.SpaceTac.UI {
                 var arena_ship = this.findShipSprite(ship);
                 if (arena_ship) {
                     arena_ship.setHovered(true);
-                    this.bringToTop(arena_ship);
+                    this.layer_ships.bringToTop(arena_ship);
                 }
                 this.hovered = arena_ship;
             } else {
@@ -144,7 +174,7 @@ module TS.SpaceTac.UI {
             if (ship) {
                 var arena_ship = this.findShipSprite(ship);
                 if (arena_ship) {
-                    this.bringToTop(arena_ship);
+                    this.layer_ships.bringToTop(arena_ship);
                     arena_ship.setPlaying(true);
                 }
                 this.playing = arena_ship;
@@ -167,7 +197,7 @@ module TS.SpaceTac.UI {
             if (!this.findDrone(drone)) {
                 let sprite = new ArenaDrone(this.battleview, drone);
                 let angle = Math.atan2(drone.y - drone.owner.arena_y, drone.x - drone.owner.arena_x);
-                this.add(sprite);
+                this.layer_drones.add(sprite);
                 this.drone_sprites.push(sprite);
 
                 if (animate) {
@@ -197,6 +227,7 @@ module TS.SpaceTac.UI {
             if (sprite) {
                 remove(this.drone_sprites, sprite);
                 sprite.setDestroyed();
+                this.layer_garbage.add(sprite);
             } else {
                 console.error("Drone not found in arena for removal", drone);
             }
@@ -214,6 +245,7 @@ module TS.SpaceTac.UI {
          */
         setTacticalMode(active: boolean): void {
             this.ship_sprites.forEach(sprite => sprite.setHovered(active));
+            this.battleview.animations.setVisible(this.layer_garbage, !active, 200);
             if (this.battleview.background) {
                 this.battleview.animations.setVisible(this.battleview.background, !active, 200);
             }
