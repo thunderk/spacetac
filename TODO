@@ -17,7 +17,6 @@
 * Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
 * Arena: hide dead drones from tactical view
-* Arena: add sticky effects indicators on ships
 * Arena: add power indicator in ship hover information
 * Arena: temporarily show ship information when it changes
 * Arena: display important changes (damages, effects...) instead of attribute changes

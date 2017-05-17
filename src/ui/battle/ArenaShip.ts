@@ -2,33 +2,34 @@ module TS.SpaceTac.UI {
     // Ship sprite in the arena (BattleView)
     export class ArenaShip extends Phaser.Group {
         // Link to the view
-        battleview: BattleView;
+        battleview: BattleView
 
         // Link to displayed ship
-        ship: Ship;
+        ship: Ship
 
         // Boolean to indicate if it is an enemy ship
-        enemy: boolean;
+        enemy: boolean
 
         // Ship sprite
-        sprite: Phaser.Button;
+        sprite: Phaser.Button
 
         // Statis effect
-        stasis: Phaser.Image;
+        stasis: Phaser.Image
 
         // Target effect
-        target: Phaser.Image;
+        target: Phaser.Image
 
         // Hover information
-        info: Phaser.Group;
-        info_hull: ValueBar;
-        info_shield: ValueBar;
+        info: Phaser.Group
+        info_hull: ValueBar
+        info_shield: ValueBar
 
         // Frame to indicate the owner of the ship, and if it is playing
-        frame: Phaser.Image;
+        frame: Phaser.Image
 
         // Effects display
-        effects: Phaser.Group;
+        sticky_effects: Phaser.Group
+        effects: Phaser.Group
 
         // Create a ship sprite usable in the Arena
         constructor(parent: Arena, ship: Ship) {
@@ -76,6 +77,8 @@ module TS.SpaceTac.UI {
             this.add(this.info);
 
             // Effects display
+            this.sticky_effects = new Phaser.Group(this.game);
+            this.add(this.sticky_effects);
             this.effects = new Phaser.Group(this.game);
             this.add(this.effects);
 
@@ -88,6 +91,13 @@ module TS.SpaceTac.UI {
 
             // Set location
             this.position.set(ship.arena_x, ship.arena_y);
+
+            // Log processing
+            this.battleview.log_processor.registerForShip(ship, event => {
+                if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent || event instanceof EffectDurationChangedEvent) {
+                    this.updateStickyEffects();
+                }
+            });
         }
 
         /**
@@ -172,6 +182,22 @@ module TS.SpaceTac.UI {
                 this.info_hull.setValue(event.value.get(), this.ship.getAttribute("hull_capacity"));
             } else if (name == "shield") {
                 this.info_shield.setValue(event.value.get(), this.ship.getAttribute("shield_capacity"));
+            }
+        }
+
+        /**
+         * Update the stick effects
+         */
+        updateStickyEffects() {
+            this.sticky_effects.removeAll();
+
+            let count = this.ship.sticky_effects.length
+            if (count) {
+                let positions = UITools.evenlySpace(70, 10, count);
+                this.ship.sticky_effects.forEach((effect, index) => {
+                    let dot = new Phaser.Image(this.game, positions[index] - 40, -47, `battle-arena-ship-effect-${effect.isBeneficial() ? "good" : "bad"}`);
+                    this.sticky_effects.add(dot);
+                });
             }
         }
     }

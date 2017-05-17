@@ -22,5 +22,21 @@ module TS.SpaceTac.UI.Specs {
             let t2 = <Phaser.Text>sprite.effects.getChildAt(1);
             expect(t2.text).toBe("shield +12");
         });
+
+        it("adds sticky effects display", function () {
+            let ship = nn(testgame.battleview.battle.playing_ship);
+            let sprite = nn(testgame.battleview.arena.findShipSprite(ship));
+
+            expect(sprite.sticky_effects.children.length).toBe(0);
+
+            ship.addStickyEffect(new StickyEffect(new BaseEffect("test")));
+            expect(sprite.sticky_effects.children.length).toBe(1);
+
+            ship.addStickyEffect(new StickyEffect(new BaseEffect("test")));
+            expect(sprite.sticky_effects.children.length).toBe(2);
+
+            ship.cleanStickyEffects();
+            expect(sprite.sticky_effects.children.length).toBe(0);
+        });
     });
 }

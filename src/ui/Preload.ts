@@ -47,6 +47,8 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/arena/ship-hull-full.png");
             this.loadImage("battle/arena/ship-shield-base.png");
             this.loadImage("battle/arena/ship-shield-full.png");
+            this.loadImage("battle/arena/ship-effect-good.png");
+            this.loadImage("battle/arena/ship-effect-bad.png");
             this.loadImage("battle/arena/stasis.png");
             this.loadImage("battle/arena/target.png");
             this.loadImage("battle/arena/blast.png");

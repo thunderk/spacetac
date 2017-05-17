@@ -48,6 +48,17 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Register a sub-subscriber, to receive events for a specific ship
+         */
+        registerForShip(ship: Ship, callback: LogSubscriber) {
+            this.register(event => {
+                if (event instanceof BaseLogShipEvent && event.ship === ship) {
+                    callback(event);
+                }
+            });
+        }
+
+        /**
          * Introduce a delay in event processing
          */
         delayNextEvents(duration: number) {
@@ -105,8 +116,6 @@ module TS.SpaceTac.UI {
                 this.processDroneDestroyedEvent(event);
             } else if (event instanceof DroneAppliedEvent) {
                 this.processDroneAppliedEvent(event);
-            } else if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent || event instanceof EffectDurationChangedEvent) {
-                this.processEffectEvent(event);
             }
         }
 
@@ -199,11 +208,6 @@ module TS.SpaceTac.UI {
         private processEndBattleEvent(event: EndBattleEvent): void {
             this.view.endBattle();
             this.destroy();
-        }
-
-        // Sticky effect on ship added, changed or removed
-        private processEffectEvent(event: EffectAddedEvent | EffectRemovedEvent | EffectDurationChangedEvent): void {
-            // TODO
         }
 
         // New drone deployed
