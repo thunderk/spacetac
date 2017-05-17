@@ -100,8 +100,6 @@ module TS.SpaceTac.UI {
                 this.processShipChangeEvent(event);
             } else if (event instanceof MoveEvent) {
                 this.processMoveEvent(event);
-            } else if (event instanceof ValueChangeEvent) {
-                this.processValueChangedEvent(event);
             } else if (event instanceof DeathEvent) {
                 this.processDeathEvent(event);
             } else if (event instanceof FireEvent) {
@@ -168,16 +166,6 @@ module TS.SpaceTac.UI {
                 let duration = sprite.moveTo(event.target.x, event.target.y, event.facing_angle, !event.initial);
                 this.delayNextEvents(duration);
             }
-        }
-
-        // Ship value changed
-        private processValueChangedEvent(event: ValueChangeEvent): void {
-            var sprite = this.view.arena.findShipSprite(event.ship);
-            if (sprite) {
-                sprite.displayValueChanged(event);
-            }
-
-            // TODO Update tooltip
         }
 
         // A ship died

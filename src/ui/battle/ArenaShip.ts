@@ -23,6 +23,7 @@ module TS.SpaceTac.UI {
         info: Phaser.Group
         info_hull: ValueBar
         info_shield: ValueBar
+        info_toggle: Toggle
 
         // Frame to indicate the owner of the ship, and if it is playing
         frame: Phaser.Image
@@ -74,6 +75,7 @@ module TS.SpaceTac.UI {
             this.info_shield.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
             this.info.add(this.info_shield);
             this.info.visible = false;
+            this.info_toggle = this.battleview.animations.newVisibilityToggle(this.info, 200);
             this.add(this.info);
 
             // Effects display
@@ -93,11 +95,28 @@ module TS.SpaceTac.UI {
             this.position.set(ship.arena_x, ship.arena_y);
 
             // Log processing
-            this.battleview.log_processor.registerForShip(ship, event => {
-                if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent || event instanceof EffectDurationChangedEvent) {
-                    this.updateStickyEffects();
+            this.battleview.log_processor.registerForShip(ship, event => this.processLogEvent(event));
+        }
+
+        /**
+         * Process a log event for this ship
+         */
+        private processLogEvent(event: BaseLogEvent) {
+            if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent || event instanceof EffectDurationChangedEvent) {
+                this.updateStickyEffects();
+            } else if (event instanceof ValueChangeEvent) {
+                if (event.value.name == "hull") {
+                    this.info_toggle.start(1500, true);
+                    this.info_hull.setValue(event.value.get(), event.value.getMaximal() || 0);
+                } else if (event.value.name == "shield") {
+                    this.info_toggle.start(1500, true);
+                    this.info_shield.setValue(event.value.get(), event.value.getMaximal() || 0);
+                } else {
+                    this.displayValueChanged(event);
                 }
-            });
+            } else if (event instanceof DamageEvent) {
+                this.displayEffect(`${event.hull + event.shield} damage`, false);
+            }
         }
 
         /**
@@ -106,7 +125,11 @@ module TS.SpaceTac.UI {
          * This will show the information HUD accordingly
          */
         setHovered(hovered: boolean) {
-            this.battleview.animations.setVisible(this.info, hovered, 200);
+            if (hovered) {
+                this.info_toggle.start();
+            } else {
+                this.info_toggle.stop();
+            }
         }
 
         // Set the playing state on this ship
@@ -177,12 +200,6 @@ module TS.SpaceTac.UI {
             let diff = event.diff;
             let name = event.value.name;
             this.displayEffect(`${name} ${diff < 0 ? "-" : "+"}${Math.abs(diff)}`, diff >= 0);
-
-            if (name == "hull") {
-                this.info_hull.setValue(event.value.get(), this.ship.getAttribute("hull_capacity"));
-            } else if (name == "shield") {
-                this.info_shield.setValue(event.value.get(), this.ship.getAttribute("shield_capacity"));
-            }
         }
 
         /**

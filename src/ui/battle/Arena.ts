@@ -126,6 +126,7 @@ module TS.SpaceTac.UI {
                 var arena_ship = this.findShipSprite(ship);
                 if (arena_ship) {
                     arena_ship.setHovered(true);
+                    this.bringToTop(arena_ship);
                 }
                 this.hovered = arena_ship;
             } else {

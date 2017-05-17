@@ -18,8 +18,7 @@
 * Menu: allow to delete cloud saves
 * Arena: hide dead drones from tactical view
 * Arena: add power indicator in ship hover information
-* Arena: temporarily show ship information when it changes
-* Arena: display important changes (damages, effects...) instead of attribute changes
+* Arena: display effects description instead of attribute changes
 * Arena: Organize objects and information in layers
 * Arena: Add auto-move to attack
 * Actions: Separate overheat and cooldown display

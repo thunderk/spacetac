@@ -103,6 +103,13 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Get a toggle on visibility
+         */
+        newVisibilityToggle(obj: IAnimationFadeable, duration = 1000): Toggle {
+            return new Toggle(() => this.setVisible(obj, true, duration), () => this.setVisible(obj, false, duration));
+        }
+
+        /**
          * Interpolate a rotation value
          * 
          * This will take into account the 2*pi modulo

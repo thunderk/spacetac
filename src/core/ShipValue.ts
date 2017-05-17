@@ -26,6 +26,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the maximal value
+         */
+        getMaximal(): number | null {
+            return this.maximal;
+        }
+
+        /**
          * Set the upper bound the value must not cross
          */
         setMaximal(value: number): void {
