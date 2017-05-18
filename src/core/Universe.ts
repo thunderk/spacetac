@@ -17,10 +17,12 @@ module TS.SpaceTac {
 
         // Generates a universe, with star systems and such
         generate(starcount = 50): void {
-            this.stars = this.generateStars(starcount);
+            while (this.stars.length == 0 || any(this.stars, star => star.getLinks().length == 0)) {
+                this.stars = this.generateStars(starcount);
 
-            var links = this.getPotentialLinks();
-            this.starlinks = this.filterCrossingLinks(links);
+                let links = this.getPotentialLinks();
+                this.starlinks = this.filterCrossingLinks(links);
+            }
 
             this.generateWarpLocations();
 

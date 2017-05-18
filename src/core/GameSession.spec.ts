@@ -86,5 +86,13 @@ module TS.SpaceTac.Specs {
             expect(start_location.encounter).toBeNull();
             expect(start_location.encounter_gen).toBe(true);
         });
+
+        it("can generate lots of new games", function () {
+            range(100).forEach(() => {
+                let session = new GameSession();
+                session.startNewGame();
+                expect(session.universe.stars.length).toBe(50);
+            });
+        });
     });
 }
