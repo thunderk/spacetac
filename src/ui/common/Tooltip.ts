@@ -115,9 +115,13 @@ module TS.SpaceTac.UI {
         /**
          * Add a text to the content
          */
-        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, center = false, bold = false): void {
+        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, center = false, bold = false, width = 0): void {
             let style = { font: `${bold ? "bold " : ""}${size}pt Arial`, fill: color, align: center ? "center" : "left" };
             let text = new Phaser.Text(this.container.game, x, y, content, style);
+            if (width) {
+                text.wordWrap = true;
+                text.wordWrapWidth = width;
+            }
             this.container.content.add(text);
         }
     }

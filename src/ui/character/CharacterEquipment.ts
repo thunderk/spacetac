@@ -158,7 +158,7 @@ module TS.SpaceTac.UI {
          */
         fillTooltip(filler: TooltipFiller): boolean {
             filler.addText(0, 0, this.item.getFullName(), "#cccccc", 20, false, true);
-            filler.addText(0, 40, this.item.getFullDescription(), "#cccccc", 18);
+            filler.addText(0, 40, this.item.getFullDescription(), "#cccccc", 18, false, false, 700);
             return true;
         }
     }
