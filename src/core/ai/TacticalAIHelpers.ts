@@ -54,7 +54,7 @@ module TS.SpaceTac {
         /**
          * Produce blast weapon shots, with multiple targets.
          */
-        static produceBlastShots(ship: Ship, battle: Battle): TacticalProducer {
+        static produceInterestingBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             // TODO Work with groups of 3, 4 ...
             let weapons = ifilter(getPlayableActions(ship), action => action instanceof FireWeaponAction && action.blast > 0);
             let enemies = battle.ienemies(ship.getPlayer(), true);
@@ -63,6 +63,23 @@ module TS.SpaceTac {
             let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.getBlastRadius(ship) * 2);
             let result = imap(candidates, ([weapon, [e1, e2]]) => new Maneuver(ship, weapon, Target.newFromLocation((e1.arena_x + e2.arena_x) / 2, (e1.arena_y + e2.arena_y) / 2)));
             return result;
+        }
+
+        /**
+         * Produce random blast weapon shots, on a grid.
+         */
+        static produceRandomBlastShots(ship: Ship, battle: Battle, cells = 20, iterations = 2, random = RandomGenerator.global): TacticalProducer {
+            let weapons = ifilter(getPlayableActions(ship), action => action instanceof FireWeaponAction && action.blast > 0);
+            let candidates = icombine(weapons, scanArena(battle, cells, random));
+            let result = imap(candidates, ([weapon, location]) => new Maneuver(ship, weapon, location));
+            return result;
+        }
+
+        /**
+         * Produce interesting then random blast shots
+         */
+        static produceBlastShots(ship: Ship, battle: Battle): TacticalProducer {
+            return ichain(TacticalAIHelpers.produceInterestingBlastShots(ship, battle), TacticalAIHelpers.produceRandomBlastShots(ship, battle));
         }
 
         /**

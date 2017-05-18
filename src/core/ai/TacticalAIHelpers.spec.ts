@@ -46,7 +46,7 @@ module TS.SpaceTac.Specs {
             ]);
         });
 
-        it("produces blast shots", function () {
+        it("produces interesting blast shots", function () {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
             let weapon = TestTools.addWeapon(ship, 50, 1, 1000, 105);
@@ -54,19 +54,19 @@ module TS.SpaceTac.Specs {
             TestTools.setShipAP(ship, 10);
             battle.playing_ship = ship;
 
-            let result = imaterialize(TacticalAIHelpers.produceBlastShots(ship, battle));
+            let result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             expect(result.length).toBe(0);
 
             let enemy1 = battle.fleets[1].addShip();
             enemy1.setArenaPosition(500, 0);
 
-            result = imaterialize(TacticalAIHelpers.produceBlastShots(ship, battle));
+            result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             expect(result.length).toBe(0);
 
             let enemy2 = battle.fleets[1].addShip();
             enemy2.setArenaPosition(700, 0);
 
-            result = imaterialize(TacticalAIHelpers.produceBlastShots(ship, battle));
+            result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             expect(result).toEqual([
                 new Maneuver(ship, weapon.action, Target.newFromLocation(600, 0)),
                 new Maneuver(ship, weapon.action, Target.newFromLocation(600, 0)),
@@ -75,7 +75,7 @@ module TS.SpaceTac.Specs {
             let enemy3 = battle.fleets[1].addShip();
             enemy3.setArenaPosition(700, 300);
 
-            result = imaterialize(TacticalAIHelpers.produceBlastShots(ship, battle));
+            result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             expect(result).toEqual([
                 new Maneuver(ship, weapon.action, Target.newFromLocation(600, 0)),
                 new Maneuver(ship, weapon.action, Target.newFromLocation(600, 0)),
