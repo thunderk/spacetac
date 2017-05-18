@@ -141,7 +141,6 @@ module TS.SpaceTac.UI {
                     // AI turn
                     this.view.gameui.audio.playOnce("battle-ship-change");
                     this.battle.playAI();
-                    this.delayNextEvents(1500);
                 } else {
                     // Ship unable to play, skip turn
                     this.view.timer.schedule(event.new_ship.alive ? 2000 : 200, () => {

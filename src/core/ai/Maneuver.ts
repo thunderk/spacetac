@@ -40,6 +40,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Returns true if the maneuver cannot be fully done this turn
+         */
+        isIncomplete(): boolean {
+            return (this.simulation.need_move && !this.simulation.can_end_move) || (this.simulation.need_fire && !this.simulation.can_fire);
+        }
+
+        /**
          * Apply the maneuver in current battle
          */
         apply(): void {

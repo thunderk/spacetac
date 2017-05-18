@@ -127,6 +127,7 @@ module TS.SpaceTac.UI {
             this.inputs.bindCheat("a", "Use AI to play", () => {
                 if (this.interacting && this.battle.playing_ship) {
                     this.setInteractionEnabled(false);
+                    this.action_bar.setShip(new Ship());
                     this.battle.playAI(new TacticalAI(this.battle.playing_ship));
                 }
             });
@@ -214,6 +215,7 @@ module TS.SpaceTac.UI {
         // Enable or disable the global player interaction
         //  Disable interaction when it is the AI turn, or when the current ship can't play
         setInteractionEnabled(enabled: boolean): void {
+            this.action_bar.setInteractive(enabled);
             this.exitTargettingMode();
             this.interacting = enabled;
         }

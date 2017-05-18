@@ -19,14 +19,16 @@ module TS.SpaceTac {
         private best: Maneuver | null
         private best_score: number
 
-        protected initWork(delay?: number): void {
+        private last_action = new Date().getTime()
+
+        protected initWork(): void {
             this.best = null;
             this.best_score = -Infinity;
 
             this.producers = this.getDefaultProducers();
             this.evaluators = this.getDefaultEvaluators();
 
-            this.addWorkItem(() => this.unitWork(), delay);
+            this.addWorkItem(() => this.unitWork());
         }
 
         /**
@@ -44,8 +46,9 @@ module TS.SpaceTac {
          */
         private unitWork() {
             let done = 0;
+            let started = new Date().getTime();
 
-            while (done < 1000 && this.producers.length > 0) {
+            while (this.producers.length > 0 && (new Date().getTime() - started < 50)) {
                 // Produce a maneuver
                 let maneuver: Maneuver | null = null;
                 let producer = this.producers.shift();
@@ -72,13 +75,17 @@ module TS.SpaceTac {
 
             // Continue or stop
             if (this.producers.length > 0 && this.getDuration() < 8000) {
-                this.addWorkItem(() => this.unitWork());
+                this.addWorkItem(() => this.unitWork(), 10);
             } else if (this.best) {
-                console.log("AI maneuver", this.best, this.best_score);
-                this.best.apply();
-                if (this.ship.playing) {
-                    this.initWork(2000);
-                }
+                let best_maneuver = this.best;
+                console.log("AI maneuver", best_maneuver, this.best_score);
+                this.addWorkItem(() => {
+                    this.last_action = new Date().getTime();
+                    best_maneuver.apply();
+                    if (this.ship.playing && !best_maneuver.isIncomplete()) {
+                        this.initWork();
+                    }
+                }, Math.max(0, 2000 - (new Date().getTime() - this.last_action)));
             }
         }
 
@@ -104,8 +111,8 @@ module TS.SpaceTac {
             let evaluators = [
                 scaled(TacticalAIHelpers.evaluateTurnCost, 1),
                 scaled(TacticalAIHelpers.evaluateOverheat, 10),
-                scaled(TacticalAIHelpers.evaluateEnemyHealth, 100),
-                scaled(TacticalAIHelpers.evaluateAllyHealth, 200),
+                scaled(TacticalAIHelpers.evaluateEnemyHealth, 500),
+                scaled(TacticalAIHelpers.evaluateAllyHealth, 800),
                 scaled(TacticalAIHelpers.evaluateClustering, 3),
                 scaled(TacticalAIHelpers.evaluatePosition, 1),
                 scaled(TacticalAIHelpers.evaluateIdling, 1),
