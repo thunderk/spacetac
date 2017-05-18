@@ -170,14 +170,14 @@ module TS.SpaceTac.UI {
          * 
          * *power_usage* is the consumption of currently selected action.
          */
-        updateSelectedActionPower(power_usage: number): void {
+        updateSelectedActionPower(power_usage: number, action: BaseAction): void {
             var remaining_ap = this.ship ? (this.ship.values.power.get() - power_usage) : 0;
             if (remaining_ap < 0) {
                 remaining_ap = 0;
             }
 
             this.action_icons.forEach((icon: ActionIcon) => {
-                icon.updateFadingStatus(remaining_ap, true);
+                icon.updateFadingStatus(remaining_ap, action);
             });
             this.updatePower(power_usage);
         }

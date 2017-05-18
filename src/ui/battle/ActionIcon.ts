@@ -111,7 +111,7 @@ module TS.SpaceTac.UI {
             }
 
             // Update fading statuses
-            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, null));
+            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, null), this.action);
 
             // Set the selected state
             this.setSelected(true);
@@ -143,7 +143,7 @@ module TS.SpaceTac.UI {
             if (this.targetting) {
                 this.targetting.setTarget(correct_target, false, this.action.getBlastRadius(this.ship));
             }
-            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, correct_target));
+            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, correct_target), this.action);
         }
 
         // Called when a target is selected
@@ -201,9 +201,9 @@ module TS.SpaceTac.UI {
         }
 
         // Update the fading status, given an hypothetical remaining AP
-        updateFadingStatus(remaining_ap: number, action = false): void {
+        updateFadingStatus(remaining_ap: number, action: BaseAction | null = null): void {
             let old_fading = this.fading;
-            let overheat = action && (this.action.equipment !== null && this.action.equipment.cooldown.willOverheat());
+            let overheat = (action == this.action && this.action.equipment !== null && this.action.equipment.cooldown.willOverheat());
             this.fading = this.active && (this.action.checkCannotBeApplied(this.ship, remaining_ap) != null || overheat);
             if (this.fading != old_fading) {
                 this.battleview.animations.setVisible(this.layer_active, this.active && !this.fading, 500);
