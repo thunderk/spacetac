@@ -140,15 +140,15 @@ module TS.SpaceTac.Specs {
 
             // no enemies hurt
             let maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(100, 0));
-            expect(TacticalAIHelpers.evaluateDamageToEnemy(ship, battle, maneuver)).toEqual(0);
+            expect(TacticalAIHelpers.evaluateEnemyHealth(ship, battle, maneuver)).toBeCloseTo(0, 8);
 
             // one enemy loses half-life
             maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(180, 0));
-            expect(TacticalAIHelpers.evaluateDamageToEnemy(ship, battle, maneuver)).toEqual(0.35);
+            expect(TacticalAIHelpers.evaluateEnemyHealth(ship, battle, maneuver)).toBeCloseTo(0.1666666666, 8);
 
             // one enemy loses half-life, the other one is dead
             maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(280, 0));
-            expect(TacticalAIHelpers.evaluateDamageToEnemy(ship, battle, maneuver)).toEqual(0.775);
+            expect(TacticalAIHelpers.evaluateEnemyHealth(ship, battle, maneuver)).toBeCloseTo(0.6666666666, 8);
         });
 
         it("evaluates ship clustering", function () {
@@ -195,6 +195,27 @@ module TS.SpaceTac.Specs {
             ship.setArenaPosition(100, 50);
             maneuver = new Maneuver(ship, weapon.action, new Target(0, 0), 0);
             expect(TacticalAIHelpers.evaluatePosition(ship, battle, maneuver)).toEqual(1);
+        });
+
+        it("evaluates overheat", function () {
+            let battle = new Battle(undefined, undefined, 200, 100);
+            let ship = battle.fleets[0].addShip();
+            let weapon = TestTools.addWeapon(ship, 1, 1, 400);
+
+            let maneuver = new Maneuver(ship, weapon.action, new Target(0, 0));
+            expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(0);
+
+            weapon.cooldown.configure(1, 0);
+            expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(-0.4);
+
+            weapon.cooldown.configure(1, 1);
+            expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(-0.8);
+
+            weapon.cooldown.configure(1, 2);
+            expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(-1);
+
+            weapon.cooldown.configure(2, 0);
+            expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(0);
         });
     });
 }

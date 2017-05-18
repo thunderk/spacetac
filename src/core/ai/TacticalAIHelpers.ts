@@ -19,6 +19,41 @@ module TS.SpaceTac {
     }
 
     /**
+     * Get the proportional effect done to a ship's health (in -1,1 range)
+     */
+    function getProportionalHealth(maneuver: Maneuver, ship: Ship): number {
+        let chull = ship.getAttribute("hull_capacity");
+        let cshield = ship.getAttribute("shield_capacity");
+        let hull = ship.getValue("hull")
+        let shield = ship.getValue("shield");
+        let dhull = 0;
+        let dshield = 0;
+
+        maneuver.effects.forEach(([iship, effect]) => {
+            if (iship === ship) {
+                if (effect instanceof DamageEffect) {
+                    let [ds, dh] = effect.getEffectiveDamage(ship);
+                    dhull -= dh;
+                    dshield -= ds;
+                } else if (effect instanceof ValueEffect) {
+                    if (effect.valuetype == "hull") {
+                        dhull = clamp(hull + effect.value, 0, chull) - hull;
+                    } else if (effect.valuetype == "shield") {
+                        dshield += clamp(shield + effect.value, 0, cshield) - shield;
+                    }
+                }
+            }
+        });
+
+        if (hull + dhull <= 0) {
+            return -1;
+        } else {
+            let diff = dhull + dshield;
+            return clamp(diff / (hull + shield), -1, 1);
+        }
+    }
+
+    /**
      * Standard producers and evaluators for TacticalAI
      * 
      * These are static methods that may be used as base for TacticalAI ruleset.
@@ -68,9 +103,9 @@ module TS.SpaceTac {
         /**
          * Produce random blast weapon shots, on a grid.
          */
-        static produceRandomBlastShots(ship: Ship, battle: Battle, cells = 20, iterations = 2, random = RandomGenerator.global): TacticalProducer {
+        static produceRandomBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             let weapons = ifilter(getPlayableActions(ship), action => action instanceof FireWeaponAction && action.blast > 0);
-            let candidates = icombine(weapons, scanArena(battle, cells, random));
+            let candidates = ifilter(icombine(weapons, scanArena(battle)), ([weapon, location]) => (<FireWeaponAction>weapon).getEffects(ship, location).length > 0);
             let result = imap(candidates, ([weapon, location]) => new Maneuver(ship, weapon, location));
             return result;
         }
@@ -112,53 +147,44 @@ module TS.SpaceTac {
             let lost = ship.getValue("power") - maneuver.getPowerUsage() + ship.getAttribute("power_recovery") - ship.getAttribute("power_capacity");
             if (lost > 0) {
                 return -lost / ship.getAttribute("power_capacity");
-            } else if (maneuver.simulation.need_fire) {
-                return 0.5;
+            } else if (maneuver.action instanceof FireWeaponAction || maneuver.action instanceof DeployDroneAction) {
+                if (maneuver.effects.length == 0) {
+                    return -1;
+                } else {
+                    return 0.5;
+                }
             } else {
                 return 0;
             }
         }
 
         /**
-         * Evaluate the damage done to a set of ships, between -1 and 1
+         * Evaluate the effect on health for a group of ships
          */
-        static evaluateDamage(ship: Ship, battle: Battle, maneuver: Maneuver, others: Ship[]): number {
-            let action = maneuver.action;
-            if (action instanceof FireWeaponAction) {
-                let damage = 0;
-                let dead = 0;
-                let effects = action.getEffects(ship, maneuver.target);
-                effects.forEach(([other, effect]) => {
-                    if (effect instanceof DamageEffect && contains(others, other)) {
-                        let [shield, hull] = effect.getEffectiveDamage(other);
-                        damage += shield + hull;
-                        if (hull == other.getValue("hull")) {
-                            dead += 1
-                        }
-                    }
-                });
-                let hp = sum(others.map(other => other.getValue("hull") + other.getValue("shield")));
-                let result = (damage ? 0.2 : 0) + 0.3 * (damage / hp) + (dead ? 0.2 : 0) + 0.3 * (dead / others.length);
-                return result;
+        static evaluateHealthEffect(maneuver: Maneuver, ships: Ship[]): number {
+            if (ships.length) {
+                let diffs = ships.map(ship => getProportionalHealth(maneuver, ship));
+                let deaths = sum(diffs.map(i => i == -1 ? 1 : 0));
+                return ((sum(diffs) * 0.5) - (deaths * 0.5)) / ships.length;
             } else {
                 return 0;
             }
         }
 
         /**
-         * Evaluate the damage done to the enemy, between -1 and 1
+         * Evaluate the effect on health to the enemy, between -1 and 1
          */
-        static evaluateDamageToEnemy(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+        static evaluateEnemyHealth(ship: Ship, battle: Battle, maneuver: Maneuver): number {
             let enemies = imaterialize(battle.ienemies(ship.getPlayer(), true));
-            return TacticalAIHelpers.evaluateDamage(ship, battle, maneuver, enemies);
+            return -TacticalAIHelpers.evaluateHealthEffect(maneuver, enemies);
         }
 
         /**
-         * Evaluate the damage done to allied ships, between -1 and 1
+         * Evaluate the effect on health to allied ships, between -1 and 1
          */
-        static evaluateDamageToAllies(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+        static evaluateAllyHealth(ship: Ship, battle: Battle, maneuver: Maneuver): number {
             let allies = imaterialize(battle.iallies(ship.getPlayer(), true));
-            return -TacticalAIHelpers.evaluateDamage(ship, battle, maneuver, allies);
+            return TacticalAIHelpers.evaluateHealthEffect(maneuver, allies);
         }
 
         /**
@@ -185,6 +211,17 @@ module TS.SpaceTac {
             let distance = min([pos.x, pos.y, battle.width - pos.x, battle.height - pos.y]);
             let factor = min([battle.width / 2, battle.height / 2]);
             return -1 + 2 * distance / factor;
+        }
+
+        /**
+         * Evaluate the cost of overheating an equipment
+         */
+        static evaluateOverheat(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+            if (maneuver.action.equipment && maneuver.action.equipment.cooldown.willOverheat()) {
+                return -Math.min(1, 0.4 * (maneuver.action.equipment.cooldown.cooling + 1));
+            } else {
+                return 0;
+            }
         }
     }
 }

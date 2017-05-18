@@ -102,12 +102,13 @@ module TS.SpaceTac {
         getDefaultEvaluators() {
             let scaled = (evaluator: (...args: any[]) => number, factor: number) => (...args: any[]) => factor * evaluator(...args);
             let evaluators = [
-                scaled(TacticalAIHelpers.evaluateTurnCost, 3),
-                scaled(TacticalAIHelpers.evaluateDamageToEnemy, 20),
-                scaled(TacticalAIHelpers.evaluateDamageToAllies, 30),
-                scaled(TacticalAIHelpers.evaluateClustering, 8),
+                scaled(TacticalAIHelpers.evaluateTurnCost, 1),
+                scaled(TacticalAIHelpers.evaluateOverheat, 10),
+                scaled(TacticalAIHelpers.evaluateEnemyHealth, 100),
+                scaled(TacticalAIHelpers.evaluateAllyHealth, 200),
+                scaled(TacticalAIHelpers.evaluateClustering, 3),
                 scaled(TacticalAIHelpers.evaluatePosition, 1),
-                scaled(TacticalAIHelpers.evaluateIdling, 5),
+                scaled(TacticalAIHelpers.evaluateIdling, 1),
             ]
 
             // TODO evaluator typing is lost

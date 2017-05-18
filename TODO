@@ -42,10 +42,7 @@
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
 * AI: apply safety distances to move actions
-* AI: do not always move first, they are defenders
 * AI: add combination of random small move and actual maneuver, as producer
-* AI: evaluate drone area effects
-* AI: consider overheat/cooldown
 * AI: new duel page with producers/evaluators tweaking
 * Map: remove jump links that cross the radius of other systems
 * Map: disable interaction (zoom, selection) while moving/jumping

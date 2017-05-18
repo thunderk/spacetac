@@ -6,24 +6,33 @@ module TS.SpaceTac {
      */
     export class Maneuver {
         // Concerned ship
-        ship: Ship;
+        ship: Ship
+
+        // Reference to battle
+        battle: Battle
 
         // Action to use
-        action: BaseAction;
+        action: BaseAction
 
-        // Target for the action;
-        target: Target;
+        // Target for the action
+        target: Target
 
         // Result of move-fire simulation
-        simulation: MoveFireResult;
+        simulation: MoveFireResult
+
+        // List of guessed effects of this maneuver
+        effects: [Ship, BaseEffect][]
 
         constructor(ship: Ship, action: BaseAction, target: Target, move_margin = 0.1) {
             this.ship = ship;
+            this.battle = nn(ship.getBattle());
             this.action = action;
             this.target = target;
 
             let simulator = new MoveFireSimulator(this.ship);
             this.simulation = simulator.simulateAction(this.action, this.target, move_margin);
+
+            this.effects = this.guessEffects();
         }
 
         jasmineToString() {
@@ -59,6 +68,24 @@ module TS.SpaceTac {
          */
         getPowerUsage(): number {
             return this.simulation.total_move_ap + this.simulation.total_fire_ap;
+        }
+
+        /**
+         * Guess what will be the effects applied on any ship by this maneuver
+         */
+        guessEffects(): [Ship, BaseEffect][] {
+            let result: [Ship, BaseEffect][] = [];
+
+            if (this.action instanceof FireWeaponAction) {
+                result = result.concat(this.action.getEffects(this.ship, this.target));
+            } else if (this.action instanceof DeployDroneAction) {
+                let ships = this.battle.collectShipsInCircle(this.target, this.action.effect_radius, true);
+                this.action.effects.forEach(effect => {
+                    result = result.concat(ships.map(ship => <[Ship, BaseEffect]>[ship, effect]));
+                });
+            }
+
+            return result;
         }
     }
 }

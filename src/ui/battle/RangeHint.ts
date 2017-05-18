@@ -16,7 +16,7 @@ module TS.SpaceTac.UI {
             this.parent = parent;
 
             this.circle = new Phaser.Graphics(this.game, 0, 0);
-            this.addChild(this.circle);
+            this.add(this.circle);
 
             this.primary = null;
         }

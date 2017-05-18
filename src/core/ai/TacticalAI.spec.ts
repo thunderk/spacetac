@@ -5,7 +5,9 @@ module TS.SpaceTac.Specs {
         class FixedManeuver extends Maneuver {
             score: number;
             constructor(score: number) {
-                super(new Ship(), new BaseAction("nothing", "Do nothing", true), new Target(0, 0));
+                let battle = new Battle();
+                let ship = battle.fleets[0].addShip();
+                super(ship, new BaseAction("nothing", "Do nothing", true), new Target(0, 0));
                 this.score = score;
             }
             apply() {
@@ -23,7 +25,8 @@ module TS.SpaceTac.Specs {
         });
 
         it("applies the highest evaluated maneuver", function () {
-            let ai = new TacticalAI(new Ship(), Timer.synchronous);
+            let battle = new Battle();
+            let ai = new TacticalAI(battle.fleets[0].addShip(), Timer.synchronous);
 
             spyOn(ai, "getDefaultProducers").and.returnValue([
                 producer(1, -8, 4),
