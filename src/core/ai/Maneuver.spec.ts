@@ -38,5 +38,25 @@ module TS.SpaceTac.Specs {
                 [ship2, new ValueEffect("shield", 10)]
             ]);
         });
+
+        it("guesses area effects on final location", function () {
+            let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
+            TestTools.addEngine(ship, 500);
+            let drone = new Drone(ship);
+            drone.effects = [new AttributeEffect("initiative", 1)];
+            drone.x = 100;
+            drone.y = 0;
+            drone.radius = 50;
+            battle.addDrone(drone);
+
+            let maneuver = new Maneuver(ship, new MoveAction(new Equipment()), Target.newFromLocation(40, 30));
+            expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 40, y: 30 }));
+            expect(maneuver.effects).toEqual([]);
+
+            maneuver = new Maneuver(ship, new MoveAction(new Equipment()), Target.newFromLocation(100, 30));
+            expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 100, y: 30 }));
+            expect(maneuver.effects).toEqual([[ship, new AttributeEffect("initiative", 1)]]);
+        });
     });
 }

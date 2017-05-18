@@ -45,7 +45,6 @@
 * AI: add combination of random small move and actual maneuver, as producer
 * AI: new duel page with producers/evaluators tweaking
 * AI: work in a dedicated process
-* AI: evaluate area effects at ship location
 * Map: remove jump links that cross the radius of other systems
 * Map: disable interaction (zoom, selection) while moving/jumping
 * Tutorial

@@ -83,6 +83,7 @@ module TS.SpaceTac {
         guessEffects(): [Ship, BaseEffect][] {
             let result: [Ship, BaseEffect][] = [];
 
+            // Effects of weapon
             if (this.action instanceof FireWeaponAction) {
                 result = result.concat(this.action.getEffects(this.ship, this.target));
             } else if (this.action instanceof DeployDroneAction) {
@@ -91,6 +92,14 @@ module TS.SpaceTac {
                     result = result.concat(ships.map(ship => <[Ship, BaseEffect]>[ship, effect]));
                 });
             }
+
+            // Area effects on final location
+            let location = this.getFinalLocation();
+            let effects = this.battle.drones.forEach(drone => {
+                if (Target.newFromLocation(location.x, location.y).isInRange(drone.x, drone.y, drone.radius)) {
+                    result = result.concat(drone.effects.map(effect => <[Ship, BaseEffect]>[this.ship, effect]));
+                }
+            });
 
             return result;
         }
