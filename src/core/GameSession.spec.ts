@@ -88,7 +88,7 @@ module TS.SpaceTac.Specs {
         });
 
         it("can generate lots of new games", function () {
-            range(100).forEach(() => {
+            range(20).forEach(() => {
                 let session = new GameSession();
                 session.startNewGame();
                 expect(session.universe.stars.length).toBe(50);
