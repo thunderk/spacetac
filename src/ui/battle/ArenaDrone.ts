@@ -85,5 +85,13 @@ module TS.SpaceTac.UI {
             });
             tween.start();
         }
+
+        /**
+         * Set the tactical mode display
+         */
+        setTacticalMode(active: boolean) {
+            this.sprite.rotation = active ? -this.rotation : 0;
+            this.sprite.scale.set(active ? 0.3 : 0.1);
+        }
     }
 }

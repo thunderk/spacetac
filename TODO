@@ -19,6 +19,7 @@
 * Arena: add power indicator in ship hover information
 * Arena: display effects description instead of attribute changes
 * Arena: add auto-move to attack
+* Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
 * Actions: separate overheat and cooldown display
 * Actions: show power usage/recovery in power bar, on action hover
 * Actions: fix targetting not resetting when using keyboard shortcuts

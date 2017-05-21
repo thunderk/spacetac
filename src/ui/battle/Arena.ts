@@ -246,6 +246,7 @@ module TS.SpaceTac.UI {
          */
         setTacticalMode(active: boolean): void {
             this.ship_sprites.forEach(sprite => sprite.setHovered(active));
+            this.drone_sprites.forEach(drone => drone.setTacticalMode(active));
             this.battleview.animations.setVisible(this.layer_garbage, !active, 200);
             if (this.battleview.background) {
                 this.battleview.animations.setVisible(this.battleview.background, !active, 200);

@@ -46,5 +46,16 @@ module TS.SpaceTac {
                 }
             }
         }
+
+        /**
+         * Switch between on and off status
+         */
+        switch(duration = 0, hard = false) {
+            if (this.status) {
+                this.stop(hard);
+            } else {
+                this.start(duration, hard);
+            }
+        }
     }
 }

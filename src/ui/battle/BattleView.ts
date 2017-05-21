@@ -51,6 +51,9 @@ module TS.SpaceTac.UI {
         // True if player interaction is allowed
         interacting: boolean;
 
+        // Tactical mode toggle
+        toggle_tactical_mode: Toggle;
+
         // Init the view, binding it to a specific battle
         init(player: Player, battle: Battle) {
             super.init();
@@ -64,6 +67,11 @@ module TS.SpaceTac.UI {
             this.battle.timer = this.timer;
 
             this.log_processor = new LogProcessor(this);
+
+            this.toggle_tactical_mode = new Toggle(
+                () => this.arena.setTacticalMode(true),
+                () => this.arena.setTacticalMode(false)
+            );
         }
 
         // Create view graphics
@@ -104,10 +112,7 @@ module TS.SpaceTac.UI {
             this.gameui.audio.startMusic("full-on");
 
             // Key mapping
-            this.inputs.bind("t", "Show tactical view", () => {
-                this.arena.setTacticalMode(true);
-                this.timer.schedule(5000, () => this.arena.setTacticalMode(false));
-            });
+            this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.switch(3000));
             this.inputs.bindCheat("w", "Win current battle", () => {
                 iforeach(this.battle.iships(), ship => {
                     if (ship.fleet.player != this.player) {
