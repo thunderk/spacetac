@@ -203,14 +203,14 @@ module TS.SpaceTac.UI {
 
                 if (animate) {
                     sprite.position.set(drone.owner.arena_x, drone.owner.arena_y);
-                    sprite.rotation = drone.owner.arena_angle;
-                    let move_duration = Animations.moveInSpace(sprite, drone.x, drone.y, angle);
+                    sprite.sprite.rotation = drone.owner.arena_angle;
+                    let move_duration = Animations.moveInSpace(sprite, drone.x, drone.y, angle, sprite.sprite);
                     this.game.tweens.create(sprite.radius).from({ alpha: 0 }, 500, Phaser.Easing.Cubic.In, true, move_duration);
 
                     return move_duration + 500;
                 } else {
                     sprite.position.set(drone.x, drone.y);
-                    sprite.rotation = angle;
+                    sprite.sprite.rotation = angle;
                     return 0;
                 }
 

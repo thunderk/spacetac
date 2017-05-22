@@ -101,7 +101,6 @@ module TS.SpaceTac.UI {
             if (active) {
                 this.duration.text = `${this.drone.duration}`;
             }
-            this.sprite.rotation = active ? -this.rotation : 0;
             this.sprite.scale.set(active ? 0.2 : 0.1);
             this.view.animations.setVisible(this.duration, active, 200);
         }
