@@ -38,7 +38,7 @@ module TS.SpaceTac.Specs {
         it("applies equipment cooldown", function () {
             let ship = new Ship();
             let equipment = new Equipment(SlotType.Weapon);
-            equipment.cooldown.configure(1, 1);
+            equipment.cooldown.configure(1, 2);
             ship.addSlot(SlotType.Weapon).attach(equipment);
 
             expect(equipment.cooldown.canUse()).toBe(true, 1);

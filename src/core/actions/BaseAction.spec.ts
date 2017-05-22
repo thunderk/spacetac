@@ -32,27 +32,38 @@ module TS.SpaceTac {
             let ship = new Ship();
 
             expect(action.checkCannotBeApplied(ship)).toBe(null);
+            expect(action.getUsesBeforeOverheat()).toBe(Infinity);
 
             equipment.cooldown.use();
             expect(action.checkCannotBeApplied(ship)).toBe(null);
+            expect(action.getUsesBeforeOverheat()).toBe(Infinity);
 
-            equipment.cooldown.configure(2, 2);
+            equipment.cooldown.configure(2, 3);
             expect(action.checkCannotBeApplied(ship)).toBe(null);
+            expect(action.getUsesBeforeOverheat()).toBe(2);
 
             equipment.cooldown.use();
             expect(action.checkCannotBeApplied(ship)).toBe(null);
+            expect(action.getUsesBeforeOverheat()).toBe(1);
+            expect(action.getCooldownDuration()).toBe(0);
 
             equipment.cooldown.use();
             expect(action.checkCannotBeApplied(ship)).toBe("overheated");
+            expect(action.getUsesBeforeOverheat()).toBe(0);
+            expect(action.getCooldownDuration()).toBe(3);
 
             equipment.cooldown.cool();
             expect(action.checkCannotBeApplied(ship)).toBe("overheated");
+            expect(action.getCooldownDuration()).toBe(2);
 
             equipment.cooldown.cool();
             expect(action.checkCannotBeApplied(ship)).toBe("overheated");
+            expect(action.getCooldownDuration()).toBe(1);
 
             equipment.cooldown.cool();
             expect(action.checkCannotBeApplied(ship)).toBe(null);
+            expect(action.getCooldownDuration()).toBe(0);
+            expect(action.getCooldownDuration(true)).toBe(3);
         });
 
         it("wears down equipment and power generators", function () {

@@ -205,16 +205,16 @@ module TS.SpaceTac.Specs {
             let maneuver = new Maneuver(ship, weapon.action, new Target(0, 0));
             expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(0);
 
-            weapon.cooldown.configure(1, 0);
+            weapon.cooldown.configure(1, 1);
             expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(-0.4);
 
-            weapon.cooldown.configure(1, 1);
+            weapon.cooldown.configure(1, 2);
             expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(-0.8);
 
-            weapon.cooldown.configure(1, 2);
+            weapon.cooldown.configure(1, 3);
             expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(-1);
 
-            weapon.cooldown.configure(2, 0);
+            weapon.cooldown.configure(2, 1);
             expect(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver)).toEqual(0);
         });
     });

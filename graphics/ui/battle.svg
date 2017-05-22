@@ -1069,6 +1069,84 @@
          y="121.98493"
          transform="rotate(45)" />
     </mask>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Thin glory"
+       id="filter6668-3">
+      <feFlood
+         flood-opacity="0.717647"
+         flood-color="rgb(255,255,255)"
+         result="flood"
+         id="feFlood6658-6" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="out"
+         result="composite1"
+         id="feComposite6660-7" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0.3"
+         result="blur"
+         id="feGaussianBlur6662-5" />
+      <feOffset
+         dx="0.5"
+         dy="0.6"
+         result="offset"
+         id="feOffset6664-3" />
+      <feComposite
+         in="offset"
+         in2="SourceGraphic"
+         operator="atop"
+         result="fbSourceGraphic"
+         id="feComposite6666-5" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix6670-6" />
+      <feFlood
+         id="feFlood6672-2"
+         flood-opacity="0.717647"
+         flood-color="rgb(255,255,255)"
+         result="flood"
+         in="fbSourceGraphic" />
+      <feComposite
+         in2="fbSourceGraphic"
+         id="feComposite6674-9"
+         in="flood"
+         operator="out"
+         result="composite1" />
+      <feGaussianBlur
+         id="feGaussianBlur6676-1"
+         in="composite1"
+         stdDeviation="0.3"
+         result="blur" />
+      <feOffset
+         id="feOffset6678-2"
+         dx="0.5"
+         dy="0.6"
+         result="offset" />
+      <feComposite
+         in2="fbSourceGraphic"
+         id="feComposite6680-7"
+         in="offset"
+         operator="atop"
+         result="composite2" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter5347"
+       x="-0.0288"
+       width="1.0576"
+       y="-0.0288"
+       height="1.0576">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.68625"
+         id="feGaussianBlur5349" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1077,11 +1155,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="394.77432"
-     inkscape:cy="563.06617"
+     inkscape:zoom="8"
+     inkscape:cx="302.42634"
+     inkscape:cy="1186.5897"
      inkscape:document-units="px"
-     inkscape:current-layer="g4971-3"
+     inkscape:current-layer="layer19"
      showgrid="false"
      units="px"
      showguides="false"
@@ -2531,35 +2609,37 @@
       <g
          inkscape:groupmode="layer"
          id="layer19"
-         inkscape:label="Action icon cooldown">
+         inkscape:label="Action icon cooldown"
+         style="display:inline">
         <g
-           id="g6298"
-           transform="translate(1.1292411)">
+           id="g5353"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-cooldown.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90">
           <circle
-             r="7.2920384"
-             cy="-83.97599"
-             cx="231.15662"
-             id="path4989"
-             style="display:inline;fill:#98301c;fill-opacity:1;fill-rule:evenodd;stroke:#cda9eb;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:0.36595746;filter:url(#filter6668);enable-background:new" />
-          <use
-             transform="translate(19.970248)"
-             height="100%"
-             width="100%"
-             id="use4994"
-             xlink:href="#path4989"
-             y="0"
-             x="0"
-             style="display:inline;enable-background:new" />
-          <use
-             transform="translate(19.970236)"
-             height="100%"
-             width="100%"
-             id="use4996"
-             xlink:href="#use4994"
-             y="0"
-             x="0"
-             style="display:inline;enable-background:new" />
+             r="28.59375"
+             cy="-50.982056"
+             cx="252.2561"
+             id="path4218"
+             style="fill:#545252;fill-opacity:0.72765958;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+          <circle
+             style="fill:none;fill-opacity:0.72765958;fill-rule:evenodd;stroke:#686868;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5347)"
+             id="circle5107"
+             cx="252.2561"
+             cy="-50.982056"
+             r="28.59375" />
         </g>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:45px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#aaaaaa;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+           x="238.54517"
+           y="-34.282837"
+           id="text5105"><tspan
+             sodipodi:role="line"
+             id="tspan5103"
+             x="238.54517"
+             y="-34.282837"
+             style="fill:#aaaaaa;stroke-width:0.9375px;fill-opacity:1;">2</tspan></text>
       </g>
     </g>
     <g

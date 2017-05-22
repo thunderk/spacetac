@@ -34,25 +34,15 @@ module TS.SpaceTac.UI {
 
             if (action.equipment && action.equipment.cooldown.overheat) {
                 let cooldown = action.equipment.cooldown;
-                let uses = cooldown.getRemainingUses();
-                let uses_message = "";
-                if (uses == 0) {
-                    uses_message = "Overheated !";
-                    if (cooldown.heat == 1) {
-                        uses_message += " Available next turn";
-                    } else if (cooldown.heat == 2) {
-                        uses_message += " Unavailable next turn";
+                if (cooldown.heat > 0) {
+                    filler.addText(150, 90, "Cooling down ...", "#c9604c", 20);
+                } else if (cooldown.willOverheat() && cost != "Not enough power") {
+                    if (cooldown.cooling > 1) {
+                        let turns = cooldown.cooling;
+                        filler.addText(150, 90, `Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, "#c9604c", 20);
                     } else {
-                        uses_message += ` Unavailable next ${cooldown.heat - 1} turns`;
+                        filler.addText(150, 90, "Unavailable until next turn if used", "#c9604c", 20);
                     }
-                } else {
-                    uses_message = uses == 1 ? "Overheats if used" : `${uses} uses before overheat`;
-                    if (cooldown.cooling) {
-                        uses_message += ` (for ${cooldown.cooling} turn${cooldown.cooling ? "s" : ""})`;
-                    }
-                }
-                if (uses_message) {
-                    filler.addText(150, 90, uses_message, "#c9604c", 20);
                 }
             }
 

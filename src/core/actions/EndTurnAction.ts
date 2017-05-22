@@ -13,5 +13,9 @@ module TS.SpaceTac {
                 battle.advanceToNextShip();
             }
         }
+
+        getEffectsDescription(): string {
+            return "End the current ship's turn.\nWill also generate power and cool down equipments.";
+        }
     }
 }

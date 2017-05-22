@@ -20,11 +20,12 @@
 * Arena: display effects description instead of attribute changes
 * Arena: add auto-move to attack
 * Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
-* Actions: separate overheat and cooldown display
 * Actions: show power usage/recovery in power bar, on action hover
 * Actions: fix targetting not resetting when using keyboard shortcuts
 * Suspend AI operation when the game is paused (window not focused)
 * Add permanent effects to ship models to ease balancing
+* Add actions with cost dependent of distance (like current move actions)
+* Keep move actions out of arena borders
 * Find incentives to move from starting position
 * Outcome: add battle statistics and/or honors
 * Outcome: disable the loot button if there is no loot
@@ -54,8 +55,10 @@
 * Campaign: Missions/quests system
 * Campaign: Main story arc
 
-Weapon ideas:
+Equipment ideas:
 * Shield with toggle effect that absorbs damage in an area
+* Shield stealing ability
+* Drive with minimal distance
 * Cooldown drone or ability
 
 Later, if possible:

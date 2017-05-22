@@ -12,10 +12,10 @@ module TS.SpaceTac {
         // Maximum number of uses allowed per turn before overheating (0 for unlimited)
         overheat = 0
 
-        // Number of turns needed to cooldown when overheated
-        cooling = 0
+        // Number of "end turn" needed to cooldown when overheated
+        cooling = 1
 
-        constructor(overheat = 0, cooling = 0) {
+        constructor(overheat = 0, cooling = 1) {
             this.configure(overheat, cooling);
         }
 
@@ -41,7 +41,11 @@ module TS.SpaceTac {
          * Check the number of uses before overheating
          */
         getRemainingUses(): number {
-            return (this.heat > 0) ? 0 : (this.overheat - this.uses);
+            if (this.overheat) {
+                return (this.heat > 0) ? 0 : (this.overheat - this.uses);
+            } else {
+                return Infinity;
+            }
         }
 
         /**
@@ -49,7 +53,7 @@ module TS.SpaceTac {
          */
         configure(overheat: number, cooling: number) {
             this.overheat = overheat;
-            this.cooling = cooling;
+            this.cooling = Math.max(1, cooling);
             this.reset();
         }
 
@@ -60,7 +64,7 @@ module TS.SpaceTac {
             if (this.overheat) {
                 this.uses += 1;
                 if (this.uses >= this.overheat) {
-                    this.heat = this.cooling + 1;
+                    this.heat = this.cooling;
                 }
             }
         }
@@ -69,9 +73,12 @@ module TS.SpaceTac {
          * Apply one cooling-down step if necessary
          */
         cool(): void {
-            this.uses = 0;
             if (this.heat > 0) {
                 this.heat -= 1;
+            }
+
+            if (this.heat == 0) {
+                this.uses = 0;
             }
         }
 

@@ -22,6 +22,28 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the number of turns this action is unavailable, because of overheating
+         */
+        getCooldownDuration(estimated = false): number {
+            if (this.equipment) {
+                return estimated ? this.equipment.cooldown.cooling : this.equipment.cooldown.heat;
+            } else {
+                return 0;
+            }
+        }
+
+        /**
+         * Get the number of remaining uses before overheat, infinity if there is no overheat
+         */
+        getUsesBeforeOverheat(): number {
+            if (this.equipment) {
+                return this.equipment.cooldown.getRemainingUses();
+            } else {
+                return Infinity;
+            }
+        }
+
+        /**
          * Check basic conditions to know if the ship can use this action at all
          * 
          * Method to extend to set conditions

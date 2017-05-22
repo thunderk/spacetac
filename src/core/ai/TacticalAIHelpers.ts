@@ -218,7 +218,7 @@ module TS.SpaceTac {
          */
         static evaluateOverheat(ship: Ship, battle: Battle, maneuver: Maneuver): number {
             if (maneuver.action.equipment && maneuver.action.equipment.cooldown.willOverheat()) {
-                return -Math.min(1, 0.4 * (maneuver.action.equipment.cooldown.cooling + 1));
+                return -Math.min(1, 0.4 * maneuver.action.equipment.cooldown.cooling);
             } else {
                 return 0;
             }

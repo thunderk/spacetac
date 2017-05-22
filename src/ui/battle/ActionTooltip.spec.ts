@@ -34,7 +34,8 @@ module TS.SpaceTac.UI.Specs {
             tooltip.hide();
             ActionTooltip.fill(tooltip.getFiller(), ship, action3, 2);
             checkText((<any>tooltip).container.content.children[1], "End turn");
-            checkText((<any>tooltip).container.content.children[2], "[ space ]");
+            checkText((<any>tooltip).container.content.children[2], "End the current ship's turn.\nWill also generate power and cool down equipments.");
+            checkText((<any>tooltip).container.content.children[3], "[ space ]");
         });
     });
 }

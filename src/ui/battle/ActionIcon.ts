@@ -2,40 +2,41 @@ module TS.SpaceTac.UI {
     // Icon to activate a ship capability (move, fire...)
     export class ActionIcon extends Phaser.Button {
         // Link to the parent bar
-        bar: ActionBar;
+        bar: ActionBar
 
         // Link to the parent battle view
-        battleview: BattleView;
+        battleview: BattleView
 
         // Related ship
-        ship: Ship;
+        ship: Ship
 
         // Related game action
-        action: BaseAction;
+        action: BaseAction
 
         // True if the action can be used
-        active: boolean;
+        active: boolean
 
         // True if the action is selected for use
-        selected: boolean;
+        selected: boolean
 
         // True if an action is currently selected, and this one won't be available after its use
-        fading: boolean;
+        fading: boolean
 
         // Current targetting
-        private targetting: Targetting | null;
+        private targetting: Targetting | null
 
         // Action icon - image representing the action
-        private layer_icon: Phaser.Image;
+        private layer_icon: Phaser.Image
 
         // Layer applied when the action is active
-        private layer_active: Phaser.Image;
+        private layer_active: Phaser.Image
 
         // Layer applied when the action is selected
-        private layer_selected: Phaser.Image;
+        private layer_selected: Phaser.Image
 
         // Cooldown indicators
-        private layer_cooldown: Phaser.Group
+        private cooldown: Phaser.Image
+        private cooldown_count: Phaser.Text
 
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Ship, action: BaseAction, position: number) {
@@ -69,8 +70,12 @@ module TS.SpaceTac.UI {
             this.addChild(this.layer_icon);
 
             // Cooldown layer
-            this.layer_cooldown = new Phaser.Group(this.game);
-            this.addChild(this.layer_cooldown);
+            this.cooldown = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-action-cooldown");
+            this.cooldown.anchor.set(0.5, 0.5);
+            this.cooldown_count = new Phaser.Text(this.game, 0, 0, "", { align: "center", font: "36pt Arial", fill: "#aaaaaa" });
+            this.cooldown_count.anchor.set(0.5, 0.5);
+            this.cooldown.addChild(this.cooldown_count);
+            this.addChild(this.cooldown);
 
             // Events
             this.battleview.tooltip.bind(this, filler => {
@@ -169,23 +174,26 @@ module TS.SpaceTac.UI {
         setSelected(selected: boolean) {
             this.selected = selected;
             this.battleview.animations.setVisible(this.layer_selected, this.selected, 300);
+            this.updateCooldownStatus();
         }
 
         // Update the cooldown status
         updateCooldownStatus(): void {
-            this.layer_cooldown.removeAll();
-            if (this.action.equipment) {
-                let cooldown = this.action.equipment.cooldown;
-                let count = cooldown.heat ? cooldown.heat : (cooldown.willOverheat() ? cooldown.cooling + 1 : 0);
-                if (count) {
-                    let positions = UITools.evenlySpace(68, 18, count);
-                    range(count).forEach(i => {
-                        let dot = new Phaser.Image(this.game, 10 + positions[i], 10, "battle-action-cooldown");
-                        dot.anchor.set(0.5, 0.5);
-                        dot.alpha = cooldown.heat ? 1 : 0.5;
-                        this.layer_cooldown.add(dot);
-                    });
-                }
+            let remaining = this.action.getUsesBeforeOverheat();
+            if (this.selected && remaining == 1) {
+                // will overheat, hint at the cooldown time
+                let cooldown = this.action.getCooldownDuration(true);
+                this.cooldown.scale.set(0.7);
+                this.cooldown_count.text = `${cooldown}`;
+                this.battleview.animations.setVisible(this.cooldown, true, 300);
+            } else if (remaining == 0) {
+                // overheated, show cooldown time
+                let cooldown = this.action.getCooldownDuration(false);
+                this.cooldown.scale.set(1);
+                this.cooldown_count.text = `${cooldown}`;
+                this.battleview.animations.setVisible(this.cooldown, true, 300);
+            } else {
+                this.battleview.animations.setVisible(this.cooldown, false, 300);
             }
         }
 

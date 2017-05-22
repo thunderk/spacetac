@@ -109,8 +109,8 @@ item is then temporarily disabled (no more effects and cannot be used), until th
 Equipments may overheat, and need to cooldown for some time, during which it cannot be used.
 
 If an equipment has "overheat 2 / cooldown 3", using it twice in the same turn will cause it to
-overheat. It then cannot be used for the next three turns. Using this equipment only once per turn
-is safe, and will never overheat it.
+overheat. It then needs three "end of turns" to cool down and be available again. Using this equipment
+only once per turn is safe, and will never overheat it.
 
 If an equipment has multiple actions associated, any of these actions will increase the shared heat.
 
