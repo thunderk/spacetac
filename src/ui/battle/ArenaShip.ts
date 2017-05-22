@@ -25,6 +25,7 @@ module TS.SpaceTac.UI {
         info_hull: ValueBar
         info_shield: ValueBar
         info_toggle: Toggle
+        info_play_order: Phaser.Text
 
         // Frame to indicate the owner of the ship, and if it is playing
         frame: Phaser.Image
@@ -76,6 +77,8 @@ module TS.SpaceTac.UI {
             this.info_shield.setBarImage("battle-arena-ship-shield-full", 3);
             this.info_shield.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
             this.info.add(this.info_shield);
+            this.info_play_order = new Phaser.Text(this.game, 55, -47, "", { font: "bold 14pt Arial", fill: "#aaaaaa" });
+            this.info.add(this.info_play_order);
             this.info.visible = false;
             this.info_toggle = this.battleview.animations.newVisibilityToggle(this.info, 200);
             this.add(this.info);
@@ -103,13 +106,28 @@ module TS.SpaceTac.UI {
             }
 
             // Log processing
-            this.battleview.log_processor.registerForShip(ship, event => this.processLogEvent(event));
+            this.battleview.log_processor.register(event => this.processLogEvent(event));
+            this.battleview.log_processor.registerForShip(ship, event => this.processShipLogEvent(event));
+        }
+
+        /**
+         * Process a battle log event
+         */
+        private processLogEvent(event: BaseLogEvent): number {
+            if (event instanceof ShipChangeEvent) {
+                if (event.new_ship === this.ship) {
+                    this.info_play_order.text = "";
+                } else {
+                    this.info_play_order.text = this.battleview.battle.getTurnsBefore(this.ship).toString();
+                }
+            }
+            return 0;
         }
 
         /**
          * Process a log event for this ship
          */
-        private processLogEvent(event: BaseLogEvent): number {
+        private processShipLogEvent(event: BaseLogShipEvent): number {
             if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent || event instanceof EffectDurationChangedEvent) {
                 this.updateStickyEffects();
                 return 0;
