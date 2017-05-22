@@ -85,6 +85,7 @@ module TS.SpaceTac.UI {
             this.add(this.sticky_effects);
             this.effects = new Phaser.Group(this.game);
             this.add(this.effects);
+            this.updateStickyEffects();
 
             // Handle input on ship sprite
             UITools.setHoverClick(this.sprite,
@@ -94,8 +95,12 @@ module TS.SpaceTac.UI {
             );
 
             // Set location
-            this.position.set(ship.arena_x - 150 * Math.cos(ship.arena_angle), ship.arena_y - 150 * Math.sin(ship.arena_angle));
-            this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle);
+            if (ship.alive) {
+                this.position.set(ship.arena_x - 150 * Math.cos(ship.arena_angle), ship.arena_y - 150 * Math.sin(ship.arena_angle));
+                this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle);
+            } else {
+                this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle, false);
+            }
 
             // Log processing
             this.battleview.log_processor.registerForShip(ship, event => this.processLogEvent(event));
