@@ -42,18 +42,27 @@ module TS.SpaceTac.UI {
          * 
          * The difference with registering directly to the BattleLog is that events may be delayed
          * for animations.
+         * 
+         * The callback may return the duration it needs to display the change.
          */
-        register(callback: LogSubscriber) {
-            this.forwarding.push(callback);
+        register(callback: (event: BaseLogEvent) => number) {
+            this.forwarding.push(event => {
+                let duration = callback(event);
+                if (duration) {
+                    this.delayNextEvents(duration);
+                }
+            });
         }
 
         /**
          * Register a sub-subscriber, to receive events for a specific ship
          */
-        registerForShip(ship: Ship, callback: LogSubscriber) {
+        registerForShip(ship: Ship, callback: (event: BaseLogShipEvent) => number) {
             this.register(event => {
                 if (event instanceof BaseLogShipEvent && event.ship === ship) {
-                    callback(event);
+                    return callback(event);
+                } else {
+                    return 0;
                 }
             });
         }
@@ -98,8 +107,6 @@ module TS.SpaceTac.UI {
 
             if (event instanceof ShipChangeEvent) {
                 this.processShipChangeEvent(event);
-            } else if (event instanceof MoveEvent) {
-                this.processMoveEvent(event);
             } else if (event instanceof DeathEvent) {
                 this.processDeathEvent(event);
             } else if (event instanceof FireEvent) {
@@ -155,15 +162,6 @@ module TS.SpaceTac.UI {
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {
                 item.setDamageHit();
-            }
-        }
-
-        // Ship moved
-        private processMoveEvent(event: MoveEvent): void {
-            var sprite = this.view.arena.findShipSprite(event.ship);
-            if (sprite) {
-                let duration = sprite.moveTo(event.target.x, event.target.y, event.facing_angle, !event.initial);
-                this.delayNextEvents(duration);
             }
         }
 

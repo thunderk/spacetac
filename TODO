@@ -20,6 +20,7 @@
 * Arena: display effects description instead of attribute changes
 * Arena: add auto-move to attack
 * Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
+* Arena: add engine trail
 * Actions: show power usage/recovery in power bar, on action hover
 * Actions: fix targetting not resetting when using keyboard shortcuts
 * Suspend AI operation when the game is paused (window not focused)

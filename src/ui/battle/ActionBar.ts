@@ -88,6 +88,7 @@ module TS.SpaceTac.UI {
                         }
                     }
                 }
+                return 0;
             });
         }
 

@@ -94,7 +94,8 @@ module TS.SpaceTac.UI {
             );
 
             // Set location
-            this.position.set(ship.arena_x, ship.arena_y);
+            this.position.set(ship.arena_x - 150 * Math.cos(ship.arena_angle), ship.arena_y - 150 * Math.sin(ship.arena_angle));
+            this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle);
 
             // Log processing
             this.battleview.log_processor.registerForShip(ship, event => this.processLogEvent(event));
@@ -103,21 +104,31 @@ module TS.SpaceTac.UI {
         /**
          * Process a log event for this ship
          */
-        private processLogEvent(event: BaseLogEvent) {
+        private processLogEvent(event: BaseLogEvent): number {
             if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent || event instanceof EffectDurationChangedEvent) {
                 this.updateStickyEffects();
+                return 0;
             } else if (event instanceof ValueChangeEvent) {
                 if (event.value.name == "hull") {
                     this.info_toggle.start(1500, true);
                     this.info_hull.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    return 0;
                 } else if (event.value.name == "shield") {
                     this.info_toggle.start(1500, true);
                     this.info_shield.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    return 0;
                 } else {
                     this.displayValueChanged(event);
+                    return 0;
                 }
             } else if (event instanceof DamageEvent) {
                 this.displayEffect(`${event.hull + event.shield} damage`, false);
+                return 0;
+            } else if (event instanceof MoveEvent) {
+                let duration = this.moveTo(event.target.x, event.target.y, event.facing_angle, !event.initial);
+                return duration;
+            } else {
+                return 0;
             }
         }
 
@@ -167,7 +178,8 @@ module TS.SpaceTac.UI {
          */
         moveTo(x: number, y: number, facing_angle: number, animate = true): number {
             if (animate) {
-                return Animations.moveInSpace(this, x, y, facing_angle, this.sprite);
+                let duration = Animations.moveInSpace(this, x, y, facing_angle, this.sprite);
+                return duration;
             } else {
                 this.x = x;
                 this.y = y;
