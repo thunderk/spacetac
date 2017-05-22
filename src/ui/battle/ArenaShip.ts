@@ -139,6 +139,9 @@ module TS.SpaceTac.UI {
                 } else if (event.value.name == "shield") {
                     this.info_toggle.start(1500, true);
                     this.info_shield.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    if (event.value.get() == 0) {
+                        this.displayEffect("Shield failure", false);
+                    }
                     return 0;
                 } else {
                     this.displayValueChanged(event);
