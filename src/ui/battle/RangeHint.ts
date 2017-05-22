@@ -2,7 +2,7 @@ module TS.SpaceTac.UI {
     // Graphical hints for movement and weapon range
     export class RangeHint extends Phaser.Group {
         // Link to the arena
-        parent: Arena;
+        arena: Arena;
 
         // Displayed circle
         circle: Phaser.Graphics;
@@ -10,10 +10,10 @@ module TS.SpaceTac.UI {
         // Stored information of primary circle, when secondary one overrides it
         primary: Phaser.Circle | null;
 
-        constructor(parent: Arena) {
-            super(parent.game);
+        constructor(arena: Arena) {
+            super(arena.game);
 
-            this.parent = parent;
+            this.arena = arena;
 
             this.circle = new Phaser.Graphics(this.game, 0, 0);
             this.add(this.circle);
@@ -63,6 +63,7 @@ module TS.SpaceTac.UI {
             this.circle.lineStyle(5, 0xffffff, 0.2);
             this.circle.drawCircle(circle.x, circle.y, circle.diameter);
             this.circle.visible = true;
+            this.add(this.circle);
         }
     }
 }
