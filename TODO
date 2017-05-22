@@ -27,7 +27,7 @@
 * Actions: fix targetting not resetting when using keyboard shortcuts
 * Suspend AI operation when the game is paused (window not focused)
 * Add actions with cost dependent of distance (like current move actions)
-* Keep move actions out of arena borders
+* Keep move and drone actions out of arena borders
 * Find incentives to move from starting position
 * Outcome: add battle statistics and/or honors
 * Outcome: disable the loot button if there is no loot

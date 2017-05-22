@@ -65,7 +65,7 @@ module TS.SpaceTac {
         }
 
         getEffectsDescription(): string {
-            let desc = `Deploy drone for ${this.lifetime} cycle${this.lifetime > 1 ? "s" : ""} (power usage ${this.power}, max range ${this.deploy_distance}km)`;
+            let desc = `Deploy drone for ${this.lifetime} activation${this.lifetime > 1 ? "s" : ""} (power usage ${this.power}, max range ${this.deploy_distance}km)`;
             let effects = this.effects.map(effect => {
                 let suffix = `for ships in ${this.effect_radius}km radius`;
                 return "• " + effect.getDescription() + " " + suffix;

@@ -23,14 +23,11 @@ module TS.SpaceTac {
         // Effects to apply
         effects: BaseEffect[] = [];
 
-        // Cycle countdown for ships
-        countdown: [Ship, number][] = [];
-
         constructor(owner: Ship, code = "drone", base_duration = 1) {
             this.battle = owner.getBattle() || new Battle();
             this.owner = owner;
             this.code = code;
-            this.duration = base_duration * this.battle.getCycleLength();
+            this.duration = base_duration;
         }
 
         /**
@@ -45,41 +42,10 @@ module TS.SpaceTac {
         }
 
         /**
-         * Get countdown until next activation for a given ship
-         */
-        getShipCountdown(ship: Ship): number {
-            let countdown = 0;
-            this.countdown.forEach(([iship, icountdown]) => {
-                if (iship === ship) {
-                    countdown = icountdown;
-                }
-            });
-            return countdown;
-        }
-
-        /**
-         * Start the countdown for a given ship
-         */
-        startShipCountdown(ship: Ship): void {
-            let found = false;
-            this.countdown = this.countdown.map(([iship, countdown]): [Ship, number] => {
-                if (iship === ship) {
-                    found = true;
-                    return [iship, this.battle.getCycleLength()];
-                } else {
-                    return [iship, countdown];
-                }
-            });
-            if (!found) {
-                this.countdown.push([ship, this.battle.getCycleLength()]);
-            }
-        }
-
-        /**
          * Get the list of affected ships.
          */
         getAffectedShips(): Ship[] {
-            let ships = ifilter(this.battle.iships(), ship => ship.alive && ship.isInCircle(this.x, this.y, this.radius) && this.getShipCountdown(ship) == 0);
+            let ships = ifilter(this.battle.iships(), ship => ship.alive && ship.isInCircle(this.x, this.y, this.radius));
             return imaterialize(ships);
         }
 
@@ -95,7 +61,6 @@ module TS.SpaceTac {
                 }
 
                 ships.forEach(ship => {
-                    this.startShipCountdown(ship);
                     this.effects.forEach(effect => effect.applyOnShip(ship));
                 });
             }
@@ -106,8 +71,6 @@ module TS.SpaceTac {
          */
         activate(log = true) {
             this.apply(this.getAffectedShips(), log);
-
-            this.countdown = this.countdown.map(([ship, countdown]): [Ship, number] => [ship, countdown - 1]).filter(([ship, countdown]) => countdown > 0);
 
             this.duration--;
             if (this.duration == 0) {

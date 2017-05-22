@@ -53,45 +53,6 @@ module TS.SpaceTac {
             expect(effect.getApplyCalls()).toEqual([ship1, ship2]);
         });
 
-        it("maintains ship application countdown", function () {
-            let battle = new Battle();
-            spyOn(battle, "getCycleLength").and.returnValue(7);
-            let ship = new Ship(battle.fleets[0]);
-            let drone = new Drone(ship, "test", 2);
-
-            expect(drone.getShipCountdown(ship)).toBe(0);
-            drone.startShipCountdown(ship);
-            expect(drone.getShipCountdown(ship)).toBe(7);
-        });
-
-        it("applies at most once per battle cycle", function () {
-            let battle = new Battle();
-            let ship1 = new Ship(battle.fleets[0], "ship1");
-            ship1.setArenaPosition(0, 0);
-            let ship2 = new Ship(battle.fleets[1], "ship2");
-            ship2.setArenaPosition(100, 100);
-            battle.throwInitiative();
-            expect(battle.getCycleLength()).toEqual(2);
-
-            let [drone, effect] = newTestDrone(2, 2, 8, ship1);
-            expect(effect.getApplyCalls()).toEqual([]);
-
-            drone.activate();
-            expect(effect.getApplyCalls()).toEqual([ship1]);
-
-            drone.activate();
-            expect(effect.getApplyCalls()).toEqual([]);
-
-            drone.activate();
-            expect(effect.getApplyCalls()).toEqual([ship1]);
-
-            drone.activate();
-            expect(effect.getApplyCalls()).toEqual([]);
-
-            drone.activate();
-            expect(effect.getApplyCalls()).toEqual([ship1]);
-        });
-
         it("signals the need for destruction after its lifetime", function () {
             let battle = new Battle();
             let owner = new Ship(battle.fleets[0]);

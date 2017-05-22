@@ -30,7 +30,6 @@ module TS.SpaceTac {
             let ship = battle.fleets[0].addShip();
             ship.setArenaPosition(0, 0);
             battle.playing_ship = ship;
-            spyOn(battle, "getCycleLength").and.returnValue(4);
             TestTools.setShipAP(ship, 3);
             let equipment = new Equipment(SlotType.Weapon, "testdrone");
             let action = new DeployDroneAction(equipment, 2, 8, 2, 4, [new DamageEffect(50)]);
@@ -44,7 +43,7 @@ module TS.SpaceTac {
 
             let drone = battle.drones[0];
             expect(drone.code).toEqual("testdrone");
-            expect(drone.duration).toEqual(8);
+            expect(drone.duration).toEqual(2);
             expect(drone.owner).toBe(ship);
             expect(drone.x).toEqual(5);
             expect(drone.y).toEqual(0);

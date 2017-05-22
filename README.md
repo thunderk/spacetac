@@ -125,11 +125,8 @@ the end of turn (it will only start cooling down after being overheated).
 
 Drones are static objects, deployed by ships, that apply effects in a circular zone around themselves.
 
-A drone lasts for a given number of battle cycles. For example, if there are 8 ships in play, a 2-cycles
-drone will try to activate 16 times, before being destroyed.
-
-All drones activate between two ship turns. At each activation, the drone effects are applied to any ship
-in the surrounding zone, except if less than a battle cycle passed since last activation for this ship.
+Drones activate between two ship turns. At each activation, the drone effects are applied to any ship
+in the surrounding zone. A drone will live for a given number of activations, before being destroyed.
 
 Drones are fully autonomous, and once deployed, are not controlled by their owner ship.
 
