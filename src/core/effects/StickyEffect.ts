@@ -72,7 +72,7 @@ module TS.SpaceTac {
         }
 
         getDescription(): string {
-            return this.base.getDescription();
+            return this.base.getDescription() + ` for ${this.duration} turn${this.duration > 1 ? "s" : ""}`;
         }
     }
 }
