@@ -9,6 +9,8 @@
 * Character sheet: add a "loot all" button
 * Shops: allow to change/buy ship model
 * Loot: lucky finds should be proportional to cargo space
+* Ship models: Add permanent effects
+* Ship models: Add permanent actions
 * Equipment: no-target actions (direct activation, with confirmation dialog ?)
 * Equipment: toggle actions (AP usage ? time of effect ?)
 * Equipment: add critical hit/miss
@@ -24,7 +26,6 @@
 * Actions: show power usage/recovery in power bar, on action hover
 * Actions: fix targetting not resetting when using keyboard shortcuts
 * Suspend AI operation when the game is paused (window not focused)
-* Add permanent effects to ship models to ease balancing
 * Add actions with cost dependent of distance (like current move actions)
 * Keep move actions out of arena borders
 * Find incentives to move from starting position

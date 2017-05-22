@@ -50,21 +50,15 @@ module TS.SpaceTac.UI {
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.input.maxPointers = 1;
 
-            // View layers
-            this.layers = this.add.group();
-
-            // Notifications
-            this.messages = new Messages(this);
-
-            // Animations
+            // Tools
             this.animations = new Animations(this.game.tweens);
-
-            // Input manager
             this.inputs = new InputManager(this);
 
-            // Tooltip
+            // Layers
+            this.layers = this.add.group();
             this.tooltip_layer = this.add.group();
             this.tooltip = new Tooltip(this);
+            this.messages = new Messages(this);
 
             // Browser console variable (for debugging purpose)
             if (typeof window != "undefined") {

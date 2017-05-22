@@ -54,17 +54,7 @@ module TS.SpaceTac.UI {
 
         update() {
             if (this.visible) {
-                let bounds = this.content.getBounds();
-                let width = bounds.width + 2 * this.border;
-                let height = bounds.height + 2 * this.border;
-
-                if (this.background.width != width || this.background.height != height) {
-                    this.background.clear();
-                    this.background.lineStyle(2, 0x404450);
-                    this.background.beginFill(0x202225, 0.9);
-                    this.background.drawRect(-this.border, -this.border, width, height);
-                    this.background.endFill();
-                }
+                let [width, height] = UITools.drawBackground(this.content, this.background, this.border);
 
                 let [x, y] = this.getBestPosition(this.item, width, height);
                 x += this.border;

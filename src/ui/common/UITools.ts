@@ -147,5 +147,26 @@ module TS.SpaceTac.UI {
                 return range(item_count).map(i => item_width / 2 + i * spacing);
             }
         }
+
+        /**
+         * Draw a background around a container
+         * 
+         * Content's top-left corner is supposed to be at (0,0)
+         */
+        static drawBackground(content: Phaser.Group | Phaser.Text, background: Phaser.Graphics, border = 6): [number, number] {
+            let bounds = content.getBounds();
+            let width = bounds.width + 2 * border;
+            let height = bounds.height + 2 * border;
+
+            if (background.width != width || background.height != height) {
+                background.clear();
+                background.lineStyle(2, 0x404450);
+                background.beginFill(0x202225, 0.9);
+                background.drawRect(-border, -border, width, height);
+                background.endFill();
+            }
+
+            return [width, height];
+        }
     }
 }
