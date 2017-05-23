@@ -53,7 +53,7 @@ module TS.SpaceTac {
             start_location.addShop();
 
             this.player = new Player(this.universe);
-            this.player.fleet = fleet_generator.generate(1, this.player);
+            this.player.fleet = fleet_generator.generate(1, this.player, 4);
             this.player.fleet.setLocation(start_location);
             this.player.fleet.credits = 500;
         }

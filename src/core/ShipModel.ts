@@ -17,12 +17,13 @@ module TS.SpaceTac {
         // Available slots
         slots: SlotType[];
 
-        constructor(code: string, name: string, level: number, cargo: number, ...slots: SlotType[]) {
+        constructor(code: string, name: string, level = 1, cargo = 6, default_slots = true, weapon_slots = 2) {
             this.code = code;
             this.name = name;
             this.level = level;
             this.cargo = cargo;
-            this.slots = slots;
+            this.slots = default_slots ? [SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine] : [];
+            range(weapon_slots).forEach(() => this.slots.push(SlotType.Weapon));
         }
 
         // Get the default ship model collection available in-game
@@ -30,41 +31,19 @@ module TS.SpaceTac {
             // TODO Store in cache
             var result: ShipModel[] = [];
 
-            result.push(new ShipModel("scout", "Scout", 1, 2, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Weapon));
-
-            result.push(new ShipModel("breeze", "Breeze", 1, 0, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Engine, SlotType.Weapon));
-
-            result.push(new ShipModel("creeper", "Creeper", 1, 2, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon));
-
-            result.push(new ShipModel("whirlwind", "Whirlwind", 1, 8, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon, SlotType.Weapon));
-
-            result.push(new ShipModel("tomahawk", "Tomahawk", 1, 8, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon));
-
-            result.push(new ShipModel("avenger", "Avenger", 1, 4, SlotType.Hull, SlotType.Shield, SlotType.Shield, SlotType.Power, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon));
-
-            result.push(new ShipModel("commodore", "Commodore", 1, 4, SlotType.Hull, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon));
-
-            result.push(new ShipModel("falcon", "Falcon", 1, 2, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon, SlotType.Weapon, SlotType.Weapon));
-
-            result.push(new ShipModel("flea", "Flea", 1, 0, SlotType.Hull, SlotType.Power, SlotType.Power, SlotType.Engine, SlotType.Engine, SlotType.Weapon));
-
-            result.push(new ShipModel("jumper", "Jumper", 1, 2, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon, SlotType.Weapon));
-
-            result.push(new ShipModel("rhino", "Rhino", 1, 16, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
-                SlotType.Weapon));
-
-            result.push(new ShipModel("trapper", "Trapper", 1, 8, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon));
-
-            result.push(new ShipModel("xander", "Xander", 1, 8, SlotType.Hull, SlotType.Shield, SlotType.Power, SlotType.Engine,
-                SlotType.Weapon, SlotType.Weapon));
+            result.push(new ShipModel("scout", "Scout"));
+            result.push(new ShipModel("breeze", "Breeze"));
+            result.push(new ShipModel("creeper", "Creeper"));
+            result.push(new ShipModel("whirlwind", "Whirlwind"));
+            result.push(new ShipModel("tomahawk", "Tomahawk"));
+            result.push(new ShipModel("avenger", "Avenger"));
+            result.push(new ShipModel("commodore", "Commodore"));
+            result.push(new ShipModel("falcon", "Falcon"));
+            result.push(new ShipModel("flea", "Flea"));
+            result.push(new ShipModel("jumper", "Jumper"));
+            result.push(new ShipModel("rhino", "Rhino"));
+            result.push(new ShipModel("trapper", "Trapper"));
+            result.push(new ShipModel("xander", "Xander"));
 
             return result;
         }

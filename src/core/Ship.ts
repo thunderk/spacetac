@@ -100,7 +100,7 @@ module TS.SpaceTac {
         play_priority = 0;
 
         // Create a new ship inside a fleet
-        constructor(fleet: Fleet | null = null, name = "Ship", model = new ShipModel("default", "Default", 1, 0)) {
+        constructor(fleet: Fleet | null = null, name = "Ship", model = new ShipModel("default", "Default", 1, 0, false, 0)) {
             this.fleet = fleet || new Fleet();
             this.name = name;
             this.alive = true;

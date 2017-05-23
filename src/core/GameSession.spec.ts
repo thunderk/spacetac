@@ -76,7 +76,7 @@ module TS.SpaceTac.Specs {
 
             session.startNewGame();
             expect(session.player).not.toBeNull();
-            expect(session.player.fleet.ships.length).toBe(3);
+            expect(session.player.fleet.ships.length).toBe(4);
             expect(session.player.fleet.credits).toBe(500);
             expect(session.player.universe.stars.length).toBe(50);
             expect(session.getBattle()).toBeNull();

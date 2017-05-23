@@ -7,9 +7,9 @@ module TS.SpaceTac.Equipments {
 
             this.setSkillsRequirements({ "skill_energy": 1 });
             this.addAttributeEffect("initiative", istep(1));
-            this.addAttributeEffect("power_capacity", istep(6));
-            this.addAttributeEffect("power_initial", istep(4, irepeat(0.5)));
-            this.addAttributeEffect("power_recovery", istep(3, irepeat(0.3)));
+            this.addAttributeEffect("power_capacity", istep(8));
+            this.addAttributeEffect("power_initial", istep(5, irepeat(0.5)));
+            this.addAttributeEffect("power_recovery", istep(4, irepeat(0.3)));
         }
     }
 }
