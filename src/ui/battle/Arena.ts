@@ -150,13 +150,13 @@ module TS.SpaceTac.UI {
         // Set the hovered state on a ship sprite
         setShipHovered(ship: Ship | null): void {
             if (this.hovered) {
-                this.hovered.setHovered(false);
+                this.hovered.setHovered(false, false);
             }
 
             if (ship) {
                 var arena_ship = this.findShipSprite(ship);
                 if (arena_ship) {
-                    arena_ship.setHovered(true);
+                    arena_ship.setHovered(true, false);
                     this.layer_ships.bringToTop(arena_ship);
                 }
                 this.hovered = arena_ship;
@@ -245,7 +245,7 @@ module TS.SpaceTac.UI {
          * Switch the tactical mode (shows information on all ships, and fades background)
          */
         setTacticalMode(active: boolean): void {
-            this.ship_sprites.forEach(sprite => sprite.setHovered(active));
+            this.ship_sprites.forEach(sprite => sprite.setHovered(active, true));
             this.drone_sprites.forEach(drone => drone.setTacticalMode(active));
             this.battleview.animations.setVisible(this.layer_garbage, !active, 200);
             if (this.battleview.background) {

@@ -20,12 +20,17 @@ module TS.SpaceTac.UI {
         // Target effect
         target: Phaser.Image
 
-        // Hover information
-        info: Phaser.Group
-        info_hull: ValueBar
-        info_shield: ValueBar
-        info_toggle: Toggle
-        info_play_order: Phaser.Text
+        // HSP display
+        hull: ValueBar
+        toggle_hull: Toggle
+        shield: ValueBar
+        toggle_shield: Toggle
+        power: Phaser.Group
+        toggle_power: Toggle
+
+        // Play order
+        play_order: Phaser.Text
+        toggle_play_order: Toggle
 
         // Frame to indicate the owner of the ship, and if it is playing
         frame: Phaser.Image
@@ -67,28 +72,34 @@ module TS.SpaceTac.UI {
             this.frame.anchor.set(0.5, 0.5);
             this.add(this.frame);
 
-            // Hover informations
-            this.info = new Phaser.Group(this.game);
-            this.info_hull = new ValueBar(this.game, -59, -47, "battle-arena-ship-hull-base", true);
-            this.info_hull.setBarImage("battle-arena-ship-hull-full", 3);
-            this.info_hull.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity"));
-            this.info.add(this.info_hull);
-            this.info_shield = new ValueBar(this.game, 40, -47, "battle-arena-ship-shield-base", true);
-            this.info_shield.setBarImage("battle-arena-ship-shield-full", 3);
-            this.info_shield.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
-            this.info.add(this.info_shield);
-            this.info_play_order = new Phaser.Text(this.game, 55, -47, "", { font: "bold 14pt Arial", fill: "#aaaaaa" });
-            this.info.add(this.info_play_order);
-            this.info.visible = false;
-            this.info_toggle = this.battleview.animations.newVisibilityToggle(this.info, 200);
-            this.add(this.info);
+            // HSP display
+            this.hull = new ValueBar(this.game, -59, -47, "battle-arena-ship-hull-base", true);
+            this.hull.setBarImage("battle-arena-ship-hull-full", 3);
+            this.hull.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity"));
+            this.toggle_hull = this.battleview.animations.newVisibilityToggle(this.hull, 200, false);
+            this.add(this.hull);
+            this.shield = new ValueBar(this.game, 40, -47, "battle-arena-ship-shield-base", true);
+            this.shield.setBarImage("battle-arena-ship-shield-full", 3);
+            this.shield.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
+            this.toggle_shield = this.battleview.animations.newVisibilityToggle(this.shield, 200, false);
+            this.add(this.shield);
+            this.power = new Phaser.Group(this.game);
+            this.toggle_power = this.battleview.animations.newVisibilityToggle(this.power, 200, false);
+            this.add(this.power);
+
+            // Play order display
+            this.play_order = new Phaser.Text(this.game, 55, -47, "", { font: "bold 14pt Arial", fill: "#aaaaaa" });
+            this.toggle_play_order = this.battleview.animations.newVisibilityToggle(this.play_order, 200, false);
+            this.add(this.play_order);
 
             // Effects display
             this.sticky_effects = new Phaser.Group(this.game);
             this.add(this.sticky_effects);
             this.effects = new Phaser.Group(this.game);
             this.add(this.effects);
+
             this.updateStickyEffects();
+            this.updatePowerIndicator(ship.getValue("power"));
 
             // Handle input on ship sprite
             UITools.setHoverClick(this.sprite,
@@ -116,9 +127,9 @@ module TS.SpaceTac.UI {
         private processLogEvent(event: BaseLogEvent): number {
             if (event instanceof ShipChangeEvent) {
                 if (event.new_ship === this.ship) {
-                    this.info_play_order.text = "";
+                    this.play_order.text = "";
                 } else {
-                    this.info_play_order.text = this.battleview.battle.getTurnsBefore(this.ship).toString();
+                    this.play_order.text = this.battleview.battle.getTurnsBefore(this.ship).toString();
                 }
             }
             return 0;
@@ -133,15 +144,19 @@ module TS.SpaceTac.UI {
                 return 0;
             } else if (event instanceof ValueChangeEvent) {
                 if (event.value.name == "hull") {
-                    this.info_toggle.start(1500, true);
-                    this.info_hull.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    this.toggle_hull.start(1500, true);
+                    this.hull.setValue(event.value.get(), event.value.getMaximal() || 0);
                     return 0;
                 } else if (event.value.name == "shield") {
-                    this.info_toggle.start(1500, true);
-                    this.info_shield.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    this.toggle_shield.start(1500, true);
+                    this.shield.setValue(event.value.get(), event.value.getMaximal() || 0);
                     if (event.value.get() == 0) {
                         this.displayEffect("Shield failure", false);
                     }
+                    return 0;
+                } else if (event.value.name == "power") {
+                    this.toggle_power.start(1500, true);
+                    this.updatePowerIndicator(event.value.get());
                     return 0;
                 } else {
                     this.displayValueChanged(event);
@@ -163,11 +178,19 @@ module TS.SpaceTac.UI {
          * 
          * This will show the information HUD accordingly
          */
-        setHovered(hovered: boolean) {
+        setHovered(hovered: boolean, tactical: boolean) {
             if (hovered && this.ship.alive) {
-                this.info_toggle.start();
+                this.toggle_hull.start();
+                this.toggle_shield.start();
+                this.toggle_power.start();
+                if (tactical) {
+                    this.toggle_play_order.start();
+                }
             } else {
-                this.info_toggle.stop();
+                this.toggle_hull.stop();
+                this.toggle_shield.stop();
+                this.toggle_power.stop();
+                this.toggle_play_order.stop();
             }
         }
 
@@ -224,7 +247,7 @@ module TS.SpaceTac.UI {
             let arena = this.battleview.arena.getBoundaries();
             this.effects.position.set(
                 (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects.width) : (-this.effects.width * 0.5)),
-                (this.ship.arena_y < arena.height * 0.9) ? 40 : (-40 - this.effects.height)
+                (this.ship.arena_y < arena.height * 0.9) ? 45 : (-45 - this.effects.height)
             );
 
             this.game.tweens.removeFrom(this.effects);
@@ -254,6 +277,21 @@ module TS.SpaceTac.UI {
                 this.ship.sticky_effects.forEach((effect, index) => {
                     let dot = new Phaser.Image(this.game, positions[index] - 40, -47, `battle-arena-ship-effect-${effect.isBeneficial() ? "good" : "bad"}`);
                     this.sticky_effects.add(dot);
+                });
+            }
+        }
+
+        /**
+         * Update the power indicator
+         */
+        updatePowerIndicator(power: number) {
+            this.power.removeAll();
+
+            if (power) {
+                let positions = UITools.evenlySpace(70, 10, power);
+                range(power).forEach(index => {
+                    let dot = new Phaser.Image(this.game, positions[index] - 40, 40, "battle-arena-ship-power");
+                    this.power.add(dot);
                 });
             }
         }

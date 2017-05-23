@@ -18,7 +18,6 @@
 * Equipment: add area effects, without the need of activation/stickyness (eg. damage reduction, attribute modifier...)
 * Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
-* Arena: add power indicator in ship hover information
 * Arena: display effects description instead of attribute changes
 * Arena: add auto-move to attack
 * Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)

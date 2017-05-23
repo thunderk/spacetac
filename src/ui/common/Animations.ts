@@ -68,13 +68,17 @@ module TS.SpaceTac.UI {
                 obj.visible = true;
             }
 
-            let tween = this.createTween(obj);
-            tween.to({ alpha: alpha }, duration);
-            if (obj.input) {
-                let input = obj.input;
-                tween.onComplete.addOnce(() => input.enabled = true);
+            if (duration) {
+                let tween = this.createTween(obj);
+                tween.to({ alpha: alpha }, duration);
+                if (obj.input) {
+                    let input = obj.input;
+                    tween.onComplete.addOnce(() => input.enabled = true);
+                }
+                tween.start();
+            } else {
+                obj.alpha = 1;
             }
-            tween.start();
         }
 
         /**
@@ -85,10 +89,15 @@ module TS.SpaceTac.UI {
                 obj.input.enabled = false;
             }
 
-            let tween = this.createTween(obj);
-            tween.to({ alpha: 0 }, duration);
-            tween.onComplete.addOnce(() => obj.visible = false);
-            tween.start();
+            if (duration) {
+                let tween = this.createTween(obj);
+                tween.to({ alpha: 0 }, duration);
+                tween.onComplete.addOnce(() => obj.visible = false);
+                tween.start();
+            } else {
+                obj.alpha = 0;
+                obj.visible = false;
+            }
         }
 
         /**
@@ -105,8 +114,10 @@ module TS.SpaceTac.UI {
         /**
          * Get a toggle on visibility
          */
-        newVisibilityToggle(obj: IAnimationFadeable, duration = 1000): Toggle {
-            return new Toggle(() => this.setVisible(obj, true, duration), () => this.setVisible(obj, false, duration));
+        newVisibilityToggle(obj: IAnimationFadeable, duration = 1000, initial = true): Toggle {
+            let result = new Toggle(() => this.setVisible(obj, true, duration), () => this.setVisible(obj, false, duration));
+            this.setVisible(obj, initial, 0);
+            return result;
         }
 
         /**
