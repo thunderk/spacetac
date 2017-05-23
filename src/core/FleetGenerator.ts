@@ -15,11 +15,13 @@ module TS.SpaceTac {
             var fleet = new Fleet(player);
             var ship_generator = new ShipGenerator(this.random);
 
-            while (ship_count--) {
-                var ship = ship_generator.generate(level, null, upgrade, ship_count != 0);
+            let models = this.random.sample(ShipModel.getDefaultCollection(), ship_count);
+
+            range(ship_count).forEach(i => {
+                var ship = ship_generator.generate(level, models[i] || null, upgrade, i < ship_count * 0.6);
                 ship.name = `${fleet.player.name}'s Level ${ship.level.get()} ${ship.model.name}`;
                 fleet.addShip(ship);
-            }
+            });
 
             return fleet;
         }
