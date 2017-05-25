@@ -40,6 +40,13 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Move the a parent's layer
+         */
+        moveToLayer(layer: Phaser.Group) {
+            layer.add(this.container);
+        }
+
+        /**
          * Create the internal phaser node
          */
         protected createInternalNode(): UIInternalComponent {
@@ -127,11 +134,40 @@ module TS.SpaceTac.UI {
         /**
          * Add a button in the component, positioning its center.
          */
-        addButton(x: number, y: number, on_click: Function, bg_normal: string, bg_hover = bg_normal, angle = 0) {
+        addButton(x: number, y: number, on_click: Function, bg_normal: string, bg_hover = bg_normal, tooltip = "", angle = 0) {
             let button = new Phaser.Button(this.view.game, x, y, bg_normal, on_click);
             button.anchor.set(0.5, 0.5);
             button.angle = angle;
+            if (tooltip) {
+                this.view.tooltip.bindStaticText(button, tooltip);
+            }
             this.addInternalChild(button);
+        }
+
+        /**
+         * Add a static text.
+         */
+        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, bold = false, center = true, width = 0): void {
+            let style = { font: `${bold ? "bold " : ""}${size}pt Arial`, fill: color, align: center ? "center" : "left" };
+            let text = new Phaser.Text(this.view.game, x, y, content, style);
+            if (center) {
+                text.anchor.set(0.5, 0.5);
+            }
+            if (width) {
+                text.wordWrap = true;
+                text.wordWrapWidth = width;
+            }
+            this.addInternalChild(text);
+        }
+
+        /**
+         * Add a static image, positioning its center.
+         */
+        addImage(x: number, y: number, key: string, scale = 1): void {
+            let image = new Phaser.Image(this.container.game, x, y, key);
+            image.anchor.set(0.5, 0.5);
+            image.scale.set(scale);
+            this.addInternalChild(image);
         }
 
         /**

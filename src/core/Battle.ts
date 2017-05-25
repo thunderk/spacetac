@@ -2,40 +2,42 @@ module TS.SpaceTac {
     // A turn-based battle between fleets
     export class Battle {
         // Flag indicating if the battle is ended
-        ended: boolean;
+        ended: boolean
 
         // Battle outcome, if *ended* is true
-        outcome: BattleOutcome;
+        outcome: BattleOutcome
+
+        // Statistics
+        stats: BattleStats
 
         // Log of all battle events
-        log: BattleLog;
+        log: BattleLog
 
         // List of fleets engaged in battle
-        fleets: Fleet[];
+        fleets: Fleet[]
 
         // List of ships, sorted by their initiative throw
-        play_order: Ship[];
+        play_order: Ship[]
 
         // Current turn
-        turn: number;
+        turn: number
 
         // Current ship whose turn it is to play
-        playing_ship_index: number | null;
-        playing_ship: Ship | null;
+        playing_ship_index: number | null
+        playing_ship: Ship | null
 
         // List of deployed drones
-        drones: Drone[] = [];
+        drones: Drone[] = []
 
         // Size of the battle area
         width: number
         height: number
 
         // Timer to use for scheduled things
-        timer = Timer.global;
+        timer = Timer.global
 
         // Create a battle between two fleets
         constructor(fleet1 = new Fleet(), fleet2 = new Fleet(), width = 1808, height = 948) {
-            this.log = new BattleLog();
             this.fleets = [fleet1, fleet2];
             this.play_order = [];
             this.playing_ship_index = null;
@@ -43,6 +45,9 @@ module TS.SpaceTac {
             this.ended = false;
             this.width = width;
             this.height = height;
+
+            this.log = new BattleLog();
+            this.stats = new BattleStats();
 
             this.fleets.forEach((fleet: Fleet) => {
                 fleet.setBattle(this);
@@ -272,7 +277,7 @@ module TS.SpaceTac {
 
             // Simulate initial ship placement
             this.play_order.forEach(ship => {
-                let event = new MoveEvent(ship, ship.arena_x, ship.arena_y);
+                let event = new MoveEvent(ship, ship.arena_x, ship.arena_y, 0);
                 event.initial = true;
                 log.add(event);
             });

@@ -33,6 +33,13 @@ module TS.SpaceTac.Specs {
 
             ship.moveTo(50, 50);
             expect(ship.arena_angle).toBeCloseTo(3.14159265, 0.00001);
+
+            let battle = new Battle();
+            battle.fleets[0].addShip(ship);
+            expect(battle.log.events).toEqual([]);
+
+            ship.moveTo(70, 50);
+            expect(battle.log.events).toEqual([new MoveEvent(ship, 70, 50, 20)]);
         });
 
         it("applies equipment cooldown", function () {

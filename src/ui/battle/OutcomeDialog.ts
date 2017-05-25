@@ -1,49 +1,45 @@
+/// <reference path="../common/UIComponent.ts" />
+
 module TS.SpaceTac.UI {
     /**
      * Dialog to display battle outcome
      */
-    export class OutcomeDialog extends Phaser.Image {
-        constructor(parent: BattleView, player: Player, outcome: BattleOutcome) {
-            super(parent.game, 0, 0, "battle-outcome-dialog");
+    export class OutcomeDialog extends UIComponent {
+        constructor(parent: BattleView, player: Player, outcome: BattleOutcome, stats: BattleStats) {
+            super(parent, 1428, 1032, "battle-outcome-dialog");
 
             let victory = outcome.winner && (outcome.winner.player == player);
-            let title = new Phaser.Image(this.game, 0, 0, victory ? "battle-outcome-title-victory" : "battle-outcome-title-defeat");
-            title.anchor.set(0.5, 0.5);
-            title.position.set(this.width / 2, 164);
-            this.addChild(title);
+            this.addImage(714, 164, victory ? "battle-outcome-title-victory" : "battle-outcome-title-defeat");
 
             if (victory) {
-                let button = new Phaser.Button(this.game, 344, 842, "battle-outcome-button-loot", () => {
-                    // Open loot screen
-                    if (outcome.winner) {
-                        parent.character_sheet.show(outcome.winner.ships[0]);
-                        parent.character_sheet.setLoot(outcome.loot);
-                    }
-                })
-                parent.tooltip.bindStaticText(button, "Open character sheet to loot equipment from defeated fleet");
-                this.addChild(button);
+                this.addButton(502, 871, () => {
+                    parent.character_sheet.show(nn(outcome.winner).ships[0]);
+                    parent.character_sheet.setLoot(outcome.loot);
+                }, "battle-outcome-button-loot", undefined, "Open character sheet to loot equipment from defeated fleet");
 
-                button = new Phaser.Button(this.game, 766, 842, "battle-outcome-button-map", () => {
-                    // Exit battle and go back to map
+                this.addButton(924, 871, () => {
                     parent.exitBattle();
-                });
-                parent.tooltip.bindStaticText(button, "Exit the battle and go back to the map");
-                this.addChild(button);
+                }, "battle-outcome-button-map", undefined, "Exit the battle and go back to the map");
             } else {
-                let button = new Phaser.Button(this.game, 344, 842, "battle-outcome-button-revert", () => {
-                    // Revert just before battle
+                this.addButton(502, 871, () => {
                     parent.revertBattle();
-                });
-                parent.tooltip.bindStaticText(button, "Go back to where the fleet was before the battle happened");
-                this.addChild(button);
+                }, "battle-outcome-button-revert", undefined, "Go back to where the fleet was before the battle happened");
 
-                button = new Phaser.Button(this.game, 766, 842, "battle-outcome-button-menu", () => {
+                this.addButton(924, 871, () => {
                     // Quit the game, and go back to menu
                     parent.gameui.quitGame();
-                });
-                parent.tooltip.bindStaticText(button, "Quit the game, and go back to main menu");
-                this.addChild(button);
+                }, "battle-outcome-button-menu", undefined, "Quit the game, and go back to main menu");
             }
+
+            this.addText(780, 270, "You", "#ffffff", 20);
+            this.addText(980, 270, "Enemy", "#ffffff", 20);
+            stats.getImportant(10).forEach((stat, index) => {
+                this.addText(500, 314 + 40 * index, stat.name, "#ffffff", 20);
+                this.addText(780, 314 + 40 * index, stat.attacker.toString(), "#8ba883", 20, true);
+                this.addText(980, 314 + 40 * index, stat.defender.toString(), "#cd6767", 20, true);
+            });
+
+            this.setPositionInsideParent(0.5, 0.5);
         }
     }
 }

@@ -148,4 +148,4 @@ except for area damage and area effects specifically designed for drones.
 
 * 1,2,3...0 - Select action
 * Space - End current ship's turn
-* T - Tactical mode for 5 seconds
+* T - Tactical mode for 3 seconds

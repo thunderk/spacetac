@@ -28,7 +28,6 @@
 * Add actions with cost dependent of distance (like current move actions)
 * Keep move and drone actions out of arena borders
 * Find incentives to move from starting position
-* Outcome: add battle statistics and/or honors
 * Outcome: disable the loot button if there is no loot
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
 * Controls: do not focus on ship while targetting for area effects (dissociate hover and target)
@@ -45,6 +44,8 @@
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
 * AI: apply safety distances to move actions
+* AI: evaluate buffs/debuffs
+* AI: abandon fight
 * AI: add combination of random small move and actual maneuver, as producer
 * AI: new duel page with producers/evaluators tweaking
 * AI: work in a dedicated process

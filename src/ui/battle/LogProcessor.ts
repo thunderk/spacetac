@@ -35,6 +35,7 @@ module TS.SpaceTac.UI {
         start() {
             this.subscription = this.log.subscribe(event => this.processBattleEvent(event));
             this.battle.injectInitialEvents();
+            this.battle.stats.watchLog(this.battle.log, this.view.player.fleet);
         }
 
         /**

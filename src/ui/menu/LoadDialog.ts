@@ -13,8 +13,8 @@ module TS.SpaceTac.UI {
         constructor(parent: MainMenu) {
             super(parent, 1344, 566, "menu-load-bg");
 
-            this.addButton(600, 115, () => this.paginateSave(-1), "common-arrow", "common-arrow", 180);
-            this.addButton(1038, 115, () => this.paginateSave(1), "common-arrow", "common-arrow", 0);
+            this.addButton(600, 115, () => this.paginateSave(-1), "common-arrow", "common-arrow", "Scroll to newer saves", 180);
+            this.addButton(1038, 115, () => this.paginateSave(1), "common-arrow", "common-arrow", "Scroll to older saves", 0);
             this.addButton(1224, 115, () => this.load(), "common-button-ok");
             this.addButton(1224, 341, () => this.join(), "common-button-ok");
 

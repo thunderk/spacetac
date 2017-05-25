@@ -257,9 +257,8 @@ module TS.SpaceTac.UI {
 
                 this.gameui.session.setBattleEnded();
 
-                let dialog = new OutcomeDialog(this, this.player, this.battle.outcome);
-                dialog.position.set(this.getMidWidth() - dialog.width / 2, this.getMidHeight() - dialog.height / 2);
-                this.outcome_layer.addChild(dialog);
+                let dialog = new OutcomeDialog(this, this.player, this.battle.outcome, this.battle.stats);
+                dialog.moveToLayer(this.outcome_layer);
             } else {
                 console.error("Battle not ended !");
             }
