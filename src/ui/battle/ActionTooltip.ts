@@ -7,7 +7,8 @@ module TS.SpaceTac.UI {
          * Fill the tooltip
          */
         static fill(filler: TooltipFiller, ship: Ship, action: BaseAction, position: number) {
-            filler.addImage(0, 0, "battle-actions-" + action.code, 0.5);
+            let icon = filler.view.getImage(`equipment-${action.equipment ? action.equipment.code : "---"}`, `battle-actions-${action.code}`);
+            filler.addImage(0, 0, icon, 0.5);
 
             filler.addText(150, 0, action.equipment ? action.equipment.name : action.name, "#ffffff", 24);
 

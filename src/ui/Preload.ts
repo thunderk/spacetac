@@ -55,10 +55,6 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/arena/blast.png");
             this.loadImage("battle/actions/move.png");
             this.loadImage("battle/actions/endturn.png");
-            this.loadImage("battle/actions/fire-gatlinggun.png");
-            this.loadImage("battle/actions/fire-powerdepleter.png");
-            this.loadImage("battle/actions/fire-submunitionmissile.png");
-            this.loadImage("battle/actions/deploy-repairdrone.png");
             this.loadImage("battle/weapon/default.png");
             this.loadImage("battle/weapon/bullets.png");
             this.loadImage("battle/weapon/hot.png");
@@ -103,6 +99,10 @@ module TS.SpaceTac.UI {
             this.loadImage("equipment/forcefield.png");
             this.loadImage("equipment/nuclearreactor.png");
             this.loadImage("equipment/rocketengine.png");
+            this.loadImage("equipment/gatlinggun.png");
+            this.loadImage("equipment/powerdepleter.png");
+            this.loadImage("equipment/submunitionmissile.png");
+            this.loadImage("equipment/repairdrone.png");
 
             // Load ships
             this.loadShip("avenger");

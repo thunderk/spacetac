@@ -35,7 +35,7 @@ module TS.SpaceTac.UI {
         price: number
 
         constructor(sheet: CharacterSheet, equipment: Equipment, container: CharacterEquipmentContainer) {
-            let icon = sheet.game.cache.checkImageKey(`equipment-${equipment.code}`) ? `equipment-${equipment.code}` : `battle-actions-${equipment.action.code}`;
+            let icon = sheet.view.getImage(`equipment-${equipment.code}`, `battle-actions-${equipment.action.code}`);
             super(sheet.game, 0, 0, icon);
 
             this.sheet = sheet;

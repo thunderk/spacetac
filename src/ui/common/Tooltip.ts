@@ -82,6 +82,10 @@ module TS.SpaceTac.UI {
             this.container = container;
         }
 
+        get view(): BaseView {
+            return this.container.view;
+        }
+
         /**
          * Configure the positioning and base style of the tooltip
          */

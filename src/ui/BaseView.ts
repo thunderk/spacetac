@@ -159,5 +159,13 @@ module TS.SpaceTac.UI {
             let pos = this.input.mousePointer.position;
             return pos.x >= area.x && pos.x < area.x + area.width && pos.y >= area.y && pos.y < area.y + area.height;
         }
+
+        /**
+         * Get the first image found in cache
+         */
+        getImage(...keys: string[]): string {
+            let found = first(keys, key => this.game.cache.checkImageKey(key));
+            return found ? found : "default";
+        }
     }
 }
