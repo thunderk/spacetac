@@ -103,6 +103,7 @@ module TS.SpaceTac.UI {
             this.loadImage("equipment/powerdepleter.png");
             this.loadImage("equipment/submunitionmissile.png");
             this.loadImage("equipment/repairdrone.png");
+            this.loadImage("equipment/shieldtransfer.png");
 
             // Load ships
             this.loadShip("avenger");

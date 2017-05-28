@@ -5,7 +5,7 @@ module TS.SpaceTac {
             expect(ship.getAttribute("initiative")).toBe(0);
 
             let effect = new AttributeEffect("initiative", 20);
-            effect.applyOnShip(ship);
+            effect.applyOnShip(ship, ship);
             expect(ship.getAttribute("initiative")).toBe(0);
 
             ship.sticky_effects.push(new StickyEffect(effect, 2));

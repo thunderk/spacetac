@@ -61,7 +61,7 @@ module TS.SpaceTac {
                 }
 
                 ships.forEach(ship => {
-                    this.effects.forEach(effect => effect.applyOnShip(ship));
+                    this.effects.forEach(effect => effect.applyOnShip(ship, this));
                 });
             }
         }

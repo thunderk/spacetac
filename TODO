@@ -22,6 +22,7 @@
 * Arena: add auto-move to attack
 * Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
 * Arena: add engine trail
+* Fix capacity limit effect not refreshing associated value (for example, on "limit power capacity to 3", potential "power" value change is not broadcast)
 * Actions: show power usage/recovery in power bar, on action hover
 * Actions: fix targetting not resetting when using keyboard shortcuts
 * Suspend AI operation when the game is paused (window not focused)
@@ -59,7 +60,6 @@
 
 Equipment ideas:
 * Shield with toggle effect that absorbs damage in an area
-* Shield stealing ability
 * Drive with minimal distance
 * Cooldown drone or ability
 

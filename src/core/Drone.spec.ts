@@ -11,7 +11,7 @@ module TS.SpaceTac {
             super("fake");
         }
 
-        applyOnShip(ship: Ship): boolean {
+        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
             this.applied.push(ship);
             return true;
         }

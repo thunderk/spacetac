@@ -29,17 +29,17 @@ module TS.SpaceTac {
             this.on_turn_end = on_turn_end;
         }
 
-        applyOnShip(ship: Ship): boolean {
+        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
             ship.addStickyEffect(new StickyEffect(this.base, this.duration, this.on_stick, this.on_turn_end));
             if (this.on_stick) {
-                this.base.applyOnShip(ship);
+                this.base.applyOnShip(ship, source);
             }
             return true;
         }
 
         private applyOnce(ship: Ship) {
             if (this.duration > 0) {
-                this.base.applyOnShip(ship);
+                this.base.applyOnShip(ship, ship);  // FIXME Does not remember the source
                 this.duration--;
                 ship.addBattleEvent(new EffectDurationChangedEvent(ship, this, this.duration + 1));
             }

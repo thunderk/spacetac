@@ -46,7 +46,7 @@ module TS.SpaceTac {
             return [shield, hull];
         }
 
-        applyOnShip(ship: Ship): boolean {
+        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
             let [shield, hull] = this.getEffectiveDamage(ship);
 
             ship.addDamage(hull, shield);

@@ -89,7 +89,7 @@ module TS.SpaceTac {
 
             // Apply effects
             let effects = this.getEffects(ship, target);
-            effects.forEach(([ship, effect]) => effect.applyOnShip(ship));
+            effects.forEach(([ship_target, effect]) => effect.applyOnShip(ship_target, ship));
         }
 
         getEffectsDescription(): string {

@@ -16,12 +16,24 @@
    version="1.1"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="actions.svg"
-   inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/equipment/conventionalengine.png"
+   inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/equipment/shieldtransfer.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    viewBox="0 0 256 256">
   <defs
      id="defs4">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4958">
+      <stop
+         style="stop-color:#9ebace;stop-opacity:1;"
+         offset="0"
+         id="stop4954" />
+      <stop
+         style="stop-color:#2d3e4a;stop-opacity:1"
+         offset="1"
+         id="stop4956" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient4679">
@@ -528,6 +540,41 @@
        fx="128"
        fy="128"
        r="28.160706" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4769-3"
+       x="-0.044399999"
+       width="1.0888"
+       y="-0.044399999"
+       height="1.0888">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="4.0378356"
+         id="feGaussianBlur4771-6" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4950"
+       x="-0.10951855"
+       width="1.2190371"
+       y="-0.37182222"
+       height="1.7436444">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="11.884128"
+         id="feGaussianBlur4952" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4958"
+       id="linearGradient4974"
+       gradientUnits="userSpaceOnUse"
+       x1="20.205349"
+       y1="108.47467"
+       x2="279.88568"
+       y2="110.07293" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -536,11 +583,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8"
-     inkscape:cx="85.018999"
-     inkscape:cy="156.22142"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="3.8613642"
+     inkscape:cy="88.185766"
      inkscape:document-units="px"
-     inkscape:current-layer="layer9"
+     inkscape:current-layer="layer10"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1030"
@@ -627,7 +674,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="fire-gatlinggun"
+     inkscape:label="GatlingGun"
      style="display:none">
     <g
        id="g10561"
@@ -764,7 +811,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer4"
-     inkscape:label="fire-energydepleter"
+     inkscape:label="EnergyDepleter"
      style="display:none">
     <g
        id="g4573"
@@ -784,7 +831,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer5"
-     inkscape:label="fire-submunitionmissile"
+     inkscape:label="SubMunitionMissile"
      style="display:none">
     <rect
        style="opacity:1;fill:url(#linearGradient10832);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0;filter:url(#filter10824)"
@@ -883,7 +930,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer6"
-     inkscape:label="equipment-ironhull"
+     inkscape:label="IronHull"
      style="display:none">
     <g
        sodipodi:type="inkscape:box3d"
@@ -1051,7 +1098,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer7"
-     inkscape:label="equipment-basicforcefield"
+     inkscape:label="ForceField"
      style="display:none">
     <circle
        r="109.13069"
@@ -1075,7 +1122,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer8"
-     inkscape:label="equipment-basicpowercore"
+     inkscape:label="NuclearReactor"
      style="display:none">
     <rect
        y="22.903906"
@@ -1133,7 +1180,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer9"
-     inkscape:label="equipment-conventionalengine">
+     inkscape:label="RocketEngine"
+     style="display:none">
     <path
        style="fill:#5c5c5c;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.80787265;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.3148936"
        d="M 62.293697,65.13217 H 193.7063 l 18.23066,96.85031 H 44.063047 Z"
@@ -1215,5 +1263,87 @@
        width="100%"
        height="100%"
        transform="translate(140.52792)" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer10"
+     inkscape:label="ShieldTransfer"
+     style="display:inline">
+    <g
+       id="g4936"
+       transform="matrix(0.86849352,0,0,0.86849352,21.648667,33.463089)">
+      <circle
+         style="display:inline;fill:#b8bbbd;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.83975744;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4769-3)"
+         id="circle4763-7"
+         cx="24.875"
+         cy="128"
+         r="109.13069" />
+      <circle
+         r="98.321274"
+         cy="128"
+         cx="24.875"
+         id="path4757-5"
+         style="display:inline;fill:#30383d;fill-opacity:1;fill-rule:evenodd;stroke:#b2d2e6;stroke-width:12.15708542;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         style="display:inline;fill:#30383d;fill-opacity:1;fill-rule:evenodd;stroke:#8aa2b1;stroke-width:9.40014172;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="circle4908"
+         cx="24.875"
+         cy="128"
+         r="76.0243" />
+      <circle
+         r="55.511082"
+         cy="128"
+         cx="24.875"
+         id="circle4910"
+         style="display:inline;fill:#30383d;fill-opacity:1;fill-rule:evenodd;stroke:#5a7281;stroke-width:6.86375332;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         style="display:inline;fill:#30383d;fill-opacity:1;fill-rule:evenodd;stroke:#3f5664;stroke-width:4.87875366;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="circle4912"
+         cx="24.875"
+         cy="128"
+         r="39.45726" />
+    </g>
+    <g
+       id="g4929"
+       transform="translate(-23.675449,18.940359)">
+      <circle
+         transform="matrix(0.58954038,0,0,0.58954038,97.13471,29.450476)"
+         r="109.13069"
+         cy="71.75"
+         cx="268.625"
+         id="circle4914"
+         style="display:inline;fill:#b8bbbd;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.83975744;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4769-3)" />
+      <circle
+         style="display:inline;fill:#30383d;fill-opacity:1;fill-rule:evenodd;stroke:#2c353c;stroke-width:7.1670928;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="circle4916"
+         cx="255.5"
+         cy="71.75"
+         r="57.964359" />
+      <circle
+         r="44.819393"
+         cy="71.75"
+         cx="255.5"
+         id="circle4918"
+         style="display:inline;fill:#30383d;fill-opacity:1;fill-rule:evenodd;stroke:#5c6367;stroke-width:5.54176331;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <circle
+         style="display:inline;fill:#30383d;fill-opacity:1;fill-rule:evenodd;stroke:#6c808d;stroke-width:4.04645967;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         id="circle4920"
+         cx="255.5"
+         cy="71.75"
+         r="32.726025" />
+      <circle
+         r="23.261648"
+         cy="71.75"
+         cx="255.5"
+         id="circle4922"
+         style="display:inline;fill:#30383d;fill-opacity:1;fill-rule:evenodd;stroke:#87a4b4;stroke-width:2.87622237;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <path
+       style="opacity:0.85199998;fill:url(#linearGradient4974);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter4950)"
+       d="M 24.148957,70.857989 36.265129,110.76713 24.148957,147.56644 155.78446,121.52345 279.99551,143.25563 263.75596,112.04928 279.99551,82.646476 154.83744,89.324839 Z"
+       id="path4940"
+       inkscape:connector-curvature="0"
+       transform="matrix(-0.92576699,0.28645103,-0.28645103,-0.92576699,308.06375,180.7838)"
+       sodipodi:nodetypes="ccccccccc" />
   </g>
 </svg>

@@ -20,7 +20,7 @@ module TS.SpaceTac {
             this.value = value;
         }
 
-        applyOnShip(ship: Ship): boolean {
+        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
             return ship.setValue(this.valuetype, this.value, true);
         }
 

@@ -14,7 +14,7 @@ module TS.SpaceTac {
 
         it("applies effects to alive ships in blast radius", function () {
             let fleet = new Fleet();
-            let ship = new Ship(fleet);
+            let ship = new Ship(fleet, "ship");
             let equipment = new Equipment(SlotType.Weapon, "testweapon");
             let effect = new BaseEffect("testeffect");
             let mock_apply = spyOn(effect, "applyOnShip").and.stub();
@@ -22,11 +22,11 @@ module TS.SpaceTac {
 
             TestTools.setShipAP(ship, 10);
 
-            let ship1 = new Ship(fleet);
+            let ship1 = new Ship(fleet, "ship1");
             ship1.setArenaPosition(65, 72);
-            let ship2 = new Ship(fleet);
+            let ship2 = new Ship(fleet, "ship2");
             ship2.setArenaPosition(45, 48);
-            let ship3 = new Ship(fleet);
+            let ship3 = new Ship(fleet, "ship3");
             ship3.setArenaPosition(45, 48);
             ship3.alive = false;
 
@@ -37,7 +37,7 @@ module TS.SpaceTac {
 
             action.apply(ship, Target.newFromLocation(50, 50));
             expect(mock_apply).toHaveBeenCalledTimes(1);
-            expect(mock_apply).toHaveBeenCalledWith(ship2);
+            expect(mock_apply).toHaveBeenCalledWith(ship2, ship);
         });
 
         it("transforms ship target in location target, when the weapon has blast radius", function () {

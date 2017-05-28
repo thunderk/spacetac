@@ -8,10 +8,10 @@ module TS.SpaceTac {
             ship.setValue("shield", 55);
             expect(ship.values.shield.get()).toEqual(55);
 
-            effect.applyOnShip(ship);
+            effect.applyOnShip(ship, ship);
             expect(ship.values.shield.get()).toEqual(75);
 
-            effect.applyOnShip(ship);
+            effect.applyOnShip(ship, ship);
             expect(ship.values.shield.get()).toEqual(80);
         });
 
