@@ -157,7 +157,11 @@ module TS.SpaceTac.UI {
          * Fill a tooltip with equipment data
          */
         fillTooltip(filler: TooltipFiller): boolean {
-            filler.addText(0, 0, this.item.getFullName(), "#cccccc", 20, false, true);
+            let title = this.item.getFullName();
+            if (this.item.slot_type !== null) {
+                title += ` (${SlotType[this.item.slot_type]})`;
+            }
+            filler.addText(0, 0, title, "#cccccc", 20, false, true);
             filler.addText(0, 40, this.item.getFullDescription(), "#cccccc", 18, false, false, 700);
             return true;
         }

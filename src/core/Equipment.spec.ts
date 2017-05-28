@@ -2,13 +2,13 @@ module TS.SpaceTac.Specs {
     describe("Equipment", () => {
         it("generates a full name", function () {
             let equipment = new Equipment(SlotType.Weapon, "rayofdeath");
-            expect(equipment.getFullName()).toEqual("Level 1 rayofdeath");
+            expect(equipment.getFullName()).toEqual("rayofdeath Mk1");
 
             equipment.name = "Ray of Death";
-            expect(equipment.getFullName()).toEqual("Level 1 Ray of Death");
+            expect(equipment.getFullName()).toEqual("Ray of Death Mk1");
 
             equipment.quality = EquipmentQuality.LEGENDARY;
-            expect(equipment.getFullName()).toEqual("Level 1 Legendary Ray of Death");
+            expect(equipment.getFullName()).toEqual("Legendary Ray of Death Mk1");
         });
 
         it("checks capabilities requirements", function () {

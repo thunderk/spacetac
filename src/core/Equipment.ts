@@ -70,7 +70,7 @@ module TS.SpaceTac {
             if (this.quality != EquipmentQuality.COMMON) {
                 name = capitalize(EquipmentQuality[this.quality].toLowerCase()) + " " + name;
             }
-            return `Level ${this.level} ${name}`;
+            return `${name} Mk${this.level}`;
         }
 
         /**
