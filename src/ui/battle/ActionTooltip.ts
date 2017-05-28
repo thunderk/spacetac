@@ -30,19 +30,19 @@ module TS.SpaceTac.UI {
                 }
             }
             if (cost) {
-                filler.addText(150, 50, cost, "#ffdd4b", 20);
+                filler.addText(150, 40, cost, "#ffdd4b", 20);
             }
 
             if (action.equipment && action.equipment.cooldown.overheat) {
                 let cooldown = action.equipment.cooldown;
                 if (cooldown.heat > 0) {
-                    filler.addText(150, 90, "Cooling down ...", "#c9604c", 20);
+                    filler.addText(150, 80, "Cooling down ...", "#c9604c", 20);
                 } else if (cooldown.willOverheat() && cost != "Not enough power") {
                     if (cooldown.cooling > 1) {
                         let turns = cooldown.cooling;
-                        filler.addText(150, 90, `Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, "#c9604c", 20);
+                        filler.addText(150, 80, `Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, "#c9604c", 20);
                     } else {
-                        filler.addText(150, 90, "Unavailable until next turn if used", "#c9604c", 20);
+                        filler.addText(150, 80, "Unavailable until next turn if used", "#c9604c", 20);
                     }
                 }
             }
@@ -61,7 +61,7 @@ module TS.SpaceTac.UI {
                 shortcut = `[ ${position + 1} ]`;
             }
             if (shortcut) {
-                filler.addText(0, 0, shortcut, "#aaaaaa", 12);
+                filler.addText(150, 120, shortcut, "#aaaaaa", 12);
             }
         }
     }
