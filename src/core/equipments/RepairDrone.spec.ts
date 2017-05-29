@@ -5,26 +5,26 @@ module TS.SpaceTac.Equipments {
 
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_human": 1 });
-            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 300, 10, 100, [new ValueEffect("hull", 5)]));
+            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 300, 10, 150, [new ValueEffect("hull", 5)]));
 
             equipment = template.generate(2);
             expect(equipment.requirements).toEqual({ "skill_human": 2 });
-            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 310, 11, 110, [new ValueEffect("hull", 6)]));
+            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 310, 11, 155, [new ValueEffect("hull", 6)]));
 
             equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_human": 3 });
-            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 320, 12, 120, [new ValueEffect("hull", 7)]));
+            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 320, 12, 160, [new ValueEffect("hull", 7)]));
 
             equipment = template.generate(10);
             expect(equipment.requirements).toEqual({ "skill_human": 10 });
-            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 390, 19, 190, [new ValueEffect("hull", 14)]));
+            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 390, 19, 195, [new ValueEffect("hull", 14)]));
         });
 
         it("generates a drone that may repair ships hull", function () {
             let template = new RepairDrone();
 
             let equipment = template.generate(1);
-            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 300, 10, 100, [new ValueEffect("hull", 5)]));
+            expect(equipment.action).toEqual(new DeployDroneAction(equipment, 4, 300, 10, 150, [new ValueEffect("hull", 5)]));
 
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();

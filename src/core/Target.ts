@@ -2,17 +2,31 @@ module TS.SpaceTac {
     // Find the nearest intersection between a line and a circle
     //  Circle is supposed to be centered at (0,0)
     //  Nearest intersection to (x1,y1) is returned
-    function intersectLineCircle(x1: number, y1: number, x2: number, y2: number, r: number): [number, number] {
-        // See http://mathworld.wolfram.com/Circle-LineIntersection.html
-        var dx = x2 - x1;
-        var dy = y2 - y1;
-        var dr = Math.sqrt(dx * dx + dy * dy);
-        var d = x1 * y2 - x2 * y1;
-        var delta = r * r * dr * dr - d * d;
+    function intersectLineCircle(x1: number, y1: number, x2: number, y2: number, r: number): [number, number] | null {
+        let a = y2 - y1;
+        let b = -(x2 - x1);
+        let c = -(a * x1 + b * y1);
+        let x0 = -a * c / (a * a + b * b), y0 = -b * c / (a * a + b * b);
+        let EPS = 10e-8;
+        if (c * c > r * r * (a * a + b * b) + EPS) {
+            return null;
+        } else if (Math.abs(c * c - r * r * (a * a + b * b)) < EPS) {
+            return [x0, y0];
+        } else {
+            let d = r * r - c * c / (a * a + b * b);
+            let mult = Math.sqrt(d / (a * a + b * b));
+            let ax, ay, bx, by;
+            ax = x0 + b * mult;
+            bx = x0 - b * mult;
+            ay = y0 - a * mult;
+            by = y0 + a * mult;
 
-        var rx = (d * dy - dx * Math.sqrt(delta)) / (dr * dr);
-        var ry = (-d * dx - dy * Math.sqrt(delta)) / (dr * dr);
-        return [rx, ry];
+            let candidates: [number, number][] = [
+                [x0 + b * mult, y0 - a * mult],
+                [x0 - b * mult, y0 + a * mult]
+            ]
+            return minBy(candidates, ([x, y]) => Math.sqrt((x - x1) * (x - x1) + (y - y1) * (y - y1)));
+        }
     }
 
     // Target for a capability
@@ -99,9 +113,12 @@ module TS.SpaceTac {
                 return this;
             } else {
                 // Find nearest intersection with circle
-                var res = intersectLineCircle(sourcex - circlex, sourcey - circley,
-                    this.x - circlex, this.y - circley, radius);
-                return Target.newFromLocation(res[0] + circlex, res[1] + circley);
+                var res = intersectLineCircle(sourcex - circlex, sourcey - circley, dx, dy, radius);
+                if (res) {
+                    return Target.newFromLocation(res[0] + circlex, res[1] + circley);
+                } else {
+                    return this;
+                }
             }
         }
     }

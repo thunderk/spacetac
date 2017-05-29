@@ -412,6 +412,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the distance to another ship
+         */
+        getDistanceTo(other: Ship): number {
+            return Target.newFromShip(this).getDistanceTo(Target.newFromShip(other));
+        }
+
+        /**
          * Rotate the ship in place to face a direction
          */
         rotate(angle: number, log = true) {

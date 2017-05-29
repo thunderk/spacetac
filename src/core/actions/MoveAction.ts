@@ -2,19 +2,19 @@ module TS.SpaceTac {
     // Action to move to a given location
     export class MoveAction extends BaseAction {
         // Distance allowed for each power point
-        distance_per_power: number;
+        distance_per_power: number
 
-        // Safety distance from other ships
-        safety_distance: number;
+        // Safety distance from other ships and arena borders
+        safety_distance: number
 
         // Equipment cannot be null (engine)
-        equipment: Equipment;
+        equipment: Equipment
 
         constructor(equipment: Equipment, distance_per_power = 0) {
             super("move", "Move", true, equipment);
 
             this.distance_per_power = distance_per_power;
-            this.safety_distance = 50;
+            this.safety_distance = 120;
         }
 
         checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): string | null {
@@ -62,11 +62,10 @@ module TS.SpaceTac {
             // Apply collision prevention
             let battle = ship.getBattle();
             if (battle) {
-                battle.play_order.forEach((iship: Ship) => {
-                    if (iship !== ship) {
-                        target = target.moveOutOfCircle(iship.arena_x, iship.arena_y, this.safety_distance,
-                            ship.arena_x, ship.arena_y);
-                    }
+                let ships = imaterialize(ifilter(battle.iships(true), s => s !== ship));
+                ships = ships.sort((a, b) => cmp(a.getDistanceTo(ship), b.getDistanceTo(ship), true));
+                ships.forEach(s => {
+                    target = target.moveOutOfCircle(s.arena_x, s.arena_y, this.safety_distance, ship.arena_x, ship.arena_y);
                 });
             }
 
