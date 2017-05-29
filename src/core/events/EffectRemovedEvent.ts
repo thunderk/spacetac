@@ -1,4 +1,4 @@
-/// <reference path="BaseLogEvent.ts"/>
+/// <reference path="BaseBattleEvent.ts"/>
 
 module TS.SpaceTac {
     // Event logged when a sticky effect is removed from a ship

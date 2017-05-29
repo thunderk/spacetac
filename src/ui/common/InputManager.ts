@@ -5,6 +5,7 @@ module TS.SpaceTac.UI {
      * Manager for keyboard/mouse/touch events.
      */
     export class InputManager {
+        private debug = false
         private view: BaseView
         private game: MainUI
         private input: Phaser.Input
@@ -48,7 +49,10 @@ module TS.SpaceTac.UI {
             });
 
             this.input.keyboard.addCallbacks(this, undefined, (event: KeyboardEvent) => {
-                // console.debug(event);
+                if (this.debug) {
+                    console.log(event);
+                }
+
                 if (!contains(["Control", "Shift", "Alt", "Meta"], event.key)) {
                     this.keyPress(event.key);
                     if (event.code != event.key) {

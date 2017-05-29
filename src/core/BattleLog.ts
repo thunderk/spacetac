@@ -2,14 +2,14 @@ module TS.SpaceTac {
     /**
      * Function called to inform subscribers of new events.
      */
-    export type LogSubscriber = (event: BaseLogEvent) => any;
+    export type LogSubscriber = (event: BaseBattleEvent) => any;
 
     // Log of a battle
     //  This keeps track of all events in a battle
     //  It also allows to register a callback to receive these events
     export class BattleLog {
         // Full list of battle events
-        events: BaseLogEvent[];
+        events: BaseBattleEvent[];
 
         // List of subscribers
         private subscribers: LogSubscriber[];
@@ -34,7 +34,7 @@ module TS.SpaceTac {
         }
 
         // Add a battle event to the log
-        add(event: BaseLogEvent): void {
+        add(event: BaseBattleEvent): void {
             // Apply filters
             var filtered = false;
             this.filters.forEach((code: string) => {

@@ -85,7 +85,7 @@ module TS.SpaceTac {
             var encounter = this.tryGenerateEncounter();
             if (encounter) {
                 var battle = new Battle(fleet, encounter);
-                battle.log.subscribe((event: BaseLogEvent) => {
+                battle.log.subscribe((event: BaseBattleEvent) => {
                     if (event.code === "endbattle") {
                         var endbattle = <EndBattleEvent>event;
                         if (!endbattle.outcome.draw && endbattle.outcome.winner !== encounter) {

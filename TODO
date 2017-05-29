@@ -1,3 +1,4 @@
+* New battle internal flow: any game state change should be done through revertable events
 * UI: use a common component class, and a layer abstraction
 * Character sheet: add initial character creation
 * Character sheet: disable interaction during battle (except for loot screen)
@@ -23,7 +24,6 @@
 * Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
 * Arena: add engine trail
 * Arena: draw move exclusion circles and border (in move targetting only)
-* Remove "initial events" injection
 * Fix capacity limit effect not refreshing associated value (for example, on "limit power capacity to 3", potential "power" value change is not broadcast)
 * Actions: show power usage/recovery in power bar, on action hover
 * Actions: fix targetting not resetting when using keyboard shortcuts

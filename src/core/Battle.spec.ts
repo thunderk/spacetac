@@ -278,11 +278,9 @@ module TS.SpaceTac {
 
             // check initial log fill
             battle.drones = [drone];
-            battle.log.events = [];
-            battle.injectInitialEvents();
             let expected = new DroneDeployedEvent(drone);
             expected.initial = true;
-            expect(battle.log.events).toEqual([expected]);
+            expect(battle.getBootstrapEvents()).toEqual([expected]);
         });
 
         it("checks if a player is able to play", function () {

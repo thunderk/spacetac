@@ -124,7 +124,7 @@ module TS.SpaceTac.UI {
         /**
          * Process a battle log event
          */
-        private processLogEvent(event: BaseLogEvent): number {
+        private processLogEvent(event: BaseBattleEvent): number {
             if (event instanceof ShipChangeEvent) {
                 if (event.new_ship === this.ship) {
                     this.play_order.text = "";

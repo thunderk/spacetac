@@ -1,6 +1,12 @@
 module TS.SpaceTac.UI {
-    // Processor of battle log events
-    //  This will process incoming battle events, and update the battleview accordingly
+    /**
+     * Processor of events coming from the battle log
+     * 
+     * This will bind to the battle log to receive new events, and update 
+     * the battle view accordingly.
+     * 
+     * It is also possible to go back/forward in time.
+     */
     export class LogProcessor {
         // Link to the battle view
         private view: BattleView;
@@ -18,7 +24,7 @@ module TS.SpaceTac.UI {
         private delayed = false;
 
         // Processing queue, when delay is active
-        private queue: BaseLogEvent[] = [];
+        private queue: BaseBattleEvent[] = [];
 
         // Forward events to other subscribers
         private forwarding: LogSubscriber[] = [];
@@ -27,6 +33,19 @@ module TS.SpaceTac.UI {
             this.view = view;
             this.battle = view.battle;
             this.log = view.battle.log;
+
+            /*view.inputs.bindCheat("PageUp", "Step backward", () => {
+                this.stepBackward();
+            });
+            view.inputs.bindCheat("PageDown", "Step forward", () => {
+                this.stepForward();
+            });
+            view.inputs.bindCheat("Home", "Jump to beginning", () => {
+                this.jumpToStart();
+            });
+            view.inputs.bindCheat("End", "Jump to end", () => {
+                this.jumpToEnd();
+            });*/
         }
 
         /**
@@ -34,8 +53,7 @@ module TS.SpaceTac.UI {
          */
         start() {
             this.subscription = this.log.subscribe(event => this.processBattleEvent(event));
-            this.battle.injectInitialEvents();
-            this.battle.stats.watchLog(this.battle.log, this.view.player.fleet);
+            this.battle.getBootstrapEvents().forEach(event => this.processBattleEvent(event));
         }
 
         /**
@@ -46,7 +64,7 @@ module TS.SpaceTac.UI {
          * 
          * The callback may return the duration it needs to display the change.
          */
-        register(callback: (event: BaseLogEvent) => number) {
+        register(callback: (event: BaseBattleEvent) => number) {
             this.forwarding.push(event => {
                 let duration = callback(event);
                 if (duration) {
@@ -92,7 +110,7 @@ module TS.SpaceTac.UI {
         /**
          * Process a single event
          */
-        processBattleEvent(event: BaseLogEvent) {
+        processBattleEvent(event: BaseBattleEvent) {
             if (!this.subscription) {
                 return;
             }

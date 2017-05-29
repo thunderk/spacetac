@@ -271,20 +271,22 @@ module TS.SpaceTac {
             this.throwInitiative();
             iforeach(this.iships(), ship => ship.startBattle());
             this.advanceToNextShip();
+
+            // For now, we inject bootstrap events in the log
+            this.getBootstrapEvents().forEach(event => this.log.add(event));
         }
 
-        // Force an injection of events in the battle log to simulate the initial state
-        //  For instance, this may be called after 'start', to use the log subscription system
-        //  to initialize a battle UI
-        //  Attributes 'play_order' and 'playing_ship' should be defined before calling this
-        injectInitialEvents(): void {
-            var log = this.log;
+        /**
+         * Get a set of minimal events required to reach current state from an empty state.
+         */
+        getBootstrapEvents(): BaseBattleEvent[] {
+            let result: BaseBattleEvent[] = [];
 
             // Simulate initial ship placement
             this.play_order.forEach(ship => {
                 let event = new MoveEvent(ship, ship.arena_x, ship.arena_y, 0);
                 event.initial = true;
-                log.add(event);
+                result.push(event);
             });
 
             // Indicate emergency stasis
@@ -292,7 +294,7 @@ module TS.SpaceTac {
                 if (!ship.alive) {
                     let event = new DeathEvent(ship);
                     event.initial = true;
-                    log.add(event);
+                    result.push(event);
                 }
             });
 
@@ -300,15 +302,17 @@ module TS.SpaceTac {
             this.drones.forEach(drone => {
                 let event = new DroneDeployedEvent(drone);
                 event.initial = true;
-                log.add(event);
+                result.push(event);
             });
 
             // Simulate game turn
             if (this.playing_ship) {
                 let event = new ShipChangeEvent(this.playing_ship, this.playing_ship);
                 event.initial = true;
-                log.add(event);
+                result.push(event);
             }
+
+            return result;
         }
 
         /**

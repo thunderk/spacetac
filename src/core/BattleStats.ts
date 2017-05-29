@@ -35,10 +35,12 @@ module TS.SpaceTac {
         }
 
         /**
-         * Watch a battle log to automatically feed the collector
+         * Process a battle log
          */
-        watchLog(log: BattleLog, attacker: Fleet) {
-            log.subscribe(event => {
+        processLog(log: BattleLog, attacker: Fleet) {
+            this.stats = {};
+
+            log.events.forEach(event => {
                 if (event instanceof DamageEvent) {
                     this.addStat("Damage dealt", event.hull + event.shield, event.ship.fleet !== attacker);
                 } else if (event instanceof MoveEvent) {

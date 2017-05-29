@@ -196,7 +196,7 @@ module TS.SpaceTac {
         }
 
         // Add an event to the battle log, if any
-        addBattleEvent(event: BaseLogEvent): void {
+        addBattleEvent(event: BaseBattleEvent): void {
             var battle = this.getBattle();
             if (battle && battle.log) {
                 battle.log.add(event);

@@ -1,4 +1,4 @@
-/// <reference path="BaseLogEvent.ts"/>
+/// <reference path="BaseBattleEvent.ts"/>
 
 module TS.SpaceTac {
     // Battle event, when a ship turn ended, and advanced to a new one

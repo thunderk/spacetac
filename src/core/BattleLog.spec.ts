@@ -1,8 +1,8 @@
-/// <reference path="events/BaseLogEvent.ts"/>
+/// <reference path="events/BaseBattleEvent.ts"/>
 
 module TS.SpaceTac {
     // Check a single game log event
-    function checkEvent(got: BaseLogEvent, ship: Ship, code: string,
+    function checkEvent(got: BaseBattleEvent, ship: Ship, code: string,
         target_ship: Ship | null = null, target_x: number | null = null, target_y: number | null = null): void {
         if (target_ship) {
             if (target_x === null) {
@@ -33,7 +33,7 @@ module TS.SpaceTac {
     }
 
     // Fake event
-    class FakeEvent extends BaseLogEvent {
+    class FakeEvent extends BaseBattleEvent {
         constructor() {
             super("fake", new Ship());
         }
@@ -42,10 +42,10 @@ module TS.SpaceTac {
     describe("BattleLog", function () {
         it("forwards events to subscribers, until unsubscribe", function () {
             var log = new BattleLog();
-            var received: BaseLogEvent[] = [];
+            var received: BaseBattleEvent[] = [];
             var fake = new FakeEvent();
 
-            var sub = log.subscribe(function (event: BaseLogEvent) {
+            var sub = log.subscribe(function (event: BaseBattleEvent) {
                 received.push(event);
             });
 
@@ -74,18 +74,14 @@ module TS.SpaceTac {
         it("can receive simulated initial state events", function () {
             let battle = Battle.newQuickRandom(true, 1, 4);
             let playing = nn(battle.playing_ship);
-            battle.log.clear();
-            battle.log.addFilter("value");
-            expect(battle.log.events.length).toBe(0);
 
-            battle.injectInitialEvents();
-
-            expect(battle.log.events.length).toBe(9);
+            let result = battle.getBootstrapEvents();
+            expect(result.length).toBe(9);
             for (var i = 0; i < 8; i++) {
-                checkEvent(battle.log.events[i], battle.play_order[i], "move", null,
+                checkEvent(result[i], battle.play_order[i], "move", null,
                     battle.play_order[i].arena_x, battle.play_order[i].arena_y);
             }
-            checkEvent(battle.log.events[8], playing, "ship_change", playing);
+            checkEvent(result[8], playing, "ship_change", playing);
         });
     });
 }

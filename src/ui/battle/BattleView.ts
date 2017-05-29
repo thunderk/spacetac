@@ -257,6 +257,8 @@ module TS.SpaceTac.UI {
 
                 this.gameui.session.setBattleEnded();
 
+                this.battle.stats.processLog(this.battle.log, this.player.fleet);
+
                 let dialog = new OutcomeDialog(this, this.player, this.battle.outcome, this.battle.stats);
                 dialog.moveToLayer(this.outcome_layer);
             } else {

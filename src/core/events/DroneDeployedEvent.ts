@@ -1,4 +1,4 @@
-/// <reference path="BaseLogEvent.ts"/>
+/// <reference path="BaseBattleEvent.ts"/>
 
 module TS.SpaceTac {
     // Event logged when a drone is deployed by a ship

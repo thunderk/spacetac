@@ -22,16 +22,19 @@ module TS.SpaceTac.Specs {
             let battle = new Battle();
             let attacker = battle.fleets[0].addShip();
             let defender = battle.fleets[1].addShip();
-            stats.watchLog(battle.log, battle.fleets[0]);
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({});
 
             battle.log.add(new DamageEvent(attacker, 10, 12));
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Damage dealt": [0, 22] });
 
             battle.log.add(new DamageEvent(defender, 40, 0));
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Damage dealt": [40, 22] });
 
             battle.log.add(new DamageEvent(attacker, 5, 4));
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Damage dealt": [40, 31] });
         })
 
@@ -40,13 +43,15 @@ module TS.SpaceTac.Specs {
             let battle = new Battle();
             let attacker = battle.fleets[0].addShip();
             let defender = battle.fleets[1].addShip();
-            stats.watchLog(battle.log, battle.fleets[0]);
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({});
 
             battle.log.add(new MoveEvent(attacker, 0, 0, 10));
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Move distance (km)": [10, 0] });
 
             battle.log.add(new MoveEvent(defender, 0, 0, 58));
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Move distance (km)": [10, 58] });
         })
 
@@ -55,13 +60,15 @@ module TS.SpaceTac.Specs {
             let battle = new Battle();
             let attacker = battle.fleets[0].addShip();
             let defender = battle.fleets[1].addShip();
-            stats.watchLog(battle.log, battle.fleets[0]);
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({});
 
             battle.log.add(new DroneDeployedEvent(new Drone(attacker)));
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Drones deployed": [1, 0] });
 
             battle.log.add(new DroneDeployedEvent(new Drone(defender)));
+            stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Drones deployed": [1, 1] });
         })
     })
