@@ -9,19 +9,42 @@
         * {
             margin: 0;
         }
-        
+
         body {
             background-color: #111;
             color: #eee;
         }
-        
+
         h1 {
             font-size: 30px;
         }
-        
+
         h2 {
             font-size: 22px;
             margin-top: 12px;
+        }
+
+        input[type="range"] {
+            position: relative;
+            margin-left: 1em;
+            width: 300px;
+        }
+
+        input[type="range"]:after,
+        input[type="range"]:before {
+            position: absolute;
+            top: 20px;
+            color: #aaa;
+        }
+
+        input[type="range"]:before {
+            left: 0em;
+            content: attr(min);
+        }
+
+        input[type="range"]:after {
+            right: 0em;
+            content: attr(max);
         }
     </style>
 </head>
@@ -32,26 +55,36 @@
 
     <div id="loot">
         <h1>SpaceTac - Loot Generator Samples</h1>
+        <input id="level" type="range" value="1" min="1" max="20" step="1" />
+        <div id="result"></div>
     </div>
 
     <script>
         window.onload = function () {
             var generator = new TS.SpaceTac.LootGenerator();
-            generator.templates.forEach(function (template) {
-                TS.range(5).forEach(function (level) {
+            var result = document.getElementById("result");
+
+            function update(level) {
+                result.innerHTML = "";
+                generator.templates.forEach(function (template) {
                     TS.iterenum(TS.SpaceTac.EquipmentQuality, function (quality) {
-                        var loot = template.generate(level + 1, quality);
+                        var loot = template.generate(level, quality);
 
                         let title = document.createElement("h2");
                         title.textContent = loot.getFullName() + " (Price " + loot.price.toString() + ")";
-                        document.body.appendChild(title);
+                        result.appendChild(title);
 
                         let description = document.createElement("pre");
                         description.textContent = loot.getFullDescription();
-                        document.body.appendChild(description);
+                        result.appendChild(description);
                     });
                 });
-            });
+            }
+
+            update(1);
+            document.getElementById("level").onchange = function () {
+                update(this.value);
+            }
         };
     </script>
 </body>
