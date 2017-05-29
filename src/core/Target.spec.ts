@@ -52,5 +52,11 @@ module TS.SpaceTac.Specs {
             expect(target.moveOutOfCircle(8, 5, 6, 0, 5)).toEqual(Target.newFromLocation(2, 5));
             expect(target.moveOutOfCircle(2, 5, 6, 10, 5)).toEqual(Target.newFromLocation(8, 5));
         });
+
+        it("keeps a target inside a rectangle", () => {
+            var target = Target.newFromLocation(5, 5);
+            expect(target.keepInsideRectangle(0, 0, 10, 10, 0, 0)).toBe(target);
+            expect(target.keepInsideRectangle(8, 0, 13, 10, 10, 5)).toEqual(Target.newFromLocation(8, 5));
+        });
     });
 }

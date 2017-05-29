@@ -59,9 +59,15 @@ module TS.SpaceTac {
             var max_distance = this.getRangeRadius(ship);
             target = target.constraintInRange(ship.arena_x, ship.arena_y, max_distance);
 
-            // Apply collision prevention
             let battle = ship.getBattle();
             if (battle) {
+                // Keep out of arena borders
+                let border = this.safety_distance * 0.5;
+                target = target.keepInsideRectangle(border, border,
+                    battle.width - border, battle.height - border,
+                    ship.arena_x, ship.arena_y);
+
+                // Apply collision prevention
                 let ships = imaterialize(ifilter(battle.iships(true), s => s !== ship));
                 ships = ships.sort((a, b) => cmp(a.getDistanceTo(ship), b.getDistanceTo(ship), true));
                 ships.forEach(s => {

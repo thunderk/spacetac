@@ -22,14 +22,13 @@
 * Arena: add auto-move to attack
 * Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
 * Arena: add engine trail
-* Arena: draw move exclusion circles (only on clonflict or in tactical mode ?)
+* Arena: draw move exclusion circles and border (in move targetting only)
 * Remove "initial events" injection
 * Fix capacity limit effect not refreshing associated value (for example, on "limit power capacity to 3", potential "power" value change is not broadcast)
 * Actions: show power usage/recovery in power bar, on action hover
 * Actions: fix targetting not resetting when using keyboard shortcuts
 * Suspend AI operation when the game is paused (window not focused)
 * Add actions with cost dependent of distance (like current move actions)
-* Keep move and drone actions out of arena borders
 * Find incentives to move from starting position
 * Outcome: disable the loot button if there is no loot
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)

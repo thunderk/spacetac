@@ -121,5 +121,36 @@ module TS.SpaceTac {
                 }
             }
         }
+
+        /**
+         * Keep the target inside a rectangle
+         * 
+         * May return the original target if it's already inside the rectangle
+         */
+        keepInsideRectangle(xmin: number, ymin: number, xmax: number, ymax: number, sourcex: number, sourcey: number): Target {
+            let length = this.getDistanceTo({ x: sourcex, y: sourcey });
+            let result: Target = this;
+            if (result.x < xmin) {
+                let factor = (xmin - sourcex) / (result.x - sourcex);
+                length *= factor;
+                result = result.constraintInRange(sourcex, sourcey, length);
+            }
+            if (result.x > xmax) {
+                let factor = (xmax - sourcex) / (result.x - sourcex);
+                length *= factor;
+                result = result.constraintInRange(sourcex, sourcey, length);
+            }
+            if (result.y < ymin) {
+                let factor = (ymin - sourcey) / (result.y - sourcey);
+                length *= factor;
+                result = result.constraintInRange(sourcex, sourcey, length);
+            }
+            if (result.y > ymax) {
+                let factor = (ymax - sourcey) / (result.y - sourcey);
+                length *= factor;
+                result = result.constraintInRange(sourcex, sourcey, length);
+            }
+            return result;
+        }
     }
 }
