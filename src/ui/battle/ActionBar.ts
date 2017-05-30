@@ -93,6 +93,13 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Check if an action is selected
+         */
+        hasActionSelected(): boolean {
+            return any(this.action_icons, icon => icon.selected);
+        }
+
+        /**
          * Set the interactivity state
          */
         setInteractive(interactive: boolean) {

@@ -100,7 +100,7 @@ module TS.SpaceTac.UI {
             this.layer_weapon_effects = this.add(new Phaser.Group(this.game));
             this.layer_targetting = this.add(new Phaser.Group(this.game));
 
-            this.layer_hints.add(this.range_hint);
+            this.range_hint.setLayer(this.layer_hints);
             this.addShipSprites();
         }
 
@@ -257,7 +257,7 @@ module TS.SpaceTac.UI {
          * Get the boundaries of the arena on display
          */
         getBoundaries(): IBounded {
-            return { x: 130, y: 140, width: 1920 - 138, height: 1080 - 148 };
+            return this.boundaries;
         }
     }
 }

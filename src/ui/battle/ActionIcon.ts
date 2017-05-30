@@ -84,8 +84,16 @@ module TS.SpaceTac.UI {
                 return true;
             });
             UITools.setHoverClick(this,
-                () => this.battleview.arena.range_hint.setSecondary(this.ship, this.action),
-                () => this.battleview.arena.range_hint.clearSecondary(),
+                () => {
+                    if (!this.bar.hasActionSelected()) {
+                        this.battleview.arena.range_hint.update(this.ship, this.action);
+                    }
+                },
+                () => {
+                    if (!this.bar.hasActionSelected()) {
+                        this.battleview.arena.range_hint.clear();
+                    }
+                },
                 () => this.processClick()
             );
 
@@ -113,7 +121,7 @@ module TS.SpaceTac.UI {
 
             // Update range hint
             if (this.battleview.arena.range_hint) {
-                this.battleview.arena.range_hint.setPrimary(this.ship, this.action);
+                this.battleview.arena.range_hint.update(this.ship, this.action);
             }
 
             // Update fading statuses
@@ -168,7 +176,7 @@ module TS.SpaceTac.UI {
             this.updateCooldownStatus();
             this.updateActiveStatus();
             this.updateFadingStatus(this.ship.values.power.get());
-            this.battleview.arena.range_hint.clearPrimary();
+            this.battleview.arena.range_hint.clear();
         }
 
         // Set the selected state on this icon
