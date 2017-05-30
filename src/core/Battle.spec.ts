@@ -38,23 +38,23 @@ module TS.SpaceTac {
             var battle = new Battle(fleet1, fleet2, 1000, 500);
             battle.placeShips();
 
-            expect(ship1.arena_x).toBeCloseTo(50, 0.0001);
+            expect(ship1.arena_x).toBeCloseTo(250, 0.0001);
             expect(ship1.arena_y).toBeCloseTo(150, 0.0001);
             expect(ship1.arena_angle).toBeCloseTo(0, 0.0001);
 
-            expect(ship2.arena_x).toBeCloseTo(50, 0.0001);
+            expect(ship2.arena_x).toBeCloseTo(250, 0.0001);
             expect(ship2.arena_y).toBeCloseTo(250, 0.0001);
             expect(ship2.arena_angle).toBeCloseTo(0, 0.0001);
 
-            expect(ship3.arena_x).toBeCloseTo(50, 0.0001);
+            expect(ship3.arena_x).toBeCloseTo(250, 0.0001);
             expect(ship3.arena_y).toBeCloseTo(350, 0.0001);
             expect(ship3.arena_angle).toBeCloseTo(0, 0.0001);
 
-            expect(ship4.arena_x).toBeCloseTo(950, 0.0001);
+            expect(ship4.arena_x).toBeCloseTo(750, 0.0001);
             expect(ship4.arena_y).toBeCloseTo(300, 0.0001);
             expect(ship4.arena_angle).toBeCloseTo(Math.PI, 0.0001);
 
-            expect(ship5.arena_x).toBeCloseTo(950, 0.0001);
+            expect(ship5.arena_x).toBeCloseTo(750, 0.0001);
             expect(ship5.arena_y).toBeCloseTo(200, 0.0001);
             expect(ship5.arena_angle).toBeCloseTo(Math.PI, 0.0001);
         });

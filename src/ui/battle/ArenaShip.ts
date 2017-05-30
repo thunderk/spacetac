@@ -109,8 +109,8 @@ module TS.SpaceTac.UI {
             );
 
             // Set location
-            if (ship.alive) {
-                this.position.set(ship.arena_x - 150 * Math.cos(ship.arena_angle), ship.arena_y - 150 * Math.sin(ship.arena_angle));
+            if (this.battleview.battle.turn == 1 && ship.alive && ship.fleet.player === this.battleview.player) {
+                this.position.set(ship.arena_x - 500 * Math.cos(ship.arena_angle), ship.arena_y - 500 * Math.sin(ship.arena_angle));
                 this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle);
             } else {
                 this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle, false);
@@ -165,8 +165,8 @@ module TS.SpaceTac.UI {
             } else if (event instanceof DamageEvent) {
                 this.displayEffect(`${event.hull + event.shield} damage`, false);
                 return 0;
-            } else if (event instanceof MoveEvent) {
-                let duration = this.moveTo(event.target.x, event.target.y, event.facing_angle, !event.initial);
+            } else if (event instanceof MoveEvent && !event.initial) {
+                let duration = this.moveTo(event.target.x, event.target.y, event.facing_angle, true);
                 return duration;
             } else {
                 return 0;

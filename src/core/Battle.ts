@@ -138,9 +138,14 @@ module TS.SpaceTac {
         }
 
         // Defines the initial ship positions of all engaged fleets
-        placeShips(): void {
-            this.placeFleetShips(this.fleets[0], this.width * 0.05, this.height * 0.5, 0);
-            this.placeFleetShips(this.fleets[1], this.width * 0.95, this.height * 0.5, Math.PI);
+        placeShips(vertical = true): void {
+            if (vertical) {
+                this.placeFleetShips(this.fleets[0], this.width * 0.25, this.height * 0.5, 0, this.height);
+                this.placeFleetShips(this.fleets[1], this.width * 0.75, this.height * 0.5, Math.PI, this.height);
+            } else {
+                this.placeFleetShips(this.fleets[0], this.width * 0.5, this.height * 0.90, -Math.PI / 2, this.width);
+                this.placeFleetShips(this.fleets[1], this.width * 0.5, this.height * 0.10, Math.PI / 2, this.width);
+            }
         }
 
         // Count the number of fleets still alive
@@ -306,12 +311,16 @@ module TS.SpaceTac {
             }
         }
 
-        // Defines the initial ship positions for one fleet
-        //  x and y are the center of the fleet placement
-        //  facing_angle is the forward angle in radians
-        private placeFleetShips(fleet: Fleet, x: number, y: number, facing_angle: number): void {
+        /**
+         * Defines the initial ship positions for one fleet
+         * 
+         * *x* and *y* are the center of the fleet formation
+         * *facing_angle* is the forward angle in radians
+         * *width* is the formation width
+         */
+        private placeFleetShips(fleet: Fleet, x: number, y: number, facing_angle: number, width: number): void {
             var side_angle = facing_angle + Math.PI * 0.5;
-            var spacing = this.height * 0.2;
+            var spacing = width * 0.2;
             var total_length = spacing * (fleet.ships.length - 1);
             var dx = Math.cos(side_angle);
             var dy = Math.sin(side_angle);
