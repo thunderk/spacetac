@@ -32,27 +32,43 @@ module TS.SpaceTac.UI.Specs {
                 return 0;
             });
             expect(battle.turn).toBe(1);
+            expect(processor.atStart()).toBe(true);
+            expect(processor.atEnd()).toBe(true);
 
             processor.stepForward();
             expect(battle.turn).toBe(1);
+            expect(processor.atStart()).toBe(true);
+            expect(processor.atEnd()).toBe(true);
 
             battle.log.add(new FakeEvent());
             expect(battle.turn).toBe(1);
+            expect(processor.atStart()).toBe(true);
+            expect(processor.atEnd()).toBe(false);
 
             processor.stepForward();
             expect(battle.turn).toBe(2);
+            expect(processor.atStart()).toBe(false);
+            expect(processor.atEnd()).toBe(true);
 
             processor.stepForward();
             expect(battle.turn).toBe(2);
+            expect(processor.atStart()).toBe(false);
+            expect(processor.atEnd()).toBe(true);
 
             processor.stepBackward();
             expect(battle.turn).toBe(1);
+            expect(processor.atStart()).toBe(true);
+            expect(processor.atEnd()).toBe(false);
 
             processor.stepBackward();
             expect(battle.turn).toBe(1);
+            expect(processor.atStart()).toBe(true);
+            expect(processor.atEnd()).toBe(false);
 
             processor.stepForward();
             expect(battle.turn).toBe(2);
+            expect(processor.atStart()).toBe(false);
+            expect(processor.atEnd()).toBe(true);
         })
     })
 }

@@ -25,15 +25,28 @@ module TS.SpaceTac {
 
         /**
          * Apply the event on a battle state
+         * 
+         * By default it does nothing
          */
         apply(battle: Battle) {
         }
 
         /**
          * Get the reverse event
+         * 
+         * By default it returns a stub event that does nothing
          */
         getReverse(): BaseBattleEvent {
-            throw new Error("No reverse implemented");
+            return new StubBattleEvent();
+        }
+    }
+
+    /**
+     * Battle event that does nothing
+     */
+    export class StubBattleEvent extends BaseBattleEvent {
+        constructor() {
+            super("stub");
         }
     }
 

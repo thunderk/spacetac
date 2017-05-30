@@ -1,7 +1,9 @@
 /// <reference path="BaseBattleEvent.ts"/>
 
 module TS.SpaceTac {
-    // Battle event, when a ship turn ended, and advanced to a new one
+    /**
+     * Event that changes the current playing ship
+     */
     export class ShipChangeEvent extends BaseLogShipEvent {
         // Ship that starts playing
         new_ship: Ship;
@@ -10,6 +12,10 @@ module TS.SpaceTac {
             super("ship_change", ship, new_ship ? Target.newFromShip(new_ship) : null);
 
             this.new_ship = new_ship;
+        }
+
+        getReverse(): BaseBattleEvent {
+            return new ShipChangeEvent(this.new_ship, this.ship);
         }
     }
 }

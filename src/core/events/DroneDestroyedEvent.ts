@@ -11,5 +11,9 @@ module TS.SpaceTac {
 
             this.drone = drone;
         }
+
+        getReverse(): BaseBattleEvent {
+            return new DroneDeployedEvent(this.drone);
+        }
     }
 }

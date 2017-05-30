@@ -1,7 +1,9 @@
 /// <reference path="BaseBattleEvent.ts"/>
 
 module TS.SpaceTac {
-    // Event logged when a ship value or attribute changed
+    /**
+     * Event logged when a ship value or attribute changed
+     */
     export class ValueChangeEvent extends BaseLogShipEvent {
         // Saved version of the current value
         value: ShipValue;
@@ -14,6 +16,12 @@ module TS.SpaceTac {
 
             this.value = copy(value);
             this.diff = diff;
+        }
+
+        getReverse(): BaseBattleEvent {
+            let value = copy(this.value);
+            value.set(value.get() - this.diff);
+            return new ValueChangeEvent(this.ship, value, -this.diff);
         }
     }
 }

@@ -56,6 +56,7 @@ module TS.SpaceTac.UI {
          */
         start() {
             this.subscription = this.log.subscribe(event => this.processBattleEvent(event));
+            this.cursor = this.log.events.length - 1;
             this.battle.getBootstrapEvents().forEach(event => this.processBattleEvent(event));
         }
 
@@ -63,9 +64,9 @@ module TS.SpaceTac.UI {
          * Make a step backward in time
          */
         stepBackward() {
-            if (this.cursor >= 0) {
-                this.processBattleEvent(this.log.events[this.cursor].getReverse());
+            if (!this.atStart()) {
                 this.cursor -= 1;
+                this.processBattleEvent(this.log.events[this.cursor + 1].getReverse());
             }
         }
 
@@ -73,7 +74,7 @@ module TS.SpaceTac.UI {
          * Make a step forward in time
          */
         stepForward() {
-            if (this.cursor < this.log.events.length - 1) {
+            if (!this.atEnd()) {
                 this.cursor += 1;
                 this.processBattleEvent(this.log.events[this.cursor]);
             }
@@ -85,6 +86,9 @@ module TS.SpaceTac.UI {
          * This will rewind all applied event
          */
         jumpToStart() {
+            while (!this.atStart()) {
+                this.stepBackward();
+            }
         }
 
         /**
@@ -93,6 +97,34 @@ module TS.SpaceTac.UI {
          * This will apply all remaining event
          */
         jumpToEnd() {
+            while (!this.atEnd()) {
+                this.stepForward();
+            }
+        }
+
+        /**
+         * Check if we are currently at the start of the log
+         */
+        atStart(): boolean {
+            return this.cursor < 0;
+        }
+
+        /**
+         * Check if we are currently at the end of the log
+         */
+        atEnd(): boolean {
+            return this.cursor >= this.log.events.length - 1;
+        }
+
+        /**
+         * Check if we need a player or AI to interact at this point
+         */
+        getPlayerNeeded(): Player | null {
+            if (this.atEnd()) {
+                return this.battle.playing_ship ? this.battle.playing_ship.getPlayer() : null;
+            } else {
+                return null;
+            }
         }
 
         /**
@@ -176,6 +208,28 @@ module TS.SpaceTac.UI {
             } else if (event instanceof DroneAppliedEvent) {
                 this.processDroneAppliedEvent(event);
             }
+
+            // FIXME temporary fix for cursor not being forwarded
+            let cursor = this.log.events.indexOf(event);
+            if (cursor >= 0) {
+                this.cursor = cursor;
+            }
+
+            // Transfer control to the needed player
+            let player = this.getPlayerNeeded();
+            if (player) {
+                if (this.battle.playing_ship && !this.battle.playing_ship.alive) {
+                    this.view.setInteractionEnabled(false);
+                    this.battle.advanceToNextShip();
+                    this.delayNextEvents(200);
+                } else if (player === this.view.player) {
+                    this.view.setInteractionEnabled(true);
+                } else {
+                    this.view.playAI();
+                }
+            } else {
+                this.view.setInteractionEnabled(false);
+            }
         }
 
         // Destroy the log processor
@@ -191,24 +245,7 @@ module TS.SpaceTac.UI {
         private processShipChangeEvent(event: ShipChangeEvent): void {
             this.view.arena.setShipPlaying(event.new_ship);
             this.view.ship_list.setPlaying(event.new_ship);
-
-            if (this.battle.canPlay(this.view.player)) {
-                // Player turn
-                this.view.gameui.audio.playOnce("battle-ship-change");
-                this.view.setInteractionEnabled(true);
-            } else {
-                this.view.setInteractionEnabled(false);
-                if (event.new_ship.isAbleToPlay()) {
-                    // AI turn
-                    this.view.gameui.audio.playOnce("battle-ship-change");
-                    this.battle.playAI();
-                } else {
-                    // Ship unable to play, skip turn
-                    this.view.timer.schedule(event.new_ship.alive ? 2000 : 200, () => {
-                        this.battle.advanceToNextShip();
-                    });
-                }
-            }
+            this.view.gameui.audio.playOnce("battle-ship-change");
         }
 
         // Damage to ship

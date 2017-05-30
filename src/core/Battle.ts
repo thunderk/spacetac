@@ -36,6 +36,9 @@ module TS.SpaceTac {
         // Timer to use for scheduled things
         timer = Timer.global
 
+        // Indicator that an AI is playing
+        ai_playing = false
+
         // Create a battle between two fleets
         constructor(fleet1 = new Fleet(), fleet2 = new Fleet(), width = 1808, height = 948) {
             this.fleets = [fleet1, fleet2];
@@ -243,6 +246,8 @@ module TS.SpaceTac {
                 this.playing_ship.startTurn();
             }
 
+            this.ai_playing = false;
+
             if (log && previous_ship && this.playing_ship) {
                 this.log.add(new ShipChangeEvent(previous_ship, this.playing_ship));
             }
@@ -251,13 +256,17 @@ module TS.SpaceTac {
         /**
          * Make an AI play the current ship
          */
-        playAI(ai: AbstractAI | null = null) {
-            if (this.playing_ship) {
+        playAI(ai: AbstractAI | null = null): boolean {
+            if (this.playing_ship && !this.ai_playing) {
+                this.ai_playing = true;
                 if (!ai) {
                     // TODO Use an AI adapted to the fleet
                     ai = new TacticalAI(this.playing_ship, this.timer);
                 }
                 ai.play();
+                return true;
+            } else {
+                return false;
             }
         }
 

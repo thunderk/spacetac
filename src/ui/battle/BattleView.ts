@@ -128,16 +128,24 @@ module TS.SpaceTac.UI {
                 });
                 this.battle.endBattle(first(this.battle.fleets, fleet => fleet.player != this.player));
             });
-            this.inputs.bindCheat("a", "Use AI to play", () => {
-                if (this.interacting && this.battle.playing_ship) {
-                    this.setInteractionEnabled(false);
-                    this.action_bar.setShip(new Ship());
-                    this.battle.playAI(new TacticalAI(this.battle.playing_ship));
-                }
-            });
+            this.inputs.bindCheat("a", "Use AI to play", () => this.playAI());
 
             // Start processing the log
             this.log_processor.start();
+        }
+
+        /**
+         * Make the AI play current ship
+         * 
+         * If the AI is already playing, do nothing
+         */
+        playAI(): void {
+            if (this.battle.playAI()) {
+                if (this.interacting) {
+                    this.action_bar.setShip(new Ship());
+                }
+                this.setInteractionEnabled(false);
+            }
         }
 
         // Leaving the view, we unbind the battle
