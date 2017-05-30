@@ -1,19 +1,32 @@
 /// <reference path="BaseBattleEvent.ts"/>
 
 module TS.SpaceTac {
-    // Event logged when a ship moves
-    export class MoveEvent extends BaseLogShipTargetEvent {
-        // Distance traveled
-        distance: number
+    /**
+     * Event making a ship move 
+     */
+    export class MoveEvent extends BaseLogShipEvent {
+        // Previous location
+        start: ArenaLocationAngle
 
-        // New facing angle, in radians
-        facing_angle: number
+        // New location
+        end: ArenaLocationAngle
 
-        constructor(ship: Ship, x: number, y: number, distance: number) {
-            super("move", ship, Target.newFromLocation(x, y));
+        constructor(ship: Ship, start: ArenaLocationAngle, end: ArenaLocationAngle) {
+            super("move", ship, Target.newFromLocation(end.x, end.y));
 
-            this.distance = distance;
-            this.facing_angle = ship.arena_angle;
+            this.start = start;
+            this.end = end;
+        }
+
+        getReverse(): BaseBattleEvent {
+            return new MoveEvent(this.ship, this.end, this.start);
+        }
+
+        /**
+         * Get the distance travelled
+         */
+        getDistance(): number {
+            return this.start.getDistanceTo(this.end);
         }
     }
 }

@@ -44,7 +44,7 @@ module TS.SpaceTac {
                 if (event instanceof DamageEvent) {
                     this.addStat("Damage dealt", event.hull + event.shield, event.ship.fleet !== attacker);
                 } else if (event instanceof MoveEvent) {
-                    this.addStat("Move distance (km)", event.distance, event.ship.fleet === attacker);
+                    this.addStat("Move distance (km)", event.getDistance(), event.ship.fleet === attacker);
                 } else if (event instanceof DroneDeployedEvent) {
                     this.addStat("Drones deployed", 1, event.ship.fleet === attacker);
                 }

@@ -66,8 +66,6 @@ module TS.SpaceTac.UI {
 
             this.battle.timer = this.timer;
 
-            this.log_processor = new LogProcessor(this);
-
             this.toggle_tactical_mode = new Toggle(
                 () => this.arena.setTacticalMode(true),
                 () => this.arena.setTacticalMode(false)
@@ -79,6 +77,7 @@ module TS.SpaceTac.UI {
             super.create();
 
             var game = this.game;
+            this.log_processor = new LogProcessor(this);
 
             // Add layers
             this.layer_background = this.addLayer();

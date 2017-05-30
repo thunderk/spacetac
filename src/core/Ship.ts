@@ -120,6 +120,13 @@ module TS.SpaceTac {
             model.slots.forEach(slot => this.addSlot(slot));
         }
 
+        /**
+         * Return the current location and angle of this ship
+         */
+        get location(): ArenaLocationAngle {
+            return new ArenaLocationAngle(this.arena_x, this.arena_y, this.arena_angle);
+        }
+
         // Returns true if the ship is able to play
         //  If *check_ap* is true, ap_current=0 will make this function return false
         isAbleToPlay(check_ap: boolean = true): boolean {
@@ -426,7 +433,7 @@ module TS.SpaceTac {
                 this.setArenaFacingAngle(angle);
 
                 if (log) {
-                    this.addBattleEvent(new MoveEvent(this, this.arena_x, this.arena_y, 0));
+                    this.addBattleEvent(new MoveEvent(this, copy(this.location), new ArenaLocationAngle(this.arena_x, this.arena_y, angle)));
                 }
             }
         }
@@ -437,13 +444,14 @@ module TS.SpaceTac {
             let dx = x - this.arena_x;
             let dy = y - this.arena_y;
             if (dx != 0 || dy != 0) {
+                let start = copy(this.location);
+
                 let angle = Math.atan2(dy, dx);
                 this.setArenaFacingAngle(angle);
-
                 this.setArenaPosition(x, y);
 
                 if (log) {
-                    this.addBattleEvent(new MoveEvent(this, x, y, Math.sqrt(dx * dx + dy * dy)));
+                    this.addBattleEvent(new MoveEvent(this, start, copy(this.location)));
                 }
             }
         }

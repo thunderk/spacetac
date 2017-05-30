@@ -9,32 +9,35 @@ module TS.SpaceTac.UI {
      */
     export class LogProcessor {
         // Link to the battle view
-        private view: BattleView;
+        private view: BattleView
 
         // Link to the battle
-        private battle: Battle;
+        private battle: Battle
 
         // Link to the battle log
-        private log: BattleLog;
+        private log: BattleLog
 
         // Subscription identifier
-        private subscription: any = null;
+        private subscription: any = null
 
         // Delay before processing next events
-        private delayed = false;
+        private delayed = false
 
         // Processing queue, when delay is active
-        private queue: BaseBattleEvent[] = [];
+        private queue: BaseBattleEvent[] = []
 
         // Forward events to other subscribers
-        private forwarding: LogSubscriber[] = [];
+        private forwarding: LogSubscriber[] = []
+
+        // Current position in the battle log
+        private cursor = -1;
 
         constructor(view: BattleView) {
             this.view = view;
             this.battle = view.battle;
             this.log = view.battle.log;
 
-            /*view.inputs.bindCheat("PageUp", "Step backward", () => {
+            view.inputs.bindCheat("PageUp", "Step backward", () => {
                 this.stepBackward();
             });
             view.inputs.bindCheat("PageDown", "Step forward", () => {
@@ -45,7 +48,7 @@ module TS.SpaceTac.UI {
             });
             view.inputs.bindCheat("End", "Jump to end", () => {
                 this.jumpToEnd();
-            });*/
+            });
         }
 
         /**
@@ -54,6 +57,42 @@ module TS.SpaceTac.UI {
         start() {
             this.subscription = this.log.subscribe(event => this.processBattleEvent(event));
             this.battle.getBootstrapEvents().forEach(event => this.processBattleEvent(event));
+        }
+
+        /**
+         * Make a step backward in time
+         */
+        stepBackward() {
+            if (this.cursor >= 0) {
+                this.processBattleEvent(this.log.events[this.cursor].getReverse());
+                this.cursor -= 1;
+            }
+        }
+
+        /**
+         * Make a step forward in time
+         */
+        stepForward() {
+            if (this.cursor < this.log.events.length - 1) {
+                this.cursor += 1;
+                this.processBattleEvent(this.log.events[this.cursor]);
+            }
+        }
+
+        /**
+         * Jump to the start of the log
+         * 
+         * This will rewind all applied event
+         */
+        jumpToStart() {
+        }
+
+        /**
+         * Jump to the end of the log
+         * 
+         * This will apply all remaining event
+         */
+        jumpToEnd() {
         }
 
         /**
@@ -111,10 +150,6 @@ module TS.SpaceTac.UI {
          * Process a single event
          */
         processBattleEvent(event: BaseBattleEvent) {
-            if (!this.subscription) {
-                return;
-            }
-
             if (this.delayed) {
                 this.queue.push(event);
                 return;

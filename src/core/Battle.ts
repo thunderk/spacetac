@@ -284,7 +284,7 @@ module TS.SpaceTac {
 
             // Simulate initial ship placement
             this.play_order.forEach(ship => {
-                let event = new MoveEvent(ship, ship.arena_x, ship.arena_y, 0);
+                let event = new MoveEvent(ship, ship.location, ship.location);
                 event.initial = true;
                 result.push(event);
             });

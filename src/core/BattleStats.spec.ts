@@ -46,11 +46,11 @@ module TS.SpaceTac.Specs {
             stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({});
 
-            battle.log.add(new MoveEvent(attacker, 0, 0, 10));
+            battle.log.add(new MoveEvent(attacker, new ArenaLocationAngle(0, 0), new ArenaLocationAngle(10, 0)));
             stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Move distance (km)": [10, 0] });
 
-            battle.log.add(new MoveEvent(defender, 0, 0, 58));
+            battle.log.add(new MoveEvent(defender, new ArenaLocationAngle(10, 5), new ArenaLocationAngle(10, 63)));
             stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Move distance (km)": [10, 58] });
         })

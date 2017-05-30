@@ -70,10 +70,9 @@ module TS.SpaceTac {
 
             expect(battle.log.events[1].code).toEqual("move");
             expect(battle.log.events[1].ship).toBe(ship);
-            let target: any = battle.log.events[1].target;
-            expect(target.ship).toBeNull();
-            expect(target.x).toBeCloseTo(3.535533, 0.00001);
-            expect(target.y).toBeCloseTo(3.535533, 0.00001);
+            let dest = (<MoveEvent>battle.log.events[1]).end;
+            expect(dest.x).toBeCloseTo(3.535533, 0.00001);
+            expect(dest.y).toBeCloseTo(3.535533, 0.00001);
         });
 
         it("can't move too much near another ship", function () {

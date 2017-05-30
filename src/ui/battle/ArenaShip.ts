@@ -166,7 +166,8 @@ module TS.SpaceTac.UI {
                 this.displayEffect(`${event.hull + event.shield} damage`, false);
                 return 0;
             } else if (event instanceof MoveEvent && !event.initial) {
-                let duration = this.moveTo(event.target.x, event.target.y, event.facing_angle, true);
+                this.moveTo(event.start.x, event.start.y, event.start.angle, false);
+                let duration = this.moveTo(event.end.x, event.end.y, event.end.angle, true);
                 return duration;
             } else {
                 return 0;
