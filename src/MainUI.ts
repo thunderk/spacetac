@@ -43,8 +43,14 @@ module TS.SpaceTac {
         }
 
         boot() {
+            if (this.renderType == Phaser.HEADLESS) {
+                this.headless = true;
+            }
+
+            super.boot();
+
             if (!this.headless) {
-                super.boot();
+                this.plugins.add((<any>Phaser.Plugin).SceneGraph);
             }
         }
 

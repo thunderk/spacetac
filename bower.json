@@ -11,6 +11,7 @@
   "dependencies": {
     "phaser": "2.6.2",
     "parse": "1.9.2",
-    "jasmine-core": "jasmine#^2.5.2"
+    "jasmine-core": "jasmine#^2.5.2",
+    "phaser-plugin-scene-graph": "samme/phaser-plugin-scene-graph#1.0.4"
   }
 }

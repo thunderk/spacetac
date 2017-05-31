@@ -28,12 +28,13 @@
 
     <script src="vendor/parse/parse.min.js"></script>
     <script src="vendor/phaser/build/phaser.min.js"></script>
+    <script src="vendor/phaser-plugin-scene-graph/dist/SceneGraph.js"></script>
     <script src="build.js"></script>
 
     <script>
         window.oncontextmenu = function (e) { e.preventDefault(); };
         window.onload = function () {
-            window.ui = new TS.SpaceTac.MainUI();
+            window.game = new TS.SpaceTac.MainUI();
         };
     </script>
 </body>
