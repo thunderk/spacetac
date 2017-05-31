@@ -55,8 +55,8 @@ module TS.SpaceTac.UI {
             this.inputs = new InputManager(this);
 
             // Layers
-            this.layers = this.add.group();
-            this.tooltip_layer = this.add.group();
+            this.layers = this.add.group(undefined, "View layers");
+            this.tooltip_layer = this.add.group(undefined, "Tooltip layer");
             this.tooltip = new Tooltip(this);
             this.messages = new Messages(this);
 
@@ -81,10 +81,17 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Go back to the router state
+         */
+        backToRouter() {
+            this.game.state.start('router');
+        }
+
+        /**
          * Add a new layer in the view
          */
-        addLayer(): Phaser.Group {
-            let layer = this.add.group(this.layers);
+        addLayer(name: string): Phaser.Group {
+            let layer = this.add.group(this.layers, name);
             return layer;
         }
 

@@ -80,12 +80,12 @@ module TS.SpaceTac.UI {
             this.log_processor = new LogProcessor(this);
 
             // Add layers
-            this.layer_background = this.addLayer();
-            this.layer_arena = this.addLayer();
-            this.layer_borders = this.addLayer();
-            this.layer_overlay = this.addLayer();
-            this.layer_dialogs = this.addLayer();
-            this.layer_sheets = this.addLayer();
+            this.layer_background = this.addLayer("background");
+            this.layer_arena = this.addLayer("arena");
+            this.layer_borders = this.addLayer("borders");
+            this.layer_overlay = this.addLayer("overlay");
+            this.layer_dialogs = this.addLayer("dialogs");
+            this.layer_sheets = this.addLayer("character_sheet");
 
             // Background
             this.background = new Phaser.Image(game, 0, 0, "battle-background", 0);

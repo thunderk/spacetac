@@ -15,8 +15,8 @@ module TS.SpaceTac.UI {
         create() {
             super.create();
 
-            this.layer_stars = this.addLayer();
-            this.layer_title = this.addLayer();
+            this.layer_stars = this.addLayer("stars");
+            this.layer_title = this.addLayer("title");
             this.layer_title.x = 5000;
 
             // Stars
@@ -47,6 +47,7 @@ module TS.SpaceTac.UI {
             // Dialogs
             this.dialog_load_game = new LoadDialog(this);
             this.dialog_load_game.setPosition(264, 160);
+            this.dialog_load_game.moveToLayer(this.layer_title);
             this.dialog_load_game.setVisible(false);
 
             this.tweens.create(this.layer_title).to({ x: 0 }, 3000, Phaser.Easing.Circular.Out).start();
@@ -88,7 +89,7 @@ module TS.SpaceTac.UI {
         onNewGame(): void {
             var gameui = <MainUI>this.game;
 
-            gameui.session.startNewGame();
+            gameui.session.startNewGame(false);
 
             this.game.state.start("router");
         }

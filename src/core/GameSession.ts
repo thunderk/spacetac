@@ -14,10 +14,14 @@ module TS.SpaceTac {
         // Current connected player
         player: Player
 
+        // Starting location
+        start_location: StarLocation
+
         constructor() {
             this.id = RandomGenerator.global.id(20);
             this.universe = new Universe();
             this.player = new Player(this.universe);
+            this.start_location = new StarLocation();
         }
 
         /**
@@ -41,20 +45,38 @@ module TS.SpaceTac {
             return serializer.serialize(this);
         }
 
-        // Generate a real single player game (campaign)
-        startNewGame(): void {
-            var fleet_generator = new FleetGenerator();
-
+        /**
+         * Generate a real single player game (campaign)
+         * 
+         * If *fleet* is false, the player fleet will be empty, and needs to be set with *setCampaignFleet*.
+         */
+        startNewGame(fleet = true): void {
             this.universe = new Universe();
             this.universe.generate();
 
-            var start_location = this.universe.getStartLocation();
-            start_location.clearEncounter();
-            start_location.addShop();
+            this.start_location = this.universe.getStartLocation();
+            this.start_location.clearEncounter();
+            this.start_location.addShop();
 
             this.player = new Player(this.universe);
-            this.player.fleet = fleet_generator.generate(1, this.player, 4);
-            this.player.fleet.setLocation(start_location);
+
+            if (fleet) {
+                this.setCampaignFleet();
+            }
+        }
+
+        /**
+         * Set the initial campaign fleet, null for a default fleet
+         */
+        setCampaignFleet(fleet: Fleet | null = null) {
+            if (fleet) {
+                this.player.fleet = fleet;
+            } else {
+                let fleet_generator = new FleetGenerator();
+                this.player.fleet = fleet_generator.generate(1, this.player, 4);
+            }
+
+            this.player.fleet.setLocation(this.start_location);
             this.player.fleet.credits = 500;
         }
 
@@ -94,10 +116,17 @@ module TS.SpaceTac {
         }
 
         /**
-         * Return true if the session has a universe to explore
+         * Returns true if the session has a universe to explore
          */
         hasUniverse(): boolean {
             return this.universe.stars.length > 0;
+        }
+
+        /**
+         * Returns true if initial fleet creation has been done.
+         */
+        isFleetCreated(): boolean {
+            return this.player.fleet.ships.length > 0;
         }
     }
 }

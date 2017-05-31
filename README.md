@@ -27,7 +27,7 @@ After making changes to sources, you need to recompile:
 * **[Phaser](http://phaser.io)** - Game engine
 * **[Viktor Hahn](https://opengameart.org/content/spaceships-6)** - Ship models
     * This work, made by Viktor Hahn (Viktor.Hahn@web.de), is licensed under the Creative Commons Attribution 3.0 Unported License. http://creativecommons.org/licenses/by/3.0/
-* **[www.kenney.nl](www.kenney.nl)** - Sound effects
+* **[www.kenney.nl](http://www.kenney.nl)** - Sound effects
 * **[Matthieu Desprez](https://github.com/edistra)** - Beta testing and ideas
 * **Nicolas Forgo** - Ship models
 * **[Kevin MacLeod](http://www.incompetech.com/)** - Musics
@@ -51,7 +51,7 @@ in key sectors of the galaxy, forbidding passage or harassing merchants.
 
 The Master Merchant Guild, a powerful group that spans several galaxies, is worried about
 the profit loss those events incurred, and after many debates, decided to send several
-investigation teams.
+investigation teams to Terranax.
 
 Their task is to discreetly uncover the origin of the invasion, and to bring back intel that
 may be used by the Guild to plan an appropriate response.
@@ -61,15 +61,16 @@ may be used by the Guild to plan an appropriate response.
 In a not-so-distant future, Artifical Intelligence has become the most prominent species in the
 universe. Humans have been defeated in their pitiful rebellions, and parked in reservations.
 
-With the secrets of faster-than-light travel unveiled in only a handful of decades, AI fleets
-quickly colonized galaxies, using AI-piloted ships.
+With the secrets of faster-than-light travel unveiled in only a handful of decades, fleets of
+AI-piloted ships quickly colonized whole galaxies.
 
 ## Ships
 
 ### Level and experience
 
 A ship gains experience during battles. When reaching a certain amount of experience points,
-a ship will automatically level up (which is, gain 1 level).
+a ship will automatically level up (which is, gain 1 level). Each level up will grant
+upgrade points that may be spent on Attributes.
 
 A ship starts at level 1. There is no upper limit to level value (except 99, for display sake,
 but it may not be reached in a classic campaign).
@@ -85,7 +86,7 @@ In combat, a ship's vitals are represented by the HSP system (Hull-Shield-Power)
 These values will be changed by various effects (usage of equipments, sustained damage...).
 
 Once the Hull of a ship is fully damaged (Hull=0), the ship engages its ESP, or Emergency
-Statis Protocol. This protocol activates a statis field that protects the ship for the
+Stasis Protocol. This protocol activates a stasis field that protects the ship for the
 remaining of the battle, preventing any further damage, but rendering it fully inoperent.
 For battle purpose, the ship is to be considered "dead".
 

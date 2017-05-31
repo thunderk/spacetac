@@ -12,8 +12,12 @@ module TS.SpaceTac.UI {
                 // A battle is raging, go to it
                 this.game.state.start("battle", true, false, session.player, session.getBattle());
             } else if (session.hasUniverse()) {
-                // Go to the universe map
-                this.game.state.start("universe", true, false, session.universe, session.player);
+                if (session.isFleetCreated()) {
+                    // Go to the universe map
+                    this.game.state.start("universe", true, false, session.universe, session.player);
+                } else {
+                    this.game.state.start("intro", true, false);
+                }
             } else {
                 // No battle, no universe, go back to menu
                 this.game.state.start("mainmenu", true, false);

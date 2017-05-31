@@ -50,8 +50,8 @@ module TS.SpaceTac.UI {
         create() {
             super.create();
 
-            this.layer_universe = this.addLayer();
-            this.layer_overlay = this.addLayer();
+            this.layer_universe = this.addLayer("universe");
+            this.layer_overlay = this.addLayer("overlay");
 
             this.starlinks = this.universe.starlinks.map(starlink => {
                 let loc1 = starlink.first.getWarpLocationTo(starlink.second);

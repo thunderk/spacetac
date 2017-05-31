@@ -50,7 +50,7 @@ module TS.SpaceTac.UI {
          * Create the internal phaser node
          */
         protected createInternalNode(): UIInternalComponent {
-            return new Phaser.Group(this.view.game);
+            return new Phaser.Group(this.view.game, undefined, classname(this));
         }
 
         /**
