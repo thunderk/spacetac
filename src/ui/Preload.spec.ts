@@ -9,5 +9,11 @@ module TS.SpaceTac.UI.Specs {
             expect(testgame.ui.state.current).toEqual("test");
             // TODO test asset loading
         });
+
+        it("builds cache keys from path", function () {
+            expect(Preload.getKey("dir/file-path")).toEqual("dir-file-path");
+            expect(Preload.getKey("dir/file-path.ext")).toEqual("dir-file-path");
+            expect(Preload.getKey("dir/file-path.mp3")).toEqual("dir-file-path");
+        });
     });
 }

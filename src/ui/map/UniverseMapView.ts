@@ -98,7 +98,7 @@ module TS.SpaceTac.UI {
             this.character_sheet.hide(false);
             this.layer_overlay.add(this.character_sheet);
 
-            this.gameui.audio.startMusic("walking-along");
+            this.gameui.audio.startMusic("spring-thaw");
 
             // Inputs
             this.inputs.bindCheat("r", "Reveal whole map", () => this.revealAll());

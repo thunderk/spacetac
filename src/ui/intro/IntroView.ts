@@ -12,15 +12,21 @@ module TS.SpaceTac.UI {
             steps.setupDefaultSteps();
             steps.startPlayback();
 
-            this.input.onTap.add(() => {
+            let nextStep = () => {
                 if (!steps.nextStep()) {
                     // For now, we create a random fleet
                     this.gameui.session.setCampaignFleet();
                     this.backToRouter();
                 }
-            });
+            };
+
+            this.input.onTap.add(nextStep);
 
             this.inputs.bind("Home", "Rewind", () => steps.rewind());
+            this.inputs.bind("Space", "Next step", nextStep);
+            this.inputs.bind("Enter", "Next step", nextStep);
+
+            this.gameui.audio.startMusic("division");
         }
     }
 }

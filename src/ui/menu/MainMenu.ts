@@ -51,6 +51,8 @@ module TS.SpaceTac.UI {
             this.dialog_load_game.setVisible(false);
 
             this.tweens.create(this.layer_title).to({ x: 0 }, 3000, Phaser.Easing.Circular.Out).start();
+
+            this.gameui.audio.startMusic("supernatural");
         }
 
         addButton(x: number, y: number, caption: string, tooltip: string, callback: Function): Phaser.Button {

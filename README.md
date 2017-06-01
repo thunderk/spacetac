@@ -31,10 +31,16 @@ After making changes to sources, you need to recompile:
 * **[Matthieu Desprez](https://github.com/edistra)** - Beta testing and ideas
 * **Nicolas Forgo** - Ship models
 * **[Kevin MacLeod](http://www.incompetech.com/)** - Musics
-    * "Full On" Kevin MacLeod (incompetech.com)
+    * "Mechanolith" Kevin MacLeod (incompetech.com)
     Licensed under Creative Commons: By Attribution 3.0 License
     http://creativecommons.org/licenses/by/3.0/
-    * "Walking Along" Kevin MacLeod (incompetech.com)
+    * "Supernatural" Kevin MacLeod (incompetech.com)
+    Licensed under Creative Commons: By Attribution 3.0 License
+    http://creativecommons.org/licenses/by/3.0/
+    * "Spring Thaw" Kevin MacLeod (incompetech.com)
+    Licensed under Creative Commons: By Attribution 3.0 License
+    http://creativecommons.org/licenses/by/3.0/
+    * "Division" Kevin MacLeod (incompetech.com)
     Licensed under Creative Commons: By Attribution 3.0 License
     http://creativecommons.org/licenses/by/3.0/
 

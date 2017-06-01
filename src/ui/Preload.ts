@@ -17,6 +17,7 @@ module TS.SpaceTac.UI {
             this.loadImage("menu/button-fullscreen.png");
             this.loadImage("menu/star.png");
             this.loadImage("menu/load-bg.png");
+            this.loadSheet("common/particles.png", 32);
             this.loadImage("common/transparent.png");
             this.loadImage("common/debug.png");
             this.loadImage("common/waiting.png");
@@ -130,8 +131,11 @@ module TS.SpaceTac.UI {
             this.loadSound("battle/drone-activate.wav");
 
             // Load musics
-            this.loadSound("music/walking-along.mp3");
-            this.loadSound("music/full-on.mp3");
+            this.loadSound("music/division.mp3");
+            this.loadSound("music/mechanolith.mp3");
+            this.loadSound("music/spring-thaw.mp3");
+            this.loadSound("music/supernatural.mp3");
+
             this.load.start();
         }
 
@@ -139,18 +143,28 @@ module TS.SpaceTac.UI {
             this.game.state.start("mainmenu");
         }
 
+        static getKey(path: string): string {
+            return path.replace(/\//g, "-").replace(/\.[a-z0-9]+$/, '');
+        }
+
+        /**
+         * Load a ship's sprite and portrait
+         */
         loadShip(name: string) {
             this.loadImage("ship/" + name + "/sprite.png");
             this.loadImage("ship/" + name + "/portrait.png");
         }
 
+        loadSheet(path: string, frame_width: number, frame_height = frame_width) {
+            this.load.spritesheet(Preload.getKey(path), "assets/images/" + path, frame_width, frame_height);
+        }
+
         loadImage(path: string) {
-            this.load.image(path.replace(/\//g, "-").replace(".png", "").replace(".jpg", ""), "assets/images/" + path);
+            this.load.image(Preload.getKey(path), "assets/images/" + path);
         }
 
         loadSound(path: string) {
-            var key = path.replace(/\//g, "-").replace(".wav", "").replace(".mp3", "");
-            this.load.audio(key, "assets/sounds/" + path);
+            this.load.audio(Preload.getKey(path), "assets/sounds/" + path);
         }
     }
 }

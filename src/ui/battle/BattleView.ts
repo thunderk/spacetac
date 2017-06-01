@@ -108,7 +108,7 @@ module TS.SpaceTac.UI {
             this.displayFightMessage();
 
             // BGM
-            this.gameui.audio.startMusic("full-on");
+            this.gameui.audio.startMusic("mechanolith");
 
             // Key mapping
             this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.switch(3000));
