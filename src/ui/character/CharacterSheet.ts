@@ -309,7 +309,7 @@ module TS.SpaceTac.UI {
             this.updateLoot();
             this.loot_slots.visible = true;
 
-            this.mode_title.setText("Shop's equipment");
+            this.mode_title.setText("Dockyard's equipment");
             this.mode_title.visible = true;
         }
 

@@ -141,8 +141,8 @@ only once per turn is safe, and will never overheat it.
 
 If an equipment has multiple actions associated, any of these actions will increase the shared heat.
 
-*Not done yet :* Some equipments may have a "cumulative overheat", meaning that the heat is stored between turns, cooling down 1
-point at the end of turn.
+*Not done yet :* Some equipments may have a "cumulative overheat", meaning that the heat is stored between turns, 
+cooling down 1 point at the end of turn.
 
 *Not done yet :* Some equipments may have a "stacked overheat", which
 is similar to "cumulative overheat", except it does not cool down at
@@ -161,6 +161,10 @@ They are small and cannot be the direct target of weapons.
 
 *Not done yet :*  They are not affected by area effects,
 except for area damage and area effects specifically designed for drones.
+
+## Dockyards
+
+Dockyards are locations where ships can dock to buy or sell equipments, meet other ships and find jobs.
 
 ## Keyboard shortcuts
 

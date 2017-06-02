@@ -54,7 +54,7 @@ module TS.SpaceTac.UI {
 
                 this.view.tooltip.bindDynamicText(<Phaser.Button>location_sprite, () => {
                     let visited = this.player.hasVisitedLocation(location);
-                    let shop = (visited && !location.encounter && location.shop) ? " (shop present)" : "";
+                    let shop = (visited && !location.encounter && location.shop) ? " (dockyard present)" : "";
 
                     if (location == this.player.fleet.location) {
                         return `Current fleet location${shop}`;
