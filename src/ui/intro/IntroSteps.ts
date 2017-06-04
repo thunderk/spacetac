@@ -63,7 +63,10 @@ module TS.SpaceTac.UI {
                 this.message("No official communication has been issued since, and numerous rogue fleets have taken position in key sectors of the galaxy, forbidding passage or harassing merchants."),
                 this.message("The Master Merchant Guild, a powerful group that spans several galaxies, is worried about the profit loss those events incurred, and after many debates, decided to send several investigation teams to Terranax."),
                 this.message("Their task is to discreetly uncover the origin of the invasion, and to bring back intel that may be used by the Guild to plan an appropriate response."),
-                this.message("Your team has been sent through the Expeller jump system based in the Eros-MC galaxy, and just left quantum space in orbit of a Terranaxan star..."),
+                this.simultaneous( [
+                    this.exitftl(),
+                    this.message("Your team has been sent through the Expeller jump system based in the Eros-MC galaxy, and just left quantum space in orbit of a Terranaxan star..."),
+                ]),
             ];
         }
 
@@ -108,6 +111,32 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Display a fleet emerging from FTL
+         */
+        protected exitftl(): Function {
+            return () => {
+                let layer = this.getLayer(1);
+                let builder = new ParticleBuilder(this.view);
+                let fleet = builder.build([
+                    new ParticleConfig(ParticleShape.TRAIL, ParticleColor.BLUEISH, 0.8, 1, 200),
+                    new ParticleConfig(ParticleShape.FLARE, ParticleColor.CYAN, 10, 0.2, -45)
+                ]);
+                fleet.position.set(this.view.getMidWidth(), this.view.getMidHeight());
+                this.view.game.add.tween(fleet).from({ x: fleet.x + 1500, y: fleet.y - 750 }, 3000, Phaser.Easing.Circular.Out, true);
+                this.view.game.add.tween(fleet).to({ alpha: 0, width: 40, height: 40 }, 500, Phaser.Easing.Cubic.Out, true, 2000);
+                let flash = this.view.game.add.image(this.view.getMidWidth() + 60, this.view.getMidHeight() - 30, "common-particles", 15);
+                flash.anchor.set(0.5);
+                flash.scale.set(0.1);
+                flash.alpha = 0;
+                let subflash = this.view.game.add.image(0, 0, "common-particles", 0);
+                subflash.anchor.set(0.5);
+                subflash.scale.set(0.5);
+                flash.addChild(subflash);
+                this.view.game.add.tween(flash).to({ alpha: 0.7, width: 60, height: 60 }, 300, Phaser.Easing.Quadratic.Out, true, 2000, undefined, true);
+            }
+        }
+
+        /**
          * Build a step that performs several other steps at the same time
          */
         protected simultaneous(steps: Function[]): Function {
@@ -119,11 +148,13 @@ module TS.SpaceTac.UI {
         /**
          * Build a step to display a message.
          */
-        protected message(message: string, layer = 1, clear = true): Function {
+        protected message(message: string, layer = 2, clear = true): Function {
             return () => {
                 let display = new ProgressiveMessage(this.view, 800, 150, message, true);
                 display.setPositionInsideParent(0.5, 0.9);
                 display.moveToLayer(this.getLayer(layer, clear));
+                display.setVisible(false);
+                display.setVisible(true, 500);
             }
         }
 

@@ -15,7 +15,6 @@ module TS.SpaceTac.UI {
             this.loadImage("menu/button.png");
             this.loadImage("menu/button-hover.png");
             this.loadImage("menu/button-fullscreen.png");
-            this.loadImage("menu/star.png");
             this.loadImage("menu/load-bg.png");
             this.loadSheet("common/particles.png", 32);
             this.loadImage("common/transparent.png");
