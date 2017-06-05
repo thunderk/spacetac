@@ -6,33 +6,36 @@ module TS.SpaceTac.UI {
      */
     export class UniverseMapView extends BaseView {
         // Displayed universe
-        universe = new Universe();
+        universe = new Universe()
 
         // Interacting player
-        player = new Player();
+        player = new Player()
 
         // Layers
-        layer_universe: Phaser.Group;
-        layer_overlay: Phaser.Group;
+        layer_universe: Phaser.Group
+        layer_overlay: Phaser.Group
 
         // Star systems
-        starsystems: StarSystemDisplay[] = [];
-        starlinks: Phaser.Graphics[] = [];
+        starsystems: StarSystemDisplay[] = []
+
+        // Links between stars
+        starlinks_group: Phaser.Group
+        starlinks: Phaser.Graphics[] = []
 
         // Fleets
-        player_fleet: FleetDisplay;
+        player_fleet: FleetDisplay
 
         // Frame to highlight current location
-        current_location: CurrentLocationMarker;
+        current_location: CurrentLocationMarker
 
         // Button to jump to another system
-        button_jump: Phaser.Button;
+        button_jump: Phaser.Button
 
         // Character sheet
-        character_sheet: CharacterSheet;
+        character_sheet: CharacterSheet
 
         // Zoom level
-        zoom = 0;
+        zoom = 0
 
         /**
          * Init the view, binding it to a universe
@@ -53,20 +56,21 @@ module TS.SpaceTac.UI {
             this.layer_universe = this.addLayer("universe");
             this.layer_overlay = this.addLayer("overlay");
 
+            this.starlinks_group = this.game.add.group(this.layer_universe);
             this.starlinks = this.universe.starlinks.map(starlink => {
                 let loc1 = starlink.first.getWarpLocationTo(starlink.second);
                 let loc2 = starlink.second.getWarpLocationTo(starlink.first);
 
                 let result = new Phaser.Graphics(this.game);
                 if (loc1 && loc2) {
-                    result.lineStyle(0.005, 0x8bbeff);
+                    result.lineStyle(0.01, 0x6cc7ce);
                     result.moveTo(starlink.first.x - 0.5 + loc1.x, starlink.first.y - 0.5 + loc1.y);
                     result.lineTo(starlink.second.x - 0.5 + loc2.x, starlink.second.y - 0.5 + loc2.y);
                 }
                 result.data.link = starlink;
                 return result;
             });
-            this.starlinks.forEach(starlink => this.layer_universe.add(starlink));
+            this.starlinks.forEach(starlink => this.starlinks_group.add(starlink));
 
             this.player_fleet = new FleetDisplay(this, this.player.fleet);
 
@@ -84,11 +88,11 @@ module TS.SpaceTac.UI {
             this.layer_universe.add(this.button_jump);
             this.tooltip.bindStaticText(this.button_jump, "Engage warp drive to jump to another star system");
 
-            let button = new Phaser.Button(this.game, 1520, 100, "map-zoom-in", () => this.setZoom(this.zoom + 1));
+            let button = new Phaser.Button(this.game, 1520, 100, "map-button-zoom", () => this.setZoom(this.zoom + 1), undefined, 1, 0);
             button.anchor.set(0.5, 0.5);
             this.layer_overlay.add(button);
             this.tooltip.bindStaticText(button, "Zoom in");
-            button = new Phaser.Button(this.game, 1520, 980, "map-zoom-out", () => this.setZoom(this.zoom - 1));
+            button = new Phaser.Button(this.game, 1520, 980, "map-button-zoom", () => this.setZoom(this.zoom - 1), undefined, 3, 2);
             button.anchor.set(0.5, 0.5);
             this.layer_overlay.add(button);
             this.tooltip.bindStaticText(button, "Zoom out");
@@ -167,8 +171,15 @@ module TS.SpaceTac.UI {
          */
         setCamera(x: number, y: number, span: number, duration = 500, easing = Phaser.Easing.Cubic.InOut) {
             let scale = 1000 / span;
-            this.tweens.create(this.layer_universe.position).to({ x: 800 - x * scale, y: 540 - y * scale }, duration, easing).start();
+            this.tweens.create(this.layer_universe.position).to({ x: 920 - x * scale, y: 540 - y * scale }, duration, easing).start();
             this.tweens.create(this.layer_universe.scale).to({ x: scale, y: scale }, duration, easing).start();
+        }
+
+        /**
+         * Set the alpha value for all links
+         */
+        setLinksAlpha(alpha: number) {
+            this.game.add.tween(this.starlinks_group).to({ alpha: alpha }, 500 * Math.abs(this.starlinks_group.alpha - alpha)).start();
         }
 
         /**
@@ -178,13 +189,16 @@ module TS.SpaceTac.UI {
             let current_star = this.player.fleet.location ? this.player.fleet.location.star : null;
             if (!current_star || level <= 0) {
                 this.setCamera(0, 0, this.universe.radius * 2);
+                this.setLinksAlpha(1);
                 this.zoom = 0;
             } else if (level == 1) {
                 // TODO Zoom to next-jump accessible
                 this.setCamera(current_star.x, current_star.y, this.universe.radius * 0.5);
+                this.setLinksAlpha(0.6);
                 this.zoom = 1;
             } else {
                 this.setCamera(current_star.x, current_star.y, current_star.radius * 2);
+                this.setLinksAlpha(0.2);
                 this.zoom = 2;
             }
 
