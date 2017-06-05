@@ -39,6 +39,10 @@ module TS.SpaceTac.UI {
             this.loopOrbit();
         }
 
+        get location(): StarLocation {
+            return this.fleet.location || new StarLocation();
+        }
+
         /**
          * Animate to a given position in orbit of its current star location
          */
@@ -71,7 +75,7 @@ module TS.SpaceTac.UI {
         /**
          * Make the fleet move to another location in the same system
          */
-        moveToLocation(location: StarLocation, speed = 1, on_leave: ((duration: number) => any) | null = null) {
+        moveToLocation(location: StarLocation, speed = 1, on_leave: ((duration: number) => any) | null = null, on_finished: Function | null = null) {
             if (this.fleet.location && location != this.fleet.location) {
                 let dx = location.universe_x - this.fleet.location.universe_x;
                 let dy = location.universe_y - this.fleet.location.universe_y;
@@ -92,6 +96,10 @@ module TS.SpaceTac.UI {
                             this.map.current_location.setFleetMoving(false);
                             this.map.updateInfo(location.star);
                             this.loopOrbit();
+                        }
+
+                        if (on_finished) {
+                            on_finished();
                         }
                     });
                     tween.start();

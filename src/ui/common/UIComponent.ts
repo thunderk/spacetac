@@ -132,10 +132,19 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Clear from all added content.
+         */
+        clearContent(): void {
+            while (this.container.children.length > 0) {
+                this.container.removeChildAt(0);
+            }
+        }
+
+        /**
          * Add a button in the component, positioning its center.
          */
-        addButton(x: number, y: number, on_click: Function, bg_normal: string, bg_hover = bg_normal, tooltip = "", angle = 0) {
-            let button = new Phaser.Button(this.view.game, x, y, bg_normal, on_click);
+        addButton(x: number, y: number, on_click: Function, background: string, frame_normal = 0, frame_hover = frame_normal, tooltip = "", angle = 0) {
+            let button = new Phaser.Button(this.view.game, x, y, background, on_click, undefined, frame_hover, frame_normal);
             button.anchor.set(0.5, 0.5);
             button.angle = angle;
             if (tooltip) {

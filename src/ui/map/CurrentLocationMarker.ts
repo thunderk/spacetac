@@ -25,8 +25,14 @@ module TS.SpaceTac.UI {
         }
 
         show() {
-            this.position.set(this.fleet.x, this.fleet.y);
-            let scale = (this.zoom >= 2) ? (this.fleet.scale.x * 4) : 0.002;
+            let scale = 1;
+            if (this.zoom == 2) {
+                this.position.set(this.fleet.x, this.fleet.y);
+                scale = this.fleet.scale.x * 4;
+            } else {
+                this.position.set(this.fleet.location.star.x, this.fleet.location.star.y);
+                scale = (this.zoom == 1) ? 0.002 : 0.016;
+            }
             this.alpha = 0;
             this.scale.set(scale * 10, scale * 10);
 

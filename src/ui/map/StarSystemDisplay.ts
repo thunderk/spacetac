@@ -33,16 +33,7 @@ module TS.SpaceTac.UI {
             // Show locations
             starsystem.locations.map(location => {
                 let location_sprite: Phaser.Image | null = null;
-                let fleet_move = () => {
-                    if (location == this.player.fleet.location) {
-                        if (location.shop) {
-                            this.view.character_sheet.setShop(location.shop);
-                            this.view.character_sheet.show(this.player.fleet.ships[0]);
-                        }
-                    } else {
-                        this.fleet_display.moveToLocation(location);
-                    }
-                }
+                let fleet_move = () => this.view.moveToLocation(location);
 
                 if (location.type == StarLocationType.STAR) {
                     location_sprite = this.addImage(location.x, location.y, "map-location-star", 0, fleet_move);

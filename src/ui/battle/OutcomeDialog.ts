@@ -15,20 +15,20 @@ module TS.SpaceTac.UI {
                 this.addButton(502, 871, () => {
                     parent.character_sheet.show(nn(outcome.winner).ships[0]);
                     parent.character_sheet.setLoot(outcome.loot);
-                }, "battle-outcome-button-loot", undefined, "Open character sheet to loot equipment from defeated fleet");
+                }, "battle-outcome-button-loot", 0, 0, "Open character sheet to loot equipment from defeated fleet");
 
                 this.addButton(924, 871, () => {
                     parent.exitBattle();
-                }, "battle-outcome-button-map", undefined, "Exit the battle and go back to the map");
+                }, "battle-outcome-button-map", 0, 0, "Exit the battle and go back to the map");
             } else {
                 this.addButton(502, 871, () => {
                     parent.revertBattle();
-                }, "battle-outcome-button-revert", undefined, "Go back to where the fleet was before the battle happened");
+                }, "battle-outcome-button-revert", 0, 0, "Go back to where the fleet was before the battle happened");
 
                 this.addButton(924, 871, () => {
                     // Quit the game, and go back to menu
                     parent.gameui.quitGame();
-                }, "battle-outcome-button-menu", undefined, "Quit the game, and go back to main menu");
+                }, "battle-outcome-button-menu", 0, 0, "Quit the game, and go back to main menu");
             }
 
             this.addText(780, 270, "You", "#ffffff", 20);

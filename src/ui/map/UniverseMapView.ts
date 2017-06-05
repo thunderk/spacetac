@@ -28,14 +28,16 @@ module TS.SpaceTac.UI {
         // Frame to highlight current location
         current_location: CurrentLocationMarker
 
-        // Button to jump to another system
-        button_jump: Phaser.Button
+        // Actions for selected location
+        actions: MapLocationMenu
 
         // Character sheet
         character_sheet: CharacterSheet
 
         // Zoom level
         zoom = 0
+        zoom_in: Phaser.Button
+        zoom_out: Phaser.Button
 
         /**
          * Init the view, binding it to a universe
@@ -82,20 +84,18 @@ module TS.SpaceTac.UI {
             this.current_location = new CurrentLocationMarker(this, this.player_fleet);
             this.layer_universe.add(this.current_location);
 
-            this.button_jump = new Phaser.Button(this.game, 0, 0, "map-button-jump", () => this.doJump());
-            this.button_jump.anchor.set(0.5, 0.5);
-            this.button_jump.visible = false;
-            this.layer_universe.add(this.button_jump);
-            this.tooltip.bindStaticText(this.button_jump, "Engage warp drive to jump to another star system");
+            this.actions = new MapLocationMenu(this);
+            this.actions.setPosition(30, 30);
+            this.actions.moveToLayer(this.layer_overlay);
 
-            let button = new Phaser.Button(this.game, 1520, 100, "map-button-zoom", () => this.setZoom(this.zoom + 1), undefined, 1, 0);
-            button.anchor.set(0.5, 0.5);
-            this.layer_overlay.add(button);
-            this.tooltip.bindStaticText(button, "Zoom in");
-            button = new Phaser.Button(this.game, 1520, 980, "map-button-zoom", () => this.setZoom(this.zoom - 1), undefined, 3, 2);
-            button.anchor.set(0.5, 0.5);
-            this.layer_overlay.add(button);
-            this.tooltip.bindStaticText(button, "Zoom out");
+            this.zoom_in = new Phaser.Button(this.game, 1520, 100, "map-button-zoom", () => this.setZoom(this.zoom + 1), undefined, 1, 0);
+            this.zoom_in.anchor.set(0.5, 0.5);
+            this.layer_overlay.add(this.zoom_in);
+            this.tooltip.bindStaticText(this.zoom_in, "Zoom in");
+            this.zoom_out = new Phaser.Button(this.game, 1520, 980, "map-button-zoom", () => this.setZoom(this.zoom - 1), undefined, 3, 2);
+            this.zoom_out.anchor.set(0.5, 0.5);
+            this.layer_overlay.add(this.zoom_out);
+            this.tooltip.bindStaticText(this.zoom_out, "Zoom out");
 
             this.character_sheet = new CharacterSheet(this, this.getWidth() - 307);
             this.character_sheet.show(this.player.fleet.ships[0], false);
@@ -133,7 +133,7 @@ module TS.SpaceTac.UI {
         /**
          * Update info on all star systems (fog of war, available data...)
          */
-        updateInfo(current_star: Star | null) {
+        updateInfo(current_star: Star | null, interactive = true) {
             this.current_location.setZoom(this.zoom);
 
             this.starlinks.forEach(linkgraphics => {
@@ -143,14 +143,10 @@ module TS.SpaceTac.UI {
 
             this.starsystems.forEach(system => system.updateInfo(this.zoom, system.starsystem == current_star));
 
-            let location = this.player.fleet.location;
-            if (location && location.type == StarLocationType.WARP && this.zoom >= 2) {
-                let angle = Math.atan2(location.y, location.x);
-                this.button_jump.scale.set(location.star.radius * 0.002, location.star.radius * 0.002);
-                this.button_jump.position.set(location.star.x + location.x + 0.02 * Math.cos(angle), location.star.y + location.y + 0.02 * Math.sin(angle));
-                this.animations.setVisible(this.button_jump, true, 300);
-            } else {
-                this.animations.setVisible(this.button_jump, false, 300);
+            this.actions.setFromLocation(this.player.fleet.location, this);
+
+            if (interactive) {
+                this.setInteractionEnabled(true);
             }
         }
 
@@ -207,18 +203,55 @@ module TS.SpaceTac.UI {
 
         /**
          * Do the jump animation to another system
+         * 
+         * This will only work if current location is a warp
          */
-        doJump() {
-            if (this.player.fleet.location && this.player.fleet.location.type == StarLocationType.WARP && this.player.fleet.location.jump_dest) {
-                this.animations.setVisible(this.button_jump, false, 300);
-
-                let dest_location = this.player.fleet.location.jump_dest;
+        doJump(): void {
+            let location = this.player.fleet.location;
+            if (location && location.type == StarLocationType.WARP && location.jump_dest) {
+                let dest_location = location.jump_dest;
                 let dest_star = dest_location.star;
                 this.player_fleet.moveToLocation(dest_location, 3, duration => {
-                    this.timer.schedule(duration / 2, () => this.updateInfo(dest_star));
+                    this.timer.schedule(duration / 2, () => this.updateInfo(dest_star, false));
                     this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, Phaser.Easing.Cubic.Out);
+                }, () => {
+                    this.setInteractionEnabled(true);
                 });
+                this.setInteractionEnabled(false);
             }
+        }
+
+        /**
+         * Open the dockyard interface
+         * 
+         * This will only work if current location has a dockyard
+         */
+        openShop(): void {
+            let location = this.player.fleet.location;
+            if (location && location.shop) {
+                this.character_sheet.setShop(location.shop);
+                this.character_sheet.show(this.player.fleet.ships[0]);
+            }
+        }
+
+        /**
+         * Move the fleet to another location
+         */
+        moveToLocation(dest: StarLocation): void {
+            if (dest != this.player.fleet.location) {
+                this.setInteractionEnabled(false);
+                this.player_fleet.moveToLocation(dest, 1, null, () => this.updateInfo(dest.star));
+            }
+        }
+
+        /**
+         * Set the interactive state
+         */
+        setInteractionEnabled(enabled: boolean) {
+            this.actions.setVisible(enabled && this.zoom == 2, 300);
+            this.animations.setVisible(this.zoom_in, enabled && this.zoom < 2, 300);
+            this.animations.setVisible(this.zoom_out, enabled && this.zoom > 0, 300);
+            this.animations.setVisible(this.character_sheet, enabled, 300);
         }
     }
 }
