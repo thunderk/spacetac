@@ -87,8 +87,10 @@ module TS.SpaceTac.UI {
             }
 
             obj.onInputOver.add(() => {
-                cursorinside = true;
-                enternext = Timer.global.schedule(hovertime, effectiveenter);
+                if (obj.visible && obj.alpha) {
+                    cursorinside = true;
+                    enternext = Timer.global.schedule(hovertime, effectiveenter);
+                }
             });
 
             obj.onInputOut.add(() => {
@@ -97,9 +99,11 @@ module TS.SpaceTac.UI {
             });
 
             obj.onInputDown.add(() => {
-                holdstart = new Date();
-                if (!cursorinside && !enternext) {
-                    enternext = Timer.global.schedule(holdtime, effectiveenter);
+                if (obj.visible && obj.alpha) {
+                    holdstart = new Date();
+                    if (!cursorinside && !enternext) {
+                        enternext = Timer.global.schedule(holdtime, effectiveenter);
+                    }
                 }
             });
 

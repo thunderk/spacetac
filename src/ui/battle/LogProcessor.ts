@@ -245,7 +245,9 @@ module TS.SpaceTac.UI {
         private processShipChangeEvent(event: ShipChangeEvent): void {
             this.view.arena.setShipPlaying(event.new_ship);
             this.view.ship_list.setPlaying(event.new_ship);
-            this.view.gameui.audio.playOnce("battle-ship-change");
+            if (event.ship !== event.new_ship) {
+                this.view.gameui.audio.playOnce("battle-ship-change");
+            }
         }
 
         // Damage to ship

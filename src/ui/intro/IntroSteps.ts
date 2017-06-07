@@ -122,8 +122,8 @@ module TS.SpaceTac.UI {
                     new ParticleConfig(ParticleShape.FLARE, ParticleColor.CYAN, 10, 0.2, -45)
                 ]);
                 fleet.position.set(this.view.getMidWidth(), this.view.getMidHeight());
-                this.view.game.add.tween(fleet).from({ x: fleet.x + 1500, y: fleet.y - 750 }, 3000, Phaser.Easing.Circular.Out, true);
-                this.view.game.add.tween(fleet).to({ alpha: 0, width: 40, height: 40 }, 500, Phaser.Easing.Cubic.Out, true, 2000);
+                this.view.game.add.tween(fleet).from({ x: fleet.x + 1500, y: fleet.y - 750 }, 5000, Phaser.Easing.Circular.Out, true);
+                this.view.game.add.tween(fleet).to({ alpha: 0, width: 40, height: 40 }, 500, Phaser.Easing.Cubic.Out, true, 3500);
                 let flash = this.view.game.add.image(this.view.getMidWidth() + 60, this.view.getMidHeight() - 30, "common-particles", 15);
                 flash.anchor.set(0.5);
                 flash.scale.set(0.1);
@@ -132,7 +132,7 @@ module TS.SpaceTac.UI {
                 subflash.anchor.set(0.5);
                 subflash.scale.set(0.5);
                 flash.addChild(subflash);
-                this.view.game.add.tween(flash).to({ alpha: 0.7, width: 60, height: 60 }, 300, Phaser.Easing.Quadratic.Out, true, 2000, undefined, true);
+                this.view.game.add.tween(flash).to({ alpha: 0.7, width: 60, height: 60 }, 300, Phaser.Easing.Quadratic.Out, true, 3500, undefined, true);
             }
         }
 

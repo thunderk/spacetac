@@ -17,7 +17,6 @@ module TS.SpaceTac.UI {
 
             this.layer_stars = this.addLayer("stars");
             this.layer_title = this.addLayer("title");
-            this.layer_title.x = 5000;
 
             // Stars
             for (let i = 0; i < 300; i++) {
@@ -51,7 +50,16 @@ module TS.SpaceTac.UI {
             this.dialog_load_game.moveToLayer(this.layer_title);
             this.dialog_load_game.setVisible(false);
 
-            this.tweens.create(this.layer_title).to({ x: 0 }, 3000, Phaser.Easing.Circular.Out).start();
+            // Fading in
+            this.tweens.create(this.layer_stars).from({ alpha: 0 }, 5000).start();
+            this.layer_title.visible = false;
+            let fading = this.timer.schedule(5000, () => {
+                this.animations.show(this.layer_title, 1000);
+            })
+            this.input.onTap.addOnce(() => {
+                this.timer.cancel(fading);
+                this.animations.show(this.layer_title, 0);
+            });
 
             this.gameui.audio.startMusic("supernatural");
         }
