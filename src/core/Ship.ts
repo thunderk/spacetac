@@ -430,10 +430,11 @@ module TS.SpaceTac {
          */
         rotate(angle: number, log = true) {
             if (angle != this.arena_angle) {
+                let start = copy(this.location);
                 this.setArenaFacingAngle(angle);
 
                 if (log) {
-                    this.addBattleEvent(new MoveEvent(this, copy(this.location), new ArenaLocationAngle(this.arena_x, this.arena_y, angle)));
+                    this.addBattleEvent(new MoveEvent(this, start, copy(this.location)));
                 }
             }
         }

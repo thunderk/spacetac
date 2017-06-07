@@ -40,6 +40,12 @@ module TS.SpaceTac.Specs {
 
             ship.moveTo(70, 50);
             expect(battle.log.events).toEqual([new MoveEvent(ship, new ArenaLocationAngle(50, 50, Math.PI), new ArenaLocationAngle(70, 50, 0))]);
+
+            ship.rotate(2.1);
+            expect(battle.log.events).toEqual([
+                new MoveEvent(ship, new ArenaLocationAngle(50, 50, Math.PI), new ArenaLocationAngle(70, 50, 0)),
+                new MoveEvent(ship, new ArenaLocationAngle(70, 50, 0), new ArenaLocationAngle(70, 50, 2.1))
+            ]);
         });
 
         it("applies equipment cooldown", function () {
