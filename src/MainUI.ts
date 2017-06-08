@@ -33,6 +33,8 @@ module TS.SpaceTac {
             this.session = new GameSession();
 
             if (!headless) {
+                this.state.onStateChange.add((state: string) => console.log(`View change: ${state}`));
+
                 this.state.add('boot', UI.Boot);
                 this.state.add('preload', UI.Preload);
                 this.state.add('mainmenu', UI.MainMenu);

@@ -42,8 +42,10 @@ module TS.SpaceTac.UI {
         pageMenu() {
             this.pageCommon();
 
-            this.addButton(this.width / 2, 600, () => this.pageInvite(), "options-button");
-            this.addText(this.width / 2, 600, "Invite a friend", "#5398e9", 36, true, true);
+            if (this.view.session.primary) {
+                this.addButton(this.width / 2, 600, () => this.pageInvite(), "options-button");
+                this.addText(this.width / 2, 600, "Invite a friend", "#5398e9", 36, true, true);
+            }
 
             this.addButton(this.width / 2, 800, () => this.view.gameui.quitGame(), "options-button");
             this.addText(this.width / 2, 800, "Quit to menu", "#5398e9", 36, true, true);

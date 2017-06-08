@@ -43,5 +43,12 @@ module TS.SpaceTac.UI {
         getContent(): string {
             return this.content.text;
         }
+
+        /**
+         * Set the current text content
+         */
+        setContent(content: string): void {
+            this.content.text = content.slice(0, this.maxlength);
+        }
     }
 }

@@ -11,6 +11,9 @@ module TS.SpaceTac.UI {
         // Interacting player
         player = new Player()
 
+        // Interaction enabled or not
+        interactive = true
+
         // Layers
         layer_universe: Phaser.Group
         layer_overlay: Phaser.Group
@@ -213,7 +216,7 @@ module TS.SpaceTac.UI {
          */
         doJump(): void {
             let location = this.player.fleet.location;
-            if (location && location.type == StarLocationType.WARP && location.jump_dest) {
+            if (this.interactive && location && location.type == StarLocationType.WARP && location.jump_dest) {
                 let dest_location = location.jump_dest;
                 let dest_star = dest_location.star;
                 this.player_fleet.moveToLocation(dest_location, 3, duration => {
@@ -233,7 +236,7 @@ module TS.SpaceTac.UI {
          */
         openShop(): void {
             let location = this.player.fleet.location;
-            if (location && location.shop) {
+            if (this.interactive && location && location.shop) {
                 this.character_sheet.setShop(location.shop);
                 this.character_sheet.show(this.player.fleet.ships[0]);
             }
@@ -243,7 +246,7 @@ module TS.SpaceTac.UI {
          * Move the fleet to another location
          */
         moveToLocation(dest: StarLocation): void {
-            if (dest != this.player.fleet.location) {
+            if (this.interactive && dest != this.player.fleet.location) {
                 this.setInteractionEnabled(false);
                 this.player_fleet.moveToLocation(dest, 1, null, () => this.updateInfo(dest.star));
             }
@@ -253,6 +256,7 @@ module TS.SpaceTac.UI {
          * Set the interactive state
          */
         setInteractionEnabled(enabled: boolean) {
+            this.interactive = enabled && !this.session.spectator;
             this.actions.setVisible(enabled && this.zoom == 2, 300);
             this.animations.setVisible(this.zoom_in, enabled && this.zoom < 2, 300);
             this.animations.setVisible(this.zoom_out, enabled && this.zoom > 0, 300);

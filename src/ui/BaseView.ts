@@ -129,11 +129,13 @@ module TS.SpaceTac.UI {
          */
         autoSave(): void {
             let session = this.gameui.session;
-            let connection = this.getConnection();
-            connection.publish(session, session.getDescription())
-                .then(() => this.messages.addMessage("Auto-saved to cloud"))
-                .catch(console.error)
-            //.catch(() => this.messages.addMessage("Error saving game to cloud"));
+            if (session.primary) {
+                let connection = this.getConnection();
+                connection.publish(session, session.getDescription())
+                    .then(() => this.messages.addMessage("Auto-saved to cloud"))
+                    .catch(console.error)
+                //.catch(() => this.messages.addMessage("Error saving game to cloud"));
+            }
         }
 
         /**

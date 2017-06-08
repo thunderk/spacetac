@@ -17,6 +17,12 @@ module TS.SpaceTac {
         // Starting location
         start_location: StarLocation
 
+        // Indicator that the session is the primary one
+        primary = true
+
+        // Indicator of spectator mode
+        spectator = false
+
         constructor() {
             this.id = RandomGenerator.global.id(20);
             this.universe = new Universe();

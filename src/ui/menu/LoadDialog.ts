@@ -30,7 +30,7 @@ module TS.SpaceTac.UI {
         /**
          * Refresh available save games
          */
-        private refreshSaves(): void {
+        refreshSaves(): void {
             let connection = this.view.getConnection();
 
             // TODO include local save
@@ -45,7 +45,7 @@ module TS.SpaceTac.UI {
         /**
          * Set the current selected save game
          */
-        private setCurrentSave(position: number): void {
+        setCurrentSave(position: number): void {
             if (this.saves.length == 0) {
                 this.save_name.setContent("No save game found");
             } else {
@@ -59,19 +59,23 @@ module TS.SpaceTac.UI {
         /**
          * Change the selected save
          */
-        private paginateSave(offset: number) {
+        paginateSave(offset: number) {
             this.setCurrentSave(this.save_selected + offset);
         }
 
         /**
          * Join an online game
          */
-        private join(): void {
+        join(): void {
             let token = this.token_input.getContent();
             let connection = this.view.getConnection();
 
             connection.loadByToken(token).then(session => {
                 if (session) {
+                    // For now, we will only spectate
+                    session.primary = false;
+                    session.spectator = true;
+
                     this.view.gameui.setSession(session);
                 }
             });
@@ -80,7 +84,7 @@ module TS.SpaceTac.UI {
         /**
          * Load selected save game
          */
-        private load(): void {
+        load(): void {
             if (this.save_selected >= 0 && this.saves.length > this.save_selected) {
                 let connection = this.view.getConnection();
                 let [saveid, saveinfo] = this.saves[this.save_selected];

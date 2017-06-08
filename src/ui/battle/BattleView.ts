@@ -227,6 +227,10 @@ module TS.SpaceTac.UI {
         // Enable or disable the global player interaction
         //  Disable interaction when it is the AI turn, or when the current ship can't play
         setInteractionEnabled(enabled: boolean): void {
+            if (this.session.spectator) {
+                enabled = false;
+            }
+
             this.action_bar.setInteractive(enabled);
             this.exitTargettingMode();
             this.interacting = enabled;
