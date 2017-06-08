@@ -33,21 +33,25 @@ module TS.SpaceTac.UI {
             battleview.layer_borders.add(this);
 
             // Background
-            this.addChild(new Phaser.Image(this.game, 0, 0, "battle-actionbar", 0));
+            this.add(new Phaser.Image(this.game, 0, 0, "battle-actionbar-background", 0));
 
             // Power bar
             this.power = this.game.add.group();
-            this.addChild(this.power);
+            this.add(this.power);
 
             // Group for actions
             this.actions = new Phaser.Group(this.game);
-            this.addChild(this.actions);
+            this.add(this.actions);
 
             // Waiting icon
             this.icon_waiting = new Phaser.Image(this.game, this.width / 2, 50, "common-waiting", 0);
             this.icon_waiting.anchor.set(0.5, 0.5);
             this.icon_waiting.scale.set(0.5, 0.5);
-            this.addChild(this.icon_waiting);
+            this.add(this.icon_waiting);
+
+            // Options button
+            let button = battleview.add.button(1841, 0, "battle-actionbar-button-menu", () => battleview.showOptions(), null, 1, 0, 0, 1, this);
+            battleview.tooltip.bindStaticText(button, "Game options");
 
             // Key bindings
             battleview.inputs.bind("Escape", "Cancel action", () => this.actionEnded());
@@ -133,7 +137,7 @@ module TS.SpaceTac.UI {
 
         // Add an action icon
         addAction(ship: Ship, action: BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, 192 + this.action_icons.length * 88, 8, ship, action, this.action_icons.length);
+            var icon = new ActionIcon(this, 170 + this.action_icons.length * 88, 8, ship, action, this.action_icons.length);
             this.action_icons.push(icon);
 
             return icon;
@@ -150,23 +154,23 @@ module TS.SpaceTac.UI {
                 range(current_power - power_capacity).forEach(i => this.power.removeChildAt(current_power - 1 - i));
                 //this.power.removeChildren(ship_power, current_power);  // TODO bugged in phaser 2.6
             } else if (power_capacity > current_power) {
-                range(power_capacity - current_power).forEach(i => this.game.add.image(190 + (current_power + i) * 56, 104, "battle-power-used", 0, this.power));
+                range(power_capacity - current_power).forEach(i => this.game.add.image(192 + (current_power + i) * 56, 104, "battle-actionbar-power", 0, this.power));
             }
 
             let power_value = this.ship_power_value;
             let remaining_power = power_value - selected_action;
             this.power.children.forEach((obj, idx) => {
                 let img = <Phaser.Image>obj;
-                let key: string;
+                let frame: number;
                 if (idx < remaining_power) {
-                    key = "battle-power-available";
+                    frame = 0;
                 } else if (idx < power_value) {
-                    key = "battle-power-using";
+                    frame = 2;
                 } else {
-                    key = "battle-power-used"
+                    frame = 1;
                 }
-                img.name = key;
-                img.loadTexture(key);
+                img.data.frame = frame;
+                img.frame = frame;
             });
         }
 

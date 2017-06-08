@@ -13,6 +13,9 @@ module TS.SpaceTac {
         // Audio manager
         audio: UI.Audio;
 
+        // Game options
+        options: UI.GameOptions;
+
         // Storage used
         storage: Storage;
 
@@ -25,7 +28,6 @@ module TS.SpaceTac {
             this.headless = headless;
 
             this.audio = new UI.Audio(this);
-
             this.storage = localStorage;
 
             this.session = new GameSession();
@@ -53,6 +55,9 @@ module TS.SpaceTac {
             if (!this.headless) {
                 this.plugins.add((<any>Phaser.Plugin).SceneGraph);
             }
+
+            this.audio = new UI.Audio(this);
+            this.options = new UI.GameOptions(this);
         }
 
         /**
@@ -131,6 +136,28 @@ module TS.SpaceTac {
                 }
             } else {
                 return null;
+            }
+        }
+
+        /**
+         * Check if the game is currently fullscreen
+         */
+        isFullscreen(): boolean {
+            return this.scale.isFullScreen;
+        }
+
+        /**
+         * Toggle fullscreen mode.
+         * 
+         * Returns true if the result is fullscreen
+         */
+        toggleFullscreen(active: boolean | null = null): boolean {
+            if (active === false || (active !== true && this.isFullscreen())) {
+                this.scale.stopFullScreen();
+                return false;
+            } else {
+                this.scale.startFullScreen(true);
+                return true;
             }
         }
     }

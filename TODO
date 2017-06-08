@@ -31,6 +31,7 @@
 * Find incentives to move from starting position
 * Outcome: disable the loot button if there is no loot
 * Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
+* UI: add standard confirm dialog
 * Controls: do not focus on ship while targetting for area effects (dissociate hover and target)
 * Controls: fix hover being stuck when the cursor exits the window, or the item moves or is hidden
 * Drones: add hull points and take area damage

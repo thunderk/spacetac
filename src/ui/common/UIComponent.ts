@@ -1,6 +1,32 @@
 module TS.SpaceTac.UI {
     export type UIInternalComponent = Phaser.Group | Phaser.Image | Phaser.Button | Phaser.Sprite;
 
+    export type UIImageInfo = string | { key: string, frame?: number, frame1?: number, frame2?: number };
+    export type UITextInfo = { content: string, color: string, size: number, bold?: boolean };
+
+    function imageFromInfo(game: Phaser.Game, info: UIImageInfo): Phaser.Image {
+        if (typeof info === "string") {
+            info = { key: info };
+        }
+        let image = new Phaser.Image(game, 0, 0, info.key, info.frame);
+        image.anchor.set(0.5, 0.5);
+        return image;
+    }
+
+    function textFromInfo(game: Phaser.Game, info: UITextInfo): Phaser.Text {
+        let style = { font: `${info.bold ? "bold " : ""}${info.size}pt Arial`, fill: info.color };
+        let text = new Phaser.Text(game, 0, 0, info.content, style);
+        return text;
+    }
+
+    function autoFromInfo(game: Phaser.Game, info: UIImageInfo | UITextInfo): Phaser.Text | Phaser.Image {
+        if (info.hasOwnProperty("content")) {
+            return textFromInfo(game, <UITextInfo>info);
+        } else {
+            return imageFromInfo(game, <UIImageInfo>info);
+        }
+    }
+
     /**
      * Base class for UI components
      */
@@ -39,11 +65,26 @@ module TS.SpaceTac.UI {
             return this.view.gameui;
         }
 
+        jasmineToString(): string {
+            return this.toString();
+        }
+
+        toString(): string {
+            return `<${classname(this)}>`;
+        }
+
         /**
          * Move the a parent's layer
          */
         moveToLayer(layer: Phaser.Group) {
             layer.add(this.container);
+        }
+
+        /**
+         * Destroy the component
+         */
+        destroy(children = true) {
+            this.container.destroy(children);
         }
 
         /**
@@ -143,7 +184,7 @@ module TS.SpaceTac.UI {
         /**
          * Add a button in the component, positioning its center.
          */
-        addButton(x: number, y: number, on_click: Function, background: string, frame_normal = 0, frame_hover = frame_normal, tooltip = "", angle = 0) {
+        addButton(x: number, y: number, on_click: Function, background: string, frame_normal = 0, frame_hover = 1, tooltip = "", angle = 0) {
             let button = new Phaser.Button(this.view.game, x, y, background, on_click, undefined, frame_hover, frame_normal);
             button.anchor.set(0.5, 0.5);
             button.angle = angle;
@@ -177,6 +218,40 @@ module TS.SpaceTac.UI {
             image.anchor.set(0.5, 0.5);
             image.scale.set(scale);
             this.addInternalChild(image);
+        }
+
+        /**
+         * Add a 2-states toggle button.
+         * 
+         * *background* should have three frames (toggled, untoggled and hovered).
+         * 
+         * Returns a function to force the state of the button.
+         */
+        addToggleButton(x: number, y: number, background: UIImageInfo, content: UIImageInfo | UITextInfo, on_change: (toggled: boolean) => void): (toggled: boolean) => void {
+            let toggled = false;
+            let toggle = (state: boolean, broadcast = false) => {
+                toggled = state;
+                if (typeof background !== "string") {
+                    image.frame = (toggled ? background.frame : background.frame1) || background.frame || 0;
+                }
+                contentobj.alpha = toggled ? 1 : 0.5;
+                if (broadcast) {
+                    on_change(toggled);
+                }
+            };
+
+            let button = new Phaser.Button(this.container.game, x, y, "common-transparent", () => toggle(!toggled, true));
+
+            let image = imageFromInfo(this.game, background);
+            let contentobj = autoFromInfo(this.game, content);
+
+            button.addChild(image);
+            button.addChild(contentobj);
+            this.addInternalChild(button);
+
+            toggle(toggled);
+
+            return toggle;
         }
 
         /**

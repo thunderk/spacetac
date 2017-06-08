@@ -88,14 +88,19 @@ module TS.SpaceTac.UI {
             this.actions.setPosition(30, 30);
             this.actions.moveToLayer(this.layer_overlay);
 
-            this.zoom_in = new Phaser.Button(this.game, 1520, 100, "map-button-zoom", () => this.setZoom(this.zoom + 1), undefined, 1, 0);
+            this.zoom_in = new Phaser.Button(this.game, 1540, 172, "map-buttons", () => this.setZoom(this.zoom + 1), undefined, 3, 0);
             this.zoom_in.anchor.set(0.5, 0.5);
             this.layer_overlay.add(this.zoom_in);
             this.tooltip.bindStaticText(this.zoom_in, "Zoom in");
-            this.zoom_out = new Phaser.Button(this.game, 1520, 980, "map-button-zoom", () => this.setZoom(this.zoom - 1), undefined, 3, 2);
+            this.zoom_out = new Phaser.Button(this.game, 1540, 958, "map-buttons", () => this.setZoom(this.zoom - 1), undefined, 4, 1);
             this.zoom_out.anchor.set(0.5, 0.5);
             this.layer_overlay.add(this.zoom_out);
             this.tooltip.bindStaticText(this.zoom_out, "Zoom out");
+            let options = new Phaser.Button(this.game, 1436, 69, "map-buttons", () => this.showOptions(), undefined, 5, 2);
+            options.angle = -90;
+            options.anchor.set(0.5, 0.5);
+            this.layer_overlay.add(options);
+            this.tooltip.bindStaticText(options, "Game options");
 
             this.character_sheet = new CharacterSheet(this, this.getWidth() - 307);
             this.character_sheet.show(this.player.fleet.ships[0], false);

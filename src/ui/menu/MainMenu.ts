@@ -36,7 +36,8 @@ module TS.SpaceTac.UI {
             this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", "Play a single generated battle", () => this.onQuickBattle());
 
             // Fullscreen button
-            let button = new Phaser.Button(this.game, 1815, 15, "menu-button-fullscreen", () => this.toggleFullscreen());
+            let button = new Phaser.Button(this.game, this.getWidth(), 0, "options-options", () => this.options.toggleBoolean("fullscreen"), null, 2, 2);
+            button.anchor.set(1, 0);
             this.tooltip.bindStaticText(button, "Toggle full-screen");
             this.layer_title.add(button);
 
@@ -65,13 +66,7 @@ module TS.SpaceTac.UI {
         }
 
         addButton(x: number, y: number, caption: string, tooltip: string, callback: Function): Phaser.Button {
-            var button = this.add.button(x - 20, y + 20, "menu-button", () => {
-                let fullscreen = this.getStorage("fullscreen");
-                if (fullscreen == "true") {
-                    this.toggleFullscreen(true);
-                }
-                callback();
-            });
+            var button = this.add.button(x - 20, y + 20, "menu-button", callback);
             button.anchor.set(0.5, 0);
             button.input.useHandCursor = true;
 

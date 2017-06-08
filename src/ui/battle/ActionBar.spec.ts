@@ -105,11 +105,11 @@ module TS.SpaceTac.UI.Specs {
                 bar.power.children.forEach((child, idx) => {
                     let img = <Phaser.Image>child;
                     if (idx < available) {
-                        expect(img.name).toEqual("battle-power-available");
+                        expect(img.data.frame).toEqual(0);
                     } else if (idx < available + using) {
-                        expect(img.name).toEqual("battle-power-using");
+                        expect(img.data.frame).toEqual(2);
                     } else {
-                        expect(img.name).toEqual("battle-power-used");
+                        expect(img.data.frame).toEqual(1);
                     }
                 });
             }

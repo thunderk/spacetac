@@ -4,26 +4,29 @@ module TS.SpaceTac.UI {
      */
     export class BaseView extends Phaser.State {
         // Link to the root UI
-        gameui: MainUI;
+        gameui: MainUI
 
         // Message notifications
-        messages: Messages;
+        messages: Messages
 
         // Input and key bindings
-        inputs: InputManager;
+        inputs: InputManager
 
         // Animations
-        animations: Animations;
+        animations: Animations
 
         // Timing
-        timer: Timer;
+        timer: Timer
 
         // Tooltip
-        tooltip_layer: Phaser.Group;
-        tooltip: Tooltip;
+        tooltip_layer: Phaser.Group
+        tooltip: Tooltip
 
         // Layers
-        layers: Phaser.Group;
+        layers: Phaser.Group
+
+        // Modal dialogs
+        dialogs_layer: Phaser.Group
 
         // Get the size of display
         getWidth(): number {
@@ -56,6 +59,7 @@ module TS.SpaceTac.UI {
 
             // Layers
             this.layers = this.add.group(undefined, "View layers");
+            this.dialogs_layer = this.add.group(undefined, "Dialogs layer");
             this.tooltip_layer = this.add.group(undefined, "Tooltip layer");
             this.tooltip = new Tooltip(this);
             this.messages = new Messages(this);
@@ -78,6 +82,14 @@ module TS.SpaceTac.UI {
             super.shutdown();
 
             this.timer.cancelAll(true);
+        }
+
+        get audio() {
+            return this.gameui.audio;
+        }
+
+        get options() {
+            return this.gameui.options;
         }
 
         /**
@@ -123,20 +135,10 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Toggle fullscreen mode.
-         * 
-         * Returns true if the result is fullscreen
+         * Open options dialog
          */
-        toggleFullscreen(active: boolean | null = null): boolean {
-            if (active === false || (active !== true && this.game.scale.isFullScreen)) {
-                this.scale.stopFullScreen();
-                this.setStorage("fullscreen", "false");
-                return false;
-            } else {
-                this.scale.startFullScreen(true);
-                this.setStorage("fullscreen", "true");
-                return true;
-            }
+        showOptions(): void {
+            let dialog = new OptionsDialog(this);
         }
 
         /**

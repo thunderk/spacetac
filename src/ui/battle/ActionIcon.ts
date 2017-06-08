@@ -40,7 +40,7 @@ module TS.SpaceTac.UI {
 
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Ship, action: BaseAction, position: number) {
-            super(bar.game, x, y, "battle-action-inactive");
+            super(bar.game, x, y, "battle-actionbar-icon");
 
             this.bar = bar;
             this.battleview = bar.battleview;
@@ -51,27 +51,27 @@ module TS.SpaceTac.UI {
 
             // Active layer
             this.active = false;
-            this.layer_active = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-action-active", 0);
+            this.layer_active = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-actionbar-icon", 1);
             this.layer_active.anchor.set(0.5, 0.5);
             this.layer_active.visible = false;
             this.addChild(this.layer_active);
 
             // Selected layer
             this.selected = false;
-            this.layer_selected = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-action-selected", 0);
+            this.layer_selected = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-actionbar-icon", 2);
             this.layer_selected.anchor.set(0.5, 0.5);
             this.layer_selected.visible = false;
             this.addChild(this.layer_selected);
 
             // Icon layer
-            let icon = this.battleview.getImage(`battle-actions-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
+            let icon = this.battleview.getImage(`battle-actionbar-action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
             this.layer_icon = new Phaser.Image(this.game, this.width / 2, this.height / 2, icon, 0);
             this.layer_icon.anchor.set(0.5, 0.5);
             this.layer_icon.scale.set(0.25, 0.25);
             this.addChild(this.layer_icon);
 
             // Cooldown layer
-            this.cooldown = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-action-cooldown");
+            this.cooldown = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-actionbar-icon", 3);
             this.cooldown.anchor.set(0.5, 0.5);
             this.cooldown_count = new Phaser.Text(this.game, 0, 0, "", { align: "center", font: "36pt Arial", fill: "#aaaaaa" });
             this.cooldown_count.anchor.set(0.5, 0.5);

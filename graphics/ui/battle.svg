@@ -18,10 +18,11 @@
    version="1.1"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="battle.svg"
-   inkscape:export-filename="/tmp/whole.png"
+   inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/actionbar/background.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
-   style="enable-background:new">
+   style="enable-background:new"
+   enable-background="new">
   <defs
      id="defs4">
     <linearGradient
@@ -1147,6 +1148,16 @@
          stdDeviation="0.68625"
          id="feGaussianBlur5349" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter5171">
+      <feBlend
+         inkscape:collect="always"
+         mode="lighten"
+         in2="BackgroundImage"
+         id="feBlend5173" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1155,11 +1166,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="8"
-     inkscape:cx="302.42634"
-     inkscape:cy="1186.5897"
+     inkscape:zoom="0.5"
+     inkscape:cx="1132.2376"
+     inkscape:cy="630.86578"
      inkscape:document-units="px"
-     inkscape:current-layer="layer19"
+     inkscape:current-layer="layer25"
      showgrid="false"
      units="px"
      showguides="false"
@@ -1170,7 +1181,7 @@
      inkscape:object-nodes="true"
      inkscape:snap-intersection-paths="false"
      inkscape:object-paths="true"
-     inkscape:snap-global="false"
+     inkscape:snap-global="true"
      inkscape:showpageshadow="false"
      showborder="true"
      borderlayer="true" />
@@ -2060,7 +2071,6 @@
          height="131.76981"
          x="0"
          y="-27.637838"
-         transform="translate(0,27.637839)"
          inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/actionbar.png"
          inkscape:export-xdpi="90"
          inkscape:export-ydpi="90"
@@ -2069,7 +2079,8 @@
          inkscape:tile-w="1920"
          inkscape:tile-h="131.76981"
          inkscape:tile-x0="0"
-         inkscape:tile-y0="6.3635254e-07" />
+         inkscape:tile-y0="6.3635254e-07"
+         transform="translate(0,27.637839)" />
       <rect
          style="opacity:1;fill:url(#linearGradient10012);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:10.39999962;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect10004"
@@ -2082,40 +2093,6 @@
          d="M 11.379707,11.46429 H 144.37971 v 108.5 H 11.379707 Z"
          id="rect10022"
          inkscape:connector-curvature="0" />
-      <rect
-         style="fill:#111e26;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.53807366px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5649)"
-         id="rect5917"
-         width="75.571304"
-         height="130.23174"
-         x="1843.6595"
-         y="0.76903749" />
-      <g
-         id="g5012"
-         transform="translate(3.0467606,4.595854)">
-        <rect
-           y="43.359364"
-           x="1860.2344"
-           height="5.625"
-           width="36.328125"
-           id="rect5003"
-           style="fill:#babad1;fill-opacity:1;fill-rule:evenodd;stroke:#b8c9ce;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.59148937" />
-        <use
-           transform="translate(0,15.117188)"
-           height="100%"
-           width="100%"
-           id="use5005"
-           xlink:href="#rect5003"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,30.234375)"
-           height="100%"
-           width="100%"
-           id="use5007"
-           xlink:href="#rect5003"
-           y="0"
-           x="0" />
-      </g>
       <g
          id="g6122"
          transform="matrix(1.3001708,0,0,1.1990242,-12.304247,-205.15147)"
@@ -2174,6 +2151,74 @@
                  x="123.03658"
                  y="942.69641" /></flowRegion><flowPara
                id="flowPara6285" /></flowRoot>        </g>
+      </g>
+    </g>
+    <g
+       inkscape:groupmode="layer"
+       id="layer21"
+       inkscape:label="Menu button"
+       style="display:inline">
+      <g
+         inkscape:groupmode="layer"
+         id="layer25"
+         inkscape:label="Normal">
+        <g
+           style="display:inline;enable-background:new"
+           id="g4998"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/actionbar/button-menu1.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90">
+          <rect
+             y="0.76903749"
+             x="1843.6595"
+             height="130.23174"
+             width="75.571304"
+             id="rect5917"
+             style="fill:#111e26;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.53807366px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5649)" />
+          <g
+             transform="translate(3.0467606,4.595854)"
+             id="g5012">
+            <rect
+               style="fill:#babad1;fill-opacity:1;fill-rule:evenodd;stroke:#b8c9ce;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.59148937"
+               id="rect5003"
+               width="36.328125"
+               height="5.625"
+               x="1860.2344"
+               y="43.359364" />
+            <use
+               x="0"
+               y="0"
+               xlink:href="#rect5003"
+               id="use5005"
+               width="100%"
+               height="100%"
+               transform="translate(0,15.117188)" />
+            <use
+               x="0"
+               y="0"
+               xlink:href="#rect5003"
+               id="use5007"
+               width="100%"
+               height="100%"
+               transform="translate(0,30.234375)" />
+          </g>
+        </g>
+      </g>
+      <g
+         inkscape:groupmode="layer"
+         id="layer22"
+         inkscape:label="Hover"
+         style="display:inline;filter:url(#filter5171)">
+        <rect
+           style="opacity:1;fill:#1b3a4e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           id="rect5008"
+           width="76.340454"
+           height="131.76979"
+           x="1843.6595"
+           y="9.7751617e-06"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/actionbar/button-menu1.png"
+           inkscape:export-xdpi="90"
+           inkscape:export-ydpi="90" />
       </g>
     </g>
     <g
@@ -2631,7 +2676,7 @@
         </g>
         <text
            xml:space="preserve"
-           style="font-style:normal;font-weight:normal;font-size:45px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#aaaaaa;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
+           style="font-style:normal;font-weight:normal;font-size:45px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#aaaaaa;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
            x="238.54517"
            y="-34.282837"
            id="text5105"><tspan
@@ -2639,7 +2684,7 @@
              id="tspan5103"
              x="238.54517"
              y="-34.282837"
-             style="fill:#aaaaaa;stroke-width:0.9375px;fill-opacity:1;">2</tspan></text>
+             style="fill:#aaaaaa;fill-opacity:1;stroke-width:0.9375px">2</tspan></text>
       </g>
     </g>
     <g

@@ -845,10 +845,10 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="338.69768"
-     inkscape:cy="912.57657"
-     inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:cx="1356.8733"
+     inkscape:cy="814.09507"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      inkscape:snap-bbox="true"
@@ -857,7 +857,7 @@
      showguides="false"
      inkscape:bbox-nodes="true"
      inkscape:snap-page="true"
-     inkscape:snap-global="false"
+     inkscape:snap-global="true"
      inkscape:snap-object-midpoints="true">
     <sodipodi:guide
        position="0,0"
@@ -888,7 +888,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1347,6 +1347,118 @@
      inkscape:label="Buttons"
      style="display:inline">
     <g
+       inkscape:groupmode="layer"
+       id="layer1"
+       inkscape:label="Normal"
+       style="display:inline">
+      <g
+         id="g5061"
+         transform="translate(85.195844,18.256263)"
+         style="display:inline;filter:url(#filter5500)"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-in-hover.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
+        <g
+           id="g5106">
+          <path
+             sodipodi:nodetypes="ccccccc"
+             inkscape:connector-curvature="0"
+             id="path5014"
+             d="M 322.38894,50.516359 309.83798,38.001483 V 17.06636 L 322.38894,4.5514861 334.9399,17.06636 v 20.935123 z"
+             style="display:inline;fill:#3b526d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.69788879;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+          <path
+             inkscape:connector-curvature="0"
+             id="path5073"
+             d="m 311.05396,17.862411 v 19.457222 l 11.27207,11.272092"
+             style="display:inline;fill:none;fill-rule:evenodd;stroke:#d2e1f3;stroke-width:0.5291667;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        </g>
+        <path
+           inkscape:connector-curvature="0"
+           id="path5035"
+           d="m 320.50485,20.1814 v 5.469432 h -5.46843 v 3.767212 h 5.46843 v 5.4684 h 3.76718 v -5.4684 h 5.46942 v -3.767212 h -5.46942 V 20.1814 Z"
+           style="display:inline;opacity:1;fill:#b8d2f1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.40000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+      <g
+         style="display:inline"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/tmp/temp.png"
+         id="g4766"
+         transform="rotate(-90,274.10252,151.75608)">
+        <g
+           id="g5998">
+          <use
+             inkscape:export-ydpi="96"
+             inkscape:export-xdpi="96"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-normal.png"
+             transform="matrix(1,0,0,-1,85.195844,285.25563)"
+             height="100%"
+             width="100%"
+             id="use4761"
+             xlink:href="#g5106"
+             y="0"
+             x="0"
+             style="display:inline;filter:url(#filter5500)" />
+          <g
+             id="g5012"
+             transform="matrix(0,-0.28222223,0.28222223,0,390.28765,787.8475)"
+             style="display:inline;enable-background:new">
+            <rect
+               y="43.359364"
+               x="1860.2344"
+               height="5.625"
+               width="36.328125"
+               id="rect5003"
+               style="fill:#b8d2f1;fill-opacity:1;fill-rule:evenodd;stroke:#b8c9ce;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.59148937" />
+            <use
+               transform="translate(0,15.117188)"
+               height="100%"
+               width="100%"
+               id="use5005"
+               xlink:href="#rect5003"
+               y="0"
+               x="0" />
+            <use
+               transform="translate(0,30.234375)"
+               height="100%"
+               width="100%"
+               id="use5007"
+               xlink:href="#rect5003"
+               y="0"
+               x="0" />
+          </g>
+        </g>
+      </g>
+      <g
+         style="display:inline"
+         id="g5335"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-hover.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96"
+         transform="translate(0,-4.2333336)">
+        <use
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-normal.png"
+           transform="matrix(1,0,0,-1,85.195844,285.25563)"
+           height="100%"
+           width="100%"
+           id="use5108"
+           xlink:href="#g5106"
+           y="0"
+           x="0"
+           style="display:inline;filter:url(#filter5500)" />
+        <path
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-normal.png"
+           id="path4531"
+           d="m 414.93731,259.60541 v -3.76742 h -14.70506 v 3.76742 z"
+           style="display:inline;opacity:1;fill:#b8d2f1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5.50333309;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
+    <g
        id="g4765">
       <g
          transform="translate(-16.445,-9.5133171)"
@@ -1458,59 +1570,6 @@
       </g>
     </g>
     <g
-       id="g5061"
-       transform="translate(85.195845)"
-       style="filter:url(#filter5500)"
-       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-in-hover.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
-      <g
-         id="g5106">
-        <path
-           sodipodi:nodetypes="ccccccc"
-           inkscape:connector-curvature="0"
-           id="path5014"
-           d="M 322.38894,50.516359 309.83798,38.001483 V 17.06636 L 322.38894,4.5514861 334.9399,17.06636 v 20.935123 z"
-           style="display:inline;fill:#3b526d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.69788879;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-        <path
-           inkscape:connector-curvature="0"
-           id="path5073"
-           d="m 311.05396,17.862411 v 19.457222 l 11.27207,11.272092"
-           style="display:inline;fill:none;fill-rule:evenodd;stroke:#d2e1f3;stroke-width:0.5291667;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      </g>
-      <path
-         inkscape:connector-curvature="0"
-         id="path5035"
-         d="m 320.50485,20.1814 v 5.469432 h -5.46843 v 3.767212 h 5.46843 v 5.4684 h 3.76718 v -5.4684 h 5.46942 v -3.767212 h -5.46942 V 20.1814 Z"
-         style="display:inline;opacity:1;fill:#b8d2f1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.40000001;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    </g>
-    <g
-       id="g5335"
-       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-hover.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
-      <use
-         inkscape:export-ydpi="96"
-         inkscape:export-xdpi="96"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-normal.png"
-         transform="matrix(1,0,0,-1,85.195844,285.25563)"
-         height="100%"
-         width="100%"
-         id="use5108"
-         xlink:href="#g5106"
-         y="0"
-         x="0"
-         style="display:inline;filter:url(#filter5500)" />
-      <path
-         inkscape:export-ydpi="96"
-         inkscape:export-xdpi="96"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-normal.png"
-         id="path4531"
-         d="m 414.93731,259.60541 v -3.76742 h -14.70506 v 3.76742 z"
-         style="display:inline;opacity:1;fill:#b8d2f1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:5.50333309;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         inkscape:connector-curvature="0" />
-    </g>
-    <g
        id="g5181">
       <use
          transform="translate(-7.2277254,28.869074)"
@@ -1612,12 +1671,12 @@
        inkscape:groupmode="layer"
        id="layer6"
        inkscape:label="Hover"
-       style="display:none">
+       style="display:inline">
       <path
          sodipodi:nodetypes="ccccccc"
          inkscape:connector-curvature="0"
          id="path5014-3"
-         d="M 407.58478,50.516359 395.03382,38.001483 V 17.066359 L 407.58478,4.5514851 420.13574,17.066359 v 20.935124 z"
+         d="M 407.58479,68.772624 395.03383,56.257748 V 35.322624 l 12.55096,-12.514874 12.55096,12.514874 v 20.935124 z"
          style="display:inline;fill:#93aac7;fill-opacity:0.57021281;fill-rule:evenodd;stroke:none;stroke-width:0.69788885;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5517)"
          inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-in-hover.png"
          inkscape:export-xdpi="96"
@@ -1629,7 +1688,7 @@
          id="use4855"
          width="100%"
          height="100%"
-         transform="translate(4e-6,230.18779)"
+         transform="translate(-5.6259523e-6,207.69819)"
          inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-hover.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96" />
@@ -1640,6 +1699,17 @@
          height="17.866964"
          x="32.366337"
          y="47.586124" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path5014-3"
+         id="use6000"
+         width="100%"
+         height="100%"
+         transform="rotate(90,407.58466,18.273681)"
+         inkscape:export-filename="/tmp/temp.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
     </g>
     <text
        xml:space="preserve"

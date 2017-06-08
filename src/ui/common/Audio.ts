@@ -1,14 +1,13 @@
 module TS.SpaceTac.UI {
     // Utility functions for sounds
     export class Audio {
-
-        private game: MainUI;
-
-        private music: Phaser.Sound | null;
+        private game: MainUI
+        private music: Phaser.Sound | null = null
+        private music_volume = 1
+        private music_playing_volume = 1
 
         constructor(game: MainUI) {
             this.game = game;
-            this.music = null;
         }
 
         // Check if the sound system is up and running
@@ -31,7 +30,8 @@ module TS.SpaceTac.UI {
                     this.stopMusic();
                 }
                 if (!this.music) {
-                    this.music = this.game.sound.play(key, volume, true);
+                    this.music_playing_volume = volume;
+                    this.music = this.game.sound.play(key, volume * this.music_volume, true);
                 }
             }
         }
@@ -46,13 +46,41 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Toggle the mute status of the sound system
-        toggleMute(): void {
+        /**
+         * Get the main volume (0-1)
+         */
+        getMainVolume(): number {
             if (this.isActive()) {
-                if (this.game.sound.volume > 0) {
-                    this.game.sound.volume = 0;
-                } else {
-                    this.game.sound.volume = 1;
+                return this.game.sound.volume;
+            } else {
+                return 0;
+            }
+        }
+
+        /**
+         * Set the main volume (0-1)
+         */
+        setMainVolume(value: number) {
+            if (this.isActive()) {
+                this.game.sound.volume = clamp(value, 0, 1);
+            }
+        }
+
+        /**
+         * Get the music volume (0-1)
+         */
+        getMusicVolume(): number {
+            return this.music_volume;
+        }
+
+        /**
+         * Set the music volume (0-1)
+         */
+        setMusicVolume(value: number) {
+            this.music_volume = value;
+            if (this.isActive()) {
+                if (this.music) {
+                    this.music.volume = value * this.music_playing_volume;
                 }
             }
         }

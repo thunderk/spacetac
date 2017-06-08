@@ -114,4 +114,18 @@ module TS.SpaceTac.UI.Specs {
         let tnode = <Phaser.Text>node;
         expect(tnode.text).toEqual(content);
     }
+
+    /**
+     * Check that a layer contains the given component at a given index
+     */
+    export function checkComponentInLayer(layer: Phaser.Group, index: number, component: UIComponent) {
+        if (index >= layer.children.length) {
+            fail(`Not enough children in group ${layer.name} for ${component} at index ${index}`);
+        } else {
+            let child = layer.children[index];
+            if (child !== (<any>component).container) {
+                fail(`${component} is not at index ${index} in ${layer.name}`);
+            }
+        }
+    }
 }

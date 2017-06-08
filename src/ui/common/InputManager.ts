@@ -36,10 +36,10 @@ module TS.SpaceTac.UI {
                 this.game.state.start("router");
             });
             this.bind("m", "Toggle sound", () => {
-                this.game.audio.toggleMute();
+                this.game.options.setNumberValue("mainvolume", this.game.options.getNumberValue("mainvolume") > 0 ? 0 : 1);
             });
             this.bind("f", "Toggle fullscreen", () => {
-                view.toggleFullscreen();
+                this.game.options.setBooleanValue("fullscreen", !this.game.options.getBooleanValue("fullscreen"));
             });
             this.bind("+", "", () => {
                 if (this.cheats_allowed) {
