@@ -87,9 +87,11 @@ module TS.SpaceTac.UI {
         get audio() {
             return this.gameui.audio;
         }
-
         get options() {
             return this.gameui.options;
+        }
+        get session() {
+            return this.gameui.session;
         }
 
         /**

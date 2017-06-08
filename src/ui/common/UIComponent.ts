@@ -31,6 +31,7 @@ module TS.SpaceTac.UI {
      * Base class for UI components
      */
     export class UIComponent {
+        private has_background: boolean
         protected readonly view: BaseView;
         protected readonly parent: UIComponent | null;
         private readonly container: UIInternalComponent;
@@ -58,6 +59,9 @@ module TS.SpaceTac.UI {
 
             if (background_key) {
                 this.addInternalChild(new Phaser.Image(this.view.game, 0, 0, background_key));
+                this.has_background = true;
+            } else {
+                this.has_background = false;
             }
         }
 
@@ -176,8 +180,9 @@ module TS.SpaceTac.UI {
          * Clear from all added content.
          */
         clearContent(): void {
-            while (this.container.children.length > 0) {
-                this.container.removeChildAt(0);
+            let offset = this.has_background ? 1 : 0;
+            while (this.container.children.length > offset) {
+                this.container.removeChildAt(offset);
             }
         }
 
