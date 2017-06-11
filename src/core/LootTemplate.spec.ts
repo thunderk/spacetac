@@ -33,23 +33,23 @@ module TS.SpaceTac.Specs {
 
         it("applies requirements on skills", function () {
             let template = new LootTemplate(SlotType.Hull, "Hull");
-            template.setSkillsRequirements({ "skill_energy": 1, "skill_gravity": istep(2, istep(1)) });
+            template.setSkillsRequirements({ "skill_photons": 1, "skill_gravity": istep(2, istep(1)) });
 
             let result = template.generate(1);
             expect(result.requirements).toEqual({
-                "skill_energy": 1,
+                "skill_photons": 1,
                 "skill_gravity": 2
             });
 
             result = template.generate(2);
             expect(result.requirements).toEqual({
-                "skill_energy": 2,
+                "skill_photons": 2,
                 "skill_gravity": 3
             });
 
             result = template.generate(10);
             expect(result.requirements).toEqual({
-                "skill_energy": 10,
+                "skill_photons": 10,
                 "skill_gravity": 47
             });
         });
@@ -123,7 +123,7 @@ module TS.SpaceTac.Specs {
             let template = new LootTemplate(SlotType.Weapon, "Weapon");
             expect(template.hasDamageEffect()).toBe(false);
 
-            template.addAttributeEffect("initiative", 1);
+            template.addAttributeEffect("maneuvrability", 1);
             expect(template.hasDamageEffect()).toBe(false);
 
             template.addFireAction(1, 50, 50, [new EffectTemplate(new BaseEffect("test"), {})]);

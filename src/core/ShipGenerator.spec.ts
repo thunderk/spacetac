@@ -14,7 +14,7 @@ module TS.SpaceTac.Specs {
             expect(ship.slots[4].type).toBe(SlotType.Weapon);
             expect(ship.slots[5].type).toBe(SlotType.Weapon);
             expect(ship.slots[6].type).toBe(SlotType.Weapon);
-            expect(ship.getAttribute("skill_material")).toBe(1);
+            expect(ship.getAttribute("skill_materials")).toBe(1);
         });
     });
 }

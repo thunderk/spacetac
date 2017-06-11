@@ -5,11 +5,10 @@ module TS.SpaceTac.Equipments {
         constructor() {
             super(SlotType.Power, "Nuclear Reactor", "A standard nuclear power core, drawing power from atom fusion cycles");
 
-            this.setSkillsRequirements({ "skill_energy": 1 });
-            this.addAttributeEffect("initiative", istep(1));
-            this.addAttributeEffect("power_capacity", istep(8));
-            this.addAttributeEffect("power_initial", istep(5, irepeat(0.5)));
-            this.addAttributeEffect("power_recovery", istep(4, irepeat(0.3)));
+            this.setSkillsRequirements({ "skill_photons": 1 });
+            this.addAttributeEffect("maneuvrability", istep(1));
+            this.addAttributeEffect("power_capacity", istep(7));
+            this.addAttributeEffect("power_generation", istep(4, irepeat(0.3)));
         }
     }
 }

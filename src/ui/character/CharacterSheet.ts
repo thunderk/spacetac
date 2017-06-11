@@ -137,16 +137,16 @@ module TS.SpaceTac.UI {
             let x1 = 664;
             let x2 = 1066;
             let y = 662;
-            this.addAttribute("initiative", x1, y);
-            this.addAttribute("hull_capacity", x1, y + 64);
-            this.addAttribute("shield_capacity", x1, y + 128);
-            this.addAttribute("power_capacity", x1, y + 192);
-            this.addAttribute("power_initial", x1, y + 256);
-            this.addAttribute("power_recovery", x1, y + 320);
-            this.addAttribute("skill_material", x2, y);
-            this.addAttribute("skill_electronics", x2, y + 64);
-            this.addAttribute("skill_energy", x2, y + 128);
-            this.addAttribute("skill_human", x2, y + 192);
+            this.addAttribute("hull_capacity", x1, y);
+            this.addAttribute("shield_capacity", x1, y + 64);
+            this.addAttribute("power_capacity", x1, y + 128);
+            this.addAttribute("power_generation", x1, y + 192);
+            this.addAttribute("maneuvrability", x1, y + 256);
+            this.addAttribute("precision", x1, y + 320);
+            this.addAttribute("skill_materials", x2, y);
+            this.addAttribute("skill_photons", x2, y + 64);
+            this.addAttribute("skill_antimatter", x2, y + 128);
+            this.addAttribute("skill_quantum", x2, y + 192);
             this.addAttribute("skill_gravity", x2, y + 256);
             this.addAttribute("skill_time", x2, y + 320);
         }
@@ -155,11 +155,18 @@ module TS.SpaceTac.UI {
          * Add an attribute display
          */
         private addAttribute(attribute: keyof ShipAttributes, x: number, y: number) {
-            let text = new Phaser.Text(this.game, x, y, "", { align: "center", font: "18pt Arial", fill: "#FFFFFF" });
+            let attrname = capitalize(SHIP_ATTRIBUTES[attribute].name);
+            let name = new Phaser.Text(this.game, x - 144, y - 2, attrname,
+                { align: "center", font: "20pt Arial", fill: "#c9d8ef", stroke: "#395665", strokeThickness: 1 });
+            name.anchor.set(0.5, 0.5);
+            this.addChild(name);
+
+            let text = new Phaser.Text(this.game, x, y, "",
+                { align: "center", font: "bold 18pt Arial", fill: "#FFFFFF" });
             text.anchor.set(0.5, 0.5);
             this.addChild(text);
 
-            this.attributes[SHIP_ATTRIBUTES[attribute].name] = text;
+            this.attributes[attribute] = text;
 
             if (SHIP_SKILLS.hasOwnProperty(attribute)) {
                 let button = new Phaser.Button(this.game, x + 54, y - 4, "character-skill-upgrade", () => {
@@ -169,7 +176,7 @@ module TS.SpaceTac.UI {
                 button.anchor.set(0.5, 0.5);
                 this.ship_upgrades.add(button);
 
-                this.view.tooltip.bindStaticText(button, `Spend one point to upgrade ${SHIP_ATTRIBUTES[attribute].name}`);
+                this.view.tooltip.bindStaticText(button, `Spend one point to upgrade ${attrname}`);
             }
         }
 
@@ -214,7 +221,7 @@ module TS.SpaceTac.UI {
             this.ship_upgrades.visible = upgrade_points > 0;
 
             iteritems(<any>ship.attributes, (key, value: ShipAttribute) => {
-                let text = this.attributes[value.name];
+                let text = this.attributes[key];
                 if (text) {
                     text.setText(value.get().toString());
                 }

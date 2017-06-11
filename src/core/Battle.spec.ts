@@ -5,15 +5,15 @@ module TS.SpaceTac {
             var fleet2 = new Fleet();
 
             var ship1 = new Ship(fleet1, "F1S1");
-            ship1.setAttribute("initiative", 2);
+            ship1.setAttribute("maneuvrability", 2);
             var ship2 = new Ship(fleet1, "F1S2");
-            ship2.setAttribute("initiative", 4);
+            ship2.setAttribute("maneuvrability", 4);
             var ship3 = new Ship(fleet1, "F1S3");
-            ship3.setAttribute("initiative", 1);
+            ship3.setAttribute("maneuvrability", 1);
             var ship4 = new Ship(fleet2, "F2S1");
-            ship4.setAttribute("initiative", 8);
+            ship4.setAttribute("maneuvrability", 8);
             var ship5 = new Ship(fleet2, "F2S2");
-            ship5.setAttribute("initiative", 2);
+            ship5.setAttribute("maneuvrability", 2);
 
             var battle = new Battle(fleet1, fleet2);
             expect(battle.play_order.length).toBe(0);
@@ -77,7 +77,7 @@ module TS.SpaceTac {
             expect(battle.playing_ship_index).toBeNull();
 
             // Force play order
-            iforeach(battle.iships(), ship => ship.setAttribute("initiative", 1));
+            iforeach(battle.iships(), ship => ship.setAttribute("maneuvrability", 1));
             var gen = new SkewedRandomGenerator([0.1, 0.2, 0.0]);
             battle.throwInitiative(gen);
 

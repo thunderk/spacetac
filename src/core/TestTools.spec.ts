@@ -4,15 +4,13 @@ module TS.SpaceTac.Specs {
             let ship = new Ship();
 
             expect(ship.getAttribute("power_capacity")).toBe(0);
-            expect(ship.getAttribute("power_initial")).toBe(0);
-            expect(ship.getAttribute("power_recovery")).toBe(0);
+            expect(ship.getAttribute("power_generation")).toBe(0);
             expect(ship.getValue("power")).toBe(0);
 
             TestTools.setShipAP(ship, 12, 4);
 
             expect(ship.getAttribute("power_capacity")).toBe(12);
-            expect(ship.getAttribute("power_initial")).toBe(12);
-            expect(ship.getAttribute("power_recovery")).toBe(4);
+            expect(ship.getAttribute("power_generation")).toBe(4);
             expect(ship.getValue("power")).toBe(12);
         });
 

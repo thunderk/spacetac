@@ -59,10 +59,8 @@ module TS.SpaceTac {
                 if (effect instanceof AttributeEffect) {
                     if (effect.attrcode === "power_capacity") {
                         effect.value = points;
-                    } else if (effect.attrcode === "power_recovery") {
+                    } else if (effect.attrcode === "power_generation") {
                         effect.value = recovery;
-                    } else if (effect.attrcode === "power_initial") {
-                        effect.value = points;
                     }
                 }
             });

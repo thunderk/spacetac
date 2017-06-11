@@ -144,7 +144,7 @@ module TS.SpaceTac {
          * Evaluate doing nothing, between -1 and 1
          */
         static evaluateIdling(ship: Ship, battle: Battle, maneuver: Maneuver): number {
-            let lost = ship.getValue("power") - maneuver.getPowerUsage() + ship.getAttribute("power_recovery") - ship.getAttribute("power_capacity");
+            let lost = ship.getValue("power") - maneuver.getPowerUsage() + ship.getAttribute("power_generation") - ship.getAttribute("power_capacity");
             if (lost > 0) {
                 return -lost / ship.getAttribute("power_capacity");
             } else if (maneuver.action instanceof FireWeaponAction || maneuver.action instanceof DeployDroneAction) {

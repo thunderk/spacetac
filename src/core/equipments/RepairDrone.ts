@@ -8,7 +8,7 @@ module TS.SpaceTac.Equipments {
         constructor() {
             super(SlotType.Weapon, "Repair Drone", "Drone able to repair small hull breaches, remotely controlled by human pilots");
 
-            this.setSkillsRequirements({ "skill_human": 1 });
+            this.setSkillsRequirements({ "skill_quantum": 1 });
             this.setCooldown(irepeat(1), istep(3, irepeat(0.2)));
             this.addDroneAction(irepeat(4), istep(300, irepeat(10)), istep(10, irepeat(1)), istep(150, irepeat(5)), [
                 new EffectTemplate(new ValueEffect("hull"), { "value": istep(5) })

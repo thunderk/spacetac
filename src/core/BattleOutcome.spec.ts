@@ -37,7 +37,7 @@ module TS.SpaceTac.Specs {
             // Force lucky finds with one template
             var looter = new LootGenerator(random, false);
             var template = new LootTemplate(SlotType.Power, "Nuclear Reactor");
-            template.setSkillsRequirements({ "skill_energy": istep(4) });
+            template.setSkillsRequirements({ "skill_photons": istep(4) });
             template.addAttributeEffect("power_capacity", 1);
             looter.templates = [template];
             spyOn(outcome, "getLootGenerator").and.returnValue(looter);
@@ -49,11 +49,11 @@ module TS.SpaceTac.Specs {
             expect(outcome.loot[1].name).toBe("Nuclear Reactor");
             expect(outcome.loot[1].level).toBe(4);
             expect(outcome.loot[1].quality).toBe(EquipmentQuality.COMMON);
-            expect(outcome.loot[1].requirements).toEqual({ "skill_energy": 7 });
+            expect(outcome.loot[1].requirements).toEqual({ "skill_photons": 7 });
             expect(outcome.loot[2].name).toBe("Nuclear Reactor");
             expect(outcome.loot[2].level).toBe(6);
             expect(outcome.loot[2].quality).toBe(EquipmentQuality.PREMIUM);
-            expect(outcome.loot[2].requirements).toEqual({ "skill_energy": 9 });
+            expect(outcome.loot[2].requirements).toEqual({ "skill_photons": 9 });
         });
 
         it("grants experience", function () {

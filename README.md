@@ -98,34 +98,34 @@ For battle purpose, the ship is to be considered "dead".
 
 ### Attributes
 
-Attributes represent a ship's ability to use its HSP system:
+Attributes represent a ship's ability to use its HSP system and weapons:
 
-* **Initiative** - Ability to play before other ships in the play order
 * **Hull capacity** - Maximal Hull value (when the battle starts)
 * **Shield capacity** - Maximal Shield value (when the battle starts)
 * **Power capacity** - Maximal Power value
-* **Initial power** - Power immediately available at the start of battle
-* **Power recovery** - Power generated at the end of a ship's turn
+* **Power generation** - Power generated at the end of a ship's turn
+* **Maneuverability** - Ability to move first and fast
+* **Precision** - Ability to target far and good
 
 These attributes are the sum of all currently applied effects (being permanent by an equipped item,
 or a temporary effect caused by a weapon or a drone).
 
-For example, a ship that equips a power generator with "power recovery +3", but has a sticky effect
-of "power recovery -1" from a previous weapon hit, will have an effective power recovery of 2.
+For example, a ship that equips a power generator with "power generation +3", but has a sticky effect
+of "power generation -1" from a previous weapon hit, will have an effective power generation of 2.
 
 ### Skills
 
 Skills represent a ship's ability to use equipments:
 
 * **Materials** - Usage of physical materials such as bullets, shells...
-* **Electronics** - Components of computers and communication
-* **Energy** - Raw energy manipulation
-* **Human** - Management of a human team and resources
+* **Photons** - Forces of light, and electromagnetic radiation
+* **Antimatter** - Manipulation of matter and antimatter particles
+* **Quantum** - Application of quantum uncertainty principle
 * **Gravity** - Interaction with gravitational forces
-* **Time** - Manipulation of time
+* **Time** - Control of relativity's time properties
 
 Each equipment has minimal skill requirements to be used. For example, a weapon may require "materials >= 2"
-and "energy >= 3" to be equipped. A ship that does not meet these requirements will not be able to use 
+and "photons >= 3" to be equipped. A ship that does not meet these requirements will not be able to use 
 the equipment.
 
 Skills are defined by the player, using points given while leveling up.

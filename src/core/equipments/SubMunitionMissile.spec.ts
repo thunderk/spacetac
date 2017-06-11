@@ -4,19 +4,19 @@ module TS.SpaceTac.Equipments {
             let template = new SubMunitionMissile();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_material": 1 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 1 });
             expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 500, 150, [new DamageEffect(30, 2)]));
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_material": 2 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 2 });
             expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 520, 155, [new DamageEffect(32, 3)]));
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_material": 3 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 3 });
             expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 540, 160, [new DamageEffect(34, 4)]));
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_material": 10 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 10 });
             expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 680, 195, [new DamageEffect(48, 11)]));
         });
 

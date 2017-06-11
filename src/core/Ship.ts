@@ -8,30 +8,30 @@ module TS.SpaceTac {
      */
     export class ShipSkills {
         // Skills
-        skill_material = new ShipAttribute("material skill")
-        skill_energy = new ShipAttribute("energy skill")
-        skill_electronics = new ShipAttribute("electronics skill")
-        skill_human = new ShipAttribute("human skill")
-        skill_time = new ShipAttribute("time skill")
+        skill_materials = new ShipAttribute("materials skill")
+        skill_photons = new ShipAttribute("photons skill")
+        skill_antimatter = new ShipAttribute("antimatter skill")
+        skill_quantum = new ShipAttribute("quantum skill")
         skill_gravity = new ShipAttribute("gravity skill")
+        skill_time = new ShipAttribute("time skill")
     }
 
     /**
      * Set of ShipAttribute for a ship
      */
     export class ShipAttributes extends ShipSkills {
-        // Attribute controlling the play order
-        initiative = new ShipAttribute("initiative")
         // Maximal hull value
         hull_capacity = new ShipAttribute("hull capacity")
         // Maximal shield value
         shield_capacity = new ShipAttribute("shield capacity")
         // Maximal power value
         power_capacity = new ShipAttribute("power capacity")
-        // Initial power value at the start of a battle
-        power_initial = new ShipAttribute("initial power")
         // Power value recovered each turn
-        power_recovery = new ShipAttribute("power recovery")
+        power_generation = new ShipAttribute("power generation")
+        // Ability to move first and fast
+        maneuvrability = new ShipAttribute("maneuvrability")
+        // Ability to fire far and good
+        precision = new ShipAttribute("precision")
     }
 
     /**
@@ -153,7 +153,7 @@ module TS.SpaceTac {
 
         // Make an initiative throw, to resolve play order in a battle
         throwInitiative(gen: RandomGenerator): void {
-            this.play_priority = gen.random() * this.attributes.initiative.get();
+            this.play_priority = gen.random() * this.attributes.maneuvrability.get();
         }
 
         // Return the player owning this ship
@@ -289,7 +289,7 @@ module TS.SpaceTac {
         //  If no value is provided, the attribute ap_initial will be used
         initializeActionPoints(value: number | null = null): void {
             if (value === null) {
-                value = this.attributes.power_initial.get();
+                value = this.attributes.power_capacity.get();
             }
             this.setValue("power", value);
         }
@@ -300,7 +300,7 @@ module TS.SpaceTac {
         recoverActionPoints(value: number | null = null): void {
             if (this.alive) {
                 if (value === null) {
-                    value = this.attributes.power_recovery.get();
+                    value = this.attributes.power_generation.get();
                 }
                 this.setValue("power", value, true);
             }

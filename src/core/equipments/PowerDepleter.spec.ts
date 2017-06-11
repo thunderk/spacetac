@@ -4,19 +4,19 @@ module TS.SpaceTac.Equipments {
             let template = new PowerDepleter();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_energy": 1 });
+            expect(equipment.requirements).toEqual({ "skill_photons": 1 });
             expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 500, 0, [new StickyEffect(new AttributeLimitEffect("power_capacity", 3), 2, true)]));
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_energy": 2 });
+            expect(equipment.requirements).toEqual({ "skill_photons": 2 });
             expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 520, 0, [new StickyEffect(new AttributeLimitEffect("power_capacity", 3), 2, true)]));
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_energy": 3 });
+            expect(equipment.requirements).toEqual({ "skill_photons": 3 });
             expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 540, 0, [new StickyEffect(new AttributeLimitEffect("power_capacity", 3), 2, true)]));
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_energy": 10 });
+            expect(equipment.requirements).toEqual({ "skill_photons": 10 });
             expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 680, 0, [new StickyEffect(new AttributeLimitEffect("power_capacity", 3), 2, true)]));
         });
 

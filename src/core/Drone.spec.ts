@@ -94,9 +94,9 @@ module TS.SpaceTac {
             drone.duration = 3;
             drone.effects = [
                 new DamageEffect(5),
-                new AttributeEffect("skill_human", 1)
+                new AttributeEffect("skill_quantum", 1)
             ]
-            expect(drone.getDescription()).toEqual("For 3 activations:\n• do 5 damage\n• human skill +1");
+            expect(drone.getDescription()).toEqual("For 3 activations:\n• do 5 damage\n• quantum skill +1");
         });
     });
 }

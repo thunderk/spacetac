@@ -291,14 +291,13 @@ module TS.SpaceTac.Specs {
             let power_generator = new Equipment(SlotType.Power);
             power_generator.effects = [
                 new AttributeEffect("power_capacity", 8),
-                new AttributeEffect("power_recovery", 3),
-                new AttributeEffect("power_initial", 4)
+                new AttributeEffect("power_generation", 3),
             ]
             ship.addSlot(SlotType.Power).attach(power_generator);
 
             expect(ship.values.power.get()).toBe(0);
             ship.initializeActionPoints();
-            expect(ship.values.power.get()).toBe(4);
+            expect(ship.values.power.get()).toBe(8);
             ship.values.power.set(3);
             expect(ship.values.power.get()).toBe(3);
             ship.recoverActionPoints();
@@ -424,13 +423,13 @@ module TS.SpaceTac.Specs {
             let slot = ship.addSlot(SlotType.Hull);
             expect(ship.canEquip(equipment)).toBe(slot);
 
-            equipment.requirements["skill_energy"] = 2;
+            equipment.requirements["skill_photons"] = 2;
             expect(ship.canEquip(equipment)).toBe(null);
 
-            ship.upgradeSkill("skill_energy");
+            ship.upgradeSkill("skill_photons");
             expect(ship.canEquip(equipment)).toBe(null);
 
-            ship.upgradeSkill("skill_energy");
+            ship.upgradeSkill("skill_photons");
             expect(ship.canEquip(equipment)).toBe(slot);
 
             slot.attach(new Equipment(SlotType.Hull));
@@ -446,17 +445,17 @@ module TS.SpaceTac.Specs {
             expect(ship.level.get()).toBe(2);
             expect(ship.getAvailableUpgradePoints()).toBe(15);
 
-            expect(ship.getAttribute("skill_energy")).toBe(0);
-            ship.upgradeSkill("skill_energy");
-            expect(ship.getAttribute("skill_energy")).toBe(1);
+            expect(ship.getAttribute("skill_photons")).toBe(0);
+            ship.upgradeSkill("skill_photons");
+            expect(ship.getAttribute("skill_photons")).toBe(1);
 
             range(50).forEach(() => ship.upgradeSkill("skill_gravity"));
-            expect(ship.getAttribute("skill_energy")).toBe(1);
+            expect(ship.getAttribute("skill_photons")).toBe(1);
             expect(ship.getAttribute("skill_gravity")).toBe(14);
             expect(ship.getAvailableUpgradePoints()).toBe(0);
 
             ship.updateAttributes();
-            expect(ship.getAttribute("skill_energy")).toBe(1);
+            expect(ship.getAttribute("skill_photons")).toBe(1);
             expect(ship.getAttribute("skill_gravity")).toBe(14);
         });
 

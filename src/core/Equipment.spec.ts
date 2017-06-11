@@ -34,11 +34,11 @@ module TS.SpaceTac.Specs {
             expect(equipment.canBeEquipped(ship.attributes)).toBe(true);
 
             // Second requirement
-            equipment.requirements["skill_material"] = 3;
+            equipment.requirements["skill_materials"] = 3;
 
             expect(equipment.canBeEquipped(ship.attributes)).toBe(false);
 
-            ship.attributes.skill_material.set(4);
+            ship.attributes.skill_materials.set(4);
 
             expect(equipment.canBeEquipped(ship.attributes)).toBe(true);
         });
@@ -65,7 +65,7 @@ module TS.SpaceTac.Specs {
             let equipment = new Equipment();
             expect(equipment.getMinimumLevel()).toBe(1);
 
-            equipment.requirements["skill_human"] = 10;
+            equipment.requirements["skill_quantum"] = 10;
             expect(equipment.getMinimumLevel()).toBe(1);
 
             equipment.requirements["skill_time"] = 1;
@@ -74,7 +74,7 @@ module TS.SpaceTac.Specs {
             equipment.requirements["skill_gravity"] = 2;
             expect(equipment.getMinimumLevel()).toBe(2);
 
-            equipment.requirements["skill_electronics"] = 4;
+            equipment.requirements["skill_antimatter"] = 4;
             expect(equipment.getMinimumLevel()).toBe(3);
         });
 

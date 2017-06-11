@@ -10,11 +10,11 @@ module TS.SpaceTac.UI.Specs {
 
             expect(sprite.effects.children.length).toBe(0);
 
-            sprite.displayValueChanged(new ValueChangeEvent(ship, ship.attributes.power_recovery, -4));
+            sprite.displayValueChanged(new ValueChangeEvent(ship, ship.attributes.power_generation, -4));
 
             expect(sprite.effects.children.length).toBe(1);
             let t1 = <Phaser.Text>sprite.effects.getChildAt(0);
-            expect(t1.text).toBe("power recovery -4");
+            expect(t1.text).toBe("power generation -4");
 
             sprite.displayValueChanged(new ValueChangeEvent(ship, ship.values.shield, 12));
 

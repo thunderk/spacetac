@@ -44,7 +44,7 @@ module TS.SpaceTac.Specs {
             let ship = battle.fleets[0].addShip();
             TestTools.addEngine(ship, 500);
             let drone = new Drone(ship);
-            drone.effects = [new AttributeEffect("initiative", 1)];
+            drone.effects = [new AttributeEffect("maneuvrability", 1)];
             drone.x = 100;
             drone.y = 0;
             drone.radius = 50;
@@ -56,7 +56,7 @@ module TS.SpaceTac.Specs {
 
             maneuver = new Maneuver(ship, new MoveAction(new Equipment()), Target.newFromLocation(100, 30));
             expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 100, y: 30 }));
-            expect(maneuver.effects).toEqual([[ship, new AttributeEffect("initiative", 1)]]);
+            expect(maneuver.effects).toEqual([[ship, new AttributeEffect("maneuvrability", 1)]]);
         });
     });
 }
