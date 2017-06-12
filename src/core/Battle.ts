@@ -366,5 +366,17 @@ module TS.SpaceTac {
                 }
             }
         }
+
+        /**
+         * Get the list of area effects at a given location
+         */
+        iAreaEffects(x: number, y: number): Iterator<BaseEffect> {
+            let drones_in_range = ifilter(iarray(this.drones), drone => drone.isInRange(x, y));
+
+            return ichain(
+                ichainit(imap(drones_in_range, drone => iarray(drone.effects))),
+                ichainit(imap(this.iships(), ship => ship.iAreaEffects(x, y)))
+            );
+        }
     }
 }

@@ -482,5 +482,24 @@ module TS.SpaceTac.Specs {
             expect(ship.sticky_effects.length).toEqual(0);
             expect(ship.getAttribute("power_capacity")).toEqual(5);
         });
+
+        it("lists active effects", function () {
+            let ship = new Ship();
+            expect(imaterialize(ship.ieffects())).toEqual([]);
+
+            let equipment = ship.addSlot(SlotType.Engine).attach(new Equipment(SlotType.Engine));
+            expect(imaterialize(ship.ieffects())).toEqual([]);
+
+            equipment.effects.push(new AttributeEffect("precision", 4));
+            expect(imaterialize(ship.ieffects())).toEqual([
+                new AttributeEffect("precision", 4)
+            ]);
+
+            ship.addStickyEffect(new StickyEffect(new AttributeLimitEffect("precision", 2), 4));
+            expect(imaterialize(ship.ieffects())).toEqual([
+                new AttributeEffect("precision", 4),
+                new AttributeLimitEffect("precision", 2)
+            ]);
+        });
     });
 }

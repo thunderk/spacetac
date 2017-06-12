@@ -304,6 +304,16 @@ module TS.SpaceTac {
         }
 
         /**
+         * Add a toggle action.
+         */
+        addToggleAction(power: LeveledValue, radius: LeveledValue, effects: EffectTemplate<BaseEffect>[]): void {
+            this.base_modifiers.push((equipment, level) => {
+                let reffects = effects.map(effect => effect.generate(level));
+                equipment.action = new ToggleAction(equipment, resolveForLevel(power, level), resolveForLevel(radius, level), reffects);
+            });
+        }
+
+        /**
          * Check if the template has any damage effect (to know if is an offensive weapon)
          */
         hasDamageEffect(): boolean {

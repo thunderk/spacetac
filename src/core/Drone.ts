@@ -42,6 +42,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Check if a location is in range
+         */
+        isInRange(x: number, y: number): boolean {
+            return Target.newFromLocation(x, y).getDistanceTo(this) <= this.radius;
+        }
+
+        /**
          * Get the list of affected ships.
          */
         getAffectedShips(): Ship[] {

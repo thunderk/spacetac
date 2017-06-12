@@ -21,12 +21,28 @@ module TS.SpaceTac {
         }
 
         /**
+         * Apply damage modifiers to get the final damage factor
+         */
+        getFactor(ship: Ship): number {
+            let percent = 0;
+            iforeach(ship.ieffects(), effect => {
+                if (effect instanceof DamageModifierEffect) {
+                    percent += effect.factor;
+                }
+            });
+            return (clamp(percent, -100, 100) + 100) / 100;
+        }
+
+        /**
          * Get the effective damage done to both shield and hull (in this order)
          */
         getEffectiveDamage(ship: Ship): [number, number] {
             var damage = (this.span > 0) ? RandomGenerator.global.randInt(this.base, this.base + this.span) : this.base;
             var hull: number;
             var shield: number;
+
+            // Apply modifiers
+            damage = Math.round(damage * this.getFactor(ship));
 
             // Apply on shields
             if (damage >= ship.values.shield.get()) {

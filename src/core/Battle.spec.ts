@@ -329,5 +329,43 @@ module TS.SpaceTac {
             expect(battle.getTurnsBefore(battle.play_order[1])).toBe(1);
             expect(battle.getTurnsBefore(battle.play_order[2])).toBe(2);
         });
+
+        it("lists area effects", function () {
+            let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
+
+            expect(imaterialize(battle.iAreaEffects(100, 50))).toEqual([]);
+
+            let drone1 = new Drone(ship);
+            drone1.x = 120;
+            drone1.y = 60;
+            drone1.radius = 40;
+            drone1.effects = [new DamageEffect(12)];
+            battle.addDrone(drone1);
+            let drone2 = new Drone(ship);
+            drone2.x = 130;
+            drone2.y = 70;
+            drone2.radius = 20;
+            drone2.effects = [new DamageEffect(14)];
+            battle.addDrone(drone2);
+
+            expect(imaterialize(battle.iAreaEffects(100, 50))).toEqual([
+                new DamageEffect(12)
+            ]);
+
+            let eq1 = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
+            eq1.action = new ToggleAction(eq1, 0, 500, [new AttributeEffect("maneuvrability", 1)]);
+            (<ToggleAction>eq1.action).activated = true;
+            let eq2 = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
+            eq2.action = new ToggleAction(eq2, 0, 500, [new AttributeEffect("maneuvrability", 2)]);
+            (<ToggleAction>eq2.action).activated = false;
+            let eq3 = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
+            eq3.action = new ToggleAction(eq3, 0, 100, [new AttributeEffect("maneuvrability", 3)]);
+            (<ToggleAction>eq3.action).activated = true;
+
+            expect(imaterialize(battle.iAreaEffects(100, 50))).toEqual([
+                new DamageEffect(12), new AttributeEffect("maneuvrability", 1)
+            ]);
+        });
     });
 }

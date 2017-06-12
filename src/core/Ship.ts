@@ -678,27 +678,41 @@ module TS.SpaceTac {
             }
         }
 
+        /**
+         * Iterator over all effects active for this ship.
+         * 
+         * This includes:
+         *  - Permanent equipment effects
+         *  - Sticky effects
+         *  - Area effects at current location
+         */
+        ieffects(): Iterator<BaseEffect> {
+            let battle = this.getBattle();
+            let area_effects = battle ? battle.iAreaEffects(this.arena_x, this.arena_y) : IEMPTY;
+            return ichain(
+                ichainit(imap(iarray(this.slots), slot => slot.attached ? iarray(slot.attached.effects) : IEMPTY)),
+                imap(iarray(this.sticky_effects), effect => effect.base),
+                area_effects
+            );
+        }
+
+        /**
+         * Iterator over area effects from this ship impacting a location
+         */
+        iAreaEffects(x: number, y: number): Iterator<BaseEffect> {
+            let distance = Target.newFromShip(this).getDistanceTo({ x: x, y: y });
+            return ichainit(imap(iarray(this.getAvailableActions()), action => {
+                if (action instanceof ToggleAction && action.activated && distance <= action.radius) {
+                    return iarray(action.effects);
+                } else {
+                    return IEMPTY;
+                }
+            }));
+        }
+
         // Collect all effects to apply for updateAttributes
         private collectEffects(code: string): BaseEffect[] {
-            var result: BaseEffect[] = [];
-
-            this.slots.forEach(slot => {
-                if (slot.attached) {
-                    slot.attached.effects.forEach(effect => {
-                        if (effect.code == code) {
-                            result.push(effect);
-                        }
-                    });
-                }
-            });
-
-            this.sticky_effects.forEach(effect => {
-                if (effect.base.code == code) {
-                    result.push(effect.base);
-                }
-            });
-
-            return result;
+            return imaterialize(ifilter(this.ieffects(), effect => effect.code == code));
         }
     }
 }

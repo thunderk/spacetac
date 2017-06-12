@@ -44,5 +44,31 @@ module TS.SpaceTac.Specs {
             expect(new DamageEffect(10).getDescription()).toEqual("do 10 damage");
             expect(new DamageEffect(10, 5).getDescription()).toEqual("do 10-15 damage");
         });
+
+        it("applies damage modifiers", function () {
+            let ship = new Ship();
+            TestTools.setShipHP(ship, 1000, 1000);
+            let damage = new DamageEffect(200);
+
+            expect(damage.getEffectiveDamage(ship)).toEqual([200, 0]);
+
+            spyOn(ship, "ieffects").and.returnValues(
+                isingle(new DamageModifierEffect(-15)),
+                isingle(new DamageModifierEffect(20)),
+                isingle(new DamageModifierEffect(-150)),
+                isingle(new DamageModifierEffect(180)),
+                iarray([new DamageModifierEffect(10), new DamageModifierEffect(-15)]),
+                isingle(new DamageModifierEffect(3))
+            );
+
+            expect(damage.getEffectiveDamage(ship)).toEqual([170, 0]);
+            expect(damage.getEffectiveDamage(ship)).toEqual([240, 0]);
+            expect(damage.getEffectiveDamage(ship)).toEqual([0, 0]);
+            expect(damage.getEffectiveDamage(ship)).toEqual([400, 0]);
+            expect(damage.getEffectiveDamage(ship)).toEqual([190, 0]);
+
+            damage = new DamageEffect(40);
+            expect(damage.getEffectiveDamage(ship)).toEqual([41, 0]);
+        });
     });
 }
