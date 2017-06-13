@@ -19,6 +19,20 @@ module TS.SpaceTac.UI.Specs {
             expect(obj.visible).toBe(true);
             expect(obj.alpha).toBe(1);
             expect(testgame.baseview.animations.simulate(obj, 'alpha')).toEqual([1, 0.75, 0.5, 0.25, 0]);
+
+            obj.alpha = 0.2;
+            testgame.baseview.animations.setVisible(obj, true, 1000, 0.6);
+
+            expect(obj.visible).toBe(true);
+            expect(obj.alpha).toBe(0.2);
+            expect(testgame.baseview.animations.simulate(obj, 'alpha')).toEqual([0.2, 0.3, 0.4, 0.5, 0.6]);
+
+            obj.alpha = 0.6;
+            testgame.baseview.animations.setVisible(obj, false, 1000, 0.6, 0.2);
+
+            expect(obj.visible).toBe(true);
+            expect(obj.alpha).toBe(0.6);
+            expect(testgame.baseview.animations.simulate(obj, 'alpha')).toEqual([0.6, 0.5, 0.4, 0.3, 0.2]);
         });
 
         it("animates rotation", function () {

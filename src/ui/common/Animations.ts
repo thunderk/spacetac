@@ -77,37 +77,39 @@ module TS.SpaceTac.UI {
                 }
                 tween.start();
             } else {
-                obj.alpha = 1;
+                obj.alpha = alpha;
             }
         }
 
         /**
          * Hide an object, with opacity transition
          */
-        hide(obj: IAnimationFadeable, duration = 1000): void {
+        hide(obj: IAnimationFadeable, duration = 1000, alpha = 0): void {
             if (obj.input) {
                 obj.input.enabled = false;
             }
 
             if (duration) {
                 let tween = this.createTween(obj);
-                tween.to({ alpha: 0 }, duration);
-                tween.onComplete.addOnce(() => obj.visible = false);
+                tween.to({ alpha: alpha }, duration);
+                if (alpha == 0) {
+                    tween.onComplete.addOnce(() => obj.visible = false);
+                }
                 tween.start();
             } else {
-                obj.alpha = 0;
-                obj.visible = false;
+                obj.alpha = alpha;
+                obj.visible = alpha > 0;
             }
         }
 
         /**
          * Set an object visibility, with opacity transition
          */
-        setVisible(obj: IAnimationFadeable, visible: boolean, duration = 1000): void {
+        setVisible(obj: IAnimationFadeable, visible: boolean, duration = 1000, alphaon = 1, alphaoff = 0): void {
             if (visible) {
-                this.show(obj, duration);
+                this.show(obj, duration, alphaon);
             } else {
-                this.hide(obj, duration);
+                this.hide(obj, duration, alphaoff);
             }
         }
 

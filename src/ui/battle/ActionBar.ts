@@ -107,11 +107,15 @@ module TS.SpaceTac.UI {
          * Set the interactivity state
          */
         setInteractive(interactive: boolean) {
-            this.interactive = interactive;
+            if (this.interactive != interactive) {
+                this.interactive = interactive;
 
-            this.game.tweens.removeFrom(this.icon_waiting);
-            this.battleview.animations.setVisible(this.icon_waiting, !this.interactive, 100);
-            this.game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
+                this.game.tweens.removeFrom(this.icon_waiting);
+                this.battleview.animations.setVisible(this.icon_waiting, !this.interactive, 100);
+                this.game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
+
+                this.battleview.animations.setVisible(this.actions, interactive, 100, 1, 0.2);
+            }
         }
 
         /**
