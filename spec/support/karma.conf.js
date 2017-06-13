@@ -11,11 +11,16 @@ module.exports = function (config) {
     preprocessors: {
       'out/build.js': ['coverage']
     },
+
     coverageReporter: {
       type: 'json',
       dir: 'out/coverage/',
       subdir: '.',
       file: 'coverage.json'
+    },
+
+    specReporter: {
+      showSpecTiming: true
     },
 
     files: [
