@@ -20,6 +20,7 @@ module TS.SpaceTac.UI {
             this.hide();
 
             let filler = this.getFiller();
+            let sprite = this.battleview.arena.findShipSprite(ship);
 
             filler.configure(10, 6, this.battleview.arena.getBoundaries());
 
@@ -38,14 +39,16 @@ module TS.SpaceTac.UI {
 
                 let iy = 148;
 
-                let effects = ship.sticky_effects;
-                if (effects.length > 0) {
-                    filler.addText(0, iy, "Active effects", "#ffffff", 18, false, true);
-                    iy += 30;
-                    effects.forEach(effect => {
-                        filler.addText(0, iy, `• ${effect.getDescription()}`, effect.isBeneficial() ? "#afe9c6" : "#e9afaf", 16);
-                        iy += 26;
-                    });
+                if (sprite) {
+                    let effects = sprite.active_effects.area.concat(sprite.active_effects.sticky);
+                    if (effects.length > 0) {
+                        filler.addText(0, iy, "Active effects", "#ffffff", 18, false, true);
+                        iy += 30;
+                        effects.forEach(effect => {
+                            filler.addText(0, iy, `• ${effect.getDescription()}`, effect.isBeneficial() ? "#afe9c6" : "#e9afaf", 16);
+                            iy += 26;
+                        });
+                    }
                 }
 
                 let weapons = ship.listEquipment(SlotType.Weapon);
@@ -61,7 +64,6 @@ module TS.SpaceTac.UI {
                 filler.addText(140, 36, "Emergency Stasis Protocol\nship disabled", "#a899db", 20, true, true);
             }
 
-            let sprite = this.battleview.arena.findShipSprite(ship);
             if (sprite) {
                 let bounds = sprite.getBounds();
                 bounds.x = sprite.worldPosition.x + sprite.width * sprite.worldScale.x * 0.5;  // TODO Should not be necessary

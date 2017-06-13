@@ -174,7 +174,7 @@ module TS.SpaceTac.Specs {
 
             expect(ship.sticky_effects).toEqual([new StickyEffect(new BaseEffect("test"), 2, false, true)]);
             expect(battle.log.events).toEqual([
-                new EffectAddedEvent(ship, new StickyEffect(new BaseEffect("test"), 2, false, true))
+                new ActiveEffectsEvent(ship, [], [new StickyEffect(new BaseEffect("test"), 2, false, true)])
             ]);
 
             ship.startTurn();
@@ -183,7 +183,7 @@ module TS.SpaceTac.Specs {
 
             expect(ship.sticky_effects).toEqual([new StickyEffect(new BaseEffect("test"), 1, false, true)]);
             expect(battle.log.events).toEqual([
-                new EffectDurationChangedEvent(ship, new StickyEffect(new BaseEffect("test"), 1, false, true), 2)
+                new ActiveEffectsEvent(ship, [], [new StickyEffect(new BaseEffect("test"), 1, false, true)])
             ]);
 
             ship.startTurn();
@@ -192,8 +192,8 @@ module TS.SpaceTac.Specs {
 
             expect(ship.sticky_effects).toEqual([]);
             expect(battle.log.events).toEqual([
-                new EffectDurationChangedEvent(ship, new StickyEffect(new BaseEffect("test"), 0, false, true), 1),
-                new EffectRemovedEvent(ship, new StickyEffect(new BaseEffect("test"), 0, false, true))
+                new ActiveEffectsEvent(ship, [], [new StickyEffect(new BaseEffect("test"), 0, false, true)]),
+                new ActiveEffectsEvent(ship, [], [])
             ]);
 
             ship.startTurn();
@@ -202,6 +202,80 @@ module TS.SpaceTac.Specs {
 
             expect(ship.sticky_effects).toEqual([]);
             expect(battle.log.events).toEqual([]);
+        });
+
+        it("resets toggle actions at the start of turn", function () {
+            let ship = new Ship();
+            let equ = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
+            let action = equ.action = new ToggleAction(equ, 0, 10, [new AttributeEffect("power_capacity", 1)]);
+            expect(action.activated).toBe(false);
+
+            let battle = new Battle(ship.fleet);
+            battle.playing_ship = ship;
+
+            ship.startTurn();
+            expect(action.activated).toBe(false);
+
+            let result = action.apply(ship, null);
+            expect(result).toBe(true, "Could not be applied");
+            expect(action.activated).toBe(true);
+
+            ship.endTurn();
+            expect(action.activated).toBe(true);
+
+            ship.startTurn();
+            expect(action.activated).toBe(false);
+
+            expect(battle.log.events).toEqual([
+                new ToggleEvent(ship, action, true),
+                new ActiveEffectsEvent(ship, [], [], [new AttributeEffect("power_capacity", 1)]),
+                new ValueChangeEvent(ship, new ShipAttribute("power capacity", 1), 1),
+                new ToggleEvent(ship, action, false),
+                new ActiveEffectsEvent(ship, [], [], []),
+                new ValueChangeEvent(ship, new ShipAttribute("power capacity", 0), -1),
+            ]);
+        });
+
+        it("updates area effects when the ship moves", function () {
+            let battle = new Battle();
+            let ship1 = battle.fleets[0].addShip();
+            let ship2 = battle.fleets[0].addShip();
+            ship2.setArenaPosition(10, 0);
+            let ship3 = battle.fleets[0].addShip();
+            ship3.setArenaPosition(20, 0);
+
+            let shield = ship1.addSlot(SlotType.Shield).attach(new Equipment(SlotType.Shield));
+            shield.action = new ToggleAction(shield, 0, 15, [new AttributeEffect("shield_capacity", 5)]);
+            battle.playing_ship = ship1;
+            shield.action.apply(ship1, null);
+
+            expect(ship1.getAttribute("shield_capacity")).toBe(5);
+            expect(ship2.getAttribute("shield_capacity")).toBe(5);
+            expect(ship3.getAttribute("shield_capacity")).toBe(0);
+
+            ship1.moveTo(15, 0);
+
+            expect(ship1.getAttribute("shield_capacity")).toBe(5);
+            expect(ship2.getAttribute("shield_capacity")).toBe(5);
+            expect(ship3.getAttribute("shield_capacity")).toBe(5);
+
+            ship1.moveTo(30, 0);
+
+            expect(ship1.getAttribute("shield_capacity")).toBe(5);
+            expect(ship2.getAttribute("shield_capacity")).toBe(0);
+            expect(ship3.getAttribute("shield_capacity")).toBe(5);
+
+            ship1.moveTo(50, 0);
+
+            expect(ship1.getAttribute("shield_capacity")).toBe(5);
+            expect(ship2.getAttribute("shield_capacity")).toBe(0);
+            expect(ship3.getAttribute("shield_capacity")).toBe(0);
+
+            ship2.moveTo(40, 0);
+
+            expect(ship1.getAttribute("shield_capacity")).toBe(5);
+            expect(ship2.getAttribute("shield_capacity")).toBe(5);
+            expect(ship3.getAttribute("shield_capacity")).toBe(0);
         });
 
         it("sets and logs death state", function () {

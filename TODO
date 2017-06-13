@@ -20,6 +20,7 @@
 * Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
 * Arena: display effects description instead of attribute changes
+* Arena: display radius for area effects (both on action hover, and while action is activated)
 * Arena: add auto-move to attack
 * Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
 * Arena: add engine trail

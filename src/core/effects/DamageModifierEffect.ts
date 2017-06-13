@@ -17,5 +17,9 @@ module TS.SpaceTac {
         getDescription(): string {
             return `damage ${this.factor}%`;
         }
+
+        isBeneficial(): boolean {
+            return this.factor <= 0;
+        }
     }
 }

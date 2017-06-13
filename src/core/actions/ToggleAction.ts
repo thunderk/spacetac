@@ -41,14 +41,21 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the list of ships in range to be affected
+         */
+        getAffectedShips(ship: Ship): Ship[] {
+            let target = Target.newFromShip(ship);
+            let radius = this.getBlastRadius(ship);
+            let battle = ship.getBattle();
+            return (radius && battle) ? battle.collectShipsInCircle(target, radius, true) : ((target.ship && target.ship.alive) ? [target.ship] : []);
+        }
+
+        /**
          * Collect the effects applied by this action
          */
         getEffects(ship: Ship): [Ship, BaseEffect][] {
-            let target = Target.newFromShip(ship);
             let result: [Ship, BaseEffect][] = [];
-            let radius = this.getBlastRadius(ship);
-            let battle = ship.getBattle();
-            let ships = (radius && battle) ? battle.collectShipsInCircle(target, radius, true) : ((target.ship && target.ship.alive) ? [target.ship] : []);
+            let ships = this.getAffectedShips(ship);
             ships.forEach(ship => {
                 this.effects.forEach(effect => result.push([ship, effect]));
             });
@@ -58,7 +65,7 @@ module TS.SpaceTac {
         protected customApply(ship: Ship, target: Target) {
             this.activated = !this.activated;
             ship.addBattleEvent(new ToggleEvent(ship, this, this.activated));
-            // TODO Refresh area effects
+            this.getAffectedShips(ship).forEach(iship => iship.setActiveEffectsChanged());
         }
 
         getEffectsDescription(): string {

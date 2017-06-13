@@ -102,6 +102,7 @@ module TS.SpaceTac.UI {
          */
         addImage(x: number, y: number, key: string, scale = 1): void {
             let image = new Phaser.Image(this.container.game, x, y, key);
+            image.data.key = key;
             image.scale.set(scale);
             this.container.content.add(image);
         }

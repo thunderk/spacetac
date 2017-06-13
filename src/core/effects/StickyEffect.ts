@@ -41,7 +41,7 @@ module TS.SpaceTac {
             if (this.duration > 0) {
                 this.base.applyOnShip(ship, ship);  // FIXME Does not remember the source
                 this.duration--;
-                ship.addBattleEvent(new EffectDurationChangedEvent(ship, this, this.duration + 1));
+                ship.setActiveEffectsChanged();
             }
         }
 

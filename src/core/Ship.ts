@@ -111,9 +111,7 @@ module TS.SpaceTac {
             this.arena_y = 0;
             this.arena_angle = 0;
 
-            if (fleet) {
-                fleet.addShip(this);
-            }
+            this.fleet.addShip(this);
 
             this.model = model;
             this.setCargoSpace(model.cargo);
@@ -360,6 +358,13 @@ module TS.SpaceTac {
                 // Apply sticky effects
                 this.sticky_effects.forEach(effect => effect.startTurn(this));
                 this.cleanStickyEffects();
+
+                // Reset toggle actions state
+                this.listEquipment().forEach(equipment => {
+                    if (equipment.action instanceof ToggleAction && equipment.action.activated) {
+                        equipment.action.apply(this, null);
+                    }
+                });
             }
         }
 
@@ -394,7 +399,7 @@ module TS.SpaceTac {
             if (this.alive) {
                 this.sticky_effects.push(effect);
                 if (log) {
-                    this.addBattleEvent(new EffectAddedEvent(this, effect));
+                    this.setActiveEffectsChanged();
                 }
             }
         }
@@ -405,7 +410,9 @@ module TS.SpaceTac {
         cleanStickyEffects() {
             let [active, ended] = binpartition(this.sticky_effects, effect => effect.duration > 0);
             this.sticky_effects = active;
-            ended.forEach(effect => this.addBattleEvent(new EffectRemovedEvent(this, effect)));
+            if (ended.length) {
+                this.setActiveEffectsChanged();
+            }
         }
 
         /**
@@ -447,6 +454,10 @@ module TS.SpaceTac {
             if (dx != 0 || dy != 0) {
                 let start = copy(this.location);
 
+                let area_effects = imaterialize(this.iToggleActions(true));
+                let old_impacted_ships = area_effects.map(action => action.getAffectedShips(this));
+                let old_area_effects = this.getActiveEffects().area;
+
                 let angle = Math.atan2(dy, dx);
                 this.setArenaFacingAngle(angle);
                 this.setArenaPosition(x, y);
@@ -454,6 +465,14 @@ module TS.SpaceTac {
                 if (log) {
                     this.addBattleEvent(new MoveEvent(this, start, copy(this.location)));
                 }
+
+                let new_impacted_ships = area_effects.map(action => action.getAffectedShips(this));
+                let diff_impacted_ships = flatten(zip(old_impacted_ships, new_impacted_ships).map(([a, b]) => disjunctunion(a, b)));
+                let new_area_effects = this.getActiveEffects().area;
+                if (disjunctunion(old_area_effects, new_area_effects).length > 0) {
+                    diff_impacted_ships.push(this);
+                }
+                unique(diff_impacted_ships).forEach(ship => ship.setActiveEffectsChanged());
             }
         }
 
@@ -679,12 +698,32 @@ module TS.SpaceTac {
         }
 
         /**
-         * Iterator over all effects active for this ship.
+         * Get the list of all effects applied on this ship
          * 
          * This includes:
          *  - Permanent equipment effects
          *  - Sticky effects
          *  - Area effects at current location
+         */
+        getActiveEffects(): ActiveEffectsEvent {
+            let result = new ActiveEffectsEvent(this);
+            result.equipment = flatten(this.slots.map(slot => slot.attached ? slot.attached.effects : []));
+            result.sticky = this.sticky_effects;
+            let battle = this.getBattle();
+            result.area = battle ? imaterialize(battle.iAreaEffects(this.arena_x, this.arena_y)) : [];
+            return result;
+        }
+
+        /**
+         * Indicate a change in active effects to the log
+         */
+        setActiveEffectsChanged(): void {
+            this.addBattleEvent(this.getActiveEffects());
+            this.updateAttributes();
+        }
+
+        /**
+         * Iterator over all effects active for this ship.
          */
         ieffects(): Iterator<BaseEffect> {
             let battle = this.getBattle();
@@ -697,12 +736,21 @@ module TS.SpaceTac {
         }
 
         /**
+         * Iterator over toggle actions
+         */
+        iToggleActions(only_active = false): Iterator<ToggleAction> {
+            return <Iterator<ToggleAction>>ifilter(iarray(this.getAvailableActions()), action => {
+                return (action instanceof ToggleAction && (action.activated || !only_active));
+            });
+        }
+
+        /**
          * Iterator over area effects from this ship impacting a location
          */
         iAreaEffects(x: number, y: number): Iterator<BaseEffect> {
             let distance = Target.newFromShip(this).getDistanceTo({ x: x, y: y });
-            return ichainit(imap(iarray(this.getAvailableActions()), action => {
-                if (action instanceof ToggleAction && action.activated && distance <= action.radius) {
+            return ichainit(imap(this.iToggleActions(true), action => {
+                if (distance <= action.radius) {
                     return iarray(action.effects);
                 } else {
                     return IEMPTY;

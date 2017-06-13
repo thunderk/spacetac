@@ -36,8 +36,9 @@ module TS.SpaceTac.UI {
         frame: Phaser.Image
 
         // Effects display
-        sticky_effects: Phaser.Group
-        effects: Phaser.Group
+        active_effects: ActiveEffectsEvent
+        active_effects_display: Phaser.Group
+        effects_messages: Phaser.Group
 
         // Create a ship sprite usable in the Arena
         constructor(parent: Arena, ship: Ship) {
@@ -93,12 +94,13 @@ module TS.SpaceTac.UI {
             this.add(this.play_order);
 
             // Effects display
-            this.sticky_effects = new Phaser.Group(this.game);
-            this.add(this.sticky_effects);
-            this.effects = new Phaser.Group(this.game);
-            this.add(this.effects);
+            this.active_effects = new ActiveEffectsEvent(ship);
+            this.active_effects_display = new Phaser.Group(this.game);
+            this.add(this.active_effects_display);
+            this.effects_messages = new Phaser.Group(this.game);
+            this.add(this.effects_messages);
 
-            this.updateStickyEffects();
+            this.updateActiveEffects();
             this.updatePowerIndicator(ship.getValue("power"));
 
             // Handle input on ship sprite
@@ -139,8 +141,9 @@ module TS.SpaceTac.UI {
          * Process a log event for this ship
          */
         private processShipLogEvent(event: BaseLogShipEvent): number {
-            if (event instanceof EffectAddedEvent || event instanceof EffectRemovedEvent || event instanceof EffectDurationChangedEvent) {
-                this.updateStickyEffects();
+            if (event instanceof ActiveEffectsEvent) {
+                this.active_effects = event;
+                this.updateActiveEffects();
                 return 0;
             } else if (event instanceof ValueChangeEvent) {
                 if (event.value.name == "hull") {
@@ -242,19 +245,19 @@ module TS.SpaceTac.UI {
          * Briefly show an effect on this ship
          */
         displayEffect(message: string, beneficial: boolean) {
-            let text = new Phaser.Text(this.game, 0, 20 * this.effects.children.length, message, { font: "14pt Arial", fill: beneficial ? "#afe9c6" : "#e9afaf" });
-            this.effects.addChild(text);
+            let text = new Phaser.Text(this.game, 0, 20 * this.effects_messages.children.length, message, { font: "14pt Arial", fill: beneficial ? "#afe9c6" : "#e9afaf" });
+            this.effects_messages.addChild(text);
 
             let arena = this.battleview.arena.getBoundaries();
-            this.effects.position.set(
-                (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects.width) : (-this.effects.width * 0.5)),
-                (this.ship.arena_y < arena.height * 0.9) ? 45 : (-45 - this.effects.height)
+            this.effects_messages.position.set(
+                (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects_messages.width) : (-this.effects_messages.width * 0.5)),
+                (this.ship.arena_y < arena.height * 0.9) ? 45 : (-45 - this.effects_messages.height)
             );
 
-            this.game.tweens.removeFrom(this.effects);
-            this.effects.alpha = 1;
-            let tween = this.game.tweens.create(this.effects).to({ alpha: 0 }, 500).delay(1000).start();
-            tween.onComplete.addOnce(() => this.effects.removeAll(true));
+            this.game.tweens.removeFrom(this.effects_messages);
+            this.effects_messages.alpha = 1;
+            let tween = this.game.tweens.create(this.effects_messages).to({ alpha: 0 }, 500).delay(1000).start();
+            tween.onComplete.addOnce(() => this.effects_messages.removeAll(true));
         }
 
         /**
@@ -267,17 +270,20 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Update the stick effects
+         * Update the list of effects active on the ship
          */
-        updateStickyEffects() {
-            this.sticky_effects.removeAll();
+        updateActiveEffects() {
+            this.active_effects_display.removeAll();
 
-            let count = this.ship.sticky_effects.length
+            let effects = this.active_effects.sticky.map(sticky => sticky.base).concat(this.active_effects.area);
+
+            let count = effects.length;
             if (count) {
                 let positions = UITools.evenlySpace(70, 10, count);
-                this.ship.sticky_effects.forEach((effect, index) => {
+
+                effects.forEach((effect, index) => {
                     let dot = new Phaser.Image(this.game, positions[index] - 40, -47, `battle-arena-ship-effect-${effect.isBeneficial() ? "good" : "bad"}`);
-                    this.sticky_effects.add(dot);
+                    this.active_effects_display.add(dot);
                 });
             }
         }
