@@ -30,12 +30,15 @@ module TS.SpaceTac.UI.Specs {
             expect(sprite.sticky_effects.children.length).toBe(0);
 
             ship.addStickyEffect(new StickyEffect(new BaseEffect("test")));
+            testgame.battleview.log_processor.jumpToEnd();
             expect(sprite.sticky_effects.children.length).toBe(1);
 
             ship.addStickyEffect(new StickyEffect(new BaseEffect("test")));
+            testgame.battleview.log_processor.jumpToEnd();
             expect(sprite.sticky_effects.children.length).toBe(2);
 
             ship.cleanStickyEffects();
+            testgame.battleview.log_processor.jumpToEnd();
             expect(sprite.sticky_effects.children.length).toBe(0);
         });
     });

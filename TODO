@@ -26,7 +26,6 @@
 * Fix capacity limit effect not refreshing associated value (for example, on "limit power capacity to 3", potential "power" value change is not broadcast)
 * Actions: show power usage/recovery in power bar, on action hover
 * Actions: fix targetting not resetting when using keyboard shortcuts
-* Suspend AI operation when the game is paused (window not focused)
 * Add actions with cost dependent of distance (like current move actions)
 * Find incentives to move from starting position
 * Outcome: disable the loot button if there is no loot

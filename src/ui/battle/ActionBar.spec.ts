@@ -127,6 +127,7 @@ module TS.SpaceTac.UI.Specs {
 
             // used points
             ship.setValue("power", 6);
+            testgame.battleview.log_processor.jumpToEnd();
             check(6, 0, 2);
 
             // using points
@@ -135,6 +136,7 @@ module TS.SpaceTac.UI.Specs {
 
             // decrease
             ship.setAttribute("power_capacity", 3);
+            testgame.battleview.log_processor.jumpToEnd();
             check(3);
         });
     });

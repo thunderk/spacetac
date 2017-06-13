@@ -17,20 +17,14 @@ module TS.SpaceTac.UI {
         // Link to the battle log
         private log: BattleLog
 
-        // Subscription identifier
-        private subscription: any = null
-
-        // Delay before processing next events
-        private delayed = false
-
-        // Processing queue, when delay is active
-        private queue: BaseBattleEvent[] = []
-
         // Forward events to other subscribers
-        private forwarding: LogSubscriber[] = []
+        private forwarding: ((event: BaseBattleEvent) => number)[] = []
 
         // Current position in the battle log
-        private cursor = -1;
+        private cursor = -1
+
+        // Indicator that the log is being played continuously
+        private playing = false
 
         constructor(view: BattleView) {
             this.view = view;
@@ -55,9 +49,29 @@ module TS.SpaceTac.UI {
          * Start log processing
          */
         start() {
-            this.subscription = this.log.subscribe(event => this.processBattleEvent(event));
             this.cursor = this.log.events.length - 1;
             this.battle.getBootstrapEvents().forEach(event => this.processBattleEvent(event));
+
+            this.playing = true;
+            if (!this.view.gameui.headless) {
+                this.playContinuous();
+            }
+        }
+
+        /**
+         * Play the log continuously
+         */
+        playContinuous() {
+            let delay = 0;
+
+            if (this.playing && !this.view.game.paused) {
+                delay = this.stepForward();
+                if (delay == 0) {
+                    delay = this.transferControl();
+                }
+            }
+
+            this.view.timer.schedule(Math.max(delay, 50), () => this.playContinuous());
         }
 
         /**
@@ -66,17 +80,28 @@ module TS.SpaceTac.UI {
         stepBackward() {
             if (!this.atStart()) {
                 this.cursor -= 1;
+                this.playing = false;
                 this.processBattleEvent(this.log.events[this.cursor + 1].getReverse());
             }
         }
 
         /**
          * Make a step forward in time
+         * 
+         * Returns the duration of the step processing
          */
-        stepForward() {
+        stepForward(): number {
             if (!this.atEnd()) {
                 this.cursor += 1;
-                this.processBattleEvent(this.log.events[this.cursor]);
+                let result = this.processBattleEvent(this.log.events[this.cursor]);
+
+                if (this.atEnd()) {
+                    this.playing = true;
+                }
+
+                return result;
+            } else {
+                return 0;
             }
         }
 
@@ -136,12 +161,7 @@ module TS.SpaceTac.UI {
          * The callback may return the duration it needs to display the change.
          */
         register(callback: (event: BaseBattleEvent) => number) {
-            this.forwarding.push(event => {
-                let duration = callback(event);
-                if (duration) {
-                    this.delayNextEvents(duration);
-                }
-            });
+            this.forwarding.push(callback);
         }
 
         /**
@@ -158,158 +178,134 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Introduce a delay in event processing
-         */
-        delayNextEvents(duration: number) {
-            if (duration > 0 && !this.view.gameui.headless) {
-                this.delayed = true;
-                this.view.timer.schedule(duration, () => this.processQueued());
-            }
-        }
-
-        /**
-         * Process the events queued due to a delay
-         */
-        processQueued() {
-            let events = acopy(this.queue);
-            this.queue = [];
-            this.delayed = false;
-
-            events.forEach(event => this.processBattleEvent(event));
-        }
-
-        /**
          * Process a single event
          */
-        processBattleEvent(event: BaseBattleEvent) {
-            if (this.delayed) {
-                this.queue.push(event);
-                return;
-            }
-
+        processBattleEvent(event: BaseBattleEvent): number {
             console.log("Battle event", event);
 
-            this.forwarding.forEach(subscriber => subscriber(event));
+            let durations = this.forwarding.map(subscriber => subscriber(event));
 
             if (event instanceof ShipChangeEvent) {
-                this.processShipChangeEvent(event);
+                durations.push(this.processShipChangeEvent(event));
             } else if (event instanceof DeathEvent) {
-                this.processDeathEvent(event);
+                durations.push(this.processDeathEvent(event));
             } else if (event instanceof FireEvent) {
-                this.processFireEvent(event);
+                durations.push(this.processFireEvent(event));
             } else if (event instanceof DamageEvent) {
-                this.processDamageEvent(event);
+                durations.push(this.processDamageEvent(event));
             } else if (event instanceof EndBattleEvent) {
-                this.processEndBattleEvent(event);
+                durations.push(this.processEndBattleEvent(event));
             } else if (event instanceof DroneDeployedEvent) {
-                this.processDroneDeployedEvent(event);
+                durations.push(this.processDroneDeployedEvent(event));
             } else if (event instanceof DroneDestroyedEvent) {
-                this.processDroneDestroyedEvent(event);
+                durations.push(this.processDroneDestroyedEvent(event));
             } else if (event instanceof DroneAppliedEvent) {
-                this.processDroneAppliedEvent(event);
+                durations.push(this.processDroneAppliedEvent(event));
             }
 
-            // FIXME temporary fix for cursor not being forwarded
-            let cursor = this.log.events.indexOf(event);
-            if (cursor >= 0) {
-                this.cursor = cursor;
-            }
+            return max([0].concat(durations));
+        }
 
-            // Transfer control to the needed player
+        /**
+         * Transfer control to the needed player (or not)
+         */
+        private transferControl(): number {
             let player = this.getPlayerNeeded();
             if (player) {
                 if (this.battle.playing_ship && !this.battle.playing_ship.alive) {
                     this.view.setInteractionEnabled(false);
                     this.battle.advanceToNextShip();
-                    this.delayNextEvents(200);
+                    return 200;
                 } else if (player === this.view.player) {
                     this.view.setInteractionEnabled(true);
+                    return 0;
                 } else {
                     this.view.playAI();
+                    return 0;
                 }
             } else {
                 this.view.setInteractionEnabled(false);
+                return 0;
             }
         }
 
         // Destroy the log processor
         destroy() {
-            if (this.subscription) {
-                this.log.unsubscribe(this.subscription);
-                this.subscription = null;
-                this.queue = [];
-            }
+            // TODO interrupt current processing or delay
         }
 
         // Playing ship changed
-        private processShipChangeEvent(event: ShipChangeEvent): void {
+        private processShipChangeEvent(event: ShipChangeEvent): number {
             this.view.arena.setShipPlaying(event.new_ship);
             this.view.ship_list.setPlaying(event.new_ship);
             if (event.ship !== event.new_ship) {
                 this.view.gameui.audio.playOnce("battle-ship-change");
             }
+            return 0;
         }
 
         // Damage to ship
-        private processDamageEvent(event: DamageEvent): void {
+        private processDamageEvent(event: DamageEvent): number {
             var item = this.view.ship_list.findItem(event.ship);
             if (item) {
                 item.setDamageHit();
             }
+            return 0;
         }
 
         // A ship died
-        private processDeathEvent(event: DeathEvent): void {
+        private processDeathEvent(event: DeathEvent): number {
             if (this.view.ship_hovered === event.ship) {
                 this.view.setShipHovered(null);
             }
             this.view.arena.markAsDead(event.ship);
             this.view.ship_list.markAsDead(event.ship);
 
-            if (!event.initial) {
-                this.delayNextEvents(1000);
-            }
+            return event.initial ? 0 : 1000;
         }
 
         // Weapon used
-        private processFireEvent(event: FireEvent): void {
+        private processFireEvent(event: FireEvent): number {
             var source = Target.newFromShip(event.ship);
             var destination = event.target;
 
             var effect = new WeaponEffect(this.view.arena, source, destination, event.weapon);
             let duration = effect.start();
 
-            this.delayNextEvents(duration);
+            return duration;
         }
 
         // Battle ended (victory or defeat)
-        private processEndBattleEvent(event: EndBattleEvent): void {
+        private processEndBattleEvent(event: EndBattleEvent): number {
             this.view.endBattle();
             this.destroy();
+            return 0;
         }
 
         // New drone deployed
-        private processDroneDeployedEvent(event: DroneDeployedEvent): void {
+        private processDroneDeployedEvent(event: DroneDeployedEvent): number {
             let duration = this.view.arena.addDrone(event.drone, !event.initial);
 
             if (duration) {
                 this.view.gameui.audio.playOnce("battle-drone-deploy");
             }
 
-            this.delayNextEvents(duration);
+            return duration;
         }
 
         // Drone destroyed
-        private processDroneDestroyedEvent(event: DroneDestroyedEvent): void {
+        private processDroneDestroyedEvent(event: DroneDestroyedEvent): number {
             this.view.arena.removeDrone(event.drone);
             if (!event.initial) {
                 this.view.gameui.audio.playOnce("battle-drone-destroy");
-                this.delayNextEvents(1000);
+                return 1000;
+            } else {
+                return 0;
             }
         }
 
         // Drone applied
-        private processDroneAppliedEvent(event: DroneAppliedEvent): void {
+        private processDroneAppliedEvent(event: DroneAppliedEvent): number {
             let drone = this.view.arena.findDrone(event.drone);
             if (drone) {
                 let duration = drone.setApplied();
@@ -318,7 +314,9 @@ module TS.SpaceTac.UI {
                     this.view.gameui.audio.playOnce("battle-drone-activate");
                 }
 
-                this.delayNextEvents(duration);
+                return duration;
+            } else {
+                return 0;
             }
         }
     }

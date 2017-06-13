@@ -231,9 +231,11 @@ module TS.SpaceTac.UI {
                 enabled = false;
             }
 
-            this.action_bar.setInteractive(enabled);
-            this.exitTargettingMode();
-            this.interacting = enabled;
+            if (enabled != this.interacting) {
+                this.action_bar.setInteractive(enabled);
+                this.exitTargettingMode();
+                this.interacting = enabled;
+            }
         }
 
         // Enter targetting mode

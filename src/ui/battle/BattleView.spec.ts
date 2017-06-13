@@ -7,6 +7,7 @@ module TS.SpaceTac.UI.Specs {
         it("forwards events in targetting mode", function () {
             let battleview = testgame.battleview;
             expect(battleview.targetting).toBeNull();
+            battleview.setInteractionEnabled(true);
 
             battleview.cursorInSpace(5, 5);
 
