@@ -1,5 +1,6 @@
 #!/bin/bash
-# Use as alternative to npm to run in local node.js environment
+# Main build/run tool for SpaceTac
+# Uses yarn installed in local node.js environment
 # REQUIRES python3, else falls back to system-wide npm
 
 set -e
@@ -10,5 +11,5 @@ dir=$(dirname $0)
 
 test -x "${dir}/.env/bin/nodeenv" || ( virtualenv -p python3 "${dir}/.env" && "${dir}/.env/bin/pip" install --upgrade nodeenv )
 test -f "${dir}/.env/node/bin/activate" || "${dir}/.env/bin/nodeenv" --node=6.9.5 --force "${dir}/.env/node"
-PATH="${dir}/.env/node/bin:${PATH}" npm "$@"
-
+test -f "${dir}/.env/node/bin/yarn" || "${dir}/.env/node/bin/npm" install -g yarn@0.24.6
+PATH="${dir}/.env/node/bin:${PATH}" yarn "$@"

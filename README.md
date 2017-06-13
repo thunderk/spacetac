@@ -11,15 +11,17 @@
 
 ## How to develop
 
+The only hard dependency of the toolchain is Python3.
+
 If you want to build on your computer, clone the repository, then run:
 
-    npm install    # Install dependencies
-    npm test       # Run unit tests
-    rpm start      # Start development server, and open game in web browser
+    ./spacetac install    # Install dependencies
+    ./spacetac test       # Run unit tests
+    ./spacetac start      # Start development server, and open game in web browser
 
 After making changes to sources, you need to recompile:
 
-    npm run build
+    ./spacetac run build
 
 ## Credits
 

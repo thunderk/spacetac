@@ -25,7 +25,7 @@ module.exports = function (config) {
 
     files: [
       'node_modules/babel-polyfill/dist/polyfill.js',
-      'out/vendor/phaser/build/phaser.js',
+      'out/vendor/phaser/phaser.js',
       'out/vendor/parse/parse.min.js',
       'out/build.js'
     ]

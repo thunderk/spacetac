@@ -5,7 +5,7 @@
   "main": "src/build.js",
   "scripts": {
     "shell": "${SHELL} || true",
-    "postinstall": "bower install && typings install",
+    "postinstall": "typings install && rm -rf out/vendor && mkdir -p out/vendor && cp -r node_modules/phaser/build out/vendor/phaser && cp -r node_modules/phaser-plugin-scene-graph/dist out/vendor/phaser-plugin-scene-graph && cp -r node_modules/parse/dist out/vendor/parse && cp -r node_modules/jasmine-core/lib/jasmine-core out/vendor/jasmine",
     "build": "tsc -p .",
     "pretest": "tsc -p .",
     "test": "karma start spec/support/karma.conf.js && remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html",
@@ -21,17 +21,22 @@
   "license": "MIT",
   "devDependencies": {
     "babel-polyfill": "^6.23.0",
-    "bower": "~1.8",
-    "codecov": "~2.1",
-    "jasmine": "~2.5",
-    "karma": "~1.5",
+    "codecov": "^2.2.0",
+    "jasmine": "^2.6.0",
+    "karma": "^1.7.0",
     "karma-coverage": "~1.1",
     "karma-jasmine": "~1.1",
-    "karma-spec-reporter": "~0.0",
     "karma-phantomjs-launcher": "~1.0",
+    "karma-spec-reporter": "~0.0",
     "live-server": "~1.2",
     "remap-istanbul": "~0.9",
     "typescript": "~2.3",
     "typings": "~2.1"
+  },
+  "dependencies": {
+    "jasmine-core": "^2.6.3",
+    "parse": "^1.9.2",
+    "phaser": "^2.6.2",
+    "phaser-plugin-scene-graph": "^1.0.4"
   }
 }

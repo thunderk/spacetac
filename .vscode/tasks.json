@@ -1,6 +1,6 @@
 {
     "version": "0.1.0",
-    "command": "./npm",
+    "command": "./spacetac",
     "isShellCommand": true,
     "args": [
         "run",

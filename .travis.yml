@@ -1,6 +1,7 @@
 language: node_js
 sudo: false
+cache: yarn
 node_js:
     - "6"
 after_success:
-    - npm run codecov
+    - yarn run codecov
