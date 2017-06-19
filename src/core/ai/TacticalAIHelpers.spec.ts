@@ -88,19 +88,27 @@ module TS.SpaceTac.Specs {
             let weapon = TestTools.addWeapon(ship, 50, 5, 100);
             let engine = TestTools.addEngine(ship, 25);
 
-            let maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(100, 0));
+            let maneuver = new Maneuver(ship, new BaseAction("fake", "Nothing", false), new Target(0, 0), 0);
+            expect(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver)).toBe(-1);
+
+            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(100, 0), 0);
+            expect(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver)).toBe(-Infinity);
+
+            TestTools.setShipAP(ship, 4);
+            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(100, 0), 0);
             expect(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver)).toBe(-Infinity);
 
             TestTools.setShipAP(ship, 10);
+            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(100, 0), 0);
             expect(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver)).toBe(0.5);  // 5 power remaining on 10
 
-            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(110, 0));
+            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(110, 0), 0);
             expect(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver)).toBe(0.4);  // 4 power remaining on 10
 
-            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(140, 0));
+            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(140, 0), 0);
             expect(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver)).toBe(0.3);  // 3 power remaining on 10
 
-            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(310, 0));
+            maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(310, 0), 0);
             expect(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver)).toBe(-1);  // can't do in one turn
         });
 
@@ -159,7 +167,8 @@ module TS.SpaceTac.Specs {
             let weapon = TestTools.addWeapon(ship, 100, 1, 100, 10);
 
             let maneuver = new Maneuver(ship, weapon.action, Target.newFromLocation(200, 0), 0.5);
-            expect(maneuver.simulation.move_location).toEqual(Target.newFromLocation(100.5, 0));
+            expect(maneuver.simulation.move_location.x).toBeCloseTo(100.5, 1);
+            expect(maneuver.simulation.move_location.y).toBe(0);
             expect(TacticalAIHelpers.evaluateClustering(ship, battle, maneuver)).toEqual(0);
 
             battle.fleets[1].addShip().setArenaPosition(battle.width, battle.height);

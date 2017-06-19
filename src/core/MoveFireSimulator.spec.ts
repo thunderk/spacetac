@@ -71,6 +71,64 @@ module TS.SpaceTac.Specs {
             ]);
         });
 
+        it("scans a circle for move targets", function () {
+            let simulator = new MoveFireSimulator(new Ship());
+
+            let result = simulator.scanCircle(50, 30, 10, 1, 1);
+            expect(imaterialize(result)).toEqual([
+                new Target(50, 30)
+            ]);
+
+            result = simulator.scanCircle(50, 30, 10, 2, 1);
+            expect(imaterialize(result)).toEqual([
+                new Target(50, 30),
+                new Target(60, 30)
+            ]);
+
+            result = simulator.scanCircle(50, 30, 10, 2, 2);
+            expect(imaterialize(result)).toEqual([
+                new Target(50, 30),
+                new Target(60, 30),
+                new Target(40, 30)
+            ]);
+
+            result = simulator.scanCircle(50, 30, 10, 3, 4);
+            expect(imaterialize(result)).toEqual([
+                new Target(50, 30),
+                new Target(55, 30),
+                new Target(45, 30),
+                new Target(60, 30),
+                new Target(50, 40),
+                new Target(40, 30),
+                new Target(50, 20)
+            ]);
+        });
+
+        it("accounts for exclusion areas for the approach", function () {
+            let [ship, simulator, action] = simpleWeaponCase(100, 5, 1, 50);
+            ship.setArenaPosition(300, 200);
+            let battle = new Battle();
+            battle.fleets[0].addShip(ship);
+            let ship1 = battle.fleets[0].addShip();
+            let moveaction = <MoveAction>nn(simulator.findBestEngine()).action;
+            moveaction.safety_distance = 30;
+
+            expect(simulator.getApproach(moveaction, Target.newFromLocation(350, 200), 100)).toBe(ApproachSimulationError.NO_MOVE_NEEDED);
+            expect(simulator.getApproach(moveaction, Target.newFromLocation(400, 200), 100)).toBe(ApproachSimulationError.NO_MOVE_NEEDED);
+            expect(simulator.getApproach(moveaction, Target.newFromLocation(500, 200), 100)).toEqual(new Target(400, 200));
+
+            ship1.setArenaPosition(420, 200);
+
+            spyOn(simulator, "scanCircle").and.returnValue(iarray([
+                new Target(400, 200),
+                new Target(410, 200),
+                new Target(410, 230),
+                new Target(420, 210),
+                new Target(480, 260),
+            ]));
+            expect(simulator.getApproach(moveaction, Target.newFromLocation(500, 200), 100)).toEqual(new Target(410, 230));
+        });
+
         it("moves to get in range, even if not enough AP to fire", function () {
             let [ship, simulator, action] = simpleWeaponCase(8, 3, 2, 5);
             let result = simulator.simulateAction(action, new Target(ship.arena_x + 18, ship.arena_y, null));

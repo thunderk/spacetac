@@ -1,4 +1,11 @@
 module TS.SpaceTac {
+    /**
+     * Error codes for approach simulation
+     */
+    export enum ApproachSimulationError {
+        NO_MOVE_NEEDED,
+        NO_VECTOR_FOUND,
+    }
 
     /**
      * A single action in the sequence result from the simulator
@@ -57,51 +64,117 @@ module TS.SpaceTac {
         }
 
         /**
-         * Simulate a given action on a given valid target.
+         * Check that a move action can reach a given destination
          */
-        simulateAction(action: BaseAction, target: Target, move_margin = 0): MoveFireResult {
-            let result = new MoveFireResult();
+        canMoveTo(action: MoveAction, target: Target): boolean {
+            return action.checkLocationTarget(this.ship, target) == target;
+        }
 
+        /**
+         * Get an iterator for scanning a circle
+         */
+        scanCircle(x: number, y: number, radius: number, nr = 6, na = 30): Iterator<Target> {
+            return ichainit(imap(istep(0, irepeat(nr ? 1 / (nr - 1) : 0, nr - 1)), r => {
+                let angles = Math.max(1, Math.ceil(na * r));
+                return imap(istep(0, irepeat(2 * Math.PI / angles, angles - 1)), a => {
+                    return new Target(x + r * radius * Math.cos(a), y + r * radius * Math.sin(a))
+                });
+            }));
+        }
+
+        /**
+         * Find the best approach location, to put a target in a given range.
+         * 
+         * Return null if no approach vector was found.
+         */
+        getApproach(action: MoveAction, target: Target, radius: number): Target | ApproachSimulationError {
             let dx = target.x - this.ship.arena_x;
             let dy = target.y - this.ship.arena_y;
             let distance = Math.sqrt(dx * dx + dy * dy);
 
-            let ap = this.ship.values.power.get();
-            let action_radius = action.getRangeRadius(this.ship);
+            if (distance <= radius) {
+                return ApproachSimulationError.NO_MOVE_NEEDED;
+            } else {
+                let factor = (distance - radius) / distance;
+                let candidate = new Target(this.ship.arena_x + dx * factor, this.ship.arena_y + dy * factor);
+                if (this.canMoveTo(action, candidate)) {
+                    return candidate;
+                } else {
+                    let candidates: [number, Target][] = [];
+                    iforeach(this.scanCircle(target.x, target.y, radius), candidate => {
+                        if (this.canMoveTo(action, candidate)) {
+                            candidates.push([candidate.getDistanceTo(this.ship.location), candidate]);
+                        }
+                    });
 
-            if (action instanceof MoveAction || distance > action_radius) {
-                let move_distance = action instanceof MoveAction ? distance : (distance - action_radius + move_margin);
-                if (move_distance > 0.000001) {
-                    result.need_move = true;
+                    if (candidates.length) {
+                        return minBy(candidates, ([distance, candidate]) => distance)[1];
+                    } else {
+                        return ApproachSimulationError.NO_VECTOR_FOUND;
+                    }
+                }
+            }
+        }
 
-                    let move_target = new Target(this.ship.arena_x + dx * move_distance / distance, this.ship.arena_y + dy * move_distance / distance, null);
-                    let engine = this.findBestEngine();
-                    if (engine) {
-                        result.total_move_ap = engine.action.getActionPointsUsage(this.ship, move_target);
-                        result.can_move = ap > 0;
-                        result.can_end_move = result.total_move_ap <= ap;
-                        result.move_location = move_target;
-                        // TODO Split in "this turn" part and "next turn" part if needed
-                        result.parts.push({ action: engine.action, target: move_target, ap: result.total_move_ap, possible: result.can_move });
+        /**
+         * Simulate a given action on a given valid target.
+         */
+        simulateAction(action: BaseAction, target: Target, move_margin = 0): MoveFireResult {
+            let result = new MoveFireResult();
+            let ap = this.ship.getValue("power");
 
-                        ap -= result.total_move_ap;
-                        distance -= move_distance;
+            // Move or approach needed ?
+            let move_target: Target | null = null;
+            if (action instanceof MoveAction) {
+                let corrected_target = action.applyExclusion(this.ship, target);
+                if (corrected_target) {
+                    result.need_move = target.getDistanceTo(this.ship.location) > 0;
+                    move_target = corrected_target;
+                }
+            } else {
+                let engine = this.findBestEngine();
+                if (engine && engine.action instanceof MoveAction) {
+                    let approach_radius = action.getRangeRadius(this.ship);
+                    if (move_margin && approach_radius > move_margin) {
+                        approach_radius -= move_margin;
+                    }
+                    let approach = this.getApproach(engine.action, target, approach_radius);
+                    if (approach instanceof Target) {
+                        result.need_move = true;
+                        move_target = approach;
+                    } else if (approach != ApproachSimulationError.NO_MOVE_NEEDED) {
+                        result.need_move = true;
+                        result.can_move = false;
+                        result.success = false;
+                        return result;
                     }
                 }
             }
 
-            if (distance <= action_radius) {
-                result.success = true;
-                if (!(action instanceof MoveAction)) {
-                    result.need_fire = true;
-                    result.total_fire_ap = action.getActionPointsUsage(this.ship, target);
-                    result.can_fire = result.total_fire_ap <= ap;
-                    result.fire_location = target;
-                    result.parts.push({ action: action, target: target, ap: result.total_fire_ap, possible: (!result.need_move || result.can_end_move) && result.can_fire });
+            // Check move AP
+            if (result.need_move && move_target) {
+                let engine = this.findBestEngine();
+                if (engine) {
+                    result.total_move_ap = engine.action.getActionPointsUsage(this.ship, move_target);
+                    result.can_move = ap > 0;
+                    result.can_end_move = result.total_move_ap <= ap;
+                    result.move_location = move_target;
+                    // TODO Split in "this turn" part and "next turn" part if needed
+                    result.parts.push({ action: engine.action, target: move_target, ap: result.total_move_ap, possible: result.can_move });
+
+                    ap -= result.total_move_ap;
                 }
-            } else {
-                result.success = false;
             }
+
+            // Check action AP
+            if (!(action instanceof MoveAction)) {
+                result.need_fire = true;
+                result.total_fire_ap = action.getActionPointsUsage(this.ship, target);
+                result.can_fire = result.total_fire_ap <= ap;
+                result.fire_location = target;
+                result.parts.push({ action: action, target: target, ap: result.total_fire_ap, possible: (!result.need_move || result.can_end_move) && result.can_fire });
+            }
+            result.success = true;
 
             return result;
         }

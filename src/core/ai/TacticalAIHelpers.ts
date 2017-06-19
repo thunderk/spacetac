@@ -131,7 +131,9 @@ module TS.SpaceTac {
          */
         static evaluateTurnCost(ship: Ship, battle: Battle, maneuver: Maneuver): number {
             let powerusage = maneuver.simulation.total_move_ap + maneuver.simulation.total_fire_ap;
-            if (maneuver.simulation.total_fire_ap > ship.getAttribute("power_capacity")) {
+            if (powerusage == 0) {
+                return -1;
+            } else if (maneuver.simulation.total_fire_ap > ship.getAttribute("power_capacity")) {
                 return -Infinity;
             } else if (powerusage > ship.getValue("power")) {
                 return -1;

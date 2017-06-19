@@ -20,7 +20,7 @@
 * Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
 * Arena: display effects description instead of attribute changes
-* Arena: display radius for area effects (both on action hover, and while action is activated)
+* Arena: display radius for area effects (both on action hover, and while action is active)
 * Arena: add auto-move to attack
 * Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
 * Arena: add engine trail
@@ -45,7 +45,6 @@
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
 * AI: use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
-* AI: apply safety distances to move actions
 * AI: evaluate buffs/debuffs
 * AI: abandon fight
 * AI: add combination of random small move and actual maneuver, as producer
