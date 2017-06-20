@@ -1,6 +1,6 @@
 module TS.SpaceTac.UI {
     // Bar to display a value (like a progress bar)
-    export class ValueBar extends Phaser.Sprite {
+    export class ValueBar extends Phaser.Image {
         // Vertical orientation
         vertical: boolean;
 
@@ -14,7 +14,7 @@ module TS.SpaceTac.UI {
         private proportional: number;
 
         // Sprite of internal bar (inside the background sprite)
-        private bar_sprite: Phaser.Sprite;
+        private bar_sprite: Phaser.Image;
         private bar_sprite_rect: Phaser.Rectangle;
         private bar_sprite_offset: number;
 
@@ -26,16 +26,16 @@ module TS.SpaceTac.UI {
         }
 
         // Create a quick styled bar
-        static newStyled(game: Phaser.Game, base_key: string, x: number, y: number, vertical: boolean = false): ValueBar {
-            var result = new ValueBar(game, x, y, base_key + "-empty", vertical);
-            result.setBarImage(base_key + "-full");
+        static newStyled(game: Phaser.Game, base_key: string, x: number, y: number, vertical = false, frame = 0): ValueBar {
+            var result = new ValueBar(game, x, y, base_key, vertical, frame);
+            result.setBarImage(base_key, 0, 0, frame + 1);
             return result;
         }
 
         // Build an value bar sprite
         //  background is the key to the image to use as background
-        constructor(game: Phaser.Game, x: number, y: number, background: string, vertical: boolean = false) {
-            super(game, x, y, background);
+        constructor(game: Phaser.Game, x: number, y: number, background: string, vertical = false, frame = 0) {
+            super(game, x, y, background, frame);
 
             this.vertical = vertical;
 
@@ -43,8 +43,8 @@ module TS.SpaceTac.UI {
         }
 
         // Set an image to use for the bar
-        setBarImage(key: string, offset_x: number = 0, offset_y: number = 0): void {
-            this.bar_sprite = new Phaser.Sprite(this.game, offset_x, offset_y, key);
+        setBarImage(key: string, offset_x = 0, offset_y = 0, frame = 0): void {
+            this.bar_sprite = new Phaser.Image(this.game, offset_x, offset_y, key, frame);
             this.bar_sprite_rect = new Phaser.Rectangle(0, 0, this.bar_sprite.width, this.bar_sprite.height);
             this.bar_sprite_offset = this.vertical ? offset_y : offset_x;
             this.addChild(this.bar_sprite);
