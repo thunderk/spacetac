@@ -49,51 +49,45 @@ module TS.SpaceTac.UI.Specs {
 
             expect(bar.action_icons.length).toBe(4);
 
-            var checkFading = (fading: number[], available: number[]) => {
+            var checkFading = (fading: number[], available: number[], message: string) => {
                 fading.forEach((index: number) => {
                     var icon = bar.action_icons[index];
-                    expect(icon.fading || !icon.active).toBe(true);
+                    expect(icon.fading || !icon.active).toBe(true, `${message} - ${index} should be fading`);
                 });
                 available.forEach((index: number) => {
                     var icon = bar.action_icons[index];
-                    expect(icon.fading).toBe(false);
+                    expect(icon.fading).toBe(false, `${message} - ${index} should be available`);
                 });
             };
 
-            // Weapon 1 leaves all choices open
-            bar.action_icons[1].processClick();
-            checkFading([], [0, 1, 2, 3]);
+            bar.updateSelectedActionPower(3, 0, bar.action_icons[1].action);
+            checkFading([], [0, 1, 2, 3], "Weapon 1 leaves all choices open");
             bar.actionEnded();
 
-            // Weapon 2 can't be fired twice
-            bar.action_icons[2].processClick();
-            checkFading([2], [0, 1, 3]);
+            bar.updateSelectedActionPower(5, 0, bar.action_icons[2].action);
+            checkFading([2], [0, 1, 3], "Weapon 2 can't be fired twice");
             bar.actionEnded();
 
-            // Not enough AP for both weapons
             ship.setValue("power", 7);
-            bar.action_icons[2].processClick();
-            checkFading([1, 2], [0, 3]);
+            bar.updateSelectedActionPower(5, 0, bar.action_icons[2].action);
+            checkFading([1, 2], [0, 3], "Not enough AP for both weapons");
             bar.actionEnded();
 
-            // Not enough AP to move
             ship.setValue("power", 3);
-            bar.action_icons[1].processClick();
-            checkFading([0, 1, 2], [3]);
+            bar.updateSelectedActionPower(3, 0, bar.action_icons[1].action);
+            checkFading([0, 1, 2], [3], "Not enough AP to move");
             bar.actionEnded();
 
             // Dynamic AP usage for move actions
             ship.setValue("power", 6);
-            bar.action_icons[0].processClick();
-            checkFading([], [0, 1, 2, 3]);
-            bar.action_icons[0].processHover(Target.newFromLocation(2, 8));
-            checkFading([2], [0, 1, 3]);
-            bar.action_icons[0].processHover(Target.newFromLocation(3, 8));
-            checkFading([1, 2], [0, 3]);
-            bar.action_icons[0].processHover(Target.newFromLocation(4, 8));
-            checkFading([0, 1, 2], [3]);
-            bar.action_icons[0].processHover(Target.newFromLocation(5, 8));
-            checkFading([0, 1, 2], [3]);
+            bar.updateSelectedActionPower(2, 0, bar.action_icons[0].action);
+            checkFading([2], [0, 1, 3], "2 move power used");
+            bar.updateSelectedActionPower(4, 0, bar.action_icons[0].action);
+            checkFading([1, 2], [0, 3], "4 move power used");
+            bar.updateSelectedActionPower(6, 0, bar.action_icons[0].action);
+            checkFading([0, 1, 2], [3], "6 move power used");
+            bar.updateSelectedActionPower(8, 0, bar.action_icons[0].action);
+            checkFading([0, 1, 2], [3], "8 move power used");
             bar.actionEnded();
         });
 

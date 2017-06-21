@@ -40,7 +40,7 @@ module TS.SpaceTac.UI {
 
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Ship, action: BaseAction, position: number) {
-            super(bar.game, x, y, "battle-actionbar-icon");
+            super(bar.game, x, y, "battle-actionbar-icon", () => this.processClick());
 
             this.bar = bar;
             this.battleview = bar.battleview;
@@ -83,19 +83,6 @@ module TS.SpaceTac.UI {
                 ActionTooltip.fill(filler, this.ship, this.action, position);
                 return true;
             });
-            UITools.setHoverClick(this,
-                () => {
-                    if (!this.bar.hasActionSelected()) {
-                        this.battleview.arena.range_hint.update(this.ship, this.action);
-                    }
-                },
-                () => {
-                    if (!this.bar.hasActionSelected()) {
-                        this.battleview.arena.range_hint.clear();
-                    }
-                },
-                () => this.processClick()
-            );
 
             // Initialize
             this.updateActiveStatus(true);
@@ -120,12 +107,9 @@ module TS.SpaceTac.UI {
             this.bar.actionStarted();
 
             // Update range hint
-            if (this.battleview.arena.range_hint) {
+            if (this.battleview.arena.range_hint && this.action instanceof MoveAction) {
                 this.battleview.arena.range_hint.update(this.ship, this.action);
             }
-
-            // Update fading statuses
-            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, null), this.action);
 
             // Set the selected state
             this.setSelected(true);
@@ -134,30 +118,12 @@ module TS.SpaceTac.UI {
                 let sprite = this.battleview.arena.findShipSprite(this.ship);
                 if (sprite) {
                     // Switch to targetting mode (will apply action when a target is selected)
-                    this.targetting = this.battleview.enterTargettingMode();
-                    if (this.targetting) {
-                        this.targetting.setSource(sprite);
-                        this.targetting.targetSelected.add(this.processSelection, this);
-                        this.targetting.targetHovered.add(this.processHover, this);
-                        if (this.action instanceof MoveAction) {
-                            this.targetting.setApIndicatorsInterval(this.action.getDistanceByActionPoint(this.ship));
-                        }
-                    }
+                    this.targetting = this.battleview.enterTargettingMode(this.action);
                 }
             } else {
                 // No target needed, apply action immediately
                 this.processSelection(null);
             }
-        }
-
-        // Called when a target is hovered
-        //  This will check the target against current action and adjust it if needed
-        processHover(target: Target): void {
-            let correct_target = this.action.checkTarget(this.ship, target);
-            if (this.targetting) {
-                this.targetting.setTarget(correct_target, false, this.action.getBlastRadius(this.ship));
-            }
-            this.bar.updateSelectedActionPower(this.action.getActionPointsUsage(this.ship, correct_target), this.action);
         }
 
         // Called when a target is selected

@@ -3,56 +3,55 @@
 module TS.SpaceTac.UI {
     // Interactive view of a Battle
     export class BattleView extends BaseView {
-
         // Displayed battle
-        battle: Battle;
+        battle: Battle
 
         // Interacting player
-        player: Player;
+        player: Player
 
         // Layers
-        layer_background: Phaser.Group;
-        layer_arena: Phaser.Group;
-        layer_borders: Phaser.Group;
-        layer_overlay: Phaser.Group;
-        layer_dialogs: Phaser.Group;
-        layer_sheets: Phaser.Group;
+        layer_background: Phaser.Group
+        layer_arena: Phaser.Group
+        layer_borders: Phaser.Group
+        layer_overlay: Phaser.Group
+        layer_dialogs: Phaser.Group
+        layer_sheets: Phaser.Group
 
         // Battleground container
-        arena: Arena;
+        arena: Arena
 
         // Background image
-        background: Phaser.Image | null;
+        background: Phaser.Image | null
 
         // Targetting mode (null if we're not in this mode)
-        targetting: Targetting | null;
+        targetting: Targetting
 
         // Ship list
-        ship_list: ShipList;
+        ship_list: ShipList
 
         // Action bar
-        action_bar: ActionBar;
+        action_bar: ActionBar
 
         // Currently hovered ship
-        ship_hovered: Ship | null;
+        ship_hovered: Ship | null
 
         // Ship tooltip
-        ship_tooltip: ShipTooltip;
+        ship_tooltip: ShipTooltip
 
         // Outcome dialog layer
-        outcome_layer: Phaser.Group;
+        outcome_layer: Phaser.Group
 
         // Character sheet
-        character_sheet: CharacterSheet;
+        character_sheet: CharacterSheet
 
         // Subscription to the battle log
-        log_processor: LogProcessor;
+        log_processor: LogProcessor
 
         // True if player interaction is allowed
-        interacting: boolean;
+        interacting: boolean
 
         // Tactical mode toggle
-        toggle_tactical_mode: Toggle;
+        toggle_tactical_mode: Toggle
 
         // Init the view, binding it to a specific battle
         init(player: Player, battle: Battle) {
@@ -60,7 +59,6 @@ module TS.SpaceTac.UI {
 
             this.player = player;
             this.battle = battle;
-            this.targetting = null;
             this.ship_hovered = null;
             this.background = null;
 
@@ -103,6 +101,10 @@ module TS.SpaceTac.UI {
             this.layer_dialogs.add(this.outcome_layer);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
             this.layer_sheets.add(this.character_sheet);
+
+            // Targetting info
+            this.targetting = new Targetting(this, this.action_bar);
+            this.targetting.moveToLayer(this.arena.layer_targetting);
 
             // "Battle" animation
             this.displayFightMessage();
@@ -150,8 +152,6 @@ module TS.SpaceTac.UI {
 
         // Leaving the view, we unbind the battle
         shutdown() {
-            this.exitTargettingMode();
-
             this.log_processor.destroy();
 
             super.shutdown();
@@ -172,7 +172,7 @@ module TS.SpaceTac.UI {
 
         // Method called when cursor starts hovering over a ship (or its icon)
         cursorOnShip(ship: Ship): void {
-            if (!this.targetting || ship.alive) {
+            if (!this.targetting.active || ship.alive) {
                 this.setShipHovered(ship);
             }
         }
@@ -187,15 +187,15 @@ module TS.SpaceTac.UI {
         // Method called when cursor moves in space
         cursorInSpace(x: number, y: number): void {
             if (!this.ship_hovered) {
-                if (this.targetting) {
-                    this.targetting.setTargetSpace(x, y);
+                if (this.targetting.active) {
+                    this.targetting.setTarget(Target.newFromLocation(x, y));
                 }
             }
         }
 
         // Method called when cursor has been clicked (in space or on a ship)
         cursorClicked(): void {
-            if (this.targetting) {
+            if (this.targetting.active) {
                 this.targetting.validate();
             } else if (this.ship_hovered && this.ship_hovered.getPlayer() == this.player && this.interacting) {
                 this.character_sheet.show(this.ship_hovered);
@@ -215,11 +215,11 @@ module TS.SpaceTac.UI {
                 this.ship_tooltip.hide();
             }
 
-            if (this.targetting) {
+            if (this.targetting.active) {
                 if (ship) {
-                    this.targetting.setTargetShip(ship);
+                    this.targetting.setTarget(Target.newFromShip(ship));
                 } else {
-                    this.targetting.unsetTarget();
+                    this.targetting.setTarget(null);
                 }
             }
         }
@@ -240,25 +240,18 @@ module TS.SpaceTac.UI {
 
         // Enter targetting mode
         //  While in this mode, the Targetting object will receive hover and click events, and handle them
-        enterTargettingMode(): Targetting | null {
+        enterTargettingMode(action: BaseAction): Targetting | null {
             if (!this.interacting) {
                 return null;
             }
 
-            if (this.targetting) {
-                this.exitTargettingMode();
-            }
-
-            this.targetting = new Targetting(this);
+            this.targetting.setAction(action);
             return this.targetting;
         }
 
         // Exit targetting mode
         exitTargettingMode(): void {
-            if (this.targetting) {
-                this.targetting.destroy();
-            }
-            this.targetting = null;
+            this.targetting.setAction(null);
         }
 
         /**

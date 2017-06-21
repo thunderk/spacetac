@@ -237,18 +237,6 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient9717">
-      <stop
-         style="stop-color:#d1d4b2;stop-opacity:1;"
-         offset="0"
-         id="stop9713" />
-      <stop
-         style="stop-color:#d1d4b2;stop-opacity:0;"
-         offset="1"
-         id="stop9715" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
        id="linearGradient9609">
       <stop
          style="stop-color:#e09c47;stop-opacity:1"
@@ -712,16 +700,6 @@
        gradientUnits="userSpaceOnUse" />
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient9717"
-       id="radialGradient9719"
-       cx="825.83337"
-       cy="849.4455"
-       fx="825.83337"
-       fy="849.4455"
-       r="22.5"
-       gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
        xlink:href="#linearGradient10129"
        id="radialGradient10131"
        cx="1515.5656"
@@ -843,16 +821,6 @@
          operator="atop"
          result="composite2" />
     </filter>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient9717"
-       id="radialGradient5025"
-       gradientUnits="userSpaceOnUse"
-       cx="825.83337"
-       cy="849.4455"
-       fx="825.83337"
-       fy="849.4455"
-       r="22.5" />
     <filter
        id="filter5041"
        inkscape:label="Color impossible"
@@ -1166,11 +1134,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="1132.2376"
-     inkscape:cy="630.86578"
+     inkscape:zoom="4"
+     inkscape:cx="358.32238"
+     inkscape:cy="992.57962"
      inkscape:document-units="px"
-     inkscape:current-layer="layer25"
+     inkscape:current-layer="layer8"
      showgrid="false"
      units="px"
      showguides="false"
@@ -1181,7 +1149,7 @@
      inkscape:object-nodes="true"
      inkscape:snap-intersection-paths="false"
      inkscape:object-paths="true"
-     inkscape:snap-global="true"
+     inkscape:snap-global="false"
      inkscape:showpageshadow="false"
      showborder="true"
      borderlayer="true" />
@@ -1548,6 +1516,12 @@
          cx="1551.4003"
          cy="742.08289"
          r="31.144533" />
+      <path
+         style="display:inline;fill:none;fill-rule:evenodd;stroke:url(#linearGradient9611);stroke-width:5.89960623;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
+         d="M 732.44478,877.88531 H 1512.2041"
+         id="path9595"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
       <use
          x="0"
          y="0"
@@ -1558,120 +1532,15 @@
          height="100%"
          style="display:inline;opacity:0.58499995;enable-background:new" />
       <path
-         style="display:inline;fill:none;fill-rule:evenodd;stroke:url(#linearGradient9611);stroke-width:5.89960623;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
-         d="M 732.44478,877.88531 H 1512.2041"
-         id="path9595"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="cc" />
-      <path
-         sodipodi:nodetypes="ccccc"
-         inkscape:connector-curvature="0"
-         id="use9628"
-         d="m 1133.0389,877.88531 -23.5347,9.28279 3.6495,-9.28279 -3.6495,-9.28279 z"
-         inkscape:transform-center-x="-2.67976"
-         style="display:inline;opacity:1;fill:#362c20;fill-opacity:1;fill-rule:evenodd;stroke:#e09c47;stroke-width:2.43093753;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new" />
-      <path
          style="display:inline;opacity:1;fill:#391b13;fill-opacity:1;fill-rule:evenodd;stroke:#dc6441;stroke-width:2.33156252;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          inkscape:transform-center-x="-3.93566"
          d="m 1517.8308,877.88531 -34.5651,13.6335 5.3601,-13.6335 -5.3601,-13.6335 z"
          id="path10745"
          inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc" />
-      <g
-         style="display:inline;enable-background:new"
-         id="g9681"
-         transform="translate(-16.499158,28.439814)"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/arena/ap-indicator.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/tmp/export.png"
          inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90">
-        <circle
-           r="22.5"
-           cy="849.4455"
-           cx="825.83337"
-           id="path9677"
-           style="opacity:1;fill:url(#radialGradient9719);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.33156252;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-        <use
-           height="100%"
-           width="100%"
-           transform="translate(828.83521,989.66854)"
-           id="use9656"
-           xlink:href="#g4573"
-           y="0"
-           x="0" />
-      </g>
-      <use
-         style="display:inline;enable-background:new"
-         x="0"
-         y="0"
-         xlink:href="#g9681"
-         id="use9699"
-         transform="translate(121.99958)"
-         width="100%"
-         height="100%" />
-      <use
-         style="display:inline;enable-background:new"
-         x="0"
-         y="0"
-         xlink:href="#g9681"
-         id="use9701"
-         transform="translate(243.99916)"
-         width="100%"
-         height="100%" />
-      <use
-         style="display:inline;enable-background:new"
-         x="0"
-         y="0"
-         xlink:href="#g9681"
-         id="use9703"
-         transform="translate(370.64181)"
-         width="100%"
-         height="100%" />
-      <use
-         style="display:inline;enable-background:new"
-         x="0"
-         y="0"
-         xlink:href="#g9681"
-         id="use9705"
-         transform="translate(436.68086)"
-         width="100%"
-         height="100%" />
-      <use
-         style="display:inline;enable-background:new"
-         x="0"
-         y="0"
-         xlink:href="#g9681"
-         id="use9707"
-         transform="translate(502.7198)"
-         width="100%"
-         height="100%" />
-      <use
-         style="display:inline;enable-background:new"
-         x="0"
-         y="0"
-         xlink:href="#g9681"
-         id="use9709"
-         transform="translate(568.75877)"
-         width="100%"
-         height="100%" />
-      <g
-         transform="translate(618.6426,28.439814)"
-         id="g5021"
-         style="display:inline;filter:url(#filter5041);enable-background:new">
-        <circle
-           style="opacity:1;fill:url(#radialGradient5025);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.33156252;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           id="circle5017"
-           cx="825.83337"
-           cy="849.4455"
-           r="22.5" />
-        <use
-           x="0"
-           y="0"
-           xlink:href="#g4573"
-           id="use5019"
-           transform="translate(828.83521,989.66854)"
-           width="100%"
-           height="100%" />
-      </g>
+         inkscape:export-ydpi="90" />
     </g>
     <g
        inkscape:groupmode="layer"
@@ -2262,17 +2131,7 @@
            inkscape:export-ydpi="90"
            transform="matrix(0.98149613,0,0,1.5780874,-2.5439867,-65.79016)" />
         <path
-           transform="matrix(0.98149613,0,0,1.5780874,52.760346,-65.79016)"
-           inkscape:export-ydpi="90"
-           inkscape:export-xdpi="90"
-           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/power-using.png"
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0"
-           id="path4925"
-           d="m 197.49714,119.86752 h 51.83694 l 5.86374,-12.12184 h -51.83694 z"
-           style="opacity:1;fill:#f8f0b5;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-        <path
-           transform="matrix(0.98149613,0,0,1.5780874,108.06471,-65.79016)"
+           transform="matrix(0.98149613,0,0,1.5780874,160.43481,-65.79016)"
            inkscape:export-ydpi="90"
            inkscape:export-xdpi="90"
            inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/power-used.png"
@@ -2281,6 +2140,26 @@
            id="path4927"
            d="m 197.49714,119.86752 h 51.83694 l 5.86374,-12.12184 h -51.83694 z"
            style="opacity:1;fill:#6b6443;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5649)" />
+        <path
+           transform="matrix(0.98149613,0,0,1.5780874,51.782267,-65.79016)"
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/tmp/export.png"
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path5001"
+           d="m 197.49714,119.86752 h 51.83694 l 5.86374,-12.12184 h -51.83694 z"
+           style="opacity:1;fill:#e09c47;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5649)" />
+        <path
+           transform="matrix(0.98149613,0,0,1.5780874,106.10853,-65.79016)"
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/tmp/export.png"
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path5003"
+           d="m 197.49714,119.86752 h 51.83694 l 5.86374,-12.12184 h -51.83694 z"
+           style="opacity:1;fill:#dc6441;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5649)" />
       </g>
     </g>
     <g

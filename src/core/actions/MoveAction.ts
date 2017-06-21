@@ -57,7 +57,7 @@ module TS.SpaceTac {
         /**
          * Apply exclusion areas (neer arena borders, or other ships)
          */
-        applyExclusion(ship: Ship, target: Target): Target {
+        applyExclusion(ship: Ship, target: Target, margin = 0.1): Target {
             let battle = ship.getBattle();
             if (battle) {
                 // Keep out of arena borders
@@ -76,14 +76,18 @@ module TS.SpaceTac {
             return target;
         }
 
+        /**
+         * Apply reachable range, with remaining power
+         */
+        applyReachableRange(ship: Ship, target: Target, margin = 0.1): Target {
+            let max_distance = this.getRangeRadius(ship);
+            max_distance = Math.max(0, max_distance - margin);
+            return target.constraintInRange(ship.arena_x, ship.arena_y, max_distance);
+        }
+
         checkLocationTarget(ship: Ship, target: Target): Target {
-            // Apply maximal distance
-            var max_distance = this.getRangeRadius(ship);
-            target = target.constraintInRange(ship.arena_x, ship.arena_y, max_distance);
-
-            // Apply exclusion areas
+            target = this.applyReachableRange(ship, target);
             target = this.applyExclusion(ship, target);
-
             return target;
         }
 

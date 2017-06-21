@@ -17,9 +17,6 @@ module TS.SpaceTac.UI {
         // Statis effect
         stasis: Phaser.Image
 
-        // Target effect
-        target: Phaser.Image
-
         // HSP display
         hull: ValueBar
         toggle_hull: Toggle
@@ -53,7 +50,7 @@ module TS.SpaceTac.UI {
             this.sprite = new Phaser.Button(this.game, 0, 0, "ship-" + ship.model.code + "-sprite");
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
-            this.sprite.scale.set(64 / this.sprite.width);
+            this.sprite.scale.set(0.25);
             this.add(this.sprite);
 
             // Add stasis effect
@@ -61,12 +58,6 @@ module TS.SpaceTac.UI {
             this.stasis.anchor.set(0.5, 0.5);
             this.stasis.visible = false;
             this.add(this.stasis);
-
-            // Add target effect
-            this.target = new Phaser.Image(this.game, 0, 0, "battle-arena-ship-frames", 5);
-            this.target.anchor.set(0.5, 0.5);
-            this.target.visible = false;
-            this.add(this.target);
 
             // Add playing effect
             this.frame = new Phaser.Image(this.game, 0, 0, "battle-arena-ship-frames", this.enemy ? 0 : 1);
@@ -200,15 +191,6 @@ module TS.SpaceTac.UI {
         //  This will toggle the "playing" indicator
         setPlaying(playing: boolean) {
             this.frame.frame = (playing ? 3 : 0) + (this.enemy ? 0 : 1);
-        }
-
-        /**
-         * Set the ship as target of current action
-         * 
-         * This will toggle the visibility of target indicator
-         */
-        setTargetted(targetted: boolean): void {
-            this.target.visible = targetted;
         }
 
         /**

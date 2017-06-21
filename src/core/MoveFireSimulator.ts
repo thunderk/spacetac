@@ -25,6 +25,8 @@ module TS.SpaceTac {
         success = false
         // Ideal successive parts to make the full move+fire
         parts: MoveFirePart[] = []
+        // Simulation complete (both move and fire are possible)
+        complete = false
 
         need_move = false
         can_move = false
@@ -74,7 +76,8 @@ module TS.SpaceTac {
          * Get an iterator for scanning a circle
          */
         scanCircle(x: number, y: number, radius: number, nr = 6, na = 30): Iterator<Target> {
-            return ichainit(imap(istep(0, irepeat(nr ? 1 / (nr - 1) : 0, nr - 1)), r => {
+            let rcount = nr ? 1 / (nr - 1) : 0;
+            return ichainit(imap(istep(0, irepeat(rcount, nr - 1)), r => {
                 let angles = Math.max(1, Math.ceil(na * r));
                 return imap(istep(0, irepeat(2 * Math.PI / angles, angles - 1)), a => {
                     return new Target(x + r * radius * Math.cos(a), y + r * radius * Math.sin(a))
@@ -125,8 +128,10 @@ module TS.SpaceTac {
 
             // Move or approach needed ?
             let move_target: Target | null = null;
+            result.move_location = Target.newFromShip(this.ship);
             if (action instanceof MoveAction) {
-                let corrected_target = action.applyExclusion(this.ship, target);
+                let corrected_target = action.applyReachableRange(this.ship, target, move_margin);
+                corrected_target = action.applyExclusion(this.ship, corrected_target, move_margin);
                 if (corrected_target) {
                     result.need_move = target.getDistanceTo(this.ship.location) > 0;
                     move_target = corrected_target;
@@ -174,7 +179,9 @@ module TS.SpaceTac {
                 result.fire_location = target;
                 result.parts.push({ action: action, target: target, ap: result.total_fire_ap, possible: (!result.need_move || result.can_end_move) && result.can_fire });
             }
+
             result.success = true;
+            result.complete = (!result.need_move || result.can_end_move) && (!result.need_fire || result.can_fire);
 
             return result;
         }

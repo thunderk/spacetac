@@ -43,7 +43,7 @@ module TS.SpaceTac.UI {
         /**
          * Update displayed information
          */
-        update(ship: Ship, action: BaseAction): void {
+        update(ship: Ship, action: BaseAction, location: ArenaLocation = ship.location): void {
             let yescolor = 0x000000;
             let nocolor = 0x242022;
             this.info.clear();
@@ -54,7 +54,7 @@ module TS.SpaceTac.UI {
                 this.info.drawRect(0, 0, this.width, this.height);
 
                 this.info.beginFill(yescolor);
-                this.info.drawCircle(ship.arena_x, ship.arena_y, radius * 2);
+                this.info.drawCircle(location.x, location.y, radius * 2);
 
                 if (action instanceof MoveAction) {
                     let safety = action.safety_distance / 2;

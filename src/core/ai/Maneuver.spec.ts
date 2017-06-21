@@ -42,7 +42,8 @@ module TS.SpaceTac.Specs {
         it("guesses area effects on final location", function () {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
-            TestTools.addEngine(ship, 500);
+            let engine = TestTools.addEngine(ship, 500);
+            TestTools.setShipAP(ship, 10);
             let drone = new Drone(ship);
             drone.effects = [new AttributeEffect("maneuvrability", 1)];
             drone.x = 100;
@@ -50,11 +51,11 @@ module TS.SpaceTac.Specs {
             drone.radius = 50;
             battle.addDrone(drone);
 
-            let maneuver = new Maneuver(ship, new MoveAction(new Equipment()), Target.newFromLocation(40, 30));
+            let maneuver = new Maneuver(ship, engine.action, Target.newFromLocation(40, 30));
             expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 40, y: 30 }));
             expect(maneuver.effects).toEqual([]);
 
-            maneuver = new Maneuver(ship, new MoveAction(new Equipment()), Target.newFromLocation(100, 30));
+            maneuver = new Maneuver(ship, engine.action, Target.newFromLocation(100, 30));
             expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 100, y: 30 }));
             expect(maneuver.effects).toEqual([[ship, new AttributeEffect("maneuvrability", 1)]]);
         });

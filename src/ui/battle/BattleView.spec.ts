@@ -6,34 +6,26 @@ module TS.SpaceTac.UI.Specs {
 
         it("forwards events in targetting mode", function () {
             let battleview = testgame.battleview;
-            expect(battleview.targetting).toBeNull();
+            expect(battleview.targetting.active).toBe(false);
             battleview.setInteractionEnabled(true);
+
+            spyOn(battleview.targetting, "validate").and.stub();
 
             battleview.cursorInSpace(5, 5);
 
-            expect(battleview.targetting).toBeNull();
+            expect(battleview.targetting.active).toBe(false);
 
             // Enter targetting mode
-            var result = nn(battleview.enterTargettingMode());
+            let weapon = TestTools.addWeapon(nn(battleview.battle.playing_ship), 10);
+            battleview.enterTargettingMode(weapon.action);
 
-            expect(battleview.targetting).toBeTruthy();
-            expect(result).toBe(nn(battleview.targetting));
-
-            // Collect targetting events
-            var hovered: (Target | null)[] = [];
-            var clicked: Target[] = [];
-            result.targetHovered.add((target: Target) => {
-                hovered.push(target);
-            });
-            result.targetSelected.add((target: Target) => {
-                clicked.push(target);
-            });
+            expect(battleview.targetting.active).toBe(true);
 
             // Forward selection in space
             battleview.cursorInSpace(8, 4);
 
             expect(battleview.ship_hovered).toBeNull();
-            expect(nn(battleview.targetting).target_corrected).toEqual(Target.newFromLocation(8, 4));
+            expect(battleview.targetting.target).toEqual(Target.newFromLocation(8, 4));
 
             // Process a click on space
             battleview.cursorClicked();
@@ -42,19 +34,19 @@ module TS.SpaceTac.UI.Specs {
             battleview.cursorOnShip(battleview.battle.play_order[0]);
 
             expect(battleview.ship_hovered).toEqual(battleview.battle.play_order[0]);
-            expect(nn(battleview.targetting).target_corrected).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
+            expect(battleview.targetting.target).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
 
             // Don't leave a ship we're not hovering
             battleview.cursorOffShip(battleview.battle.play_order[1]);
 
             expect(battleview.ship_hovered).toEqual(battleview.battle.play_order[0]);
-            expect(nn(battleview.targetting).target_corrected).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
+            expect(battleview.targetting.target).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
 
             // Don't move in space while on ship
             battleview.cursorInSpace(1, 3);
 
             expect(battleview.ship_hovered).toEqual(battleview.battle.play_order[0]);
-            expect(nn(battleview.targetting).target_corrected).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
+            expect(battleview.targetting.target).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
 
             // Process a click on ship
             battleview.cursorClicked();
@@ -63,12 +55,12 @@ module TS.SpaceTac.UI.Specs {
             battleview.cursorOffShip(battleview.battle.play_order[0]);
 
             expect(battleview.ship_hovered).toBeNull();
-            expect(nn(battleview.targetting).target_corrected).toBeNull();
+            expect(battleview.targetting.target).toBeNull();
 
             // Quit targetting
             battleview.exitTargettingMode();
 
-            expect(battleview.targetting).toBeNull();
+            expect(battleview.targetting.active).toBe(false);
 
             // Events process normally
             battleview.cursorInSpace(8, 4);
@@ -78,17 +70,6 @@ module TS.SpaceTac.UI.Specs {
 
             // Quit twice don't do anything
             battleview.exitTargettingMode();
-
-            // Check collected targetting events
-            expect(hovered).toEqual([
-                Target.newFromLocation(8, 4),
-                Target.newFromShip(battleview.battle.play_order[0]),
-                null
-            ]);
-            expect(clicked).toEqual([
-                Target.newFromLocation(8, 4),
-                Target.newFromShip(battleview.battle.play_order[0]),
-            ]);
         });
     });
 }

@@ -150,7 +150,7 @@ module TS.SpaceTac.UI {
         /**
          * Update the power indicator
          */
-        updatePower(selected_action = 0): void {
+        updatePower(move_power = 0, fire_power = 0): void {
             let current_power = this.power.children.length;
             let power_capacity = this.ship_power_capacity;
 
@@ -162,14 +162,16 @@ module TS.SpaceTac.UI {
             }
 
             let power_value = this.ship_power_value;
-            let remaining_power = power_value - selected_action;
+            let remaining_power = power_value - move_power - fire_power;
             this.power.children.forEach((obj, idx) => {
                 let img = <Phaser.Image>obj;
                 let frame: number;
                 if (idx < remaining_power) {
                     frame = 0;
-                } else if (idx < power_value) {
+                } else if (idx < remaining_power + move_power) {
                     frame = 2;
+                } else if (idx < power_value) {
+                    frame = 3;
                 } else {
                     frame = 1;
                 }
@@ -179,23 +181,34 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Set current action power usage.
+         * Temporarily set current action power usage.
          * 
          * When an action is selected, this will fade the icons not available after the action would be done.
          * This will also highlight power usage in the power bar.
          * 
-         * *power_usage* is the consumption of currently selected action.
+         * *move_power* and *fire_power* is the consumption of currently selected action/target.
          */
-        updateSelectedActionPower(power_usage: number, action: BaseAction): void {
-            var remaining_ap = this.ship ? (this.ship.values.power.get() - power_usage) : 0;
+        updateSelectedActionPower(move_power: number, fire_power: number, action: BaseAction): void {
+            var remaining_ap = this.ship ? (this.ship.getValue("power") - move_power - fire_power) : 0;
             if (remaining_ap < 0) {
                 remaining_ap = 0;
             }
 
-            this.action_icons.forEach((icon: ActionIcon) => {
+            this.action_icons.forEach(icon => {
                 icon.updateFadingStatus(remaining_ap, action);
             });
-            this.updatePower(power_usage);
+            this.updatePower(move_power, fire_power);
+        }
+
+        /**
+         * Temporarily set power status for a given move-fire simulation
+         */
+        updateFromSimulation(action: BaseAction, simulation: MoveFireResult) {
+            if (simulation.complete) {
+                this.updateSelectedActionPower(simulation.total_move_ap, simulation.total_fire_ap, action);
+            } else {
+                this.updateSelectedActionPower(0, 0, action);
+            }
         }
 
         /**

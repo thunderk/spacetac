@@ -17,7 +17,7 @@ module TS.SpaceTac {
             expect(result).toEqual(Target.newFromLocation(0, 2));
 
             result = action.checkTarget(ship, Target.newFromLocation(0, 8));
-            expect(result).toEqual(Target.newFromLocation(0, 3));
+            expect(result).toEqual(Target.newFromLocation(0, 2.9));
 
             ship.values.power.set(0);
             result = action.checkTarget(ship, Target.newFromLocation(0, 8));

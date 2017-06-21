@@ -67,6 +67,9 @@ module TS.SpaceTac.UI {
             background.onInputUp.add(() => {
                 battleview.cursorClicked();
             });
+            background.onInputOut.add(() => {
+                battleview.targetting.setTarget(null);
+            });
 
             // Watch mouse move to capture hovering over background
             this.input_callback = this.game.input.addMoveCallback((pointer: Phaser.Pointer) => {
@@ -232,13 +235,6 @@ module TS.SpaceTac.UI {
             } else {
                 console.error("Drone not found in arena for removal", drone);
             }
-        }
-
-        /**
-         * Highlight ships that would be the target of current action
-         */
-        highlightTargets(ships: Ship[]): void {
-            this.ship_sprites.forEach(sprite => sprite.setTargetted(contains(ships, sprite.ship)));
         }
 
         /**

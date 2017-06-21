@@ -1,199 +1,265 @@
 module TS.SpaceTac.UI {
-    // Targetting system
-    //  Allows to pick a target for an action
+    /**
+     * Targetting system on the arena
+     * 
+     * This system handles choosing a target for currently selected action, and displays a visual aid.
+     */
     export class Targetting {
-        // Initial target (as pointed by the user)
-        target_initial: Target | null;
-        line_initial: Phaser.Graphics;
+        // Container group
+        container: Phaser.Group
 
-        // Corrected target (applying action rules)
-        target_corrected: Target | null;
-        line_corrected: Phaser.Graphics;
+        // Current action
+        ship: Ship | null = null
+        action: BaseAction | null = null
+        target: Target | null = null
+        simulation = new MoveFireResult()
 
-        // Circle for effect radius
-        blast_radius: number;
-        blast: Phaser.Image;
+        // Movement projector
+        drawn_info: Phaser.Graphics
+        move_ghost: Phaser.Image
 
-        // Signal to receive hovering events
-        targetHovered: Phaser.Signal;
+        // Fire projector
+        fire_arrow: Phaser.Image
+        fire_blast: Phaser.Image
+        fire_impact: Phaser.Group
 
-        // Signal to receive targetting events
-        targetSelected: Phaser.Signal;
+        // Collaborators to update
+        actionbar: ActionBar
 
-        // AP usage display
-        ap_interval: number = 0;
-        ap_indicators: Phaser.Image[] = [];
+        // Access to the parent view
+        view: BaseView
 
-        // Access to the parent battle view
-        private battleview: BattleView | null;
+        constructor(view: BaseView, actionbar: ActionBar) {
+            this.view = view;
+            this.actionbar = actionbar;
 
-        // Source of the targetting
-        private source: PIXI.DisplayObject | null;
-
-        // Create a default targetting mode
-        constructor(battleview: BattleView | null) {
-            this.battleview = battleview;
-            this.targetHovered = new Phaser.Signal();
-            this.targetSelected = new Phaser.Signal();
+            this.container = view.add.group();
 
             // Visual effects
-            if (battleview) {
-                this.blast = new Phaser.Image(battleview.game, 0, 0, "battle-arena-blast");
-                this.blast.anchor.set(0.5, 0.5);
-                this.blast.visible = false;
-                battleview.arena.layer_targetting.add(this.blast);
-                this.line_initial = new Phaser.Graphics(battleview.game, 0, 0);
-                this.line_initial.visible = false;
-                battleview.arena.layer_targetting.add(this.line_initial);
-                this.line_corrected = new Phaser.Graphics(battleview.game, 0, 0);
-                this.line_corrected.visible = false;
-                battleview.arena.layer_targetting.add(this.line_corrected);
-            }
+            this.drawn_info = new Phaser.Graphics(view.game, 0, 0);
+            this.drawn_info.visible = false;
+            this.move_ghost = new Phaser.Image(view.game, 0, 0, "common-transparent");
+            this.move_ghost.anchor.set(0.5, 0.5);
+            this.move_ghost.alpha = 0.8;
+            this.move_ghost.visible = false;
+            this.fire_arrow = new Phaser.Image(view.game, 0, 0, "battle-arena-indicators", 0);
+            this.fire_arrow.anchor.set(1, 0.5);
+            this.fire_arrow.visible = false;
+            this.fire_impact = new Phaser.Group(view.game);
+            this.fire_impact.visible = false;
+            this.fire_blast = new Phaser.Image(view.game, 0, 0, "battle-arena-blast");
+            this.fire_blast.anchor.set(0.5, 0.5);
+            this.fire_blast.visible = false;
 
-            this.source = null;
-            this.target_initial = null;
-            this.target_corrected = null;
+            this.container.add(this.fire_impact);
+            this.container.add(this.fire_blast);
+            this.container.add(this.drawn_info);
+            this.container.add(this.fire_arrow);
+            this.container.add(this.move_ghost);
         }
 
-        // Destructor
-        destroy(): void {
-            this.targetHovered.dispose();
-            this.targetSelected.dispose();
-            if (this.line_initial) {
-                this.line_initial.destroy();
-            }
-            if (this.line_corrected) {
-                this.line_corrected.destroy();
-            }
-            if (this.blast) {
-                this.blast.destroy();
-            }
-            this.ap_indicators.forEach(indicator => indicator.destroy());
-            if (this.battleview) {
-                this.battleview.arena.highlightTargets([]);
-            }
+        /**
+         * Move to a given view layer
+         */
+        moveToLayer(layer: Phaser.Group): void {
+            layer.add(this.container);
         }
 
-        // Set AP indicators to display at fixed interval along the line
-        setApIndicatorsInterval(interval: number) {
-            this.ap_interval = interval;
-            this.updateApIndicators();
+        /**
+         * Indicator that the targetting is currently active
+         */
+        get active(): boolean {
+            return (this.ship && this.action) ? true : false;
         }
 
-        // Update visual effects for current targetting
-        update(): void {
-            if (this.battleview) {
-                if (this.source && this.target_initial) {
-                    this.line_initial.clear();
-                    this.line_initial.lineStyle(3, 0x666666);
-                    this.line_initial.moveTo(this.source.x, this.source.y);
-                    this.line_initial.lineTo(this.target_initial.x, this.target_initial.y);
-                    this.line_initial.visible = true;
-                } else {
-                    this.line_initial.visible = false;
+        /**
+         * Draw a vector, with line and gradation
+         */
+        drawVector(color: number, x1: number, y1: number, x2: number, y2: number, gradation = 0) {
+            let line = this.drawn_info;
+            line.lineStyle(6, color);
+            line.moveTo(x1, y1);
+            line.lineTo(x2, y2);
+            line.visible = true;
+
+            if (gradation) {
+                let dx = x2 - x1;
+                let dy = y2 - y1;
+                let dist = Math.sqrt(dx * dx + dy * dy);
+                let angle = Math.atan2(dy, dx);
+                dx = Math.cos(angle);
+                dy = Math.sin(angle);
+                for (let d = gradation; d <= dist; d += gradation) {
+                    line.moveTo(x1 + dx * d + dy * 10, y1 + dy * d - dx * 10);
+                    line.lineTo(x1 + dx * d - dy * 10, y1 + dy * d + dx * 10);
                 }
-
-                if (this.source && this.target_corrected) {
-                    this.line_corrected.clear();
-                    this.line_corrected.lineStyle(6, this.ap_interval ? 0xe09c47 : 0xDC6441);
-                    this.line_corrected.moveTo(this.source.x, this.source.y);
-                    this.line_corrected.lineTo(this.target_corrected.x, this.target_corrected.y);
-                    this.line_corrected.visible = true;
-                } else {
-                    this.line_corrected.visible = false;
-                }
-
-                if (this.target_corrected && this.blast_radius) {
-                    this.blast.position.set(this.target_corrected.x, this.target_corrected.y);
-                    this.blast.scale.set(this.blast_radius * 2 / 365);
-                    this.blast.visible = true;
-
-                    let targets = this.battleview.battle.collectShipsInCircle(this.target_corrected, this.blast_radius, true);
-                    this.battleview.arena.highlightTargets(targets);
-                } else {
-                    this.blast.visible = false;
-
-                    this.battleview.arena.highlightTargets(this.target_corrected && this.target_corrected.ship ? [this.target_corrected.ship] : []);
-                }
-
-                this.updateApIndicators();
             }
         }
 
-        // Update the AP indicators display
-        updateApIndicators() {
-            if (!this.battleview || !this.source) {
+        /**
+         * Draw a part of the simulation
+         */
+        drawPart(part: MoveFirePart, enabled = true, previous: MoveFirePart | null = null): void {
+            if (!this.ship) {
                 return;
             }
 
-            // Get indicator count
-            let count = 0;
-            let distance = 0;
-            if (this.line_corrected.visible && this.ap_interval > 0 && this.target_corrected) {
-                distance = this.target_corrected.getDistanceTo(Target.newFromLocation(this.source.x, this.source.y)) - 0.00001;
-                count = Math.ceil(distance / this.ap_interval);
+            let move = part.action instanceof MoveAction;
+            let color = (enabled && part.possible) ? (move ? 0xe09c47 : 0xdc6441) : 0x8e8e8e;
+            let src = previous ? previous.target : this.ship.location;
+            let gradation = part.action instanceof MoveAction ? part.action.distance_per_power : 0;
+            this.drawVector(color, src.x, src.y, part.target.x, part.target.y, gradation);
+        }
+
+        /**
+         * Update impact indicators
+         */
+        updateImpactIndicators(ship: Ship, target: Target, radius: number): void {
+            let ships: Ship[];
+            if (radius) {
+                let battle = ship.getBattle();
+                if (battle) {
+                    ships = battle.collectShipsInCircle(target, radius, true);
+                } else {
+                    ships = [];
+                }
+            } else {
+                ships = target.ship ? [target.ship] : [];
             }
 
-            // Adjust object count to match
-            while (this.ap_indicators.length < count) {
-                let indicator = new Phaser.Image(this.battleview.game, 0, 0, "battle-arena-ap-indicator");
-                indicator.anchor.set(0.5, 0.5);
-                this.battleview.arena.layer_targetting.add(indicator);
-                this.ap_indicators.push(indicator);
-            }
-            while (this.ap_indicators.length > count) {
-                this.ap_indicators[this.ap_indicators.length - 1].destroy();
-                this.ap_indicators.pop();
-            }
-
-            // Spread indicators
-            if (count > 0 && distance > 0 && this.target_corrected) {
-                let source = this.source;
-                let dx = this.ap_interval * (this.target_corrected.x - source.x) / distance;
-                let dy = this.ap_interval * (this.target_corrected.y - source.y) / distance;
-                this.ap_indicators.forEach((indicator, index) => {
-                    indicator.position.set(source.x + dx * index, source.y + dy * index);
+            if (ships.length) {
+                this.fire_impact.removeAll(true);
+                ships.forEach(iship => {
+                    let frame = this.view.add.image(iship.arena_x, iship.arena_y, "battle-arena-ship-frames", 5, this.fire_impact);
+                    frame.anchor.set(0.5);
                 });
+                this.fire_impact.visible = true;
+            } else {
+                this.fire_impact.visible = false;
             }
         }
 
-        // Set the source sprite for the targetting (for visual effects)
-        setSource(sprite: PIXI.DisplayObject) {
-            this.source = sprite;
+        /**
+         * Update visual effects to show the simulation of current action/target
+         */
+        update(): void {
+            this.simulate();
+            if (this.ship && this.action && this.target) {
+                let simulation = this.simulation;
+
+                this.drawn_info.clear();
+                this.fire_arrow.visible = false;
+                this.move_ghost.visible = false;
+
+                if (simulation.success) {
+                    let previous: MoveFirePart | null = null;
+                    simulation.parts.forEach(part => {
+                        this.drawPart(part, simulation.complete, previous);
+                        previous = part;
+                    });
+                    this.fire_arrow.frame = simulation.complete ? 0 : 1;
+
+                    let from = simulation.need_fire ? simulation.move_location : this.ship.location;
+                    let angle = Math.atan2(this.target.y - from.y, this.target.x - from.x);
+
+                    if (simulation.need_move) {
+                        this.move_ghost.visible = true;
+                        this.move_ghost.position.set(simulation.move_location.x, simulation.move_location.y);
+                        this.move_ghost.rotation = angle;
+                    } else {
+                        this.move_ghost.visible = false;
+                    }
+
+                    if (simulation.need_fire) {
+                        let blast = this.action.getBlastRadius(this.ship);
+                        if (blast) {
+                            this.fire_blast.position.set(this.target.x, this.target.y);
+                            this.fire_blast.scale.set(blast * 2 / 365);
+                            this.fire_blast.alpha = simulation.can_fire ? 1 : 0.5;
+                            this.fire_blast.visible = true;
+                        } else {
+                            this.fire_blast.visible = false;
+                        }
+                        this.updateImpactIndicators(this.ship, this.target, blast);
+
+                        this.fire_arrow.position.set(this.target.x, this.target.y);
+                        this.fire_arrow.rotation = angle;
+                        this.fire_arrow.frame = simulation.complete ? 0 : 1;
+                        this.fire_arrow.visible = true;
+                    } else {
+                        this.fire_blast.visible = false;
+                        this.fire_impact.visible = false;
+                        this.fire_arrow.visible = false;
+                    }
+
+                    this.container.visible = true;
+                } else {
+                    // TODO Display error
+                    this.container.visible = false;
+                }
+            } else {
+                this.container.visible = false;
+            }
         }
 
-        // Set a target from a target object
-        setTarget(target: Target | null, dispatch: boolean = true, blast_radius: number = 0): void {
-            this.target_corrected = target;
-            this.blast_radius = blast_radius;
-            if (dispatch) {
-                this.target_initial = target ? copy(target) : null;
-                this.targetHovered.dispatch(this.target_corrected);
+        /**
+         * Simulate current action
+         */
+        simulate(): void {
+            if (this.ship && this.action && this.target) {
+                let simulator = new MoveFireSimulator(this.ship);
+                this.simulation = simulator.simulateAction(this.action, this.target, 1);
+            } else {
+                this.simulation = new MoveFireResult();
             }
+        }
+
+        /**
+         * Set the current targetting action, or null to stop targetting
+         */
+        setAction(action: BaseAction | null): void {
+            if (action && action.equipment && action.equipment.attached_to && action.equipment.attached_to.ship) {
+                this.ship = action.equipment.attached_to.ship;
+                this.action = action;
+
+                this.move_ghost.loadTexture(`ship-${this.ship.model.code}-sprite`);
+                this.move_ghost.scale.set(0.25);
+            } else {
+                this.ship = null;
+                this.action = null;
+            }
+            this.target = null;
             this.update();
         }
 
-        // Set no target
-        unsetTarget(dispatch: boolean = true): void {
-            this.setTarget(null, dispatch);
-        }
-
-        // Set the current target ship (when hovered)
-        setTargetShip(ship: Ship, dispatch: boolean = true): void {
-            if (ship.alive) {
-                this.setTarget(Target.newFromShip(ship), dispatch);
+        /**
+         * Set the target for current action
+         */
+        setTarget(target: Target | null): void {
+            this.target = target;
+            this.update();
+            if (this.action) {
+                this.actionbar.updateFromSimulation(this.action, this.simulation);
             }
         }
 
-        // Set the current target in space (when hovered)
-        setTargetSpace(x: number, y: number, dispatch: boolean = true): void {
-            this.setTarget(Target.newFromLocation(x, y));
-        }
-
-        // Validate the current target (when clicked)
-        //  This will broadcast the targetSelected signal
+        /**
+         * Validate the current target.
+         * 
+         * This will make the needed approach and apply the action.
+         */
         validate(): void {
-            this.targetSelected.dispatch(this.target_corrected);
+            this.simulate();
+
+            if (this.ship && this.simulation.complete) {
+                let ship = this.ship;
+                this.simulation.parts.forEach(part => {
+                    if (part.possible) {
+                        part.action.apply(ship, part.target);
+                    }
+                });
+                this.actionbar.actionEnded();
+            }
         }
     }
 }
