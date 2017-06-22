@@ -12,20 +12,16 @@
 * Loot: lucky finds should be proportional to cargo space
 * Ship models: Add permanent effects
 * Ship models: Add permanent actions
-* Equipment: no-target actions (direct activation, with confirmation dialog ?)
-* Equipment: toggle actions (AP usage ? time of effect ?)
 * Equipment: add critical hit/miss
 * Equipment: add damage over time effect
-* Equipment: add area effects, without the need of activation/stickyness (eg. damage reduction, attribute modifier...)
-* Menu: end appear animation when a button is clicked
 * Menu: allow to delete cloud saves
 * Arena: display effects description instead of attribute changes
 * Arena: display radius for area effects (both on action hover, and while action is active)
-* Arena: fix effects originating from real ship location instead of current sprite (when AI fires then moves)
+* Arena: any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
 * Arena: add engine trail
+* Log processor: Cancel previous animations, and allow no animation mode
 * Fix capacity limit effect not refreshing associated value (for example, on "limit power capacity to 3", potential "power" value change is not broadcast)
-* Actions: show power usage/recovery in power bar, on action hover
-* Actions: fix targetting not resetting when using keyboard shortcuts
+* Actions: fix targetting not resetting on current cursor location when using keyboard shortcuts
 * Add actions with cost dependent of distance (like current move actions)
 * Find incentives to move from starting position
 * Outcome: disable the loot button if there is no loot

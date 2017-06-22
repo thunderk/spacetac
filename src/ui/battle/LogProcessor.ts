@@ -266,10 +266,7 @@ module TS.SpaceTac.UI {
 
         // Weapon used
         private processFireEvent(event: FireEvent): number {
-            var source = Target.newFromShip(event.ship);
-            var destination = event.target;
-
-            var effect = new WeaponEffect(this.view.arena, source, destination, event.weapon);
+            var effect = new WeaponEffect(this.view.arena, event.ship, event.target, event.weapon);
             let duration = effect.start();
 
             return duration;

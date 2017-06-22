@@ -118,6 +118,17 @@ module TS.SpaceTac.UI {
             });
         }
 
+        /**
+         * Get all ship sprites in a circle area
+         */
+        getShipsInCircle(area: ArenaCircleArea, alive_only = true, border_inclusive = true): ArenaShip[] {
+            let base = this.ship_sprites;
+            if (alive_only) {
+                base = base.filter(ship => !ship.isDead());
+            }
+            return base.filter(ship => arenaInside(ship, area, border_inclusive));
+        }
+
         // Get the current MainUI instance
         getGame(): MainUI {
             return this.battleview.gameui;

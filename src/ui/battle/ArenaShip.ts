@@ -205,6 +205,27 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Check if the ship is dead
+         */
+        isDead(): boolean {
+            return this.stasis.visible;
+        }
+
+        /**
+         * Get a ship value
+         */
+        getValue(value: keyof ShipValues): number {
+            switch (value) {
+                case "hull":
+                    return this.hull.getValue();
+                case "shield":
+                    return this.shield.getValue();
+                default:
+                    return 0;
+            }
+        }
+
+        /**
          * Move the sprite to a location
          * 
          * Return the duration of animation

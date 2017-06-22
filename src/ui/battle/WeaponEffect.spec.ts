@@ -4,7 +4,7 @@ module TS.SpaceTac.UI.Specs {
 
         it("displays shield hit effect", function () {
             let battleview = testgame.battleview;
-            let effect = new WeaponEffect(battleview.arena, new Target(0, 0), new Target(0, 0), new Equipment());
+            let effect = new WeaponEffect(battleview.arena, new Ship(), new Target(0, 0), new Equipment());
             effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1000, 3000, true);
 
             let layer = battleview.arena.layer_weapon_effects;
@@ -19,10 +19,13 @@ module TS.SpaceTac.UI.Specs {
 
         it("displays gatling gun effect", function () {
             let battleview = testgame.battleview;
-            let ship = new Ship();
+            let ship = nn(battleview.battle.playing_ship);
+            let sprite = nn(battleview.arena.findShipSprite(ship));
             ship.setArenaPosition(50, 30);
-            TestTools.setShipHP(ship, 10, 0);
-            let effect = new WeaponEffect(battleview.arena, new Target(10, 0), Target.newFromShip(ship), new Equipment());
+            sprite.position.set(50, 30);
+            sprite.hull.setValue(10, 10);
+            sprite.shield.setValue(0, 10);
+            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), new Equipment());
 
             let mock_shield_impact = spyOn(effect, "shieldImpactEffect").and.stub();
             let mock_hull_impact = spyOn(effect, "hullImpactEffect").and.stub();
@@ -35,12 +38,12 @@ module TS.SpaceTac.UI.Specs {
             expect(layer.children[0] instanceof Phaser.Particles.Arcade.Emitter).toBe(true);
             expect(mock_shield_impact).toHaveBeenCalledTimes(0);
             expect(mock_hull_impact).toHaveBeenCalledTimes(1);
-            expect(mock_hull_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 10, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800);
+            expect(mock_hull_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800);
 
-            TestTools.setShipHP(ship, 10, 10);
+            sprite.shield.setValue(10, 10);
             effect.gunEffect();
             expect(mock_shield_impact).toHaveBeenCalledTimes(1);
-            expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 10, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800, true);
+            expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800, true);
             expect(mock_hull_impact).toHaveBeenCalledTimes(1);
         });
     });

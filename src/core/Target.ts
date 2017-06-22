@@ -48,7 +48,7 @@ module TS.SpaceTac {
 
         jasmineToString() {
             if (this.ship) {
-                return this.ship.jasmineToString();
+                return `(${this.x},${this.y}) ${this.ship.jasmineToString()}`;
             } else {
                 return `(${this.x},${this.y})`;
             }

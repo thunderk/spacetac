@@ -7,44 +7,44 @@ module TS.SpaceTac.UI {
         }
     }
 
-    interface Point {
-        x: number;
-        y: number;
-    }
-
     /**
      * Visual effects renderer for weapons.
      */
     export class WeaponEffect {
         // Link to game
-        private ui: MainUI;
+        private ui: MainUI
 
         // Link to arena
-        private arena: Arena;
+        private arena: Arena
 
         // Display group in which to display the visual effects
-        private layer: Phaser.Group;
+        private layer: Phaser.Group
 
         // Firing ship
-        private source: Target;
+        private ship: Ship
+        private source: IArenaLocation
 
-        // Targetted ship
-        private destination: Target;
+        // Target (ship or space)
+        private target: Target
+        private destination: IArenaLocation
 
         // Weapon used
-        private weapon: Equipment;
+        private weapon: Equipment
 
         // Effect in use
-        private effect: Function;
+        private effect: Function
 
-        constructor(arena: Arena, source: Target, destination: Target, weapon: Equipment) {
+        constructor(arena: Arena, ship: Ship, target: Target, weapon: Equipment) {
             this.ui = arena.getGame();
             this.arena = arena;
             this.layer = arena.layer_weapon_effects;
-            this.source = source;
-            this.destination = destination;
+            this.ship = ship;
+            this.target = target;
             this.weapon = weapon;
             this.effect = this.getEffectForWeapon(weapon.code);
+
+            this.source = this.getCoords(Target.newFromShip(this.ship));
+            this.destination = this.getCoords(this.target);
         }
 
         /**
@@ -57,6 +57,22 @@ module TS.SpaceTac.UI {
                 return this.effect();
             } else {
                 return 0;
+            }
+        }
+
+        /**
+         * Get the location of a target (as of current view, not as actual game state)
+         */
+        getCoords(target: Target): IArenaLocation {
+            if (target.ship) {
+                let sprite = this.arena.findShipSprite(target.ship);
+                if (sprite) {
+                    return sprite;
+                } else {
+                    return target.ship.location;
+                }
+            } else {
+                return target;
             }
         }
 
@@ -75,7 +91,7 @@ module TS.SpaceTac.UI {
         /**
          * Add a shield impact effect on a ship
          */
-        shieldImpactEffect(from: Point, ship: Point, delay: number, duration: number, particles = false) {
+        shieldImpactEffect(from: IArenaLocation, ship: IArenaLocation, delay: number, duration: number, particles = false) {
             let angle = Math.atan2(from.y - ship.y, from.x - ship.x);
 
             let effect = new Phaser.Image(this.ui, ship.x, ship.y, "battle-weapon-shield-impact");
@@ -108,7 +124,7 @@ module TS.SpaceTac.UI {
         /**
          * Add a hull impact effect on a ship
          */
-        hullImpactEffect(from: Point, ship: Point, delay: number, duration: number) {
+        hullImpactEffect(from: IArenaLocation, ship: IArenaLocation, delay: number, duration: number) {
             let angle = Math.atan2(from.y - ship.y, from.x - ship.x);
 
             let emitter = this.ui.add.emitter(ship.x + Math.cos(angle) * 10, ship.y + Math.sin(angle) * 10, 30);
@@ -132,10 +148,10 @@ module TS.SpaceTac.UI {
 
             let missile = new Phaser.Image(this.ui, this.source.x, this.source.y, "battle-weapon-default");
             missile.anchor.set(0.5, 0.5);
-            missile.rotation = this.source.getAngleTo(this.destination);
+            missile.rotation = arenaAngle(this.source, this.destination);
             this.layer.addChild(missile);
 
-            let blast_radius = this.weapon.action.getBlastRadius(this.source.ship || new Ship());
+            let blast_radius = this.weapon.action.getBlastRadius(this.ship);
 
             let tween = this.ui.tweens.create(missile);
             tween.to({ x: this.destination.x, y: this.destination.y }, 1000);
@@ -159,12 +175,12 @@ module TS.SpaceTac.UI {
             tween.start();
 
             if (blast_radius > 0) {
-                let ships = this.arena.getBattle().collectShipsInCircle(this.destination, blast_radius, true);
-                ships.forEach(ship => {
-                    if (ship.getValue("shield") > 0) {
-                        this.shieldImpactEffect(this.destination, { x: ship.arena_x, y: ship.arena_y }, 1200, 800);
+                let ships = this.arena.getShipsInCircle(new ArenaCircleArea());
+                ships.forEach(sprite => {
+                    if (sprite.getValue("shield") > 0) {
+                        this.shieldImpactEffect(this.target, sprite, 1200, 800);
                     } else {
-                        this.hullImpactEffect(this.destination, { x: ship.arena_x, y: ship.arena_y }, 1200, 400);
+                        this.hullImpactEffect(this.target, sprite, 1200, 400);
                     }
                 });
             }
@@ -178,13 +194,13 @@ module TS.SpaceTac.UI {
         gunEffect(): number {
             this.ui.audio.playOnce("battle-weapon-bullets");
 
-            let has_shield = this.destination.ship && this.destination.ship.getValue("shield") > 0;
+            let sprite = this.target.ship ? this.arena.findShipSprite(this.target.ship) : null;
+            let has_shield = sprite && sprite.getValue("shield") > 0;
 
-            var dx = this.destination.x - this.source.x;
-            var dy = this.destination.y - this.source.y;
-            var angle = Math.atan2(dy, dx);
-            var distance = Math.sqrt(dx * dx + dy * dy);
-            var emitter = new Phaser.Particles.Arcade.Emitter(this.ui, this.source.x + Math.cos(angle) * 35, this.source.y + Math.sin(angle) * 35, 10);
+            var angle = arenaAngle(this.source, this.target);
+            var distance = arenaDistance(this.source, this.target);
+            var emitter = new Phaser.Particles.Arcade.Emitter(this.ui,
+                this.source.x + Math.cos(angle) * 35, this.source.y + Math.sin(angle) * 35, 10);
             var speed = 2000;
             emitter.particleClass = BulletParticle;
             emitter.gravity = 0;
@@ -201,9 +217,9 @@ module TS.SpaceTac.UI {
             this.layer.addChild(emitter);
 
             if (has_shield) {
-                this.shieldImpactEffect(this.source, this.destination, 100, 800, true);
+                this.shieldImpactEffect(this.source, this.target, 100, 800, true);
             } else {
-                this.hullImpactEffect(this.source, this.destination, 100, 800);
+                this.hullImpactEffect(this.source, this.target, 100, 800);
             }
 
             return 1000;

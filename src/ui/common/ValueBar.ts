@@ -69,7 +69,9 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Set current value
+        /**
+         * Set the current value, and maximal value
+         */
         setValue(current: number, maximal: number = -1) {
             this.current = current > 0 ? current : 0;
             if (maximal >= 0) {
@@ -84,7 +86,16 @@ module TS.SpaceTac.UI {
             this.update();
         }
 
-        // Get the proportional (in 0.0-1.0 range) value
+        /**
+         * Get current raw value
+         */
+        getValue(): number {
+            return this.current;
+        }
+
+        /**
+         * Get the proportional (in 0.0-1.0 range) value
+         */
         getProportionalValue(): number {
             return this.proportional;
         }

@@ -26,7 +26,7 @@ module TS.SpaceTac {
          * Get the distance travelled
          */
         getDistance(): number {
-            return this.start.getDistanceTo(this.end);
+            return arenaDistance(this.start, this.end);
         }
     }
 }
