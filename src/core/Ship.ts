@@ -245,6 +245,16 @@ module TS.SpaceTac {
         }
 
         /**
+         * Set a value's maximal capacity
+         */
+        setValueCapacity(name: keyof ShipValues, maximal: number, log = true): void {
+            if (this.getValue(name) > maximal) {
+                this.setValue(name, maximal, false, log);
+            }
+            this.values[name].setMaximal(maximal);
+        }
+
+        /**
          * Get a ship attribute's current value
          */
         getAttribute(name: keyof ShipAttributes): number {
@@ -268,11 +278,11 @@ module TS.SpaceTac {
 
             // TODO more generic
             if (name == "power_capacity") {
-                this.values.power.setMaximal(attr.get());
+                this.setValueCapacity("power", attr.get());
             } else if (name == "shield_capacity") {
-                this.values.shield.setMaximal(attr.get());
+                this.setValueCapacity("shield", attr.get());
             } else if (name == "hull_capacity") {
-                this.values.hull.setMaximal(attr.get());
+                this.setValueCapacity("hull", attr.get());
             }
 
             if (log && diff != 0) {

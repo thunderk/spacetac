@@ -20,7 +20,6 @@
 * Arena: any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
 * Arena: add engine trail
 * Log processor: Cancel previous animations, and allow no animation mode
-* Fix capacity limit effect not refreshing associated value (for example, on "limit power capacity to 3", potential "power" value change is not broadcast)
 * Actions: fix targetting not resetting on current cursor location when using keyboard shortcuts
 * Add actions with cost dependent of distance (like current move actions)
 * Find incentives to move from starting position
@@ -31,6 +30,7 @@
 * Controls: fix hover being stuck when the cursor exits the window, or the item moves or is hidden
 * Drones: add hull points and take area damage
 * Drones: find a way to avoid arena cluttering
+* Drones: repair drone has its activation effect displayed as permanent effect on ships in the radius
 * Add a battle log display
 * Allow to undo last moves
 * Merge identical sticky effects
