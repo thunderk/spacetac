@@ -16,8 +16,6 @@ module TS.SpaceTac.UI.Specs {
             });
 
             it("handles hover and click on desktops and mobile targets", function (done) {
-                jasmine.clock().uninstall();
-
                 let newButton: () => [Phaser.Button, any] = () => {
                     var button = new Phaser.Button(testgame.ui);
                     var funcs = {
@@ -49,7 +47,25 @@ module TS.SpaceTac.UI.Specs {
                 expect(funcs.leave).toHaveBeenCalledTimes(1);
                 expect(funcs.click).toHaveBeenCalledTimes(1);
 
+                // Leaves on destroy
+                [button, funcs] = newButton();
+                button.onInputDown.dispatch();
+                jasmine.clock().tick(150);
+                expect(funcs.enter).toHaveBeenCalledTimes(1);
+                expect(funcs.leave).toHaveBeenCalledTimes(0);
+                expect(funcs.click).toHaveBeenCalledTimes(0);
+                button.events.onDestroy.dispatch();
+                expect(funcs.enter).toHaveBeenCalledTimes(1);
+                expect(funcs.leave).toHaveBeenCalledTimes(1);
+                expect(funcs.click).toHaveBeenCalledTimes(0);
+                button.onInputDown.dispatch();
+                button.onInputUp.dispatch();
+                expect(funcs.enter).toHaveBeenCalledTimes(1);
+                expect(funcs.leave).toHaveBeenCalledTimes(1);
+                expect(funcs.click).toHaveBeenCalledTimes(0);
+
                 // Hold to hover on mobile
+                jasmine.clock().uninstall();
                 [button, funcs] = newButton();
                 button.onInputDown.dispatch();
                 Timer.global.schedule(150, () => {

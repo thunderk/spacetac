@@ -53,6 +53,7 @@ module TS.SpaceTac.UI {
             let enternext: Function | null = null;
             let entercalled = false;
             let cursorinside = false;
+            let destroyed = false;
 
             obj.input.useHandCursor = true;
 
@@ -67,9 +68,11 @@ module TS.SpaceTac.UI {
             };
 
             let effectiveenter = () => {
-                enternext = null;
-                entercalled = true;
-                enter();
+                if (!destroyed) {
+                    enternext = null;
+                    entercalled = true;
+                    enter();
+                }
             }
 
             let effectiveleave = () => {
@@ -82,11 +85,14 @@ module TS.SpaceTac.UI {
 
             if (obj.events) {
                 obj.events.onDestroy.addOnce(() => {
-                    prevententer();
+                    destroyed = true;
+                    effectiveleave();
                 });
             }
 
             obj.onInputOver.add(() => {
+                if (destroyed) return;
+
                 if (obj.visible && obj.alpha) {
                     cursorinside = true;
                     enternext = Timer.global.schedule(hovertime, effectiveenter);
@@ -94,11 +100,15 @@ module TS.SpaceTac.UI {
             });
 
             obj.onInputOut.add(() => {
+                if (destroyed) return;
+
                 cursorinside = false;
                 effectiveleave();
             });
 
             obj.onInputDown.add(() => {
+                if (destroyed) return;
+
                 if (obj.visible && obj.alpha) {
                     holdstart = new Date();
                     if (!cursorinside && !enternext) {
@@ -108,6 +118,8 @@ module TS.SpaceTac.UI {
             });
 
             obj.onInputUp.add(() => {
+                if (destroyed) return;
+
                 if (!cursorinside) {
                     effectiveleave();
                 }
