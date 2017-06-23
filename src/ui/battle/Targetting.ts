@@ -89,6 +89,7 @@ module TS.SpaceTac.UI {
                 let angle = Math.atan2(dy, dx);
                 dx = Math.cos(angle);
                 dy = Math.sin(angle);
+                line.lineStyle(3, color);
                 for (let d = gradation; d <= dist; d += gradation) {
                     line.moveTo(x1 + dx * d + dy * 10, y1 + dy * d - dx * 10);
                     line.lineTo(x1 + dx * d - dy * 10, y1 + dy * d + dx * 10);

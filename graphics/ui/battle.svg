@@ -27,6 +27,18 @@
      id="defs4">
     <linearGradient
        inkscape:collect="always"
+       id="linearGradient5008">
+      <stop
+         style="stop-color:#391b13;stop-opacity:1;"
+         offset="0"
+         id="stop5004" />
+      <stop
+         style="stop-color:#6b3f34;stop-opacity:1"
+         offset="1"
+         id="stop5006" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        id="linearGradient6968">
       <stop
          style="stop-color:#f2f3f3;stop-opacity:1"
@@ -1126,6 +1138,29 @@
          in2="BackgroundImage"
          id="feBlend5173" />
     </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5008"
+       id="radialGradient5010"
+       cx="1493.6574"
+       cy="877.88534"
+       fx="1493.6574"
+       fy="877.88534"
+       r="18.468012"
+       gradientTransform="matrix(1,0,0,0.79806604,0,177.27486)"
+       gradientUnits="userSpaceOnUse" />
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter5012"
+       inkscape:label="filtre17" />
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter5014"
+       inkscape:label="filtre18" />
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter5016"
+       inkscape:label="filtre19" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1134,11 +1169,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4"
-     inkscape:cx="358.32238"
-     inkscape:cy="992.57962"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="1073.556"
+     inkscape:cy="383.48794"
      inkscape:document-units="px"
-     inkscape:current-layer="layer8"
+     inkscape:current-layer="layer30"
      showgrid="false"
      units="px"
      showguides="false"
@@ -1152,7 +1187,8 @@
      inkscape:snap-global="false"
      inkscape:showpageshadow="false"
      showborder="true"
-     borderlayer="true" />
+     borderlayer="true"
+     inkscape:snap-bbox-midpoints="true" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -1517,7 +1553,7 @@
          cy="742.08289"
          r="31.144533" />
       <path
-         style="display:inline;fill:none;fill-rule:evenodd;stroke:url(#linearGradient9611);stroke-width:5.89960623;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
+         style="display:inline;fill:none;fill-rule:evenodd;stroke:url(#linearGradient9611);stroke-width:5.625;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
          d="M 732.44478,877.88531 H 1512.2041"
          id="path9595"
          inkscape:connector-curvature="0"
@@ -1531,16 +1567,77 @@
          width="100%"
          height="100%"
          style="display:inline;opacity:0.58499995;enable-background:new" />
-      <path
-         style="display:inline;opacity:1;fill:#391b13;fill-opacity:1;fill-rule:evenodd;stroke:#dc6441;stroke-width:2.33156252;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
-         inkscape:transform-center-x="-3.93566"
-         d="m 1517.8308,877.88531 -34.5651,13.6335 5.3601,-13.6335 -5.3601,-13.6335 z"
-         id="path10745"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc"
+      <g
+         id="g4978"
          inkscape:export-filename="/tmp/export.png"
          inkscape:export-xdpi="90"
-         inkscape:export-ydpi="90" />
+         inkscape:export-ydpi="90">
+        <path
+           inkscape:export-ydpi="90"
+           inkscape:export-xdpi="90"
+           inkscape:export-filename="/tmp/export.png"
+           sodipodi:nodetypes="cccccc"
+           inkscape:connector-curvature="0"
+           id="path10745"
+           d="m 1510.9596,875.89667 v 3.98405 l -34.6853,11.63809 5.3601,-13.6335 -5.3601,-13.6335 z"
+           inkscape:transform-center-x="-3.93566"
+           style="display:inline;opacity:1;fill:url(#radialGradient5010);fill-opacity:1;fill-rule:evenodd;stroke:#dc6441;stroke-width:2.8125;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new" />
+        <path
+           inkscape:transform-center-y="7.8835938e-06"
+           transform="matrix(1,0,0,0.55607334,-1.5820313,389.70172)"
+           inkscape:transform-center-x="-1.5626526"
+           d="m 1509.8834,877.85156 -9.3759,5.41319 v -10.82637 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="true"
+           sodipodi:arg2="1.0471976"
+           sodipodi:arg1="0"
+           sodipodi:r2="3.1253049"
+           sodipodi:r1="6.2506104"
+           sodipodi:cy="877.85156"
+           sodipodi:cx="1503.6328"
+           sodipodi:sides="3"
+           id="path4974"
+           style="fill:#ec7b5a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           sodipodi:type="star" />
+        <path
+           style="display:inline;fill:none;fill-rule:evenodd;stroke:#b0482a;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
+           d="m 1481.3672,869.44248 15.4687,5.15624"
+           id="path4980"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="cc" />
+        <use
+           style="display:inline;enable-background:new"
+           x="0"
+           y="0"
+           xlink:href="#path4980"
+           id="use4982"
+           width="100%"
+           height="100%"
+           transform="matrix(1,0,0,-1,-8.5648544e-5,1755.8688)" />
+      </g>
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#ffdd4b;stroke-width:2.03981209;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="m 841.40625,867.22126 v 21.32811"
+         id="path5018"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="cc" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path5018"
+         id="use5020"
+         width="100%"
+         height="100%"
+         transform="translate(110.625)" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path5018"
+         id="use5022"
+         width="100%"
+         height="100%"
+         transform="translate(226.875)" />
     </g>
     <g
        inkscape:groupmode="layer"
