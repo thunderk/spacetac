@@ -35,6 +35,24 @@ module TS.SpaceTac.UI.Specs {
             expect(testgame.baseview.animations.simulate(obj, 'alpha')).toEqual([0.6, 0.5, 0.4, 0.3, 0.2]);
         });
 
+        it("blocks input while object is hidden", function () {
+            let obj = { visible: true, alpha: 1, input: { enabled: true }, changeStateFrame: jasmine.createSpy("changeStateFrame"), freezeFrames: false };
+
+            testgame.baseview.animations.setVisible(obj, false, 0);
+            expect(obj.visible).toBe(false);
+            expect(obj.alpha).toBe(0);
+            expect(obj.input.enabled).toBe(false);
+            expect(obj.changeStateFrame).toHaveBeenCalledWith("Out");
+            expect(obj.freezeFrames).toBe(true);
+
+            testgame.baseview.animations.setVisible(obj, true, 0);
+            expect(obj.visible).toBe(true);
+            expect(obj.alpha).toBe(1);
+            expect(obj.input.enabled).toBe(true);
+            expect(obj.changeStateFrame).toHaveBeenCalledTimes(1);
+            expect(obj.freezeFrames).toBe(false);
+        });
+
         it("animates rotation", function () {
             let obj = { rotation: -Math.PI * 2.5 };
             let tween = testgame.ui.tweens.create(obj);

@@ -1,25 +1,20 @@
 module TS.SpaceTac.UI {
     interface PhaserGraphics {
-        x: number;
-        y: number;
-        rotation: number;
-        game: Phaser.Game;
+        x: number
+        y: number
+        rotation: number
+        game: Phaser.Game
     };
-
-    /**
-     * Interface of an object that may be enabled/disabled.
-     */
-    interface IAnimationEnableable {
-        enabled: boolean
-    }
 
     /**
      * Interface of an object that may be shown/hidden, with opacity transition.
      */
     interface IAnimationFadeable {
-        alpha: number;
-        visible: boolean;
-        input?: IAnimationEnableable;
+        alpha: number
+        visible: boolean
+        input?: { enabled: boolean }
+        changeStateFrame?: Function
+        freezeFrames?: boolean
     }
 
     /**
@@ -73,11 +68,18 @@ module TS.SpaceTac.UI {
                 tween.to({ alpha: alpha }, duration);
                 if (obj.input) {
                     let input = obj.input;
-                    tween.onComplete.addOnce(() => input.enabled = true);
+                    tween.onComplete.addOnce(() => {
+                        input.enabled = true
+                        obj.freezeFrames = false;
+                    });
                 }
                 tween.start();
             } else {
                 obj.alpha = alpha;
+                if (obj.input) {
+                    obj.input.enabled = true;
+                    obj.freezeFrames = false;
+                }
             }
         }
 
@@ -85,6 +87,11 @@ module TS.SpaceTac.UI {
          * Hide an object, with opacity transition
          */
         hide(obj: IAnimationFadeable, duration = 1000, alpha = 0): void {
+            if (obj.changeStateFrame) {
+                obj.changeStateFrame("Out");
+                obj.freezeFrames = true;
+            }
+
             if (obj.input) {
                 obj.input.enabled = false;
             }
