@@ -15,6 +15,7 @@
 * Equipment: add critical hit/miss
 * Equipment: add damage over time effect
 * Menu: allow to delete cloud saves
+* Fix cloud save games with "Level 0 - 0 ships"
 * Arena: display effects description instead of attribute changes
 * Arena: display radius for area effects (both on action hover, and while action is active)
 * Arena: any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)

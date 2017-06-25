@@ -298,6 +298,15 @@ module TS.SpaceTac {
                 result.push(event);
             });
 
+            // Simulate active effects
+            this.play_order.forEach(ship => {
+                if (ship.alive) {
+                    let event = ship.getActiveEffects();
+                    event.initial = true;
+                    result.push(event);
+                }
+            });
+
             // Indicate emergency stasis
             this.play_order.forEach(ship => {
                 if (!ship.alive) {

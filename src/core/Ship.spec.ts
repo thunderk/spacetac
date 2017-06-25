@@ -298,10 +298,11 @@ module TS.SpaceTac.Specs {
             ship.addDamage(5, 0);
 
             expect(ship.alive).toBe(false);
-            expect(battle.log.events.length).toBe(3);
+            expect(battle.log.events.length).toBe(4);
             expect(battle.log.events[0].code).toEqual("value");
             expect(battle.log.events[1].code).toEqual("damage");
-            expect(battle.log.events[2].code).toEqual("death");
+            expect(battle.log.events[2].code).toEqual("activeeffects");
+            expect(battle.log.events[3].code).toEqual("death");
         });
 
         it("checks if a ship is able to play", function () {

@@ -237,7 +237,7 @@ module TS.SpaceTac {
                 diff = val.set(value);
             }
 
-            if (log && diff != 0) {
+            if (log && diff != 0 && this.alive) {
                 this.addBattleEvent(new ValueChangeEvent(this, val, diff));
             }
 
@@ -285,7 +285,7 @@ module TS.SpaceTac {
                 this.setValueCapacity("hull", attr.get());
             }
 
-            if (log && diff != 0) {
+            if (log && diff != 0 && this.alive) {
                 this.addBattleEvent(new ValueChangeEvent(this, attr, diff));
             }
 
@@ -418,7 +418,7 @@ module TS.SpaceTac {
          * Clean sticky effects that are no longer active
          */
         cleanStickyEffects() {
-            let [active, ended] = binpartition(this.sticky_effects, effect => effect.duration > 0);
+            let [active, ended] = binpartition(this.sticky_effects, effect => this.alive && effect.duration > 0);
             this.sticky_effects = active;
             if (ended.length) {
                 this.setActiveEffectsChanged();
@@ -486,12 +486,18 @@ module TS.SpaceTac {
             }
         }
 
-        // Set the death status on this ship
+        /**
+         * Set the death status on this ship
+         */
         setDead(log: boolean = true): void {
             this.alive = false;
             this.values.hull.set(0);
             this.values.shield.set(0);
             this.values.power.set(0);
+
+            this.sticky_effects = [];
+            this.setActiveEffectsChanged();
+
             if (log) {
                 this.addBattleEvent(new DeathEvent(this));
             }
@@ -672,9 +678,9 @@ module TS.SpaceTac {
 
         // Update attributes, taking into account attached equipment and active effects
         updateAttributes(): void {
-            if (this.alive) {
-                var new_attrs = new ShipAttributes();
+            let new_attrs = new ShipAttributes();
 
+            if (this.alive) {
                 // TODO better typing for iteritems
 
                 // Apply base skills
@@ -691,12 +697,12 @@ module TS.SpaceTac {
                 this.collectEffects("attrlimit").forEach((effect: AttributeLimitEffect) => {
                     new_attrs[effect.attrcode].setMaximal(effect.value);
                 });
-
-                // Set final attributes
-                iteritems(<any>new_attrs, (key, value) => {
-                    this.setAttribute(<keyof ShipAttributes>key, (<ShipAttribute>value).get());
-                });
             }
+
+            // Set final attributes
+            iteritems(<any>new_attrs, (key, value) => {
+                this.setAttribute(<keyof ShipAttributes>key, (<ShipAttribute>value).get());
+            });
         }
 
         // Fully restore hull and shield
@@ -717,10 +723,12 @@ module TS.SpaceTac {
          */
         getActiveEffects(): ActiveEffectsEvent {
             let result = new ActiveEffectsEvent(this);
-            result.equipment = flatten(this.slots.map(slot => slot.attached ? slot.attached.effects : []));
-            result.sticky = this.sticky_effects;
-            let battle = this.getBattle();
-            result.area = battle ? imaterialize(battle.iAreaEffects(this.arena_x, this.arena_y)) : [];
+            if (this.alive) {
+                result.equipment = flatten(this.slots.map(slot => slot.attached ? slot.attached.effects : []));
+                result.sticky = this.sticky_effects;
+                let battle = this.getBattle();
+                result.area = battle ? imaterialize(battle.iAreaEffects(this.arena_x, this.arena_y)) : [];
+            }
             return result;
         }
 

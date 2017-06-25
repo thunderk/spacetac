@@ -27,7 +27,7 @@ module TS.SpaceTac {
             } else {
                 expect(got.target.y).toBeCloseTo(target_y, 0.000001);
             }
-        } else {
+        } else if (target_ship || target_x || target_y) {
             fail("Got no target");
         }
     }
@@ -76,12 +76,15 @@ module TS.SpaceTac {
             let playing = nn(battle.playing_ship);
 
             let result = battle.getBootstrapEvents();
-            expect(result.length).toBe(9);
+            expect(result.length).toBe(17);
             for (var i = 0; i < 8; i++) {
                 checkEvent(result[i], battle.play_order[i], "move", null,
                     battle.play_order[i].arena_x, battle.play_order[i].arena_y);
             }
-            checkEvent(result[8], playing, "ship_change", playing);
+            for (var i = 0; i < 8; i++) {
+                checkEvent(result[8 + i], battle.play_order[i], "activeeffects");
+            }
+            checkEvent(result[16], playing, "ship_change", playing);
         });
     });
 }
