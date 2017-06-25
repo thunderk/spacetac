@@ -90,7 +90,7 @@ module TS.SpaceTac {
          * 
          * Return null if no approach vector was found.
          */
-        getApproach(action: MoveAction, target: Target, radius: number): Target | ApproachSimulationError {
+        getApproach(action: MoveAction, target: Target, radius: number, margin = 0): Target | ApproachSimulationError {
             let dx = target.x - this.ship.arena_x;
             let dy = target.y - this.ship.arena_y;
             let distance = Math.sqrt(dx * dx + dy * dy);
@@ -98,6 +98,9 @@ module TS.SpaceTac {
             if (distance <= radius) {
                 return ApproachSimulationError.NO_MOVE_NEEDED;
             } else {
+                if (margin && radius > margin) {
+                    radius -= margin;
+                }
                 let factor = (distance - radius) / distance;
                 let candidate = new Target(this.ship.arena_x + dx * factor, this.ship.arena_y + dy * factor);
                 if (this.canMoveTo(action, candidate)) {
@@ -140,10 +143,7 @@ module TS.SpaceTac {
                 let engine = this.findBestEngine();
                 if (engine && engine.action instanceof MoveAction) {
                     let approach_radius = action.getRangeRadius(this.ship);
-                    if (move_margin && approach_radius > move_margin) {
-                        approach_radius -= move_margin;
-                    }
-                    let approach = this.getApproach(engine.action, target, approach_radius);
+                    let approach = this.getApproach(engine.action, target, approach_radius, move_margin);
                     if (approach instanceof Target) {
                         result.need_move = true;
                         move_target = approach;

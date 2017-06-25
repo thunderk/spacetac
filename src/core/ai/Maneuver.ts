@@ -23,7 +23,7 @@ module TS.SpaceTac {
         // List of guessed effects of this maneuver
         effects: [Ship, BaseEffect][]
 
-        constructor(ship: Ship, action: BaseAction, target: Target, move_margin = 0.1) {
+        constructor(ship: Ship, action: BaseAction, target: Target, move_margin = 1) {
             this.ship = ship;
             this.battle = nn(ship.getBattle());
             this.action = action;

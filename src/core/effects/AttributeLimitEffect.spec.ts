@@ -17,7 +17,6 @@ module TS.SpaceTac {
 
             expect(ship.getAttribute("shield_capacity")).toBe(30);
             expect(ship.getValue("shield")).toBe(30);
-            console.log(battle.log.events);
             expect(battle.log.events).toEqual([
                 new ActiveEffectsEvent(ship, [new AttributeEffect("hull_capacity", 100), new AttributeEffect("shield_capacity", 50)], [effect]),
                 new ValueChangeEvent(ship, new ShipValue("shield", 30, 50), -10),

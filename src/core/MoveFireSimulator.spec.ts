@@ -155,5 +155,16 @@ module TS.SpaceTac.Specs {
             expect(result.need_fire).toBe(false);
             expect(result.parts).toEqual([]);
         });
+
+        it("does not move if already in range, even if in the safety margin", function () {
+            let [ship, simulator, action] = simpleWeaponCase(100);
+            let result = simulator.simulateAction(action, new Target(ship.arena_x + 97, ship.arena_y, null), 5);
+            expect(result.success).toBe(true);
+            expect(result.need_move).toBe(false);
+            result = simulator.simulateAction(action, new Target(ship.arena_x + 101, ship.arena_y, null), 5);
+            expect(result.success).toBe(true);
+            expect(result.need_move).toBe(true);
+            expect(result.move_location).toEqual(new Target(ship.arena_x + 6, ship.arena_y));
+        });
     });
 }
