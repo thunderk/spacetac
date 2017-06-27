@@ -68,7 +68,8 @@ module TS.SpaceTac.UI {
             this.loadImage("map/location-star.png");
             this.loadImage("map/location-planet.png");
             this.loadImage("map/location-warp.png");
-            this.loadSheet("map/status.png", 32, 32);
+            this.loadSheet("map/status.png", 32);
+            this.loadSheet("map/missions.png", 70);
             this.loadImage("character/sheet.png");
             this.loadImage("character/close.png");
             this.loadImage("character/ship.png");

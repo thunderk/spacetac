@@ -34,6 +34,9 @@ module TS.SpaceTac.UI {
         // Actions for selected location
         actions: MapLocationMenu
 
+        // Active missions
+        missions: ActiveMissionsDisplay
+
         // Character sheet
         character_sheet: CharacterSheet
 
@@ -90,6 +93,10 @@ module TS.SpaceTac.UI {
             this.actions = new MapLocationMenu(this);
             this.actions.setPosition(30, 30);
             this.actions.moveToLayer(this.layer_overlay);
+
+            this.missions = new ActiveMissionsDisplay(this, this.player.missions);
+            this.missions.setPosition(20, 720);
+            this.missions.moveToLayer(this.layer_overlay);
 
             this.zoom_in = new Phaser.Button(this.game, 1540, 172, "map-buttons", () => this.setZoom(this.zoom + 1), undefined, 3, 0);
             this.zoom_in.anchor.set(0.5, 0.5);
@@ -152,6 +159,8 @@ module TS.SpaceTac.UI {
             this.starsystems.forEach(system => system.updateInfo(this.zoom, system.starsystem == current_star));
 
             this.actions.setFromLocation(this.player.fleet.location, this);
+
+            this.missions.update();
 
             if (interactive) {
                 this.setInteractionEnabled(true);
@@ -258,6 +267,7 @@ module TS.SpaceTac.UI {
         setInteractionEnabled(enabled: boolean) {
             this.interactive = enabled && !this.session.spectator;
             this.actions.setVisible(enabled && this.zoom == 2, 300);
+            this.missions.setVisible(enabled && this.zoom == 2, 300);
             this.animations.setVisible(this.zoom_in, enabled && this.zoom < 2, 300);
             this.animations.setVisible(this.zoom_out, enabled && this.zoom > 0, 300);
             this.animations.setVisible(this.character_sheet, enabled, 300);

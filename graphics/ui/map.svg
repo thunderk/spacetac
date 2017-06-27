@@ -231,7 +231,7 @@
        fy="142.875"
        r="125.15247"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="translate(-79.375026)" />
+       gradientTransform="translate(-32.808351)" />
     <filter
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
@@ -589,15 +589,6 @@
         </meshpatch>
       </meshrow>
     </meshgradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient6231"
-       id="linearGradient4924"
-       gradientUnits="userSpaceOnUse"
-       x1="340.67481"
-       y1="142.875"
-       x2="344.28405"
-       y2="142.875" />
     <filter
        style="color-interpolation-filters:sRGB;"
        inkscape:label="Drop Shadow"
@@ -645,16 +636,6 @@
        r="33.072917"
        gradientTransform="matrix(1,0,0,0.232,0,43.484801)"
        gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient7346"
-       id="radialGradient7338"
-       gradientUnits="userSpaceOnUse"
-       cx="342.45343"
-       cy="142.875"
-       fx="342.45343"
-       fy="142.875"
-       r="9.7939377" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient7353"
@@ -719,16 +700,6 @@
          stdDeviation="1.1229882"
          id="feGaussianBlur7949" />
     </filter>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient8007"
-       id="radialGradient8009"
-       cx="349.2796"
-       cy="150.05988"
-       fx="349.2796"
-       fy="150.05988"
-       r="3.9959407"
-       gradientUnits="userSpaceOnUse" />
     <filter
        style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
@@ -836,6 +807,71 @@
          stdDeviation="0.87056823"
          id="feGaussianBlur5519" />
     </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter7229-3"
+       x="-0.2"
+       y="-0.2"
+       height="1.5"
+       width="1.5">
+      <feFlood
+         flood-opacity="0.709804"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood7219-6" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite7221-7" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0.4"
+         result="blur"
+         id="feGaussianBlur7223-5" />
+      <feOffset
+         dx="0.2"
+         dy="0.2"
+         result="offset"
+         id="feOffset7225-3" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite7227-5" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient7346"
+       id="radialGradient7460"
+       gradientUnits="userSpaceOnUse"
+       cx="342.45343"
+       cy="142.875"
+       fx="342.45343"
+       fy="142.875"
+       r="9.7939377" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6231"
+       id="linearGradient7462"
+       gradientUnits="userSpaceOnUse"
+       x1="340.67481"
+       y1="142.875"
+       x2="344.28405"
+       y2="142.875" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8007"
+       id="radialGradient7464"
+       gradientUnits="userSpaceOnUse"
+       cx="349.2796"
+       cy="150.05988"
+       fx="349.2796"
+       fy="150.05988"
+       r="3.9959407" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -844,11 +880,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="1356.8733"
-     inkscape:cy="814.09507"
+     inkscape:zoom="2.0000001"
+     inkscape:cx="221.23289"
+     inkscape:cy="353.88524"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g7264"
      showgrid="false"
      units="px"
      inkscape:snap-bbox="true"
@@ -888,7 +924,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -900,7 +936,7 @@
     <circle
        style="opacity:1;fill:url(#radialGradient4534);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.75199997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path4518"
-       cx="212.45763"
+       cx="259.0242"
        cy="142.875"
        r="124.77647"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/starsystem-background.png"
@@ -908,7 +944,7 @@
        inkscape:export-ydpi="96" />
     <g
        id="g6185"
-       transform="matrix(1.9167932,0,0,1.9167932,-346.92541,-130.98683)"
+       transform="matrix(1.9167932,0,0,1.9167932,-300.35866,-130.98683)"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/star.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -927,7 +963,7 @@
     </g>
     <g
        id="g7485"
-       transform="translate(0.52916667)"
+       transform="translate(47.095836)"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/orbit.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -949,17 +985,17 @@
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/location-planet.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       transform="translate(-79.375026)">
+       transform="translate(-32.808351)">
       <circle
          r="9.7939377"
          cy="142.875"
          cx="342.45343"
          id="path6987"
-         style="opacity:0.44200003;fill:url(#radialGradient7338);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3233197;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         style="opacity:0.44200003;fill:url(#radialGradient7460);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.3233197;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
       <g
          id="g6991">
         <circle
-           style="opacity:1;fill:url(#linearGradient4924);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.75200003;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.2255319"
+           style="opacity:1;fill:url(#linearGradient7462);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.75200003;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.2255319"
            id="path6181"
            cx="342.47943"
            cy="142.875"
@@ -975,7 +1011,7 @@
     </g>
     <path
        style="opacity:0.2;fill:none;fill-rule:evenodd;stroke:#6cc7ce;stroke-width:6.57727718;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 317.78733,142.53751 h 130.8253"
+       d="m 364.35408,142.53751 h 130.8253"
        id="path6997"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -983,7 +1019,8 @@
        id="g5591"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/location-warp.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
+       inkscape:export-ydpi="96"
+       transform="translate(46.566669)">
       <g
          transform="translate(-79.375026)"
          id="g4572"
@@ -1116,7 +1153,8 @@
       </g>
     </g>
     <g
-       id="g9054">
+       id="g9054"
+       transform="translate(46.566669)">
       <path
          sodipodi:nodetypes="cccc"
          inkscape:connector-curvature="0"
@@ -1136,13 +1174,13 @@
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/state-unknown.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       transform="translate(-79.375026)">
+       transform="translate(-32.808351)">
       <circle
          r="3.9959407"
          cy="150.05988"
          cx="349.2796"
          id="path7269"
-         style="opacity:1;fill:url(#radialGradient8009);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56499994;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+         style="opacity:1;fill:url(#radialGradient7464);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.56499994;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
       <text
          id="text7273"
          y="152.67815"
@@ -1160,7 +1198,7 @@
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/state-clear.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       transform="translate(-79.375026)">
+       transform="translate(-32.808351)">
       <use
          height="100%"
          width="100%"
@@ -1184,7 +1222,7 @@
        y="0"
        xlink:href="#g7279"
        id="use7304"
-       transform="rotate(-131,202.14105,135.77543)"
+       transform="rotate(-131,248.70755,135.77543)"
        width="100%"
        height="100%" />
     <g
@@ -1192,7 +1230,7 @@
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/state-enemy.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96"
-       transform="translate(-79.375026)">
+       transform="translate(-32.808351)">
       <use
          height="100%"
          width="100%"
@@ -1220,10 +1258,10 @@
        id="use4605"
        width="100%"
        height="100%"
-       transform="rotate(135.15474,212.73111,143.11838)" />
+       transform="rotate(135.15474,259.29761,143.11838)" />
     <g
        id="g5470"
-       transform="translate(-79.375026)"
+       transform="translate(-32.808351)"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/state-shop.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -1272,7 +1310,8 @@
        id="g5568"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/current-location.png"
        inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
+       inkscape:export-ydpi="96"
+       transform="translate(46.566669)">
       <g
          style="display:inline"
          id="g5193"
@@ -1328,13 +1367,13 @@
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/starsystem-background.png"
        r="124.77647"
        cy="142.875"
-       cx="212.45763"
+       cx="259.0242"
        id="circle7551"
        style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.75199997;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <circle
        style="opacity:0.48699999;fill:none;fill-opacity:0;fill-rule:evenodd;stroke:#ffffff;stroke-width:1.32291663;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:1.32291667, 3.96875;stroke-dashoffset:0;stroke-opacity:1;filter:url(#filter7947)"
        id="circle7929"
-       cx="212.45763"
+       cx="259.0242"
        cy="142.875"
        r="124.77647"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/boundaries.png"
@@ -1733,6 +1772,189 @@
          x="144.34477"
          y="278.22641"
          style="font-size:8.46666622px;fill:#a0a0a0;fill-opacity:1;stroke-width:0.26458332px">3</tspan></text>
+    <g
+       id="g7249"
+       transform="translate(-3.7041668,-23.380296)">
+      <path
+         sodipodi:type="star"
+         style="display:inline;fill:#425464;fill-opacity:0.99607843;fill-rule:evenodd;stroke:#b8d2f1;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5500)"
+         id="path7197"
+         sodipodi:sides="5"
+         sodipodi:cx="17.468948"
+         sodipodi:cy="225.56728"
+         sodipodi:r1="6.9222808"
+         sodipodi:r2="3.876477"
+         sodipodi:arg1="-1.5707963"
+         sodipodi:arg2="-0.9424778"
+         inkscape:flatsided="false"
+         inkscape:rounded="0"
+         inkscape:randomized="0"
+         d="m 17.468949,218.645 2.278535,3.78614 4.304945,0.99703 -2.896732,3.337 0.382066,4.40235 -4.068815,-1.72377 -4.068814,1.72377 0.382066,-4.40235 -2.896732,-3.337 4.304944,-0.99703 z"
+         inkscape:transform-center-y="-0.66101504"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="27.120064"
+         y="228.10905"
+         id="text7209"><tspan
+           sodipodi:role="line"
+           id="tspan7207"
+           x="27.120064"
+           y="228.10905"
+           style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px">Find the smugglers' hideout</tspan></text>
+    </g>
+    <g
+       id="g7244"
+       transform="translate(-3.7041668,-21.455759)">
+      <text
+         id="text7221"
+         y="245.04216"
+         x="27.120064"
+         style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+           y="245.04216"
+           x="27.120064"
+           id="tspan7219"
+           sodipodi:role="line">Keep Acalanth alive</tspan></text>
+      <g
+         id="g7236"
+         style="filter:url(#filter5500)"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
+        <path
+           sodipodi:type="star"
+           style="display:inline;fill:#425464;fill-opacity:0.99607843;fill-rule:evenodd;stroke:#b8d2f1;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path7217"
+           sodipodi:sides="5"
+           sodipodi:cx="17.468948"
+           sodipodi:cy="242.50043"
+           sodipodi:r1="6.9222808"
+           sodipodi:r2="3.876477"
+           sodipodi:arg1="-1.5707963"
+           sodipodi:arg2="-0.9424778"
+           inkscape:flatsided="false"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 17.468949,235.57815 2.278535,3.78614 4.304945,0.99704 -2.896732,3.33699 0.382066,4.40235 -4.068815,-1.72377 -4.068814,1.72377 0.382066,-4.40235 -2.896732,-3.337 4.304944,-0.99703 z"
+           inkscape:transform-center-y="-0.66101504" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#b8d2f1;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="16.196157"
+           y="244.53183"
+           id="text7225"><tspan
+             sodipodi:role="line"
+             id="tspan7223"
+             x="16.196157"
+             y="244.53183"
+             style="font-size:6.3499999px;fill:#b8d2f1;fill-opacity:1;stroke-width:0.26458335px">!</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g7256"
+       transform="translate(-3.7041668,-25.400018)">
+      <text
+         id="text7205"
+         y="211.30801"
+         x="27.120064"
+         style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+           y="211.30801"
+           x="27.120064"
+           id="tspan7203"
+           sodipodi:role="line">Deliver the intel</tspan></text>
+      <g
+         id="g7231"
+         style="filter:url(#filter5500)"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
+        <path
+           sodipodi:type="star"
+           style="display:inline;fill:#435565;fill-opacity:0.99607843;fill-rule:evenodd;stroke:#b8d2f1;stroke-width:1.0583334;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           id="path7195"
+           sodipodi:sides="5"
+           sodipodi:cx="17.468948"
+           sodipodi:cy="208.72929"
+           sodipodi:r1="6.9222808"
+           sodipodi:r2="3.876477"
+           sodipodi:arg1="-1.5707963"
+           sodipodi:arg2="-0.9424778"
+           inkscape:flatsided="false"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 17.468949,201.80701 2.278535,3.78615 4.304945,0.99703 -2.896732,3.337 0.382066,4.40235 -4.068815,-1.72377 -4.068814,1.72377 0.382066,-4.40235 -2.896732,-3.337 4.304944,-0.99703 z"
+           inkscape:transform-center-y="-0.66101504" />
+        <path
+           inkscape:transform-center-y="-0.38290609"
+           d="m 17.468948,204.71943 1.319888,2.19319 2.493724,0.57756 -1.677989,1.93302 0.221319,2.55015 -2.356942,-0.99853 -2.356941,0.99853 0.221319,-2.55015 -1.677989,-1.93302 2.493724,-0.57756 z"
+           inkscape:randomized="0"
+           inkscape:rounded="0"
+           inkscape:flatsided="false"
+           sodipodi:arg2="-0.9424778"
+           sodipodi:arg1="-1.5707963"
+           sodipodi:r2="2.2455263"
+           sodipodi:r1="4.0098686"
+           sodipodi:cy="208.72929"
+           sodipodi:cx="17.468948"
+           sodipodi:sides="5"
+           id="path7227"
+           style="display:inline;fill:#b8d2f1;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.61306065;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           sodipodi:type="star" />
+      </g>
+    </g>
+    <g
+       transform="translate(-3.7041668,14.33509)"
+       id="g7264">
+      <text
+         id="text7262"
+         y="228.10905"
+         x="27.120064"
+         style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+           y="228.10905"
+           x="27.120064"
+           sodipodi:role="line"
+           id="tspan7266">Go back to Warna Sector for reward</tspan></text>
+      <g
+         id="g4800"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
+        <path
+           sodipodi:type="star"
+           style="display:inline;fill:#425464;fill-opacity:0.99607843;fill-rule:evenodd;stroke:#b8d2f1;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5500)"
+           id="path7258"
+           sodipodi:sides="5"
+           sodipodi:cx="17.468948"
+           sodipodi:cy="225.56728"
+           sodipodi:r1="6.9222808"
+           sodipodi:r2="3.876477"
+           sodipodi:arg1="-1.5707963"
+           sodipodi:arg2="-0.9424778"
+           inkscape:flatsided="false"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 17.468949,218.645 2.278535,3.78614 4.304945,0.99703 -2.896732,3.337 0.382066,4.40235 -4.068815,-1.72377 -4.068814,1.72377 0.382066,-4.40235 -2.896732,-3.337 4.304944,-0.99703 z"
+           inkscape:transform-center-y="-0.66101504" />
+        <path
+           style="display:inline;fill:none;fill-rule:evenodd;stroke:#b8d2f1;stroke-width:0.79374999;stroke-linecap:square;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="m 15.60486,225.82352 1.78335,1.65025 2.68829,-3.35372"
+           id="path7294-6"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccc"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/state-clear.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+      </g>
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"

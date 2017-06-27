@@ -51,6 +51,13 @@ module TS.SpaceTac {
             this.shop = new Shop(level);
         }
 
+        /**
+         * Check if the location is clear of encounter
+         */
+        isClear(): boolean {
+            return this.encounter_gen && this.encounter === null;
+        }
+
         // Set the jump destination of a WARP location
         setJumpDestination(jump_dest: StarLocation): void {
             if (this.type === StarLocationType.WARP) {

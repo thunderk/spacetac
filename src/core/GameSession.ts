@@ -56,7 +56,7 @@ module TS.SpaceTac {
          * 
          * If *fleet* is false, the player fleet will be empty, and needs to be set with *setCampaignFleet*.
          */
-        startNewGame(fleet = true): void {
+        startNewGame(fleet = true, story = false): void {
             this.universe = new Universe();
             this.universe.generate();
 
@@ -67,14 +67,16 @@ module TS.SpaceTac {
             this.player = new Player(this.universe);
 
             if (fleet) {
-                this.setCampaignFleet();
+                this.setCampaignFleet(null, story);
             }
         }
 
         /**
          * Set the initial campaign fleet, null for a default fleet
+         * 
+         * If *story* is true, the main story arc will be started.
          */
-        setCampaignFleet(fleet: Fleet | null = null) {
+        setCampaignFleet(fleet: Fleet | null = null, story = true) {
             if (fleet) {
                 this.player.fleet = fleet;
             } else {
@@ -84,6 +86,10 @@ module TS.SpaceTac {
 
             this.player.fleet.setLocation(this.start_location);
             this.player.fleet.credits = 500;
+
+            if (story) {
+                this.player.missions.startMainStory(this.universe, this.player.fleet);
+            }
         }
 
         // Start a new "quick battle" game

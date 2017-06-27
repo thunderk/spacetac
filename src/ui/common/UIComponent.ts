@@ -202,12 +202,10 @@ module TS.SpaceTac.UI {
         /**
          * Add a static text.
          */
-        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, bold = false, center = true, width = 0): void {
+        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, bold = false, center = true, width = 0, vcenter = center): void {
             let style = { font: `${bold ? "bold " : ""}${size}pt Arial`, fill: color, align: center ? "center" : "left" };
             let text = new Phaser.Text(this.view.game, x, y, content, style);
-            if (center) {
-                text.anchor.set(0.5, 0.5);
-            }
+            text.anchor.set(center ? 0.5 : 0, vcenter ? 0.5 : 0);
             if (width) {
                 text.wordWrap = true;
                 text.wordWrapWidth = width;

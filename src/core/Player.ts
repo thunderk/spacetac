@@ -2,16 +2,19 @@ module TS.SpaceTac {
     // One player (human or IA)
     export class Player {
         // Player's name
-        name: string;
+        name: string
 
         // Universe in which we are playing
-        universe: Universe;
+        universe: Universe
 
         // Current fleet
-        fleet: Fleet;
+        fleet: Fleet
 
         // List of visited star systems
-        visited: StarLocation[] = [];
+        visited: StarLocation[] = []
+
+        // Active missions
+        missions = new ActiveMissions()
 
         // Create a player, with an empty fleet
         constructor(universe: Universe = new Universe(), name = "Player") {
@@ -44,9 +47,12 @@ module TS.SpaceTac {
 
         /**
          * Set a star location as visited.
+         * 
+         * This should always be called for any location, even if it was already marked visited.
          */
         setVisited(location: StarLocation): void {
             add(this.visited, location);
+            this.missions.checkStatus(this.fleet, this.universe);
         }
 
         // Get currently played battle, null when none is in progress
@@ -55,6 +61,7 @@ module TS.SpaceTac {
         }
         setBattle(battle: Battle | null): void {
             this.fleet.setBattle(battle);
+            this.missions.checkStatus(this.fleet, this.universe);
         }
 
         /**
