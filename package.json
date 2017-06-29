@@ -24,14 +24,14 @@
     "codecov": "^2.2.0",
     "jasmine": "^2.6.0",
     "karma": "^1.7.0",
-    "karma-coverage": "~1.1",
-    "karma-jasmine": "~1.1",
-    "karma-phantomjs-launcher": "~1.0",
-    "karma-spec-reporter": "~0.0",
-    "live-server": "~1.2",
-    "remap-istanbul": "~0.9",
-    "typescript": "~2.3",
-    "typings": "~2.1"
+    "karma-coverage": "^1.1.1",
+    "karma-jasmine": "^1.1.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-spec-reporter": "^0.0.31",
+    "live-server": "^1.2.0",
+    "remap-istanbul": "^0.9.5",
+    "typescript": "^2.4.1",
+    "typings": "^2.1.1"
   },
   "dependencies": {
     "jasmine-core": "^2.6.3",
