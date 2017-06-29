@@ -52,7 +52,7 @@ module TS.SpaceTac {
          */
         setVisited(location: StarLocation): void {
             add(this.visited, location);
-            this.missions.checkStatus(this.fleet, this.universe);
+            this.missions.checkStatus();
         }
 
         // Get currently played battle, null when none is in progress
@@ -61,7 +61,7 @@ module TS.SpaceTac {
         }
         setBattle(battle: Battle | null): void {
             this.fleet.setBattle(battle);
-            this.missions.checkStatus(this.fleet, this.universe);
+            this.missions.checkStatus();
         }
 
         /**

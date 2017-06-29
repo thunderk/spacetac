@@ -13,12 +13,17 @@ module TS.SpaceTac.Specs {
 
         it("gets the current list of missions, and updates them", function () {
             let missions = new ActiveMissions();
+            let universe = new Universe();
+            let fleet = new Fleet();
 
-            missions.main = new Mission([new MissionPart("Do something")]);
+            missions.main = new Mission(universe, fleet);
+            missions.main.addPart(new MissionPart(missions.main, "Do something"));
             missions.secondary = [
-                new Mission([new MissionPart("Maybe do something")]),
-                new Mission([new MissionPart("Surely do something")])
+                new Mission(universe, fleet),
+                new Mission(universe, fleet)
             ];
+            missions.secondary[0].addPart(new MissionPart(missions.secondary[0], "Maybe do something"));
+            missions.secondary[1].addPart(new MissionPart(missions.secondary[1], "Surely do something"));
 
             expect(missions.getCurrent().map(mission => mission.current_part.title)).toEqual([
                 "Do something",
@@ -26,9 +31,7 @@ module TS.SpaceTac.Specs {
                 "Surely do something",
             ]);
 
-            let universe = new Universe();
-            let fleet = new Fleet();
-            missions.checkStatus(fleet, universe);
+            missions.checkStatus();
 
             expect(missions.getCurrent().map(mission => mission.current_part.title)).toEqual([
                 "Do something",
@@ -37,7 +40,7 @@ module TS.SpaceTac.Specs {
             ]);
 
             spyOn(missions.secondary[0].current_part, "checkCompleted").and.returnValue(true);
-            missions.checkStatus(fleet, universe);
+            missions.checkStatus();
 
             expect(missions.getCurrent().map(mission => mission.current_part.title)).toEqual([
                 "Do something",
@@ -45,7 +48,7 @@ module TS.SpaceTac.Specs {
             ]);
 
             spyOn(missions.main.current_part, "checkCompleted").and.returnValue(true);
-            missions.checkStatus(fleet, universe);
+            missions.checkStatus();
 
             expect(missions.getCurrent().map(mission => mission.current_part.title)).toEqual([
                 "Surely do something",

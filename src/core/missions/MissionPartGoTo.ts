@@ -7,14 +7,19 @@ module TS.SpaceTac {
     export class MissionPartGoTo extends MissionPart {
         destination: StarLocation
 
-        constructor(destination: StarLocation, directive: string, hint = true) {
-            super(hint ? `${directive} in ${destination.star.name} system` : directive);
+        constructor(mission: Mission, destination: StarLocation, directive: string, hint = true) {
+            super(mission, hint ? `${directive} in ${destination.star.name} system` : directive);
 
             this.destination = destination;
         }
 
-        checkCompleted(fleet: Fleet, universe: Universe): boolean {
-            return fleet.location === this.destination && this.destination.isClear();
+        checkCompleted(): boolean {
+            return this.fleet.location === this.destination && this.destination.isClear();
+        }
+
+        forceComplete(): void {
+            this.destination.clearEncounter();
+            this.fleet.setLocation(this.destination, true);
         }
     }
 }

@@ -10,9 +10,9 @@ module TS.SpaceTac.UI.Specs {
             let container = <Phaser.Group>(<any>display).container;
             expect(container.children.length).toBe(0);
 
-            missions.secondary.push(new Mission([
-                new MissionPart("Get back to base")
-            ]));
+            let mission = new Mission(new Universe(), new Fleet());
+            mission.addPart(new MissionPart(mission, "Get back to base"));
+            missions.secondary = [mission];
 
             display.update();
             expect(container.children.length).toBe(2);

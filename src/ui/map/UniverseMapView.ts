@@ -36,6 +36,7 @@ module TS.SpaceTac.UI {
 
         // Active missions
         missions: ActiveMissionsDisplay
+        conversation: ConversationDisplay
 
         // Character sheet
         character_sheet: CharacterSheet
@@ -117,10 +118,21 @@ module TS.SpaceTac.UI {
             this.character_sheet.hide(false);
             this.layer_overlay.add(this.character_sheet);
 
+            this.conversation = new ConversationDisplay(this, this.player);
+            this.conversation.moveToLayer(this.layer_overlay);
+
             this.gameui.audio.startMusic("spring-thaw");
 
             // Inputs
+            this.inputs.bind(" ", "Conversation step", () => this.conversation.nextPiece());
+            this.inputs.bind("Escape", "Skip conversation", () => this.conversation.skipConversation());
             this.inputs.bindCheat("r", "Reveal whole map", () => this.revealAll());
+            this.inputs.bindCheat("n", "Next story step", () => {
+                if (this.player.missions.main) {
+                    this.player.missions.main.current_part.forceComplete();
+                    this.backToRouter();
+                }
+            });
 
             this.setZoom(2);
 
@@ -161,6 +173,10 @@ module TS.SpaceTac.UI {
             this.actions.setFromLocation(this.player.fleet.location, this);
 
             this.missions.update();
+            this.conversation.updateFromMissions(this.player.missions, () => {
+                this.player.missions.checkStatus();
+                this.missions.update();
+            });
 
             if (interactive) {
                 this.setInteractionEnabled(true);

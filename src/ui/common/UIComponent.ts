@@ -1,5 +1,5 @@
 module TS.SpaceTac.UI {
-    export type UIInternalComponent = Phaser.Group | Phaser.Image | Phaser.Button | Phaser.Sprite;
+    export type UIInternalComponent = Phaser.Group | Phaser.Image | Phaser.Button | Phaser.Sprite | Phaser.Graphics;
 
     export type UIImageInfo = string | { key: string, frame?: number, frame1?: number, frame2?: number };
     export type UITextInfo = { content: string, color: string, size: number, bold?: boolean };
@@ -31,12 +31,12 @@ module TS.SpaceTac.UI {
      * Base class for UI components
      */
     export class UIComponent {
-        private has_background: boolean
-        protected readonly view: BaseView;
-        protected readonly parent: UIComponent | null;
-        private readonly container: UIInternalComponent;
-        protected readonly width: number;
-        protected readonly height: number;
+        private background: Phaser.Image | Phaser.Graphics | null
+        protected readonly view: BaseView
+        protected readonly parent: UIComponent | null
+        private readonly container: Phaser.Group
+        protected readonly width: number
+        protected readonly height: number
 
         constructor(parent: BaseView | UIComponent, width: number, height: number, background_key: string | null = null) {
             this.width = width;
@@ -58,10 +58,9 @@ module TS.SpaceTac.UI {
             }
 
             if (background_key) {
-                this.addInternalChild(new Phaser.Image(this.view.game, 0, 0, background_key));
-                this.has_background = true;
+                this.background = this.addInternalChild(new Phaser.Image(this.view.game, 0, 0, background_key));
             } else {
-                this.has_background = false;
+                this.background = null;
             }
         }
 
@@ -75,6 +74,29 @@ module TS.SpaceTac.UI {
 
         toString(): string {
             return `<${classname(this)}>`;
+        }
+
+        /**
+         * Draw a background
+         */
+        drawBackground(fill: number, border?: number, border_width = 0, alpha = 1, mouse_capture?: Function) {
+            if (this.background) {
+                this.background.destroy();
+            }
+
+            this.background = this.addInternalChild(new Phaser.Graphics(this.game, 0, 0));
+            if (border_width) {
+                this.background.lineStyle(border_width, border);
+            }
+            this.background.beginFill(fill, alpha);
+            this.background.drawRect(0, 0, this.width, this.height);
+            this.background.endFill();
+
+            if (mouse_capture) {
+                this.background.inputEnabled = true;
+                this.background.input.useHandCursor = true;
+                this.background.events.onInputUp.add(() => mouse_capture());
+            }
         }
 
         /**
@@ -94,30 +116,23 @@ module TS.SpaceTac.UI {
         /**
          * Create the internal phaser node
          */
-        protected createInternalNode(): UIInternalComponent {
+        protected createInternalNode(): Phaser.Group {
             return new Phaser.Group(this.view.game, undefined, classname(this));
         }
 
         /**
          * Add an other internal component as child
          */
-        protected addInternalChild(child: UIInternalComponent): void {
-            if (this.container instanceof Phaser.Group) {
-                this.container.add(child);
-            } else {
-                this.container.addChild(child);
-            }
+        protected addInternalChild<T extends UIInternalComponent>(child: T): T {
+            this.container.add(child);
+            return child;
         }
 
         /**
          * Set the component's visibility, with optional transition (in milliseconds)
          */
         setVisible(visible: boolean, transition = 0): void {
-            if (transition > 0) {
-                this.view.animations.setVisible(this.container, visible, transition);
-            } else {
-                this.container.visible = visible;
-            }
+            this.view.animations.setVisible(this.container, visible, transition);
         }
 
         /**
@@ -180,9 +195,9 @@ module TS.SpaceTac.UI {
          * Clear from all added content.
          */
         clearContent(): void {
-            let offset = this.has_background ? 1 : 0;
+            let offset = this.background ? 1 : 0;
             while (this.container.children.length > offset) {
-                this.container.removeChildAt(offset);
+                this.container.remove(this.container.children[offset], true);
             }
         }
 

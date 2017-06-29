@@ -32,13 +32,13 @@ module TS.SpaceTac {
          * 
          * This will remove ended missions
          */
-        checkStatus(fleet: Fleet, universe: Universe): void {
+        checkStatus(): void {
             if (this.main) {
-                if (!this.main.checkStatus(fleet, universe)) {
+                if (!this.main.checkStatus()) {
                     this.main = null;
                 }
             }
-            this.secondary = this.secondary.filter(mission => mission.checkStatus(fleet, universe));
+            this.secondary = this.secondary.filter(mission => mission.checkStatus());
         }
     }
 }

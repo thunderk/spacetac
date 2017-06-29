@@ -28,7 +28,10 @@ module TS.SpaceTac.Specs {
             checkPart(story, 0, "^Find your contact in .* system$");
 
             goTo(fleet, (<MissionPartGoTo>story.current_part).destination);
-            expect(story.completed).toBe(true);
+            checkPart(story, 1, "^Speak with your contact .*$");
+
+            (<MissionPartDialog>story.current_part).skip();
+            expect(story.checkStatus()).toBe(false, "story not complete");
         })
     })
 }
