@@ -86,7 +86,7 @@ module TS.SpaceTac.Specs {
             expect(session.start_location.encounter_gen).toBe(true);
 
             session.setCampaignFleet();
-            expect(session.player.fleet.ships.length).toBe(4);
+            expect(session.player.fleet.ships.length).toBe(2);
             expect(session.player.fleet.credits).toBe(500);
             expect(session.player.fleet.location).toBe(session.start_location);
         });

@@ -70,6 +70,9 @@ module TS.SpaceTac {
         // Flag indicating if the ship is alive
         alive: boolean
 
+        // Flag indicating that the ship is mission critical (escorted ship)
+        critical = false
+
         // Position in the arena
         arena_x: number
         arena_y: number

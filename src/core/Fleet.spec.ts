@@ -14,6 +14,39 @@ module TS.SpaceTac {
             expect(fleet.getLevel()).toEqual(4);
         });
 
+        it("adds and removes ships", function () {
+            let fleet1 = new Fleet();
+            let fleet2 = new Fleet();
+
+            let ship1 = fleet1.addShip();
+            expect(fleet1.ships).toEqual([ship1]);
+            expect(fleet2.ships).toEqual([]);
+
+            let ship2 = new Ship();
+            expect(fleet1.ships).toEqual([ship1]);
+            expect(fleet2.ships).toEqual([]);
+
+            fleet2.addShip(ship2);
+            expect(fleet1.ships).toEqual([ship1]);
+            expect(fleet2.ships).toEqual([ship2]);
+
+            fleet1.addShip(ship2);
+            expect(fleet1.ships).toEqual([ship1, ship2]);
+            expect(fleet2.ships).toEqual([]);
+
+            fleet1.removeShip(ship1, fleet2);
+            expect(fleet1.ships).toEqual([ship2]);
+            expect(fleet2.ships).toEqual([ship1]);
+
+            fleet1.removeShip(ship1);
+            expect(fleet1.ships).toEqual([ship2]);
+            expect(fleet2.ships).toEqual([ship1]);
+
+            fleet1.removeShip(ship2);
+            expect(fleet1.ships).toEqual([]);
+            expect(fleet2.ships).toEqual([ship1]);
+        });
+
         it("changes location, only using jumps to travel between systems", function () {
             let fleet = new Fleet();
             let system1 = new Star();
@@ -47,6 +80,33 @@ module TS.SpaceTac {
             result = fleet.setLocation(jump1);
             expect(result).toBe(true);
             expect(fleet.location).toBe(jump1);
+        });
+
+        it("checks if a fleet is alive", function () {
+            let fleet = new Fleet();
+            expect(fleet.isAlive()).toBe(false);
+
+            let ship1 = fleet.addShip();
+            expect(fleet.isAlive()).toBe(true);
+
+            let ship2 = fleet.addShip();
+            expect(fleet.isAlive()).toBe(true);
+
+            ship1.setDead();
+            expect(fleet.isAlive()).toBe(true);
+
+            ship2.setDead();
+            expect(fleet.isAlive()).toBe(false);
+
+            let ship3 = fleet.addShip();
+            expect(fleet.isAlive()).toBe(true);
+
+            let ship4 = fleet.addShip();
+            ship4.critical = true;
+            expect(fleet.isAlive()).toBe(true);
+
+            ship4.setDead();
+            expect(fleet.isAlive()).toBe(false);
         });
     });
 }

@@ -35,5 +35,17 @@ module TS.SpaceTac {
          */
         forceComplete(): void {
         }
+
+        /**
+         * Event called when the part starts
+         */
+        onStarted(): void {
+        }
+
+        /**
+         * Event called when the part ends
+         */
+        onEnded(): void {
+        }
     }
 }

@@ -53,12 +53,15 @@ module TS.SpaceTac {
             if (this.completed) {
                 return false;
             } else if (this.current_part.checkCompleted()) {
+                this.current_part.onEnded();
+
                 let current_index = this.parts.indexOf(this.current_part);
                 if (current_index < 0 || current_index >= this.parts.length - 1) {
                     this.completed = true;
                     return false;
                 } else {
                     this.current_part = this.parts[current_index + 1];
+                    this.current_part.onStarted();
                     return true;
                 }
             } else {

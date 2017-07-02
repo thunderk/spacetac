@@ -6,9 +6,9 @@ module TS.SpaceTac.Specs {
 
             let universe = new Universe();
             let fleet = new Fleet();
-            let part = new MissionPartGoTo(new Mission(universe, fleet), destination, "Collect gems");
+            let part = new MissionPartGoTo(new Mission(universe, fleet), destination);
 
-            expect(part.title).toEqual("Collect gems in Atanax system");
+            expect(part.title).toEqual("Go to Atanax system");
             expect(part.checkCompleted()).toBe(false, "Init location");
 
             fleet.setLocation(destination, true);
@@ -32,6 +32,7 @@ module TS.SpaceTac.Specs {
             let fleet = new Fleet();
             let part = new MissionPartGoTo(new Mission(universe, fleet), destination, "Investigate");
 
+            expect(part.title).toEqual("Investigate");
             expect(part.checkCompleted()).toBe(false);
             part.forceComplete();
             expect(part.checkCompleted()).toBe(true);

@@ -25,8 +25,8 @@ module TS.SpaceTac {
         // Current piece
         current_piece = 0
 
-        constructor(mission: Mission, interlocutors: Ship[], directive = "Speak with") {
-            super(mission, `${directive} ${interlocutors[0].name}`);
+        constructor(mission: Mission, interlocutors: Ship[], directive?: string) {
+            super(mission, directive || `Speak with ${interlocutors[0].name}`);
 
             this.interlocutors = interlocutors;
         }

@@ -7,8 +7,8 @@ module TS.SpaceTac {
     export class MissionPartGoTo extends MissionPart {
         destination: StarLocation
 
-        constructor(mission: Mission, destination: StarLocation, directive: string, hint = true) {
-            super(mission, hint ? `${directive} in ${destination.star.name} system` : directive);
+        constructor(mission: Mission, destination: StarLocation, directive?: string) {
+            super(mission, directive || `Go to ${destination.star.name} system`);
 
             this.destination = destination;
         }

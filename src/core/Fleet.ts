@@ -25,6 +25,10 @@ module TS.SpaceTac {
             this.ships = [];
         }
 
+        jasmineToString(): string {
+            return `${this.player.name}'s fleet [${this.ships.map(ship => ship.name).join(",")}]`;
+        }
+
         /**
          * Set the current location of the fleet
          * 
@@ -48,7 +52,9 @@ module TS.SpaceTac {
             return true;
         }
 
-        // Add a ship in this fleet
+        /**
+         * Add a ship this fleet
+         */
         addShip(ship = new Ship()): Ship {
             if (ship.fleet && ship.fleet != this) {
                 remove(ship.fleet.ships, ship);
@@ -56,6 +62,15 @@ module TS.SpaceTac {
             add(this.ships, ship);
             ship.fleet = this;
             return ship;
+        }
+
+        /**
+         * Remove the ship from this fleet, transferring it to another fleet
+         */
+        removeShip(ship: Ship, fleet = new Fleet()): void {
+            if (ship.fleet === this) {
+                fleet.addShip(ship);
+            }
         }
 
         // Set the current battle
@@ -77,15 +92,15 @@ module TS.SpaceTac {
             return Math.floor(avg);
         }
 
-        // Check if the fleet still has living ships
+        /**
+         * Check if the fleet is considered alive (at least one ship alive, and no critical ship dead)
+         */
         isAlive(): boolean {
-            var count = 0;
-            this.ships.forEach((ship: Ship) => {
-                if (ship.alive) {
-                    count += 1;
-                }
-            });
-            return (count > 0);
+            if (any(this.ships, ship => ship.critical && !ship.alive)) {
+                return false;
+            } else {
+                return any(this.ships, ship => ship.alive);
+            }
         }
     }
 }

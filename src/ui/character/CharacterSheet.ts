@@ -201,6 +201,9 @@ module TS.SpaceTac.UI {
             this.credits.setText(fleet.credits.toString());
 
             this.portraits.scale.set(980 * this.portraits.scale.x / this.portraits.height, 980 * this.portraits.scale.y / this.portraits.height);
+            if (this.portraits.width > 308) {
+                this.portraits.scale.set(308 * this.portraits.scale.x / this.portraits.width, 308 * this.portraits.scale.y / this.portraits.width);
+            }
             this.portraits.y = 80 + 160 * this.portraits.scale.x;
         }
 

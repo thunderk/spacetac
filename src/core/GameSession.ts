@@ -5,7 +5,7 @@ module TS.SpaceTac {
      * This represents the current state of game
      */
     export class GameSession {
-        // "Hopefully"" unique session id
+        // "Hopefully" unique session id
         id: string
 
         // Game universe
@@ -81,7 +81,7 @@ module TS.SpaceTac {
                 this.player.fleet = fleet;
             } else {
                 let fleet_generator = new FleetGenerator();
-                this.player.fleet = fleet_generator.generate(1, this.player, 4);
+                this.player.fleet = fleet_generator.generate(1, this.player, 2);
             }
 
             this.player.fleet.setLocation(this.start_location);
