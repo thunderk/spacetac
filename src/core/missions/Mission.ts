@@ -21,13 +21,17 @@ module TS.SpaceTac {
         // Indicator that the mission is completed
         completed: boolean
 
-        constructor(universe: Universe, fleet: Fleet, main = false) {
+        // Title of this mission (should be kept short)
+        title: string
+
+        constructor(universe: Universe, fleet = new Fleet(), main = false) {
             this.universe = universe;
             this.fleet = fleet;
             this.main = main;
             this.parts = [];
             this.completed = false;
             this.current_part = new MissionPart(this, "Empty mission");
+            this.title = main ? "Main story" : "Secondary mission";
         }
 
         /**

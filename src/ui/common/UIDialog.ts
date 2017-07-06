@@ -7,7 +7,7 @@ module TS.SpaceTac.UI {
      * When a modal dialog opens, an overlay is displayed behind it to prevent clicking through it
      */
     export class UIDialog extends UIComponent {
-        constructor(parent: BaseView, width: number, height: number, background: string) {
+        constructor(parent: BaseView, width = 1495, height = 1080, background = "common-dialog") {
             super(parent, width, height, background);
 
             if (parent.dialogs_layer.children.length == 0) {
@@ -23,6 +23,7 @@ module TS.SpaceTac.UI {
          */
         addOverlay(layer: Phaser.Group): void {
             let overlay = layer.game.add.button(0, 0, "common-transparent", () => null);
+            overlay.input.useHandCursor = false;
             overlay.scale.set(this.view.getWidth() / overlay.width, this.view.getHeight() / overlay.height);
             layer.add(overlay);
         }
@@ -30,7 +31,7 @@ module TS.SpaceTac.UI {
         /**
          * Add a close button
          */
-        addCloseButton(key: string, x: number, y: number, frame = 0, frame_hover = 1): void {
+        addCloseButton(key = "common-dialog-close", x = 1325, y = 131, frame = 0, frame_hover = 1): void {
             this.addButton(x, y, () => this.close(), key, frame, frame_hover, "Close this dialog");
         }
 

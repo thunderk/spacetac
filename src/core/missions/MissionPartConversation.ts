@@ -2,9 +2,9 @@
 
 module TS.SpaceTac {
     /**
-     * A single dialog piece
+     * A single conversation piece
      */
-    interface DialogPiece {
+    interface ConversationPiece {
         // Interlocutor (null for the player's fleet)
         interlocutor: Ship | null
 
@@ -13,14 +13,14 @@ module TS.SpaceTac {
     }
 
     /**
-     * A mission part that triggers a dialog
+     * A mission part that triggers a conversation
      */
-    export class MissionPartDialog extends MissionPart {
+    export class MissionPartConversation extends MissionPart {
         // Other ships with which the dialog will take place
         interlocutors: Ship[]
 
         // Pieces of dialog
-        pieces: DialogPiece[] = []
+        pieces: ConversationPiece[] = []
 
         // Current piece
         current_piece = 0
@@ -70,7 +70,7 @@ module TS.SpaceTac {
         /**
          * Get the current piece of dialog
          */
-        getCurrent(): DialogPiece {
+        getCurrent(): ConversationPiece {
             if (this.checkCompleted()) {
                 return {
                     interlocutor: null,
@@ -88,7 +88,7 @@ module TS.SpaceTac {
         /**
          * Get the interlocutor from the player fleet that will say the piece
          */
-        private getFleetInterlocutor(piece: DialogPiece): Ship | null {
+        private getFleetInterlocutor(piece: ConversationPiece): Ship | null {
             if (this.fleet.ships.length > 0) {
                 // TODO Choose a ship by its personality traits
                 return this.fleet.ships[0];

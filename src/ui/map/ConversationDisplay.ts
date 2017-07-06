@@ -3,7 +3,7 @@ module TS.SpaceTac.UI {
      * Display of an active conversation
      */
     export class ConversationDisplay extends UIComponent {
-        dialog: MissionPartDialog | null = null
+        dialog: MissionPartConversation | null = null
         player: Player
         on_end: Function | null = null
 
@@ -21,7 +21,7 @@ module TS.SpaceTac.UI {
          */
         updateFromMissions(missions: ActiveMissions, on_end: Function | null = null) {
             let parts = missions.getCurrent().map(mission => mission.current_part);
-            this.dialog = <MissionPartDialog | null>first(parts, part => part instanceof MissionPartDialog);
+            this.dialog = <MissionPartConversation | null>first(parts, part => part instanceof MissionPartConversation);
 
             if (this.dialog) {
                 this.on_end = on_end;

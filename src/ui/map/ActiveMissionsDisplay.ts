@@ -8,7 +8,7 @@ module TS.SpaceTac.UI {
         private missions: ActiveMissions
 
         constructor(parent: BaseView, missions: ActiveMissions) {
-            super(parent, 520, 210);
+            super(parent, 520, 240);
             this.missions = missions;
 
             this.update();
@@ -21,10 +21,11 @@ module TS.SpaceTac.UI {
             this.clearContent();
 
             let active = this.missions.getCurrent();
-            let offset = 245 - active.length * 70;
+            let spacing = 80;
+            let offset = 245 - active.length * spacing;
             active.forEach((mission, idx) => {
-                this.addImage(35, offset + 70 * idx, "map-missions");
-                this.addText(90, offset + 70 * idx, mission.current_part.title, "#d2e1f3", 22, false, false, 430, true);
+                this.addImage(35, offset + spacing * idx, "map-missions", mission.main ? 0 : 1);
+                this.addText(90, offset + spacing * idx, mission.current_part.title, "#d2e1f3", 20, false, false, 430, true);
             });
         }
     }

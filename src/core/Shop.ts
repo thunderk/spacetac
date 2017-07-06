@@ -15,6 +15,9 @@ module TS.SpaceTac {
         // Random generator
         private random: RandomGenerator
 
+        // Available missions
+        private missions: Mission[] = []
+
         constructor(level = 1, stock: Equipment[] = [], count = 40) {
             this.level = level;
             this.stock = stock;
@@ -93,6 +96,34 @@ module TS.SpaceTac {
             if (add(this.stock, equipment)) {
                 this.sortStock();
                 fleet.credits += price;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Get a list of available secondary missions
+         */
+        getMissions(around: StarLocation, max_count = 3): Mission[] {
+            while (this.missions.length < max_count) {
+                let generator = new MissionGenerator(around.star.universe, around.star.level, around, this.random);
+                let mission = generator.generate();
+                this.missions.push(mission);
+            }
+
+            return this.missions;
+        }
+
+        /**
+         * Assign a mission to a fleet
+         * 
+         * Returns true on success
+         */
+        acceptMission(mission: Mission, player: Player): boolean {
+            if (player.missions.secondary.length < 2 && remove(this.missions, mission)) {
+                mission.fleet = player.fleet;
+                add(player.missions.secondary, mission);
                 return true;
             } else {
                 return false;

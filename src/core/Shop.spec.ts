@@ -31,5 +31,41 @@ module TS.SpaceTac.Specs {
             expect(shop.stock).toEqual([equ1, equ2]);
             expect(fleet.credits).toEqual(1000);
         });
+
+        it("generates secondary missions", function () {
+            let universe = new Universe();
+            universe.generate(4);
+            let start = universe.getStartLocation();
+
+            let shop = new Shop();
+            expect((<any>shop).missions.length).toBe(0);
+
+            let result = shop.getMissions(start, 4);
+            expect(result.length).toBe(4);
+            expect((<any>shop).missions.length).toBe(4);
+
+            let oresult = shop.getMissions(start, 4);
+            expect(oresult).toEqual(result);
+
+            result.forEach(mission => {
+                expect(mission.main).toBe(false);
+            });
+        });
+
+        it("assigns missions to a fleet", function () {
+            let shop = new Shop();
+            let player = new Player();
+            let mission = new Mission(new Universe());
+            (<any>shop).missions = [mission];
+
+            expect(shop.getMissions(new StarLocation(), 1)).toEqual([mission]);
+            expect(player.missions.secondary).toEqual([]);
+
+            shop.acceptMission(mission, player);
+
+            expect((<any>shop).missions).toEqual([]);
+            expect(player.missions.secondary).toEqual([mission]);
+            expect(mission.fleet).toBe(player.fleet);
+        });
     });
 }

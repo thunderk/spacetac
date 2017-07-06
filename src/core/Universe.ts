@@ -13,10 +13,31 @@ module TS.SpaceTac {
         radius = 5
 
         // Source of randomness
-        random = RandomGenerator.global;
+        random = RandomGenerator.global
 
-        // Generates a universe, with star systems and such
+        /**
+         * Add a single star
+         */
+        addStar(level = 1, name?: string): Star {
+            let result = new Star(this, 0, 0, name || `Star ${this.stars.length + 1}`);
+            result.level = level;
+            this.stars.push(result);
+            return result;
+        }
+
+        /**
+         * Generates a random universe, with star systems and locations of interest
+         * 
+         * This will also :
+         * - create a network of jump links between star systems
+         * - add random shops
+         * - define a progressive gradient of enemy levels
+         */
         generate(starcount = 50): void {
+            if (starcount < 4) {
+                starcount = 4;
+            }
+
             while (this.stars.length == 0 || any(this.stars, star => star.getLinks().length == 0)) {
                 this.stars = this.generateStars(starcount);
 
@@ -27,7 +48,7 @@ module TS.SpaceTac {
             this.generateWarpLocations();
 
             this.stars.forEach((star: Star) => {
-                star.generate();
+                star.generate(this.random);
             });
 
             this.setEncounterLevels();

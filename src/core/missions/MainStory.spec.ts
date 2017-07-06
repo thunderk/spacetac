@@ -30,13 +30,13 @@ module TS.SpaceTac.Specs {
             let fleet_size = fleet.ships.length;
 
             checkPart(story, 0, "^Travel to Terranax galaxy$");
-            (<MissionPartDialog>story.current_part).skip();
+            (<MissionPartConversation>story.current_part).skip();
 
             checkPart(story, 1, "^Find your contact in .*$");
             goTo(fleet, (<MissionPartGoTo>story.current_part).destination);
 
             checkPart(story, 2, "^Speak with your contact");
-            (<MissionPartDialog>story.current_part).skip();
+            (<MissionPartConversation>story.current_part).skip();
 
             checkPart(story, 3, "^Go with .* in .* system$");
             expect(fleet.ships.length).toBe(fleet_size + 1);

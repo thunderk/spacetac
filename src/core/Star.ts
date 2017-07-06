@@ -89,6 +89,14 @@ module TS.SpaceTac {
             return `Star ${this.name}`;
         }
 
+        /**
+         * Add a location of interest
+         */
+        addLocation(type: StarLocationType): StarLocation {
+            let result = new StarLocation(this, type);
+            return result;
+        }
+
         // Get the distance to another star
         getDistanceTo(star: Star): number {
             var dx = this.x - star.x;
@@ -157,6 +165,13 @@ module TS.SpaceTac {
             });
 
             return result;
+        }
+
+        /**
+         * Get the neighboring star systems (single jump accessible)
+         */
+        getNeighbors(): Star[] {
+            return nna(this.getLinks().map(link => link.getPeer(this)));
         }
 
         // Check if a location is far enough from all other ones

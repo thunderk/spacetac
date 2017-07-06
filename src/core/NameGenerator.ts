@@ -8,7 +8,7 @@ module TS.SpaceTac {
         private random: RandomGenerator;
 
         constructor(choices: string[], random: RandomGenerator = new RandomGenerator()) {
-            this.choices = choices.slice(0);
+            this.choices = acopy(choices);
             this.random = random;
         }
 

@@ -1,11 +1,11 @@
 module TS.SpaceTac.Specs {
-    describe("MissionPartDialog", () => {
-        it("advances through dialog", function () {
+    describe("MissionPartConversation", () => {
+        it("advances through conversation", function () {
             let universe = new Universe();
             let fleet = new Fleet();
             let ship1 = new Ship(null, "Tim");
             let ship2 = new Ship(null, "Ben");
-            let part = new MissionPartDialog(new Mission(universe, fleet), [ship1, ship2], "Talk to Tim");
+            let part = new MissionPartConversation(new Mission(universe, fleet), [ship1, ship2], "Talk to Tim");
 
             expect(part.title).toEqual("Talk to Tim");
             expect(part.checkCompleted()).toBe(true, "No dialog piece");
@@ -36,7 +36,7 @@ module TS.SpaceTac.Specs {
             let universe = new Universe();
             let fleet = new Fleet();
             let ship = new Ship(null, "Tim");
-            let part = new MissionPartDialog(new Mission(universe, fleet), [ship]);
+            let part = new MissionPartConversation(new Mission(universe, fleet), [ship]);
             part.addPiece(null, "Hello !");
             part.addPiece(ship, "Hiya !");
 

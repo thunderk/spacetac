@@ -18,6 +18,7 @@ module TS.SpaceTac.UI {
             this.loadImage("common/arrow.png");
             this.loadImage("common/button-ok.png");
             this.loadImage("common/button-cancel.png");
+            this.loadImage("common/dialog.png");
             this.loadSheet("common/dialog-close.png", 92, 82);
             this.loadImage("menu/title.png");
             this.loadImage("menu/button.png");
@@ -70,6 +71,7 @@ module TS.SpaceTac.UI {
             this.loadImage("map/location-warp.png");
             this.loadSheet("map/status.png", 32);
             this.loadSheet("map/missions.png", 70);
+            this.loadSheet("map/mission-action.png", 192, 56);
             this.loadImage("character/sheet.png");
             this.loadImage("character/close.png");
             this.loadImage("character/ship.png");

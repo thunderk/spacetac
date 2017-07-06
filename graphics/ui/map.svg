@@ -811,8 +811,8 @@
        style="color-interpolation-filters:sRGB"
        inkscape:label="Drop Shadow"
        id="filter7229-3"
-       x="-0.2"
-       y="-0.2"
+       x="-0.25"
+       y="-0.25"
        height="1.5"
        width="1.5">
       <feFlood
@@ -872,6 +872,237 @@
        fx="349.2796"
        fy="150.05988"
        r="3.9959407" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath5802">
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/options/background.png"
+         style="display:inline;fill:#2c353d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7512);enable-background:new"
+         d="M 475.82605,190.2261 H 1444.174 l -93.4957,699.5478 H 569.3217 Z"
+         id="path5804"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         transform="matrix(0.34038154,0,0,0.34038154,19.662314,-53.825672)" />
+    </clipPath>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter7193">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(255,255,255)"
+         result="flood"
+         id="feFlood7183" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite7185" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0.4"
+         result="blur"
+         id="feGaussianBlur7187" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset7189" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite7191" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter6138">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(255,255,255)"
+         result="flood"
+         id="feFlood6128" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite6130" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0.4"
+         result="blur"
+         id="feGaussianBlur6132" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset6134" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite6136" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Dialog shadow"
+       id="filter7512">
+      <feFlood
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood7502" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite7504" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="33.649999999999999"
+         result="blur"
+         id="feGaussianBlur7506" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset7508" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite7510" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Drop Shadow"
+       id="filter5500-2"
+       x="-0.2"
+       y="-0.2"
+       width="1.4"
+       height="1.4">
+      <feFlood
+         flood-opacity="0.556863"
+         flood-color="rgb(255,255,255)"
+         result="flood"
+         id="feFlood5490-9" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite5492-1" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="1.1"
+         result="blur"
+         id="feGaussianBlur5494-2" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset5496-7" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite5498-0" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter5500-3"
+       x="-0.20000000000000001"
+       y="-0.20000000000000001"
+       width="1.3999999999999999"
+       height="1.3999999999999999">
+      <feFlood
+         flood-opacity="0.556863"
+         flood-color="rgb(255,255,255)"
+         result="flood"
+         id="feFlood5490-6" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite5492-0" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="1.1"
+         result="blur"
+         id="feGaussianBlur5494-6" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset5496-2" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite5498-6" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter6297"
+       x="-0.20000000000000001"
+       y="-0.20000000000000001"
+       width="1.3999999999999999"
+       height="1.3999999999999999">
+      <feFlood
+         flood-opacity="0.556863"
+         flood-color="rgb(255,255,255)"
+         result="flood"
+         id="feFlood6287" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite6289" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="1.1"
+         result="blur"
+         id="feGaussianBlur6291" />
+      <feOffset
+         dx="0"
+         dy="0"
+         result="offset"
+         id="feOffset6293" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite6295" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter6390"
+       x="-0.0936"
+       width="1.1872"
+       y="-0.0936"
+       height="1.1872">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.1866562"
+         id="feGaussianBlur6392" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -880,11 +1111,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.0000001"
-     inkscape:cx="221.23289"
-     inkscape:cy="353.88524"
+     inkscape:zoom="0.70710682"
+     inkscape:cx="728.12591"
+     inkscape:cy="574.187"
      inkscape:document-units="px"
-     inkscape:current-layer="g7264"
+     inkscape:current-layer="g6210"
      showgrid="false"
      units="px"
      inkscape:snap-bbox="true"
@@ -893,8 +1124,10 @@
      showguides="false"
      inkscape:bbox-nodes="true"
      inkscape:snap-page="true"
-     inkscape:snap-global="true"
-     inkscape:snap-object-midpoints="true">
+     inkscape:snap-global="false"
+     inkscape:snap-object-midpoints="true"
+     inkscape:measure-start="551.543,453.963"
+     inkscape:measure-end="1261.48,449.72">
     <sodipodi:guide
        position="0,0"
        orientation="0,1920"
@@ -1977,6 +2210,402 @@
          width="67.235291"
          id="rect4926"
          style="fill:#43535c;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.23345587px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Mission dialog"
+     style="display:inline">
+    <g
+       id="g6210"
+       transform="translate(-4.1823501,30.369099)">
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/common/dialog.png"
+         style="display:inline;fill:#2c353d;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7512);enable-background:new"
+         d="M 475.82605,190.2261 H 1444.174 l -93.4957,699.5478 H 569.3217 Z"
+         id="rect4931"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         transform="matrix(0.34038154,0,0,0.34038154,-68.583942,-71.300136)" />
+      <g
+         clip-path="url(#clipPath5802)"
+         inkscape:export-ydpi="91.800003"
+         inkscape:export-xdpi="91.800003"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/common/dialog-close1.png"
+         id="g5454"
+         style="display:inline;opacity:1"
+         transform="translate(-88.246252,-17.474463)">
+        <circle
+           style="fill:#151c22;fill-opacity:1;stroke:#c1c1c1;stroke-width:0.79374999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter7193)"
+           id="path7854"
+           cx="508"
+           cy="11.249985"
+           r="20.847025" />
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:10.58333397px;line-height:6.61458349px;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';letter-spacing:0px;word-spacing:0px;fill:#d5c5ae;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7193)"
+           x="496.83798"
+           y="22.792192"
+           id="text7862"><tspan
+             sodipodi:role="line"
+             id="tspan7860"
+             x="496.83798"
+             y="22.792192"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#d5c5ae;fill-opacity:1;stroke-width:0.26458335px">X</tspan></text>
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#b8d2f1;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="223.79375"
+         y="20.359943"
+         id="text6214"><tspan
+           sodipodi:role="line"
+           id="tspan6212"
+           x="223.79375"
+           y="20.359943"
+           style="fill:#b8d2f1;fill-opacity:1;stroke-width:0.26458335px">Active jobs</tspan></text>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#b8d2f1;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="213.62073"
+         y="116.95998"
+         id="text6218"><tspan
+           sodipodi:role="line"
+           id="tspan6216"
+           x="213.62073"
+           y="116.95998"
+           style="fill:#b8d2f1;fill-opacity:1;stroke-width:0.26458335px">Proposed jobs</tspan></text>
+      <g
+         id="g6630"
+         transform="translate(0,7.4083337)">
+        <use
+           transform="translate(0,23.881537)"
+           height="100%"
+           width="100%"
+           id="use6334"
+           inkscape:transform-center-y="-0.66101504"
+           xlink:href="#use6271"
+           y="0"
+           x="0" />
+        <g
+           id="g6499">
+          <text
+             id="text6338"
+             y="51.764362"
+             x="152.35658"
+             style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+               y="51.764362"
+               x="152.35658"
+               id="tspan6336"
+               sodipodi:role="line">Escort a merchant transport to Rhinard</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:7.05555582px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             x="152.35658"
+             y="61.289371"
+             id="text6342"><tspan
+               sodipodi:role="line"
+               id="tspan6340"
+               x="152.35658"
+               y="61.289371"
+               style="font-size:7.05555582px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px">Reward : 500 zotys</tspan></text>
+        </g>
+      </g>
+      <g
+         id="g6622"
+         transform="translate(0,7.4083337)">
+        <use
+           transform="translate(121.04306,-195.15429)"
+           height="100%"
+           width="100%"
+           id="use6271"
+           inkscape:transform-center-y="-0.66101504"
+           xlink:href="#path7197"
+           y="0"
+           x="0"
+           style="display:inline" />
+        <g
+           id="g6493">
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             x="152.35658"
+             y="27.882824"
+             id="text6332"><tspan
+               sodipodi:role="line"
+               id="tspan6330"
+               x="152.35658"
+               y="27.882824"
+               style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px">Deliver an item to the FTC contact in Suburbia</tspan></text>
+          <text
+             id="text6364"
+             y="37.937"
+             x="152.35658"
+             style="font-style:normal;font-weight:normal;font-size:7.05555582px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               style="font-size:7.05555582px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+               y="37.937"
+               x="152.35658"
+               id="tspan6362"
+               sodipodi:role="line">Reward : Legendary SubMunition Missile Mk4</tspan></text>
+        </g>
+      </g>
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#c57147;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="195.37274"
+         y="84.18927"
+         id="text6370"><tspan
+           sodipodi:role="line"
+           id="tspan6368"
+           x="195.37274"
+           y="84.18927"
+           style="font-size:8.46666718px;fill:#c57147;fill-opacity:1;stroke-width:0.26458335px">Cannot accept more missions</tspan></text>
+      <g
+         id="g6485"
+         transform="translate(-14.81667,12.026318)">
+        <g
+           transform="matrix(0.21520643,0.21520643,-0.21520643,0.21520643,286.3185,-60.540215)"
+           id="g6378">
+          <use
+             transform="matrix(2.3233506,-2.3233506,2.3233506,2.3233506,-525.09999,803.63525)"
+             x="0"
+             y="0"
+             xlink:href="#path6571"
+             id="use6579"
+             width="100%"
+             height="100%" />
+          <rect
+             y="23.390965"
+             x="351.41891"
+             height="7.4835463"
+             width="35.546844"
+             style="fill:#8ab4e7;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter7229-3)"
+             id="use6398"
+             transform="rotate(90,370.99631,25.421645)" />
+        </g>
+        <text
+           inkscape:transform-center-y="3.5546847"
+           inkscape:transform-center-x="-0.74835467"
+           id="text6396"
+           y="27.506914"
+           x="372.11609"
+           style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           xml:space="preserve"><tspan
+             style="font-size:7.05555582px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+             y="27.506914"
+             x="372.11609"
+             id="tspan6394"
+             sodipodi:role="line">Cancel</tspan></text>
+        <path
+           inkscape:connector-curvature="0"
+           id="path6400"
+           d="m 351.98078,24.297867 v 7.276041 l 50.40313,1e-6"
+           style="fill:none;fill-rule:evenodd;stroke:#8ab4e7;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g6485"
+         id="use6487"
+         width="100%"
+         height="100%"
+         transform="translate(0,23.881537)"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <g
+         id="g6523"
+         transform="translate(0,7.4083337)">
+        <use
+           style="display:inline"
+           x="0"
+           y="0"
+           xlink:href="#path7197"
+           inkscape:transform-center-y="-0.66101504"
+           id="use6501"
+           width="100%"
+           height="100%"
+           transform="translate(121.04306,-96.199953)" />
+        <g
+           transform="translate(0,98.954178)"
+           id="g6511">
+          <text
+             id="text6505"
+             y="27.882824"
+             x="152.35658"
+             style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+               y="27.882824"
+               x="152.35658"
+               id="tspan6503"
+               sodipodi:role="line">Deliver an item to the FTC contact in Suburbia</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:7.05555582px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             x="152.35658"
+             y="37.937"
+             id="text6509"><tspan
+               sodipodi:role="line"
+               id="tspan6507"
+               x="152.35658"
+               y="37.937"
+               style="font-size:7.05555582px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px">Reward : Legendary SubMunition Missile Mk4</tspan></text>
+        </g>
+      </g>
+      <g
+         id="g6537"
+         transform="translate(0,34.925014)">
+        <use
+           transform="translate(121.04306,-96.199953)"
+           height="100%"
+           width="100%"
+           id="use6525"
+           inkscape:transform-center-y="-0.66101504"
+           xlink:href="#path7197"
+           y="0"
+           x="0"
+           style="display:inline" />
+        <g
+           id="g6535"
+           transform="translate(0,98.954178)">
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             x="152.35658"
+             y="27.882824"
+             id="text6529"><tspan
+               sodipodi:role="line"
+               id="tspan6527"
+               x="152.35658"
+               y="27.882824"
+               style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px">Deliver an item to the FTC contact in Suburbia</tspan></text>
+          <text
+             id="text6533"
+             y="37.937"
+             x="152.35658"
+             style="font-style:normal;font-weight:normal;font-size:7.05555582px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               style="font-size:7.05555582px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+               y="37.937"
+               x="152.35658"
+               id="tspan6531"
+               sodipodi:role="line">Reward : Legendary SubMunition Missile Mk4</tspan></text>
+        </g>
+      </g>
+      <g
+         transform="translate(0,62.441675)"
+         id="g6551">
+        <use
+           style="display:inline"
+           x="0"
+           y="0"
+           xlink:href="#path7197"
+           inkscape:transform-center-y="-0.66101504"
+           id="use6539"
+           width="100%"
+           height="100%"
+           transform="translate(121.04306,-96.199953)" />
+        <g
+           transform="translate(0,98.954178)"
+           id="g6549">
+          <text
+             id="text6543"
+             y="27.882824"
+             x="152.35658"
+             style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             xml:space="preserve"><tspan
+               style="font-size:7.76111126px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px"
+               y="27.882824"
+               x="152.35658"
+               id="tspan6541"
+               sodipodi:role="line">Deliver an item to the FTC contact in Suburbia</tspan></text>
+          <text
+             xml:space="preserve"
+             style="font-style:normal;font-weight:normal;font-size:7.05555582px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             x="152.35658"
+             y="37.937"
+             id="text6547"><tspan
+               sodipodi:role="line"
+               id="tspan6545"
+               x="152.35658"
+               y="37.937"
+               style="font-size:7.05555582px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px">Reward : Legendary SubMunition Missile Mk4</tspan></text>
+        </g>
+      </g>
+      <g
+         transform="translate(-14.81667,111.42406)"
+         id="g6565"
+         inkscape:export-filename="/tmp/export.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:12.70000076px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#d2e1f3;fill-opacity:1;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           x="371.05774"
+           y="27.506914"
+           id="text6561"
+           inkscape:transform-center-x="-0.74835467"
+           inkscape:transform-center-y="3.5546847"><tspan
+             sodipodi:role="line"
+             id="tspan6559"
+             x="371.05774"
+             y="27.506914"
+             style="font-size:7.05555582px;fill:#d2e1f3;fill-opacity:1;stroke-width:0.26458335px">Accept</tspan></text>
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#8ab4e7;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="m 351.98078,24.297867 v 7.276041 l 50.40313,1e-6"
+           id="path6563"
+           inkscape:connector-curvature="0" />
+        <g
+           id="g6608">
+          <circle
+             r="4.490128"
+             cy="24.61265"
+             cx="360.34225"
+             id="path6571"
+             style="fill:#222932;fill-opacity:1;fill-rule:evenodd;stroke:#8ab4e7;stroke-width:0.5291667;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        </g>
+        <path
+           sodipodi:type="star"
+           style="fill:#8ab4e7;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.1217779px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           id="path6596"
+           sodipodi:sides="3"
+           sodipodi:cx="356.96808"
+           sodipodi:cy="24.61265"
+           sodipodi:r1="1.918968"
+           sodipodi:r2="0.01918968"
+           sodipodi:arg1="0"
+           sodipodi:arg2="1.0471976"
+           inkscape:flatsided="true"
+           inkscape:rounded="0"
+           inkscape:randomized="0"
+           d="m 358.88705,24.61265 -2.87846,1.661875 v -3.32375 z"
+           inkscape:transform-center-x="-0.42217421"
+           inkscape:transform-center-y="1.2619461e-06" />
+      </g>
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g6565"
+         id="use6567"
+         width="100%"
+         height="100%"
+         transform="translate(0,27.516676)" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g6565"
+         id="use6569"
+         width="100%"
+         height="100%"
+         transform="translate(0,55.033337)" />
     </g>
   </g>
 </svg>
