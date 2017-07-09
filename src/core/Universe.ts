@@ -18,8 +18,8 @@ module TS.SpaceTac {
         /**
          * Add a single star
          */
-        addStar(level = 1, name?: string): Star {
-            let result = new Star(this, 0, 0, name || `Star ${this.stars.length + 1}`);
+        addStar(level = 1, name?: string, x = 0, y = 0): Star {
+            let result = new Star(this, x, y, name || `Star ${this.stars.length + 1}`);
             result.level = level;
             this.stars.push(result);
             return result;
@@ -42,7 +42,7 @@ module TS.SpaceTac {
                 this.stars = this.generateStars(starcount);
 
                 let links = this.getPotentialLinks();
-                this.starlinks = this.filterCrossingLinks(links);
+                this.starlinks = this.filterRedundantLinks(this.filterCrossingLinks(links));
             }
 
             this.generateWarpLocations();
@@ -98,7 +98,12 @@ module TS.SpaceTac {
             return result;
         }
 
-        // Filter a list of potential links to avoid crossing ones
+        /**
+         * Filter a list of potential links to avoid crossing ones.
+         * 
+         * Returned list of links should be free of crossings.
+         * This should not alter the universe connectivity.
+         */
         filterCrossingLinks(links: StarLink[]): StarLink[] {
             var result: StarLink[] = [];
 
@@ -111,6 +116,33 @@ module TS.SpaceTac {
                 });
                 if (!crossed) {
                     result.push(link1);
+                }
+            });
+
+            return result;
+        }
+
+        /**
+         * Filter a list of potential links to remove redundant ones.
+         * 
+         * This will remove direct links that are also achieved by a similar two-jump couple.
+         * This should not alter the universe connectivity.
+         */
+        filterRedundantLinks(links: StarLink[]): StarLink[] {
+            let result: StarLink[] = [];
+
+            links = sortedBy(links, link => link.getLength(), true);
+
+            links.forEach(link => {
+                let alternative_passages = intersection(
+                    link.first.getNeighbors(links).filter(n => n != link.second),
+                    link.second.getNeighbors(links).filter(n => n != link.first)
+                );
+                let alternative_lengths = alternative_passages.map(
+                    passage => nn(link.first.getLinkTo(passage, links)).getLength() + nn(link.second.getLinkTo(passage, links)).getLength()
+                );
+                if (!any(alternative_lengths, length => length < link.getLength() * 1.2)) {
+                    result.push(link);
                 }
             });
 
@@ -216,9 +248,8 @@ module TS.SpaceTac {
          * Get a good start location
          */
         getStartLocation(): StarLocation {
-            let stars = acopy(this.stars);
-            stars.sort((a, b) => cmp(a.level, b.level));
-            return stars[0].locations[0];
+            let star = minBy(this.stars, star => star.level);
+            return star.locations[0];
         }
     }
 }

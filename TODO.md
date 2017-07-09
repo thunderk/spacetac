@@ -11,10 +11,10 @@ Map/story
 ---------
 
 * Add initial character creation
-* Remove jump links that cross the radius of other systems
 * Fix quickly zooming in twice preventing to display some UI parts
 * Enemy fleet size should start low and increase with system level
 * Allow to change/buy ship model
+* Fix galaxy generator sometimes being short on systems to create a proper level gradient (mainly in unit testing)
 * Add ship personality (with icons to identify ?), with reaction dialogs
 * Add factions and reputation
 * Add generated missions with rewards

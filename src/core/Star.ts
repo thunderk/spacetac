@@ -128,11 +128,11 @@ module TS.SpaceTac {
             return warp;
         }
 
-        // Get the number of links to other stars
-        getLinks(): StarLink[] {
+        // Get all direct links to other stars
+        getLinks(all = this.universe.starlinks): StarLink[] {
             var result: StarLink[] = [];
 
-            this.universe.starlinks.forEach((link: StarLink) => {
+            all.forEach(link => {
                 if (link.first === this || link.second === this) {
                     result.push(link);
                 }
@@ -141,11 +141,11 @@ module TS.SpaceTac {
             return result;
         }
 
-        // Get the link to another star, null of not found
-        getLinkTo(other: Star): StarLink | null {
+        // Get the link to another star, null if not found
+        getLinkTo(other: Star, all = this.universe.starlinks): StarLink | null {
             var result: StarLink | null = null;
 
-            this.universe.starlinks.forEach(link => {
+            all.forEach(link => {
                 if (link.isLinking(this, other)) {
                     result = link;
                 }
@@ -170,8 +170,8 @@ module TS.SpaceTac {
         /**
          * Get the neighboring star systems (single jump accessible)
          */
-        getNeighbors(): Star[] {
-            return nna(this.getLinks().map(link => link.getPeer(this)));
+        getNeighbors(all = this.universe.starlinks): Star[] {
+            return nna(this.getLinks(all).map(link => link.getPeer(this)));
         }
 
         // Check if a location is far enough from all other ones

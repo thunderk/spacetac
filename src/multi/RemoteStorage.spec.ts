@@ -45,7 +45,7 @@ module TS.SpaceTac.Multi.Specs {
             await storage.upsert("test", { key: 5, text: "things" }, {});
 
             result = await storage.search("test", { key: 5 });
-            expect(result.sort((a: any, b: any) => cmp(a.text, b.text))).toEqual([{ key: 5, text: "other thingy" }, { key: 5, text: "things" }]);
+            expect(sortedBy(result, (x: any) => x.text)).toEqual([{ key: 5, text: "other thingy" }, { key: 5, text: "things" }]);
         });
     });
 }

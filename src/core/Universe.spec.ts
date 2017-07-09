@@ -32,6 +32,29 @@ module TS.SpaceTac.Specs {
 
             var filtered = universe.filterCrossingLinks(result);
             expect(filtered.length).toBe(5);
+            expect(any(filtered, link => link.isLinking(universe.stars[1], universe.stars[2]))).toBe(true);
+            expect(any(filtered, link => link.isLinking(universe.stars[0], universe.stars[3]))).toBe(false);
+        });
+
+        it("filters out redundant links", () => {
+            let universe = new Universe();
+            let s1 = universe.addStar(1, "S1", 0, 0);
+            let s2 = universe.addStar(1, "S2", 0, 1);
+            let s3 = universe.addStar(1, "S3", 1, 0);
+            let s4 = universe.addStar(1, "S4", 0.75, 0.75);
+
+            let links = [
+                new StarLink(s1, s2),
+                new StarLink(s1, s3),
+                new StarLink(s2, s3),
+                new StarLink(s2, s4),
+                new StarLink(s3, s4),
+            ]
+
+            let filtered = universe.filterRedundantLinks(links);
+            expect(filtered.length).toBe(4);
+            expect(filtered).toContain(links[0]);
+            expect(filtered).not.toContain(links[2]);
         });
 
         it("generates warp locations", () => {
