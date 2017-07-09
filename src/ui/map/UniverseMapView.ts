@@ -205,6 +205,19 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Set the camera to include all direct-jump accessible stars
+         */
+        setCameraOnAccessible(star: Star) {
+            let accessible = star.getNeighbors();
+            let xmin = min(accessible.map(star => star.x));
+            let xmax = max(accessible.map(star => star.x));
+            let ymin = min(accessible.map(star => star.y));
+            let ymax = max(accessible.map(star => star.y));
+            let dmax = Math.max(xmax - xmin, ymax - ymin);
+            this.setCamera(xmin + (xmax - xmin) * 0.5, ymin + (ymax - ymin) * 0.5, dmax * 1.1);
+        }
+
+        /**
          * Set the alpha value for all links
          */
         setLinksAlpha(alpha: number) {
@@ -221,8 +234,7 @@ module TS.SpaceTac.UI {
                 this.setLinksAlpha(1);
                 this.zoom = 0;
             } else if (level == 1) {
-                // TODO Zoom to next-jump accessible
-                this.setCamera(current_star.x, current_star.y, this.universe.radius * 0.5);
+                this.setCameraOnAccessible(current_star);
                 this.setLinksAlpha(0.6);
                 this.zoom = 1;
             } else {
