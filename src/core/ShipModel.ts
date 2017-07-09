@@ -48,17 +48,21 @@ module TS.SpaceTac {
             return result;
         }
 
-        // Pick a random model in the default collection
-        static getRandomModel(level: Number, random: RandomGenerator = new RandomGenerator()): ShipModel {
-            var collection = this.getDefaultCollection();
-            collection = collection.filter((model: ShipModel) => {
-                return model.level <= level;
-            });
-            var result = random.choice(collection);
-            if (!result) {
-                console.error("Couldn't pick a random model for level " + level.toString());
+        /**
+         * Pick a random model in the default collection
+         */
+        static getRandomModel(level?: number, random: RandomGenerator = new RandomGenerator()): ShipModel {
+            let collection = this.getDefaultCollection();
+            if (level) {
+                collection = collection.filter(model => model.level <= level);
             }
-            return result;
+
+            if (collection.length == 0) {
+                console.error("Couldn't pick a random model");
+                return new ShipModel("undefined", "Undefined");
+            } else {
+                return random.choice(collection);
+            }
         }
     }
 }

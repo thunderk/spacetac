@@ -36,7 +36,7 @@ module TS.SpaceTac.UI {
                 if (location.shop) {
                     let shop = location.shop;
                     actions.push(["Go to dockyard", () => view.openShop()]);
-                    actions.push(["Show jobs", () => new MissionsDialog(view, shop, view.player)]);
+                    actions.push(["Show jobs", () => view.openMissions()]);
                 }
 
                 switch (location.type) {

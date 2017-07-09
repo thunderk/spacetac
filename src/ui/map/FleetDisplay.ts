@@ -13,9 +13,10 @@ module TS.SpaceTac.UI {
      * Group to display a fleet
      */
     export class FleetDisplay extends Phaser.Group {
-        private map: UniverseMapView;
-        private fleet: Fleet;
-        private tween: Phaser.Tween;
+        private map: UniverseMapView
+        private fleet: Fleet
+        private tween: Phaser.Tween
+        private ship_count = 0
 
         constructor(parent: UniverseMapView, fleet: Fleet) {
             super(parent.game);
@@ -23,12 +24,7 @@ module TS.SpaceTac.UI {
             this.map = parent;
             this.fleet = fleet;
 
-            fleet.ships.forEach((ship, index) => {
-                let offset = LOCATIONS[index];
-                let sprite = this.game.add.image(offset[0], offset[1] + 150, `ship-${ship.model.code}-sprite`, 0, this);
-                sprite.scale.set(64 / sprite.width);
-                sprite.anchor.set(0.5, 0.5);
-            });
+            this.updateShipSprites();
 
             if (fleet.location) {
                 this.position.set(fleet.location.star.x + fleet.location.x, fleet.location.star.y + fleet.location.y);
@@ -37,6 +33,23 @@ module TS.SpaceTac.UI {
 
             this.tween = this.game.tweens.create(this);
             this.loopOrbit();
+        }
+
+        /**
+         * Update the ship sprites
+         */
+        updateShipSprites() {
+            if (this.ship_count != this.fleet.ships.length) {
+                this.removeAll(true);
+                this.fleet.ships.forEach((ship, index) => {
+                    let offset = LOCATIONS[index];
+                    let sprite = this.game.add.image(offset[0], offset[1] + 150, `ship-${ship.model.code}-sprite`, 0, this);
+                    sprite.scale.set(64 / sprite.width);
+                    sprite.anchor.set(0.5, 0.5);
+                });
+
+                this.ship_count = this.fleet.ships.length;
+            }
         }
 
         get location(): StarLocation {

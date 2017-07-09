@@ -24,6 +24,9 @@ module TS.SpaceTac {
         // Title of this mission (should be kept short)
         title: string
 
+        // Numerical identifier
+        id = -1
+
         constructor(universe: Universe, fleet = new Fleet(), main = false) {
             this.universe = universe;
             this.fleet = fleet;
@@ -49,6 +52,25 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the index of current part
+         */
+        getIndex(): number {
+            return this.parts.indexOf(this.current_part);
+        }
+
+        /**
+         * Set the mission as started (start the first part)
+         */
+        setStarted(id: number): void {
+            if (this.id < 0) {
+                this.id = id;
+                if (this.current_part) {
+                    this.current_part.onStarted();
+                }
+            }
+        }
+
+        /**
          * Check the status for current part, and move on to next part if necessary.
          * 
          * Returns true if the mission is still active.
@@ -59,7 +81,7 @@ module TS.SpaceTac {
             } else if (this.current_part.checkCompleted()) {
                 this.current_part.onEnded();
 
-                let current_index = this.parts.indexOf(this.current_part);
+                let current_index = this.getIndex();
                 if (current_index < 0 || current_index >= this.parts.length - 1) {
                     this.completed = true;
                     return false;

@@ -1,0 +1,19 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run game in Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:8012",
+            "webRoot": "${workspaceRoot}/out"
+        },
+        {
+            "name": "Run tests in Chrome",
+            "type": "chrome",
+            "request": "launch",
+            "url": "http://localhost:8012/tests.html",
+            "webRoot": "${workspaceRoot}/out"
+        }
+    ]
+}

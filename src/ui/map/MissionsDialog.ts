@@ -6,13 +6,15 @@ module TS.SpaceTac.UI {
         shop: Shop
         player: Player
         location: StarLocation
+        on_change: Function
 
-        constructor(view: BaseView, shop: Shop, player: Player) {
+        constructor(view: BaseView, shop: Shop, player: Player, on_change?: Function) {
             super(view);
 
             this.shop = shop;
             this.player = player;
             this.location = player.fleet.location || new StarLocation();
+            this.on_change = on_change || (() => null);
 
             this.refresh();
         }
@@ -46,6 +48,7 @@ module TS.SpaceTac.UI {
                     this.addMission(offset, mission.title, "Reward: ???", 2, () => {
                         this.shop.acceptMission(mission, this.player);
                         this.refresh();
+                        this.on_change();
                     });
                     offset += 110;
                 });

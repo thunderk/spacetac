@@ -121,10 +121,13 @@ module TS.SpaceTac {
          * Returns true on success
          */
         acceptMission(mission: Mission, player: Player): boolean {
-            if (player.missions.secondary.length < 2 && remove(this.missions, mission)) {
-                mission.fleet = player.fleet;
-                add(player.missions.secondary, mission);
-                return true;
+            if (contains(this.missions, mission)) {
+                if (player.missions.addSecondary(mission, player.fleet)) {
+                    remove(this.missions, mission);
+                    return true;
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }

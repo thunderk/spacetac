@@ -6,18 +6,34 @@ module TS.SpaceTac.UI {
      */
     export class ActiveMissionsDisplay extends UIComponent {
         private missions: ActiveMissions
+        private hash: number
 
         constructor(parent: BaseView, missions: ActiveMissions) {
             super(parent, 520, 240);
             this.missions = missions;
+            this.hash = missions.getHash();
 
             this.update();
         }
 
         /**
+         * Check if the active missions' status changed
+         */
+        checkUpdate(): boolean {
+            let new_hash = this.missions.getHash();
+            if (new_hash != this.hash) {
+                this.hash = new_hash;
+                this.update();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        /**
          * Update the current missions list
          */
-        update() {
+        private update() {
             this.clearContent();
 
             let active = this.missions.getCurrent();

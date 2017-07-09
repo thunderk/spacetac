@@ -14,10 +14,11 @@ Map/story
 * Fix quickly zooming in twice preventing to display some UI parts
 * Enemy fleet size should start low and increase with system level
 * Allow to change/buy ship model
-* Fix galaxy generator sometimes being short on systems to create a proper level gradient (mainly in unit testing)
 * Add ship personality (with icons to identify ?), with reaction dialogs
 * Add factions and reputation
 * Add generated missions with rewards
+* Allow to cancel secondary missions
+* Forbid to end up with more than 5 ships in the fleet because of escorts
 * Show missions' destination near systems/locations
 
 Character sheet
@@ -29,7 +30,6 @@ Character sheet
 * When transferring to another ship, if the item can't be equipped (unmatched requirements), the transfer is cancelled instead of trying cargo
 * Effective skill is sometimes not updated when upgrading base skill
 * Tooltip to show the sources of attributes
-* Fix ship list not refreshing when escorted ship is added or removed
 * Forbid to modify escorted ship
 * Add merged cargo display for the whole fleet
 

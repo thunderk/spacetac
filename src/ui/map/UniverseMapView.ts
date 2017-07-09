@@ -155,6 +155,19 @@ module TS.SpaceTac.UI {
          */
         refresh() {
             this.setZoom(this.zoom);
+            this.character_sheet.updateFleet(this.player.fleet);
+            this.player_fleet.updateShipSprites();
+        }
+
+        /**
+         * Check active missions.
+         * 
+         * When any mission status changes, a refresh is triggered.
+         */
+        checkMissionsUpdate() {
+            if (this.missions.checkUpdate()) {
+                this.refresh();
+            }
         }
 
         /**
@@ -172,10 +185,12 @@ module TS.SpaceTac.UI {
 
             this.actions.setFromLocation(this.player.fleet.location, this);
 
-            this.missions.update();
+            this.missions.checkUpdate();
             this.conversation.updateFromMissions(this.player.missions, () => {
                 this.player.missions.checkStatus();
-                this.missions.update();
+                if (this.missions.checkUpdate()) {
+                    this.refresh();
+                }
             });
 
             if (interactive) {
@@ -276,6 +291,18 @@ module TS.SpaceTac.UI {
             if (this.interactive && location && location.shop) {
                 this.character_sheet.setShop(location.shop);
                 this.character_sheet.show(this.player.fleet.ships[0]);
+            }
+        }
+
+        /**
+         * Open the missions dialog (job posting)
+         * 
+         * This will only work if current location has a dockyard
+         */
+        openMissions(): void {
+            let location = this.player.fleet.location;
+            if (this.interactive && location && location.shop) {
+                new MissionsDialog(this, location.shop, this.player, () => this.checkMissionsUpdate());
             }
         }
 

@@ -212,7 +212,11 @@ module TS.SpaceTac {
 
             // Choose two systems to be the lowest and highest danger zones (not connected directly)
             let lowest = this.random.choice(this.stars.filter(star => star.getLinks().length > 1));
-            let highest = this.random.choice(this.stars.filter(star => star != lowest && !star.getLinkTo(lowest)));
+            let highest_choices = this.stars.filter(star => star != lowest && !star.getLinkTo(lowest));
+            if (highest_choices.length == 0) {
+                highest_choices = this.stars.filter(star => star != lowest);
+            }
+            let highest = this.random.choice(highest_choices);
             highest.level = maximal;
 
             // Make danger gradients

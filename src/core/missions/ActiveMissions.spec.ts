@@ -55,5 +55,45 @@ module TS.SpaceTac.Specs {
             ]);
             expect(missions.main).toBeNull();
         })
+
+        it("builds a hash to help monitor status changes", function () {
+            let universe = new Universe();
+            universe.generate(4);
+            let fleet = new Fleet();
+            fleet.setLocation(universe.getStartLocation(), true);
+
+            let missions = new ActiveMissions();
+            let hash = missions.getHash();
+            function checkChanged(info: string, expected = true) {
+                let new_hash = missions.getHash();
+                expect(new_hash != hash).toBe(expected, info);
+                hash = new_hash;
+                expect(missions.getHash()).toEqual(hash, "Stable after " + info);
+            }
+            checkChanged("Stable at init", false);
+
+            missions.startMainStory(universe, fleet);
+            checkChanged("Main story started");
+
+            let mission = new Mission(universe, fleet);
+            mission.addPart(new MissionPartConversation(mission, [new Ship()]));
+            mission.addPart(new MissionPartConversation(mission, [new Ship()]));
+            missions.addSecondary(mission, fleet);
+            checkChanged("Secondary mission accepted");
+
+            expect(mission.getIndex()).toBe(0);
+            missions.checkStatus();
+            expect(mission.getIndex()).toBe(1);
+            checkChanged("First conversation ended");
+
+            expect(missions.secondary.length).toBe(1);
+            missions.checkStatus();
+            expect(missions.secondary.length).toBe(0);
+            checkChanged("Second conversation ended - mission removed");
+
+            nn(missions.main).current_part.forceComplete();
+            missions.checkStatus();
+            checkChanged("Main mission progress");
+        });
     })
 }
