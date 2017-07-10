@@ -19,13 +19,11 @@ module TS.SpaceTac {
      */
     export class MissionGenerator {
         universe: Universe
-        level: number
         around: StarLocation
         random: RandomGenerator
 
-        constructor(universe: Universe, level: number, around: StarLocation, random = RandomGenerator.global) {
+        constructor(universe: Universe, around: StarLocation, random = RandomGenerator.global) {
             this.universe = universe;
-            this.level = level;
             this.around = around;
             this.random = random;
         }
@@ -35,7 +33,8 @@ module TS.SpaceTac {
          */
         generate(): Mission {
             let generators = [
-                bound(this, "generateEscort")
+                bound(this, "generateEscort"),
+                bound(this, "generateCleanLocation"),
             ];
 
             let generator = this.random.choice(generators);
@@ -47,9 +46,9 @@ module TS.SpaceTac {
         /**
          * Generate a new ship
          */
-        private generateShip() {
+        private generateShip(level: number) {
             let generator = new ShipGenerator(this.random);
-            let result = generator.generate(this.level, null, true);
+            let result = generator.generate(level, null, true);
             result.name = `${this.random.choice(POOL_SHIP_NAMES)}-${this.random.randInt(10, 999)}`;
             return result;
         }
@@ -59,11 +58,27 @@ module TS.SpaceTac {
          */
         generateEscort(): Mission {
             let mission = new Mission(this.universe);
-            let ship = this.generateShip();
-            let dest_star = minBy(this.around.star.getNeighbors(), star => Math.abs(star.level - this.level));
+            let dest_star = this.random.choice(this.around.star.getNeighbors());
             let destination = this.random.choice(dest_star.locations);
+            let ship = this.generateShip(dest_star.level);
             mission.addPart(new MissionPartEscort(mission, destination, ship));
             mission.title = `Escort a ship to a level ${dest_star.level} system`;
+            return mission;
+        }
+
+        /**
+         * Generate a clean location mission
+         */
+        generateCleanLocation(): Mission {
+            let mission = new Mission(this.universe);
+            let dest_star = this.random.choice(this.around.star.getNeighbors().concat([this.around.star]));
+            let choices = dest_star.locations;
+            if (dest_star == this.around.star) {
+                choices = choices.filter(loc => loc != this.around);
+            }
+            let destination = this.random.choice(choices);
+            mission.addPart(new MissionPartCleanLocation(mission, destination));
+            mission.title = `Defeat a level ${destination.star.level} fleet in ${(dest_star == this.around.star) ? "this" : "a nearby"} system`;
             return mission;
         }
     }

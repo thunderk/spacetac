@@ -72,13 +72,7 @@ module TS.SpaceTac {
                 this.encounter_gen = true;
 
                 if (this.encounter_random.random() < 0.8) {
-                    var fleet_generator = new FleetGenerator(this.encounter_random);
-                    let variations: [number, number][] = [[this.star.level, 4], [this.star.level + 1, 3], [this.star.level + 2, 2]];
-                    if (this.star.level > 1) {
-                        variations.push([this.star.level - 1, 5]);
-                    }
-                    let [level, enemies] = this.encounter_random.choice(variations);
-                    this.encounter = fleet_generator.generate(level, new Player(this.star.universe, "Enemy"), enemies, true);
+                    this.setupEncounter();
                 }
             }
 
@@ -122,6 +116,21 @@ module TS.SpaceTac {
         clearEncounter() {
             this.encounter_gen = true;
             this.encounter = null;
+        }
+
+        /**
+         * Forces the setup of an encounter
+         */
+        setupEncounter() {
+            this.encounter_gen = true;
+
+            let fleet_generator = new FleetGenerator(this.encounter_random);
+            let variations: [number, number][] = [[this.star.level, 4], [this.star.level + 1, 3], [this.star.level + 2, 2]];
+            if (this.star.level > 1) {
+                variations.push([this.star.level - 1, 5]);
+            }
+            let [level, enemies] = this.encounter_random.choice(variations);
+            this.encounter = fleet_generator.generate(level, new Player(this.star.universe, "Enemy"), enemies, true);
         }
     }
 }

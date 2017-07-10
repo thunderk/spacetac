@@ -94,6 +94,7 @@ module TS.SpaceTac {
          */
         addLocation(type: StarLocationType): StarLocation {
             let result = new StarLocation(this, type);
+            this.locations.push(result);
             return result;
         }
 

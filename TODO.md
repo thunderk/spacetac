@@ -36,6 +36,7 @@ Character sheet
 Battle
 ------
 
+* Fix numerous effects being displayed on ships at the end, behind outcome dialog
 * Add a voluntary retreat option
 * Display effects description instead of attribute changes
 * Display radius for area effects (both on action hover, and while action is active)

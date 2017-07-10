@@ -107,7 +107,7 @@ module TS.SpaceTac {
          */
         getMissions(around: StarLocation, max_count = 3): Mission[] {
             while (this.missions.length < max_count) {
-                let generator = new MissionGenerator(around.star.universe, around.star.level, around, this.random);
+                let generator = new MissionGenerator(around.star.universe, around, this.random);
                 let mission = generator.generate();
                 this.missions.push(mission);
             }
