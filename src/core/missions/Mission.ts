@@ -1,5 +1,19 @@
 module TS.SpaceTac {
     /**
+     * Reward for a mission (either an equipment or money)
+     */
+    export type MissionReward = Equipment | number
+
+    /**
+     * Level of difficulty for a mission
+     */
+    export enum MissionDifficulty {
+        easy,
+        normal,
+        hard
+    }
+
+    /**
      * A mission (or quest) assigned to the player
      */
     export class Mission {
@@ -23,6 +37,13 @@ module TS.SpaceTac {
 
         // Title of this mission (should be kept short)
         title: string
+
+        // Estimated mission difficulty and value (expected reward value)
+        difficulty: MissionDifficulty = MissionDifficulty.normal
+        value = 0
+
+        // Reward when this mission is completed
+        reward: MissionReward | null = null
 
         // Numerical identifier
         id = -1
@@ -59,6 +80,29 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get a small text describing the associated reward
+         */
+        getRewardText(): string {
+            if (this.reward) {
+                if (this.reward instanceof Equipment) {
+                    return this.reward.getFullName();
+                } else {
+                    return `${this.reward} zotys`;
+                }
+            } else {
+                return "-";
+            }
+        }
+
+        /**
+         * Set the difficulty level
+         */
+        setDifficulty(description: MissionDifficulty, value: number) {
+            this.difficulty = description;
+            this.value = value;
+        }
+
+        /**
          * Set the mission as started (start the first part)
          */
         setStarted(id: number): void {
@@ -83,7 +127,7 @@ module TS.SpaceTac {
 
                 let current_index = this.getIndex();
                 if (current_index < 0 || current_index >= this.parts.length - 1) {
-                    this.completed = true;
+                    this.setCompleted();
                     return false;
                 } else {
                     this.current_part = this.parts[current_index + 1];
@@ -92,6 +136,22 @@ module TS.SpaceTac {
                 }
             } else {
                 return true;
+            }
+        }
+
+        /**
+         * Set the mission as completed, and give the reward to the fleet
+         */
+        setCompleted(): void {
+            if (!this.completed) {
+                this.completed = true;
+                if (this.reward) {
+                    if (this.reward instanceof Equipment) {
+                        this.fleet.addCargo(this.reward);
+                    } else {
+                        this.fleet.credits += this.reward;
+                    }
+                }
             }
         }
     }

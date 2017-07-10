@@ -31,5 +31,41 @@ module TS.SpaceTac.Specs {
             expect(result).toBe(false);
             expect(mission.current_part).toBe(mission.parts[1]);
         })
+
+        it("stores a reward", function () {
+            let mission = new Mission(new Universe());
+            expect(mission.getRewardText()).toEqual("-");
+
+            mission.reward = 720;
+            expect(mission.getRewardText()).toEqual("720 zotys");
+
+            mission.reward = new Equipment();
+            mission.reward.name = "Super Equipment";
+            expect(mission.getRewardText()).toEqual("Super Equipment Mk1");
+        })
+
+        it("gives the reward on completion", function () {
+            let fleet = new Fleet();
+            let ship = fleet.addShip();
+            ship.cargo_space = 5;
+            fleet.credits = 150;
+
+            let mission = new Mission(new Universe(), fleet);
+            mission.reward = 75;
+            mission.setCompleted();
+            expect(mission.completed).toBe(true);
+            expect(fleet.credits).toBe(225);
+
+            mission.setCompleted();
+            expect(fleet.credits).toBe(225);
+
+            mission = new Mission(new Universe(), fleet);
+            mission.reward = new Equipment();
+            expect(ship.cargo).toEqual([]);
+            mission.setCompleted();
+            expect(mission.completed).toBe(true);
+            expect(fleet.credits).toBe(225);
+            expect(ship.cargo).toEqual([mission.reward]);
+        })
     })
 }

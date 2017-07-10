@@ -12,11 +12,9 @@ Map/story
 
 * Add initial character creation
 * Fix quickly zooming in twice preventing to display some UI parts
-* Enemy fleet size should start low and increase with system level
+* Enemy fleet size should start low and increase with system level (there should be less locations in systems too)
 * Allow to change/buy ship model
-* Add ship personality (with icons to identify ?), with reaction dialogs
 * Add factions and reputation
-* Add generated missions with rewards
 * Allow to cancel secondary missions
 * Forbid to end up with more than 5 ships in the fleet because of escorts
 * Show missions' destination near systems/locations
@@ -61,6 +59,7 @@ Ships models and equipments
 * Chance to hit should increase with precision
 * Add actions with cost dependent of distance (like current move actions)
 * Add hull points to drones and make them take area damage
+* "Shield Transfer" has no quality offsets
 
 Artificial Intelligence
 -----------------------
@@ -94,6 +93,7 @@ Postponed
 * Replays
 * Multiplayer/co-op
 * Formation or deployment phase
+* Add ship personality (with icons to identify ?), with reaction dialogs
 * New battle internal flow: any game state change should be done through revertable events
 * Animated arena background, instead of big picture
 * Hide enemy information (shield, hull, weapons), until they are in play, or until a "spy" effect is used

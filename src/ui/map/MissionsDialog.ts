@@ -34,7 +34,7 @@ module TS.SpaceTac.UI {
                 offset += 110;
 
                 active.forEach(mission => {
-                    this.addMission(offset, mission.title, "Reward: ???", 0, () => null);
+                    this.addMission(offset, mission, 0, () => null);
                     offset += 110;
                 });
             }
@@ -45,7 +45,7 @@ module TS.SpaceTac.UI {
                 offset += 110;
 
                 proposed.forEach(mission => {
-                    this.addMission(offset, mission.title, "Reward: ???", 2, () => {
+                    this.addMission(offset, mission, 2, () => {
                         this.shop.acceptMission(mission, this.player);
                         this.refresh();
                         this.on_change();
@@ -58,13 +58,16 @@ module TS.SpaceTac.UI {
         /**
          * Add a mission text
          */
-        addMission(yoffset: number, title: string, subtitle: string, button_frame: number, button_callback: Function) {
+        addMission(yoffset: number, mission: Mission, button_frame: number, button_callback: Function) {
+            let title = mission.title;
+            let subtitle = `${capitalize(MissionDifficulty[mission.difficulty])} - Reward: ${mission.getRewardText()}`;
+
             this.addImage(320, yoffset, "map-missions", 1);
             if (title) {
                 this.addText(380, yoffset - 15, title, "#d2e1f3", 22, false, false, 620, true);
             }
             if (subtitle) {
-                this.addText(380, yoffset + 22, subtitle, "#d2e1f3", 20, false, false, 620, true);
+                this.addText(380, yoffset + 22, subtitle, "#d2e1f3", 18, false, false, 620, true);
             }
             this.addButton(1120, yoffset, button_callback, "map-mission-action", button_frame, button_frame + 1);
         }

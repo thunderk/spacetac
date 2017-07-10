@@ -276,6 +276,7 @@ module TS.SpaceTac.UI {
                     this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, Phaser.Easing.Cubic.Out);
                 }, () => {
                     this.setInteractionEnabled(true);
+                    this.refresh();
                 });
                 this.setInteractionEnabled(false);
             }
@@ -312,7 +313,7 @@ module TS.SpaceTac.UI {
         moveToLocation(dest: StarLocation): void {
             if (this.interactive && dest != this.player.fleet.location) {
                 this.setInteractionEnabled(false);
-                this.player_fleet.moveToLocation(dest, 1, null, () => this.updateInfo(dest.star));
+                this.player_fleet.moveToLocation(dest, 1, null, () => this.refresh());
             }
         }
 

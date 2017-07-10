@@ -108,5 +108,36 @@ module TS.SpaceTac {
             ship4.setDead();
             expect(fleet.isAlive()).toBe(false);
         });
+
+        it("adds cargo in first empty slot", function () {
+            let fleet = new Fleet();
+            let ship1 = fleet.addShip();
+            ship1.cargo_space = 1;
+            let ship2 = fleet.addShip();
+            ship2.cargo_space = 2;
+
+            expect(ship1.cargo).toEqual([]);
+            expect(ship2.cargo).toEqual([]);
+
+            let result = fleet.addCargo(new Equipment());
+            expect(result).toBe(true);
+            expect(ship1.cargo).toEqual([new Equipment()]);
+            expect(ship2.cargo).toEqual([]);
+
+            result = fleet.addCargo(new Equipment());
+            expect(result).toBe(true);
+            expect(ship1.cargo).toEqual([new Equipment()]);
+            expect(ship2.cargo).toEqual([new Equipment()]);
+
+            result = fleet.addCargo(new Equipment());
+            expect(result).toBe(true);
+            expect(ship1.cargo).toEqual([new Equipment()]);
+            expect(ship2.cargo).toEqual([new Equipment(), new Equipment()]);
+
+            result = fleet.addCargo(new Equipment());
+            expect(result).toBe(false);
+            expect(ship1.cargo).toEqual([new Equipment()]);
+            expect(ship2.cargo).toEqual([new Equipment(), new Equipment()]);
+        });
     });
 }
