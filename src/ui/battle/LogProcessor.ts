@@ -229,11 +229,6 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Destroy the log processor
-        destroy() {
-            // TODO interrupt current processing or delay
-        }
-
         // Playing ship changed
         private processShipChangeEvent(event: ShipChangeEvent): number {
             this.view.arena.setShipPlaying(event.new_ship);
@@ -275,7 +270,6 @@ module TS.SpaceTac.UI {
         // Battle ended (victory or defeat)
         private processEndBattleEvent(event: EndBattleEvent): number {
             this.view.endBattle();
-            this.destroy();
             return 0;
         }
 

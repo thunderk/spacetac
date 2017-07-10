@@ -86,5 +86,17 @@ module TS.SpaceTac {
             }
             checkEvent(result[16], playing, "ship_change", playing);
         });
+
+        it("stop accepting events once the battle is ended", function () {
+            let log = new BattleLog();
+
+            log.add(new ValueChangeEvent(new Ship(), new ShipValue("test"), 1));
+            log.add(new EndBattleEvent(new BattleOutcome(null)));
+            log.add(new ShipChangeEvent(new Ship(), new Ship()));
+
+            expect(log.events.length).toBe(2);
+            expect(log.events[0] instanceof ValueChangeEvent).toBe(true);
+            expect(log.events[1] instanceof EndBattleEvent).toBe(true);
+        });
     });
 }

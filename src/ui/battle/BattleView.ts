@@ -150,13 +150,6 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Leaving the view, we unbind the battle
-        shutdown() {
-            this.log_processor.destroy();
-
-            super.shutdown();
-        }
-
         // Display an animated "BATTLE" text in the center of the view
         displayFightMessage(): void {
             var text = this.game.add.text(this.getMidWidth(), this.getMidHeight(), "BATTLE !",

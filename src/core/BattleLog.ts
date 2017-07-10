@@ -9,13 +9,16 @@ module TS.SpaceTac {
     //  It also allows to register a callback to receive these events
     export class BattleLog {
         // Full list of battle events
-        events: BaseBattleEvent[];
+        events: BaseBattleEvent[]
 
         // List of subscribers
-        private subscribers: LogSubscriber[];
+        private subscribers: LogSubscriber[]
 
         // List of event codes to ignore
-        private filters: string[];
+        private filters: string[]
+
+        // Indicator that the battle has ended
+        private ended = false
 
         // Create an initially empty log
         constructor() {
@@ -30,6 +33,7 @@ module TS.SpaceTac {
 
         // Clear the stored events
         clear(): void {
+            this.ended = false;
             this.events = [];
         }
 
@@ -37,12 +41,12 @@ module TS.SpaceTac {
         add(event: BaseBattleEvent): void {
             // Apply filters
             var filtered = false;
-            this.filters.forEach((code: string) => {
+            this.filters.forEach(code => {
                 if (event.code === code) {
                     filtered = true;
                 }
             });
-            if (filtered) {
+            if (filtered || this.ended) {
                 return;
             }
 
@@ -51,6 +55,10 @@ module TS.SpaceTac {
             this.subscribers.forEach(subscriber => {
                 subscriber(event);
             });
+
+            if (event instanceof EndBattleEvent) {
+                this.ended = true;
+            }
         }
 
         // Filter out a type of event
