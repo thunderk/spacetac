@@ -28,8 +28,9 @@ module TS.SpaceTac.UI {
         // Fleets
         player_fleet: FleetDisplay
 
-        // Frame to highlight current location
+        // Markers
         current_location: CurrentLocationMarker
+        mission_markers: MissionLocationMarker
 
         // Actions for selected location
         actions: MapLocationMenu
@@ -91,11 +92,13 @@ module TS.SpaceTac.UI {
             this.current_location = new CurrentLocationMarker(this, this.player_fleet);
             this.layer_universe.add(this.current_location);
 
+            this.mission_markers = new MissionLocationMarker(this, this.layer_universe);
+
             this.actions = new MapLocationMenu(this);
             this.actions.setPosition(30, 30);
             this.actions.moveToLayer(this.layer_overlay);
 
-            this.missions = new ActiveMissionsDisplay(this, this.player.missions);
+            this.missions = new ActiveMissionsDisplay(this, this.player.missions, this.mission_markers);
             this.missions.setPosition(20, 720);
             this.missions.moveToLayer(this.layer_overlay);
 
@@ -175,6 +178,9 @@ module TS.SpaceTac.UI {
          */
         updateInfo(current_star: Star | null, interactive = true) {
             this.current_location.setZoom(this.zoom);
+            if (current_star) {
+                this.mission_markers.setZoom(this.zoom, current_star);
+            }
 
             this.starlinks.forEach(linkgraphics => {
                 let link = <StarLink>linkgraphics.data.link;
@@ -229,7 +235,7 @@ module TS.SpaceTac.UI {
             let ymin = min(accessible.map(star => star.y));
             let ymax = max(accessible.map(star => star.y));
             let dmax = Math.max(xmax - xmin, ymax - ymin);
-            this.setCamera(xmin + (xmax - xmin) * 0.5, ymin + (ymax - ymin) * 0.5, dmax * 1.1);
+            this.setCamera(xmin + (xmax - xmin) * 0.5, ymin + (ymax - ymin) * 0.5, dmax * 1.2);
         }
 
         /**

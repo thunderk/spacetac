@@ -26,7 +26,7 @@ module TS.SpaceTac {
             let contact_location = randomLocation(random, [start_location.star], [start_location]);
             let contact_character = new Ship(null, "Osten-37", ShipModel.getRandomModel(1, random));
             contact_character.fleet.setLocation(contact_location, true);
-            this.addPart(new MissionPartGoTo(this, contact_location, `Find your contact in ${contact_location.star.name}`));
+            this.addPart(new MissionPartGoTo(this, contact_location, `Find your contact in ${contact_location.star.name}`, MissionPartDestinationHint.SYSTEM));
             conversation = this.addPart(new MissionPartConversation(this, [contact_character], "Speak with your contact"));
             conversation.addPiece(contact_character, "Finally, you came!");
             conversation.addPiece(contact_character, "Sorry for not broadcasting my position. As you may have encountered, this star system is not safe anymore.");

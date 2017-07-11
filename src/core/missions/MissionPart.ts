@@ -37,6 +37,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get a location hint about this part
+         */
+        getLocationHint(): Star | StarLocation | null {
+            return null;
+        }
+
+        /**
          * Event called when the part starts
          */
         onStarted(): void {

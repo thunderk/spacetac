@@ -4,6 +4,7 @@ To-Do-list
 Menu/settings/saves
 -------------------
 
+* Save locally first, make saving to cloud an option
 * Allow to delete cloud saves
 * Fix cloud save games with "Level 0 - 0 ships"
 
@@ -17,7 +18,6 @@ Map/story
 * Add factions and reputation
 * Allow to cancel secondary missions
 * Forbid to end up with more than 5 ships in the fleet because of escorts
-* Show missions' destination near systems/locations
 
 Character sheet
 ---------------

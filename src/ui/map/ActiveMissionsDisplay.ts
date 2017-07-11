@@ -7,11 +7,13 @@ module TS.SpaceTac.UI {
     export class ActiveMissionsDisplay extends UIComponent {
         private missions: ActiveMissions
         private hash: number
+        private markers?: MissionLocationMarker
 
-        constructor(parent: BaseView, missions: ActiveMissions) {
+        constructor(parent: BaseView, missions: ActiveMissions, markers?: MissionLocationMarker) {
             super(parent, 520, 240);
             this.missions = missions;
             this.hash = missions.getHash();
+            this.markers = markers;
 
             this.update();
         }
@@ -36,13 +38,25 @@ module TS.SpaceTac.UI {
         private update() {
             this.clearContent();
 
+            let markers: [StarLocation | Star, number][] = [];
+
             let active = this.missions.getCurrent();
             let spacing = 80;
             let offset = 245 - active.length * spacing;
             active.forEach((mission, idx) => {
-                this.addImage(35, offset + spacing * idx, "map-missions", mission.main ? 0 : 1);
+                let frame = mission.main ? 0 : 1;
+                this.addImage(35, offset + spacing * idx, "map-missions", frame);
                 this.addText(90, offset + spacing * idx, mission.current_part.title, "#d2e1f3", 20, false, false, 430, true);
+
+                let location = mission.current_part.getLocationHint();
+                if (location) {
+                    markers.push([location, frame]);
+                }
             });
+
+            if (this.markers) {
+                this.markers.setMarkers(markers);
+            }
         }
     }
 }
