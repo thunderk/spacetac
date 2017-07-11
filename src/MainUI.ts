@@ -113,7 +113,7 @@ module TS.SpaceTac {
                     console.log("Game loaded");
                     return true;
                 } else {
-                    console.error("No saved game found");
+                    console.warn("No saved game found");
                     return false;
                 }
             } else {

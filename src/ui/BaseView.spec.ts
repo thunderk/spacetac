@@ -1,5 +1,4 @@
 /// <reference path="TestGame.ts" />
-/// <reference path="BaseView.ts" />
 
 module TS.SpaceTac.UI.Specs {
     describe("BaseView", function () {

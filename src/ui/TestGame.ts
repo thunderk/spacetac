@@ -2,6 +2,8 @@
 /// <reference path="map/UniverseMapView.ts"/>
 
 module TS.SpaceTac.UI.Specs {
+    let test_ui: MainUI;
+
     /**
      * Class to hold references to test objects (used as singleton in "describe" blocks)
      * 
@@ -27,12 +29,16 @@ module TS.SpaceTac.UI.Specs {
 
             jasmine.clock().install();
 
-            testgame.ui = new MainUI(true);
+            if (!test_ui) {
+                test_ui = new MainUI(true);
 
-            if (testgame.ui.load) {
-                spyOn(testgame.ui.load, 'image').and.stub();
-                spyOn(testgame.ui.load, 'audio').and.stub();
+                if (test_ui.load) {
+                    spyOn(test_ui.load, 'image').and.stub();
+                    spyOn(test_ui.load, 'audio').and.stub();
+                }
             }
+
+            testgame.ui = test_ui;
 
             let [state, stateargs] = buildView(testgame);
 
@@ -50,16 +56,14 @@ module TS.SpaceTac.UI.Specs {
 
             testgame.ui.state.add("test", state);
             testgame.ui.state.start("test", true, false, ...stateargs);
+
+            if (!testgame.ui.isBooted) {
+                testgame.ui.device.canvas = true;
+                testgame.ui.boot();
+            }
         });
 
         afterEach(function () {
-            let ui = testgame.ui;
-            window.requestAnimationFrame(() => {
-                if (ui) {
-                    ui.destroy();
-                }
-            });
-
             jasmine.clock().uninstall();
         });
 

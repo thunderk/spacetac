@@ -1,8 +1,10 @@
+/// <reference path="ui/TestGame.ts" />
+
 if (typeof window != "undefined") {
     (<any>window).describe = (<any>window).describe || function () { };
 }
 
-module TS.SpaceTac.Specs {
+module TS.SpaceTac.UI.Specs {
     class FakeStorage {
         data: any = {}
         getItem(name: string) {
@@ -14,14 +16,10 @@ module TS.SpaceTac.Specs {
     }
 
     describe("MainUI", () => {
-        beforeEach(function () {
-            spyOn(console, "log").and.stub();
-            spyOn(console, "warn").and.stub();
-            spyOn(console, "error").and.stub();
-        });
+        let testgame = setupEmptyView();
 
         it("saves games in local browser storage", function () {
-            let ui = new MainUI(true);
+            let ui = testgame.ui;
             ui.storage = <any>new FakeStorage();
 
             let result = ui.loadGame("spacetac-test-save");
