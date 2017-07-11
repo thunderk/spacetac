@@ -124,9 +124,15 @@ module TS.SpaceTac {
             this.encounter_gen = true;
 
             let fleet_generator = new FleetGenerator(this.encounter_random);
-            let variations: [number, number][] = [[this.star.level, 4], [this.star.level + 1, 3], [this.star.level + 2, 2]];
-            if (this.star.level > 1) {
-                variations.push([this.star.level - 1, 5]);
+            let variations: [number, number][];
+            if (this.star.level == 1) {
+                variations = [[this.star.level, 2]];
+            } else if (this.star.level <= 3) {
+                variations = [[this.star.level, 2], [this.star.level - 1, 3]];
+            } else if (this.star.level <= 6) {
+                variations = [[this.star.level, 3], [this.star.level - 1, 4], [this.star.level + 1, 2]];
+            } else {
+                variations = [[this.star.level, 4], [this.star.level - 1, 5], [this.star.level + 1, 3], [this.star.level + 3, 2]];
             }
             let [level, enemies] = this.encounter_random.choice(variations);
             this.encounter = fleet_generator.generate(level, new Player(this.star.universe, "Enemy"), enemies, true);

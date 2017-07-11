@@ -38,21 +38,22 @@ module TS.SpaceTac {
                 starcount = 4;
             }
 
+            // Links between stars
             while (this.stars.length == 0 || any(this.stars, star => star.getLinks().length == 0)) {
                 this.stars = this.generateStars(starcount);
 
                 let links = this.getPotentialLinks();
                 this.starlinks = this.filterRedundantLinks(this.filterCrossingLinks(links));
             }
-
             this.generateWarpLocations();
 
+            // Encounter levels
+            this.setEncounterLevels();
+
+            // Locations
             this.stars.forEach((star: Star) => {
                 star.generate(this.random);
             });
-
-            this.setEncounterLevels();
-
             this.addShops();
         }
 

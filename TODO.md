@@ -13,7 +13,6 @@ Map/story
 
 * Add initial character creation
 * Fix quickly zooming in twice preventing to display some UI parts
-* Enemy fleet size should start low and increase with system level (there should be less locations in systems too)
 * Allow to change/buy ship model
 * Add factions and reputation
 * Allow to cancel secondary missions

@@ -108,7 +108,7 @@ module TS.SpaceTac {
 
         // Generate the contents of this star system
         generate(random = RandomGenerator.global): void {
-            var location_count = random.randInt(2, 10);
+            var location_count = random.randInt(2 + Math.floor(this.level / 2), 3 + this.level);
             if (this.name.length == 0) {
                 this.name = random.choice(Star.NAMES_POOL);
             }
@@ -118,14 +118,14 @@ module TS.SpaceTac {
         // Generate points of interest (*count* doesn't include the star and warp locations)
         generateLocations(count: number, random = RandomGenerator.global): void {
             while (count--) {
-                this.generateOneLocation(StarLocationType.PLANET, this.locations, this.radius * 0.2, this.radius * 0.7, random);
+                this.generateOneLocation(StarLocationType.PLANET, this.locations, this.radius * 0.2, this.radius * 0.6, random);
             }
         }
 
         // Generate a warp location to another star (to be bound later)
         generateWarpLocationTo(other: Star, random = RandomGenerator.global): StarLocation {
             let fav_phi = Math.atan2(other.y - this.y, other.x - this.x);
-            var warp = this.generateOneLocation(StarLocationType.WARP, this.locations, this.radius * 0.8, this.radius * 1, random, fav_phi);
+            var warp = this.generateOneLocation(StarLocationType.WARP, this.locations, this.radius * 0.75, this.radius * 0.85, random, fav_phi);
             return warp;
         }
 
