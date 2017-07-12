@@ -1,55 +1,4 @@
-/// <reference path="ShipAttribute.ts"/>
-/// <reference path="ShipValue.ts"/>
-
 module TS.SpaceTac {
-
-    /**
-     * Set of upgradable skills for a ship
-     */
-    export class ShipSkills {
-        // Skills
-        skill_materials = new ShipAttribute("materials skill")
-        skill_photons = new ShipAttribute("photons skill")
-        skill_antimatter = new ShipAttribute("antimatter skill")
-        skill_quantum = new ShipAttribute("quantum skill")
-        skill_gravity = new ShipAttribute("gravity skill")
-        skill_time = new ShipAttribute("time skill")
-    }
-
-    /**
-     * Set of ShipAttribute for a ship
-     */
-    export class ShipAttributes extends ShipSkills {
-        // Maximal hull value
-        hull_capacity = new ShipAttribute("hull capacity")
-        // Maximal shield value
-        shield_capacity = new ShipAttribute("shield capacity")
-        // Maximal power value
-        power_capacity = new ShipAttribute("power capacity")
-        // Power value recovered each turn
-        power_generation = new ShipAttribute("power generation")
-        // Ability to move first and fast
-        maneuvrability = new ShipAttribute("maneuvrability")
-        // Ability to fire far and good
-        precision = new ShipAttribute("precision")
-    }
-
-    /**
-     * Set of ShipValue for a ship
-     */
-    export class ShipValues {
-        hull = new ShipValue("hull")
-        shield = new ShipValue("shield")
-        power = new ShipValue("power")
-    }
-
-    /**
-     * Static attributes and values object for name queries
-     */
-    export const SHIP_SKILLS = new ShipSkills();
-    export const SHIP_ATTRIBUTES = new ShipAttributes();
-    export const SHIP_VALUES = new ShipValues();
-
     /**
      * A single ship in a fleet
      */
@@ -782,6 +731,43 @@ module TS.SpaceTac {
         // Collect all effects to apply for updateAttributes
         private collectEffects(code: string): BaseEffect[] {
             return imaterialize(ifilter(this.ieffects(), effect => effect.code == code));
+        }
+
+        /**
+         * Get a textual description of an attribute, and the origin of its value
+         */
+        getAttributeDescription(attribute: keyof ShipAttributes): string {
+            let result = this.attributes[attribute].description;
+
+            let diffs: string[] = [];
+            let limits: string[] = [];
+
+            function addEffect(base: string, effect: BaseEffect) {
+                if (effect instanceof AttributeEffect && effect.attrcode == attribute) {
+                    diffs.push(`${base}: ${effect.value > 0 ? "+" + effect.value.toString() : effect.value}`);
+                } else if (effect instanceof AttributeLimitEffect && effect.attrcode == attribute) {
+                    limits.push(`${base}: limit to ${effect.value}`);
+                }
+            }
+
+            if (attribute in this.skills) {
+                let skill = this.skills[<keyof ShipSkills>attribute];
+                if (skill.get()) {
+                    diffs.push(`Levelled up: +${skill.get()}`);
+                }
+            }
+
+            this.slots.forEach(slot => {
+                if (slot.attached) {
+                    let equipment = slot.attached;
+                    equipment.effects.forEach(effect => addEffect(equipment.getFullName(), effect));
+                }
+            });
+
+            this.sticky_effects.forEach(effect => addEffect("???", effect.base));
+
+            let sources = diffs.concat(limits).join("\n");
+            return sources ? (result + "\n\n" + sources) : result;
         }
     }
 }

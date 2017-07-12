@@ -158,22 +158,30 @@ module TS.SpaceTac.UI {
             let attrname = capitalize(SHIP_ATTRIBUTES[attribute].name);
             let name = new Phaser.Text(this.game, x - 144, y - 2, attrname,
                 { align: "center", font: "20pt Arial", fill: "#c9d8ef", stroke: "#395665", strokeThickness: 1 });
-            name.anchor.set(0.5, 0.5);
+            name.anchor.set(0.5);
             this.addChild(name);
 
-            let text = new Phaser.Text(this.game, x, y, "",
-                { align: "center", font: "bold 18pt Arial", fill: "#FFFFFF" });
-            text.anchor.set(0.5, 0.5);
-            this.addChild(text);
+            let button_value = new Phaser.Button(this.game, x, y, "common-transparent");
+            button_value.input.useHandCursor = false;
+            button_value.anchor.set(0.5);
+            button_value.width = 58;
+            button_value.height = 42;
+            this.addChild(button_value);
+            this.view.tooltip.bindDynamicText(button_value, () => this.ship.getAttributeDescription(attribute));
 
-            this.attributes[attribute] = text;
+            let value = new Phaser.Text(this.game, x, y, "",
+                { align: "center", font: "bold 18pt Arial", fill: "#FFFFFF" });
+            value.anchor.set(0.5);
+            this.addChild(value);
+
+            this.attributes[attribute] = value;
 
             if (SHIP_SKILLS.hasOwnProperty(attribute)) {
                 let button = new Phaser.Button(this.game, x + 54, y - 4, "character-skill-upgrade", () => {
                     this.ship.upgradeSkill(<keyof ShipSkills>attribute);
                     this.refresh();
                 });
-                button.anchor.set(0.5, 0.5);
+                button.anchor.set(0.5);
                 this.ship_upgrades.add(button);
 
                 this.view.tooltip.bindStaticText(button, `Spend one point to upgrade ${attrname}`);

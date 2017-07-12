@@ -576,5 +576,25 @@ module TS.SpaceTac.Specs {
                 new AttributeLimitEffect("precision", 2)
             ]);
         });
+
+        it("gets a textual description of an attribute", function () {
+            let ship = new Ship();
+            expect(ship.getAttributeDescription("skill_photons")).toEqual("Forces of light, and electromagnetic radiation");
+
+            let equipment = new Equipment(SlotType.Engine);
+            equipment.effects = [new AttributeEffect("skill_photons", 4)];
+            equipment.name = "Photonic engine";
+            ship.addSlot(SlotType.Engine).attach(equipment);
+            expect(ship.getAttribute("skill_photons")).toBe(4);
+            expect(ship.getAttributeDescription("skill_photons")).toEqual("Forces of light, and electromagnetic radiation\n\nPhotonic engine Mk1: +4");
+
+            ship.level.forceLevelUp();
+            ship.upgradeSkill("skill_photons");
+            ship.upgradeSkill("skill_photons");
+            expect(ship.getAttributeDescription("skill_photons")).toEqual("Forces of light, and electromagnetic radiation\n\nLevelled up: +2\nPhotonic engine Mk1: +4");
+
+            ship.addStickyEffect(new StickyEffect(new AttributeLimitEffect("skill_photons", 3)));
+            expect(ship.getAttributeDescription("skill_photons")).toEqual("Forces of light, and electromagnetic radiation\n\nLevelled up: +2\nPhotonic engine Mk1: +4\n???: limit to 3");
+        });
     });
 }

@@ -12,7 +12,8 @@ module TS.SpaceTac.UI {
 
             this.sheet = sheet;
 
-            let sloticon = new Phaser.Button(this.game, 150, 150, `character-slot-${SlotType[slot].toLowerCase()}`);
+            let sloticon = new Phaser.Button(this.game, 150, 150, `character-slots`);
+            sloticon.frame = slot;
             sloticon.anchor.set(0.5, 0.5);
             this.addChild(sloticon);
             sheet.view.tooltip.bindStaticText(sloticon, `${SlotType[slot]} slot`);
