@@ -9,6 +9,11 @@
 
 *Play directly in your browser, no download or dependency required.*
 
+![Menu screenshot](docs/shot_menu.jpg "Main menu")
+![Map screenshot](docs/shot_map.jpg "Star system map")
+![Battle screenshot](docs/shot_battle.jpg "Battle")
+![Character sheet screenshot](docs/shot_character.jpg "Character sheet")
+
 ## How to develop
 
 The only hard dependency of the toolchain is Python3.

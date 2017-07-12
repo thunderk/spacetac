@@ -66,7 +66,7 @@ Artificial Intelligence
 * Use a first batch of producers, and only if no "good" move has been fo go on with some infinite producers
 * Evaluate buffs/debuffs
 * Abandon fight if the AI judges there is no hope of victory
-* Add combination of random small move and actual maneuver, as prer
+* Add combination of random small move and actual maneuver, as producer
 * New duel page with producers/evaluators tweaking
 * Work in a dedicated process (webworker)
 
