@@ -107,7 +107,6 @@ module TS.SpaceTac.UI {
                             this.game.state.start("router");
                         } else {
                             this.map.current_location.setFleetMoving(false);
-                            this.map.updateInfo(location.star);
                             this.loopOrbit();
                         }
 

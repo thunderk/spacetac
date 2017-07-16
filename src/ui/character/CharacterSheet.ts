@@ -192,7 +192,7 @@ module TS.SpaceTac.UI {
          * Update the fleet sidebar
          */
         updateFleet(fleet: Fleet) {
-            if (fleet != this.fleet) {
+            if (fleet != this.fleet || fleet.ships.length != this.portraits.children.length) {
                 this.portraits.removeAll(true);
                 this.fleet = fleet;
             }

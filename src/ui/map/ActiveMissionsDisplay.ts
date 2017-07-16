@@ -22,6 +22,8 @@ module TS.SpaceTac.UI {
          * Check if the active missions' status changed
          */
         checkUpdate(): boolean {
+            this.missions.checkStatus();
+
             let new_hash = this.missions.getHash();
             if (new_hash != this.hash) {
                 this.hash = new_hash;

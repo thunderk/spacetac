@@ -47,6 +47,9 @@ module TS.SpaceTac.UI {
         zoom_in: Phaser.Button
         zoom_out: Phaser.Button
 
+        // Options button
+        button_options: Phaser.Button
+
         /**
          * Init the view, binding it to a universe
          */
@@ -110,11 +113,11 @@ module TS.SpaceTac.UI {
             this.zoom_out.anchor.set(0.5, 0.5);
             this.layer_overlay.add(this.zoom_out);
             this.tooltip.bindStaticText(this.zoom_out, "Zoom out");
-            let options = new Phaser.Button(this.game, 1436, 69, "map-buttons", () => this.showOptions(), undefined, 5, 2);
-            options.angle = -90;
-            options.anchor.set(0.5, 0.5);
-            this.layer_overlay.add(options);
-            this.tooltip.bindStaticText(options, "Game options");
+            this.button_options = new Phaser.Button(this.game, 1436, 69, "map-buttons", () => this.showOptions(), undefined, 5, 2);
+            this.button_options.angle = -90;
+            this.button_options.anchor.set(0.5, 0.5);
+            this.layer_overlay.add(this.button_options);
+            this.tooltip.bindStaticText(this.button_options, "Game options");
 
             this.character_sheet = new CharacterSheet(this, this.getWidth() - 307);
             this.character_sheet.show(this.player.fleet.ships[0], false);
@@ -192,12 +195,7 @@ module TS.SpaceTac.UI {
             this.actions.setFromLocation(this.player.fleet.location, this);
 
             this.missions.checkUpdate();
-            this.conversation.updateFromMissions(this.player.missions, () => {
-                this.player.missions.checkStatus();
-                if (this.missions.checkUpdate()) {
-                    this.refresh();
-                }
-            });
+            this.conversation.updateFromMissions(this.player.missions, () => this.checkMissionsUpdate());
 
             if (interactive) {
                 this.setInteractionEnabled(true);
@@ -319,7 +317,10 @@ module TS.SpaceTac.UI {
         moveToLocation(dest: StarLocation): void {
             if (this.interactive && dest != this.player.fleet.location) {
                 this.setInteractionEnabled(false);
-                this.player_fleet.moveToLocation(dest, 1, null, () => this.refresh());
+                this.player_fleet.moveToLocation(dest, 1, null, () => {
+                    this.setInteractionEnabled(true);
+                    this.refresh();
+                });
             }
         }
 
@@ -332,6 +333,7 @@ module TS.SpaceTac.UI {
             this.missions.setVisible(enabled && this.zoom == 2, 300);
             this.animations.setVisible(this.zoom_in, enabled && this.zoom < 2, 300);
             this.animations.setVisible(this.zoom_out, enabled && this.zoom > 0, 300);
+            this.animations.setVisible(this.button_options, enabled, 300);
             this.animations.setVisible(this.character_sheet, enabled, 300);
         }
     }
