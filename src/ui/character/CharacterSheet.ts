@@ -283,6 +283,7 @@ module TS.SpaceTac.UI {
          * Hide the sheet
          */
         hide(animate = true) {
+            this.loot_page = 0;
             this.loot_items = [];
             this.shop = null;
             this.loot_slots.visible = false;
