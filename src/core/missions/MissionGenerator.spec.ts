@@ -12,11 +12,13 @@ module TS.SpaceTac.Specs {
             let mission = generator.generateEscort();
 
             expect(mission.title).toBe("Escort a ship to a level 2 system");
-            expect(mission.parts.length).toBe(1);
-            expect(mission.parts[0] instanceof MissionPartEscort).toBe(true);
-            let escort = <MissionPartEscort>mission.parts[0];
+            expect(mission.parts.length).toBe(3);
+            expect(mission.parts[0] instanceof MissionPartConversation).toBe(true);
+            expect(mission.parts[1] instanceof MissionPartEscort).toBe(true);
+            let escort = <MissionPartEscort>mission.parts[1];
             expect(escort.destination).toBe(loc2);
             expect(escort.ship.level.get()).toBe(2);
+            expect(mission.parts[2] instanceof MissionPartConversation).toBe(true);
         })
 
         it("generates location cleaning missions", function () {
@@ -29,15 +31,17 @@ module TS.SpaceTac.Specs {
             let mission = generator.generateCleanLocation();
 
             expect(mission.title).toBe("Defeat a level 1 fleet in this system");
-            expect(mission.parts.length).toBe(2);
-            expect(mission.parts[0] instanceof MissionPartCleanLocation).toBe(true);
-            let part1 = <MissionPartCleanLocation>mission.parts[0];
+            expect(mission.parts.length).toBe(4);
+            expect(mission.parts[0] instanceof MissionPartConversation).toBe(true);
+            expect(mission.parts[1] instanceof MissionPartCleanLocation).toBe(true);
+            let part1 = <MissionPartCleanLocation>mission.parts[1];
             expect(part1.destination).toBe(loc2);
             expect(part1.title).toEqual("Clean a planet in TTX system");
-            expect(mission.parts[0] instanceof MissionPartGoTo).toBe(true);
-            let part2 = <MissionPartGoTo>mission.parts[1];
+            expect(mission.parts[2] instanceof MissionPartGoTo).toBe(true);
+            let part2 = <MissionPartGoTo>mission.parts[2];
             expect(part2.destination).toBe(loc1);
             expect(part2.title).toEqual("Go back to collect your reward");
+            expect(mission.parts[3] instanceof MissionPartConversation).toBe(true);
         })
 
         it("helps to evaluate mission difficulty", function () {

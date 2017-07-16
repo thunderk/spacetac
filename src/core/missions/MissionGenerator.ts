@@ -117,12 +117,32 @@ module TS.SpaceTac {
          */
         generateEscort(): Mission {
             let mission = new Mission(this.universe);
+
             let dest_star = this.random.choice(this.around.star.getNeighbors());
             let destination = this.random.choice(dest_star.locations);
             let ship = this.generateShip(dest_star.level);
-            mission.addPart(new MissionPartEscort(mission, destination, ship));
+
             mission.title = `Escort a ship to a level ${dest_star.level} system`;
             this.setDifficulty(mission, 1000, dest_star.level);
+
+            let conversation = new MissionPartConversation(mission, [ship]);
+            conversation.addPiece(ship, this.random.choice([
+                "I'm very grateful you accepted to escort me! These systems are not safe to travel anymore.",
+                "Thank you for bringing me along, I'm afraid not to be up to the dangers ahead.",
+                "Always a pleasure to travel with battle-ready companions, it is not a triviality these days!",
+            ]));
+            mission.addPart(conversation);
+
+            mission.addPart(new MissionPartEscort(mission, destination, ship));
+
+            conversation = new MissionPartConversation(mission, [ship]);
+            conversation.addPiece(ship, this.random.choice([
+                "Thank you! Have your reward, you deserved it.",
+                "Never could have made it safely without your help, take this as a token of my gratitude.",
+                "Thanks so much... May we meet again in the future. For now, please accept this small reward.",
+            ]));
+            mission.addPart(conversation);
+
             return mission;
         }
 
@@ -131,6 +151,7 @@ module TS.SpaceTac {
          */
         generateCleanLocation(): Mission {
             let mission = new Mission(this.universe);
+
             let dest_star = this.random.choice(this.around.star.getNeighbors().concat([this.around.star]));
             let here = (dest_star == this.around.star);
             let choices = dest_star.locations;
@@ -138,10 +159,31 @@ module TS.SpaceTac {
                 choices = choices.filter(loc => loc != this.around);
             }
             let destination = this.random.choice(choices);
-            mission.addPart(new MissionPartCleanLocation(mission, destination));
-            mission.addPart(new MissionPartGoTo(mission, this.around, "Go back to collect your reward"));
+            let ship = this.generateShip(1);
+
             mission.title = `Defeat a level ${destination.star.level} fleet in ${here ? "this" : "a nearby"} system`;
             this.setDifficulty(mission, here ? 300 : 500, dest_star.level);
+
+            let conversation = new MissionPartConversation(mission, [ship]);
+            conversation.addPiece(ship, this.random.choice([
+                `We need you to clean a ${capitalize(StarLocationType[destination.type].toLowerCase())} for us. It is of vital importance.`,
+                "It would be very kind of you to remove these pesky rogues from the location we pointed on your map. Have no mercy!",
+                "One of those uninvited fleets is blocking a strategic point for our supplies. Send them back to hell.",
+            ]));
+            mission.addPart(conversation);
+
+            mission.addPart(new MissionPartCleanLocation(mission, destination));
+
+            mission.addPart(new MissionPartGoTo(mission, this.around, "Go back to collect your reward"));
+
+            conversation = new MissionPartConversation(mission, [ship]);
+            conversation.addPiece(ship, this.random.choice([
+                "You really are efficient! Feel free to have a look at our other jobs, while we load your reward.",
+                "We know it will be a temporary respite, but thank you nonetheless.",
+                "A job well done, is a job well paid! Looking forward to working with you again.",
+            ]));
+            mission.addPart(conversation);
+
             return mission;
         }
     }

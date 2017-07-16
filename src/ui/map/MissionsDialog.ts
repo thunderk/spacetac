@@ -47,7 +47,7 @@ module TS.SpaceTac.UI {
                 proposed.forEach(mission => {
                     this.addMission(offset, mission, 2, () => {
                         this.shop.acceptMission(mission, this.player);
-                        this.refresh();
+                        this.close();
                         this.on_change();
                     });
                     offset += 110;
