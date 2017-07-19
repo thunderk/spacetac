@@ -73,8 +73,8 @@ module TS.SpaceTac.UI {
             // Cooldown layer
             this.cooldown = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-actionbar-icon", 3);
             this.cooldown.anchor.set(0.5, 0.5);
-            this.cooldown_count = new Phaser.Text(this.game, 0, 0, "", { align: "center", font: "36pt Arial", fill: "#aaaaaa" });
-            this.cooldown_count.anchor.set(0.5, 0.5);
+            this.cooldown_count = new Phaser.Text(this.game, 0, 0, "", { align: "center", font: "bold 34pt Arial", fill: "#aaaaaa" });
+            this.cooldown_count.anchor.set(0.5, 0.45);
             this.cooldown.addChild(this.cooldown_count);
             this.addChild(this.cooldown);
 
@@ -158,14 +158,21 @@ module TS.SpaceTac.UI {
             if (this.selected && remaining == 1) {
                 // will overheat, hint at the cooldown time
                 let cooldown = this.action.getCooldownDuration(true);
+                this.cooldown.frame = 3;
                 this.cooldown.scale.set(0.7);
                 this.cooldown_count.text = `${cooldown}`;
                 this.battleview.animations.setVisible(this.cooldown, true, 300);
             } else if (remaining == 0) {
                 // overheated, show cooldown time
                 let cooldown = this.action.getCooldownDuration(false);
+                this.cooldown.frame = 3;
                 this.cooldown.scale.set(1);
                 this.cooldown_count.text = `${cooldown}`;
+                this.battleview.animations.setVisible(this.cooldown, true, 300);
+            } else if (this.action instanceof ToggleAction && this.action.activated) {
+                this.cooldown.frame = 4;
+                this.cooldown.scale.set(1);
+                this.cooldown_count.text = "";
                 this.battleview.animations.setVisible(this.cooldown, true, 300);
             } else {
                 this.battleview.animations.setVisible(this.cooldown, false, 300);

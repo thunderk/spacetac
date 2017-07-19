@@ -26,16 +26,16 @@ Character sheet
 * Highlight allowed destinations during drag-and-drop, with text hints
 * When transferring to another ship, if the item can't be equipped (unmatched requirements), the transfer is cancelled instead of trying cargo
 * Effective skill is sometimes not updated when upgrading base skill
-* Tooltip to show the sources of attributes [WIP]
 * Forbid to modify escorted ship
 * Add merged cargo display for the whole fleet
+* Fix player's ship name not updating with level
 
 Battle
 ------
 
 * Add a voluntary retreat option
 * Display effects description instead of attribute changes
-* Display radius for area effects (both on action hover, and while action is active)
+* Display radius and power usage hints for area effects on action icon hover + add confirmation ?
 * Any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
 * Add engine trail effect, and sound
 * Fix targetting not resetting on current cursor location when using keyboard shortcuts
@@ -78,6 +78,7 @@ Technical
 Common UI
 ---------
 
+* Add feedback sounds (clicks...)
 * Fix hover being stuck when the cursor exits the window, or the item moves or is hidden
 * Add a standard confirm dialog
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)

@@ -45,6 +45,8 @@ module TS.SpaceTac.UI {
                         filler.addText(150, 80, "Unavailable until next turn if used", "#c9604c", 20);
                     }
                 }
+            } else if (action instanceof ToggleAction && action.activated) {
+                filler.addText(150, 80, `Activated`, "#b1d549", 20);
             }
 
             let description = action.getEffectsDescription();

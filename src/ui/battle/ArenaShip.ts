@@ -35,6 +35,7 @@ module TS.SpaceTac.UI {
         // Effects display
         active_effects: ActiveEffectsEvent
         active_effects_display: Phaser.Group
+        effects_radius: Phaser.Graphics
         effects_messages: Phaser.Group
 
         // Create a ship sprite usable in the Arena
@@ -45,6 +46,10 @@ module TS.SpaceTac.UI {
 
             this.ship = ship;
             this.enemy = this.ship.getPlayer() != this.battleview.player;
+
+            // Add effects radius
+            this.effects_radius = new Phaser.Graphics(this.game);
+            this.add(this.effects_radius);
 
             // Add ship sprite
             this.sprite = new Phaser.Button(this.game, 0, 0, "ship-" + ship.model.code + "-sprite");
@@ -91,6 +96,7 @@ module TS.SpaceTac.UI {
 
             this.updateActiveEffects();
             this.updatePowerIndicator(ship.getValue("power"));
+            this.updateEffectsRadius();
 
             // Handle input on ship sprite
             UITools.setHoverClick(this.sprite,
@@ -156,6 +162,17 @@ module TS.SpaceTac.UI {
                 }
             } else if (event instanceof DamageEvent) {
                 this.displayEffect(`${event.hull + event.shield} damage`, false);
+                return 0;
+            } else if (event instanceof ToggleEvent) {
+                if (event.action.equipment) {
+                    let equname = event.action.equipment.name;
+                    if (event.activated) {
+                        this.displayEffect(`${equname} ON`, true);
+                    } else {
+                        this.displayEffect(`${equname} OFF`, false);
+                    }
+                    this.updateEffectsRadius();
+                }
                 return 0;
             } else if (event instanceof MoveEvent && !event.initial) {
                 this.moveTo(event.start.x, event.start.y, event.start.angle, false);
@@ -252,7 +269,7 @@ module TS.SpaceTac.UI {
             let arena = this.battleview.arena.getBoundaries();
             this.effects_messages.position.set(
                 (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects_messages.width) : (-this.effects_messages.width * 0.5)),
-                (this.ship.arena_y < arena.height * 0.9) ? 45 : (-45 - this.effects_messages.height)
+                (this.ship.arena_y < arena.height * 0.9) ? 50 : (-50 - this.effects_messages.height)
             );
 
             this.game.tweens.removeFrom(this.effects_messages);
@@ -302,6 +319,21 @@ module TS.SpaceTac.UI {
                     this.power.add(dot);
                 });
             }
+        }
+
+        /**
+         * Update the activated effects radius
+         */
+        updateEffectsRadius(): void {
+            this.effects_radius.clear();
+            this.ship.getAvailableActions().forEach(action => {
+                if (action instanceof ToggleAction && action.activated) {
+                    this.effects_radius.lineStyle(2, 0xe9f2f9, 0.3);
+                    this.effects_radius.beginFill(0xe9f2f9, 0.0);
+                    this.effects_radius.drawCircle(0, 0, action.radius * 2);
+                    this.effects_radius.endFill();
+                }
+            });
         }
     }
 }
