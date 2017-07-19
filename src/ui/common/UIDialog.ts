@@ -14,6 +14,8 @@ module TS.SpaceTac.UI {
                 this.addOverlay(parent.dialogs_layer);
             }
 
+            this.view.audio.playOnce("ui-dialog-open");
+
             this.moveToLayer(parent.dialogs_layer);
             this.setPositionInsideParent(0.5, 0.5);
         }
@@ -40,6 +42,8 @@ module TS.SpaceTac.UI {
          */
         close() {
             this.destroy();
+
+            this.view.audio.playOnce("ui-dialog-close");
 
             if (this.view.dialogs_layer.children.length == 1) {
                 this.view.dialogs_layer.removeAll(true);

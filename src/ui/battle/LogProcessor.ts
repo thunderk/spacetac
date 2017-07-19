@@ -234,7 +234,7 @@ module TS.SpaceTac.UI {
             this.view.arena.setShipPlaying(event.new_ship);
             this.view.ship_list.setPlaying(event.new_ship);
             if (event.ship !== event.new_ship) {
-                this.view.gameui.audio.playOnce("battle-ship-change");
+                this.view.audio.playOnce("battle-ship-change");
             }
             return 0;
         }

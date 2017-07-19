@@ -70,6 +70,8 @@ module TS.SpaceTac.UI {
             button.anchor.set(0.5, 0);
             button.input.useHandCursor = true;
 
+            UIComponent.setButtonSound(button);
+
             var text = new Phaser.Text(this.game, 0, 76, caption,
                 { align: "center", font: "bold 40pt Arial", fill: "#529aee" });
             text.anchor.set(0.5, 0.5);

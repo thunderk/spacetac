@@ -102,10 +102,12 @@ module TS.SpaceTac.UI {
             this.input.enableDrag(false, true);
 
             this.events.onDragStart.add(() => {
+                this.sheet.view.audio.playOnce("ui-drag");
                 this.scale.set(0.5, 0.5);
                 this.alpha = 0.8;
             });
             this.events.onDragStop.add(() => {
+                this.sheet.view.audio.playOnce("ui-drop");
                 let destination = this.findContainerAt(this.x, this.y);
                 if (destination && destination != this.container) {
                     if (this.applyDragDrop(this.container, destination, false)) {

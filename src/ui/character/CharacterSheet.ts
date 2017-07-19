@@ -75,6 +75,7 @@ module TS.SpaceTac.UI {
 
             let close_button = new Phaser.Button(this.game, view.getWidth(), 0, "character-close", () => this.hide());
             close_button.anchor.set(1, 0);
+            UIComponent.setButtonSound(close_button);
             this.addChild(close_button);
             view.tooltip.bindStaticText(close_button, "Close the character sheet");
 
@@ -127,11 +128,13 @@ module TS.SpaceTac.UI {
 
             this.loot_next = new Phaser.Button(this.game, 1890, 850, "common-arrow", () => this.paginate(1));
             this.loot_next.anchor.set(0.5, 0.5);
+            UIComponent.setButtonSound(this.loot_next);
             this.addChild(this.loot_next);
 
             this.loot_prev = new Phaser.Button(this.game, 1238, 850, "common-arrow", () => this.paginate(-1));
             this.loot_prev.anchor.set(0.5, 0.5);
             this.loot_prev.angle = 180;
+            UIComponent.setButtonSound(this.loot_prev);
             this.addChild(this.loot_prev);
 
             let x1 = 664;
@@ -181,6 +184,7 @@ module TS.SpaceTac.UI {
                     this.ship.upgradeSkill(<keyof ShipSkills>attribute);
                     this.refresh();
                 });
+                UIComponent.setButtonSound(button);
                 button.anchor.set(0.5);
                 this.ship_upgrades.add(button);
 
@@ -218,7 +222,7 @@ module TS.SpaceTac.UI {
         /**
          * Show the sheet for a given ship
          */
-        show(ship: Ship, animate = true) {
+        show(ship: Ship, animate = true, sound = true) {
             this.ship = ship;
 
             this.equipments.removeAll(true);
@@ -272,6 +276,10 @@ module TS.SpaceTac.UI {
                 this.updatePrices(this.shop);
             }
 
+            if (sound) {
+                this.view.audio.playOnce("ui-dialog-open");
+            }
+
             if (animate) {
                 this.game.tweens.create(this).to({ x: this.xshown }, 800, Phaser.Easing.Circular.InOut, true);
             } else {
@@ -290,6 +298,8 @@ module TS.SpaceTac.UI {
             this.mode_title.visible = false;
 
             this.portraits.children.forEach((portrait: Phaser.Button) => portrait.loadTexture("character-ship"));
+
+            this.view.audio.playOnce("ui-dialog-close");
 
             if (animate) {
                 this.game.tweens.create(this).to({ x: this.xhidden }, 800, Phaser.Easing.Circular.InOut, true);
@@ -397,7 +407,7 @@ module TS.SpaceTac.UI {
          * Refresh the sheet display
          */
         refresh() {
-            this.show(this.ship);
+            this.show(this.ship, false, false);
         }
 
         /**

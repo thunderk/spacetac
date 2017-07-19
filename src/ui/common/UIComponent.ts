@@ -202,10 +202,19 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Set the standard sounds on a button
+         */
+        static setButtonSound(button: Phaser.Button): void {
+            button.setDownSound(new Phaser.Sound(button.game, "ui-button-down"));
+            button.setUpSound(new Phaser.Sound(button.game, "ui-button-up"));
+        }
+
+        /**
          * Add a button in the component, positioning its center.
          */
         addButton(x: number, y: number, on_click: Function, background: string, frame_normal = 0, frame_hover = 1, tooltip = "", angle = 0) {
             let button = new Phaser.Button(this.view.game, x, y, background, on_click, undefined, frame_hover, frame_normal);
+            UIComponent.setButtonSound(button);
             button.anchor.set(0.5, 0.5);
             button.angle = angle;
             if (tooltip) {
@@ -259,6 +268,7 @@ module TS.SpaceTac.UI {
             };
 
             let button = new Phaser.Button(this.container.game, x, y, "common-transparent", () => toggle(!toggled, true));
+            UIComponent.setButtonSound(button);
 
             let image = imageFromInfo(this.game, background);
             let contentobj = autoFromInfo(this.game, content);

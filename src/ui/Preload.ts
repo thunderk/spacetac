@@ -110,6 +110,13 @@ module TS.SpaceTac.UI {
             this.loadShip("xander");
 
             // Load sounds
+            this.loadSound("ui/button-down.wav");
+            this.loadSound("ui/button-up.wav");
+            this.loadSound("ui/button-click.wav");
+            this.loadSound("ui/dialog-open.wav");
+            this.loadSound("ui/dialog-close.wav");
+            this.loadSound("ui/drag.wav");
+            this.loadSound("ui/drop.wav");
             this.loadSound("battle/ship-change.wav");
             this.loadSound("battle/weapon-bullets.wav");
             this.loadSound("battle/weapon-missile-launch.wav");

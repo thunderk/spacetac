@@ -107,15 +107,18 @@ module TS.SpaceTac.UI {
 
             this.zoom_in = new Phaser.Button(this.game, 1540, 172, "map-buttons", () => this.setZoom(this.zoom + 1), undefined, 3, 0);
             this.zoom_in.anchor.set(0.5, 0.5);
+            UIComponent.setButtonSound(this.zoom_in);
             this.layer_overlay.add(this.zoom_in);
             this.tooltip.bindStaticText(this.zoom_in, "Zoom in");
             this.zoom_out = new Phaser.Button(this.game, 1540, 958, "map-buttons", () => this.setZoom(this.zoom - 1), undefined, 4, 1);
             this.zoom_out.anchor.set(0.5, 0.5);
+            UIComponent.setButtonSound(this.zoom_out);
             this.layer_overlay.add(this.zoom_out);
             this.tooltip.bindStaticText(this.zoom_out, "Zoom out");
             this.button_options = new Phaser.Button(this.game, 1436, 69, "map-buttons", () => this.showOptions(), undefined, 5, 2);
             this.button_options.angle = -90;
             this.button_options.anchor.set(0.5, 0.5);
+            UIComponent.setButtonSound(this.button_options);
             this.layer_overlay.add(this.button_options);
             this.tooltip.bindStaticText(this.button_options, "Game options");
 
@@ -227,7 +230,7 @@ module TS.SpaceTac.UI {
          * Set the camera to include all direct-jump accessible stars
          */
         setCameraOnAccessible(star: Star) {
-            let accessible = star.getNeighbors();
+            let accessible = star.getNeighbors().concat([star]);
             let xmin = min(accessible.map(star => star.x));
             let xmax = max(accessible.map(star => star.x));
             let ymin = min(accessible.map(star => star.y));

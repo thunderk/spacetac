@@ -7,11 +7,13 @@ Menu/settings/saves
 * Save locally first, make saving to cloud an option
 * Allow to delete cloud saves
 * Fix cloud save games with "Level 0 - 0 ships"
+* Disable interaction and add loading dialog while loading from network
 
 Map/story
 ---------
 
 * Add initial character creation
+* Add sound effects and more visual effects (jumps...)
 * Fix quickly zooming in twice preventing to display some UI parts
 * Allow to change/buy ship model
 * Add factions and reputation
@@ -78,7 +80,7 @@ Technical
 Common UI
 ---------
 
-* Add feedback sounds (clicks...)
+* Add caret/focus to text input
 * Fix hover being stuck when the cursor exits the window, or the item moves or is hidden
 * Add a standard confirm dialog
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)

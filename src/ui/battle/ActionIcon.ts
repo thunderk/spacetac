@@ -97,6 +97,9 @@ module TS.SpaceTac.UI {
             if (this.action.checkCannotBeApplied(this.ship)) {
                 return;
             }
+
+            this.battleview.audio.playOnce("ui-button-click");
+
             if (this.selected) {
                 this.bar.actionEnded();
                 return;
