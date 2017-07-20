@@ -20,7 +20,7 @@ module TS.SpaceTac.UI {
         ship_power_value: number;
 
         // Interactivity
-        interactive = false;
+        interactive = true;
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
@@ -94,6 +94,8 @@ module TS.SpaceTac.UI {
                 }
                 return 0;
             });
+
+            this.setInteractive(false);
         }
 
         /**
@@ -111,6 +113,7 @@ module TS.SpaceTac.UI {
                 this.interactive = interactive;
 
                 this.game.tweens.removeFrom(this.icon_waiting);
+                this.icon_waiting.angle = 0;
                 this.battleview.animations.setVisible(this.icon_waiting, !this.interactive, 100);
                 this.game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
 

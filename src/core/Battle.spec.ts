@@ -367,5 +367,19 @@ module TS.SpaceTac {
                 new DamageEffect(12), new AttributeEffect("maneuvrability", 1)
             ]);
         });
+
+        it("is serializable", function () {
+            let battle = Battle.newQuickRandom();
+            battle.ai_playing = true;
+
+            let serializer = new Serializer(TS.SpaceTac);
+            let data = serializer.serialize(battle);
+
+            let loaded = serializer.unserialize(data);
+
+            expect(loaded.ai_playing).toBe(false);
+            battle.ai_playing = false;
+            expect(loaded).toEqual(battle);
+        });
     });
 }

@@ -37,9 +37,7 @@ Battle
 ------
 
 * Add a voluntary retreat option
-* Fix AI not playing after loading a game where the next ship to play is AI
 * Remove dead ships from ship list and play order
-* Fix "thinking" rotating icon sometimes not rotating (after loading a game where AI plays for example)
 * Add quick animation of playing ship indicator, on ship change
 * Display effects description instead of attribute changes
 * Display radius and power usage hints for area effects on action icon hover + add confirmation ?

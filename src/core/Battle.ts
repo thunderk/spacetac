@@ -57,10 +57,14 @@ module TS.SpaceTac {
             });
         }
 
+        postUnserialize() {
+            this.ai_playing = false;
+        }
+
         // Create a quick random battle, for testing purposes
         static newQuickRandom(start = true, level = 1, shipcount = 5): Battle {
-            var player1 = Player.newQuickRandom("John", level, shipcount, true);
-            var player2 = Player.newQuickRandom("Carl", level, shipcount, true);
+            var player1 = Player.newQuickRandom("Player", level, shipcount, true);
+            var player2 = Player.newQuickRandom("Enemy", level, shipcount, true);
 
             var result = new Battle(player1.fleet, player2.fleet);
             if (start) {
