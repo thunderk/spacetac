@@ -88,10 +88,17 @@ module TS.SpaceTac.UI {
             if (this.save_selected >= 0 && this.saves.length > this.save_selected) {
                 let connection = this.view.getConnection();
                 let [saveid, saveinfo] = this.saves[this.save_selected];
+
+                let dialog = new UIWaitingDialog(this.view, "Loading game from server...");
                 connection.loadById(saveid).then(session => {
                     if (session) {
                         this.view.gameui.setSession(session);
+                        dialog.close();
+                    } else {
+                        dialog.displayError("No suitable data found in save game (saved with older version ?)");
                     }
+                }).catch(() => {
+                    dialog.displayError("Error while loading game from server");
                 });
             }
         }

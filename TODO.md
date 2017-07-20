@@ -7,7 +7,6 @@ Menu/settings/saves
 * Save locally first, make saving to cloud an option
 * Allow to delete cloud saves
 * Fix cloud save games with "Level 0 - 0 ships"
-* Disable interaction and add loading dialog while loading from network
 
 Map/story
 ---------
@@ -19,6 +18,8 @@ Map/story
 * Add factions and reputation
 * Allow to cancel secondary missions
 * Forbid to end up with more than 5 ships in the fleet because of escorts
+* Fix problems when several dialogs are active at the same time
+* Handle case where cargo is full to give a reward (give money ?)
 
 Character sheet
 ---------------
@@ -36,6 +37,10 @@ Battle
 ------
 
 * Add a voluntary retreat option
+* Fix AI not playing after loading a game where the next ship to play is AI
+* Remove dead ships from ship list and play order
+* Fix "thinking" rotating icon sometimes not rotating (after loading a game where AI plays for example)
+* Add quick animation of playing ship indicator, on ship change
 * Display effects description instead of attribute changes
 * Display radius and power usage hints for area effects on action icon hover + add confirmation ?
 * Any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
