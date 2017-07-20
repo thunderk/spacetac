@@ -26,9 +26,7 @@ module TS.SpaceTac.UI {
         startMusic(key: string, volume = 1): void {
             key = "music-" + key;
             if (this.isActive()) {
-                if (this.music && this.music.key !== key) {
-                    this.stopMusic();
-                }
+                this.stopMusic();
                 if (!this.music) {
                     this.music_playing_volume = volume;
                     this.music = this.game.sound.play(key, volume * this.music_volume, true);

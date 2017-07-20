@@ -28,6 +28,8 @@ module TS.SpaceTac.UI {
             this.loadSheet("options/button.png", 497, 134);
             this.loadSheet("options/options.png", 128, 128);
             this.loadSheet("options/toggle.png", 149, 149);
+            this.loadSheet("battle/splash/base.png", 853, 210);
+            this.loadSheet("battle/splash/shipcard.png", 99, 114);
             this.loadImage("battle/background.jpg");
             this.loadImage("battle/actionbar/background.png");
             this.loadSheet("battle/actionbar/icon.png", 88, 88);

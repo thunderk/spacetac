@@ -130,6 +130,21 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Add an asynchronous animation to an object.
+         */
+        addAnimation(obj: any, properties: any, duration: number, ease: Function, delay = 0): Promise<void> {
+            return new Promise((resolve, reject) => {
+                let tween = this.tweens.create(obj);
+                tween.to(properties, duration, ease, false, delay);
+                tween.onComplete.addOnce(() => {
+                    this.tweens.remove(tween);
+                    resolve();
+                });
+                tween.start();
+            });
+        }
+
+        /**
          * Interpolate a rotation value
          * 
          * This will take into account the 2*pi modulo

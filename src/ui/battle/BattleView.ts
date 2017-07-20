@@ -107,7 +107,7 @@ module TS.SpaceTac.UI {
             this.targetting.moveToLayer(this.arena.layer_targetting);
 
             // "Battle" animation
-            this.displayFightMessage();
+            this.showSplash();
 
             // BGM
             this.gameui.audio.startMusic("mechanolith", 0.2);
@@ -150,17 +150,13 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Display an animated "BATTLE" text in the center of the view
-        displayFightMessage(): void {
-            var text = this.game.add.text(this.getMidWidth(), this.getMidHeight(), "BATTLE !",
-                { align: "center", font: "bold 42px Arial", fill: "#EE2233" });
-            text.anchor.set(0.5, 0.5);
-            this.game.tweens.create(text.scale).to({ x: 3, y: 3 }).start();
-            var text_anim = this.game.tweens.create(text).to({ alpha: 0 });
-            text_anim.onComplete.addOnce(() => {
-                text.destroy();
-            });
-            text_anim.start();
+        /**
+         * Display the splash screen at the star of battle
+         */
+        showSplash(): void {
+            let splash = new BattleSplash(this, this.battle.fleets[0], this.battle.fleets[1]);
+            splash.moveToLayer(this.layer_overlay);
+            splash.start();
         }
 
         // Method called when cursor starts hovering over a ship (or its icon)
