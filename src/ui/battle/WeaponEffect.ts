@@ -17,6 +17,9 @@ module TS.SpaceTac.UI {
         // Link to arena
         private arena: Arena
 
+        // Timer to use
+        private timer: Timer
+
         // Display group in which to display the visual effects
         private layer: Phaser.Group
 
@@ -37,6 +40,7 @@ module TS.SpaceTac.UI {
         constructor(arena: Arena, ship: Ship, target: Target, weapon: Equipment) {
             this.ui = arena.getGame();
             this.arena = arena;
+            this.timer = arena.battleview.timer;
             this.layer = arena.layer_weapon_effects;
             this.ship = ship;
             this.target = target;
@@ -98,7 +102,7 @@ module TS.SpaceTac.UI {
             effect.alpha = 0;
             effect.rotation = angle;
             effect.anchor.set(0.5, 0.5);
-            this.layer.addChild(effect);
+            this.layer.add(effect);
 
             let tween1 = this.ui.add.tween(effect).to({ alpha: 1 }, 100).delay(delay);
             let tween2 = this.ui.add.tween(effect).to({ alpha: 0 }, 100).delay(duration);
@@ -116,8 +120,9 @@ module TS.SpaceTac.UI {
                 emitter.setRotation(0, 0);
                 emitter.setXSpeed(-Math.cos(angle) * 20, -Math.cos(angle) * 80);
                 emitter.setYSpeed(-Math.sin(angle) * 20, -Math.sin(angle) * 80);
-                this.arena.battleview.timer.schedule(delay, () => emitter.start(false, 200, 30, duration * 0.8 / 30));
-                this.layer.addChild(emitter);
+                this.timer.schedule(delay, () => emitter.start(false, 200, 30, duration * 0.8 / 30));
+                this.layer.add(emitter);
+                this.timer.schedule(delay + duration + 5000, () => emitter.destroy());
             }
         }
 
@@ -136,8 +141,9 @@ module TS.SpaceTac.UI {
             emitter.setRotation(0, 0);
             emitter.setXSpeed(-Math.cos(angle) * 120, -Math.cos(angle) * 260);
             emitter.setYSpeed(-Math.sin(angle) * 120, -Math.sin(angle) * 260);
-            this.arena.battleview.timer.schedule(delay, () => emitter.start(false, 200, 30, duration * 0.8 / 30));
-            this.layer.addChild(emitter);
+            this.timer.schedule(delay, () => emitter.start(false, 200, 30, duration * 0.8 / 30));
+            this.layer.add(emitter);
+            this.timer.schedule(delay + duration + 5000, () => emitter.destroy());
         }
 
         /**
@@ -149,7 +155,7 @@ module TS.SpaceTac.UI {
             let missile = new Phaser.Image(this.ui, this.source.x, this.source.y, "battle-weapon-default");
             missile.anchor.set(0.5, 0.5);
             missile.rotation = arenaAngle(this.source, this.destination);
-            this.layer.addChild(missile);
+            this.layer.add(missile);
 
             let blast_radius = this.weapon.action.getBlastRadius(this.ship);
 
@@ -169,13 +175,13 @@ module TS.SpaceTac.UI {
                     tween1.start();
                     let tween2 = this.ui.tweens.create(blast).to({ alpha: 0 }, 1450, Phaser.Easing.Quadratic.In);
                     tween2.start();
-                    this.layer.addChild(blast);
+                    this.layer.add(blast);
                 }
             });
             tween.start();
 
             if (blast_radius > 0) {
-                let ships = this.arena.getShipsInCircle(new ArenaCircleArea());
+                let ships = this.arena.getShipsInCircle(new ArenaCircleArea(this.destination.x, this.destination.y, blast_radius));
                 ships.forEach(sprite => {
                     if (sprite.getValue("shield") > 0) {
                         this.shieldImpactEffect(this.target, sprite, 1200, 800);
@@ -199,8 +205,7 @@ module TS.SpaceTac.UI {
 
             var angle = arenaAngle(this.source, this.target);
             var distance = arenaDistance(this.source, this.target);
-            var emitter = new Phaser.Particles.Arcade.Emitter(this.ui,
-                this.source.x + Math.cos(angle) * 35, this.source.y + Math.sin(angle) * 35, 10);
+            var emitter = this.ui.add.emitter(this.source.x + Math.cos(angle) * 35, this.source.y + Math.sin(angle) * 35, 10);
             var speed = 2000;
             emitter.particleClass = BulletParticle;
             emitter.gravity = 0;
@@ -214,7 +219,8 @@ module TS.SpaceTac.UI {
                 guard = distance - 1;
             }
             emitter.start(false, 1000 * (distance - guard) / speed, 50, 10);
-            this.layer.addChild(emitter);
+            this.layer.add(emitter);
+            this.timer.schedule(5000, () => emitter.destroy());
 
             if (has_shield) {
                 this.shieldImpactEffect(this.source, this.target, 100, 800, true);

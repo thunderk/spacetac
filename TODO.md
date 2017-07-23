@@ -75,11 +75,6 @@ Artificial Intelligence
 * New duel page with producers/evaluators tweaking
 * Work in a dedicated process (webworker)
 
-Technical
----------
-
-* Ensure that tweens and particle emitters get destroyed once animation is done (or view changes)
-
 Common UI
 ---------
 

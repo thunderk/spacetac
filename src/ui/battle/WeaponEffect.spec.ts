@@ -2,8 +2,20 @@ module TS.SpaceTac.UI.Specs {
     describe("WeaponEffect", function () {
         let testgame = setupBattleview();
 
+        function checkEmitters(step: string, expected: number) {
+            expect(testgame.battleview.arena.layer_weapon_effects.children.length).toBe(expected, `${step} - layer children`);
+            expect(keys(testgame.battleview.game.particles.emitters).length).toBe(expected, `${step} - registered emitters`);
+        }
+
+        function fastForward(milliseconds: number) {
+            jasmine.clock().tick(milliseconds);
+            testgame.ui.updateLogic(milliseconds);
+        }
+
         it("displays shield hit effect", function () {
             let battleview = testgame.battleview;
+            battleview.timer = new Timer();
+
             let effect = new WeaponEffect(battleview.arena, new Ship(), new Target(0, 0), new Equipment());
             effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1000, 3000, true);
 
@@ -19,6 +31,8 @@ module TS.SpaceTac.UI.Specs {
 
         it("displays gatling gun effect", function () {
             let battleview = testgame.battleview;
+            battleview.timer = new Timer();
+
             let ship = nn(battleview.battle.playing_ship);
             let sprite = nn(battleview.arena.findShipSprite(ship));
             ship.setArenaPosition(50, 30);
@@ -45,6 +59,23 @@ module TS.SpaceTac.UI.Specs {
             expect(mock_shield_impact).toHaveBeenCalledTimes(1);
             expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800, true);
             expect(mock_hull_impact).toHaveBeenCalledTimes(1);
+        });
+
+        it("removes particle emitters when done", function () {
+            let battleview = testgame.battleview;
+            battleview.timer = new Timer();
+
+            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(50, 50), new Equipment());
+
+            effect.gunEffect();
+            checkEmitters("gun effect started", 2);
+            fastForward(6000);
+            checkEmitters("gun effect ended", 0);
+
+            effect.hullImpactEffect({ x: 0, y: 0 }, { x: 50, y: 50 }, 1000, 2000);
+            checkEmitters("hull effect started", 1);
+            fastForward(8500);
+            checkEmitters("hull effect ended", 0);
         });
     });
 }
