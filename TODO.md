@@ -78,6 +78,7 @@ Artificial Intelligence
 Common UI
 ---------
 
+* Better fonts, font effects...
 * Add caret/focus to text input
 * Fix hover being stuck when the cursor exits the window, or the item moves or is hidden
 * Add a standard confirm dialog

@@ -54,23 +54,49 @@ module TS.SpaceTac.UI {
         /**
          * Show the invite page
          */
-        pageInvite() {
+        async pageInvite() {
             this.pageCommon();
 
             let conn = this.view.getConnection();
-            conn.publish(this.view.session, "Multiplayer invitation").then(token => {
-                this.addText(this.width / 2, 540, "Give this invite code to your friend:", "#5398e9", 36, false, true);
-                this.addText(this.width / 2, 620, token, "#d6d6bd", 36, true, true);
-                this.addText(this.width / 2, 700, "Waiting for a connection...", "#b39256", 36, false, true);
+            try {
+                let token = await conn.publish(this.view.session, "Multiplayer invitation");
+                this.displayMultiplayerToken(token);  // TODO On cancel
 
-                this.addButton(this.width / 2, 840, () => this.pageMenu(), "options-button");
-                this.addText(this.width / 2, 840, "Cancel", "#5398e9", 36, true, true);
-            }).catch(() => {
-                this.addText(this.width / 2, 620, "Could not establish connection to server", "#b35b56", 36, true, true);
+                let exchange = new Multi.Exchange(this.view.getConnection(), token, true);
+                await exchange.start();
 
-                this.addButton(this.width / 2, 840, () => this.pageMenu(), "options-button");
-                this.addText(this.width / 2, 840, "Cancel", "#5398e9", 36, true, true);
-            });
+                // TODO Setup the exchange on current view
+
+                this.close();
+            } catch (err) {
+                this.displayConnectionError();
+            }
+        }
+
+        /**
+         * Display a multiplayer token page
+         */
+        private displayMultiplayerToken(token: string) {
+            this.pageCommon();
+
+            this.addText(this.width / 2, 540, "Give this invite code to your friend:", "#5398e9", 36, false, true);
+            this.addText(this.width / 2, 620, token, "#d6d6bd", 36, true, true);
+            this.addText(this.width / 2, 700, "Waiting for a connection...", "#b39256", 36, false, true);
+
+            this.addButton(this.width / 2, 840, () => this.pageMenu(), "options-button");
+            this.addText(this.width / 2, 840, "Cancel", "#5398e9", 36, true, true);
+        }
+
+        /**
+         * Display a connection error
+         */
+        private displayConnectionError() {
+            this.pageCommon();
+
+            this.addText(this.width / 2, 620, "Could not establish connection to server", "#b35b56", 36, true, true);
+
+            this.addButton(this.width / 2, 840, () => this.pageMenu(), "options-button");
+            this.addText(this.width / 2, 840, "Cancel", "#5398e9", 36, true, true);
         }
     }
 }

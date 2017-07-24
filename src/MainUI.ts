@@ -8,19 +8,20 @@ module TS.SpaceTac {
     // Router between game views
     export class MainUI extends Phaser.Game {
         // Current game session
-        session: GameSession;
+        session: GameSession
+        session_token: string | null
 
         // Audio manager
-        audio: UI.Audio;
+        audio: UI.Audio
 
         // Game options
-        options: UI.GameOptions;
+        options: UI.GameOptions
 
         // Storage used
-        storage: Storage;
+        storage: Storage
 
         // Headless mode
-        headless: boolean;
+        headless: boolean
 
         constructor(headless: boolean = false) {
             super(1920, 1080, headless ? Phaser.HEADLESS : Phaser.AUTO, '-space-tac');
@@ -31,6 +32,7 @@ module TS.SpaceTac {
             this.storage = localStorage;
 
             this.session = new GameSession();
+            this.session_token = null;
 
             if (!headless) {
                 this.state.onStateChange.add((state: string) => console.log(`View change: ${state}`));
@@ -77,6 +79,7 @@ module TS.SpaceTac {
          */
         quitGame() {
             this.session = new GameSession();
+            this.session_token = null;
             this.state.start('router');
         }
 
@@ -97,8 +100,9 @@ module TS.SpaceTac {
         /**
          * Set the current game session, and redirect to view router
          */
-        setSession(session: GameSession): void {
+        setSession(session: GameSession, token?: string): void {
             this.session = session;
+            this.session_token = token || null;
             this.state.start("router");
         }
 
@@ -110,6 +114,7 @@ module TS.SpaceTac {
                 var loaded = this.storage.getItem(name);
                 if (loaded) {
                     this.session = GameSession.loadFromString(loaded);
+                    this.session_token = null;
                     console.log("Game loaded");
                     return true;
                 } else {

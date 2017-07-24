@@ -9,6 +9,9 @@ module TS.SpaceTac.UI {
         // Interacting player
         player: Player
 
+        // Exchange (for remote session only)
+        exchange: Multi.Exchange | null
+
         // Layers
         layer_background: Phaser.Group
         layer_arena: Phaser.Group
@@ -61,6 +64,7 @@ module TS.SpaceTac.UI {
             this.battle = battle;
             this.ship_hovered = null;
             this.background = null;
+            this.exchange = null;
 
             this.battle.timer = this.timer;
 
@@ -134,6 +138,11 @@ module TS.SpaceTac.UI {
 
             // Start processing the log
             this.log_processor.start();
+
+            // If we are on a remote session, start the exchange
+            if (!this.session.primary && this.gameui.session_token) {
+                this.setupRemoteSession(this.gameui.session_token);
+            }
         }
 
         /**
@@ -275,6 +284,16 @@ module TS.SpaceTac.UI {
         revertBattle() {
             this.player.revertBattle();
             this.game.state.start('router');
+        }
+
+        /**
+         * Setup exchange for remote session
+         */
+        async setupRemoteSession(token: string) {
+            this.exchange = new Multi.Exchange(this.getConnection(), token);
+            await this.exchange.start();
+
+            // TODO read actions and apply them
         }
     }
 }

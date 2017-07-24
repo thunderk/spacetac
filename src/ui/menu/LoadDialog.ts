@@ -76,7 +76,7 @@ module TS.SpaceTac.UI {
                     session.primary = false;
                     session.spectator = true;
 
-                    this.view.gameui.setSession(session);
+                    this.view.gameui.setSession(session, token);
                 }
             });
         }

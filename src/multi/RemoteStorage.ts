@@ -42,7 +42,7 @@ module TS.SpaceTac.Multi {
             return Parse.Object.extend("spacetac" + collection);
         }
 
-        async search(collection: string, fields: any) {
+        async search(collection: string, fields: any): Promise<any[]> {
             let query = new Parse.Query(this.getModel(collection));
             iteritems(fields, (key, value) => {
                 query.equalTo(key, value);
@@ -52,7 +52,7 @@ module TS.SpaceTac.Multi {
             return results.map(ParseRemoteStorage.unpack);
         }
 
-        async find(collection: string, fields: any) {
+        async find(collection: string, fields: any): Promise<any> {
             let results = await this.search(collection, fields);
             if (results.length == 1) {
                 return results[0];
@@ -61,7 +61,7 @@ module TS.SpaceTac.Multi {
             }
         }
 
-        async upsert(collection: string, unicity: any, additional: any) {
+        async upsert(collection: string, unicity: any, additional: any): Promise<void> {
             let query = new Parse.Query(this.getModel(collection));
             iteritems(unicity, (key, value) => {
                 query.equalTo(key, value);
@@ -99,12 +99,12 @@ module TS.SpaceTac.Multi {
                 return this.collections[name];
             }
         }
-        async search(collection: string, fields: any) {
+        async search(collection: string, fields: any): Promise<any[]> {
             let objects = this.getCollection(collection);
             let result = objects.filter((obj: any) => !any(items(fields), ([key, value]) => obj[key] != value));
             return result;
         }
-        async find(collection: string, fields: any) {
+        async find(collection: string, fields: any): Promise<any> {
             let results = await this.search(collection, fields);
             if (results.length == 1) {
                 return results[0];
@@ -112,7 +112,7 @@ module TS.SpaceTac.Multi {
                 return null;
             }
         }
-        async upsert(collection: string, unicity: any, additional: any) {
+        async upsert(collection: string, unicity: any, additional: any): Promise<void> {
             let existing = await this.find(collection, unicity);
             let base = existing || copy(unicity);
             copyfields(additional, base);
