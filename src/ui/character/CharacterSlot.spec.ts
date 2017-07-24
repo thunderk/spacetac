@@ -25,14 +25,24 @@ module TS.SpaceTac.UI.Specs {
             ship.upgradeSkill("skill_time");
             expect(slot.addEquipment(equipment, source, true)).toBe(true);
 
+            ship.critical = true;
+            expect(slot.addEquipment(equipment, source, true)).toBe(false);
+            ship.critical = false;
+
             expect(ship.listEquipment(SlotType.Engine)).toEqual([]);
             let result = slot.addEquipment(equipment, source, false);
             expect(result).toBe(true);
             expect(ship.listEquipment(SlotType.Engine)).toEqual([equipment.item]);
 
+            expect(slot.removeEquipment(equipment, source, true)).toBe(true);
+            ship.critical = true;
+            expect(slot.removeEquipment(equipment, source, true)).toBe(false);
+            ship.critical = false;
+
             result = slot.removeEquipment(equipment, source, false);
             expect(result).toBe(true);
             expect(ship.listEquipment(SlotType.Engine)).toEqual([]);
+
         });
     });
 }

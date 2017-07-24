@@ -21,11 +21,15 @@ module TS.SpaceTac.UI {
         removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
             let shop = this.sheet.shop;
             if (shop && contains(shop.getStock(), equipment.item)) {
-                let price = shop.getPrice(equipment.item);
-                if (test) {
-                    return price <= this.sheet.fleet.credits;
+                if (destination) {
+                    let price = shop.getPrice(equipment.item);
+                    if (test) {
+                        return price <= this.sheet.fleet.credits;
+                    } else {
+                        return shop.sellToFleet(equipment.item, this.sheet.fleet);
+                    }
                 } else {
-                    return shop.sellToFleet(equipment.item, this.sheet.fleet);
+                    return test;
                 }
             } else {
                 return false;

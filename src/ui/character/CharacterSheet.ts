@@ -247,6 +247,7 @@ module TS.SpaceTac.UI {
             ship.slots.forEach((slot, idx) => {
                 let slot_display = new CharacterSlot(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y, slot.type);
                 slot_display.scale.set(slotsinfo.scaling, slotsinfo.scaling);
+                slot_display.alpha = ship.critical ? 0.5 : 1;
                 this.ship_slots.addChild(slot_display);
 
                 if (slot.attached) {
@@ -260,6 +261,7 @@ module TS.SpaceTac.UI {
             range(ship.cargo_space).forEach(idx => {
                 let cargo_slot = new CharacterCargo(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y);
                 cargo_slot.scale.set(slotsinfo.scaling, slotsinfo.scaling);
+                cargo_slot.alpha = ship.critical ? 0.5 : 1;
                 this.ship_cargo.addChild(cargo_slot);
 
                 if (idx < this.ship.cargo.length) {

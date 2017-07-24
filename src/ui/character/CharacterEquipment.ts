@@ -10,7 +10,7 @@ module TS.SpaceTac.UI {
         /**
          * Get a centric anchor point and scaling to snap the equipment
          */
-        getEquipmentAnchor(): { x: number, y: number, scale: number }
+        getEquipmentAnchor(): { x: number, y: number, scale: number, alpha: number }
         /**
          * Get a vertical offset to position the price tag
          */
@@ -91,7 +91,7 @@ module TS.SpaceTac.UI {
             let info = this.container.getEquipmentAnchor();
             this.position.set(info.x, info.y);
             this.scale.set(0.5 * info.scale, 0.5 * info.scale);
-            this.alpha = 1.0;
+            this.alpha = info.alpha;
         }
 
         /**
@@ -99,7 +99,9 @@ module TS.SpaceTac.UI {
          */
         setupDragDrop(sheet: CharacterSheet) {
             this.inputEnabled = true;
-            this.input.enableDrag(false, true);
+            if (this.container.removeEquipment(this, null, true)) {
+                this.input.enableDrag(false, true);
+            }
 
             this.events.onDragStart.add(() => {
                 this.sheet.view.audio.playOnce("ui-drag");

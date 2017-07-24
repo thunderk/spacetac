@@ -42,15 +42,17 @@ module TS.SpaceTac.UI {
         isInside(x: number, y: number): boolean {
             return this.getBounds().contains(x, y);
         }
-        getEquipmentAnchor(): { x: number, y: number, scale: number } {
+        getEquipmentAnchor(): { x: number, y: number, scale: number, alpha: number } {
             // not needed, equipment is never shown snapped in the slot
-            return { x: 0, y: 0, scale: 1 };
+            return { x: 0, y: 0, scale: 1, alpha: 1 };
         }
         getPriceOffset(): number {
             return 0;
         }
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
-            if (this.ship != this.sheet.ship && equipment.item.slot_type !== null) {
+            if (this.ship.critical) {
+                return false;
+            } else if (this.ship != this.sheet.ship && equipment.item.slot_type !== null) {
                 let slot = this.ship.getFreeSlot(equipment.item.slot_type);
                 if (slot) {
                     if (test) {

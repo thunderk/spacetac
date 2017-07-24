@@ -57,6 +57,12 @@ module TS.SpaceTac.UI.Specs {
             expect(ship1.cargo).toContain(equ3);
             equ.applyDragDrop(source, dest, false);
             expect(ship1.cargo).toContain(equ3);
+
+            // Cannot transfer to escorted ship
+            ship2.setCargoSpace(2);
+            expect(equ.applyDragDrop(source, dest, true)).toBe(true);
+            ship2.critical = true;
+            expect(equ.applyDragDrop(source, dest, true)).toBe(false);
         });
     });
 }

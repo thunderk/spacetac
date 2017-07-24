@@ -29,7 +29,6 @@ Character sheet
 * Highlight allowed destinations during drag-and-drop, with text hints
 * When transferring to another ship, if the item can't be equipped (unmatched requirements), the transfer is cancelled instead of trying cargo
 * Effective skill is sometimes not updated when upgrading base skill
-* Forbid to modify escorted ship
 * Add merged cargo display for the whole fleet
 * Fix player's ship name not updating with level
 

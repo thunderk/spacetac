@@ -26,18 +26,21 @@ module TS.SpaceTac.UI {
         isInside(x: number, y: number): boolean {
             return this.getBounds().contains(x, y);
         }
-        getEquipmentAnchor(): { x: number, y: number, scale: number } {
+        getEquipmentAnchor(): { x: number, y: number, scale: number, alpha: number } {
             return {
                 x: this.x + this.parent.x + 84 * this.scale.x,
                 y: this.y + this.parent.y + 83 * this.scale.y,
-                scale: this.scale.x
+                scale: this.scale.x,
+                alpha: this.alpha,
             }
         }
         getPriceOffset(): number {
             return 66;
         }
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
-            if (this.sheet.ship.canEquip(equipment.item)) {
+            if (this.sheet.ship.critical) {
+                return false;
+            } if (this.sheet.ship.canEquip(equipment.item)) {
                 if (test) {
                     return true;
                 } else {
@@ -48,7 +51,9 @@ module TS.SpaceTac.UI {
             }
         }
         removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
-            if (contains(this.sheet.ship.listEquipment(equipment.item.slot_type), equipment.item)) {
+            if (this.sheet.ship.critical) {
+                return false;
+            } if (contains(this.sheet.ship.listEquipment(equipment.item.slot_type), equipment.item)) {
                 if (test) {
                     return true;
                 } else {

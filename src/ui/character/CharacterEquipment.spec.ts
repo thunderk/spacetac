@@ -17,12 +17,8 @@ module TS.SpaceTac.UI.Specs {
             isInside(x: number, y: number): boolean {
                 return x == this.x;
             }
-            getEquipmentAnchor(): { x: number, y: number, scale: number } {
-                return {
-                    x: this.x,
-                    y: 0,
-                    scale: 0.5
-                }
+            getEquipmentAnchor(): { x: number, y: number, scale: number, alpha: number } {
+                return { x: this.x, y: 0, scale: 0.5, alpha: 1 };
             }
             getPriceOffset(): number {
                 return 12;

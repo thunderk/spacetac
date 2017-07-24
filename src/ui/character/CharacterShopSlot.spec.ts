@@ -11,7 +11,7 @@ module TS.SpaceTac.UI.Specs {
             let ship = fleet.addShip();
             ship.setCargoSpace(2);
             let equ1 = new Equipment(SlotType.Shield, "equ1");
-            ship.addCargo(equ1)
+            ship.addCargo(equ1);
 
             let equ2 = new Equipment(SlotType.Weapon, "equ2");
             let shop = <any>new Shop(1, [equ2], 0);
