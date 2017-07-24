@@ -39,7 +39,7 @@ module TS.SpaceTac.Multi {
                 await this.writeMessage(null, true);
             }
 
-            console.log("Echange established", this.token, this.localpeer, this.remotepeer);
+            console.log("Exchange established", this.token, this.localpeer, this.remotepeer);
         }
 
         /**

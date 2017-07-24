@@ -86,6 +86,14 @@ Common UI
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
 
+Network
+-------
+
+* Handle cancel button in invitation dialog
+* Close connection on view exit
+* Add timeouts to read operations
+* Display connection status
+
 Postponed
 ---------
 

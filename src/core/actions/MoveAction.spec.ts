@@ -61,16 +61,19 @@ module TS.SpaceTac {
             expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
             expect(ship.values.power.get()).toEqual(0);
 
-            expect(battle.log.events.length).toBe(2);
+            expect(battle.log.events.length).toBe(3);
 
             expect(battle.log.events[0].code).toEqual("value");
             expect(battle.log.events[0].ship).toBe(ship);
             expect((<ValueChangeEvent>battle.log.events[0]).value).toEqual(
                 new ShipValue("power", 0, 20));
 
-            expect(battle.log.events[1].code).toEqual("move");
+            expect(battle.log.events[1].code).toEqual("action");
             expect(battle.log.events[1].ship).toBe(ship);
-            let dest = (<MoveEvent>battle.log.events[1]).end;
+
+            expect(battle.log.events[2].code).toEqual("move");
+            expect(battle.log.events[2].ship).toBe(ship);
+            let dest = (<MoveEvent>battle.log.events[2]).end;
             expect(dest.x).toBeCloseTo(3.535533, 0.00001);
             expect(dest.y).toBeCloseTo(3.535533, 0.00001);
         });

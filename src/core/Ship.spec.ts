@@ -227,9 +227,11 @@ module TS.SpaceTac.Specs {
             expect(action.activated).toBe(false);
 
             expect(battle.log.events).toEqual([
+                new ActionAppliedEvent(ship, action, null),
                 new ToggleEvent(ship, action, true),
                 new ActiveEffectsEvent(ship, [], [], [new AttributeEffect("power_capacity", 1)]),
                 new ValueChangeEvent(ship, new ShipAttribute("power capacity", 1), 1),
+                new ActionAppliedEvent(ship, action, null),
                 new ToggleEvent(ship, action, false),
                 new ActiveEffectsEvent(ship, [], [], []),
                 new ValueChangeEvent(ship, new ShipAttribute("power capacity", 0), -1),

@@ -60,12 +60,14 @@ module TS.SpaceTac.UI {
             let conn = this.view.getConnection();
             try {
                 let token = await conn.publish(this.view.session, "Multiplayer invitation");
-                this.displayMultiplayerToken(token);  // TODO On cancel
+                this.displayMultiplayerToken(token);
 
-                let exchange = new Multi.Exchange(this.view.getConnection(), token, true);
-                await exchange.start();
-
-                // TODO Setup the exchange on current view
+                if (this.view instanceof BattleView) {
+                    await this.view.multi.setup(this.view, this.view.battle, token, true);
+                } else {
+                    // TODO
+                    this.displayConnectionError();
+                }
 
                 this.close();
             } catch (err) {

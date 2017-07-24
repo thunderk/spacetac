@@ -1,5 +1,9 @@
 module TS.SpaceTac {
-    // Base class for action definitions
+    /**
+     * Base class for a battle action.
+     * 
+     * An action should be the only way to modify a battle state.
+     */
     export class BaseAction {
         // Identifier code for the type of action
         code: string
@@ -138,6 +142,11 @@ module TS.SpaceTac {
                     ship.listEquipment(SlotType.Power).forEach(equipment => equipment.addWear(1));
 
                     this.equipment.cooldown.use();
+                }
+
+                let battle = ship.getBattle();
+                if (battle) {
+                    battle.log.add(new ActionAppliedEvent(ship, this, checked_target));
                 }
 
                 this.customApply(ship, checked_target);
