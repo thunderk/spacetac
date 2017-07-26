@@ -34,8 +34,6 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/actionbar/background.png");
             this.loadSheet("battle/actionbar/icon.png", 88, 88);
             this.loadSheet("battle/actionbar/power.png", 58, 21);
-            this.loadImage("battle/actionbar/action-move.png");
-            this.loadImage("battle/actionbar/action-endturn.png");
             this.loadSheet("battle/actionbar/button-menu.png", 79, 132);
             this.loadImage("battle/arena/background.png");
             this.loadImage("battle/arena/blast.png");
@@ -85,31 +83,10 @@ module TS.SpaceTac.UI {
             this.loadImage("character/upgrade-available.png");
             this.loadImage("character/price-tag.png");
             this.loadImage("character/experience.png");
-            this.loadImage("equipment/ironhull.png");
-            this.loadImage("equipment/forcefield.png");
-            this.loadImage("equipment/nuclearreactor.png");
-            this.loadImage("equipment/rocketengine.png");
-            this.loadImage("equipment/gatlinggun.png");
-            this.loadImage("equipment/powerdepleter.png");
-            this.loadImage("equipment/submunitionmissile.png");
-            this.loadImage("equipment/repairdrone.png");
-            this.loadImage("equipment/shieldtransfer.png");
-            this.loadImage("equipment/damageprotector.png");
 
-            // Load ships
-            this.loadShip("avenger");
-            this.loadShip("breeze");
-            this.loadShip("commodore");
-            this.loadShip("creeper");
-            this.loadShip("falcon");
-            this.loadShip("flea");
-            this.loadShip("jumper");
-            this.loadShip("rhino");
-            this.loadShip("scout");
-            this.loadShip("tomahawk");
-            this.loadShip("trapper");
-            this.loadShip("whirlwind");
-            this.loadShip("xander");
+            // Load image atlases
+            // TODO automatic range
+            range(3).forEach(i => this.loadAtlas(i + 1));
 
             // Load sounds
             this.loadSound("ui/button-down.wav");
@@ -144,12 +121,8 @@ module TS.SpaceTac.UI {
             return path.replace(/\//g, "-").replace(/\.[a-z0-9]+$/, '');
         }
 
-        /**
-         * Load a ship's sprite and portrait
-         */
-        loadShip(name: string) {
-            this.loadImage("ship/" + name + "/sprite.png");
-            this.loadImage("ship/" + name + "/portrait.png");
+        loadAtlas(index: number) {
+            this.load.atlasJSONHash(`atlas-${index}`, `assets/atlas-${index}.png`, `assets/atlas-${index}.json`);
         }
 
         loadSheet(path: string, frame_width: number, frame_height = frame_width) {

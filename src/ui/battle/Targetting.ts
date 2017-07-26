@@ -223,7 +223,9 @@ module TS.SpaceTac.UI {
                 this.ship = action.equipment.attached_to.ship;
                 this.action = action;
 
-                this.move_ghost.loadTexture(`ship-${this.ship.model.code}-sprite`);
+                let info = this.view.getImageInfo(`ship-${this.ship.model.code}-sprite`);
+                this.move_ghost.loadTexture(info.key);
+                this.move_ghost.frame = info.frame;
                 this.move_ghost.scale.set(0.25);
             } else {
                 this.ship = null;

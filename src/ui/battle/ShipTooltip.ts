@@ -24,7 +24,7 @@ module TS.SpaceTac.UI {
 
             filler.configure(10, 6, this.battleview.arena.getBoundaries());
 
-            filler.addImage(0, 0, `ship-${ship.model.code}-portrait`, 0.5);
+            filler.addImageA(0, 0, `ship-${ship.model.code}-portrait`, 0.5);
 
             let enemy = ship.getPlayer() != this.battleview.player;
             filler.addText(140, 0, ship.name, enemy ? "#cc0d00" : "#ffffff", 22, false, true);

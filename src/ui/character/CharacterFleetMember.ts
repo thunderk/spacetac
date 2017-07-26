@@ -16,7 +16,7 @@ module TS.SpaceTac.UI {
             this.sheet = sheet;
             this.ship = ship;
 
-            let portrait_pic = new Phaser.Image(this.game, 0, 0, `ship-${ship.model.code}-portrait`);
+            let portrait_pic = sheet.view.newImage(`ship-${ship.model.code}-portrait`);
             portrait_pic.anchor.set(0.5, 0.5);
             this.addChild(portrait_pic);
 

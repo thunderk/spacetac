@@ -52,7 +52,8 @@ module TS.SpaceTac.UI {
             this.add(this.effects_radius);
 
             // Add ship sprite
-            this.sprite = new Phaser.Button(this.game, 0, 0, "ship-" + ship.model.code + "-sprite");
+            let info = this.battleview.getImageInfo(`ship-${ship.model.code}-sprite`);
+            this.sprite = new Phaser.Button(this.game, 0, 0, info.key, undefined, undefined, info.frame, info.frame);
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(0.25);

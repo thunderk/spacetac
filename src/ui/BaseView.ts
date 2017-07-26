@@ -175,11 +175,39 @@ module TS.SpaceTac.UI {
         }
 
         /**
-         * Get the first image found in cache
+         * Get a new image from an atlas name
          */
-        getImage(...keys: string[]): string {
-            let found = first(keys, key => this.game.cache.checkImageKey(key));
-            return found ? found : "default";
+        newImage(name: string, x = 0, y = 0): Phaser.Image {
+            let info = this.getImageInfo(name);
+            let result = this.game.add.image(x, y, info.key, info.frame);
+            result.name = name;
+            return result;
+        }
+
+        /**
+         * Get an image from atlases
+         */
+        getImageInfo(name: string): { key: string, frame: number } {
+            // TODO Cache
+            let i = 1;
+            while (this.game.cache.checkImageKey(`atlas-${i}`)) {
+                let data = this.game.cache.getFrameData(`atlas-${i}`);
+                let frames = data.getFrames();
+                let frame = first(frames, frame => Preload.getKey(frame.name) == `graphics-exported-${name}`);
+                if (frame) {
+                    return { key: `atlas-${i}`, frame: frame.index };
+                }
+                i++;
+            }
+            return { key: "default", frame: 0 };
+        }
+
+        /**
+         * Get the first image found in atlases
+         */
+        getFirstImage(...names: string[]): { key: string, frame: number } {
+            let infos = names.map(name => this.getImageInfo(name));
+            return first(infos, info => info.key != "default") || infos[0];
         }
     }
 }

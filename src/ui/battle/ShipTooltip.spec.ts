@@ -21,7 +21,7 @@ module TS.SpaceTac.UI.Specs {
             tooltip.setShip(ship);
 
             let content = (<any>tooltip).container.content;
-            expect(content.children[0].data.key).toBe("ship-fake-portrait");
+            expect(content.children[0].name).toBe("ship-fake-portrait");
             expect(content.children[1].text).toBe("Fury");
             expect(content.children[2].text).toBe("Plays in 2 turns");
             expect(content.children[3].text).toBe("Hull\n58");

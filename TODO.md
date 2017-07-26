@@ -85,6 +85,12 @@ Common UI
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
 
+Technical
+---------
+
+* Pack all images in atlases
+* Pack sounds
+
 Network
 -------
 

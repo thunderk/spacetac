@@ -43,9 +43,10 @@ module TS.SpaceTac.UI {
                 this.removeAll(true);
                 this.fleet.ships.forEach((ship, index) => {
                     let offset = LOCATIONS[index];
-                    let sprite = this.game.add.image(offset[0], offset[1] + 150, `ship-${ship.model.code}-sprite`, 0, this);
+                    let sprite = this.map.newImage(`ship-${ship.model.code}-sprite`, offset[0], offset[1] + 150);
                     sprite.scale.set(64 / sprite.width);
                     sprite.anchor.set(0.5, 0.5);
+                    this.add(sprite);
                 });
 
                 this.ship_count = this.fleet.ships.length;

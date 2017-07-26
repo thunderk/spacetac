@@ -64,8 +64,8 @@ module TS.SpaceTac.UI {
             this.addChild(this.layer_selected);
 
             // Icon layer
-            let icon = this.battleview.getImage(`battle-actionbar-action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
-            this.layer_icon = new Phaser.Image(this.game, this.width / 2, this.height / 2, icon, 0);
+            let icon = this.battleview.getFirstImage(`action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
+            this.layer_icon = new Phaser.Image(this.game, this.width / 2, this.height / 2, icon.key, icon.frame);
             this.layer_icon.anchor.set(0.5, 0.5);
             this.layer_icon.scale.set(0.25, 0.25);
             this.addChild(this.layer_icon);

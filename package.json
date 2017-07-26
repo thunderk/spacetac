@@ -7,6 +7,7 @@
     "shell": "${SHELL} || true",
     "postinstall": "typings install && rm -rf out/vendor && mkdir -p out/vendor && cp -r node_modules/phaser/build out/vendor/phaser && cp -r node_modules/phaser-plugin-scene-graph/dist out/vendor/phaser-plugin-scene-graph && cp -r node_modules/parse/dist out/vendor/parse && cp -r node_modules/jasmine-core/lib/jasmine-core out/vendor/jasmine",
     "build": "tsc -p .",
+    "pack": "rm -f out/assets/atlas* && find graphics/exported -name '*.png' -print0 | xargs -0 gf-pack --name out/assets/atlas --fullpath --width 1024 --height 1024 --square --powerOfTwo --trim",
     "pretest": "tsc -p .",
     "test": "karma start spec/support/karma.conf.js && remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html",
     "prestart": "tsc -p . || true",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "babel-polyfill": "^6.23.0",
     "codecov": "^2.2.0",
+    "gamefroot-texture-packer": "git+https://github.com/Gamefroot/Gamefroot-Texture-Packer.git#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
     "jasmine": "^2.6.0",
     "karma": "^1.7.0",
     "karma-coverage": "^1.1.1",

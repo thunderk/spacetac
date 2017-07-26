@@ -100,9 +100,18 @@ module TS.SpaceTac.UI {
         /**
          * Add an image to the content
          */
-        addImage(x: number, y: number, key: string, scale = 1): void {
-            let image = new Phaser.Image(this.container.game, x, y, key);
+        addImage(x: number, y: number, key: string, frame = 0, scale = 1): void {
+            let image = new Phaser.Image(this.container.game, x, y, key, frame);
             image.data.key = key;
+            image.scale.set(scale);
+            this.container.content.add(image);
+        }
+
+        /**
+         * Add an image to the content, coming from an atlas
+         */
+        addImageA(x: number, y: number, name: string, scale = 1): void {
+            let image = this.view.newImage(name, x, y);
             image.scale.set(scale);
             this.container.content.add(image);
         }

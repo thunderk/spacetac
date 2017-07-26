@@ -31,7 +31,7 @@ module TS.SpaceTac.UI {
             this.player_indicator.angle = 90;
             this.addChild(this.player_indicator);
 
-            this.portrait = new Phaser.Image(this.game, 18, 9, "ship-" + ship.model.code + "-portrait", 0);
+            this.portrait = this.view.newImage(`ship-${ship.model.code}-portrait`, 18, 9);
             this.portrait.scale.set(0.332, 0.332);
             this.addChild(this.portrait);
 
