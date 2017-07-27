@@ -187,11 +187,11 @@ module TS.SpaceTac {
         // Modifiers applied to "common" equipment to obtain a specific quality
         protected quality_modifiers: QualityModifier[]
 
-        constructor(slot: SlotType, name: string, description = "") {
+        constructor(slot: SlotType, name: string, description = "", price_base = 100, price_inflation = 200) {
             this.slot = slot;
             this.name = name;
             this.description = description;
-            this.price = istep(100, istep(200, irepeat(200)));
+            this.price = istep(price_base, istep(price_inflation, irepeat(price_inflation)));
             this.base_modifiers = [];
             this.quality_modifiers = [standardQualityModifier];
         }
@@ -268,7 +268,7 @@ module TS.SpaceTac {
         addAttributeEffect(attribute: keyof ShipAttributes, value: LeveledValue): void {
             this.base_modifiers.push((equipment, level) => {
                 let resolved = resolveForLevel(value, level);
-                if (resolved > 0) {
+                if (resolved != 0) {
                     equipment.effects.push(new AttributeEffect(attribute, resolved));
                 }
             });

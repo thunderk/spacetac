@@ -55,6 +55,9 @@
 
     <div id="loot">
         <h1>SpaceTac - Loot Generator Samples</h1>
+        <select id="template">
+            <option value="---">---</option>
+        </select>
         <input id="level" type="range" value="1" min="1" max="20" step="1" />
         <div id="result"></div>
     </div>
@@ -63,12 +66,17 @@
         window.onload = function () {
             var generator = new TS.SpaceTac.LootGenerator();
             var result = document.getElementById("result");
+            var current_level = 1;
+            var current_name = "";
 
-            function update(level) {
+            function update() {
                 result.innerHTML = "";
                 generator.templates.forEach(function (template) {
+                    if (template.name != current_name) {
+                        return;
+                    }
                     TS.iterenum(TS.SpaceTac.EquipmentQuality, function (quality) {
-                        var loot = template.generate(level, quality);
+                        var loot = template.generate(current_level, quality);
 
                         let title = document.createElement("h2");
                         title.textContent = loot.getFullName() + " (Price " + loot.price.toString() + ")";
@@ -81,10 +89,24 @@
                 });
             }
 
-            update(1);
+            TS.sortedBy(generator.templates, function (template) {
+                return template.name;
+            }).forEach(function (template) {
+                var opt = document.createElement('option');
+                opt.value = template.name;
+                opt.innerHTML = template.name;
+                document.getElementById("template").appendChild(opt);
+            });
+
             document.getElementById("level").onchange = function () {
-                update(this.value);
+                current_level = this.value;
+                update();
             }
+            document.getElementById("template").onchange = function () {
+                current_name = this.value;
+                update();
+            }
+            update();
         };
     </script>
 </body>
