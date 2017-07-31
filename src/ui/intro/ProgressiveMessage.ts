@@ -22,7 +22,7 @@ module TS.SpaceTac.UI {
         text_size = 20
         text_bold = true
 
-        // Portrait or image to display
+        // Portrait or image to display (from atlases)
         image = ""
         image_size = 0
         image_caption = ""
@@ -43,7 +43,7 @@ module TS.SpaceTac.UI {
                 width -= offset;
 
                 let ioffset = style.padding + Math.floor(style.image_size / 2);
-                this.addImage(ioffset, ioffset, style.image);
+                this.addImageA(ioffset, ioffset, style.image);
 
                 if (style.image_caption) {
                     let text_size = Math.ceil(style.text_size * 0.6);

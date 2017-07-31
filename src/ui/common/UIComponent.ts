@@ -248,6 +248,17 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Add a static image, from atlases, positioning its center.
+         */
+        addImageA(x: number, y: number, name: string, scale = 1): void {
+            let info = this.view.getImageInfo(name);
+            let image = new Phaser.Image(this.container.game, x, y, info.key, info.frame);
+            image.anchor.set(0.5, 0.5);
+            image.scale.set(scale);
+            this.addInternalChild(image);
+        }
+
+        /**
          * Add a 2-states toggle button.
          * 
          * *background* should have three frames (toggled, untoggled and hovered).
