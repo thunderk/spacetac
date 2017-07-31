@@ -106,7 +106,7 @@ module TS.SpaceTac {
             expect(result).toEqual(Target.newFromLocation(12, 5));
         });
 
-        it("move exclusion radius is applied correctly over two ships", function () {
+        it("exclusion radius is applied correctly over two ships", function () {
             var battle = TestTools.createBattle(1, 2);
             var ship = battle.fleets[0].ships[0];
             var enemy1 = battle.fleets[1].ships[0];
@@ -121,6 +121,25 @@ module TS.SpaceTac {
 
             var result = action.checkLocationTarget(ship, Target.newFromLocation(0, 110));
             expect(result).toEqual(Target.newFromLocation(0, 65));
+        });
+
+        it("exclusion radius does not make the ship go back", function () {
+            var battle = TestTools.createBattle(1, 2);
+            var ship = battle.fleets[0].ships[0];
+            var enemy1 = battle.fleets[1].ships[0];
+            var enemy2 = battle.fleets[1].ships[1];
+            TestTools.setShipAP(ship, 100);
+            enemy1.setArenaPosition(0, 50);
+            enemy2.setArenaPosition(0, 80);
+
+            var action = new MoveAction(new Equipment());
+            action.distance_per_power = 1000;
+            action.safety_distance = 60;
+
+            let result = action.checkLocationTarget(ship, Target.newFromLocation(0, 100));
+            expect(result).toBeNull();
+            result = action.checkLocationTarget(ship, Target.newFromLocation(0, 140));
+            expect(result).toEqual(Target.newFromLocation(0, 140));
         });
     });
 }

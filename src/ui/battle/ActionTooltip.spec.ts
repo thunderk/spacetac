@@ -21,7 +21,7 @@ module TS.SpaceTac.UI.Specs {
             ActionTooltip.fill(tooltip.getFiller(), ship, action1, 0);
             checkText((<any>tooltip).container.content.children[1], "Engine");
             checkText((<any>tooltip).container.content.children[2], "Cost: 1 power per 0km");
-            checkText((<any>tooltip).container.content.children[3], "Move: 0km per power point");
+            checkText((<any>tooltip).container.content.children[3], "Move: 0km per power point (safety: 120km)");
             checkText((<any>tooltip).container.content.children[4], "[ 1 ]");
 
             tooltip.hide();

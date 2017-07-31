@@ -277,9 +277,9 @@ module TS.SpaceTac {
         /**
          * Add a move action.
          */
-        addMoveAction(distance_per_power: LeveledValue): void {
+        addMoveAction(distance_per_power: LeveledValue, safety_distance: LeveledValue = irepeat(120)): void {
             this.base_modifiers.push((equipment, level) => {
-                equipment.action = new MoveAction(equipment, resolveForLevel(distance_per_power, level));
+                equipment.action = new MoveAction(equipment, resolveForLevel(distance_per_power, level), resolveForLevel(safety_distance, level));
             });
         }
 

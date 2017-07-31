@@ -10,11 +10,11 @@ module TS.SpaceTac {
         // Equipment cannot be null (engine)
         equipment: Equipment
 
-        constructor(equipment: Equipment, distance_per_power = 0) {
+        constructor(equipment: Equipment, distance_per_power = 0, safety_distance = 120) {
             super("move", "Move", true, equipment);
 
             this.distance_per_power = distance_per_power;
-            this.safety_distance = 120;
+            this.safety_distance = safety_distance;
         }
 
         checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): string | null {
@@ -70,7 +70,13 @@ module TS.SpaceTac {
                 let ships = imaterialize(ifilter(battle.iships(true), s => s !== ship));
                 ships = ships.sort((a, b) => cmp(a.getDistanceTo(ship), b.getDistanceTo(ship), true));
                 ships.forEach(s => {
-                    target = target.moveOutOfCircle(s.arena_x, s.arena_y, this.safety_distance, ship.arena_x, ship.arena_y);
+                    let new_target = target.moveOutOfCircle(s.arena_x, s.arena_y, this.safety_distance, ship.arena_x, ship.arena_y);
+                    if (target != new_target && s.getDistanceTo(ship) < this.safety_distance) {
+                        // Already inside the nearest ship's exclusion area
+                        target = Target.newFromLocation(ship.arena_x, ship.arena_y);
+                    } else {
+                        target = new_target;
+                    }
                 });
             }
             return target;
@@ -85,10 +91,10 @@ module TS.SpaceTac {
             return target.constraintInRange(ship.arena_x, ship.arena_y, max_distance);
         }
 
-        checkLocationTarget(ship: Ship, target: Target): Target {
+        checkLocationTarget(ship: Ship, target: Target): Target | null {
             target = this.applyReachableRange(ship, target);
             target = this.applyExclusion(ship, target);
-            return target;
+            return target.getDistanceTo(ship.location) > 0 ? target : null;
         }
 
         protected customApply(ship: Ship, target: Target) {
@@ -96,7 +102,7 @@ module TS.SpaceTac {
         }
 
         getEffectsDescription(): string {
-            return `Move: ${this.distance_per_power}km per power point`;
+            return `Move: ${this.distance_per_power}km per power point (safety: ${this.safety_distance}km)`;
         }
     }
 }
