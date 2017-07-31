@@ -1,5 +1,19 @@
 module TS.SpaceTac.Specs {
     describe("Ship", function () {
+        it("creates a full name", function () {
+            let ship = new Ship();
+            expect(ship.getFullName(false)).toEqual("Level 1 unnamed");
+
+            ship.name = "Titan";
+            expect(ship.getFullName(false)).toEqual("Level 1 Titan");
+
+            ship.level.forceLevel(3);
+            expect(ship.getFullName(false)).toEqual("Level 3 Titan");
+
+            ship.fleet.player.name = "Emperor";
+            expect(ship.getFullName(true)).toEqual("Emperor's Level 3 Titan");
+        });
+
         it("moves and computes facing angle", function () {
             var ship = new Ship(null, "Test");
             ship.setArenaFacingAngle(0);

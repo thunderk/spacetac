@@ -27,7 +27,7 @@ module TS.SpaceTac.UI {
             filler.addImageA(0, 0, `ship-${ship.model.code}-portrait`, 0.5);
 
             let enemy = ship.getPlayer() != this.battleview.player;
-            filler.addText(140, 0, ship.name, enemy ? "#cc0d00" : "#ffffff", 22, false, true);
+            filler.addText(140, 0, ship.getFullName(), enemy ? "#cc0d00" : "#ffffff", 22, false, true);
 
             if (ship.alive) {
                 let turns = this.battleview.battle.getTurnsBefore(ship);

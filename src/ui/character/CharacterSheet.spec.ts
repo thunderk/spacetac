@@ -28,14 +28,14 @@ module TS.SpaceTac.UI.Specs {
                 expect(sheet.x).toEqual(0);
                 expect(sheet.portraits.length).toBe(2);
 
-                expect(sheet.ship_name.text).toEqual("Ship 1");
+                expect(sheet.ship_name.text).toEqual("Player's Level 1 Ship 1");
                 expect(sheet.ship_slots.length).toBe(4);
                 expect(sheet.ship_cargo.length).toBe(3);
 
                 let portrait = <Phaser.Button>sheet.portraits.getChildAt(1);
                 portrait.onInputUp.dispatch();
 
-                expect(sheet.ship_name.text).toEqual("Ship 2");
+                expect(sheet.ship_name.text).toEqual("Player's Level 1 Ship 2");
                 expect(sheet.ship_slots.length).toBe(1);
                 expect(sheet.ship_cargo.length).toBe(2);
             });

@@ -229,11 +229,11 @@ module TS.SpaceTac.UI {
 
             let upgrade_points = ship.getAvailableUpgradePoints();
 
-            this.ship_name.setText(ship.name);
+            this.ship_name.setText(ship.getFullName());
             this.ship_level.setText(ship.level.get().toString());
             this.ship_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
             this.ship_upgrade_points.setText(upgrade_points.toString());
-            this.ship_upgrades.visible = upgrade_points > 0;
+            this.ship_upgrades.visible = !ship.critical && upgrade_points > 0;
 
             iteritems(<any>ship.attributes, (key, value: ShipAttribute) => {
                 let text = this.attributes[key];

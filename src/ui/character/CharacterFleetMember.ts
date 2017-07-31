@@ -25,7 +25,7 @@ module TS.SpaceTac.UI {
             this.levelup.visible = this.ship.getAvailableUpgradePoints() > 0;
             this.addChild(this.levelup);
 
-            sheet.view.tooltip.bindDynamicText(this, () => ship.name);
+            sheet.view.tooltip.bindDynamicText(this, () => ship.getFullName());
         }
 
         /**

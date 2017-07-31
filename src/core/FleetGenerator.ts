@@ -19,7 +19,7 @@ module TS.SpaceTac {
 
             range(ship_count).forEach(i => {
                 var ship = ship_generator.generate(level, models[i] || null, upgrade, i < ship_count * 0.6);
-                ship.name = `${fleet.player.name}'s Level ${ship.level.get()} ${ship.model.name}`;
+                ship.name = ship.model.name;
                 fleet.addShip(ship);
             });
 

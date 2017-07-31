@@ -77,6 +77,14 @@ module TS.SpaceTac {
             return new ArenaLocationAngle(this.arena_x, this.arena_y, this.arena_angle);
         }
 
+        /**
+         * Returns the full name of this ship
+         */
+        getFullName(owner = true): string {
+            let result = `Level ${this.level.get()} ${this.name}`;
+            return owner ? `${this.fleet.player.name}'s ${result}` : result;
+        }
+
         // Returns true if the ship is able to play
         //  If *check_ap* is true, ap_current=0 will make this function return false
         isAbleToPlay(check_ap: boolean = true): boolean {

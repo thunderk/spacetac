@@ -5,6 +5,7 @@ module TS.SpaceTac.UI.Specs {
         it("fills ship details", function () {
             let tooltip = new ShipTooltip(testgame.battleview);
             let ship = testgame.battleview.battle.play_order[2];
+            ship.fleet.player.name = "Phil";
             ship.name = "Fury";
             ship.model = new ShipModel("fake", "Fury");
             ship.listEquipment(SlotType.Weapon).forEach(equ => equ.detach());
@@ -22,7 +23,7 @@ module TS.SpaceTac.UI.Specs {
 
             let content = (<any>tooltip).container.content;
             expect(content.children[0].name).toBe("ship-fake-portrait");
-            expect(content.children[1].text).toBe("Fury");
+            expect(content.children[1].text).toBe("Phil's Level 1 Fury");
             expect(content.children[2].text).toBe("Plays in 2 turns");
             expect(content.children[3].text).toBe("Hull\n58");
             expect(content.children[4].text).toBe("Shield\n140");
