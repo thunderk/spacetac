@@ -7,7 +7,7 @@
     "shell": "${SHELL} || true",
     "postinstall": "typings install && rm -rf out/vendor && mkdir -p out/vendor && cp -r node_modules/phaser/build out/vendor/phaser && cp -r node_modules/phaser-plugin-scene-graph/dist out/vendor/phaser-plugin-scene-graph && cp -r node_modules/parse/dist out/vendor/parse && cp -r node_modules/jasmine-core/lib/jasmine-core out/vendor/jasmine",
     "build": "tsc -p .",
-    "pack": "rm -f out/assets/atlas* && find graphics/exported -name '*.png' -print0 | xargs -0 gf-pack --name out/assets/atlas --fullpath --width 1024 --height 1024 --square --powerOfTwo --trim",
+    "pack": "rm -f out/assets/atlas* && find graphics/exported -name '*.png' -print0 | xargs -0 gf-pack --name out/assets/atlas --fullpath --width 1024 --height 1024 --square --powerOfTwo --trim --padding 2",
     "pretest": "tsc -p .",
     "test": "karma start spec/support/karma.conf.js && remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html",
     "prestart": "tsc -p . || true",

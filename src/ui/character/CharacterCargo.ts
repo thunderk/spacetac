@@ -27,12 +27,12 @@ module TS.SpaceTac.UI {
             return {
                 x: this.x + (this.parent ? this.parent.x : 0) + 98 * this.scale.x,
                 y: this.y + (this.parent ? this.parent.y : 0) + 98 * this.scale.y,
-                scale: this.scale.x,
+                scale: this.scale.x * 1.25,
                 alpha: this.alpha,
             }
         }
         getPriceOffset(): number {
-            return 82;
+            return 66;
         }
         addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
             if (this.sheet.ship.critical) {
