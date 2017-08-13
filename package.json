@@ -5,7 +5,7 @@
   "main": "src/build.js",
   "scripts": {
     "shell": "${SHELL} || true",
-    "postinstall": "typings install && rm -rf out/vendor && mkdir -p out/vendor && cp -r node_modules/phaser/build out/vendor/phaser && cp -r node_modules/phaser-plugin-scene-graph/dist out/vendor/phaser-plugin-scene-graph && cp -r node_modules/parse/dist out/vendor/parse && cp -r node_modules/jasmine-core/lib/jasmine-core out/vendor/jasmine",
+    "postinstall": "rm -rf out/vendor && mkdir -p out/vendor && cp -r node_modules/phaser/build out/vendor/phaser && cp -r node_modules/phaser-plugin-scene-graph/dist out/vendor/phaser-plugin-scene-graph && cp -r node_modules/parse/dist out/vendor/parse && cp -r node_modules/jasmine-core/lib/jasmine-core out/vendor/jasmine",
     "build": "tsc -p .",
     "pack": "rm -f out/assets/atlas* && find graphics/exported -name '*.png' -print0 | xargs -0 gf-pack --name out/assets/atlas --fullpath --width 1024 --height 1024 --square --powerOfTwo --trim --padding 2",
     "pretest": "tsc -p .",
@@ -21,10 +21,11 @@
   "author": "Michael Lemaire",
   "license": "MIT",
   "devDependencies": {
+    "@types/jasmine": "^2.5.53",
     "babel-polyfill": "^6.23.0",
-    "codecov": "^2.2.0",
-    "gamefroot-texture-packer": "git+https://github.com/Gamefroot/Gamefroot-Texture-Packer.git#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
-    "jasmine": "^2.6.0",
+    "codecov": "^2.3.0",
+    "gamefroot-texture-packer": "Gamefroot/Gamefroot-Texture-Packer.git#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
+    "jasmine": "^2.7.0",
     "karma": "^1.7.0",
     "karma-coverage": "^1.1.1",
     "karma-jasmine": "^1.1.0",
@@ -32,8 +33,7 @@
     "karma-spec-reporter": "^0.0.31",
     "live-server": "^1.2.0",
     "remap-istanbul": "^0.9.5",
-    "typescript": "^2.4.1",
-    "typings": "^2.1.1"
+    "typescript": "^2.4.2"
   },
   "dependencies": {
     "jasmine-core": "^2.6.3",

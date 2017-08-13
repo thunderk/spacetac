@@ -1,4 +1,4 @@
-/// <reference path="../typings/index.d.ts"/>
+/// <reference path="lib/phaser.d.ts"/>
 
 if (typeof window != "undefined") {
     (<any>window).describe = (<any>window).describe || function () { };

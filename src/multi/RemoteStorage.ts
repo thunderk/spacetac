@@ -1,4 +1,4 @@
-/// <reference path="Parse.d.ts" />
+/// <reference path="../lib/parse.d.ts" />
 
 module TS.SpaceTac.Multi {
     /**
