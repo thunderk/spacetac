@@ -43,7 +43,7 @@ Battle
 * Add engine trail effect, and sound
 * Fix targetting not resetting on current cursor location when using keyboard shortcuts
 * Allow to skip animations, and allow no animation mode
-* Find incentives to move from starting position (permanent drones ?)
+* Find incentives to move from starting position (permanent drones or anomalies ?)
 * Add a "loot all" button, disable the loot button if there is no loot
 * Do not focus on ship while targetting for area effects (dissociate hover and target)
 * Repair drone has its activation effect sometimes displayed as permanent effect on ships in the radius
@@ -57,16 +57,21 @@ Ships models and equipments
 * Add permanent effects and actions to ship models
 * Add critical hit/miss
 * Add damage over time effect (tricky to make intuitive)
+* Safety margin should only be applied on ships, not arena borders (which should be fixed)
 * Move distance should increase with maneuvrability
 * Chance to hit should increase with precision
 * Add actions with cost dependent of distance (like current move actions)
+* Add "cone" targetting
+* Add disc targetting (for some jump move actions)
+* Add "chain" effects
+* Add "forced move" effects (like a gravity well)
 * Add hull points to drones and make them take area damage
 * "Shield Transfer" has no quality offsets
 
 Artificial Intelligence
 -----------------------
 
-* Use a first batch of producers, and only if no "good" move has been fo go on with some infinite producers
+* Use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
 * Evaluate buffs/debuffs
 * Abandon fight if the AI judges there is no hope of victory
 * Add combination of random small move and actual maneuver, as producer
