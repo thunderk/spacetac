@@ -34,6 +34,7 @@ If you want to build on your computer, clone the repository, then run:
     * This work, made by Viktor Hahn (Viktor.Hahn@web.de), is licensed under the Creative Commons Attribution 3.0 Unported License. http://creativecommons.org/licenses/by/3.0/
 * **[www.kenney.nl](http://www.kenney.nl)** - Sound effects
 * **[Matthieu Desprez](https://github.com/edistra)** - Beta testing and ideas
+* **[Néstor Delgado](http://www.1001fonts.com/daggersquare-font.html)** - DAGGERSQUARE Font
 * **Nicolas Forgo** - Ship models
 * **[Kevin MacLeod](http://www.incompetech.com/)** - Musics
     * "Mechanolith" Kevin MacLeod (incompetech.com)

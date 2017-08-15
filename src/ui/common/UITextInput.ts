@@ -19,7 +19,7 @@ module TS.SpaceTac.UI {
             this.addInternalChild(input_bg);
 
             let fontsize = Math.ceil(height * 0.8);
-            this.content = new Phaser.Text(this.game, width / 2, height / 2, "", { align: "center", font: `${fontsize}px Arial`, fill: fontcolor });
+            this.content = new Phaser.Text(this.game, width / 2, height / 2, "", { align: "center", font: `${fontsize}px SpaceTac`, fill: fontcolor });
             this.content.anchor.set(0.5, 0.5);
             this.addInternalChild(this.content);
 

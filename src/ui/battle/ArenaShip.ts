@@ -84,7 +84,7 @@ module TS.SpaceTac.UI {
             this.add(this.power);
 
             // Play order display
-            this.play_order = new Phaser.Text(this.game, 55, -47, "", { font: "bold 14pt Arial", fill: "#aaaaaa" });
+            this.play_order = new Phaser.Text(this.game, 55, -47, "", { font: "bold 14pt SpaceTac", fill: "#aaaaaa" });
             this.toggle_play_order = this.battleview.animations.newVisibilityToggle(this.play_order, 200, false);
             this.add(this.play_order);
 
@@ -264,7 +264,7 @@ module TS.SpaceTac.UI {
          * Briefly show an effect on this ship
          */
         displayEffect(message: string, beneficial: boolean) {
-            let text = new Phaser.Text(this.game, 0, 20 * this.effects_messages.children.length, message, { font: "14pt Arial", fill: beneficial ? "#afe9c6" : "#e9afaf" });
+            let text = new Phaser.Text(this.game, 0, 20 * this.effects_messages.children.length, message, { font: "14pt SpaceTac", fill: beneficial ? "#afe9c6" : "#e9afaf" });
             this.effects_messages.addChild(text);
 
             let arena = this.battleview.arena.getBoundaries();

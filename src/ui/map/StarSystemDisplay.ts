@@ -70,10 +70,10 @@ module TS.SpaceTac.UI {
             this.label = new Phaser.Button(this.game, 0, 460, "map-name");
             this.label.anchor.set(0.5, 0.5);
             this.label.input.useHandCursor = false;
-            let label_content = new Phaser.Text(this.game, 0, 0, this.starsystem.name, { align: "center", font: `32pt Arial`, fill: "#b8d2f1" });
+            let label_content = new Phaser.Text(this.game, 0, 0, this.starsystem.name, { align: "center", font: `32pt SpaceTac`, fill: "#b8d2f1" });
             label_content.anchor.set(0.6, 0.5);
             this.label.addChild(label_content);
-            let label_level = new Phaser.Text(this.game, 243, 30, this.starsystem.level.toString(), { align: "center", font: `24pt Arial`, fill: "#a0a0a0" });
+            let label_level = new Phaser.Text(this.game, 243, 30, this.starsystem.level.toString(), { align: "center", font: `24pt SpaceTac`, fill: "#a0a0a0" });
             label_level.anchor.set(0.6, 0.5);
             this.label.addChild(label_level);
             this.addChild(this.label);

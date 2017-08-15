@@ -14,7 +14,7 @@ module TS.SpaceTac.UI {
             this.add(this.background);
 
             this.text = new Phaser.Text(this.game, 0, 0, text,
-                { font: "bold 14pt Arial", fill: "#90FEE3" });
+                { font: "bold 14pt SpaceTac", fill: "#90FEE3" });
             this.add(this.text);
 
             this.position.set(parent.view.getWidth(), 10);

@@ -79,7 +79,7 @@ module TS.SpaceTac.UI {
             tag.alpha = 0.85;
             this.addChild(tag);
 
-            let text = new Phaser.Text(this.game, -10, 4, price.toString(), { align: "center", font: "18pt Arial", fill: "#FFFFCC" });
+            let text = new Phaser.Text(this.game, -10, 4, price.toString(), { align: "center", font: "18pt SpaceTac", fill: "#FFFFCC" });
             text.anchor.set(0.5, 0.5);
             tag.addChild(text);
         }

@@ -73,7 +73,7 @@ module TS.SpaceTac.UI {
             UIComponent.setButtonSound(button);
 
             var text = new Phaser.Text(this.game, 0, 76, caption,
-                { align: "center", font: "bold 40pt Arial", fill: "#529aee" });
+                { align: "center", font: "bold 40pt SpaceTac", fill: "#529aee" });
             text.anchor.set(0.5, 0.5);
             button.addChild(text);
 

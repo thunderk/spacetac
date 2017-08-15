@@ -73,7 +73,7 @@ module TS.SpaceTac.UI {
             // Cooldown layer
             this.cooldown = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-actionbar-icon", 3);
             this.cooldown.anchor.set(0.5, 0.5);
-            this.cooldown_count = new Phaser.Text(this.game, 0, 0, "", { align: "center", font: "bold 34pt Arial", fill: "#aaaaaa" });
+            this.cooldown_count = new Phaser.Text(this.game, 0, 0, "", { align: "center", font: "bold 34pt SpaceTac", fill: "#aaaaaa" });
             this.cooldown_count.anchor.set(0.5, 0.45);
             this.cooldown.addChild(this.cooldown_count);
             this.addChild(this.cooldown);

@@ -51,7 +51,7 @@ module TS.SpaceTac.UI {
             this.sprite.scale.set(0.1, 0.1);
             this.add(this.sprite);
 
-            this.duration = new Phaser.Text(this.game, 0, 40, "", { font: "bold 16pt Arial", fill: "#ffdd4b" });
+            this.duration = new Phaser.Text(this.game, 0, 40, "", { font: "bold 16pt SpaceTac", fill: "#ffdd4b" });
             this.duration.anchor.set(0.5, 0.5);
             this.duration.visible = false;
             this.add(this.duration);

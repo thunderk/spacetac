@@ -14,7 +14,7 @@ module TS.SpaceTac.UI {
     }
 
     function textFromInfo(game: Phaser.Game, info: UITextInfo): Phaser.Text {
-        let style = { font: `${info.bold ? "bold " : ""}${info.size}pt Arial`, fill: info.color };
+        let style = { font: `${info.bold ? "bold " : ""}${info.size}pt SpaceTac`, fill: info.color };
         let text = new Phaser.Text(game, 0, 0, info.content, style);
         return text;
     }
@@ -227,7 +227,7 @@ module TS.SpaceTac.UI {
          * Add a static text.
          */
         addText(x: number, y: number, content: string, color = "#ffffff", size = 16, bold = false, center = true, width = 0, vcenter = center): void {
-            let style = { font: `${bold ? "bold " : ""}${size}pt Arial`, fill: color, align: center ? "center" : "left" };
+            let style = { font: `${bold ? "bold " : ""}${size}pt SpaceTac`, fill: color, align: center ? "center" : "left" };
             let text = new Phaser.Text(this.view.game, x, y, content, style);
             text.anchor.set(center ? 0.5 : 0, vcenter ? 0.5 : 0);
             if (width) {

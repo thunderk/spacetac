@@ -79,11 +79,11 @@ module TS.SpaceTac.UI {
             this.addChild(close_button);
             view.tooltip.bindStaticText(close_button, "Close the character sheet");
 
-            this.ship_name = new Phaser.Text(this.game, 758, 48, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
+            this.ship_name = new Phaser.Text(this.game, 758, 48, "", { align: "center", font: "30pt SpaceTac", fill: "#FFFFFF" });
             this.ship_name.anchor.set(0.5, 0.5);
             this.addChild(this.ship_name);
 
-            this.ship_level = new Phaser.Text(this.game, 552, 1054, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
+            this.ship_level = new Phaser.Text(this.game, 552, 1054, "", { align: "center", font: "30pt SpaceTac", fill: "#FFFFFF" });
             this.ship_level.anchor.set(0.5, 0.5);
             this.addChild(this.ship_level);
 
@@ -91,7 +91,7 @@ module TS.SpaceTac.UI {
             this.ship_experience.setBarImage("character-experience");
             this.addChild(this.ship_experience);
 
-            this.ship_upgrade_points = new Phaser.Text(this.game, 1066, 1054, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
+            this.ship_upgrade_points = new Phaser.Text(this.game, 1066, 1054, "", { align: "center", font: "30pt SpaceTac", fill: "#FFFFFF" });
             this.ship_upgrade_points.anchor.set(0.5, 0.5);
             this.addChild(this.ship_upgrade_points);
 
@@ -115,14 +115,14 @@ module TS.SpaceTac.UI {
             this.portraits.position.set(152, 0);
             this.addChild(this.portraits);
 
-            this.credits = new Phaser.Text(this.game, 136, 38, "", { align: "center", font: "30pt Arial", fill: "#FFFFFF" });
+            this.credits = new Phaser.Text(this.game, 136, 38, "", { align: "center", font: "30pt SpaceTac", fill: "#FFFFFF" });
             this.credits.anchor.set(0.5, 0.5);
             this.addChild(this.credits);
 
             this.equipments = new Phaser.Group(this.game);
             this.addChild(this.equipments);
 
-            this.mode_title = new Phaser.Text(this.game, 1548, 648, "", { align: "center", font: "18pt Arial", fill: "#FFFFFF" });
+            this.mode_title = new Phaser.Text(this.game, 1548, 648, "", { align: "center", font: "18pt SpaceTac", fill: "#FFFFFF" });
             this.mode_title.anchor.set(0.5, 0.5);
             this.addChild(this.mode_title);
 
@@ -160,7 +160,7 @@ module TS.SpaceTac.UI {
         private addAttribute(attribute: keyof ShipAttributes, x: number, y: number) {
             let attrname = capitalize(SHIP_ATTRIBUTES[attribute].name);
             let name = new Phaser.Text(this.game, x - 144, y - 2, attrname,
-                { align: "center", font: "20pt Arial", fill: "#c9d8ef", stroke: "#395665", strokeThickness: 1 });
+                { align: "center", font: "20pt SpaceTac", fill: "#c9d8ef", stroke: "#395665", strokeThickness: 1 });
             name.anchor.set(0.5);
             this.addChild(name);
 
@@ -173,7 +173,7 @@ module TS.SpaceTac.UI {
             this.view.tooltip.bindDynamicText(button_value, () => this.ship.getAttributeDescription(attribute));
 
             let value = new Phaser.Text(this.game, x, y, "",
-                { align: "center", font: "bold 18pt Arial", fill: "#FFFFFF" });
+                { align: "center", font: "bold 18pt SpaceTac", fill: "#FFFFFF" });
             value.anchor.set(0.5);
             this.addChild(value);
 

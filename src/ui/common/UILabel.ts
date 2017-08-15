@@ -10,7 +10,7 @@ module TS.SpaceTac.UI {
         constructor(parent: UIComponent, width: number, height: number, content = "", fontsize = 20, fontcolor = "#FFFFFF") {
             super(parent, width, height);
 
-            this.content = new Phaser.Text(this.game, width / 2, height / 2, content, { align: "center", font: `${fontsize}px Arial`, fill: fontcolor })
+            this.content = new Phaser.Text(this.game, width / 2, height / 2, content, { align: "center", font: `${fontsize}px SpaceTac`, fill: fontcolor })
             this.content.anchor.set(0.5, 0.5);
             this.addInternalChild(this.content);
         }

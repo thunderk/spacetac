@@ -20,11 +20,26 @@
             width: 100%;
             height: 100vh;
         }
+
+        @font-face {
+            font-family: 'SpaceTac';
+            src: url('assets/fonts/daggersquare.regular.otf');
+        }
+
+        body {
+            font-family: 'SpaceTac';
+        }
+
+        .fontLoader {
+            position: absolute;
+            left: -1000px;
+        }
     </style>
 </head>
 
 <body>
     <div id="-space-tac" class="game"></div>
+    <div class=".fontLoader">.</div>
 
     <script src="vendor/parse/parse.min.js"></script>
     <script src="vendor/phaser/phaser.min.js"></script>
