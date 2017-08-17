@@ -11,15 +11,19 @@ module TS.SpaceTac {
         // New location
         end: ArenaLocationAngle
 
-        constructor(ship: Ship, start: ArenaLocationAngle, end: ArenaLocationAngle) {
+        // Engine used
+        engine: Equipment | null
+
+        constructor(ship: Ship, start: ArenaLocationAngle, end: ArenaLocationAngle, engine: Equipment | null = null) {
             super("move", ship, Target.newFromLocation(end.x, end.y));
 
             this.start = start;
             this.end = end;
+            this.engine = engine;
         }
 
         getReverse(): BaseBattleEvent {
-            return new MoveEvent(this.ship, this.end, this.start);
+            return new MoveEvent(this.ship, this.end, this.start, this.engine);
         }
 
         /**

@@ -118,22 +118,8 @@ module TS.SpaceTac.UI {
 
             // Key mapping
             this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.switch(3000));
-            this.inputs.bindCheat("w", "Win current battle", () => {
-                iforeach(this.battle.iships(), ship => {
-                    if (ship.fleet.player != this.player) {
-                        ship.setDead();
-                    }
-                });
-                this.battle.endBattle(this.player.fleet);
-            });
-            this.inputs.bindCheat("x", "Lose current battle", () => {
-                iforeach(this.battle.iships(), ship => {
-                    if (ship.fleet.player == this.player) {
-                        ship.setDead();
-                    }
-                });
-                this.battle.endBattle(first(this.battle.fleets, fleet => fleet.player != this.player));
-            });
+            this.inputs.bindCheat("w", "Win current battle", () => this.battle.cheats.win());
+            this.inputs.bindCheat("x", "Lose current battle", () => this.battle.cheats.lose());
             this.inputs.bindCheat("a", "Use AI to play", () => this.playAI());
 
             // Start processing the log

@@ -175,6 +175,23 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Move an object linearly to another position
+         * 
+         * Returns the animation duration.
+         */
+        static moveTo(obj: PhaserGraphics, x: number, y: number, angle: number, rotated_obj = obj, ease = true): number {
+            let tween_rot = obj.game.tweens.create(rotated_obj);
+            let duration_rot = Animations.rotationTween(tween_rot, angle, 0.5);
+            let tween_pos = obj.game.tweens.create(obj);
+            let duration_pos = arenaDistance(obj, { x: x, y: y }) * 2;
+            tween_pos.to({ x: x, y: y }, duration_pos, ease ? Phaser.Easing.Quadratic.InOut : undefined);
+
+            tween_rot.start();
+            tween_pos.start();
+            return Math.max(duration_rot, duration_pos);
+        }
+
+        /**
          * Make an object move toward a location in space, with a ship-like animation.
          * 
          * Returns the animation duration.

@@ -177,7 +177,7 @@ module TS.SpaceTac.UI {
                 return 0;
             } else if (event instanceof MoveEvent && !event.initial) {
                 this.moveTo(event.start.x, event.start.y, event.start.angle, false);
-                let duration = this.moveTo(event.end.x, event.end.y, event.end.angle, true);
+                let duration = this.moveTo(event.end.x, event.end.y, event.end.angle, true, !!event.engine);
                 return duration;
             } else {
                 return 0;
@@ -248,9 +248,10 @@ module TS.SpaceTac.UI {
          * 
          * Return the duration of animation
          */
-        moveTo(x: number, y: number, facing_angle: number, animate = true): number {
+        moveTo(x: number, y: number, facing_angle: number, animate = true, engine = true): number {
             if (animate) {
-                let duration = Animations.moveInSpace(this, x, y, facing_angle, this.sprite);
+                let animation = engine ? Animations.moveInSpace : Animations.moveTo;
+                let duration = animation(this, x, y, facing_angle, this.sprite);
                 return duration;
             } else {
                 this.x = x;

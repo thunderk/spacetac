@@ -21,7 +21,7 @@ module TS.SpaceTac {
         equipment: Equipment;
 
         constructor(equipment: Equipment, power = 1, range = 0, blast = 0, effects: BaseEffect[] = [], name = "Fire") {
-            super("fire-" + equipment.code, name, true, equipment);
+            super("fire-" + equipment.code, name, range > 0, equipment);
 
             this.power = power;
             this.range = range;
@@ -80,9 +80,14 @@ module TS.SpaceTac {
             return result;
         }
 
-        protected customApply(ship: Ship, target: Target) {
+        protected customApply(ship: Ship, target: Target | null) {
+            if (!target) {
+                // Self-target
+                target = Target.newFromShip(ship);
+            }
+
             // Face the target
-            ship.rotate(Target.newFromShip(ship).getAngleTo(target));
+            ship.rotate(Target.newFromShip(ship).getAngleTo(target), first(ship.listEquipment(SlotType.Engine), () => true));
 
             // Fire event
             ship.addBattleEvent(new FireEvent(ship, this.equipment, target));

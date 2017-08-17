@@ -31,6 +31,13 @@ module TS.SpaceTac {
         }
 
         /**
+         * Return the current location of the drone
+         */
+        get location(): ArenaLocation {
+            return new ArenaLocation(this.x, this.y);
+        }
+
+        /**
          * Get a textual description of this drone
          */
         getDescription(): string {

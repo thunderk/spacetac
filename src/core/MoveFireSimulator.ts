@@ -68,7 +68,8 @@ module TS.SpaceTac {
          * Check that a move action can reach a given destination
          */
         canMoveTo(action: MoveAction, target: Target): boolean {
-            return action.checkLocationTarget(this.ship, target) == target;
+            let checked = action.checkLocationTarget(this.ship, target);
+            return checked != null && checked.x == target.x && checked.y == target.y;
         }
 
         /**
@@ -133,7 +134,7 @@ module TS.SpaceTac {
             result.move_location = Target.newFromShip(this.ship);
             if (action instanceof MoveAction) {
                 let corrected_target = action.applyReachableRange(this.ship, target, move_margin);
-                corrected_target = action.applyExclusion(this.ship, corrected_target, move_margin);
+                corrected_target = action.applyExclusion(this.ship, corrected_target);
                 if (corrected_target) {
                     result.need_move = target.getDistanceTo(this.ship.location) > 0;
                     move_target = corrected_target;

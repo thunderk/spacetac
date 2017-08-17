@@ -4,7 +4,7 @@ module TS.SpaceTac {
         // Distance allowed for each power point
         distance_per_power: number
 
-        // Safety distance from other ships and arena borders
+        // Safety distance from other ships
         safety_distance: number
 
         // Equipment cannot be null (engine)
@@ -55,30 +55,20 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get an exclusion helper for this move action
+         */
+        getExclusionAreas(ship: Ship): ExclusionAreas {
+            return ExclusionAreas.fromShip(ship, this.safety_distance);
+        }
+
+        /**
          * Apply exclusion areas (neer arena borders, or other ships)
          */
-        applyExclusion(ship: Ship, target: Target, margin = 0.1): Target {
-            let battle = ship.getBattle();
-            if (battle) {
-                // Keep out of arena borders
-                let border = this.safety_distance * 0.5;
-                target = target.keepInsideRectangle(border, border,
-                    battle.width - border, battle.height - border,
-                    ship.arena_x, ship.arena_y);
+        applyExclusion(ship: Ship, target: Target): Target {
+            let exclusion = this.getExclusionAreas(ship);
 
-                // Apply collision prevention
-                let ships = imaterialize(ifilter(battle.iships(true), s => s !== ship));
-                ships = ships.sort((a, b) => cmp(a.getDistanceTo(ship), b.getDistanceTo(ship), true));
-                ships.forEach(s => {
-                    let new_target = target.moveOutOfCircle(s.arena_x, s.arena_y, this.safety_distance, ship.arena_x, ship.arena_y);
-                    if (target != new_target && s.getDistanceTo(ship) < this.safety_distance) {
-                        // Already inside the nearest ship's exclusion area
-                        target = Target.newFromLocation(ship.arena_x, ship.arena_y);
-                    } else {
-                        target = new_target;
-                    }
-                });
-            }
+            let destination = exclusion.stopBefore(new ArenaLocation(target.x, target.y), ship.location);
+            target = Target.newFromLocation(destination.x, destination.y);
             return target;
         }
 
@@ -98,7 +88,7 @@ module TS.SpaceTac {
         }
 
         protected customApply(ship: Ship, target: Target) {
-            ship.moveTo(target.x, target.y);
+            ship.moveTo(target.x, target.y, this.equipment);
         }
 
         getEffectsDescription(): string {

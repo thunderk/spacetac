@@ -405,20 +405,25 @@ module TS.SpaceTac {
         /**
          * Rotate the ship in place to face a direction
          */
-        rotate(angle: number, log = true) {
+        rotate(angle: number, engine: Equipment | null = null, log = true) {
             if (angle != this.arena_angle) {
                 let start = copy(this.location);
                 this.setArenaFacingAngle(angle);
 
                 if (log) {
-                    this.addBattleEvent(new MoveEvent(this, start, copy(this.location)));
+                    this.addBattleEvent(new MoveEvent(this, start, copy(this.location), engine));
                 }
             }
         }
 
-        // Move toward a location
-        //  This does not check or consume action points
-        moveTo(x: number, y: number, log: boolean = true): void {
+        /**
+         * Move the ship to another location
+         * 
+         * This does not check or consume action points, but will update area effects (for this ship and the others).
+         * 
+         * If *engine* is specified, the facing angle will be updated to simulate an engine maneuver.
+         */
+        moveTo(x: number, y: number, engine: Equipment | null = null, log = true): void {
             let dx = x - this.arena_x;
             let dy = y - this.arena_y;
             if (dx != 0 || dy != 0) {
@@ -428,12 +433,15 @@ module TS.SpaceTac {
                 let old_impacted_ships = area_effects.map(action => action.getAffectedShips(this));
                 let old_area_effects = this.getActiveEffects().area;
 
-                let angle = Math.atan2(dy, dx);
-                this.setArenaFacingAngle(angle);
+                if (engine) {
+                    let angle = Math.atan2(dy, dx);
+                    this.setArenaFacingAngle(angle);
+                }
+
                 this.setArenaPosition(x, y);
 
                 if (log) {
-                    this.addBattleEvent(new MoveEvent(this, start, copy(this.location)));
+                    this.addBattleEvent(new MoveEvent(this, start, copy(this.location), engine));
                 }
 
                 let new_impacted_ships = area_effects.map(action => action.getAffectedShips(this));

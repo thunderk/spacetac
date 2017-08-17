@@ -12,11 +12,13 @@ module TS.SpaceTac.Equipments {
 
     export class GravitShield extends LootTemplate {
         constructor() {
-            super(SlotType.Shield, "Gravit Shield", "A shield with micro-gravity wells to help absorb damage", 140, 180);
+            super(SlotType.Shield, "Gravit Shield", "A shield able to repel damage and enemies using micro-gravity wells", 140, 180);
 
             this.setSkillsRequirements({ "skill_gravity": istep(2, irepeat(3)) });
-            this.addAttributeEffect("shield_capacity", istep(160, irepeat(30)));
-            this.addAttributeEffect("precision", istep(-1, irepeat(-1)));
+            this.addAttributeEffect("shield_capacity", istep(80, irepeat(30)));
+            this.addFireAction(irepeat(2), 0, istep(300, irepeat(10)), [
+                new EffectTemplate(new RepelEffect(), { value: istep(100, irepeat(5)) })
+            ]);
         }
     }
 
@@ -25,7 +27,7 @@ module TS.SpaceTac.Equipments {
             super(SlotType.Shield, "Inverter Shield", "An antimatter shield that tries to cancel inbound energy", 300, 160);
 
             this.setSkillsRequirements({ "skill_antimatter": istep(2, irepeat(2)) });
-            this.addAttributeEffect("shield_capacity", istep(130, irepeat(35)));
+            this.addAttributeEffect("shield_capacity", istep(130, irepeat(45)));
             this.addAttributeEffect("power_generation", istep(-0.2, irepeat(-0.3)));
         }
     }

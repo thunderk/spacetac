@@ -30,33 +30,33 @@ module TS.SpaceTac.Equipments {
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_gravity": 2 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("shield_capacity", 160),
-                new AttributeEffect("precision", -1),
+                new AttributeEffect("shield_capacity", 80),
             ]);
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 2, 0, 300, [new RepelEffect(100)]));
             expect(equipment.price).toEqual(140);
 
             equipment = template.generate(2);
             expect(equipment.requirements).toEqual({ "skill_gravity": 5 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("shield_capacity", 190),
-                new AttributeEffect("precision", -2),
+                new AttributeEffect("shield_capacity", 110),
             ]);
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 2, 0, 310, [new RepelEffect(105)]));
             expect(equipment.price).toEqual(320);
 
             equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_gravity": 8 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("shield_capacity", 220),
-                new AttributeEffect("precision", -3),
+                new AttributeEffect("shield_capacity", 140),
             ]);
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 2, 0, 320, [new RepelEffect(110)]));
             expect(equipment.price).toEqual(680);
 
             equipment = template.generate(10);
             expect(equipment.requirements).toEqual({ "skill_gravity": 29 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("shield_capacity", 430),
-                new AttributeEffect("precision", -10),
+                new AttributeEffect("shield_capacity", 350),
             ]);
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 2, 0, 390, [new RepelEffect(145)]));
             expect(equipment.price).toEqual(8240);
         });
 
@@ -74,7 +74,7 @@ module TS.SpaceTac.Equipments {
             equipment = template.generate(2);
             expect(equipment.requirements).toEqual({ "skill_antimatter": 4 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("shield_capacity", 165),
+                new AttributeEffect("shield_capacity", 175),
                 new AttributeEffect("power_generation", -1),
             ]);
             expect(equipment.price).toEqual(460);
@@ -82,7 +82,7 @@ module TS.SpaceTac.Equipments {
             equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_antimatter": 6 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("shield_capacity", 200),
+                new AttributeEffect("shield_capacity", 220),
                 new AttributeEffect("power_generation", -1),
             ]);
             expect(equipment.price).toEqual(780);
@@ -90,7 +90,7 @@ module TS.SpaceTac.Equipments {
             equipment = template.generate(10);
             expect(equipment.requirements).toEqual({ "skill_antimatter": 20 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("shield_capacity", 445),
+                new AttributeEffect("shield_capacity", 535),
                 new AttributeEffect("power_generation", -3),
             ]);
             expect(equipment.price).toEqual(7500);

@@ -4,12 +4,15 @@ module TS.SpaceTac {
     describe("FireWeaponAction", function () {
         it("constructs correctly", function () {
             let equipment = new Equipment(SlotType.Weapon, "testweapon");
-            let action = new FireWeaponAction(equipment);
+            let action = new FireWeaponAction(equipment, 4, 30, 10);
 
             expect(action.code).toEqual("fire-testweapon");
             expect(action.name).toEqual("Fire");
             expect(action.equipment).toBe(equipment);
             expect(action.needs_target).toBe(true);
+
+            action = new FireWeaponAction(equipment, 4, 0, 10);
+            expect(action.needs_target).toBe(false);
         });
 
         it("applies effects to alive ships in blast radius", function () {

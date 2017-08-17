@@ -170,7 +170,8 @@
        y1="143.13321"
        x2="259.57538"
        y2="95.291969"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(6.0768709,2.3920799)" />
     <radialGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5286"
@@ -180,7 +181,7 @@
        fx="201.79222"
        fy="102.01662"
        r="136.00291"
-       gradientTransform="matrix(1.9392397,0.081369,-0.00937077,0.22333045,-191.15776,76.134141)"
+       gradientTransform="matrix(1.9392397,0.081369,-0.00937077,0.22333045,-185.08089,78.526222)"
        gradientUnits="userSpaceOnUse" />
     <filter
        inkscape:collect="always"
@@ -289,11 +290,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.959798"
-     inkscape:cx="1838.5705"
-     inkscape:cy="1007.2957"
+     inkscape:zoom="0.70000001"
+     inkscape:cx="921.73937"
+     inkscape:cy="523.01763"
      inkscape:document-units="px"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer1"
      showgrid="false"
      showguides="true"
      inkscape:lockguides="false"
@@ -413,18 +414,27 @@
        id="use4617"
        transform="matrix(3.0721311,0,0,3.0721311,-6.6877028,-512.5613)"
        width="100%"
-       height="100%" />
+       height="100%"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#283646;stroke-width:2.86500001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:15.75749969;stroke-opacity:1;marker-start:url(#Arrow1Send);marker-end:url(#Arrow2Sstart)"
-       d="M 213.28108,143.75099 H 384.60085"
+       d="M 208.51855,143.75099 H 379.83832"
        id="path5290"
-       inkscape:connector-curvature="0" />
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:6.61458302px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="216.48831"
        y="198.11024"
-       id="text4525"><tspan
+       id="text4525"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
          sodipodi:role="line"
          id="tspan4523"
          x="216.48831"
@@ -433,35 +443,47 @@
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:6.61458302px;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:0px;word-spacing:0px;fill:url(#radialGradient5288);fill-opacity:1;stroke:url(#linearGradient5254);stroke-width:0.96499997;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       x="116.71846"
-       y="132.02577"
-       id="text4529"><tspan
+       x="122.79533"
+       y="134.41782"
+       id="text4529"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
          sodipodi:role="line"
          id="tspan4527"
-         x="116.71846"
-         y="132.02577"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:50.79999924px;line-height:6.61000013px;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';fill:url(#radialGradient5288);fill-opacity:1;stroke:url(#linearGradient5254);stroke-width:0.96499997;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">SpaceTac</tspan></text>
+         x="122.79533"
+         y="134.41782"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:56.44444656px;line-height:6.61000013px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:url(#radialGradient5288);fill-opacity:1;stroke:url(#linearGradient5254);stroke-width:0.96499997;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">SpaceTac</tspan></text>
     <ellipse
        style="fill:#19232c;fill-opacity:1;stroke:#1a2e44;stroke-width:0.60000002;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:59.55590439;stroke-opacity:1"
        id="path6915"
        cx="299.03043"
        cy="143.76476"
        rx="75.166008"
-       ry="3.60095" />
+       ry="3.60095"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:6.61458302px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#b2b2b2;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="230.68631"
+       x="227.21475"
        y="146.65189"
-       id="text4550"><tspan
+       id="text4550"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96"><tspan
          sodipodi:role="line"
          id="tspan4548"
-         x="230.68631"
+         x="227.21475"
          y="146.65189"
-         style="fill:#b2b2b2;fill-opacity:1;stroke-width:0.26458332px">a tactical turn-based RPG</tspan></text>
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:#b2b2b2;fill-opacity:1;stroke-width:0.26458332px">a tactical turn-based RPG</tspan></text>
     <g
        id="g7596"
-       transform="translate(-1.0583333)">
+       transform="translate(-1.0583333)"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
       <circle
          r="3.2072344"
          cy="160.57437"
@@ -490,7 +512,10 @@
        id="use7598"
        transform="matrix(-1,0,0,1,510.43903,0)"
        width="100%"
-       height="100%" />
+       height="100%"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -498,7 +523,10 @@
        id="use7600"
        transform="translate(75.629323)"
        width="100%"
-       height="100%" />
+       height="100%"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <use
        x="0"
        y="0"
@@ -506,13 +534,19 @@
        id="use7603"
        transform="translate(0,29.108755)"
        width="100%"
-       height="100%" />
+       height="100%"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#4e535a;stroke-width:2.56500006;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:5.13000018, 5.13000018;stroke-dashoffset:8.46450043;stroke-opacity:0.56470588"
        d="M 254,189.71274 V 160.73956"
        id="path7605"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cc" />
+       sodipodi:nodetypes="cc"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title1.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
   </g>
   <g
      inkscape:groupmode="layer"
@@ -520,41 +554,38 @@
      inkscape:label="Texts"
      style="display:inline">
     <text
-       transform="translate(0,-11.249983)"
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:6.61458302px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#529aee;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="46.876923"
-       y="208.91302"
+       x="48.484272"
+       y="197.66304"
        id="text4554"><tspan
          sodipodi:role="line"
          id="tspan4552"
-         x="46.876923"
-         y="208.91302"
-         style="font-size:14.11111069px;fill:#529aee;fill-opacity:1;stroke-width:0.26458332px">New game</tspan></text>
+         x="48.484272"
+         y="197.66304"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111069px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:#529aee;fill-opacity:1;stroke-width:0.26458332px">New game</tspan></text>
     <text
-       transform="translate(0,-11.249983)"
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#529aee;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="214.49164"
-       y="209.34711"
+       x="215.93364"
+       y="198.09712"
        id="text4554-6"><tspan
          sodipodi:role="line"
          id="tspan4552-7"
-         x="214.49164"
-         y="209.34711"
-         style="font-size:14.11111069px;fill:#529aee;fill-opacity:1;stroke-width:0.26458332px">Load game</tspan></text>
+         x="215.93364"
+         y="198.09712"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111069px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:#529aee;fill-opacity:1;stroke-width:0.26458332px">Load game</tspan></text>
     <text
-       transform="translate(0,-11.249983)"
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:6.61458349px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#4b8ad4;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       x="380.26669"
-       y="209.34711"
+       x="383.20383"
+       y="198.09712"
        id="text4554-2"><tspan
          sodipodi:role="line"
          id="tspan4552-74"
-         x="380.26669"
-         y="209.34711"
-         style="font-size:14.11111069px;fill:#4b8ad4;fill-opacity:1;stroke-width:0.26458332px">Quick battle</tspan></text>
+         x="383.20383"
+         y="198.09712"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:14.11111069px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:#4b8ad4;fill-opacity:1;stroke-width:0.26458332px">Quick battle</tspan></text>
   </g>
   <g
      inkscape:groupmode="layer"

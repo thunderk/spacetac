@@ -83,27 +83,27 @@ module TS.SpaceTac {
             var ship = battle.fleets[0].ships[0];
             var enemy = battle.fleets[1].ships[0];
             TestTools.setShipAP(ship, 100);
-            ship.setArenaPosition(5, 5);
-            enemy.setArenaPosition(10, 5);
+            ship.setArenaPosition(500, 500);
+            enemy.setArenaPosition(1000, 500);
 
             var action = new MoveAction(new Equipment());
-            action.distance_per_power = 10;
-            action.safety_distance = 2;
+            action.distance_per_power = 1000;
+            action.safety_distance = 200;
 
-            var result = action.checkLocationTarget(ship, Target.newFromLocation(7, 5));
-            expect(result).toEqual(Target.newFromLocation(7, 5));
+            var result = action.checkLocationTarget(ship, Target.newFromLocation(700, 500));
+            expect(result).toEqual(Target.newFromLocation(700, 500));
 
-            result = action.checkLocationTarget(ship, Target.newFromLocation(8, 5));
-            expect(result).toEqual(Target.newFromLocation(8, 5));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(800, 500));
+            expect(result).toEqual(Target.newFromLocation(800, 500));
 
-            result = action.checkLocationTarget(ship, Target.newFromLocation(9, 5));
-            expect(result).toEqual(Target.newFromLocation(8, 5));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(900, 500));
+            expect(result).toEqual(Target.newFromLocation(800, 500));
 
-            result = action.checkLocationTarget(ship, Target.newFromLocation(10, 5));
-            expect(result).toEqual(Target.newFromLocation(8, 5));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(1000, 500));
+            expect(result).toEqual(Target.newFromLocation(800, 500));
 
-            result = action.checkLocationTarget(ship, Target.newFromLocation(12, 5));
-            expect(result).toEqual(Target.newFromLocation(12, 5));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(1200, 500));
+            expect(result).toEqual(Target.newFromLocation(1200, 500));
         });
 
         it("exclusion radius is applied correctly over two ships", function () {
@@ -112,15 +112,15 @@ module TS.SpaceTac {
             var enemy1 = battle.fleets[1].ships[0];
             var enemy2 = battle.fleets[1].ships[1];
             TestTools.setShipAP(ship, 100);
-            enemy1.setArenaPosition(0, 80);
-            enemy2.setArenaPosition(0, 100);
+            enemy1.setArenaPosition(0, 800);
+            enemy2.setArenaPosition(0, 1000);
 
             var action = new MoveAction(new Equipment());
             action.distance_per_power = 1000;
-            action.safety_distance = 15;
+            action.safety_distance = 150;
 
-            var result = action.checkLocationTarget(ship, Target.newFromLocation(0, 110));
-            expect(result).toEqual(Target.newFromLocation(0, 65));
+            var result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1100));
+            expect(result).toEqual(Target.newFromLocation(0, 650));
         });
 
         it("exclusion radius does not make the ship go back", function () {
@@ -129,17 +129,17 @@ module TS.SpaceTac {
             var enemy1 = battle.fleets[1].ships[0];
             var enemy2 = battle.fleets[1].ships[1];
             TestTools.setShipAP(ship, 100);
-            enemy1.setArenaPosition(0, 50);
-            enemy2.setArenaPosition(0, 80);
+            enemy1.setArenaPosition(0, 500);
+            enemy2.setArenaPosition(0, 800);
 
             var action = new MoveAction(new Equipment());
             action.distance_per_power = 1000;
-            action.safety_distance = 60;
+            action.safety_distance = 600;
 
-            let result = action.checkLocationTarget(ship, Target.newFromLocation(0, 100));
+            let result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1000));
             expect(result).toBeNull();
-            result = action.checkLocationTarget(ship, Target.newFromLocation(0, 140));
-            expect(result).toEqual(Target.newFromLocation(0, 140));
+            result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1400));
+            expect(result).toEqual(Target.newFromLocation(0, 1400));
         });
     });
 }

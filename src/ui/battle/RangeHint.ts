@@ -57,21 +57,17 @@ module TS.SpaceTac.UI {
                 this.info.drawCircle(location.x, location.y, radius * 2);
 
                 if (action instanceof MoveAction) {
-                    let safety = action.safety_distance / 2;
-                    this.info.beginFill(nocolor);
-                    this.info.drawRect(0, 0, this.width, safety);
-                    this.info.drawRect(0, this.height - safety, this.width, safety);
-                    this.info.drawRect(0, safety, safety, this.height - safety * 2);
-                    this.info.drawRect(this.width - safety, safety, safety, this.height - safety * 2);
+                    let exclusions = action.getExclusionAreas(ship);
 
-                    let battle = ship.getBattle();
-                    if (battle) {
-                        iforeach(battle.iships(true), s => {
-                            if (s !== ship) {
-                                this.info.drawCircle(s.arena_x, s.arena_y, safety * 4);
-                            }
-                        });
-                    }
+                    this.info.beginFill(nocolor);
+                    this.info.drawRect(0, 0, this.width, exclusions.hard_border);
+                    this.info.drawRect(0, this.height - exclusions.hard_border, this.width, exclusions.hard_border);
+                    this.info.drawRect(0, exclusions.hard_border, exclusions.hard_border, this.height - exclusions.hard_border * 2);
+                    this.info.drawRect(this.width - exclusions.hard_border, exclusions.hard_border, exclusions.hard_border, this.height - exclusions.hard_border * 2);
+
+                    exclusions.obstacles.forEach(obstacle => {
+                        this.info.drawCircle(obstacle.x, obstacle.y, exclusions.effective_obstacle * 2);
+                    });
                 }
 
                 this.info.visible = true;

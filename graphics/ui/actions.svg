@@ -16,13 +16,25 @@
    version="1.1"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="actions.svg"
-   inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/equipment/voidhawkengine.png"
+   inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/equipment/gravitshield.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    viewBox="0 0 256 256"
    enable-background="new">
   <defs
      id="defs4">
+    <linearGradient
+       id="linearGradient5049"
+       inkscape:collect="always">
+      <stop
+         id="stop5045"
+         offset="0"
+         style="stop-color:#b5c3c6;stop-opacity:1" />
+      <stop
+         id="stop5047"
+         offset="1"
+         style="stop-color:#4d5959;stop-opacity:1" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient5473">
@@ -65,21 +77,9 @@
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient5046">
-      <stop
-         style="stop-color:#6f8185;stop-opacity:1"
-         offset="0"
-         id="stop5042" />
-      <stop
-         style="stop-color:#222a2c;stop-opacity:1"
-         offset="1"
-         id="stop5044" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
        id="linearGradient5038">
       <stop
-         style="stop-color:#4f5c64;stop-opacity:1;"
+         style="stop-color:#8d9aa2;stop-opacity:1"
          offset="0"
          id="stop5034" />
       <stop
@@ -756,43 +756,23 @@
        inkscape:collect="always"
        style="color-interpolation-filters:sRGB"
        id="filter5260"
-       x="-0.1224"
-       width="1.2448"
-       y="-0.1224"
-       height="1.2448">
+       x="-0.5"
+       width="2"
+       y="-0.5"
+       height="2">
+      <feGaussianBlur
+         stdDeviation="1.4199999999999999"
+         id="feGaussianBlur5264" />
       <feBlend
          inkscape:collect="always"
          mode="hard-light"
          in2="BackgroundImage"
          id="feBlend5262" />
-      <feGaussianBlur
-         stdDeviation="1.4194335"
-         id="feGaussianBlur5264" />
     </filter>
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient5046"
+       xlink:href="#linearGradient5049"
        id="radialGradient5289"
-       gradientUnits="userSpaceOnUse"
-       cx="187.13762"
-       cy="49.451832"
-       fx="187.13762"
-       fy="49.451832"
-       r="13.916015" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient5046"
-       id="radialGradient5299"
-       gradientUnits="userSpaceOnUse"
-       cx="187.13762"
-       cy="49.451832"
-       fx="187.13762"
-       fy="49.451832"
-       r="13.916015" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient5046"
-       id="radialGradient5305"
        gradientUnits="userSpaceOnUse"
        cx="187.13762"
        cy="49.451832"
@@ -1082,10 +1062,10 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.56"
-     inkscape:cx="158.76788"
-     inkscape:cy="151.25188"
+     inkscape:cx="130.38994"
+     inkscape:cy="132.56959"
      inkscape:document-units="px"
-     inkscape:current-layer="g5519"
+     inkscape:current-layer="g5022"
      showgrid="false"
      inkscape:window-width="1920"
      inkscape:window-height="1030"
@@ -2215,7 +2195,7 @@
        style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#38454d;stroke-width:8.99291325;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      inkscape:label="GravitShield"
      id="g5022"
      inkscape:groupmode="layer">
@@ -2236,7 +2216,7 @@
          style="fill:url(#radialGradient5289);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5260)" />
     </g>
     <g
-       id="g4856">
+       id="g5114">
       <use
          transform="translate(0,-98.321274)"
          height="100%"
@@ -2253,34 +2233,30 @@
          xlink:href="#g5267"
          y="0"
          x="0" />
-      <g
-         id="g5297"
-         transform="translate(-59.137619,176.86944)">
-        <circle
-           r="13.916015"
-           cy="49.451832"
-           cx="187.13762"
-           id="circle5295"
-           style="fill:url(#radialGradient5299);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5260)" />
-      </g>
-      <g
-         id="g5303"
-         transform="translate(-157.45889,78.548168)">
-        <circle
-           r="13.916015"
-           cy="49.451832"
-           cx="187.13762"
-           id="circle5301"
-           style="fill:url(#radialGradient5305);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.93749994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5260)" />
-      </g>
+      <use
+         transform="rotate(-180,128,128)"
+         x="0"
+         y="0"
+         xlink:href="#use5291"
+         id="use5073"
+         width="100%"
+         height="100%" />
+      <use
+         x="0"
+         y="0"
+         xlink:href="#use5293"
+         id="use5075"
+         width="100%"
+         height="100%"
+         transform="rotate(-180,128,128)" />
     </g>
     <use
        x="0"
        y="0"
-       xlink:href="#g4856"
-       id="use4858"
+       xlink:href="#g5114"
        width="100%"
        height="100%"
+       id="use5116"
        transform="rotate(45,128,128)" />
   </g>
   <g
@@ -2579,7 +2555,7 @@
      inkscape:groupmode="layer"
      id="g4919"
      inkscape:label="VoidhawkEngine"
-     style="display:inline">
+     style="display:none">
     <g
        id="g5449"
        transform="translate(1.6322846,-21.706596)">

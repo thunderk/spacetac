@@ -15,7 +15,8 @@ module TS.SpaceTac.Specs {
         });
 
         it("moves and computes facing angle", function () {
-            var ship = new Ship(null, "Test");
+            let ship = new Ship(null, "Test");
+            let engine = TestTools.addEngine(ship, 50);
             ship.setArenaFacingAngle(0);
             ship.setArenaPosition(50, 50);
 
@@ -23,42 +24,48 @@ module TS.SpaceTac.Specs {
             expect(ship.arena_y).toEqual(50);
             expect(ship.arena_angle).toEqual(0);
 
-            ship.moveTo(51, 50);
+            ship.moveTo(51, 50, engine);
             expect(ship.arena_x).toEqual(51);
             expect(ship.arena_y).toEqual(50);
             expect(ship.arena_angle).toEqual(0);
 
-            ship.moveTo(50, 50);
+            ship.moveTo(50, 50, engine);
             expect(ship.arena_angle).toBeCloseTo(3.14159265, 0.00001);
 
-            ship.moveTo(51, 51);
+            ship.moveTo(51, 51, engine);
             expect(ship.arena_angle).toBeCloseTo(0.785398, 0.00001);
 
-            ship.moveTo(51, 52);
+            ship.moveTo(51, 52, engine);
             expect(ship.arena_angle).toBeCloseTo(1.5707963, 0.00001);
 
-            ship.moveTo(52, 52);
+            ship.moveTo(52, 52, engine);
             expect(ship.arena_x).toEqual(52);
             expect(ship.arena_y).toEqual(52);
             expect(ship.arena_angle).toEqual(0);
 
-            ship.moveTo(52, 50);
+            ship.moveTo(52, 50, engine);
             expect(ship.arena_angle).toBeCloseTo(-1.5707963, 0.00001);
 
-            ship.moveTo(50, 50);
+            ship.moveTo(50, 50, engine);
             expect(ship.arena_angle).toBeCloseTo(3.14159265, 0.00001);
 
             let battle = new Battle();
             battle.fleets[0].addShip(ship);
             expect(battle.log.events).toEqual([]);
 
-            ship.moveTo(70, 50);
-            expect(battle.log.events).toEqual([new MoveEvent(ship, new ArenaLocationAngle(50, 50, Math.PI), new ArenaLocationAngle(70, 50, 0))]);
+            ship.moveTo(70, 50, engine);
+            expect(battle.log.events).toEqual([new MoveEvent(ship, new ArenaLocationAngle(50, 50, Math.PI), new ArenaLocationAngle(70, 50, 0), engine)]);
 
+            battle.log.clear();
             ship.rotate(2.1);
             expect(battle.log.events).toEqual([
-                new MoveEvent(ship, new ArenaLocationAngle(50, 50, Math.PI), new ArenaLocationAngle(70, 50, 0)),
                 new MoveEvent(ship, new ArenaLocationAngle(70, 50, 0), new ArenaLocationAngle(70, 50, 2.1))
+            ]);
+
+            battle.log.clear();
+            ship.moveTo(0, 0, null);
+            expect(battle.log.events).toEqual([
+                new MoveEvent(ship, new ArenaLocationAngle(70, 50, 2.1), new ArenaLocationAngle(0, 0, 2.1))
             ]);
         });
 

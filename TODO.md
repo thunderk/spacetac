@@ -37,6 +37,7 @@ Battle
 * Add a voluntary retreat option
 * Remove dead ships from ship list and play order
 * Add quick animation of playing ship indicator, on ship change
+* Display a hint when a move-fire simulation failed (cannot enter exclusion area for example)
 * Display effects description instead of attribute changes
 * Display radius and power usage hints for area effects on action icon hover + add confirmation ?
 * Any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
@@ -57,14 +58,13 @@ Ships models and equipments
 * Add permanent effects and actions to ship models
 * Add critical hit/miss
 * Add damage over time effect (tricky to make intuitive)
-* Safety margin should only be applied on ships, not arena borders (which should be fixed)
 * Move distance should increase with maneuvrability
 * Chance to hit should increase with precision
 * Add actions with cost dependent of distance (like current move actions)
 * Add "cone" targetting
 * Add disc targetting (for some jump move actions)
 * Add "chain" effects
-* Add "forced move" effects (like a gravity well)
+* RepelEffect should apply on ships in a good order (distance decreasing)
 * Add hull points to drones and make them take area damage
 * "Shield Transfer" has no quality offsets
 

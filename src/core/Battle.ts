@@ -7,6 +7,9 @@ module TS.SpaceTac {
         // Battle outcome, if *ended* is true
         outcome: BattleOutcome
 
+        // Battle cheats
+        cheats: BattleCheats
+
         // Statistics
         stats: BattleStats
 
@@ -32,6 +35,8 @@ module TS.SpaceTac {
         // Size of the battle area
         width: number
         height: number
+        border = 50
+        ship_separation = 100
 
         // Timer to use for scheduled things
         timer = Timer.global
@@ -51,6 +56,7 @@ module TS.SpaceTac {
 
             this.log = new BattleLog();
             this.stats = new BattleStats();
+            this.cheats = new BattleCheats(this, fleet1.player);
 
             this.fleets.forEach((fleet: Fleet) => {
                 fleet.setBattle(this);
