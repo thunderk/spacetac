@@ -159,8 +159,9 @@ module TS.SpaceTac.UI {
 
             let blast_radius = this.weapon.action.getBlastRadius(this.ship);
 
+            let projectile_duration = arenaDistance(this.source, this.destination) * 1.5;
             let tween = this.ui.tweens.create(missile);
-            tween.to({ x: this.destination.x, y: this.destination.y }, 1000);
+            tween.to({ x: this.destination.x, y: this.destination.y }, projectile_duration || 1);
             tween.onComplete.addOnce(() => {
                 missile.destroy();
                 if (blast_radius > 0) {
@@ -180,18 +181,20 @@ module TS.SpaceTac.UI {
             });
             tween.start();
 
-            if (blast_radius > 0) {
-                let ships = this.arena.getShipsInCircle(new ArenaCircleArea(this.destination.x, this.destination.y, blast_radius));
-                ships.forEach(sprite => {
-                    if (sprite.getValue("shield") > 0) {
-                        this.shieldImpactEffect(this.target, sprite, 1200, 800);
-                    } else {
-                        this.hullImpactEffect(this.target, sprite, 1200, 400);
-                    }
-                });
+            if (blast_radius > 0 && this.weapon.action instanceof FireWeaponAction) {
+                if (any(this.weapon.action.effects, effect => effect instanceof DamageEffect)) {
+                    let ships = this.arena.getShipsInCircle(new ArenaCircleArea(this.destination.x, this.destination.y, blast_radius));
+                    ships.forEach(sprite => {
+                        if (sprite.getValue("shield") > 0) {
+                            this.shieldImpactEffect(this.target, sprite, 1200, 800);
+                        } else {
+                            this.hullImpactEffect(this.target, sprite, 1200, 400);
+                        }
+                    });
+                }
             }
 
-            return 1000 + (blast_radius ? 1500 : 0);
+            return projectile_duration + (blast_radius ? 1500 : 0);
         }
 
         /**
