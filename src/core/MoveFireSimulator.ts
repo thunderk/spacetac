@@ -60,7 +60,7 @@ module TS.SpaceTac {
             if (engines.length == 0) {
                 return null;
             } else {
-                return maxBy(engines, engine => (engine.action instanceof MoveAction) ? engine.action.distance_per_power : 0);
+                return maxBy(engines, engine => (engine.action instanceof MoveAction) ? engine.action.getDistanceByActionPoint(this.ship) : 0);
             }
         }
 

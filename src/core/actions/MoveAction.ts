@@ -1,7 +1,7 @@
 module TS.SpaceTac {
     // Action to move to a given location
     export class MoveAction extends BaseAction {
-        // Distance allowed for each power point
+        // Distance allowed for each power point (raw, without applying maneuvrability)
         distance_per_power: number
 
         // Safety distance from other ships
@@ -10,11 +10,15 @@ module TS.SpaceTac {
         // Equipment cannot be null (engine)
         equipment: Equipment
 
-        constructor(equipment: Equipment, distance_per_power = 0, safety_distance = 120) {
+        // Impact of maneuvrability (in % of distance)
+        maneuvrability_factor: number
+
+        constructor(equipment: Equipment, distance_per_power = 0, safety_distance = 120, maneuvrability_factor = 0) {
             super("move", "Move", true, equipment);
 
             this.distance_per_power = distance_per_power;
             this.safety_distance = safety_distance;
+            this.maneuvrability_factor = maneuvrability_factor;
         }
 
         checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): string | null {
@@ -40,18 +44,20 @@ module TS.SpaceTac {
             }
 
             var distance = Target.newFromShip(ship).getDistanceTo(target);
-            return Math.ceil(distance / this.distance_per_power);
+            return Math.ceil(distance / this.getDistanceByActionPoint(ship));
         }
 
         getRangeRadius(ship: Ship): number {
-            return ship.values.power.get() * this.distance_per_power;
+            return ship.getValue("power") * this.getDistanceByActionPoint(ship);
         }
 
         /**
          * Get the distance that may be traveled with 1 action point
          */
         getDistanceByActionPoint(ship: Ship): number {
-            return this.distance_per_power;
+            let maneuvrability = Math.max(ship.getAttribute("maneuvrability"), 0);
+            let factor = maneuvrability / (maneuvrability + 2);
+            return Math.ceil(this.distance_per_power * (1 - this.maneuvrability_factor * 0.01 * (1 - factor)));
         }
 
         /**
@@ -92,7 +98,20 @@ module TS.SpaceTac {
         }
 
         getEffectsDescription(): string {
-            return `Move: ${this.distance_per_power}km per power point (safety: ${this.safety_distance}km)`;
+            let result = `Move: ${this.distance_per_power}km per power point`;
+
+            let precisions = [];
+            if (this.safety_distance) {
+                precisions.push(`safety: ${this.safety_distance}km`);
+            }
+            if (this.maneuvrability_factor) {
+                precisions.push(`maneuvrability influence: ${this.maneuvrability_factor}%`);
+            }
+            if (precisions.length) {
+                result += ` (${precisions.join(", ")})`;
+            }
+
+            return result;
         }
     }
 }

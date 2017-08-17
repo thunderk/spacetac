@@ -35,10 +35,12 @@ module TS.SpaceTac {
             return equipment;
         }
 
-        // Add an engine, allowing a ship to move *distance*, for each action points
+        /**
+         * Add an engine, allowing a ship to move *distance*, for each action points
+         */
         static addEngine(ship: Ship, distance: number): Equipment {
-            var equipment = this.getOrGenEquipment(ship, SlotType.Engine, new Equipments.RocketEngine(), true);
-            (<MoveAction>equipment.action).distance_per_power = distance;
+            let equipment = ship.addSlot(SlotType.Engine).attach(new Equipment(SlotType.Engine));
+            equipment.action = new MoveAction(equipment, distance);
             return equipment;
         }
 

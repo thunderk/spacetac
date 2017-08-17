@@ -84,13 +84,13 @@ module TS.SpaceTac.Specs {
 
         it("adds move actions", function () {
             let template = new LootTemplate(SlotType.Engine, "Engine");
-            template.addMoveAction(irange(undefined, 100, 10));
+            template.addMoveAction(irange(undefined, 100, 10), istep(50, irepeat(10)), irepeat(95));
 
             let result = template.generate(1);
-            expect(result.action).toEqual(new MoveAction(result, 100));
+            expect(result.action).toEqual(new MoveAction(result, 100, 50, 95));
 
             result = template.generate(2);
-            expect(result.action).toEqual(new MoveAction(result, 110));
+            expect(result.action).toEqual(new MoveAction(result, 110, 60, 95));
         });
 
         it("adds fire actions", function () {

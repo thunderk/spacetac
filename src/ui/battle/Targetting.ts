@@ -108,7 +108,7 @@ module TS.SpaceTac.UI {
             let move = part.action instanceof MoveAction;
             let color = (enabled && part.possible) ? (move ? 0xe09c47 : 0xdc6441) : 0x8e8e8e;
             let src = previous ? previous.target : this.ship.location;
-            let gradation = part.action instanceof MoveAction ? part.action.distance_per_power : 0;
+            let gradation = (part.action instanceof MoveAction) ? part.action.getDistanceByActionPoint(this.ship) : 0;
             this.drawVector(color, src.x, src.y, part.target.x, part.target.y, gradation);
         }
 

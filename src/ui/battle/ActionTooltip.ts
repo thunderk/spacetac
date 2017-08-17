@@ -17,7 +17,7 @@ module TS.SpaceTac.UI {
                 if (ship.getValue("power") == 0) {
                     cost = "Not enough power";
                 } else {
-                    cost = `Cost: 1 power per ${action.distance_per_power}km`;
+                    cost = `Cost: 1 power per ${action.getDistanceByActionPoint(ship)}km`;
                 }
             } else if (action.equipment) {
                 let power_usage = action.getActionPointsUsage(ship, null);

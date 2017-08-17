@@ -58,7 +58,6 @@ Ships models and equipments
 * Add permanent effects and actions to ship models
 * Add critical hit/miss
 * Add damage over time effect (tricky to make intuitive)
-* Move distance should increase with maneuvrability
 * Chance to hit should increase with precision
 * Add actions with cost dependent of distance (like current move actions)
 * Add "cone" targetting

@@ -9,18 +9,18 @@ module TS.SpaceTac {
             ship.arena_x = 0;
             ship.arena_y = 0;
             var engine = new Equipment();
-            var action = new MoveAction(engine, 0.5);
+            var action = new MoveAction(engine, 10);
 
-            expect(action.getDistanceByActionPoint(ship)).toBe(0.5);
+            expect(action.getDistanceByActionPoint(ship)).toBe(10);
 
-            var result = action.checkTarget(ship, Target.newFromLocation(0, 2));
-            expect(result).toEqual(Target.newFromLocation(0, 2));
+            var result = action.checkTarget(ship, Target.newFromLocation(0, 20));
+            expect(result).toEqual(Target.newFromLocation(0, 20));
 
-            result = action.checkTarget(ship, Target.newFromLocation(0, 8));
-            expect(result).toEqual(Target.newFromLocation(0, 2.9));
+            result = action.checkTarget(ship, Target.newFromLocation(0, 80));
+            expect(nn(result).y).toBeCloseTo(59.9, 0.000001);
 
             ship.values.power.set(0);
-            result = action.checkTarget(ship, Target.newFromLocation(0, 8));
+            result = action.checkTarget(ship, Target.newFromLocation(0, 80));
             expect(result).toBeNull();
         });
 
@@ -140,6 +140,37 @@ module TS.SpaceTac {
             expect(result).toBeNull();
             result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1400));
             expect(result).toEqual(Target.newFromLocation(0, 1400));
+        });
+
+        it("applies ship maneuvrability to determine distance per power point", function () {
+            let ship = new Ship();
+
+            let action = new MoveAction(new Equipment(), 100, undefined, 60);
+            ship.setAttribute("maneuvrability", 0);
+            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(40, 0.01);
+            ship.setAttribute("maneuvrability", 1);
+            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(60, 0.01);
+            ship.setAttribute("maneuvrability", 2);
+            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(70, 0.01);
+            ship.setAttribute("maneuvrability", 10);
+            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(90, 0.01);
+
+            action = new MoveAction(new Equipment(), 100, undefined, 0);
+            ship.setAttribute("maneuvrability", 0);
+            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(100, 0.01);
+            ship.setAttribute("maneuvrability", 10);
+            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(100, 0.01);
+        });
+
+        it("builds a textual description", function () {
+            let action = new MoveAction(new Equipment(), 58, 0, 0);
+            expect(action.getEffectsDescription()).toEqual("Move: 58km per power point");
+
+            action = new MoveAction(new Equipment(), 58, 12, 0);
+            expect(action.getEffectsDescription()).toEqual("Move: 58km per power point (safety: 12km)");
+
+            action = new MoveAction(new Equipment(), 58, 12, 80);
+            expect(action.getEffectsDescription()).toEqual("Move: 58km per power point (safety: 12km, maneuvrability influence: 80%)");
         });
     });
 }

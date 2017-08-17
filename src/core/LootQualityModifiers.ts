@@ -82,6 +82,7 @@ module TS.SpaceTac {
 
             if (equipment.action instanceof MoveAction) {
                 simpleFactor(equipment.action, 'distance_per_power');
+                simpleFactor(equipment.action, 'maneuvrability_factor', true);
             }
 
             if (equipment.cooldown.overheat) {

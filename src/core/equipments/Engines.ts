@@ -8,11 +8,11 @@ module TS.SpaceTac.Equipments {
             this.setSkillsRequirements({ "skill_materials": 1 });
             this.setCooldown(irepeat(2), 0);
             this.addAttributeEffect("maneuvrability", 2);
-            this.addMoveAction(istep(200, irepeat(20)));
+            this.addMoveAction(istep(200, irepeat(20)), undefined, irepeat(70));
         }
     }
 
-    export class IonEngine extends LootTemplate {
+    export class IonThruster extends LootTemplate {
         constructor() {
             super(SlotType.Engine, "Ion Thruster", "Electric propulsion based on accelerating ions through an electrostatic grid", 150, 230);
 
@@ -30,7 +30,7 @@ module TS.SpaceTac.Equipments {
             this.setSkillsRequirements({ "skill_gravity": 2 });
             this.setCooldown(irepeat(1), 0);
             this.addAttributeEffect("maneuvrability", istep(-5, irepeat(0.8)));
-            this.addMoveAction(irepeat(2000), istep(250, irepeat(-10)));
+            this.addMoveAction(irepeat(2000), istep(250, irepeat(-10)), irepeat(0));
         }
     }
 }
