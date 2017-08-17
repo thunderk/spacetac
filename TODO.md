@@ -64,9 +64,10 @@ Ships models and equipments
 * Add "cone" targetting
 * Add disc targetting (for some jump move actions)
 * Add "chain" effects
+* Add mines equivalent (drones that apply only at the end)
 * RepelEffect should apply on ships in a good order (distance decreasing)
 * Add hull points to drones and make them take area damage
-* "Shield Transfer" has no quality offsets
+* Quality modifiers should be based on an "quality diff" to reach
 
 Artificial Intelligence
 -----------------------

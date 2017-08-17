@@ -59,6 +59,7 @@
             <option value="---">---</option>
         </select>
         <input id="level" type="range" value="1" min="1" max="20" step="1" />
+        <button id="refresh" type="button">Refresh</button>
         <div id="result"></div>
     </div>
 
@@ -104,6 +105,9 @@
             }
             document.getElementById("template").onchange = function () {
                 current_name = this.value;
+                update();
+            }
+            document.getElementById("refresh").onclick = function () {
                 update();
             }
             update();
