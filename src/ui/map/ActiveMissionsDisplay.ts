@@ -40,19 +40,19 @@ module TS.SpaceTac.UI {
         private update() {
             this.clearContent();
 
-            let markers: [StarLocation | Star, number][] = [];
+            let markers: [StarLocation | Star, string][] = [];
 
             let active = this.missions.getCurrent();
             let spacing = 80;
             let offset = 245 - active.length * spacing;
             active.forEach((mission, idx) => {
-                let frame = mission.main ? 0 : 1;
-                this.addImageF(35, offset + spacing * idx, "map-missions", frame);
+                let image = mission.main ? "map-mission-main" : "map-mission-standard";
+                this.addImage(35, offset + spacing * idx, image);
                 this.addText(90, offset + spacing * idx, mission.current_part.title, "#d2e1f3", 20, false, false, 430, true);
 
                 let location = mission.current_part.getLocationHint();
                 if (location) {
-                    markers.push([location, frame]);
+                    markers.push([location, image]);
                 }
             });
 

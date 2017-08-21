@@ -36,13 +36,13 @@ module TS.SpaceTac.UI {
                 let fleet_move = () => this.view.moveToLocation(location);
 
                 if (location.type == StarLocationType.STAR) {
-                    location_sprite = this.addImage(location.x, location.y, "map-location-star", 0, fleet_move);
+                    location_sprite = this.addImage(location.x, location.y, "map-location-star", fleet_move);
                 } else if (location.type == StarLocationType.PLANET) {
-                    location_sprite = this.addImage(location.x, location.y, "map-location-planet", 0, fleet_move);
+                    location_sprite = this.addImage(location.x, location.y, "map-location-planet", fleet_move);
                     location_sprite.rotation = Math.atan2(location.y, location.x);
                     this.addCircle(location.x, location.y);
                 } else if (location.type == StarLocationType.WARP) {
-                    location_sprite = this.addImage(location.x, location.y, "map-location-warp", 0, fleet_move);
+                    location_sprite = this.addImage(location.x, location.y, "map-location-warp", fleet_move);
                     location_sprite.rotation = Math.atan2(location.y, location.x);
                 }
 
@@ -61,7 +61,7 @@ module TS.SpaceTac.UI {
 
                 if (location_sprite) {
                     let frame = this.getBadgeFrame(location);
-                    let status_badge = this.addImage(location.x + 0.005, location.y + 0.005, "map-status", frame);
+                    let status_badge = this.addImage(location.x + 0.005, location.y + 0.005, `map-status-${frame}`);
                     this.locations.push([location, location_sprite, status_badge]);
                 }
             });
@@ -80,10 +80,11 @@ module TS.SpaceTac.UI {
             this.view.tooltip.bindStaticText(this.label, `Level ${this.starsystem.level} starsystem`);
         }
 
-        addImage(x: number, y: number, key: string, frame = 0, onclick: Function | null = null): Phaser.Image {
+        addImage(x: number, y: number, name: string, onclick: Function | null = null): Phaser.Image {
             x /= this.scale.x;
             y /= this.scale.y;
-            let image = onclick ? this.game.add.button(x, y, key, onclick, undefined, frame, frame) : this.game.add.image(x, y, key, frame);
+            let info = this.view.getImageInfo(name);
+            let image = onclick ? this.game.add.button(x, y, info.key, onclick, undefined, info.frame, info.frame) : this.game.add.image(x, y, info.key, info.frame);
             image.anchor.set(0.5, 0.5);
             this.addChild(image);
             return image;
@@ -107,17 +108,17 @@ module TS.SpaceTac.UI {
         /**
          * Return the frame to use for info badge.
          */
-        getBadgeFrame(location: StarLocation): number {
+        getBadgeFrame(location: StarLocation): string {
             if (this.player.hasVisitedLocation(location)) {
                 if (location.encounter) {
-                    return 2;
+                    return "enemy";
                 } else if (location.shop) {
-                    return 3;
+                    return "dockyard";
                 } else {
-                    return 1;
+                    return "clear";
                 }
             } else {
-                return 0;
+                return "unvisited";
             }
         }
 

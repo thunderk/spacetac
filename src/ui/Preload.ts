@@ -48,18 +48,12 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/shiplist/hover.png");
             this.loadImage("battle/shiplist/info-button.png");
             this.loadImage("map/starsystem-background.png");
-            this.loadImage("map/current-location.png");
             this.loadImage("map/name.png");
             this.loadImage("map/subname.png");
             this.loadSheet("map/action.png", 323, 192);
             this.loadImage("map/orbit.png");
             this.loadImage("map/boundaries.png");
             this.loadSheet("map/buttons.png", 115, 191);
-            this.loadImage("map/location-star.png");
-            this.loadImage("map/location-planet.png");
-            this.loadImage("map/location-warp.png");
-            this.loadSheet("map/status.png", 32);
-            this.loadSheet("map/missions.png", 70);
             this.loadSheet("map/mission-action.png", 192, 56);
             this.loadImage("character/sheet.png");
             this.loadImage("character/close.png");

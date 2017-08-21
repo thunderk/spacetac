@@ -8,7 +8,7 @@ module TS.SpaceTac.UI {
         private fleet: FleetDisplay;
 
         constructor(parent: UniverseMapView, fleet: FleetDisplay) {
-            super(parent.game, 0, 0, "map-current-location");
+            super(parent.game, 0, 0, parent.getImageInfo("map-current-location").key, parent.getImageInfo("map-current-location").frame);
 
             this.fleet = fleet;
 
