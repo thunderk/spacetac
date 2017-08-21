@@ -16,6 +16,7 @@ module TS.SpaceTac.UI {
 
         // Link to arena
         private arena: Arena
+        private view: BattleView
 
         // Timer to use
         private timer: Timer
@@ -40,6 +41,7 @@ module TS.SpaceTac.UI {
         constructor(arena: Arena, ship: Ship, target: Target, weapon: Equipment) {
             this.ui = arena.getGame();
             this.arena = arena;
+            this.view = arena.battleview;
             this.timer = arena.battleview.timer;
             this.layer = arena.layer_weapon_effects;
             this.ship = ship;
@@ -98,7 +100,7 @@ module TS.SpaceTac.UI {
         shieldImpactEffect(from: IArenaLocation, ship: IArenaLocation, delay: number, duration: number, particles = false) {
             let angle = Math.atan2(from.y - ship.y, from.x - ship.x);
 
-            let effect = new Phaser.Image(this.ui, ship.x, ship.y, "battle-weapon-shield-impact");
+            let effect = this.view.newImage("battle-effects-shield-impact", ship.x, ship.y);
             effect.alpha = 0;
             effect.rotation = angle;
             effect.anchor.set(0.5, 0.5);
@@ -111,11 +113,12 @@ module TS.SpaceTac.UI {
             tween1.start();
 
             if (particles) {
+                let image = this.view.getImageInfo("battle-effects-hot");
                 let emitter = this.ui.add.emitter(ship.x + Math.cos(angle) * 35, ship.y + Math.sin(angle) * 35, 30);
                 emitter.minParticleScale = 0.7;
                 emitter.maxParticleScale = 1.2;
                 emitter.gravity = 0;
-                emitter.makeParticles("battle-weapon-hot");
+                emitter.makeParticles(image.key, image.frame);
                 emitter.setSize(10, 10);
                 emitter.setRotation(0, 0);
                 emitter.setXSpeed(-Math.cos(angle) * 20, -Math.cos(angle) * 80);
@@ -132,11 +135,12 @@ module TS.SpaceTac.UI {
         hullImpactEffect(from: IArenaLocation, ship: IArenaLocation, delay: number, duration: number) {
             let angle = Math.atan2(from.y - ship.y, from.x - ship.x);
 
+            let image = this.view.getImageInfo("battle-effects-hot");
             let emitter = this.ui.add.emitter(ship.x + Math.cos(angle) * 10, ship.y + Math.sin(angle) * 10, 30);
             emitter.minParticleScale = 1.0;
             emitter.maxParticleScale = 2.0;
             emitter.gravity = 0;
-            emitter.makeParticles("battle-weapon-hot");
+            emitter.makeParticles(image.key, image.frame);
             emitter.setSize(15, 15);
             emitter.setRotation(0, 0);
             emitter.setXSpeed(-Math.cos(angle) * 120, -Math.cos(angle) * 260);
@@ -152,7 +156,7 @@ module TS.SpaceTac.UI {
         defaultEffect(): number {
             this.ui.audio.playOnce("battle-weapon-missile-launch");
 
-            let missile = new Phaser.Image(this.ui, this.source.x, this.source.y, "battle-weapon-default");
+            let missile = this.view.newImage("battle-effects-default", this.source.x, this.source.y);
             missile.anchor.set(0.5, 0.5);
             missile.rotation = arenaAngle(this.source, this.destination);
             this.layer.add(missile);
@@ -167,7 +171,7 @@ module TS.SpaceTac.UI {
                 if (blast_radius > 0) {
                     this.ui.audio.playOnce("battle-weapon-missile-explosion");
 
-                    let blast = new Phaser.Image(this.ui, this.destination.x, this.destination.y, "battle-weapon-blast");
+                    let blast = this.view.newImage("battle-effects-blast", this.destination.x, this.destination.y);
                     let scaling = blast_radius * 2 / (blast.width * 0.9);
                     blast.anchor.set(0.5, 0.5);
                     blast.scale.set(0.001, 0.001);
@@ -206,17 +210,18 @@ module TS.SpaceTac.UI {
             let sprite = this.target.ship ? this.arena.findShipSprite(this.target.ship) : null;
             let has_shield = sprite && sprite.getValue("shield") > 0;
 
-            var angle = arenaAngle(this.source, this.target);
-            var distance = arenaDistance(this.source, this.target);
-            var emitter = this.ui.add.emitter(this.source.x + Math.cos(angle) * 35, this.source.y + Math.sin(angle) * 35, 10);
-            var speed = 2000;
+            let angle = arenaAngle(this.source, this.target);
+            let distance = arenaDistance(this.source, this.target);
+            let image = this.view.getImageInfo("battle-effects-bullets");
+            let emitter = this.ui.add.emitter(this.source.x + Math.cos(angle) * 35, this.source.y + Math.sin(angle) * 35, 10);
+            let speed = 2000;
             emitter.particleClass = BulletParticle;
             emitter.gravity = 0;
             emitter.setSize(5, 5);
             emitter.setRotation(0, 0);
             emitter.setXSpeed(Math.cos(angle) * speed, Math.cos(angle) * speed);
             emitter.setYSpeed(Math.sin(angle) * speed, Math.sin(angle) * speed);
-            emitter.makeParticles(["battle-weapon-bullets"]);
+            emitter.makeParticles(image.key, image.frame);
             let guard = 50 + (has_shield ? 80 : 40);
             if (guard + 1 > distance) {
                 guard = distance - 1;

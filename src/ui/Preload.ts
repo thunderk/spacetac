@@ -47,11 +47,6 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/shiplist/damage.png");
             this.loadImage("battle/shiplist/hover.png");
             this.loadImage("battle/shiplist/info-button.png");
-            this.loadImage("battle/weapon/default.png");
-            this.loadImage("battle/weapon/bullets.png");
-            this.loadImage("battle/weapon/hot.png");
-            this.loadImage("battle/weapon/shield-impact.png");
-            this.loadImage("battle/weapon/blast.png");
             this.loadImage("map/starsystem-background.png");
             this.loadImage("map/current-location.png");
             this.loadImage("map/name.png");
