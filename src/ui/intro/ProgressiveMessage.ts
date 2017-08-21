@@ -43,7 +43,7 @@ module TS.SpaceTac.UI {
                 width -= offset;
 
                 let ioffset = style.padding + Math.floor(style.image_size / 2);
-                this.addImageA(ioffset, ioffset, style.image);
+                this.addImage(ioffset, ioffset, style.image);
 
                 if (style.image_caption) {
                     let text_size = Math.ceil(style.text_size * 0.6);

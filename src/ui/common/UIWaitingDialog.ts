@@ -7,7 +7,7 @@ module TS.SpaceTac.UI {
             super(view);
 
             this.addText(this.width * 0.5, this.height * 0.3, message, "#90FEE3", 32);
-            this.addImage(this.width * 0.5, this.height * 0.6, "common-waiting");
+            this.addImageF(this.width * 0.5, this.height * 0.6, "common-waiting");
         }
 
         /**

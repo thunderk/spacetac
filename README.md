@@ -22,7 +22,7 @@ If you want to build on your computer, clone the repository, then run:
 
     ./spacetac install    # Install dependencies
     ./spacetac run build  # Build the final JS
-    ./spacetac run pack   # Pack the images and sounds
+    ./spacetac run atlas  # Pack the images and sounds
     ./spacetac test       # Run unit tests
     ./spacetac start      # Start development server, and open game in web browser
 

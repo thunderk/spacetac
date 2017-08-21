@@ -16,7 +16,7 @@ module TS.SpaceTac.UI {
             this.clearContent();
 
             if (title) {
-                this.addImage(239, 57, "map-subname");
+                this.addImageF(239, 57, "map-subname");
                 this.addText(239, 57, title, "#b8d2f1", 22, false, true);
             }
 

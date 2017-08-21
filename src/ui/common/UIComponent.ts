@@ -212,21 +212,21 @@ module TS.SpaceTac.UI {
         /**
          * Add a button in the component, positioning its center.
          */
-        addButton(x: number, y: number, on_click: Function, background: string, frame_normal = 0, frame_hover = 1, tooltip = "", angle = 0) {
+        addButton(x: number, y: number, on_click: Function, background: string, frame_normal = 0, frame_hover = 1, tooltip = ""): Phaser.Button {
             let button = new Phaser.Button(this.view.game, x, y, background, on_click, undefined, frame_hover, frame_normal);
             UIComponent.setButtonSound(button);
             button.anchor.set(0.5, 0.5);
-            button.angle = angle;
             if (tooltip) {
                 this.view.tooltip.bindStaticText(button, tooltip);
             }
             this.addInternalChild(button);
+            return button;
         }
 
         /**
          * Add a static text.
          */
-        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, bold = false, center = true, width = 0, vcenter = center): void {
+        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, bold = false, center = true, width = 0, vcenter = center): Phaser.Text {
             let style = { font: `${bold ? "bold " : ""}${size}pt SpaceTac`, fill: color, align: center ? "center" : "left" };
             let text = new Phaser.Text(this.view.game, x, y, content, style);
             text.anchor.set(center ? 0.5 : 0, vcenter ? 0.5 : 0);
@@ -235,12 +235,15 @@ module TS.SpaceTac.UI {
                 text.wordWrapWidth = width;
             }
             this.addInternalChild(text);
+            return text;
         }
 
         /**
          * Add a static image, positioning its center.
+         * 
+         * DEPRECATED - Use addImage instead
          */
-        addImage(x: number, y: number, key: string, frame = 0, scale = 1): void {
+        addImageF(x: number, y: number, key: string, frame = 0, scale = 1): void {
             let image = new Phaser.Image(this.container.game, x, y, key, frame);
             image.anchor.set(0.5, 0.5);
             image.scale.set(scale);
@@ -250,12 +253,13 @@ module TS.SpaceTac.UI {
         /**
          * Add a static image, from atlases, positioning its center.
          */
-        addImageA(x: number, y: number, name: string, scale = 1): void {
+        addImage(x: number, y: number, name: string, scale = 1): Phaser.Image {
             let info = this.view.getImageInfo(name);
             let image = new Phaser.Image(this.container.game, x, y, info.key, info.frame);
             image.anchor.set(0.5, 0.5);
             image.scale.set(scale);
             this.addInternalChild(image);
+            return image;
         }
 
         /**

@@ -63,7 +63,7 @@ module TS.SpaceTac.UI {
         // Attributes and skills
         attributes: { [key: string]: Phaser.Text } = {};
 
-        constructor(view: BaseView, xhidden = -2000, xshown = 0) {
+        constructor(view: BaseView, xhidden = -2000, xshown = 0, onclose?: Function) {
             super(view.game, 0, 0, "character-sheet");
 
             this.view = view;
@@ -73,7 +73,10 @@ module TS.SpaceTac.UI {
             this.xhidden = xhidden;
             this.inputEnabled = true;
 
-            let close_button = new Phaser.Button(this.game, view.getWidth(), 0, "character-close", () => this.hide());
+            if (!onclose) {
+                onclose = () => this.hide();
+            }
+            let close_button = new Phaser.Button(this.game, view.getWidth(), 0, "character-close", onclose);
             close_button.anchor.set(1, 0);
             UIComponent.setButtonSound(close_button);
             this.addChild(close_button);
@@ -283,7 +286,7 @@ module TS.SpaceTac.UI {
             }
 
             if (animate) {
-                this.game.tweens.create(this).to({ x: this.xshown }, 800, Phaser.Easing.Circular.InOut, true);
+                this.game.tweens.create(this).to({ x: this.xshown }, 400, Phaser.Easing.Circular.InOut, true);
             } else {
                 this.x = this.xshown;
             }
@@ -304,7 +307,7 @@ module TS.SpaceTac.UI {
             this.view.audio.playOnce("ui-dialog-close");
 
             if (animate) {
-                this.game.tweens.create(this).to({ x: this.xhidden }, 800, Phaser.Easing.Circular.InOut, true);
+                this.game.tweens.create(this).to({ x: this.xhidden }, 400, Phaser.Easing.Circular.InOut, true);
             } else {
                 this.x = this.xhidden;
             }

@@ -19,6 +19,7 @@ module TS.SpaceTac.UI {
             this.loadImage("common/button-ok.png");
             this.loadImage("common/button-cancel.png");
             this.loadImage("common/dialog.png");
+            this.loadSheet("common/dialog-textbutton.png", 316, 59);
             this.loadSheet("common/dialog-close.png", 92, 82);
             this.loadImage("menu/title.png");
             this.loadImage("menu/button.png");
@@ -51,13 +52,6 @@ module TS.SpaceTac.UI {
             this.loadImage("battle/weapon/hot.png");
             this.loadImage("battle/weapon/shield-impact.png");
             this.loadImage("battle/weapon/blast.png");
-            this.loadImage("battle/outcome/dialog.png");
-            this.loadImage("battle/outcome/title-victory.png");
-            this.loadImage("battle/outcome/title-defeat.png");
-            this.loadImage("battle/outcome/button-menu.png");
-            this.loadImage("battle/outcome/button-map.png");
-            this.loadImage("battle/outcome/button-revert.png");
-            this.loadImage("battle/outcome/button-loot.png");
             this.loadImage("map/starsystem-background.png");
             this.loadImage("map/current-location.png");
             this.loadImage("map/name.png");

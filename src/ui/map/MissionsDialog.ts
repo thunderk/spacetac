@@ -62,7 +62,7 @@ module TS.SpaceTac.UI {
             let title = mission.title;
             let subtitle = `${capitalize(MissionDifficulty[mission.difficulty])} - Reward: ${mission.getRewardText()}`;
 
-            this.addImage(320, yoffset, "map-missions", 1);
+            this.addImageF(320, yoffset, "map-missions", 1);
             if (title) {
                 this.addText(380, yoffset - 15, title, "#d2e1f3", 22, false, false, 620, true);
             }

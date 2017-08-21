@@ -47,7 +47,7 @@ module TS.SpaceTac.UI {
             let offset = 245 - active.length * spacing;
             active.forEach((mission, idx) => {
                 let frame = mission.main ? 0 : 1;
-                this.addImage(35, offset + spacing * idx, "map-missions", frame);
+                this.addImageF(35, offset + spacing * idx, "map-missions", frame);
                 this.addText(90, offset + spacing * idx, mission.current_part.title, "#d2e1f3", 20, false, false, 430, true);
 
                 let location = mission.current_part.getLocationHint();

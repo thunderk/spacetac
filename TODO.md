@@ -19,7 +19,7 @@ Map/story
 * Allow to cancel secondary missions
 * Forbid to end up with more than 5 ships in the fleet because of escorts
 * Fix problems when several dialogs are active at the same time
-* Handle case where cargo is full to give a reward (give money ?)
+* Handle case where cargo is full to give a reward (give money?)
 
 Character sheet
 ---------------
@@ -39,13 +39,13 @@ Battle
 * Add quick animation of playing ship indicator, on ship change
 * Display a hint when a move-fire simulation failed (cannot enter exclusion area for example)
 * Display effects description instead of attribute changes
-* Display radius and power usage hints for area effects on action icon hover + add confirmation ?
+* Display radius and power usage hints for area effects on action icon hover + add confirmation?
 * Any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
 * Add engine trail effect, and sound
 * Fix targetting not resetting on current cursor location when using keyboard shortcuts
 * Allow to skip animations, and allow no animation mode
-* Find incentives to move from starting position (permanent drones or anomalies ?)
-* Add a "loot all" button, disable the loot button if there is no loot
+* Find incentives to move from starting position (permanent drones or anomalies?)
+* Add a "loot all" button (on the character sheet or outcome dialog?)
 * Do not focus on ship while targetting for area effects (dissociate hover and target)
 * Repair drone has its activation effect sometimes displayed as permanent effect on ships in the radius
 * Merge identical sticky effects
@@ -110,7 +110,7 @@ Postponed
 * Replays
 * Multiplayer/co-op
 * Formation or deployment phase
-* Add ship personality (with icons to identify ?), with reaction dialogs
+* Add ship personality (with icons to identify?), with reaction dialogs
 * New battle internal flow: any game state change should be done through revertable events
 * Animated arena background, instead of big picture
 * Hide enemy information (shield, hull, weapons), until they are in play, or until a "spy" effect is used

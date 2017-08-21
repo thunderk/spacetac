@@ -24,7 +24,8 @@ module TS.SpaceTac.UI {
          * Add a control-capturing overlay
          */
         addOverlay(layer: Phaser.Group): void {
-            let overlay = layer.game.add.button(0, 0, "common-transparent", () => null);
+            let info = this.view.getImageInfo("translucent");
+            let overlay = layer.game.add.button(0, 0, info.key, () => null, undefined, info.frame, info.frame);
             overlay.input.useHandCursor = false;
             overlay.scale.set(this.view.getWidth() / overlay.width, this.view.getHeight() / overlay.height);
             layer.add(overlay);

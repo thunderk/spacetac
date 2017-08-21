@@ -41,9 +41,6 @@ module TS.SpaceTac.UI {
         // Ship tooltip
         ship_tooltip: ShipTooltip
 
-        // Outcome dialog layer
-        outcome_layer: Phaser.Group
-
         // Character sheet
         character_sheet: CharacterSheet
 
@@ -101,8 +98,6 @@ module TS.SpaceTac.UI {
             this.action_bar = new ActionBar(this);
             this.ship_list = new ShipList(this);
             this.ship_tooltip = new ShipTooltip(this);
-            this.outcome_layer = new Phaser.Group(this.game);
-            this.layer_dialogs.add(this.outcome_layer);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
             this.layer_sheets.add(this.character_sheet);
 
@@ -250,8 +245,7 @@ module TS.SpaceTac.UI {
 
                 this.battle.stats.processLog(this.battle.log, this.player.fleet);
 
-                let dialog = new OutcomeDialog(this, this.player, this.battle.outcome, this.battle.stats);
-                dialog.moveToLayer(this.outcome_layer);
+                new OutcomeDialog(this, this.player, this.battle.outcome, this.battle.stats);
             } else {
                 console.error("Battle not ended !");
             }
