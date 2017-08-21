@@ -18,17 +18,14 @@ module TS.SpaceTac.UI {
         private bar_sprite_rect: Phaser.Rectangle;
         private bar_sprite_offset: number;
 
-        // Create a quick standard bar
-        static newStandard(game: Phaser.Game, x: number, y: number): ValueBar {
-            var result = new ValueBar(game, x, y, "common-standard-bar-background");
-            result.setBarImage("common-standard-bar-foreground", 5, 5);
-            return result;
-        }
-
         // Create a quick styled bar
-        static newStyled(game: Phaser.Game, base_key: string, x: number, y: number, vertical = false, frame = 0): ValueBar {
-            var result = new ValueBar(game, x, y, base_key, vertical, frame);
-            result.setBarImage(base_key, 0, 0, frame + 1);
+        static newStyled(view: BaseView, base_name: string, x: number, y: number, vertical = false): ValueBar {
+            let info = view.getImageInfo(base_name + "-empty");
+            let result = new ValueBar(view.game, x, y, info.key, vertical, info.frame);
+
+            info = view.getImageInfo(base_name + "-full");
+            result.setBarImage(info.key, 0, 0, info.frame);
+
             return result;
         }
 

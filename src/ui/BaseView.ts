@@ -185,6 +185,15 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Update an image from an atlas name
+         */
+        changeImage(image: Phaser.Image, name: string): void {
+            let info = this.getImageInfo(name);
+            image.loadTexture(info.key);
+            image.frame = info.frame;
+        }
+
+        /**
          * Get an image from atlases
          */
         getImageInfo(name: string): { key: string, frame: number } {

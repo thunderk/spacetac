@@ -38,10 +38,6 @@ module TS.SpaceTac.UI {
             this.loadSheet("battle/actionbar/button-menu.png", 79, 132);
             this.loadImage("battle/arena/background.png");
             this.loadImage("battle/arena/blast.png");
-            this.loadSheet("battle/arena/gauges.png", 19, 93);
-            this.loadSheet("battle/arena/small-indicators.png", 10, 10);
-            this.loadSheet("battle/arena/indicators.png", 64, 64);
-            this.loadSheet("battle/arena/ship-frames.png", 70, 70);
             this.loadImage("battle/shiplist/background.png");
             this.loadImage("battle/shiplist/item-background.png");
             this.loadImage("battle/shiplist/damage.png");

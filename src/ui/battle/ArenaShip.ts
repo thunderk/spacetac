@@ -60,22 +60,23 @@ module TS.SpaceTac.UI {
             this.add(this.sprite);
 
             // Add stasis effect
-            this.stasis = new Phaser.Image(this.game, 0, 0, "battle-arena-ship-frames", 2);
+            this.stasis = this.battleview.newImage("battle-hud-ship-stasis");
             this.stasis.anchor.set(0.5, 0.5);
             this.stasis.visible = false;
             this.add(this.stasis);
 
             // Add playing effect
-            this.frame = new Phaser.Image(this.game, 0, 0, "battle-arena-ship-frames", this.enemy ? 0 : 1);
+            this.frame = this.battleview.newImage("battle-hud-ship-enemy");
             this.frame.anchor.set(0.5, 0.5);
             this.add(this.frame);
+            this.setPlaying(false);
 
             // HSP display
-            this.hull = ValueBar.newStyled(this.game, "battle-arena-gauges", -59, -47, true, 0);
+            this.hull = ValueBar.newStyled(this.battleview, "battle-hud-ship-hull", -59, -47, true);
             this.hull.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity"));
             this.toggle_hull = this.battleview.animations.newVisibilityToggle(this.hull, 200, false);
             this.add(this.hull);
-            this.shield = ValueBar.newStyled(this.game, "battle-arena-gauges", 40, -47, true, 2);
+            this.shield = ValueBar.newStyled(this.battleview, "battle-hud-ship-shield", 40, -47, true);
             this.shield.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
             this.toggle_shield = this.battleview.animations.newVisibilityToggle(this.shield, 200, false);
             this.add(this.shield);
@@ -208,7 +209,13 @@ module TS.SpaceTac.UI {
         // Set the playing state on this ship
         //  This will toggle the "playing" indicator
         setPlaying(playing: boolean) {
-            this.frame.frame = (playing ? 3 : 0) + (this.enemy ? 0 : 1);
+            let name = this.enemy ? "battle-hud-ship-enemy" : "battle-hud-ship-own";
+            if (playing) {
+                name += "-playing";
+            }
+            let info = this.battleview.getImageInfo(name);
+            this.frame.loadTexture(info.key);
+            this.frame.frame = info.frame;
         }
 
         /**
@@ -302,7 +309,8 @@ module TS.SpaceTac.UI {
                 let positions = UITools.evenlySpace(70, 10, count);
 
                 effects.forEach((effect, index) => {
-                    let dot = new Phaser.Image(this.game, positions[index] - 40, -47, "battle-arena-small-indicators", effect.isBeneficial() ? 1 : 0);
+                    let name = effect.isBeneficial() ? "battle-hud-ship-effect-good" : "battle-hud-ship-effect-bad";
+                    let dot = this.battleview.newImage(name, positions[index] - 40, -47);
                     this.active_effects_display.add(dot);
                 });
             }
@@ -317,7 +325,7 @@ module TS.SpaceTac.UI {
             if (power) {
                 let positions = UITools.evenlySpace(70, 10, power);
                 range(power).forEach(index => {
-                    let dot = new Phaser.Image(this.game, positions[index] - 40, 40, "battle-arena-small-indicators", 2);
+                    let dot = this.battleview.newImage("battle-hud-ship-power", positions[index] - 40, 40);
                     this.power.add(dot);
                 });
             }

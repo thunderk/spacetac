@@ -42,7 +42,7 @@ module TS.SpaceTac.UI {
             this.move_ghost.anchor.set(0.5, 0.5);
             this.move_ghost.alpha = 0.8;
             this.move_ghost.visible = false;
-            this.fire_arrow = new Phaser.Image(view.game, 0, 0, "battle-arena-indicators", 0);
+            this.fire_arrow = new Phaser.Image(view.game, 0, 0, "battle-hud-simulator-ok");
             this.fire_arrow.anchor.set(1, 0.5);
             this.fire_arrow.visible = false;
             this.fire_impact = new Phaser.Group(view.game);
@@ -131,8 +131,9 @@ module TS.SpaceTac.UI {
             if (ships.length) {
                 this.fire_impact.removeAll(true);
                 ships.forEach(iship => {
-                    let frame = this.view.add.image(iship.arena_x, iship.arena_y, "battle-arena-ship-frames", 5, this.fire_impact);
-                    frame.anchor.set(0.5);
+                    let indicator = this.view.newImage("battle-hud-ship-impacted", iship.arena_x, iship.arena_y);
+                    indicator.anchor.set(0.5);
+                    this.fire_impact.add(indicator);
                 });
                 this.fire_impact.visible = true;
             } else {
@@ -158,7 +159,6 @@ module TS.SpaceTac.UI {
                         this.drawPart(part, simulation.complete, previous);
                         previous = part;
                     });
-                    this.fire_arrow.frame = simulation.complete ? 0 : 1;
 
                     let from = simulation.need_fire ? simulation.move_location : this.ship.location;
                     let angle = Math.atan2(this.target.y - from.y, this.target.x - from.x);
@@ -185,7 +185,7 @@ module TS.SpaceTac.UI {
 
                         this.fire_arrow.position.set(this.target.x, this.target.y);
                         this.fire_arrow.rotation = angle;
-                        this.fire_arrow.frame = simulation.complete ? 0 : 1;
+                        this.view.changeImage(this.fire_arrow, simulation.complete ? "battle-hud-simulator-ok" : "battle-hud-simulator-power");
                         this.fire_arrow.visible = true;
                     } else {
                         this.fire_blast.visible = false;
@@ -223,9 +223,7 @@ module TS.SpaceTac.UI {
                 this.ship = action.equipment.attached_to.ship;
                 this.action = action;
 
-                let info = this.view.getImageInfo(`ship-${this.ship.model.code}-sprite`);
-                this.move_ghost.loadTexture(info.key);
-                this.move_ghost.frame = info.frame;
+                this.view.changeImage(this.move_ghost, `ship-${this.ship.model.code}-sprite`);
                 this.move_ghost.scale.set(0.25);
             } else {
                 this.ship = null;
