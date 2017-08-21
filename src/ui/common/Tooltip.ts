@@ -183,7 +183,7 @@ module TS.SpaceTac.UI {
             this.bind(obj, filler => {
                 let content = text_getter();
                 if (content) {
-                    filler.addText(0, 0, content, "#cccccc", 20, false, true);
+                    filler.addText(0, 0, content, "#cccccc", 20);
                     return true;
                 } else {
                     return false;
