@@ -52,6 +52,7 @@ module TS.SpaceTac.UI {
             this.game.stage.backgroundColor = 0x000000;
             this.game.stage.disableVisibilityChange = this.gameui.headless;
             this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+            this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.input.maxPointers = 1;
 
             // Tools
