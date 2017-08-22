@@ -82,7 +82,6 @@ Common UI
 ---------
 
 * Add caret/focus to text input
-* Fix hover being stuck when the cursor exits the window, or the item moves or is hidden
 * Add a standard confirm dialog
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not

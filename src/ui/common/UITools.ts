@@ -8,6 +8,8 @@ module TS.SpaceTac.UI {
 
     // Common UI tools functions
     export class UITools {
+        static hovered: Phaser.Button | null = null;
+
         /**
          * Get the position of an object, adjusted to remain inside a container
          */
@@ -90,8 +92,18 @@ module TS.SpaceTac.UI {
                 });
             }
 
-            obj.onInputOver.add(() => {
+            obj.onInputOver.add((_: any, pointer: Phaser.Pointer) => {
                 if (destroyed) return;
+
+                if (UITools.hovered) {
+                    if (UITools.hovered === obj) {
+                        return;
+                    } else {
+                        // Dirty fix - Force a "pointer out" on previously hovered, if it did not go out cleanly
+                        (<any>UITools.hovered.input)._pointerOutHandler(pointer);
+                    }
+                }
+                UITools.hovered = obj;
 
                 if (obj.visible && obj.alpha) {
                     cursorinside = true;
@@ -101,6 +113,10 @@ module TS.SpaceTac.UI {
 
             obj.onInputOut.add(() => {
                 if (destroyed) return;
+
+                if (UITools.hovered === obj) {
+                    UITools.hovered = null;
+                }
 
                 cursorinside = false;
                 effectiveleave();
