@@ -66,40 +66,38 @@ module TS.SpaceTac {
         /**
          * Perform the next battle
          */
-        next() {
+        async next() {
             console.log(`${this.ai1.name} vs ${this.ai2.name} ...`);
 
+            // Prepare battle
             let battle = Battle.newQuickRandom();
+            battle.fleets.forEach((fleet, findex) => {
+                fleet.ships.forEach((ship, sindex) => {
+                    ship.name = `F${findex + 1}S${sindex + 1} (${ship.model.name})`;
+                });
+            });
 
+            // Run battle
             while (!battle.ended && battle.turn < 100) {
-                let playing = battle.playing_ship;
-
-                // console.debug(`Turn ${battle.turn} - Ship ${battle.play_order.indexOf(playing)} - Player ${battle.fleets.indexOf(playing.fleet)}`);
-
-                if (playing) {
-                    let ai = (playing.fleet == battle.fleets[0]) ? this.ai1 : this.ai2;
-                    ai.timer = Timer.synchronous;
-                    ai.ship = playing;
-                    ai.play();
-                } else {
-                    console.error("No ship playing");
-                    break;
+                if (this.stopped) {
+                    return;
                 }
 
-                if (!battle.ended && battle.playing_ship == playing) {
-                    console.error("AI did not end its turn !");
-                    battle.advanceToNextShip();
+                let playing = battle.playing_ship;
+                if (playing) {
+                    let ai = (playing.fleet == battle.fleets[0]) ? this.ai1 : this.ai2;
+                    ai.ship = playing;
+                    await ai.play();
                 }
             }
 
-            if (battle.ended && !battle.outcome.draw && battle.outcome.winner) {
+            // Update results, and go on to next battle
+            if (!battle.outcome.draw && battle.outcome.winner) {
                 this.update(battle.fleets.indexOf(battle.outcome.winner));
             } else {
                 this.update(-1);
             }
-            if (!this.stopped) {
-                this.scheduled = Timer.global.schedule(100, () => this.next());
-            }
+            this.scheduled = Timer.global.schedule(100, () => this.next());
         }
 
         /**
@@ -116,6 +114,9 @@ module TS.SpaceTac {
                     option.textContent = ai.name;
                     selects[i].appendChild(option);
                 }
+                ai.name += `${idx + 1}`;
+                ai.timer = new Timer();
+                ai.timer.schedule = (delay, callback) => Timer.global.schedule(1, callback);
             });
 
             let button = element.getElementsByTagName("button").item(0);

@@ -10,9 +10,6 @@ module TS.SpaceTac.Specs {
                 super(ship, new BaseAction("nothing", "Do nothing", true), new Target(0, 0));
                 this.score = score;
             }
-            apply() {
-                applied.push(this.score);
-            }
         }
 
         // producer of FixedManeuver from a list of scores
@@ -26,7 +23,10 @@ module TS.SpaceTac.Specs {
 
         it("applies the highest evaluated maneuver", function () {
             let battle = new Battle();
-            let ai = new TacticalAI(battle.fleets[0].addShip(), Timer.synchronous);
+            let ship = battle.fleets[0].addShip();
+            battle.playing_ship = ship;
+            ship.playing = true;
+            let ai = new TacticalAI(ship, Timer.synchronous);
 
             spyOn(ai, "getDefaultProducers").and.returnValue([
                 producer(1, -8, 4),
@@ -35,8 +35,8 @@ module TS.SpaceTac.Specs {
             spyOn(ai, "getDefaultEvaluators").and.returnValue([
                 (maneuver: Maneuver) => (<FixedManeuver>maneuver).score
             ]);
+            spyOn(ai, "applyManeuver").and.callFake((maneuver: FixedManeuver) => applied.push(maneuver.score));
 
-            ai.ship.playing = true;
             ai.play();
             expect(applied).toEqual([7]);
         });

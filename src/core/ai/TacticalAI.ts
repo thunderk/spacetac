@@ -19,8 +19,6 @@ module TS.SpaceTac {
         private best: Maneuver | null
         private best_score: number
 
-        private last_action = new Date().getTime()
-
         protected initWork(): void {
             this.best = null;
             this.best_score = -Infinity;
@@ -28,27 +26,13 @@ module TS.SpaceTac {
             this.producers = this.getDefaultProducers();
             this.evaluators = this.getDefaultEvaluators();
 
-            this.addWorkItem(() => this.unitWork());
+            if (this.debug) {
+                console.log("AI started", this.name, this.ship.name);
+            }
         }
 
-        /**
-         * Evaluate a single maneuver
-         */
-        evaluate(maneuver: Maneuver) {
-            return sum(this.evaluators.map(evaluator => evaluator(maneuver)));
-        }
-
-        /**
-         * Single unit of work => produce a batch of maneuvers and evaluate them
-         * 
-         * The best produced maneuver (highest evaluation score) is kept to be played.
-         * If two maneuvers have nearly the same score, the best one is randomly chosen.
-         */
-        private unitWork() {
-            let done = 0;
-            let started = new Date().getTime();
-
-            while (this.producers.length > 0 && (new Date().getTime() - started < 50)) {
+        protected doWorkUnit(): boolean {
+            if (this.producers.length > 0 && this.getDuration() < 8000) {
                 // Produce a maneuver
                 let maneuver: Maneuver | null = null;
                 let producer = this.producers.shift();
@@ -70,23 +54,37 @@ module TS.SpaceTac {
                     }
                 }
 
-                done += 1;
-            }
-
-            // Continue or stop
-            if (this.producers.length > 0 && this.getDuration() < 8000) {
-                this.addWorkItem(() => this.unitWork(), 10);
+                return true;
             } else if (this.best) {
+                // Choose the best maneuver so far
                 let best_maneuver = this.best;
-                console.log("AI maneuver", best_maneuver, this.best_score);
-                this.addWorkItem(() => {
-                    this.last_action = new Date().getTime();
-                    best_maneuver.apply();
-                    if (this.ship.playing && !best_maneuver.isIncomplete()) {
-                        this.initWork();
-                    }
-                }, Math.max(0, 2000 - (new Date().getTime() - this.last_action)));
+                if (this.debug) {
+                    console.log("AI maneuver", this.name, this.ship.name, best_maneuver, this.best_score);
+                }
+
+                if (this.best.action instanceof EndTurnAction) {
+                    return false;
+                }
+
+                let success = this.applyManeuver(best_maneuver);
+                if (success && best_maneuver.mayContinue()) {
+                    // Try to play another maneuver
+                    this.initWork();
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                // No maneuver produced
+                return false;
             }
+        }
+
+        /**
+         * Evaluate a single maneuver
+         */
+        evaluate(maneuver: Maneuver) {
+            return sum(this.evaluators.map(evaluator => evaluator(maneuver)));
         }
 
         /**
@@ -107,8 +105,13 @@ module TS.SpaceTac {
          * Get the default set of maneuver evaluators
          */
         getDefaultEvaluators() {
-            let scaled = (evaluator: (...args: any[]) => number, factor: number) => (...args: any[]) => factor * evaluator(...args);
-            let evaluators = [
+            type EvaluatorHelper = (ship: Ship, battle: Battle, maneuver: Maneuver) => number;
+
+            function scaled(evaluator: EvaluatorHelper, factor: number): EvaluatorHelper {
+                return (ship: Ship, battle: Battle, maneuver: Maneuver) => factor * evaluator(ship, battle, maneuver);
+            }
+
+            let evaluators: EvaluatorHelper[] = [
                 scaled(TacticalAIHelpers.evaluateTurnCost, 1),
                 scaled(TacticalAIHelpers.evaluateOverheat, 10),
                 scaled(TacticalAIHelpers.evaluateEnemyHealth, 500),
@@ -118,8 +121,8 @@ module TS.SpaceTac {
                 scaled(TacticalAIHelpers.evaluateIdling, 1),
             ]
 
-            // TODO evaluator typing is lost
-            return evaluators.map(evaluator => ((maneuver: Maneuver) => evaluator(this.ship, this.ship.getBattle(), maneuver)));
+            let battle = nn(this.ship.getBattle());
+            return evaluators.map(evaluator => ((maneuver: Maneuver) => evaluator(this.ship, battle, maneuver)));
         }
     }
 }

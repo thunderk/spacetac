@@ -26,6 +26,9 @@ module TS.SpaceTac.UI {
         // Indicator that the log is being played continuously
         private playing = false
 
+        // Time at which the last action was applied
+        private last_action: number
+
         constructor(view: BattleView) {
             this.view = view;
             this.battle = view.battle;
@@ -184,8 +187,18 @@ module TS.SpaceTac.UI {
             console.log("Battle event", event);
 
             let durations = this.forwarding.map(subscriber => subscriber(event));
+            let t = (new Date()).getTime()
 
-            if (event instanceof ShipChangeEvent) {
+            if (event instanceof ActionAppliedEvent) {
+                if (event.ship.getPlayer() != this.view.player) {
+                    // AI is playing, do not make it play too fast
+                    let since_last = t - this.last_action;
+                    if (since_last < 2000) {
+                        durations.push(2000 - since_last);
+                    }
+                }
+                this.last_action = t;
+            } else if (event instanceof ShipChangeEvent) {
                 durations.push(this.processShipChangeEvent(event));
             } else if (event instanceof DeathEvent) {
                 durations.push(this.processDeathEvent(event));

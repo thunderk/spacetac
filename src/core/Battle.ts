@@ -266,14 +266,14 @@ module TS.SpaceTac {
         /**
          * Make an AI play the current ship
          */
-        playAI(ai: AbstractAI | null = null): boolean {
+        playAI(ai: AbstractAI | null = null, debug = false): boolean {
             if (this.playing_ship && !this.ai_playing) {
                 this.ai_playing = true;
                 if (!ai) {
                     // TODO Use an AI adapted to the fleet
                     ai = new TacticalAI(this.playing_ship, this.timer);
                 }
-                ai.play();
+                ai.play(debug);
                 return true;
             } else {
                 return false;

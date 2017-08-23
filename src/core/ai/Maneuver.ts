@@ -47,16 +47,10 @@ module TS.SpaceTac {
         }
 
         /**
-         * Apply the maneuver in current battle
+         * Returns true if another maneuver could be done next on the same ship
          */
-        apply(): void {
-            if (this.simulation.success) {
-                this.simulation.parts.filter(part => part.possible).forEach(part => {
-                    if (!part.action.apply(this.ship, part.target)) {
-                        console.error("AI cannot apply maneuver", this, part);
-                    }
-                });
-            }
+        mayContinue(): boolean {
+            return this.ship.playing && !this.isIncomplete() && !(this.action instanceof EndTurnAction);
         }
 
         /**
