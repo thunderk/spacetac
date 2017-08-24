@@ -26,7 +26,7 @@ module TS.SpaceTac.UI {
 
             this.ship = ship;
 
-            this.player_indicator = this.view.newImage(owned ? "battle-hud-ship-own" : "battle-hud-ship-enemy", 42, 52);
+            this.player_indicator = this.view.newImage(owned ? "battle-hud-ship-own-mini" : "battle-hud-ship-enemy-mini", 8, 52);
             this.player_indicator.anchor.set(0.5, 0.5);
             this.player_indicator.angle = 90;
             this.addChild(this.player_indicator);

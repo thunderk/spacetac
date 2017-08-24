@@ -37,6 +37,8 @@ Battle
 * Add a voluntary retreat option
 * Remove dead ships from ship list and play order
 * Add quick animation of playing ship indicator, on ship change
+* Toggle bar/text display in power section of action bar
+* Fix ship's active effect radius pushing the tooltip far from the ship
 * Display a hint when a move-fire simulation failed (cannot enter exclusion area for example)
 * Display effects description instead of attribute changes
 * Display radius and power usage hints for area effects on action icon hover + add confirmation?

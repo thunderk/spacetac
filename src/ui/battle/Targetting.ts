@@ -224,7 +224,7 @@ module TS.SpaceTac.UI {
                 this.action = action;
 
                 this.view.changeImage(this.move_ghost, `ship-${this.ship.model.code}-sprite`);
-                this.move_ghost.scale.set(0.25);
+                this.move_ghost.scale.set(0.4);
             } else {
                 this.ship = null;
                 this.action = null;

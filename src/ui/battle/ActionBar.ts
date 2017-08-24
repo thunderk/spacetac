@@ -37,6 +37,7 @@ module TS.SpaceTac.UI {
 
             // Power bar
             this.power = this.game.add.group();
+            this.power.position.set(1600, 14);
             this.add(this.power);
 
             // Group for actions
@@ -144,7 +145,7 @@ module TS.SpaceTac.UI {
 
         // Add an action icon
         addAction(ship: Ship, action: BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, 170 + this.action_icons.length * 88, 8, ship, action, this.action_icons.length);
+            var icon = new ActionIcon(this, 170 + this.action_icons.length * 124, 2, ship, action, this.action_icons.length);
             this.action_icons.push(icon);
 
             return icon;
@@ -158,28 +159,32 @@ module TS.SpaceTac.UI {
             let power_capacity = this.ship_power_capacity;
 
             if (current_power > power_capacity) {
-                range(current_power - power_capacity).forEach(i => this.power.removeChildAt(current_power - 1 - i));
+                range(current_power - power_capacity).forEach(i => {
+                    this.power.removeChildAt(current_power - 1 - i)
+                });
                 //this.power.removeChildren(ship_power, current_power);  // TODO bugged in phaser 2.6
             } else if (power_capacity > current_power) {
-                range(power_capacity - current_power).forEach(i => this.game.add.image(192 + (current_power + i) * 56, 104, "battle-actionbar-power", 0, this.power));
+                range(power_capacity - current_power).forEach(i => {
+                    let x = (current_power + i) % 5;
+                    let y = ((current_power + i) - x) / 5;
+                    let image = this.battleview.newImage("battle-actionbar-power-used", x * 43, y * 22);
+                    this.power.add(image);
+                });
             }
 
             let power_value = this.ship_power_value;
             let remaining_power = power_value - move_power - fire_power;
             this.power.children.forEach((obj, idx) => {
                 let img = <Phaser.Image>obj;
-                let frame: number;
                 if (idx < remaining_power) {
-                    frame = 0;
+                    this.battleview.changeImage(img, "battle-actionbar-power-available");
                 } else if (idx < remaining_power + move_power) {
-                    frame = 2;
+                    this.battleview.changeImage(img, "battle-actionbar-power-move");
                 } else if (idx < power_value) {
-                    frame = 3;
+                    this.battleview.changeImage(img, "battle-actionbar-power-fire");
                 } else {
-                    frame = 1;
+                    this.battleview.changeImage(img, "battle-actionbar-power-used");
                 }
-                img.data.frame = frame;
-                img.frame = frame;
             });
         }
 

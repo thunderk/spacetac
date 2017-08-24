@@ -51,12 +51,18 @@ module TS.SpaceTac.UI {
             this.effects_radius = new Phaser.Graphics(this.game);
             this.add(this.effects_radius);
 
+            // Add frame indicating which side this ship is on
+            this.frame = this.battleview.newImage(this.enemy ? "battle-hud-ship-enemy" : "battle-hud-ship-own");
+            this.frame.anchor.set(0.5, 0.5);
+            this.add(this.frame);
+            this.setPlaying(false);
+
             // Add ship sprite
             let info = this.battleview.getImageInfo(`ship-${ship.model.code}-sprite`);
             this.sprite = new Phaser.Button(this.game, 0, 0, info.key, undefined, undefined, info.frame, info.frame);
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
-            this.sprite.scale.set(0.25);
+            this.sprite.scale.set(0.4);
             this.add(this.sprite);
 
             // Add stasis effect
@@ -64,12 +70,6 @@ module TS.SpaceTac.UI {
             this.stasis.anchor.set(0.5, 0.5);
             this.stasis.visible = false;
             this.add(this.stasis);
-
-            // Add playing effect
-            this.frame = this.battleview.newImage("battle-hud-ship-enemy");
-            this.frame.anchor.set(0.5, 0.5);
-            this.add(this.frame);
-            this.setPlaying(false);
 
             // HSP display
             this.hull = ValueBar.newStyled(this.battleview, "battle-hud-ship-hull", -59, -47, true);
@@ -92,6 +92,7 @@ module TS.SpaceTac.UI {
             // Effects display
             this.active_effects = new ActiveEffectsEvent(ship);
             this.active_effects_display = new Phaser.Group(this.game);
+            this.active_effects_display.position.set(0, -44);
             this.add(this.active_effects_display);
             this.effects_messages = new Phaser.Group(this.game);
             this.add(this.effects_messages);
@@ -206,16 +207,13 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Set the playing state on this ship
-        //  This will toggle the "playing" indicator
+        /**
+         * Set the playing state on this ship
+         * 
+         * This will alter the HUD frame to show this state
+         */
         setPlaying(playing: boolean) {
-            let name = this.enemy ? "battle-hud-ship-enemy" : "battle-hud-ship-own";
-            if (playing) {
-                name += "-playing";
-            }
-            let info = this.battleview.getImageInfo(name);
-            this.frame.loadTexture(info.key);
-            this.frame.frame = info.frame;
+            this.frame.alpha = playing ? 1 : 0.35;
         }
 
         /**
@@ -225,7 +223,7 @@ module TS.SpaceTac.UI {
             if (dead) {
                 this.displayEffect("stasis", false);
             }
-            this.frame.alpha = dead ? 0.5 : 1.0;
+            this.frame.alpha = dead ? 0 : 1;
             this.battleview.animations.setVisible(this.stasis, dead, 400);
         }
 
@@ -306,11 +304,12 @@ module TS.SpaceTac.UI {
 
             let count = effects.length;
             if (count) {
-                let positions = UITools.evenlySpace(70, 10, count);
+                let positions = UITools.evenlySpace(70, 17, count);
 
                 effects.forEach((effect, index) => {
                     let name = effect.isBeneficial() ? "battle-hud-ship-effect-good" : "battle-hud-ship-effect-bad";
-                    let dot = this.battleview.newImage(name, positions[index] - 40, -47);
+                    let dot = this.battleview.newImage(name, positions[index] - 35, 0);
+                    dot.anchor.set(0.5, 0.5);
                     this.active_effects_display.add(dot);
                 });
             }

@@ -40,38 +40,39 @@ module TS.SpaceTac.UI {
 
         // Create an icon for a single ship action
         constructor(bar: ActionBar, x: number, y: number, ship: Ship, action: BaseAction, position: number) {
-            super(bar.game, x, y, "battle-actionbar-icon", () => this.processClick());
+            super(bar.game, x, y, bar.battleview.getImageInfo("battle-actionbar-icon").key, () => this.processClick(),
+                undefined, bar.battleview.getImageInfo("battle-actionbar-icon").frame, bar.battleview.getImageInfo("battle-actionbar-icon").frame);
 
             this.bar = bar;
             this.battleview = bar.battleview;
             this.ship = ship;
             this.action = action;
 
-            bar.actions.addChild(this);
+            bar.actions.add(this);
+
+            // Icon layer
+            let icon = this.battleview.getFirstImage(`action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
+            this.layer_icon = new Phaser.Image(this.game, this.width / 2, this.height / 2, icon.key, icon.frame);
+            this.layer_icon.anchor.set(0.5, 0.5);
+            this.layer_icon.scale.set(0.35, 0.35);
+            this.addChild(this.layer_icon);
 
             // Active layer
             this.active = false;
-            this.layer_active = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-actionbar-icon", 1);
+            this.layer_active = this.battleview.newImage("battle-actionbar-icon-available", this.width / 2, this.height / 2);
             this.layer_active.anchor.set(0.5, 0.5);
             this.layer_active.visible = false;
             this.addChild(this.layer_active);
 
             // Selected layer
             this.selected = false;
-            this.layer_selected = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-actionbar-icon", 2);
+            this.layer_selected = this.battleview.newImage("battle-actionbar-icon-selected", this.width / 2, this.height / 2);
             this.layer_selected.anchor.set(0.5, 0.5);
             this.layer_selected.visible = false;
             this.addChild(this.layer_selected);
 
-            // Icon layer
-            let icon = this.battleview.getFirstImage(`action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
-            this.layer_icon = new Phaser.Image(this.game, this.width / 2, this.height / 2, icon.key, icon.frame);
-            this.layer_icon.anchor.set(0.5, 0.5);
-            this.layer_icon.scale.set(0.25, 0.25);
-            this.addChild(this.layer_icon);
-
             // Cooldown layer
-            this.cooldown = new Phaser.Image(this.game, this.width / 2, this.height / 2, "battle-actionbar-icon", 3);
+            this.cooldown = this.battleview.newImage("battle-actionbar-icon-cooldown", this.width / 2, this.height / 2);
             this.cooldown.anchor.set(0.5, 0.5);
             this.cooldown_count = new Phaser.Text(this.game, 0, 0, "", { align: "center", font: "bold 34pt SpaceTac", fill: "#aaaaaa" });
             this.cooldown_count.anchor.set(0.5, 0.45);
@@ -161,19 +162,19 @@ module TS.SpaceTac.UI {
             if (this.selected && remaining == 1) {
                 // will overheat, hint at the cooldown time
                 let cooldown = this.action.getCooldownDuration(true);
-                this.cooldown.frame = 3;
+                this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-cooldown");
                 this.cooldown.scale.set(0.7);
                 this.cooldown_count.text = `${cooldown}`;
                 this.battleview.animations.setVisible(this.cooldown, true, 300);
             } else if (remaining == 0) {
                 // overheated, show cooldown time
                 let cooldown = this.action.getCooldownDuration(false);
-                this.cooldown.frame = 3;
+                this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-cooldown");
                 this.cooldown.scale.set(1);
                 this.cooldown_count.text = `${cooldown}`;
                 this.battleview.animations.setVisible(this.cooldown, true, 300);
             } else if (this.action instanceof ToggleAction && this.action.activated) {
-                this.cooldown.frame = 4;
+                this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-toggled");
                 this.cooldown.scale.set(1);
                 this.cooldown_count.text = "";
                 this.battleview.animations.setVisible(this.cooldown, true, 300);
