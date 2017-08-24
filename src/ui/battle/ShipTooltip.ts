@@ -33,9 +33,9 @@ module TS.SpaceTac.UI {
                 let turns = this.battleview.battle.getTurnsBefore(ship);
                 filler.addText(140, 36, (turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), "#cccccc", 18);
 
-                filler.addText(140, 72, `Hull\n${ship.getValue("hull")}`, "#eb4e4a", 20, true, true);
-                filler.addText(228, 72, `Shield\n${ship.getValue("shield")}`, "#2ad8dc", 20, true, true);
-                filler.addText(328, 72, `Power\n${ship.getValue("power")}`, "#ffdd4b", 20, true, true);
+                filler.addText(140, 72, `Hull\n${ship.getValue("hull")}/${ship.getAttribute("hull_capacity")}`, "#eb4e4a", 20, true, true);
+                filler.addText(288, 72, `Shield\n${ship.getValue("shield")}/${ship.getAttribute("shield_capacity")}`, "#2ad8dc", 20, true, true);
+                filler.addText(408, 72, `Power\n${ship.getValue("power")}/${ship.getAttribute("power_capacity")}`, "#ffdd4b", 20, true, true);
 
                 let iy = 148;
 

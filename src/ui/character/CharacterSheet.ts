@@ -90,9 +90,8 @@ module TS.SpaceTac.UI {
             this.ship_level.anchor.set(0.5, 0.5);
             this.addChild(this.ship_level);
 
-            this.ship_experience = new ValueBar(this.game, 516, 1067, "common-transparent");
-            this.ship_experience.setBarImage("character-experience");
-            this.addChild(this.ship_experience);
+            this.ship_experience = new ValueBar(this.view, "character-experience", ValueBarOrientation.EAST, 516, 1067);
+            this.addChild(this.ship_experience.node);
 
             this.ship_upgrade_points = new Phaser.Text(this.game, 1066, 1054, "", { align: "center", font: "30pt SpaceTac", fill: "#FFFFFF" });
             this.ship_upgrade_points.anchor.set(0.5, 0.5);

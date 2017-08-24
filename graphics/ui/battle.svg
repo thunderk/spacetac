@@ -1750,11 +1750,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.0000001"
-     inkscape:cx="258.91963"
-     inkscape:cy="1160.3512"
+     inkscape:zoom="4.0000002"
+     inkscape:cx="1176.8952"
+     inkscape:cy="497.32479"
      inkscape:document-units="px"
-     inkscape:current-layer="g5353"
+     inkscape:current-layer="layer17"
      showgrid="false"
      units="px"
      showguides="false"
@@ -2321,26 +2321,63 @@
       <g
          id="g10129"
          transform="translate(-0.11994512,63.748889)">
-        <rect
-           style="fill:url(#linearGradient10355);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.0351876px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter10397)"
-           id="rect10347"
-           width="91.712814"
-           height="14.83267"
-           x="1153.8358"
-           y="629.98633" />
-        <path
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0"
-           id="rect10078"
-           d="m 1187.7736,630.35042 h 23.8371 l -4.8475,16.98714 h -14.1421 z"
-           style="fill:#1d5664;fill-opacity:1;fill-rule:evenodd;stroke:#287583;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <g
+           id="g5251"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/hud/ship-hsp.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96">
+          <rect
+             y="629.98633"
+             x="1153.8358"
+             height="14.83267"
+             width="91.712814"
+             id="rect10347"
+             style="fill:url(#linearGradient10355);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.0351876px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter10397)" />
+          <path
+             style="fill:#1d5664;fill-opacity:1;fill-rule:evenodd;stroke:#287583;stroke-width:1.875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             d="m 1187.7736,630.35042 h 23.8371 l -4.8475,16.98714 h -14.1421 z"
+             id="rect10078"
+             inkscape:connector-curvature="0"
+             sodipodi:nodetypes="ccccc" />
+          <g
+             transform="translate(0.7326577,0.9375)"
+             id="g10345">
+            <g
+               id="g10307">
+              <path
+                 sodipodi:nodetypes="ccccc"
+                 inkscape:connector-curvature="0"
+                 id="path10085"
+                 d="m 1152.4031,643.36008 h 44.9006 v 3.97748 h -44.3116 z"
+                 style="fill:#287583;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85732162px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+              <path
+                 d="m 1153.5078,644.3125 0.3067,2.07227 h 42.5351 v -2.07227 z"
+                 id="path10297"
+                 style="fill:#263538;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85732162px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+                 inkscape:original="M 1152.4023 643.35938 L 1152.9922 647.33789 L 1197.3027 647.33789 L 1197.3027 643.35938 L 1152.4023 643.35938 z "
+                 inkscape:radius="-0.95294189"
+                 sodipodi:type="inkscape:offset" />
+            </g>
+            <use
+               x="0"
+               y="0"
+               xlink:href="#g10307"
+               id="use10313"
+               width="100%"
+               height="100%"
+               transform="matrix(-1,0,0,1,2397.919,0)"
+               inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/hud/ship-shield-empty.png"
+               inkscape:export-xdpi="96"
+               inkscape:export-ydpi="96" />
+          </g>
+        </g>
         <text
            id="text10091"
            y="642.75806"
            x="1153.788"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:23.4375px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;fill:#eb4e4a;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter10663)"
            xml:space="preserve"><tspan
-             style="font-size:15px;fill:#eb4e4a;fill-opacity:1;stroke-width:0.9375px"
+             style="font-size:14.66666698px;fill:#eb4e4a;fill-opacity:1;stroke-width:0.9375px"
              y="642.75806"
              x="1153.788"
              id="tspan10089"
@@ -2355,71 +2392,40 @@
              id="tspan10093"
              x="1223.2982"
              y="642.75806"
-             style="font-size:15px;fill:#2ad8dc;fill-opacity:1;stroke-width:0.9375px">145</tspan></text>
+             style="font-size:14.66666698px;fill:#2ad8dc;fill-opacity:1;stroke-width:0.9375px">145</tspan></text>
         <text
            id="text10099"
            y="641.53931"
            x="1196.4734"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:20px;line-height:23.4375px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;fill:#ffdd4b;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter10663)"
            xml:space="preserve"><tspan
-             style="font-size:12.5px;fill:#ffdd4b;fill-opacity:1;stroke-width:0.9375px"
+             style="font-size:13.33333302px;fill:#ffdd4b;fill-opacity:1;stroke-width:0.9375px"
              y="641.53931"
              x="1196.4734"
              id="tspan10097"
              sodipodi:role="line">4</tspan></text>
-        <g
-           id="g10335"
-           transform="translate(0.7326577,0.9375)">
-          <g
-             id="g10345">
-            <g
-               id="g10321">
-              <g
-                 id="g10307">
-                <path
-                   style="fill:#287583;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85732162px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                   d="m 1152.4031,643.36008 h 44.9006 v 3.97748 h -44.3116 z"
-                   id="path10085"
-                   inkscape:connector-curvature="0"
-                   sodipodi:nodetypes="ccccc" />
-                <path
-                   sodipodi:type="inkscape:offset"
-                   inkscape:radius="-0.95294189"
-                   inkscape:original="M 1152.4023 643.35938 L 1152.9922 647.33789 L 1197.3027 647.33789 L 1197.3027 643.35938 L 1152.4023 643.35938 z "
-                   style="fill:#263538;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85732162px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                   id="path10297"
-                   d="m 1153.5078,644.3125 0.3067,2.07227 h 42.5351 v -2.07227 z" />
-              </g>
-              <path
-                 sodipodi:type="inkscape:offset"
-                 inkscape:radius="-0.95294189"
-                 inkscape:original="M 1152.4023 643.35938 L 1152.9922 647.33789 L 1197.3027 647.33789 L 1197.3027 643.35938 L 1152.4023 643.35938 z "
-                 style="fill:#eb4e4a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85732162px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                 id="path10303"
-                 d="m 1153.5078,644.3125 0.3067,2.07227 h 42.5351 v -2.07227 z" />
-            </g>
-            <g
-               transform="translate(-8.0378154)"
-               id="g10325">
-              <use
-                 transform="matrix(-1,0,0,1,2405.9568,0)"
-                 height="100%"
-                 width="100%"
-                 id="use10313"
-                 xlink:href="#g10307"
-                 y="0"
-                 x="0" />
-              <path
-                 transform="matrix(-1,0,0,1,2405.9568,0)"
-                 d="m 1153.5078,644.3125 0.3067,2.07227 h 42.5351 v -2.07227 z"
-                 id="path10315"
-                 style="fill:#2ad8dc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85732162px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-                 inkscape:original="M 1152.4023 643.35938 L 1152.9922 647.33789 L 1197.3027 647.33789 L 1197.3027 643.35938 L 1152.4023 643.35938 z "
-                 inkscape:radius="-0.95294189"
-                 sodipodi:type="inkscape:offset" />
-            </g>
-          </g>
-        </g>
+        <path
+           transform="translate(0.73264512,0.937501)"
+           d="m 1153.5078,644.3125 0.3067,2.07227 h 42.5351 v -2.07227 z"
+           id="path10303"
+           style="display:inline;fill:#eb4e4a;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85732162px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
+           inkscape:original="M 1152.4023 643.35938 L 1152.9922 647.33789 L 1197.3027 647.33789 L 1197.3027 643.35938 L 1152.4023 643.35938 z "
+           inkscape:radius="-0.95294189"
+           sodipodi:type="inkscape:offset"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/hud/ship-hull.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+        <path
+           sodipodi:type="inkscape:offset"
+           inkscape:radius="-0.95294189"
+           inkscape:original="M 1152.4023 643.35938 L 1152.9922 647.33789 L 1197.3027 647.33789 L 1197.3027 643.35938 L 1152.4023 643.35938 z "
+           style="display:inline;fill:#2ad8dc;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85732162px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
+           id="path10315"
+           d="m 1153.5078,644.3125 0.3067,2.07227 h 42.5351 v -2.07227 z"
+           transform="matrix(-1,0,0,1,2398.6516,0.937501)"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/hud/ship-shield-full.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
       </g>
       <g
          transform="translate(230.1314,-149.11519)"

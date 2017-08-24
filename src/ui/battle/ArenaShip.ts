@@ -18,12 +18,13 @@ module TS.SpaceTac.UI {
         stasis: Phaser.Image
 
         // HSP display
-        hull: ValueBar
-        toggle_hull: Toggle
-        shield: ValueBar
-        toggle_shield: Toggle
-        power: Phaser.Group
-        toggle_power: Toggle
+        hsp: Phaser.Image
+        hull_bar: ValueBar
+        hull_text: Phaser.Text
+        shield_bar: ValueBar
+        shield_text: Phaser.Text
+        power_text: Phaser.Text
+        toggle_hsp: Toggle
 
         // Play order
         play_order: Phaser.Text
@@ -72,20 +73,33 @@ module TS.SpaceTac.UI {
             this.add(this.stasis);
 
             // HSP display
-            this.hull = ValueBar.newStyled(this.battleview, "battle-hud-ship-hull", -59, -47, true);
-            this.hull.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity"));
-            this.toggle_hull = this.battleview.animations.newVisibilityToggle(this.hull, 200, false);
-            this.add(this.hull);
-            this.shield = ValueBar.newStyled(this.battleview, "battle-hud-ship-shield", 40, -47, true);
-            this.shield.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
-            this.toggle_shield = this.battleview.animations.newVisibilityToggle(this.shield, 200, false);
-            this.add(this.shield);
-            this.power = new Phaser.Group(this.game);
-            this.toggle_power = this.battleview.animations.newVisibilityToggle(this.power, 200, false);
-            this.add(this.power);
+            this.hsp = this.battleview.newImage("battle-hud-ship-hsp", -48, 28);
+            this.add(this.hsp);
+            this.hull_bar = new ValueBar(this.battleview, "battle-hud-ship-hull", ValueBarOrientation.WEST, 45, 17);
+            this.hull_bar.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity"));
+            this.hsp.addChild(this.hull_bar.node);
+            this.shield_bar = new ValueBar(this.battleview, "battle-hud-ship-shield", ValueBarOrientation.EAST, 50, 17);
+            this.shield_bar.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
+            this.hsp.addChild(this.shield_bar.node);
+            this.hull_text = new Phaser.Text(this.game, 3, 23, `${this.ship.getValue("hull")}`,
+                { align: "left", font: "10pt SpaceTac", fill: "#eb4e4a" });
+            this.hull_text.setShadow(1, 1, "#000000");
+            this.hull_text.anchor.set(0, 1);
+            this.hsp.addChild(this.hull_text);
+            this.shield_text = new Phaser.Text(this.game, 92, 23, `${this.ship.getValue("shield")}`,
+                { align: "right", font: "11pt SpaceTac", fill: "#2ad8dc" });
+            this.shield_text.setShadow(1, 1, "#000000");
+            this.shield_text.anchor.set(1, 1);
+            this.hsp.addChild(this.shield_text);
+            this.power_text = new Phaser.Text(this.game, 48, 11, `${this.ship.getValue("power")}`,
+                { align: "center", font: "11pt SpaceTac", fill: "#ffdd4b" });
+            this.power_text.setShadow(1, 1, "#000000");
+            this.power_text.anchor.set(0.5, 0.5);
+            this.hsp.addChild(this.power_text);
+            this.toggle_hsp = this.battleview.animations.newVisibilityToggle(this.hsp, 200, false);
 
             // Play order display
-            this.play_order = new Phaser.Text(this.game, 55, -47, "", { font: "bold 14pt SpaceTac", fill: "#aaaaaa" });
+            this.play_order = new Phaser.Text(this.game, 44, -42, "", { font: "bold 14pt SpaceTac", fill: "#aaaaaa" });
             this.toggle_play_order = this.battleview.animations.newVisibilityToggle(this.play_order, 200, false);
             this.add(this.play_order);
 
@@ -98,7 +112,6 @@ module TS.SpaceTac.UI {
             this.add(this.effects_messages);
 
             this.updateActiveEffects();
-            this.updatePowerIndicator(ship.getValue("power"));
             this.updateEffectsRadius();
 
             // Handle input on ship sprite
@@ -145,19 +158,21 @@ module TS.SpaceTac.UI {
                 return 0;
             } else if (event instanceof ValueChangeEvent) {
                 if (event.value.name == "hull") {
-                    this.toggle_hull.start(1500, true);
-                    this.hull.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    this.toggle_hsp.start(1500, true);
+                    this.hull_bar.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    this.hull_text.text = `${event.value.get()}`;
                     return 0;
                 } else if (event.value.name == "shield") {
-                    this.toggle_shield.start(1500, true);
-                    this.shield.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    this.toggle_hsp.start(1500, true);
+                    this.shield_bar.setValue(event.value.get(), event.value.getMaximal() || 0);
+                    this.shield_text.text = `${event.value.get()}`;
                     if (event.value.get() == 0) {
                         this.displayEffect("Shield failure", false);
                     }
                     return 0;
                 } else if (event.value.name == "power") {
-                    this.toggle_power.start(1500, true);
-                    this.updatePowerIndicator(event.value.get());
+                    this.toggle_hsp.start(1500, true);
+                    this.power_text.text = `${event.value.get()}`;
                     return 0;
                 } else {
                     this.displayValueChanged(event);
@@ -193,16 +208,12 @@ module TS.SpaceTac.UI {
          */
         setHovered(hovered: boolean, tactical: boolean) {
             if (hovered && this.ship.alive) {
-                this.toggle_hull.start();
-                this.toggle_shield.start();
-                this.toggle_power.start();
+                this.toggle_hsp.start();
                 if (tactical) {
                     this.toggle_play_order.start();
                 }
             } else {
-                this.toggle_hull.stop();
-                this.toggle_shield.stop();
-                this.toggle_power.stop();
+                this.toggle_hsp.stop();
                 this.toggle_play_order.stop();
             }
         }
@@ -213,7 +224,11 @@ module TS.SpaceTac.UI {
          * This will alter the HUD frame to show this state
          */
         setPlaying(playing: boolean) {
-            this.frame.alpha = playing ? 1 : 0.35;
+            if (this.ship.alive) {
+                this.frame.alpha = playing ? 1 : 0.35;
+            } else {
+                this.frame.alpha = 0;
+            }
         }
 
         /**
@@ -223,7 +238,7 @@ module TS.SpaceTac.UI {
             if (dead) {
                 this.displayEffect("stasis", false);
             }
-            this.frame.alpha = dead ? 0 : 1;
+            this.setPlaying(false);
             this.battleview.animations.setVisible(this.stasis, dead, 400);
         }
 
@@ -240,9 +255,9 @@ module TS.SpaceTac.UI {
         getValue(value: keyof ShipValues): number {
             switch (value) {
                 case "hull":
-                    return this.hull.getValue();
+                    return this.hull_bar.getValue();
                 case "shield":
-                    return this.shield.getValue();
+                    return this.shield_bar.getValue();
                 default:
                     return 0;
             }
@@ -311,21 +326,6 @@ module TS.SpaceTac.UI {
                     let dot = this.battleview.newImage(name, positions[index] - 35, 0);
                     dot.anchor.set(0.5, 0.5);
                     this.active_effects_display.add(dot);
-                });
-            }
-        }
-
-        /**
-         * Update the power indicator
-         */
-        updatePowerIndicator(power: number) {
-            this.power.removeAll();
-
-            if (power) {
-                let positions = UITools.evenlySpace(70, 10, power);
-                range(power).forEach(index => {
-                    let dot = this.battleview.newImage("battle-hud-ship-power", positions[index] - 40, 40);
-                    this.power.add(dot);
                 });
             }
         }

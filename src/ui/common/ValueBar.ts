@@ -1,69 +1,82 @@
 module TS.SpaceTac.UI {
-    // Bar to display a value (like a progress bar)
-    export class ValueBar extends Phaser.Image {
-        // Vertical orientation
-        vertical: boolean;
+    /**
+     * Orientation of a ValueBar.
+     * 
+     * A EAST bar will have 0 at the west, and 1 at the east.
+     */
+    export enum ValueBarOrientation {
+        NORTH,
+        SOUTH,
+        EAST,
+        WEST,
+    }
+
+    /**
+     * Bar to display a value with a graphical bar
+     * 
+     * This will crop the image according to the value
+     */
+    export class ValueBar {
+        // Phaser node
+        node: Phaser.Image
+
+        // Orientation
+        private orientation: ValueBarOrientation
 
         // Current value
-        private current: number;
+        private current: number
 
         // Maximal value
-        private maximal: number;
+        private maximal: number
 
         // Proportional value
-        private proportional: number;
+        private proportional: number
 
-        // Sprite of internal bar (inside the background sprite)
-        private bar_sprite: Phaser.Image;
-        private bar_sprite_rect: Phaser.Rectangle;
-        private bar_sprite_offset: number;
+        // Original size
+        private original_width: number
+        private original_height: number
+        private crop_rect: Phaser.Rectangle
 
-        // Create a quick styled bar
-        static newStyled(view: BaseView, base_name: string, x: number, y: number, vertical = false): ValueBar {
-            let info = view.getImageInfo(base_name + "-empty");
-            let result = new ValueBar(view.game, x, y, info.key, vertical, info.frame);
+        constructor(view: BaseView, name: string, orientation: ValueBarOrientation, x = 0, y = 0) {
+            this.node = view.newImage(name, x, y);
+            this.orientation = orientation;
+            this.original_width = this.node.width;
+            this.original_height = this.node.height;
 
-            info = view.getImageInfo(base_name + "-full");
-            result.setBarImage(info.key, 0, 0, info.frame);
+            this.crop_rect = new Phaser.Rectangle(0, 0, this.original_width, this.original_height);
+            this.node.crop(this.crop_rect);
 
-            return result;
-        }
-
-        // Build an value bar sprite
-        //  background is the key to the image to use as background
-        constructor(game: Phaser.Game, x: number, y: number, background: string, vertical = false, frame = 0) {
-            super(game, x, y, background, frame);
-
-            this.vertical = vertical;
+            if (orientation == ValueBarOrientation.WEST) {
+                this.node.anchor.set(1, 0);
+            } else if (orientation == ValueBarOrientation.NORTH) {
+                this.node.anchor.set(0, 1);
+            }
 
             this.setValue(0, 1000);
         }
 
-        // Set an image to use for the bar
-        setBarImage(key: string, offset_x = 0, offset_y = 0, frame = 0): void {
-            this.bar_sprite = new Phaser.Image(this.game, offset_x, offset_y, key, frame);
-            this.bar_sprite_rect = new Phaser.Rectangle(0, 0, this.bar_sprite.width, this.bar_sprite.height);
-            this.bar_sprite_offset = this.vertical ? offset_y : offset_x;
-            this.addChild(this.bar_sprite);
-        }
-
-        // Update graphics representation
+        /**
+         * Update the phaser graphics to match the value
+         */
         update() {
-            if (this.bar_sprite) {
-                var xdest = this.vertical ? 1.0 : this.proportional;
-                var ydest = this.vertical ? this.proportional : 1.0;
-
-                // TODO Animate
-                var rect = Phaser.Rectangle.clone(this.bar_sprite_rect);
-                rect = rect.scale(xdest, ydest);
-                if (this.vertical) {
-                    rect = rect.offset(0, this.bar_sprite_rect.height - rect.height);
-                }
-                this.bar_sprite.crop(rect, false);
-                if (this.vertical) {
-                    this.bar_sprite.y = this.bar_sprite_offset + (this.bar_sprite_rect.height - rect.height);
-                }
+            // TODO animation
+            switch (this.orientation) {
+                case ValueBarOrientation.EAST:
+                    this.crop_rect.width = Math.round(this.original_width * this.proportional);
+                    break;
+                case ValueBarOrientation.WEST:
+                    this.crop_rect.width = Math.round(this.original_width * this.proportional);
+                    this.crop_rect.x = this.original_width - this.crop_rect.width;
+                    break;
+                case ValueBarOrientation.NORTH:
+                    this.crop_rect.height = Math.round(this.original_height * this.proportional);
+                    this.crop_rect.y = this.original_height - this.crop_rect.height;
+                    break;
+                case ValueBarOrientation.SOUTH:
+                    this.crop_rect.height = Math.round(this.original_height * this.proportional);
+                    break;
             }
+            this.node.updateCrop();
         }
 
         /**

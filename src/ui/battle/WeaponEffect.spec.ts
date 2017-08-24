@@ -37,8 +37,8 @@ module TS.SpaceTac.UI.Specs {
             let sprite = nn(battleview.arena.findShipSprite(ship));
             ship.setArenaPosition(50, 30);
             sprite.position.set(50, 30);
-            sprite.hull.setValue(10, 10);
-            sprite.shield.setValue(0, 10);
+            sprite.hull_bar.setValue(10, 10);
+            sprite.shield_bar.setValue(0, 10);
             let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), new Equipment());
 
             let mock_shield_impact = spyOn(effect, "shieldImpactEffect").and.stub();
@@ -54,7 +54,7 @@ module TS.SpaceTac.UI.Specs {
             expect(mock_hull_impact).toHaveBeenCalledTimes(1);
             expect(mock_hull_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800);
 
-            sprite.shield.setValue(10, 10);
+            sprite.shield_bar.setValue(10, 10);
             effect.gunEffect();
             expect(mock_shield_impact).toHaveBeenCalledTimes(1);
             expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800, true);
