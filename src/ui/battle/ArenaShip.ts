@@ -224,11 +224,8 @@ module TS.SpaceTac.UI {
          * This will alter the HUD frame to show this state
          */
         setPlaying(playing: boolean) {
-            if (this.ship.alive) {
-                this.frame.alpha = playing ? 1 : 0.35;
-            } else {
-                this.frame.alpha = 0;
-            }
+            this.frame.alpha = playing ? 1 : 0.35;
+            this.frame.visible = this.ship.alive;
         }
 
         /**
@@ -240,6 +237,7 @@ module TS.SpaceTac.UI {
             }
             this.setPlaying(false);
             this.battleview.animations.setVisible(this.stasis, dead, 400);
+            this.alpha = dead ? 0.3 : 1;
         }
 
         /**

@@ -33,7 +33,7 @@ module TS.SpaceTac {
             let result = new ExclusionAreas(battle.width, battle.height);
             result.hard_border = battle.border;
             result.hard_obstacle = battle.ship_separation;
-            let obstacles = imap(ifilter(battle.iships(), ship => !contains(ignore_ships, ship)), ship => ship.location);
+            let obstacles = imap(ifilter(battle.iships(true), ship => !contains(ignore_ships, ship)), ship => ship.location);
             result.configure(imaterialize(obstacles), soft_distance);
             return result;
         }

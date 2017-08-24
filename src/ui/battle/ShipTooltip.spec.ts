@@ -25,9 +25,9 @@ module TS.SpaceTac.UI.Specs {
             expect(content.children[0].name).toBe("ship-fake-portrait");
             expect(content.children[1].text).toBe("Phil's Level 1 Fury");
             expect(content.children[2].text).toBe("Plays in 2 turns");
-            expect(content.children[3].text).toBe("Hull\n58");
-            expect(content.children[4].text).toBe("Shield\n140");
-            expect(content.children[5].text).toBe("Power\n12");
+            expect(content.children[3].text).toBe("Hull\n58/58");
+            expect(content.children[4].text).toBe("Shield\n140/140");
+            expect(content.children[5].text).toBe("Power\n12/12");
             expect(content.children[6].text).toBe("Active effects");
             expect(content.children[7].text).toBe("• limit precision to 10");
             expect(content.children[8].text).toBe("• damage -15% for 3 turns");

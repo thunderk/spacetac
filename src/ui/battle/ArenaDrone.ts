@@ -21,9 +21,6 @@ module TS.SpaceTac.UI {
         // Duration info
         duration: Phaser.Text
 
-        // Destroyed state
-        destroyed = false
-
         constructor(battleview: BattleView, drone: Drone) {
             super(battleview.game);
 
@@ -57,7 +54,7 @@ module TS.SpaceTac.UI {
             this.add(this.duration);
 
             this.view.tooltip.bindDynamicText(this.sprite, () => {
-                return this.destroyed ? "" : this.drone.getDescription();
+                return this.drone.getDescription();
             });
         }
 
@@ -67,10 +64,6 @@ module TS.SpaceTac.UI {
          * Return the animation duration
          */
         setApplied(): number {
-            if (this.destroyed) {
-                return 0;
-            }
-
             this.activation.scale.set(0.001, 0.001);
             this.activation.visible = true;
             let tween = this.game.tweens.create(this.activation.scale).to({ x: 1, y: 1 }, 500);
@@ -83,14 +76,11 @@ module TS.SpaceTac.UI {
          * Set the sprite as destroyed
          */
         setDestroyed() {
-            this.destroyed = true;
-
             this.game.tweens.create(this).to({ alpha: 0.3 }, 300).delay(200).start();
 
             let tween = this.game.tweens.create(this.radius.scale).to({ x: 0, y: 0 }, 500);
             tween.onComplete.addOnce(() => {
-                this.radius.destroy();
-                this.activation.destroy();
+                this.destroy();
             });
             tween.start();
         }
