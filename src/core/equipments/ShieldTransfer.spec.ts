@@ -6,22 +6,22 @@ module TS.SpaceTac.Equipments {
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_gravity": 1 });
             expect(equipment.cooldown).toEqual(new Cooldown(3, 3));
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 3, 150, 0, [new ValueTransferEffect("shield", -20)]));
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 3, 0, 250, [new ValueTransferEffect("shield", -40)]));
 
             equipment = template.generate(2);
             expect(equipment.requirements).toEqual({ "skill_gravity": 2 });
             expect(equipment.cooldown).toEqual(new Cooldown(3, 3));
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 3, 160, 0, [new ValueTransferEffect("shield", -22)]));
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 3, 0, 270, [new ValueTransferEffect("shield", -44)]));
 
             equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_gravity": 3 });
             expect(equipment.cooldown).toEqual(new Cooldown(3, 3));
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 3, 170, 0, [new ValueTransferEffect("shield", -24)]));
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 3, 0, 290, [new ValueTransferEffect("shield", -48)]));
 
             equipment = template.generate(10);
             expect(equipment.requirements).toEqual({ "skill_gravity": 10 });
             expect(equipment.cooldown).toEqual(new Cooldown(3, 3));
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 3, 240, 0, [new ValueTransferEffect("shield", -38)]));
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 3, 0, 430, [new ValueTransferEffect("shield", -76)]));
         })
     })
 }

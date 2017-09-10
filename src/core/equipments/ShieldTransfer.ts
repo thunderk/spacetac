@@ -7,8 +7,8 @@ module TS.SpaceTac.Equipments {
 
             this.setSkillsRequirements({ "skill_gravity": 1 });
             this.setCooldown(irepeat(3), irepeat(3));
-            this.addFireAction(irepeat(3), istep(150, irepeat(10)), 0, [
-                new EffectTemplate(new ValueTransferEffect("shield"), { "amount": istep(-20, irepeat(-2)) })
+            this.addFireAction(irepeat(3), 0, istep(250, irepeat(20)), [
+                new EffectTemplate(new ValueTransferEffect("shield"), { "amount": istep(-40, irepeat(-4)) })
             ]);
         }
     }
