@@ -45,9 +45,9 @@ module TS.SpaceTac.UI {
             this.add(this.actions);
 
             // Waiting icon
-            this.icon_waiting = new Phaser.Image(this.game, this.width / 2, 50, "common-waiting", 0);
+            this.icon_waiting = new Phaser.Image(this.game, this.width / 2, this.height / 2, "common-waiting", 0);
             this.icon_waiting.anchor.set(0.5, 0.5);
-            this.icon_waiting.scale.set(0.5, 0.5);
+            this.icon_waiting.animations.add("loop").play(9, true);
             this.add(this.icon_waiting);
 
             // Options button
@@ -113,11 +113,7 @@ module TS.SpaceTac.UI {
             if (this.interactive != interactive) {
                 this.interactive = interactive;
 
-                this.game.tweens.removeFrom(this.icon_waiting);
-                this.icon_waiting.angle = 0;
                 this.battleview.animations.setVisible(this.icon_waiting, !this.interactive, 100);
-                this.game.tweens.create(this.icon_waiting).to({ "angle": 360 }, 3000).loop().start();
-
                 this.battleview.animations.setVisible(this.actions, interactive, 100, 1, 0.2);
             }
         }

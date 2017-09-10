@@ -263,6 +263,18 @@ module TS.SpaceTac.UI {
         }
 
         /**
+         * Add an animated loader (to indicate a waiting for something).
+         */
+        addLoader(x: number, y: number, scale = 1): Phaser.Image {
+            let image = new Phaser.Image(this.game, x, y, "common-waiting");
+            image.anchor.set(0.5, 0.5);
+            image.scale.set(scale);
+            image.animations.add("loop").play(3, true);
+            this.addInternalChild(image);
+            return image;
+        }
+
+        /**
          * Add a 2-states toggle button.
          * 
          * *background* should have three frames (toggled, untoggled and hovered).

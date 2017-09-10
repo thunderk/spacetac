@@ -14,7 +14,7 @@ module TS.SpaceTac.UI {
             this.loadSheet("common/particles.png", 32);
             this.loadImage("common/transparent.png");
             this.loadImage("common/debug.png");
-            this.loadImage("common/waiting.png");
+            this.loadAnimation("common/waiting.png", 128, 128, 6);
             this.loadImage("common/arrow.png");
             this.loadImage("common/button-ok.png");
             this.loadImage("common/button-cancel.png");
@@ -104,6 +104,10 @@ module TS.SpaceTac.UI {
 
         loadSheet(path: string, frame_width: number, frame_height = frame_width) {
             this.load.spritesheet(Preload.getKey(path), "assets/images/" + path, frame_width, frame_height);
+        }
+
+        loadAnimation(path: string, frame_width: number, frame_height = frame_width, count?: number) {
+            this.load.spritesheet(Preload.getKey(path), "assets/images/" + path, frame_width, frame_height, count);
         }
 
         loadImage(path: string) {
