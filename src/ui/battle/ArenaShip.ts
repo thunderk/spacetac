@@ -73,35 +73,40 @@ module TS.SpaceTac.UI {
             this.add(this.stasis);
 
             // HSP display
-            this.hsp = this.battleview.newImage("battle-hud-ship-hsp", -48, 28);
+            this.hsp = this.battleview.newImage("battle-hud-ship-hsp", -50, 28);
             this.add(this.hsp);
-            this.hull_bar = new ValueBar(this.battleview, "battle-hud-ship-hull", ValueBarOrientation.WEST, 45, 17);
+            this.hull_bar = new ValueBar(this.battleview, "battle-hud-ship-hull", ValueBarOrientation.WEST, 48, 15);
             this.hull_bar.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity"));
             this.hsp.addChild(this.hull_bar.node);
-            this.shield_bar = new ValueBar(this.battleview, "battle-hud-ship-shield", ValueBarOrientation.EAST, 50, 17);
+            this.shield_bar = new ValueBar(this.battleview, "battle-hud-ship-shield", ValueBarOrientation.EAST, 53, 15);
             this.shield_bar.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
             this.hsp.addChild(this.shield_bar.node);
-            this.hull_text = new Phaser.Text(this.game, 3, 23, `${this.ship.getValue("hull")}`,
-                { align: "left", font: "10pt SpaceTac", fill: "#eb4e4a" });
+            this.hull_text = new Phaser.Text(this.game, 0, 20, `${this.ship.getValue("hull")}`,
+                { align: "left", font: "12pt SpaceTac", fill: "#eb4e4a" });
             this.hull_text.setShadow(1, 1, "#000000");
             this.hull_text.anchor.set(0, 1);
             this.hsp.addChild(this.hull_text);
-            this.shield_text = new Phaser.Text(this.game, 92, 23, `${this.ship.getValue("shield")}`,
-                { align: "right", font: "11pt SpaceTac", fill: "#2ad8dc" });
+            this.shield_text = new Phaser.Text(this.game, 104, 20, `${this.ship.getValue("shield")}`,
+                { align: "right", font: "12pt SpaceTac", fill: "#2ad8dc" });
             this.shield_text.setShadow(1, 1, "#000000");
             this.shield_text.anchor.set(1, 1);
             this.hsp.addChild(this.shield_text);
-            this.power_text = new Phaser.Text(this.game, 48, 11, `${this.ship.getValue("power")}`,
-                { align: "center", font: "11pt SpaceTac", fill: "#ffdd4b" });
+            this.power_text = new Phaser.Text(this.game, 51, 10, `${this.ship.getValue("power")}`,
+                { align: "center", font: "10pt SpaceTac", fill: "#ffdd4b" });
             this.power_text.setShadow(1, 1, "#000000");
             this.power_text.anchor.set(0.5, 0.5);
             this.hsp.addChild(this.power_text);
             this.toggle_hsp = this.battleview.animations.newVisibilityToggle(this.hsp, 200, false);
 
             // Play order display
-            this.play_order = new Phaser.Text(this.game, 44, -42, "", { font: "bold 14pt SpaceTac", fill: "#aaaaaa" });
-            this.toggle_play_order = this.battleview.animations.newVisibilityToggle(this.play_order, 200, false);
-            this.add(this.play_order);
+            let play_order_bg = this.battleview.newImage("battle-hud-ship-play-order", -44, 0);
+            play_order_bg.anchor.set(0.5, 0.5);
+            this.play_order = new Phaser.Text(this.game, -2, 3, "", { font: "bold 12pt SpaceTac", fill: "#d1d1d1" });
+            this.play_order.setShadow(1, 1, "#000000");
+            this.play_order.anchor.set(0.5, 0.5);
+            play_order_bg.addChild(this.play_order);
+            this.toggle_play_order = this.battleview.animations.newVisibilityToggle(play_order_bg, 200, false);
+            this.add(play_order_bg);
 
             // Effects display
             this.active_effects = new ActiveEffectsEvent(ship);
@@ -140,7 +145,7 @@ module TS.SpaceTac.UI {
         private processLogEvent(event: BaseBattleEvent): number {
             if (event instanceof ShipChangeEvent) {
                 if (event.new_ship === this.ship) {
-                    this.play_order.text = "";
+                    this.play_order.text = "-";
                 } else {
                     this.play_order.text = this.battleview.battle.getTurnsBefore(this.ship).toString();
                 }
