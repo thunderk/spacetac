@@ -52,12 +52,21 @@ module TS.SpaceTac {
         }
 
         /**
+         * Get the distance range that may be traveled with 1 action point
+         */
+        getDistanceRangeByActionPoint(): IntegerRange {
+            let min_distance = Math.ceil(this.distance_per_power * (1 - this.maneuvrability_factor * 0.01));
+            return new IntegerRange(min_distance, this.distance_per_power);
+        }
+
+        /**
          * Get the distance that may be traveled with 1 action point
          */
         getDistanceByActionPoint(ship: Ship): number {
             let maneuvrability = Math.max(ship.getAttribute("maneuvrability"), 0);
             let factor = maneuvrability / (maneuvrability + 2);
-            return Math.ceil(this.distance_per_power * (1 - this.maneuvrability_factor * 0.01 * (1 - factor)));
+            let range = this.getDistanceRangeByActionPoint();
+            return range.getProportional(factor);
         }
 
         /**
@@ -98,17 +107,12 @@ module TS.SpaceTac {
         }
 
         getEffectsDescription(): string {
-            let result = `Move: ${this.distance_per_power}km per power point`;
+            let range = this.getDistanceRangeByActionPoint();
+            let rangeinfo = (range.max == range.min) ? `${range.min}` : `${range.min}-${range.max}`;
+            let result = `Move: ${rangeinfo}km per power point`;
 
-            let precisions = [];
             if (this.safety_distance) {
-                precisions.push(`safety: ${this.safety_distance}km`);
-            }
-            if (this.maneuvrability_factor) {
-                precisions.push(`maneuvrability influence: ${this.maneuvrability_factor}%`);
-            }
-            if (precisions.length) {
-                result += ` (${precisions.join(", ")})`;
+                result += ` (safety: ${this.safety_distance}km)`;
             }
 
             return result;

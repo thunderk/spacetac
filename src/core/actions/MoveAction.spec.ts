@@ -170,7 +170,7 @@ module TS.SpaceTac {
             expect(action.getEffectsDescription()).toEqual("Move: 58km per power point (safety: 12km)");
 
             action = new MoveAction(new Equipment(), 58, 12, 80);
-            expect(action.getEffectsDescription()).toEqual("Move: 58km per power point (safety: 12km, maneuvrability influence: 80%)");
+            expect(action.getEffectsDescription()).toEqual("Move: 12-58km per power point (safety: 12km)");
         });
     });
 }
