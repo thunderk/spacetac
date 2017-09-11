@@ -52,8 +52,19 @@ module TS.SpaceTac.UI {
                 }
             }
 
-            this.addText(offset + (style.center ? width / 2 : style.padding), style.center ? height / 2 : style.padding, message,
+            let text = this.addText(offset + (style.center ? width / 2 : style.padding), style.center ? height / 2 : style.padding, message,
                 style.text_color, style.text_size, style.text_bold, style.center, width - style.padding * 2, style.center);
+
+            let i = 0;
+            let colorchar = () => {
+                text.clearColors();
+                if (i < message.length) {
+                    text.addColor("transparent", i);
+                    i++;
+                    this.view.timer.schedule(10, colorchar);
+                }
+            }
+            colorchar();
         }
     }
 }

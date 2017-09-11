@@ -163,9 +163,13 @@ module TS.SpaceTac.UI {
          * Refresh the view
          */
         refresh() {
-            this.setZoom(this.zoom);
-            this.character_sheet.updateFleet(this.player.fleet);
-            this.player_fleet.updateShipSprites();
+            if (this.player.getBattle()) {
+                this.backToRouter();
+            } else {
+                this.setZoom(this.zoom);
+                this.character_sheet.updateFleet(this.player.fleet);
+                this.player_fleet.updateShipSprites();
+            }
         }
 
         /**

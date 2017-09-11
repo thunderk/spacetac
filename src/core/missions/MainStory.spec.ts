@@ -42,6 +42,14 @@ module TS.SpaceTac.Specs {
             expect(fleet.ships.length).toBe(fleet_size + 1);
             goTo(fleet, (<MissionPartEscort>story.current_part).destination);
 
+            checkPart(story, 4, "^Listen to .*$");
+            (<MissionPartConversation>story.current_part).skip();
+            expect(session.getBattle()).toBeNull();
+
+            checkPart(story, 5, "^Fight the arrived fleet$");
+            expect(session.getBattle()).not.toBeNull();
+            nn(session.getBattle()).endBattle(fleet);
+
             expect(story.checkStatus()).toBe(false, "story not complete");
         })
     })

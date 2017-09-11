@@ -21,5 +21,21 @@ module TS.SpaceTac.Specs {
             destination.clearEncounter();
             expect(part.checkCompleted()).toBe(true, "Encouter cleared");
         })
+
+        it("generates the battle immediately if the fleet is already at the destination", function () {
+            let destination = new StarLocation(new Star(null, 0, 0, "Atanax"));
+            destination.clearEncounter();
+
+            let universe = new Universe();
+            let fleet = new Fleet();
+            fleet.setLocation(destination, true);
+            let part = new MissionPartCleanLocation(new Mission(universe, fleet), destination);
+
+            expect(fleet.battle).toBeNull();
+            part.onStarted();
+            expect(fleet.battle).not.toBeNull();
+            expect(nn(fleet.battle).fleets).toEqual([fleet, nn(destination.encounter)]);
+            expect(part.checkCompleted()).toBe(false);
+        })
     })
 }

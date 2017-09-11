@@ -37,12 +37,28 @@ module TS.SpaceTac {
             conversation.addPiece(null, "So where do we go from here? In your last message, you told us of a resistance group growing.");
             conversation.addPiece(contact_character, "Yes, some merchants and miners have rallied behind a retired TSF general, but I lost contact with them weeks ago.");
             conversation.addPiece(contact_character, "We may go to their last known location, but first I want you to see something in a nearby system.");
+            conversation.addPiece(contact_character, "If you need any equipment before going, there is a dockyard in this system. They often offer some missions if you need money too.");
+            conversation.addPiece(null, "Yes, we came here with basic equipment as to not raise suspicion, but it looks like we will need more to defend ourselves.");
             conversation.addPiece(null, "Ok, let's go...");
 
             // Go take a look at the graveyard
             let nearby_systems = nna(start_location.star.getLinks().map(link => link.getPeer(contact_location.star)));
             let graveyard_location = randomLocation(random, [minBy(nearby_systems, system => system.level)]);
             this.addPart(new MissionPartEscort(this, graveyard_location, contact_character, `Go with ${contact_character.name} in ${graveyard_location.star.name} system`));
+            conversation = this.addPart(new MissionPartConversation(this, [contact_character], `Listen to ${contact_character.name}`));
+            conversation.addPiece(null, "What is all this junk?");
+            conversation.addPiece(contact_character, "This was until recently an unofficial ship scrap yard. Lots of abandoned ship carcasses were floating in here, and many smugglers used to camouflage their activities amongst those.");
+            conversation.addPiece(contact_character, "I don't know what happened of the ship relics themselves, they disappeared, but all you see left are their quantum matrix computers.");
+            conversation.addPiece(null, "This makes no sense, ship bodies have no value without their brains!");
+            conversation.addPiece(contact_character, "Exactly. Someone went through a lot of work, but I do not see the reason why.");
+            conversation.addPiece(null, "Do you have any clue on where the ships were taken?");
+            conversation.addPiece(contact_character, "From what I gathered from locals, they were taken far away, maybe to the other side of the galaxy.");
+            conversation.addPiece(null, "So many ship structures stripped and transported elsewhere is weird. You're right, it's a LOT of work. We definitely need to know what is going on with it.");
+            conversation.addPiece(null, "...");
+            conversation.addPiece(null, "But it seems that we will have to deal with something else first! My high-spectrum sensors just picked an incoming fleet that will emerge near us.");
+
+            // Fight with the patrol
+            this.addPart(new MissionPartCleanLocation(this, graveyard_location, "Fight the arrived fleet"));
         }
     }
 }
