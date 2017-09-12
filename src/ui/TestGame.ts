@@ -86,6 +86,7 @@ module TS.SpaceTac.UI.Specs {
     export function setupBattleview(): TestGame {
         return setupSingleView(testgame => {
             testgame.battleview = new BattleView();
+            testgame.battleview.splash = false;
 
             let battle = Battle.newQuickRandom();
             let player = battle.playing_ship ? battle.playing_ship.getPlayer() : new Player();
