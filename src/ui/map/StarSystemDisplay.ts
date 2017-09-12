@@ -60,8 +60,8 @@ module TS.SpaceTac.UI {
                 });
 
                 if (location_sprite) {
-                    let frame = this.getBadgeFrame(location);
-                    let status_badge = this.addImage(location.x + 0.005, location.y + 0.005, `map-status-${frame}`);
+                    let status = this.getBadgeFrame(location);
+                    let status_badge = this.addImage(location.x + 0.005, location.y + 0.005, `map-status-${status}`);
                     this.locations.push([location, location_sprite, status_badge]);
                 }
             });
@@ -127,7 +127,8 @@ module TS.SpaceTac.UI {
          */
         updateInfo(level: number, focus: boolean) {
             this.locations.forEach(info => {
-                info[2].frame = this.getBadgeFrame(info[0]);
+                let status = this.getBadgeFrame(info[0]);
+                this.view.changeImage(info[2], `map-status-${status}`);
             });
 
             // LOD

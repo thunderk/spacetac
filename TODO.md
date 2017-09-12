@@ -21,7 +21,6 @@ Map/story
 * Forbid to end up with more than 5 ships in the fleet because of escorts
 * Fix problems when several dialogs are active at the same time
 * Handle case where cargo is full to give a reward (give money?)
-* Fix question mark not being cleared on no encounter
 
 Character sheet
 ---------------
