@@ -71,5 +71,27 @@ module TS.SpaceTac.UI.Specs {
             // Quit twice don't do anything
             battleview.exitTargettingMode();
         });
+
+        it("allows to choose an action and a target with shortcut keys", function () {
+            let battleview = testgame.battleview;
+            battleview.setInteractionEnabled(true);
+            let action_icon = nn(first(battleview.action_bar.action_icons, icon => icon.action.needs_target));
+
+            expect(battleview.targetting.active).toBe(false);
+            expect(battleview.action_bar.hasActionSelected()).toBe(false);
+            battleview.numberPressed(battleview.action_bar.action_icons.indexOf(action_icon) + 1);
+            expect(battleview.action_bar.hasActionSelected()).toBe(true);
+            expect(battleview.targetting.active).toBe(true);
+            expect(battleview.targetting.action).toBe(action_icon.action);
+            expect(battleview.targetting.target).toBe(null);
+            battleview.numberPressed(3);
+            expect(battleview.targetting.active).toBe(true);
+            expect(battleview.targetting.action).toBe(action_icon.action);
+            expect(battleview.targetting.target).toEqual(Target.newFromShip(battleview.battle.play_order[3]));
+            battleview.numberPressed(4);
+            expect(battleview.targetting.active).toBe(true);
+            expect(battleview.targetting.action).toBe(action_icon.action);
+            expect(battleview.targetting.target).toEqual(Target.newFromShip(battleview.battle.play_order[4]));
+        });
     });
 }

@@ -210,7 +210,7 @@ module TS.SpaceTac.UI {
                 }
                 i++;
             }
-            return { key: "default", frame: 0 };
+            return { key: `-missing-${name}`, frame: 0 };
         }
 
         /**
@@ -218,7 +218,7 @@ module TS.SpaceTac.UI {
          */
         getFirstImage(...names: string[]): { key: string, frame: number } {
             let infos = names.map(name => this.getImageInfo(name));
-            return first(infos, info => info.key != "default") || infos[0];
+            return first(infos, info => info.key.substr(0, 9) != "-missing-") || infos[0];
         }
     }
 }

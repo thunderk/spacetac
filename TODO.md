@@ -54,8 +54,9 @@ Battle
 * Merge identical sticky effects
 * Allow to undo last moves
 * Add a battle log display
-* Allow to target ships with number keys, using their play order
-* Allow to validate the current targetting with enter
+* Allow to move targetting indicator with arrow keys
+* Trigger targetting mode for all actions (even for damage protector or shield transfer)
+* Add targetting shortcuts for "previous target", "next enemy" and "next ally"
 
 Ships models and equipments
 ---------------------------

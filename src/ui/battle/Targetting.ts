@@ -44,7 +44,7 @@ module TS.SpaceTac.UI {
             this.move_ghost.anchor.set(0.5, 0.5);
             this.move_ghost.alpha = 0.8;
             this.move_ghost.visible = false;
-            this.fire_arrow = new Phaser.Image(view.game, 0, 0, "battle-hud-simulator-ok");
+            this.fire_arrow = this.view.newImage("battle-hud-simulator-ok");
             this.fire_arrow.anchor.set(1, 0.5);
             this.fire_arrow.visible = false;
             this.fire_impact = new Phaser.Group(view.game);
@@ -71,7 +71,7 @@ module TS.SpaceTac.UI {
          * Indicator that the targetting is currently active
          */
         get active(): boolean {
-            return (this.ship && this.action) ? true : false;
+            return bool(this.ship && this.action);
         }
 
         /**
@@ -254,16 +254,18 @@ module TS.SpaceTac.UI {
          * This will make the needed approach and apply the action.
          */
         validate(): void {
-            this.simulate();
+            if (this.active) {
+                this.simulate();
 
-            if (this.ship && this.simulation.complete) {
-                let ship = this.ship;
-                this.simulation.parts.forEach(part => {
-                    if (part.possible) {
-                        part.action.apply(ship, part.target);
-                    }
-                });
-                this.actionbar.actionEnded();
+                if (this.ship && this.simulation.complete) {
+                    let ship = this.ship;
+                    this.simulation.parts.forEach(part => {
+                        if (part.possible) {
+                            part.action.apply(ship, part.target);
+                        }
+                    });
+                    this.actionbar.actionEnded();
+                }
             }
         }
     }

@@ -79,6 +79,7 @@ module TS.SpaceTac.UI {
             super.create();
 
             var game = this.game;
+            this.interacting = false;
             this.log_processor = new LogProcessor(this);
 
             // Add layers
@@ -113,6 +114,9 @@ module TS.SpaceTac.UI {
 
             // Key mapping
             this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.manipulate("keyboard")(3000));
+            this.inputs.bind("Enter", "Validate action", () => this.targetting.validate());
+            range(10).forEach(i => this.inputs.bind(`Numpad${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
+            range(10).forEach(i => this.inputs.bind(`Digit${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
             this.inputs.bindCheat("w", "Win current battle", () => this.battle.cheats.win());
             this.inputs.bindCheat("x", "Lose current battle", () => this.battle.cheats.lose());
             this.inputs.bindCheat("a", "Use AI to play", () => this.playAI());
@@ -154,6 +158,25 @@ module TS.SpaceTac.UI {
             let splash = new BattleSplash(this, this.battle.fleets[0], this.battle.fleets[1]);
             splash.moveToLayer(this.layer_overlay);
             return splash.start();
+        }
+
+        /**
+         * Handle the pressing of a number key
+         * 
+         * It may first be used to select an action to play, then to select a target
+         */
+        numberPressed(num: number): void {
+            if (this.interacting) {
+                if (this.targetting.active) {
+                    let ship = ifirst(this.battle.iships(true), ship => this.battle.getTurnsBefore(ship) == num % 10);
+                    if (ship) {
+                        this.targetting.setTarget(Target.newFromShip(ship));
+                    }
+                } else {
+                    console.log(num);
+                    this.action_bar.keyActionPressed(num - 1);
+                }
+            }
         }
 
         // Method called when cursor starts hovering over a ship (or its icon)

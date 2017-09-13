@@ -59,7 +59,6 @@ module TS.SpaceTac.UI {
             this.loadSheet("character/slots.png", 52);
             this.loadImage("character/upgrade-available.png");
             this.loadImage("character/price-tag.png");
-            this.loadImage("character/experience.png");
 
             // Load image atlases
             // TODO automatic range
