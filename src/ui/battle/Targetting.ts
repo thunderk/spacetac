@@ -25,13 +25,15 @@ module TS.SpaceTac.UI {
 
         // Collaborators to update
         actionbar: ActionBar
+        tactical_mode: ToggleClient
 
         // Access to the parent view
         view: BaseView
 
-        constructor(view: BaseView, actionbar: ActionBar) {
+        constructor(view: BaseView, actionbar: ActionBar, tactical_mode: Toggle) {
             this.view = view;
             this.actionbar = actionbar;
+            this.tactical_mode = tactical_mode.manipulate("targetting");
 
             this.container = view.add.group();
 
@@ -201,6 +203,8 @@ module TS.SpaceTac.UI {
             } else {
                 this.container.visible = false;
             }
+
+            this.tactical_mode(bool(this.action));
         }
 
         /**

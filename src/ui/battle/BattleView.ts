@@ -105,14 +105,14 @@ module TS.SpaceTac.UI {
             this.layer_sheets.add(this.character_sheet);
 
             // Targetting info
-            this.targetting = new Targetting(this, this.action_bar);
+            this.targetting = new Targetting(this, this.action_bar, this.toggle_tactical_mode);
             this.targetting.moveToLayer(this.arena.layer_targetting);
 
             // BGM
             this.gameui.audio.startMusic("mechanolith", 0.2);
 
             // Key mapping
-            this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.switch(3000));
+            this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.manipulate("keyboard")(3000));
             this.inputs.bindCheat("w", "Win current battle", () => this.battle.cheats.win());
             this.inputs.bindCheat("x", "Lose current battle", () => this.battle.cheats.lose());
             this.inputs.bindCheat("a", "Use AI to play", () => this.playAI());

@@ -38,6 +38,7 @@ module TS.SpaceTac.UI {
         active_effects_display: Phaser.Group
         effects_radius: Phaser.Graphics
         effects_messages: Phaser.Group
+        effects_messages_toggle: Toggle
 
         // Create a ship sprite usable in the Arena
         constructor(parent: Arena, ship: Ship) {
@@ -115,6 +116,7 @@ module TS.SpaceTac.UI {
             this.add(this.active_effects_display);
             this.effects_messages = new Phaser.Group(this.game);
             this.add(this.effects_messages);
+            this.effects_messages_toggle = this.battleview.animations.newVisibilityToggle(this.effects_messages, 500, false);
 
             this.updateActiveEffects();
             this.updateEffectsRadius();
@@ -163,12 +165,12 @@ module TS.SpaceTac.UI {
                 return 0;
             } else if (event instanceof ValueChangeEvent) {
                 if (event.value.name == "hull") {
-                    this.toggle_hsp.start(1500, true);
+                    this.toggle_hsp.manipulate("value")(1500);
                     this.hull_bar.setValue(event.value.get(), event.value.getMaximal() || 0);
                     this.hull_text.text = `${event.value.get()}`;
                     return 0;
                 } else if (event.value.name == "shield") {
-                    this.toggle_hsp.start(1500, true);
+                    this.toggle_hsp.manipulate("value")(1500);
                     this.shield_bar.setValue(event.value.get(), event.value.getMaximal() || 0);
                     this.shield_text.text = `${event.value.get()}`;
                     if (event.value.get() == 0) {
@@ -176,7 +178,7 @@ module TS.SpaceTac.UI {
                     }
                     return 0;
                 } else if (event.value.name == "power") {
-                    this.toggle_hsp.start(1500, true);
+                    this.toggle_hsp.manipulate("value")(1500);
                     this.power_text.text = `${event.value.get()}`;
                     return 0;
                 } else {
@@ -212,14 +214,16 @@ module TS.SpaceTac.UI {
          * This will show the information HUD accordingly
          */
         setHovered(hovered: boolean, tactical: boolean) {
+            let client = tactical ? "tactical" : "hover";
+
             if (hovered && this.ship.alive) {
-                this.toggle_hsp.start();
+                this.toggle_hsp.manipulate(client)(true);
                 if (tactical) {
-                    this.toggle_play_order.start();
+                    this.toggle_play_order.manipulate(client)(true);
                 }
             } else {
-                this.toggle_hsp.stop();
-                this.toggle_play_order.stop();
+                this.toggle_hsp.manipulate(client)(false);
+                this.toggle_play_order.manipulate(client)(false);
             }
         }
 
@@ -288,6 +292,10 @@ module TS.SpaceTac.UI {
          * Briefly show an effect on this ship
          */
         displayEffect(message: string, beneficial: boolean) {
+            if (!this.effects_messages.visible) {
+                this.effects_messages.removeAll(true);
+            }
+
             let text = new Phaser.Text(this.game, 0, 20 * this.effects_messages.children.length, message, { font: "14pt SpaceTac", fill: beneficial ? "#afe9c6" : "#e9afaf" });
             this.effects_messages.addChild(text);
 
@@ -297,10 +305,7 @@ module TS.SpaceTac.UI {
                 (this.ship.arena_y < arena.height * 0.9) ? 50 : (-50 - this.effects_messages.height)
             );
 
-            this.game.tweens.removeFrom(this.effects_messages);
-            this.effects_messages.alpha = 1;
-            let tween = this.game.tweens.create(this.effects_messages).to({ alpha: 0 }, 500).delay(1000).start();
-            tween.onComplete.addOnce(() => this.effects_messages.removeAll(true));
+            this.effects_messages_toggle.manipulate("added")(1000);
         }
 
         /**

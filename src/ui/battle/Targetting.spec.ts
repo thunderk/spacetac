@@ -3,7 +3,7 @@ module TS.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("draws simulation parts", function () {
-            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar);
+            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar, new Toggle());
 
             let ship = nn(testgame.battleview.battle.playing_ship);
             ship.setArenaPosition(10, 20);
@@ -35,7 +35,7 @@ module TS.SpaceTac.UI.Specs {
         });
 
         it("updates impact indicators on ships inside the blast radius", function () {
-            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar);
+            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar, new Toggle());
             let ship = nn(testgame.battleview.battle.playing_ship);
 
             let collect = spyOn(testgame.battleview.battle, "collectShipsInCircle").and.returnValues(
@@ -71,7 +71,7 @@ module TS.SpaceTac.UI.Specs {
         });
 
         it("updates graphics from simulation", function () {
-            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar);
+            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar, new Toggle());
             let ship = nn(testgame.battleview.battle.playing_ship);
 
             let engine = TestTools.addEngine(ship, 8000);

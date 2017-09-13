@@ -54,6 +54,8 @@ Battle
 * Merge identical sticky effects
 * Allow to undo last moves
 * Add a battle log display
+* Allow to target ships with number keys, using their play order
+* Allow to validate the current targetting with enter
 
 Ships models and equipments
 ---------------------------
