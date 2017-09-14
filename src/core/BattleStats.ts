@@ -37,8 +37,10 @@ module TS.SpaceTac {
         /**
          * Process a battle log
          */
-        processLog(log: BattleLog, attacker: Fleet) {
-            this.stats = {};
+        processLog(log: BattleLog, attacker: Fleet, clear = false) {
+            if (clear) {
+                this.stats = {};
+            }
 
             log.events.forEach(event => {
                 if (event instanceof ActionAppliedEvent) {
@@ -51,6 +53,31 @@ module TS.SpaceTac {
                     this.addStat("Drones deployed", 1, event.ship.fleet === attacker);
                 }
             });
+        }
+
+        /**
+         * Get the raw value of a fleet
+         */
+        private getFleetValue(fleet: Fleet): number {
+            return sum(fleet.ships.map(ship => {
+                return sum(ship.listEquipment().map(equipment => equipment.getPrice()));
+            }));
+        }
+
+        /**
+         * Prepare some stats at the start of battle
+         */
+        onBattleStart(attacker: Fleet, defender: Fleet): void {
+            this.addStat("Equipment wear (zotys)", this.getFleetValue(attacker), true);
+            this.addStat("Equipment wear (zotys)", this.getFleetValue(defender), false);
+        }
+
+        /**
+         * Finalize some stats at the start of battle
+         */
+        onBattleEnd(attacker: Fleet, defender: Fleet): void {
+            this.addStat("Equipment wear (zotys)", -this.getFleetValue(attacker), true);
+            this.addStat("Equipment wear (zotys)", -this.getFleetValue(defender), false);
         }
     }
 }

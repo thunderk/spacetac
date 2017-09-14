@@ -194,6 +194,7 @@ module TS.SpaceTac {
 
             // Apply to all ships
             iforeach(this.iships(), ship => ship.endBattle(this.turn));
+            this.stats.onBattleEnd(this.fleets[0], this.fleets[1]);
         }
 
         // Checks end battle conditions, returns true if the battle ended
@@ -287,6 +288,7 @@ module TS.SpaceTac {
             this.ended = false;
             this.turn = 0;
             this.placeShips();
+            this.stats.onBattleStart(this.fleets[0], this.fleets[1]);
             this.throwInitiative();
             iforeach(this.iships(), ship => ship.startBattle());
             this.advanceToNextShip();
