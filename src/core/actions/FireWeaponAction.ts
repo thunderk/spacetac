@@ -84,10 +84,10 @@ module TS.SpaceTac {
             if (!target) {
                 // Self-target
                 target = Target.newFromShip(ship);
+            } else {
+                // Face the target
+                ship.rotate(Target.newFromShip(ship).getAngleTo(target), first(ship.listEquipment(SlotType.Engine), () => true));
             }
-
-            // Face the target
-            ship.rotate(Target.newFromShip(ship).getAngleTo(target), first(ship.listEquipment(SlotType.Engine), () => true));
 
             // Fire event
             ship.addBattleEvent(new FireEvent(ship, this.equipment, target));

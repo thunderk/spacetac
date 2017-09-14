@@ -66,5 +66,20 @@ module TS.SpaceTac {
             target = weapon.action.checkTarget(ship1, Target.newFromShip(ship2));
             expect(target).toEqual(new Target(100, 10));
         });
+
+        it("rotates toward the target", function () {
+            let ship = new Ship();
+            let weapon = TestTools.addWeapon(ship, 1, 0, 100, 30);
+            expect(ship.arena_angle).toEqual(0);
+
+            let result = weapon.action.apply(ship, Target.newFromLocation(10, 20));
+            expect(result).toBe(true);
+            expect(ship.arena_angle).toBeCloseTo(1.107, 0.001);
+
+            weapon.action.needs_target = false;
+            result = weapon.action.apply(ship, null);
+            expect(result).toBe(true);
+            expect(ship.arena_angle).toBeCloseTo(1.107, 0.001);
+        });
     });
 }
