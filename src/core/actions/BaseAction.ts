@@ -146,7 +146,7 @@ module TS.SpaceTac {
 
                 let battle = ship.getBattle();
                 if (battle) {
-                    battle.log.add(new ActionAppliedEvent(ship, this, checked_target));
+                    battle.log.add(new ActionAppliedEvent(ship, this, checked_target, cost));
                 }
 
                 this.customApply(ship, checked_target);

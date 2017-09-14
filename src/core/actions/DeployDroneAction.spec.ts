@@ -50,7 +50,7 @@ module TS.SpaceTac {
             expect(drone.radius).toEqual(4);
             expect(drone.effects).toEqual([new DamageEffect(50)]);
             expect(battle.log.events).toEqual([
-                new ActionAppliedEvent(ship, action, Target.newFromLocation(5, 0)),
+                new ActionAppliedEvent(ship, action, Target.newFromLocation(5, 0), 2),
                 new DroneDeployedEvent(drone)
             ]);
 

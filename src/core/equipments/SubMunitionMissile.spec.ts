@@ -61,7 +61,7 @@ module TS.SpaceTac.Equipments {
             equipment.action.apply(ship, target);
             checkHP(50, 10, 50, 10, 50, 10);
             expect(battle.log.events.length).toBe(5);
-            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, Target.newFromLocation(1, 0)));
+            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, Target.newFromLocation(1, 0), 4));
             expect(battle.log.events[1]).toEqual(new FireEvent(ship, equipment, Target.newFromLocation(1, 0)));
             expect(battle.log.events[2]).toEqual(new DamageEvent(ship, 0, 20));
             expect(battle.log.events[3]).toEqual(new DamageEvent(enemy1, 0, 20));
@@ -76,7 +76,7 @@ module TS.SpaceTac.Equipments {
             equipment.action.apply(ship, target);
             checkHP(50, 10, 40, 0, 40, 0);
             expect(battle.log.events.length).toBe(4);
-            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, target));
+            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, target, 4));
             expect(battle.log.events[1]).toEqual(new FireEvent(ship, equipment, target));
             expect(battle.log.events[2]).toEqual(new DamageEvent(enemy1, 10, 10));
             expect(battle.log.events[3]).toEqual(new DamageEvent(enemy2, 10, 10));
@@ -90,7 +90,7 @@ module TS.SpaceTac.Equipments {
             equipment.action.apply(ship, target);
             checkHP(50, 10, 40, 0, 40, 0);
             expect(battle.log.events.length).toBe(2);
-            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, target));
+            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, target, 4));
             expect(battle.log.events[1]).toEqual(new FireEvent(ship, equipment, target));
         });
     });

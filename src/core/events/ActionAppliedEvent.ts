@@ -8,10 +8,14 @@ module TS.SpaceTac {
         // Action applied
         action: BaseAction
 
-        constructor(ship: Ship, action: BaseAction, target: Target | null) {
+        // Power usage
+        power: number
+
+        constructor(ship: Ship, action: BaseAction, target: Target | null, power: number) {
             super("action", ship, target);
 
             this.action = action;
+            this.power = power;
         }
     }
 }

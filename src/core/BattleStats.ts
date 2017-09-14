@@ -41,7 +41,9 @@ module TS.SpaceTac {
             this.stats = {};
 
             log.events.forEach(event => {
-                if (event instanceof DamageEvent) {
+                if (event instanceof ActionAppliedEvent) {
+                    this.addStat("Power used", event.power, event.ship.fleet === attacker);
+                } else if (event instanceof DamageEvent) {
                     this.addStat("Damage dealt", event.hull + event.shield, event.ship.fleet !== attacker);
                 } else if (event instanceof MoveEvent) {
                     this.addStat("Move distance (km)", event.getDistance(), event.ship.fleet === attacker);

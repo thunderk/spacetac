@@ -71,5 +71,22 @@ module TS.SpaceTac.Specs {
             stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({ "Drones deployed": [1, 1] });
         })
+
+        it("collects power usage", function () {
+            let stats = new BattleStats();
+            let battle = new Battle();
+            let attacker = battle.fleets[0].addShip();
+            let defender = battle.fleets[1].addShip();
+            stats.processLog(battle.log, battle.fleets[0]);
+            expect(stats.stats).toEqual({});
+
+            battle.log.add(new ActionAppliedEvent(attacker, new BaseAction("nop", "nop", false), null, 4));
+            stats.processLog(battle.log, battle.fleets[0]);
+            expect(stats.stats).toEqual({ "Power used": [4, 0] });
+
+            battle.log.add(new ActionAppliedEvent(defender, new BaseAction("nop", "nop", false), null, 2));
+            stats.processLog(battle.log, battle.fleets[0]);
+            expect(stats.stats).toEqual({ "Power used": [4, 2] });
+        })
     })
 }
