@@ -173,7 +173,6 @@ module TS.SpaceTac.UI {
                         this.targetting.setTarget(Target.newFromShip(ship));
                     }
                 } else {
-                    console.log(num);
                     this.action_bar.keyActionPressed(num - 1);
                 }
             }

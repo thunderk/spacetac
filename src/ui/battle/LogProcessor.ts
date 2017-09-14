@@ -26,6 +26,9 @@ module TS.SpaceTac.UI {
         // Indicator that the log is being played continuously
         private playing = false
 
+        // Indicator to debug the processed logs
+        private debug = false
+
         // Time at which the last action was applied
         private last_action: number
 
@@ -184,7 +187,9 @@ module TS.SpaceTac.UI {
          * Process a single event
          */
         processBattleEvent(event: BaseBattleEvent): number {
-            console.log("Battle event", event);
+            if (this.debug) {
+                console.log("Battle event", event);
+            }
 
             let durations = this.forwarding.map(subscriber => subscriber(event));
             let t = (new Date()).getTime()
