@@ -82,15 +82,15 @@ module TS.SpaceTac.Specs {
             let template = new LootTemplate(SlotType.Weapon, "Test Weapon");
             generator.equipment_generator.templates = [template];
 
-            template.price = 350;
+            template.price = irepeat(350);
             let result = generator.tryGenerateEquipmentReward(500);
             expect(result).toBeNull();
 
-            template.price = 800;
+            template.price = irepeat(800);
             result = generator.tryGenerateEquipmentReward(500);
             expect(result).toBeNull();
 
-            template.price = 500;
+            template.price = irepeat(500);
             result = generator.tryGenerateEquipmentReward(500);
             expect(result).not.toBeNull();
         })
@@ -103,7 +103,7 @@ module TS.SpaceTac.Specs {
             expect(result).toBe(15000);
 
             let template = new LootTemplate(SlotType.Weapon, "Test Weapon");
-            template.price = 15000;
+            template.price = irepeat(15000);
             generator.equipment_generator.templates.push(template);
 
             generator.random = new SkewedRandomGenerator([0], true);

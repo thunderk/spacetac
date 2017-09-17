@@ -151,11 +151,11 @@ module TS.SpaceTac {
         }
 
         /**
-         * Try to upgrade a skill by 1 point
+         * Try to upgrade a skill by 1 point or more
          */
-        upgradeSkill(skill: keyof ShipSkills) {
-            if (this.getAvailableUpgradePoints() > 0) {
-                this.skills[skill].add(1);
+        upgradeSkill(skill: keyof ShipSkills, points = 1) {
+            if (this.getAvailableUpgradePoints() >= points) {
+                this.skills[skill].add(points);
                 this.updateAttributes();
             }
         }

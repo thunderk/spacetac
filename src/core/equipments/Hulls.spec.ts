@@ -5,23 +5,23 @@ module TS.SpaceTac.Equipments {
 
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_materials": 1 });
-            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 200)]);
+            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 100)]);
             expect(equipment.price).toEqual(100);
 
             equipment = template.generate(2);
             expect(equipment.requirements).toEqual({ "skill_materials": 2 });
-            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 220)]);
-            expect(equipment.price).toEqual(300);
+            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 140)]);
+            expect(equipment.price).toEqual(350);
 
             equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_materials": 3 });
-            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 240)]);
-            expect(equipment.price).toEqual(700);
+            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 188)]);
+            expect(equipment.price).toEqual(850);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_materials": 10 });
-            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 380)]);
-            expect(equipment.price).toEqual(9100);
+            expect(equipment.requirements).toEqual({ "skill_materials": 17 });
+            expect(equipment.effects).toEqual([new AttributeEffect("hull_capacity", 748)]);
+            expect(equipment.price).toEqual(11350);
         });
 
         it("generates HardCoatedHull based on level", function () {
@@ -30,34 +30,34 @@ module TS.SpaceTac.Equipments {
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_materials": 2 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("hull_capacity", 300),
+                new AttributeEffect("hull_capacity", 130),
                 new AttributeEffect("maneuvrability", -2),
             ]);
-            expect(equipment.price).toEqual(120);
+            expect(equipment.price).toEqual(124);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_materials": 4 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 3 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("hull_capacity", 315),
+                new AttributeEffect("hull_capacity", 182),
                 new AttributeEffect("maneuvrability", -3),
             ]);
-            expect(equipment.price).toEqual(330);
+            expect(equipment.price).toEqual(434);
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_materials": 6 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 5 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("hull_capacity", 330),
-                new AttributeEffect("maneuvrability", -4),
+                new AttributeEffect("hull_capacity", 244),
+                new AttributeEffect("maneuvrability", -5),
             ]);
-            expect(equipment.price).toEqual(750);
+            expect(equipment.price).toEqual(1054);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_materials": 20 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 24 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("hull_capacity", 435),
-                new AttributeEffect("maneuvrability", -11),
+                new AttributeEffect("hull_capacity", 972),
+                new AttributeEffect("maneuvrability", -19),
             ]);
-            expect(equipment.price).toEqual(9570);
+            expect(equipment.price).toEqual(14074);
         });
 
         it("generates FractalHull based on level", function () {
@@ -66,34 +66,41 @@ module TS.SpaceTac.Equipments {
             let equipment = template.generate(1);
             expect(equipment.requirements).toEqual({ "skill_quantum": 1 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("hull_capacity", 260),
-                new AttributeEffect("maneuvrability", -1),
+                new AttributeEffect("hull_capacity", 60),
+                new AttributeEffect("precision", 2),
             ]);
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 1, 0, 0, [
+                new ValueEffect("hull", 60)
+            ]))
+            expect(equipment.cooldown).toEqual(new Cooldown(1, 4));
             expect(equipment.price).toEqual(250);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_quantum": 2 });
-            expect(equipment.effects).toEqual([
-                new AttributeEffect("hull_capacity", 270),
-                new AttributeEffect("maneuvrability", -2),
-            ]);
-            expect(equipment.price).toEqual(480);
-
-            equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_quantum": 3 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("hull_capacity", 280),
-                new AttributeEffect("maneuvrability", -2),
+                new AttributeEffect("hull_capacity", 84),
+                new AttributeEffect("precision", 2),
             ]);
-            expect(equipment.price).toEqual(940);
+            expect(equipment.cooldown).toEqual(new Cooldown(1, 4));
+            expect(equipment.price).toEqual(875);
+
+            equipment = template.generate(3);
+            expect(equipment.requirements).toEqual({ "skill_quantum": 5 });
+            expect(equipment.effects).toEqual([
+                new AttributeEffect("hull_capacity", 112),
+                new AttributeEffect("precision", 3),
+            ]);
+            expect(equipment.cooldown).toEqual(new Cooldown(1, 4));
+            expect(equipment.price).toEqual(2125);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_quantum": 10 });
+            expect(equipment.requirements).toEqual({ "skill_quantum": 33 });
             expect(equipment.effects).toEqual([
-                new AttributeEffect("hull_capacity", 350),
-                new AttributeEffect("maneuvrability", -6),
+                new AttributeEffect("hull_capacity", 448),
+                new AttributeEffect("precision", 14),
             ]);
-            expect(equipment.price).toEqual(10600);
+            expect(equipment.cooldown).toEqual(new Cooldown(1, 4));
+            expect(equipment.price).toEqual(28375);
         });
     });
 }

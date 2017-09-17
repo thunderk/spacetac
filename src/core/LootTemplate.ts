@@ -1,8 +1,8 @@
 module TS.SpaceTac {
     /**
-     * A leveled value is either a number multiplied by the level, or a custom iterator
+     * A leveled value is an iterator yielding the desired value for each level (first item is for level 1, and so on)
      */
-    type LeveledValue = number | Iterator<number>;
+    type LeveledValue = Iterator<number>;
 
     /**
      * Modifiers of generated equipment
@@ -14,12 +14,15 @@ module TS.SpaceTac {
      * Resolve a leveled value
      */
     function resolveForLevel(value: LeveledValue, level: number): number {
-        if (typeof value === "number") {
-            value *= level;
-        } else {
-            value = iat(value, level - 1) || 0;
-        }
-        return Math.floor(value);
+        let lvalue = iat(value, level - 1) || 0;
+        return Math.floor(lvalue);
+    }
+
+    /**
+     * Balanced generic leveled value
+     */
+    export function leveled(base: number, increment = base * 0.4, exponent = 0.2): LeveledValue {
+        return istep(base, istep(increment, irepeat(increment * exponent)));
     }
 
     /**
@@ -103,11 +106,11 @@ module TS.SpaceTac {
         // Modifiers applied to "common" equipment to obtain a specific quality
         protected quality_modifiers: QualityModifier[]
 
-        constructor(slot: SlotType, name: string, description = "", price_base = 100, price_inflation = 200) {
+        constructor(slot: SlotType, name: string, description = "", base_price = 100) {
             this.slot = slot;
             this.name = name;
             this.description = description;
-            this.price = istep(price_base, istep(price_inflation, irepeat(price_inflation)));
+            this.price = leveled(base_price, base_price * 2.5, 1);
             this.base_modifiers = [];
             this.quality_modifiers = [LootQualityModifiers.applyStandard];
         }

@@ -69,6 +69,13 @@
             var result = document.getElementById("result");
             var current_level = 1;
             var current_name = "";
+            var qualities = {}
+
+            qualities[TS.SpaceTac.EquipmentQuality.WEAK] = "#e66";
+            qualities[TS.SpaceTac.EquipmentQuality.COMMON] = "#eee";
+            qualities[TS.SpaceTac.EquipmentQuality.FINE] = "#669";
+            qualities[TS.SpaceTac.EquipmentQuality.PREMIUM] = "#66b";
+            qualities[TS.SpaceTac.EquipmentQuality.LEGENDARY] = "#66e";
 
             function update() {
                 result.innerHTML = "";
@@ -79,13 +86,17 @@
                     TS.iterenum(TS.SpaceTac.EquipmentQuality, function (quality) {
                         var loot = template.generate(current_level, quality);
 
-                        let title = document.createElement("h2");
-                        title.textContent = loot.getFullName() + " (Price " + loot.price.toString() + ")";
-                        result.appendChild(title);
+                        var block = document.createElement("div");
+                        block.setAttribute("style", "color:" + qualities[quality]);
+                        result.appendChild(block);
 
-                        let description = document.createElement("pre");
+                        var title = document.createElement("h2");
+                        title.textContent = loot.getFullName() + " (Price " + loot.price.toString() + ")";
+                        block.appendChild(title);
+
+                        var description = document.createElement("pre");
                         description.textContent = loot.getFullDescription();
-                        result.appendChild(description);
+                        block.appendChild(description);
                     });
                 });
             }

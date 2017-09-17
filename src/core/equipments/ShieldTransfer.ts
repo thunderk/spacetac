@@ -5,10 +5,10 @@ module TS.SpaceTac.Equipments {
         constructor() {
             super(SlotType.Weapon, "Shield Transfer", "Generates small gravity wells between the ship's and the target's shields, stealing physical properties and energy");
 
-            this.setSkillsRequirements({ "skill_gravity": 1 });
+            this.setSkillsRequirements({ "skill_gravity": leveled(2, 1.5) });
             this.setCooldown(irepeat(3), irepeat(3));
-            this.addFireAction(irepeat(3), 0, istep(250, irepeat(20)), [
-                new EffectTemplate(new ValueTransferEffect("shield"), { "amount": istep(-40, irepeat(-4)) })
+            this.addFireAction(irepeat(3), irepeat(0), leveled(250, 20), [
+                new EffectTemplate(new ValueTransferEffect("shield"), { "amount": leveled(-40, -4) })
             ]);
         }
     }

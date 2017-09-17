@@ -4,34 +4,34 @@ module TS.SpaceTac.Equipments {
             let template = new DamageProtector();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_time": 1 });
+            expect(equipment.requirements).toEqual({ "skill_time": 3 });
             expect(equipment.action).toEqual(new ToggleAction(equipment, 2, 300, [
-                new DamageModifierEffect(-30)
+                new DamageModifierEffect(-17)
             ]));
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_time": 3 });
+            expect(equipment.requirements).toEqual({ "skill_time": 4 });
             expect(equipment.action).toEqual(new ToggleAction(equipment, 2, 310, [
-                new DamageModifierEffect(-31)
+                new DamageModifierEffect(-22)
             ]));
 
             equipment = template.generate(3);
             expect(equipment.requirements).toEqual({ "skill_time": 5 });
-            expect(equipment.action).toEqual(new ToggleAction(equipment, 2, 320, [
-                new DamageModifierEffect(-32)
+            expect(equipment.action).toEqual(new ToggleAction(equipment, 2, 322, [
+                new DamageModifierEffect(-28)
             ]));
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_time": 19 });
-            expect(equipment.action).toEqual(new ToggleAction(equipment, 3, 390, [
-                new DamageModifierEffect(-39)
+            expect(equipment.requirements).toEqual({ "skill_time": 22 });
+            expect(equipment.action).toEqual(new ToggleAction(equipment, 8, 462, [
+                new DamageModifierEffect(-60)
             ]));
         });
 
         it("reduces damage around the ship", function () {
             let battle = new Battle();
             let ship1 = battle.fleets[0].addShip();
-            ship1.upgradeSkill("skill_time");
+            ship1.upgradeSkill("skill_time", 3);
             let protector = ship1.addSlot(SlotType.Weapon).attach(new DamageProtector().generate(1));
             TestTools.setShipAP(ship1, 10);
             let ship2 = battle.fleets[0].addShip();
@@ -64,8 +64,8 @@ module TS.SpaceTac.Equipments {
             iforeach(battle.iships(), ship => new DamageEffect(10).applyOnShip(ship, ship1));
 
             expect(ship1.getValue("power")).toEqual(8);
-            expect(ship1.getValue("hull")).toEqual(83);
-            expect(ship2.getValue("hull")).toEqual(83);
+            expect(ship1.getValue("hull")).toEqual(82);
+            expect(ship2.getValue("hull")).toEqual(82);
             expect(ship3.getValue("hull")).toEqual(80);
 
             result = protector.action.apply(ship1, null);
@@ -75,8 +75,8 @@ module TS.SpaceTac.Equipments {
             iforeach(battle.iships(), ship => new DamageEffect(10).applyOnShip(ship, ship1));
 
             expect(ship1.getValue("power")).toEqual(8);
-            expect(ship1.getValue("hull")).toEqual(73);
-            expect(ship2.getValue("hull")).toEqual(73);
+            expect(ship1.getValue("hull")).toEqual(72);
+            expect(ship2.getValue("hull")).toEqual(72);
             expect(ship3.getValue("hull")).toEqual(70);
         });
     });

@@ -4,20 +4,28 @@ module TS.SpaceTac.Equipments {
             let template = new SubMunitionMissile();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_materials": 1 });
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 500, 150, [new DamageEffect(30, 2)]));
+            expect(equipment.requirements).toEqual({ "skill_materials": 1, "skill_photons": 1 });
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 500, 150, [new DamageEffect(26, 4)]));
+            expect(equipment.cooldown).toEqual(new Cooldown(1, 0));
+            expect(equipment.price).toEqual(163);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_materials": 2 });
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 520, 155, [new DamageEffect(32, 3)]));
+            expect(equipment.requirements).toEqual({ "skill_materials": 2, "skill_photons": 1 });
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 520, 155, [new DamageEffect(28, 5)]));
+            expect(equipment.cooldown).toEqual(new Cooldown(1, 0));
+            expect(equipment.price).toEqual(570);
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_materials": 3 });
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 540, 160, [new DamageEffect(34, 4)]));
+            expect(equipment.requirements).toEqual({ "skill_materials": 3, "skill_photons": 2 });
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 544, 161, [new DamageEffect(30, 6)]));
+            expect(equipment.cooldown).toEqual(new Cooldown(1, 0));
+            expect(equipment.price).toEqual(1385);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_materials": 10 });
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 680, 195, [new DamageEffect(48, 11)]));
+            expect(equipment.requirements).toEqual({ "skill_materials": 20, "skill_photons": 13 });
+            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 4, 824, 231, [new DamageEffect(58, 20)]));
+            expect(equipment.cooldown).toEqual(new Cooldown(1, 0));
+            expect(equipment.price).toEqual(18500);
         });
 
         it("hits several targets in circle", function () {

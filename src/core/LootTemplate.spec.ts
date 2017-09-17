@@ -17,7 +17,7 @@ module TS.SpaceTac.Specs {
             expect(result.slot_type).toEqual(SlotType.Power);
             expect(result.code).toEqual("powergenerator");
             expect(result.name).toEqual("Power Generator");
-            expect(result.price).toEqual(300);
+            expect(result.price).toEqual(350);
             expect(result.level).toEqual(2);
             expect(result.quality).toEqual(EquipmentQuality.COMMON);
             expect(result.description).toEqual("A great power generator !");
@@ -33,7 +33,7 @@ module TS.SpaceTac.Specs {
 
         it("applies requirements on skills", function () {
             let template = new LootTemplate(SlotType.Hull, "Hull");
-            template.setSkillsRequirements({ "skill_photons": 1, "skill_gravity": istep(2, istep(1)) });
+            template.setSkillsRequirements({ "skill_photons": istep(1), "skill_gravity": istep(2, istep(1)) });
 
             let result = template.generate(1);
             expect(result.requirements).toEqual({
@@ -123,13 +123,13 @@ module TS.SpaceTac.Specs {
             let template = new LootTemplate(SlotType.Weapon, "Weapon");
             expect(template.hasDamageEffect()).toBe(false);
 
-            template.addAttributeEffect("maneuvrability", 1);
+            template.addAttributeEffect("maneuvrability", irepeat(1));
             expect(template.hasDamageEffect()).toBe(false);
 
-            template.addFireAction(1, 50, 50, [new EffectTemplate(new BaseEffect("test"), {})]);
+            template.addFireAction(irepeat(1), irepeat(50), irepeat(50), [new EffectTemplate(new BaseEffect("test"), {})]);
             expect(template.hasDamageEffect()).toBe(false);
 
-            template.addFireAction(1, 50, 50, [new EffectTemplate(new DamageEffect(20), {})]);
+            template.addFireAction(irepeat(1), irepeat(50), irepeat(50), [new EffectTemplate(new DamageEffect(20), {})]);
             expect(template.hasDamageEffect()).toBe(true);
         });
     });
