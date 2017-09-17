@@ -36,7 +36,7 @@ module TS.SpaceTac.Equipments {
             expect(equipment.price).toEqual(124);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_materials": 3 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 5 });
             expect(equipment.effects).toEqual([
                 new AttributeEffect("hull_capacity", 182),
                 new AttributeEffect("maneuvrability", -3),
@@ -44,7 +44,7 @@ module TS.SpaceTac.Equipments {
             expect(equipment.price).toEqual(434);
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_materials": 5 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 8 });
             expect(equipment.effects).toEqual([
                 new AttributeEffect("hull_capacity", 244),
                 new AttributeEffect("maneuvrability", -5),
@@ -52,7 +52,7 @@ module TS.SpaceTac.Equipments {
             expect(equipment.price).toEqual(1054);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_materials": 24 });
+            expect(equipment.requirements).toEqual({ "skill_materials": 50 });
             expect(equipment.effects).toEqual([
                 new AttributeEffect("hull_capacity", 972),
                 new AttributeEffect("maneuvrability", -19),

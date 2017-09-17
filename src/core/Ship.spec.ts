@@ -105,20 +105,24 @@ module TS.SpaceTac.Specs {
             expect(actions[0].code).toEqual("endturn");
 
             slot = ship.addSlot(SlotType.Engine);
-            equipment = new Equipment();
-            equipment.slot_type = slot.type;
+            equipment = new Equipment(slot.type);
             equipment.action = new MoveAction(equipment);
             slot.attach(equipment);
 
             slot = ship.addSlot(SlotType.Weapon);
-            equipment = new Equipment();
-            equipment.slot_type = slot.type;
+            equipment = new Equipment(slot.type);
+            slot.attach(equipment);
+
+            slot = ship.addSlot(SlotType.Power);
+            equipment = new Equipment(slot.type);
+            equipment.action = new FireWeaponAction(equipment);
             slot.attach(equipment);
 
             actions = ship.getAvailableActions();
-            expect(actions.length).toBe(2);
+            expect(actions.length).toBe(3);
             expect(actions[0].code).toEqual("move");
-            expect(actions[1].code).toEqual("endturn");
+            expect(actions[1].code).toEqual("fire-equipment");
+            expect(actions[2].code).toEqual("endturn");
         });
 
         it("applies permanent effects of equipments on attributes", function () {

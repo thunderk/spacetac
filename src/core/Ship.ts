@@ -124,17 +124,23 @@ module TS.SpaceTac {
             return this.fleet.battle;
         }
 
-        // Get the list of actions available
-        //  This list does not filter out actions unavailable due to insufficient AP, it only filters out
-        //  actions that are not allowed/available at all on the ship
+        /**
+         * Get the list of actions available
+         * 
+         * This list does not filter out actions unavailable due to insufficient AP, it only filters out actions that
+         * are not allowed/available at all on the ship
+         */
         getAvailableActions(): BaseAction[] {
             var actions: BaseAction[] = [];
 
             if (this.alive) {
-                this.slots.forEach((slot: Slot) => {
-                    if (slot.attached && slot.attached.action && slot.attached.action.code != "nothing") {
-                        actions.push(slot.attached.action);
-                    }
+                let slots = [SlotType.Engine, SlotType.Power, SlotType.Hull, SlotType.Shield, SlotType.Weapon];
+                slots.forEach(slot => {
+                    this.listEquipment(slot).forEach(equipment => {
+                        if (equipment.action.code != "nothing") {
+                            actions.push(equipment.action)
+                        }
+                    });
                 });
             }
 

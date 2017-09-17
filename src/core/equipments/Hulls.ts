@@ -14,7 +14,7 @@ module TS.SpaceTac.Equipments {
         constructor() {
             super(SlotType.Hull, "Hard Coated Hull", "Hardened hull, with titanium coating", 124);
 
-            this.setSkillsRequirements({ "skill_materials": leveled(2, 1.4) });
+            this.setSkillsRequirements({ "skill_materials": leveled(2, 3) });
             this.addAttributeEffect("hull_capacity", leveled(130));
             this.addAttributeEffect("maneuvrability", leveled(-2, -1));
         }
