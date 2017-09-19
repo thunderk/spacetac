@@ -9,10 +9,6 @@ module TS.SpaceTac {
             expect(action.code).toEqual("fire-testweapon");
             expect(action.name).toEqual("Fire");
             expect(action.equipment).toBe(equipment);
-            expect(action.needs_target).toBe(true);
-
-            action = new FireWeaponAction(equipment, 4, 0, 10);
-            expect(action.needs_target).toBe(false);
         });
 
         it("applies effects to alive ships in blast radius", function () {
@@ -49,35 +45,37 @@ module TS.SpaceTac {
             let ship2 = new Ship();
             ship2.setArenaPosition(150, 10);
             let weapon = TestTools.addWeapon(ship1, 1, 0, 100, 30);
+            let action = nn(weapon.action);
 
-            let target = weapon.action.checkTarget(ship1, new Target(150, 10));
+            let target = action.checkTarget(ship1, new Target(150, 10));
             expect(target).toEqual(new Target(150, 10));
 
-            target = weapon.action.checkTarget(ship1, Target.newFromShip(ship2));
+            target = action.checkTarget(ship1, Target.newFromShip(ship2));
             expect(target).toEqual(new Target(150, 10));
 
             ship1.setArenaPosition(30, 10);
 
-            target = weapon.action.checkTarget(ship1, Target.newFromShip(ship2));
+            target = action.checkTarget(ship1, Target.newFromShip(ship2));
             expect(target).toEqual(new Target(130, 10));
 
             ship1.setArenaPosition(0, 10);
 
-            target = weapon.action.checkTarget(ship1, Target.newFromShip(ship2));
+            target = action.checkTarget(ship1, Target.newFromShip(ship2));
             expect(target).toEqual(new Target(100, 10));
         });
 
         it("rotates toward the target", function () {
             let ship = new Ship();
             let weapon = TestTools.addWeapon(ship, 1, 0, 100, 30);
+            let action = nn(weapon.action);
+            spyOn(action, "checkTarget").and.callFake((ship: Ship, target: Target) => target);
             expect(ship.arena_angle).toEqual(0);
 
-            let result = weapon.action.apply(ship, Target.newFromLocation(10, 20));
+            let result = action.apply(ship, Target.newFromLocation(10, 20));
             expect(result).toBe(true);
             expect(ship.arena_angle).toBeCloseTo(1.107, 0.001);
 
-            weapon.action.needs_target = false;
-            result = weapon.action.apply(ship, null);
+            result = action.apply(ship, Target.newFromShip(ship));
             expect(result).toBe(true);
             expect(ship.arena_angle).toBeCloseTo(1.107, 0.001);
         });

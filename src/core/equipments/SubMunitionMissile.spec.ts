@@ -44,7 +44,7 @@ module TS.SpaceTac.Equipments {
 
             var template = new Equipments.SubMunitionMissile();
             var equipment = template.generate(1);
-            let action = <FireWeaponAction>equipment.action;
+            let action = <FireWeaponAction>nn(equipment.action);
             action.range = 5;
             action.blast = 1.5;
             (<DamageEffect>action.effects[0]).base = 20;
@@ -65,11 +65,11 @@ module TS.SpaceTac.Equipments {
 
             // Fire at a ship
             var target = Target.newFromShip(enemy1);
-            expect(equipment.action.checkCannotBeApplied(ship)).toBe(null);
-            equipment.action.apply(ship, target);
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+            action.apply(ship, target);
             checkHP(50, 10, 50, 10, 50, 10);
             expect(battle.log.events.length).toBe(5);
-            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, Target.newFromLocation(1, 0), 4));
+            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, action, Target.newFromLocation(1, 0), 4));
             expect(battle.log.events[1]).toEqual(new FireEvent(ship, equipment, Target.newFromLocation(1, 0)));
             expect(battle.log.events[2]).toEqual(new DamageEvent(ship, 0, 20));
             expect(battle.log.events[3]).toEqual(new DamageEvent(enemy1, 0, 20));
@@ -80,11 +80,11 @@ module TS.SpaceTac.Equipments {
 
             // Fire in space
             target = Target.newFromLocation(2.4, 0);
-            expect(equipment.action.checkCannotBeApplied(ship)).toBe(null);
-            equipment.action.apply(ship, target);
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+            action.apply(ship, target);
             checkHP(50, 10, 40, 0, 40, 0);
             expect(battle.log.events.length).toBe(4);
-            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, target, 4));
+            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, action, target, 4));
             expect(battle.log.events[1]).toEqual(new FireEvent(ship, equipment, target));
             expect(battle.log.events[2]).toEqual(new DamageEvent(enemy1, 10, 10));
             expect(battle.log.events[3]).toEqual(new DamageEvent(enemy2, 10, 10));
@@ -94,11 +94,11 @@ module TS.SpaceTac.Equipments {
 
             // Fire far away
             target = Target.newFromLocation(5, 0);
-            expect(equipment.action.checkCannotBeApplied(ship)).toBe(null);
-            equipment.action.apply(ship, target);
+            expect(action.checkCannotBeApplied(ship)).toBe(null);
+            action.apply(ship, target);
             checkHP(50, 10, 40, 0, 40, 0);
             expect(battle.log.events.length).toBe(2);
-            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, equipment.action, target, 4));
+            expect(battle.log.events[0]).toEqual(new ActionAppliedEvent(ship, action, target, 4));
             expect(battle.log.events[1]).toEqual(new FireEvent(ship, equipment, target));
         });
     });

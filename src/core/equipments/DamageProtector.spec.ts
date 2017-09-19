@@ -33,6 +33,7 @@ module TS.SpaceTac.Equipments {
             let ship1 = battle.fleets[0].addShip();
             ship1.upgradeSkill("skill_time", 3);
             let protector = ship1.addSlot(SlotType.Weapon).attach(new DamageProtector().generate(1));
+            let action = nn(protector.action);
             TestTools.setShipAP(ship1, 10);
             let ship2 = battle.fleets[0].addShip();
             let ship3 = battle.fleets[0].addShip();
@@ -41,10 +42,7 @@ module TS.SpaceTac.Equipments {
             ship3.setArenaPosition(800, 0);
             battle.playing_ship = ship1;
             ship1.playing = true;
-            expect(ship1.getAvailableActions()).toEqual([
-                protector.action,
-                new EndTurnAction()
-            ]);
+            expect(ship1.getAvailableActions()).toEqual([action, new EndTurnAction()]);
 
             TestTools.setShipHP(ship1, 100, 0);
             TestTools.setShipHP(ship2, 100, 0);
@@ -57,7 +55,7 @@ module TS.SpaceTac.Equipments {
             expect(ship2.getValue("hull")).toEqual(90);
             expect(ship3.getValue("hull")).toEqual(90);
 
-            let result = protector.action.apply(ship1, null);
+            let result = action.apply(ship1);
             expect(result).toBe(true);
             expect((<ToggleAction>protector.action).activated).toBe(true);
 
@@ -68,7 +66,7 @@ module TS.SpaceTac.Equipments {
             expect(ship2.getValue("hull")).toEqual(82);
             expect(ship3.getValue("hull")).toEqual(80);
 
-            result = protector.action.apply(ship1, null);
+            result = action.apply(ship1);
             expect(result).toBe(true);
             expect((<ToggleAction>protector.action).activated).toBe(false);
 

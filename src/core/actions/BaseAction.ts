@@ -1,5 +1,21 @@
 module TS.SpaceTac {
     /**
+     * Targetting mode for an action.
+     * 
+     * This is a hint as to what type of target is required for this action.
+     */
+    export enum ActionTargettingMode {
+        // Apply immediately on the ship owning the action, without confirmation
+        SELF,
+        // Apply on the ship owning the action, with a confirmation
+        SELF_CONFIRM,
+        // Apply on one selected ship
+        SHIP,
+        // Apply on a space area
+        SPACE
+    }
+
+    /**
      * Base class for a battle action.
      * 
      * An action should be the only way to modify a battle state.
@@ -11,40 +27,56 @@ module TS.SpaceTac {
         // Human-readable name
         name: string
 
-        // Boolean at true if the action needs a target
-        needs_target: boolean
-
         // Equipment that triggers this action
         equipment: Equipment | null
 
         // Create the action
-        constructor(code: string, name: string, needs_target: boolean, equipment: Equipment | null = null) {
+        constructor(code: string, name: string, equipment: Equipment | null = null) {
             this.code = code;
             this.name = name;
-            this.needs_target = needs_target;
             this.equipment = equipment;
+        }
+
+        /**
+         * Get the relevent cooldown for this action
+         */
+        get cooldown(): Cooldown {
+            return this.equipment ? this.equipment.cooldown : new Cooldown();
+        }
+
+        /**
+         * Get the targetting mode
+         */
+        getTargettingMode(ship: Ship): ActionTargettingMode {
+            if (this.getBlastRadius(ship)) {
+                return ActionTargettingMode.SPACE;
+            } else if (this.getRangeRadius(ship)) {
+                return ActionTargettingMode.SHIP;
+            } else {
+                return ActionTargettingMode.SELF_CONFIRM;
+            }
+        }
+
+        /**
+         * Get a default target for this action
+         */
+        getDefaultTarget(ship: Ship): Target {
+            return Target.newFromShip(ship);
         }
 
         /**
          * Get the number of turns this action is unavailable, because of overheating
          */
         getCooldownDuration(estimated = false): number {
-            if (this.equipment) {
-                return estimated ? this.equipment.cooldown.cooling : this.equipment.cooldown.heat;
-            } else {
-                return 0;
-            }
+            let cooldown = this.cooldown;
+            return estimated ? this.cooldown.cooling : this.cooldown.heat;
         }
 
         /**
          * Get the number of remaining uses before overheat, infinity if there is no overheat
          */
         getUsesBeforeOverheat(): number {
-            if (this.equipment) {
-                return this.equipment.cooldown.getRemainingUses();
-            } else {
-                return Infinity;
-            }
+            return this.cooldown.getRemainingUses();
         }
 
         /**
@@ -71,7 +103,7 @@ module TS.SpaceTac {
             }
 
             // Check cooldown
-            if (this.equipment && !this.equipment.cooldown.canUse()) {
+            if (!this.cooldown.canUse()) {
                 return "overheated";
             }
 
@@ -93,40 +125,43 @@ module TS.SpaceTac {
             return 0;
         }
 
-        // Method to check if a target is applicable for this action
-        //  Will call checkLocationTarget or checkShipTarget by default
-        checkTarget(ship: Ship, target: Target | null): Target | null {
+        /**
+         * Check if a target is suitable for this action
+         * 
+         * Will call checkLocationTarget or checkShipTarget by default
+         */
+        checkTarget(ship: Ship, target: Target): Target | null {
             if (this.checkCannotBeApplied(ship)) {
                 return null;
-            } else if (target) {
+            } else {
                 if (target.ship) {
                     return this.checkShipTarget(ship, target);
                 } else {
                     return this.checkLocationTarget(ship, target);
                 }
-            } else {
-                return null;
             }
         }
 
-        // Method to reimplement to check if a space target is applicable
+        // Method to reimplement to check if a space target is suitable
         //  Must return null if the target can't be applied, an altered target, or the original target
-        checkLocationTarget(ship: Ship, target: Target): Target | null {
+        protected checkLocationTarget(ship: Ship, target: Target): Target | null {
             return null;
         }
 
-        // Method to reimplement to check if a ship target is applicable
+        // Method to reimplement to check if a ship target is suitable
         //  Must return null if the target can't be applied, an altered target, or the original target
-        checkShipTarget(ship: Ship, target: Target): Target | null {
+        protected checkShipTarget(ship: Ship, target: Target): Target | null {
             return null;
         }
 
-        // Apply an action, returning true if it was successful
-        apply(ship: Ship, target: Target | null): boolean {
+        /**
+         * Apply an action, returning true if it was successful
+         */
+        apply(ship: Ship, target = this.getDefaultTarget(ship)): boolean {
             let reject = this.checkCannotBeApplied(ship);
             if (reject == null) {
                 let checked_target = this.checkTarget(ship, target);
-                if (!checked_target && this.needs_target) {
+                if (!checked_target) {
                     console.warn("Action rejected - invalid target", ship, this, target);
                     return false;
                 }
@@ -140,9 +175,9 @@ module TS.SpaceTac {
                 if (this.equipment) {
                     this.equipment.addWear(1);
                     ship.listEquipment(SlotType.Power).forEach(equipment => equipment.addWear(1));
-
-                    this.equipment.cooldown.use();
                 }
+
+                this.cooldown.use();
 
                 let battle = ship.getBattle();
                 if (battle) {
@@ -157,8 +192,10 @@ module TS.SpaceTac {
             }
         }
 
-        // Method to reimplement to apply a action
-        protected customApply(ship: Ship, target: Target | null) {
+        /**
+         * Method to reimplement to apply the action
+         */
+        protected customApply(ship: Ship, target: Target): void {
         }
 
         /**

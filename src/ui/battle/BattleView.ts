@@ -94,9 +94,10 @@ module TS.SpaceTac.UI {
             this.background = new Phaser.Image(game, 0, 0, "battle-background", 0);
             this.layer_background.add(this.background);
 
-            // Add arena (local map)
-            this.arena = new Arena(this);
-            this.layer_arena.add(this.arena);
+            // Add arena (local battlefield map)
+            this.arena = new Arena(this, this.layer_arena);
+            this.arena.callbacks_hover.push(bound(this, "cursorHovered"));
+            this.arena.callbacks_click.push(bound(this, "cursorClicked"));
 
             // Add UI elements
             this.action_bar = new ActionBar(this);
@@ -106,7 +107,7 @@ module TS.SpaceTac.UI {
             this.layer_sheets.add(this.character_sheet);
 
             // Targetting info
-            this.targetting = new Targetting(this, this.action_bar, this.toggle_tactical_mode);
+            this.targetting = new Targetting(this, this.action_bar, this.toggle_tactical_mode, this.arena.range_hint);
             this.targetting.moveToLayer(this.arena.layer_targetting);
 
             // BGM
@@ -178,30 +179,43 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Method called when cursor starts hovering over a ship (or its icon)
+        /**
+         * Method called when the arena cursor is hovered
+         */
+        cursorHovered(location: ArenaLocation | null, ship: Ship | null) {
+            if (this.targetting.active) {
+                this.targetting.setTargetFromLocation(location);
+            }
+
+            if (ship && this.ship_hovered != ship) {
+                // TODO if targetting is active, this may hide targetting info with the tooltip
+                this.cursorOnShip(ship);
+            } else if (!ship && this.ship_hovered) {
+                this.cursorOffShip(this.ship_hovered);
+            }
+        }
+
+        /**
+         * Method called when cursor starts hovering over a ship (or its icon)
+         */
         cursorOnShip(ship: Ship): void {
-            if (!this.targetting.active || ship.alive) {
+            if (ship.alive) {
                 this.setShipHovered(ship);
             }
         }
 
-        // Method called when cursor stops hovering over a ship (or its icon)
+        /**
+         * Method called when cursor stops hovering over a ship (or its icon)
+         */
         cursorOffShip(ship: Ship): void {
             if (this.ship_hovered === ship) {
                 this.setShipHovered(null);
             }
         }
 
-        // Method called when cursor moves in space
-        cursorInSpace(x: number, y: number): void {
-            if (!this.ship_hovered) {
-                if (this.targetting.active) {
-                    this.targetting.setTarget(Target.newFromLocation(x, y));
-                }
-            }
-        }
-
-        // Method called when cursor has been clicked (in space or on a ship)
+        /**
+         * Method called when cursor has been clicked (in space or on a ship)
+         */
         cursorClicked(): void {
             if (this.targetting.active) {
                 this.targetting.validate();
@@ -211,7 +225,9 @@ module TS.SpaceTac.UI {
             }
         }
 
-        // Set the currently hovered ship
+        /**
+         * Set the currently hovered ship
+         */
         setShipHovered(ship: Ship | null): void {
             this.ship_hovered = ship;
             this.arena.setShipHovered(ship);
@@ -221,14 +237,6 @@ module TS.SpaceTac.UI {
                 this.ship_tooltip.setShip(ship);
             } else {
                 this.ship_tooltip.hide();
-            }
-
-            if (this.targetting.active) {
-                if (ship) {
-                    this.targetting.setTarget(Target.newFromShip(ship));
-                } else {
-                    this.targetting.setTarget(null);
-                }
             }
         }
 
@@ -248,12 +256,12 @@ module TS.SpaceTac.UI {
 
         // Enter targetting mode
         //  While in this mode, the Targetting object will receive hover and click events, and handle them
-        enterTargettingMode(action: BaseAction): Targetting | null {
+        enterTargettingMode(action: BaseAction, mode: ActionTargettingMode): Targetting | null {
             if (!this.interacting) {
                 return null;
             }
 
-            this.targetting.setAction(action);
+            this.targetting.setAction(action, mode);
             return this.targetting;
         }
 

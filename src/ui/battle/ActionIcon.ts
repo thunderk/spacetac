@@ -87,10 +87,14 @@ module TS.SpaceTac.UI {
 
             // Initialize
             this.updateActiveStatus(true);
-            this.updateCooldownStatus();
+            this.updateCooldownStatus(0);
         }
 
-        // Process a click event on the action icon
+        /**
+         * Process a click event on the action icon
+         * 
+         * This will enter the action's targetting mode, waiting for a target or confirmation to apply the action
+         */
         processClick(): void {
             if (!this.bar.interactive) {
                 return;
@@ -110,28 +114,29 @@ module TS.SpaceTac.UI {
             this.bar.actionEnded();
             this.bar.actionStarted();
 
-            // Update range hint
-            if (this.battleview.arena.range_hint && this.action instanceof MoveAction) {
-                this.battleview.arena.range_hint.update(this.ship, this.action);
-            }
-
             // Set the selected state
             this.setSelected(true);
 
-            if (this.action.needs_target) {
+            let mode = this.action.getTargettingMode(this.ship);
+            if (mode == ActionTargettingMode.SELF || mode == ActionTargettingMode.SELF_CONFIRM) {
+                // Apply immediately on the ship
+                // TODO Handle confirm
+                this.processSelection(Target.newFromShip(this.ship));
+            } else {
                 let sprite = this.battleview.arena.findShipSprite(this.ship);
                 if (sprite) {
                     // Switch to targetting mode (will apply action when a target is selected)
-                    this.targetting = this.battleview.enterTargettingMode(this.action);
+                    this.targetting = this.battleview.enterTargettingMode(this.action, mode);
                 }
-            } else {
-                // No target needed, apply action immediately
-                this.processSelection(null);
             }
         }
 
-        // Called when a target is selected
-        processSelection(target: Target | null): void {
+        /**
+         * Called when a target is selected
+         * 
+         * This will effectively apply the action
+         */
+        processSelection(target: Target): void {
             if (this.action.apply(this.ship, target)) {
                 this.bar.actionEnded();
             }
@@ -157,7 +162,7 @@ module TS.SpaceTac.UI {
         }
 
         // Update the cooldown status
-        updateCooldownStatus(): void {
+        updateCooldownStatus(animate = 300): void {
             let remaining = this.action.getUsesBeforeOverheat();
             if (this.selected && remaining == 1) {
                 // will overheat, hint at the cooldown time
@@ -165,21 +170,21 @@ module TS.SpaceTac.UI {
                 this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-cooldown");
                 this.cooldown.scale.set(0.7);
                 this.cooldown_count.text = `${cooldown}`;
-                this.battleview.animations.setVisible(this.cooldown, true, 300);
+                this.battleview.animations.setVisible(this.cooldown, true, animate);
             } else if (remaining == 0) {
                 // overheated, show cooldown time
                 let cooldown = this.action.getCooldownDuration(false);
                 this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-cooldown");
                 this.cooldown.scale.set(1);
                 this.cooldown_count.text = `${cooldown}`;
-                this.battleview.animations.setVisible(this.cooldown, true, 300);
+                this.battleview.animations.setVisible(this.cooldown, true, animate);
             } else if (this.action instanceof ToggleAction && this.action.activated) {
                 this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-toggled");
                 this.cooldown.scale.set(1);
                 this.cooldown_count.text = "";
-                this.battleview.animations.setVisible(this.cooldown, true, 300);
+                this.battleview.animations.setVisible(this.cooldown, true, animate);
             } else {
-                this.battleview.animations.setVisible(this.cooldown, false, 300);
+                this.battleview.animations.setVisible(this.cooldown, false, animate);
             }
         }
 

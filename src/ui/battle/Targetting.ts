@@ -12,6 +12,7 @@ module TS.SpaceTac.UI {
         ship: Ship | null = null
         action: BaseAction | null = null
         target: Target | null = null
+        mode: ActionTargettingMode
         simulation = new MoveFireResult()
 
         // Movement projector
@@ -25,15 +26,17 @@ module TS.SpaceTac.UI {
 
         // Collaborators to update
         actionbar: ActionBar
+        range_hint: RangeHint
         tactical_mode: ToggleClient
 
         // Access to the parent view
         view: BaseView
 
-        constructor(view: BaseView, actionbar: ActionBar, tactical_mode: Toggle) {
+        constructor(view: BaseView, actionbar: ActionBar, tactical_mode: Toggle, range_hint: RangeHint) {
             this.view = view;
             this.actionbar = actionbar;
             this.tactical_mode = tactical_mode.manipulate("targetting");
+            this.range_hint = range_hint;
 
             this.container = view.add.group();
 
@@ -155,15 +158,15 @@ module TS.SpaceTac.UI {
                 this.fire_arrow.visible = false;
                 this.move_ghost.visible = false;
 
+                let from = simulation.need_fire ? simulation.move_location : this.ship.location;
+                let angle = Math.atan2(this.target.y - from.y, this.target.x - from.x);
+
                 if (simulation.success) {
                     let previous: MoveFirePart | null = null;
                     simulation.parts.forEach(part => {
                         this.drawPart(part, simulation.complete, previous);
                         previous = part;
                     });
-
-                    let from = simulation.need_fire ? simulation.move_location : this.ship.location;
-                    let angle = Math.atan2(this.target.y - from.y, this.target.x - from.x);
 
                     if (simulation.need_move) {
                         this.move_ghost.visible = true;
@@ -194,17 +197,46 @@ module TS.SpaceTac.UI {
                         this.fire_impact.visible = false;
                         this.fire_arrow.visible = false;
                     }
-
-                    this.container.visible = true;
                 } else {
-                    // TODO Display error
-                    this.container.visible = false;
+                    this.drawVector(0x888888, this.ship.arena_x, this.ship.arena_y, this.target.x, this.target.y);
+                    this.fire_arrow.position.set(this.target.x, this.target.y);
+                    this.fire_arrow.rotation = angle;
+                    this.view.changeImage(this.fire_arrow, "battle-hud-simulator-failed");
+                    this.fire_arrow.visible = true;
+                    this.fire_blast.visible = false;
                 }
+                this.container.visible = true;
             } else {
                 this.container.visible = false;
             }
 
+            // Toggle tactical mode
             this.tactical_mode(bool(this.action));
+
+            // Toggle range hint
+            if (this.ship && this.action) {
+                if (this.simulation.need_move) {
+                    if (this.simulation.success) {
+                        let last_move = first(acopy(this.simulation.parts).reverse(), part => part.action instanceof MoveAction);
+                        if (last_move) {
+                            this.range_hint.update(this.ship, last_move.action);
+                        } else {
+                            this.range_hint.clear();
+                        }
+                    } else {
+                        let engine = new MoveFireSimulator(this.ship).findBestEngine();
+                        if (engine && engine.action) {
+                            this.range_hint.update(this.ship, engine.action);
+                        } else {
+                            this.range_hint.clear();
+                        }
+                    }
+                } else {
+                    this.range_hint.update(this.ship, this.action);
+                }
+            } else {
+                this.range_hint.clear();
+            }
         }
 
         /**
@@ -222,19 +254,44 @@ module TS.SpaceTac.UI {
         /**
          * Set the current targetting action, or null to stop targetting
          */
-        setAction(action: BaseAction | null): void {
+        setAction(action: BaseAction | null, mode?: ActionTargettingMode): void {
             if (action && action.equipment && action.equipment.attached_to && action.equipment.attached_to.ship) {
                 this.ship = action.equipment.attached_to.ship;
                 this.action = action;
+                this.mode = (typeof mode == "undefined") ? action.getTargettingMode(this.ship) : mode;
 
                 this.view.changeImage(this.move_ghost, `ship-${this.ship.model.code}-sprite`);
                 this.move_ghost.scale.set(0.4);
+
+                this.setTarget(action.getDefaultTarget(this.ship));
             } else {
                 this.ship = null;
                 this.action = null;
+
+                this.setTarget(null);
             }
-            this.target = null;
-            this.update();
+        }
+
+        /**
+         * Set the target according to a hovered arena location
+         * 
+         * This will apply the current targetting mode, to assist the player
+         */
+        setTargetFromLocation(location: ArenaLocation | null): void {
+            if (location && this.ship) {
+                let battle = this.ship.getBattle();
+                if (this.mode == ActionTargettingMode.SHIP && battle) {
+                    let targets = imaterialize(battle.iships(true));
+                    let nearest = minBy(targets, ship => arenaDistance(ship.location, location));
+                    this.setTarget(Target.newFromShip(nearest ? nearest : this.ship));
+                } else if (this.mode == ActionTargettingMode.SPACE) {
+                    this.setTarget(Target.newFromLocation(location.x, location.y));
+                } else {
+                    this.setTarget(Target.newFromShip(this.ship));
+                }
+            } else {
+                this.setTarget(null);
+            }
         }
 
         /**

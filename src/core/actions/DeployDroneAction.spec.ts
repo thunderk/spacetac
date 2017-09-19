@@ -9,7 +9,6 @@ module TS.SpaceTac {
             expect(action.code).toEqual("deploy-testdrone");
             expect(action.name).toEqual("Deploy");
             expect(action.equipment).toBe(equipment);
-            expect(action.needs_target).toBe(true);
         });
 
         it("allows to deploy in range", function () {

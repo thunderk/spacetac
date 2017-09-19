@@ -39,10 +39,10 @@ module TS.SpaceTac.UI {
         private effect: Function
 
         constructor(arena: Arena, ship: Ship, target: Target, weapon: Equipment) {
-            this.ui = arena.getGame();
+            this.ui = arena.game;
             this.arena = arena;
-            this.view = arena.battleview;
-            this.timer = arena.battleview.timer;
+            this.view = arena.view;
+            this.timer = arena.view.timer;
             this.layer = arena.layer_weapon_effects;
             this.ship = ship;
             this.target = target;
@@ -161,7 +161,7 @@ module TS.SpaceTac.UI {
             missile.rotation = arenaAngle(this.source, this.destination);
             this.layer.add(missile);
 
-            let blast_radius = this.weapon.action.getBlastRadius(this.ship);
+            let blast_radius = this.weapon.action ? this.weapon.action.getBlastRadius(this.ship) : 0;
 
             let projectile_duration = arenaDistance(this.source, this.destination) * 1.5;
             let tween = this.ui.tweens.create(missile);

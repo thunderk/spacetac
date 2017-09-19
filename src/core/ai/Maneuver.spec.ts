@@ -12,7 +12,7 @@ module TS.SpaceTac.Specs {
             TestTools.setShipHP(ship2, 30, 30);
             ship3.setArenaPosition(0, 15);
             TestTools.setShipHP(ship3, 30, 30);
-            let maneuver = new Maneuver(ship1, weapon.action, Target.newFromLocation(0, 0));
+            let maneuver = new Maneuver(ship1, nn(weapon.action), Target.newFromLocation(0, 0));
             expect(maneuver.effects).toEqual([
                 [ship1, new DamageEffect(50)],
                 [ship2, new DamageEffect(50)]
@@ -43,6 +43,7 @@ module TS.SpaceTac.Specs {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
             let engine = TestTools.addEngine(ship, 500);
+            let move = nn(engine.action);
             TestTools.setShipAP(ship, 10);
             let drone = new Drone(ship);
             drone.effects = [new AttributeEffect("maneuvrability", 1)];
@@ -51,11 +52,11 @@ module TS.SpaceTac.Specs {
             drone.radius = 50;
             battle.addDrone(drone);
 
-            let maneuver = new Maneuver(ship, engine.action, Target.newFromLocation(40, 30));
+            let maneuver = new Maneuver(ship, move, Target.newFromLocation(40, 30));
             expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 40, y: 30 }));
             expect(maneuver.effects).toEqual([]);
 
-            maneuver = new Maneuver(ship, engine.action, Target.newFromLocation(100, 30));
+            maneuver = new Maneuver(ship, move, Target.newFromLocation(100, 30));
             expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 100, y: 30 }));
             expect(maneuver.effects).toEqual([[ship, new AttributeEffect("maneuvrability", 1)]]);
         });

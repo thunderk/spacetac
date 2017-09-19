@@ -7,7 +7,7 @@ module TS.SpaceTac.Specs {
             constructor(score: number) {
                 let battle = new Battle();
                 let ship = battle.fleets[0].addShip();
-                super(ship, new BaseAction("nothing", "Do nothing", true), new Target(0, 0));
+                super(ship, new BaseAction("nothing", "Do nothing"), new Target(0, 0));
                 this.score = score;
             }
         }

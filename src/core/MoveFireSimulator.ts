@@ -155,11 +155,14 @@ module TS.SpaceTac {
                     }
                 }
             }
+            if (move_target && arenaDistance(move_target, this.ship.location) < 0.000001) {
+                result.need_move = false;
+            }
 
             // Check move AP
             if (result.need_move && move_target) {
                 let engine = this.findBestEngine();
-                if (engine) {
+                if (engine && engine.action) {
                     result.total_move_ap = engine.action.getActionPointsUsage(this.ship, move_target);
                     result.can_move = ap > 0;
                     result.can_end_move = result.total_move_ap <= ap;
@@ -172,15 +175,17 @@ module TS.SpaceTac {
             }
 
             // Check action AP
-            if (!(action instanceof MoveAction)) {
+            if (action instanceof MoveAction) {
+                result.success = result.need_move && result.can_move;
+            } else {
                 result.need_fire = true;
                 result.total_fire_ap = action.getActionPointsUsage(this.ship, target);
                 result.can_fire = result.total_fire_ap <= ap;
                 result.fire_location = target;
                 result.parts.push({ action: action, target: target, ap: result.total_fire_ap, possible: (!result.need_move || result.can_end_move) && result.can_fire });
+                result.success = true;
             }
 
-            result.success = true;
             result.complete = (!result.need_move || result.can_end_move) && (!result.need_fire || result.can_fire);
 
             return result;

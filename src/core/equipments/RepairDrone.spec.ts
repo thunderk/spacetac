@@ -41,7 +41,7 @@ module TS.SpaceTac.Equipments {
             battle.playing_ship = ship;
             battle.play_order = [ship];
             TestTools.setShipAP(ship, 10);
-            let result = equipment.action.apply(ship, new Target(5, 5, null));
+            let result = nn(equipment.action).apply(ship, new Target(5, 5, null));
             expect(result).toBe(true);
 
             expect(battle.drones.length).toBe(1);

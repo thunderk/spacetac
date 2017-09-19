@@ -43,7 +43,7 @@ module TS.SpaceTac {
         effects: BaseEffect[] = []
 
         // Action available when equipped
-        action = new BaseAction("nothing", "Do nothing", false)
+        action: BaseAction | null = null
 
         // Equipment wear due to usage in battles (will lower the sell price)
         wear = 0
@@ -158,9 +158,11 @@ module TS.SpaceTac {
                 parts.push(["When equipped:"].concat(this.effects.map(effect => "• " + effect.getDescription())).join("\n"));
             }
 
-            let action_desc = this.action.getEffectsDescription();
-            if (action_desc != "") {
-                parts.push(action_desc);
+            if (this.action) {
+                let action_desc = this.action.getEffectsDescription();
+                if (action_desc != "") {
+                    parts.push(action_desc);
+                }
             }
 
             return parts.length > 0 ? parts.join("\n\n") : "does nothing";

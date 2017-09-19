@@ -45,7 +45,7 @@ module TS.SpaceTac.Equipments {
             expect(target.sticky_effects).toEqual([]);
 
             // Attribute is immediately limited
-            equipment.action.apply(ship, Target.newFromShip(target));
+            nn(equipment.action).apply(ship, Target.newFromShip(target));
 
             expect(target.values.power.get()).toBe(3);
             expect(target.sticky_effects).toEqual([

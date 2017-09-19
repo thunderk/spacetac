@@ -137,7 +137,7 @@ module TS.SpaceTac {
                 let slots = [SlotType.Engine, SlotType.Power, SlotType.Hull, SlotType.Shield, SlotType.Weapon];
                 slots.forEach(slot => {
                     this.listEquipment(slot).forEach(equipment => {
-                        if (equipment.action.code != "nothing") {
+                        if (equipment.action) {
                             actions.push(equipment.action)
                         }
                     });
@@ -338,7 +338,7 @@ module TS.SpaceTac {
                 // Reset toggle actions state
                 this.listEquipment().forEach(equipment => {
                     if (equipment.action instanceof ToggleAction && equipment.action.activated) {
-                        equipment.action.apply(this, null);
+                        equipment.action.apply(this);
                     }
                 });
             }

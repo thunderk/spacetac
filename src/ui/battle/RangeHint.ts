@@ -14,7 +14,7 @@ module TS.SpaceTac.UI {
         private height: number
 
         constructor(arena: Arena) {
-            this.view = arena.battleview;
+            this.view = arena.view;
 
             let boundaries = arena.getBoundaries();
             this.width = boundaries.width;

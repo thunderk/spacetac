@@ -2,7 +2,7 @@ module TS.SpaceTac {
     describe("BaseAction", function () {
         it("check if equipment can be used with remaining AP", function () {
             var equipment = new Equipment(SlotType.Hull);
-            var action = new BaseAction("test", "Test", false, equipment);
+            var action = new BaseAction("test", "Test", equipment);
             spyOn(action, "getActionPointsUsage").and.returnValue(3);
             var ship = new Ship();
             ship.addSlot(SlotType.Hull).attach(equipment);
@@ -28,7 +28,7 @@ module TS.SpaceTac {
 
         it("check if equipment can be used with overheat", function () {
             let equipment = new Equipment();
-            let action = new BaseAction("test", "Test", false, equipment);
+            let action = new BaseAction("test", "Test", equipment);
             let ship = new Ship();
 
             expect(action.checkCannotBeApplied(ship)).toBe(null);
@@ -71,11 +71,13 @@ module TS.SpaceTac {
             TestTools.setShipAP(ship, 10);
             let power = ship.listEquipment(SlotType.Power)[0];
             let equipment = new Equipment(SlotType.Weapon);
-            let action = new BaseAction("test", "Test", false, equipment);
+            let action = new BaseAction("test", "Test", equipment);
+
+            spyOn(action, "checkTarget").and.callFake((ship: Ship, target: Target) => target);
 
             expect(power.wear).toBe(0);
             expect(equipment.wear).toBe(0);
-            action.apply(ship, null);
+            action.apply(ship);
 
             expect(power.wear).toBe(1);
             expect(equipment.wear).toBe(1);

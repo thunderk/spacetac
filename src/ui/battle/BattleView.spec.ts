@@ -4,78 +4,66 @@ module TS.SpaceTac.UI.Specs {
     describe("BattleView", function () {
         let testgame = setupBattleview();
 
-        it("forwards events in targetting mode", function () {
+        it("handles ship hovering to display tooltip", function () {
+            let battleview = testgame.battleview;
+            expect(battleview.ship_hovered).toBeNull("initial state");
+
+            let ship = nn(battleview.battle.playing_ship);
+            battleview.cursorHovered(ship.location, ship);
+            expect(battleview.ship_hovered).toBe(ship, "ship1 hovered");
+
+            ship = nn(battleview.battle.play_order[1]);
+            battleview.cursorHovered(ship.location, ship);
+            expect(battleview.ship_hovered).toBe(ship, "ship2 hovered");
+
+            battleview.cursorHovered(new ArenaLocation(0, 0), null);
+            expect(battleview.ship_hovered).toBeNull("out");
+
+            battleview.cursorOnShip(ship);
+            expect(battleview.ship_hovered).toBe(ship, "force on");
+
+            battleview.cursorOffShip(battleview.battle.play_order[2]);
+            expect(battleview.ship_hovered).toBe(ship, "force off on wrong ship");
+
+            battleview.cursorOffShip(ship);
+            expect(battleview.ship_hovered).toBeNull("force off");
+        });
+
+        it("forwards cursor hovering and click to targetting", function () {
             let battleview = testgame.battleview;
             expect(battleview.targetting.active).toBe(false);
             battleview.setInteractionEnabled(true);
 
-            spyOn(battleview.targetting, "validate").and.stub();
-
-            battleview.cursorInSpace(5, 5);
-
-            expect(battleview.targetting.active).toBe(false);
-
-            // Enter targetting mode
             let weapon = TestTools.addWeapon(nn(battleview.battle.playing_ship), 10);
-            battleview.enterTargettingMode(weapon.action);
-
+            battleview.enterTargettingMode(nn(weapon.action), ActionTargettingMode.SPACE);
             expect(battleview.targetting.active).toBe(true);
 
-            // Forward selection in space
-            battleview.cursorInSpace(8, 4);
-
+            battleview.cursorHovered(new ArenaLocation(5, 8), null);
+            expect(battleview.targetting.target).toEqual(Target.newFromLocation(5, 8));
             expect(battleview.ship_hovered).toBeNull();
-            expect(battleview.targetting.target).toEqual(Target.newFromLocation(8, 4));
 
-            // Process a click on space
+            let ship = battleview.battle.play_order[3];
+            battleview.cursorHovered(ship.location, ship);
+            expect(battleview.targetting.target).toEqual(Target.newFromLocation(ship.arena_x, ship.arena_y));
+            expect(battleview.ship_hovered).toBe(ship);
+
+            spyOn(battleview.targetting, "validate").and.stub();
+
+            expect(battleview.targetting.validate).toHaveBeenCalledTimes(0);
             battleview.cursorClicked();
+            expect(battleview.targetting.validate).toHaveBeenCalledTimes(1);
 
-            // Forward ship hovering
-            battleview.cursorOnShip(battleview.battle.play_order[0]);
-
-            expect(battleview.ship_hovered).toEqual(battleview.battle.play_order[0]);
-            expect(battleview.targetting.target).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
-
-            // Don't leave a ship we're not hovering
-            battleview.cursorOffShip(battleview.battle.play_order[1]);
-
-            expect(battleview.ship_hovered).toEqual(battleview.battle.play_order[0]);
-            expect(battleview.targetting.target).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
-
-            // Don't move in space while on ship
-            battleview.cursorInSpace(1, 3);
-
-            expect(battleview.ship_hovered).toEqual(battleview.battle.play_order[0]);
-            expect(battleview.targetting.target).toEqual(Target.newFromShip(battleview.battle.play_order[0]));
-
-            // Process a click on ship
-            battleview.cursorClicked();
-
-            // Leave the ship
-            battleview.cursorOffShip(battleview.battle.play_order[0]);
-
-            expect(battleview.ship_hovered).toBeNull();
-            expect(battleview.targetting.target).toBeNull();
-
-            // Quit targetting
             battleview.exitTargettingMode();
-
             expect(battleview.targetting.active).toBe(false);
 
-            // Events process normally
-            battleview.cursorInSpace(8, 4);
-            expect(battleview.ship_hovered).toBeNull();
-            battleview.cursorOnShip(battleview.battle.play_order[0]);
-            expect(battleview.ship_hovered).toEqual(battleview.battle.play_order[0]);
-
-            // Quit twice don't do anything
-            battleview.exitTargettingMode();
+            battleview.cursorHovered(new ArenaLocation(5, 8), null);
+            expect(battleview.targetting.target).toBeNull();
         });
 
         it("allows to choose an action and a target with shortcut keys", function () {
             let battleview = testgame.battleview;
             battleview.setInteractionEnabled(true);
-            let action_icon = nn(first(battleview.action_bar.action_icons, icon => icon.action.needs_target));
+            let action_icon = battleview.action_bar.action_icons[0];
 
             expect(battleview.targetting.active).toBe(false);
             expect(battleview.action_bar.hasActionSelected()).toBe(false);
@@ -83,7 +71,7 @@ module TS.SpaceTac.UI.Specs {
             expect(battleview.action_bar.hasActionSelected()).toBe(true);
             expect(battleview.targetting.active).toBe(true);
             expect(battleview.targetting.action).toBe(action_icon.action);
-            expect(battleview.targetting.target).toBe(null);
+            expect(battleview.targetting.target).toEqual(action_icon.action.getDefaultTarget(action_icon.ship));
             battleview.numberPressed(3);
             expect(battleview.targetting.active).toBe(true);
             expect(battleview.targetting.action).toBe(action_icon.action);

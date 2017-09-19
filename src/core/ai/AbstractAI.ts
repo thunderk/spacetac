@@ -63,7 +63,7 @@ module TS.SpaceTac {
             }
 
             // End the ship turn
-            this.applyAction(new EndTurnAction(), null);
+            this.applyAction(new EndTurnAction(), Target.newFromShip(ship));
         }
 
         /**
@@ -71,7 +71,7 @@ module TS.SpaceTac {
          * 
          * This should be the only real interaction point with battle state
          */
-        private applyAction(action: BaseAction, target: Target | null): boolean {
+        private applyAction(action: BaseAction, target: Target): boolean {
             return action.apply(this.ship, target);
         }
 

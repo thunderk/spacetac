@@ -241,7 +241,7 @@ module TS.SpaceTac.Specs {
             ship.startTurn();
             expect(action.activated).toBe(false);
 
-            let result = action.apply(ship, null);
+            let result = action.apply(ship);
             expect(result).toBe(true, "Could not be applied");
             expect(action.activated).toBe(true);
 
@@ -252,11 +252,11 @@ module TS.SpaceTac.Specs {
             expect(action.activated).toBe(false);
 
             expect(battle.log.events).toEqual([
-                new ActionAppliedEvent(ship, action, null, 0),
+                new ActionAppliedEvent(ship, action, Target.newFromShip(ship), 0),
                 new ToggleEvent(ship, action, true),
                 new ActiveEffectsEvent(ship, [], [], [new AttributeEffect("power_capacity", 1)]),
                 new ValueChangeEvent(ship, new ShipAttribute("power capacity", 1), 1),
-                new ActionAppliedEvent(ship, action, null, 0),
+                new ActionAppliedEvent(ship, action, Target.newFromShip(ship), 0),
                 new ToggleEvent(ship, action, false),
                 new ActiveEffectsEvent(ship, [], [], []),
                 new ValueChangeEvent(ship, new ShipAttribute("power capacity", 0), -1),
@@ -274,7 +274,7 @@ module TS.SpaceTac.Specs {
             let shield = ship1.addSlot(SlotType.Shield).attach(new Equipment(SlotType.Shield));
             shield.action = new ToggleAction(shield, 0, 15, [new AttributeEffect("shield_capacity", 5)]);
             battle.playing_ship = ship1;
-            shield.action.apply(ship1, null);
+            shield.action.apply(ship1);
 
             expect(ship1.getAttribute("shield_capacity")).toBe(5);
             expect(ship2.getAttribute("shield_capacity")).toBe(5);

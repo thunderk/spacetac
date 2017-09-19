@@ -14,11 +14,19 @@ module TS.SpaceTac {
         maneuvrability_factor: number
 
         constructor(equipment: Equipment, distance_per_power = 0, safety_distance = 120, maneuvrability_factor = 0) {
-            super("move", "Move", true, equipment);
+            super("move", "Move", equipment);
 
             this.distance_per_power = distance_per_power;
             this.safety_distance = safety_distance;
             this.maneuvrability_factor = maneuvrability_factor;
+        }
+
+        getTargettingMode(ship: Ship): ActionTargettingMode {
+            return ActionTargettingMode.SPACE;
+        }
+
+        getDefaultTarget(ship: Ship): Target {
+            return Target.newFromLocation(ship.arena_x + Math.cos(ship.arena_angle) * 100, ship.arena_y + Math.sin(ship.arena_angle) * 100);
         }
 
         checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): string | null {
@@ -38,13 +46,13 @@ module TS.SpaceTac {
             }
         }
 
-        getActionPointsUsage(ship: Ship, target: Target): number {
-            if (target === null) {
+        getActionPointsUsage(ship: Ship, target: Target | null): number {
+            if (target) {
+                let distance = Target.newFromShip(ship).getDistanceTo(target);
+                return Math.ceil(distance / this.getDistanceByActionPoint(ship));
+            } else {
                 return 0;
             }
-
-            var distance = Target.newFromShip(ship).getDistanceTo(target);
-            return Math.ceil(distance / this.getDistanceByActionPoint(ship));
         }
 
         getRangeRadius(ship: Ship): number {

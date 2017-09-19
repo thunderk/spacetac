@@ -36,26 +36,26 @@ Battle
 ------
 
 * Add a voluntary retreat option
+* Add scroll buttons when there are too many actions
 * Remove dead ships from ship list and play order
 * Add quick animation of playing ship indicator, on ship change
 * Toggle bar/text display in power section of action bar
 * Fix ship's active effect radius pushing the tooltip far from the ship
-* Display a hint when a move-fire simulation failed (cannot enter exclusion area for example)
 * Display effects description instead of attribute changes
-* Display radius and power usage hints for area effects on action icon hover + add confirmation?
+* End the battle as soon as victory or defeat condition is detected (do not wait for the turn to end)
+* Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat
+* Mark action icons unavailable next turn, if if will overheat
 * Any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
 * Add engine trail effect, and sound
-* Fix targetting not resetting on current cursor location when using keyboard shortcuts
 * Allow to skip animations, and allow no animation mode
 * Find incentives to move from starting position (permanent drones or anomalies?)
 * Add a "loot all" button (on the character sheet or outcome dialog?)
-* Do not focus on ship while targetting for area effects (dissociate hover and target)
+* Mark targetting in error when target is refused by the action (there is already an arrow for this)
 * Repair drone has its activation effect sometimes displayed as permanent effect on ships in the radius
 * Merge identical sticky effects
 * Allow to undo last moves
 * Add a battle log display
 * Allow to move targetting indicator with arrow keys
-* Trigger targetting mode for all actions (even for damage protector or shield transfer)
 * Add targetting shortcuts for "previous target", "next enemy" and "next ally"
 
 Ships models and equipments
@@ -96,6 +96,7 @@ Common UI
 Technical
 ---------
 
+* Run jasmine tests in random order by default, and fix problems
 * Pack all images in atlases
 * Pack sounds
 

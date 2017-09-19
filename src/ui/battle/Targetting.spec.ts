@@ -2,8 +2,15 @@ module TS.SpaceTac.UI.Specs {
     describe("Targetting", function () {
         let testgame = setupBattleview();
 
+        function newTargetting(): Targetting {
+            return new Targetting(testgame.battleview,
+                testgame.battleview.action_bar,
+                testgame.battleview.toggle_tactical_mode,
+                testgame.battleview.arena.range_hint);
+        }
+
         it("draws simulation parts", function () {
-            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar, new Toggle());
+            let targetting = newTargetting();
 
             let ship = nn(testgame.battleview.battle.playing_ship);
             ship.setArenaPosition(10, 20);
@@ -14,7 +21,7 @@ module TS.SpaceTac.UI.Specs {
             let drawvector = spyOn(targetting, "drawVector").and.stub();
 
             let part = {
-                action: weapon.action,
+                action: nn(weapon.action),
                 target: new Target(50, 30),
                 ap: 5,
                 possible: true
@@ -27,15 +34,15 @@ module TS.SpaceTac.UI.Specs {
             expect(drawvector).toHaveBeenCalledTimes(2);
             expect(drawvector).toHaveBeenCalledWith(0x8e8e8e, 10, 20, 50, 30, 0);
 
-            targetting.setAction(engine.action);
-            part.action = engine.action;
+            targetting.action = engine.action;
+            part.action = nn(engine.action);
             targetting.drawPart(part, true, null);
             expect(drawvector).toHaveBeenCalledTimes(3);
             expect(drawvector).toHaveBeenCalledWith(0xe09c47, 10, 20, 50, 30, 12);
         });
 
         it("updates impact indicators on ships inside the blast radius", function () {
-            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar, new Toggle());
+            let targetting = newTargetting();
             let ship = nn(testgame.battleview.battle.playing_ship);
 
             let collect = spyOn(testgame.battleview.battle, "collectShipsInCircle").and.returnValues(
@@ -71,7 +78,7 @@ module TS.SpaceTac.UI.Specs {
         });
 
         it("updates graphics from simulation", function () {
-            let targetting = new Targetting(testgame.battleview, testgame.battleview.action_bar, new Toggle());
+            let targetting = newTargetting();
             let ship = nn(testgame.battleview.battle.playing_ship);
 
             let engine = TestTools.addEngine(ship, 8000);
@@ -90,8 +97,8 @@ module TS.SpaceTac.UI.Specs {
                 result.need_fire = true;
                 result.can_fire = true;
                 result.parts = [
-                    { action: engine.action, target: Target.newFromLocation(80, 20), ap: 1, possible: true },
-                    { action: weapon.action, target: Target.newFromLocation(156, 65), ap: 5, possible: true }
+                    { action: nn(engine.action), target: Target.newFromLocation(80, 20), ap: 1, possible: true },
+                    { action: nn(weapon.action), target: Target.newFromLocation(156, 65), ap: 5, possible: true }
                 ]
                 targetting.simulation = result;
             });

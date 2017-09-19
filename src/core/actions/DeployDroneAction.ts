@@ -24,7 +24,7 @@ module TS.SpaceTac {
         equipment: Equipment;
 
         constructor(equipment: Equipment, power = 1, deploy_distance = 0, lifetime = 0, effect_radius = 0, effects: BaseEffect[] = []) {
-            super("deploy-" + equipment.code, "Deploy", true, equipment);
+            super("deploy-" + equipment.code, "Deploy", equipment);
 
             this.power = power;
             this.deploy_distance = deploy_distance;

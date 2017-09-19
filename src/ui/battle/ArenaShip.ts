@@ -12,7 +12,7 @@ module TS.SpaceTac.UI {
         enemy: boolean
 
         // Ship sprite
-        sprite: Phaser.Button
+        sprite: Phaser.Image
 
         // Statis effect
         stasis: Phaser.Image
@@ -44,7 +44,7 @@ module TS.SpaceTac.UI {
         constructor(parent: Arena, ship: Ship) {
             super(parent.game);
             this.arena = parent;
-            this.battleview = parent.battleview;
+            this.battleview = parent.view;
 
             this.ship = ship;
             this.enemy = this.ship.getPlayer() != this.battleview.player;
@@ -60,8 +60,7 @@ module TS.SpaceTac.UI {
             this.setPlaying(false);
 
             // Add ship sprite
-            let info = this.battleview.getImageInfo(`ship-${ship.model.code}-sprite`);
-            this.sprite = new Phaser.Button(this.game, 0, 0, info.key, undefined, undefined, info.frame, info.frame);
+            this.sprite = this.battleview.newImage(`ship-${ship.model.code}-sprite`)
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(0.4);
@@ -120,13 +119,6 @@ module TS.SpaceTac.UI {
 
             this.updateActiveEffects();
             this.updateEffectsRadius();
-
-            // Handle input on ship sprite
-            UITools.setHoverClick(this.sprite,
-                () => this.battleview.cursorOnShip(ship),
-                () => this.battleview.cursorOffShip(ship),
-                () => this.battleview.cursorClicked()
-            );
 
             // Set location
             if (this.battleview.battle.turn == 1 && ship.alive && ship.fleet.player === this.battleview.player) {

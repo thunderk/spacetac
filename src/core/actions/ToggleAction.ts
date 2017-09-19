@@ -21,7 +21,7 @@ module TS.SpaceTac {
         activated = false
 
         constructor(equipment: Equipment, power = 1, radius = 0, effects: BaseEffect[] = [], name = "(De)activate") {
-            super("toggle-" + equipment.code, name, false, equipment);
+            super("toggle-" + equipment.code, name, equipment);
 
             this.power = power;
             this.radius = radius;
@@ -38,6 +38,10 @@ module TS.SpaceTac {
 
         getBlastRadius(ship: Ship): number {
             return this.radius;
+        }
+
+        checkShipTarget(ship: Ship, target: Target): Target | null {
+            return (ship == target.ship) ? target : null;
         }
 
         /**

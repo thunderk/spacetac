@@ -80,11 +80,11 @@ module TS.SpaceTac.Specs {
             stats.processLog(battle.log, battle.fleets[0]);
             expect(stats.stats).toEqual({});
 
-            battle.log.add(new ActionAppliedEvent(attacker, new BaseAction("nop", "nop", false), null, 4));
+            battle.log.add(new ActionAppliedEvent(attacker, new BaseAction("nop", "nop"), null, 4));
             stats.processLog(battle.log, battle.fleets[0], true);
             expect(stats.stats).toEqual({ "Power used": [4, 0] });
 
-            battle.log.add(new ActionAppliedEvent(defender, new BaseAction("nop", "nop", false), null, 2));
+            battle.log.add(new ActionAppliedEvent(defender, new BaseAction("nop", "nop"), null, 2));
             stats.processLog(battle.log, battle.fleets[0], true);
             expect(stats.stats).toEqual({ "Power used": [4, 2] });
         })
