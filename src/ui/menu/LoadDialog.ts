@@ -1,6 +1,6 @@
 /// <reference path="../common/UIComponent.ts"/>
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Dialog to load a saved game, or join an online one
      */

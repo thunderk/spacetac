@@ -4,7 +4,7 @@ if (typeof window != "undefined") {
     (<any>window).describe = (<any>window).describe || function () { };
 }
 
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     class FakeStorage {
         data: any = {}
         getItem(name: string) {

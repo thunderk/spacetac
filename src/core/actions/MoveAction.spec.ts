@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("MoveAction", function () {
         it("checks movement against remaining AP", function () {
             var ship = new Ship();

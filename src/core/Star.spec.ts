@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Star", () => {
         it("lists links to other stars", () => {
             var universe = new Universe();

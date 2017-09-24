@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("MainStory", () => {
         function checkPart(story: Mission, index: number, title: string, completed = false) {
             let result = story.checkStatus();

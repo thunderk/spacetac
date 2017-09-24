@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Base class for battle events
      * 

@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Interface for any graphical area that may contain or receive an equipment
      */

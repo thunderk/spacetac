@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Statistics collection over a battle
      */

@@ -1,6 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     export class RocketEngine extends LootTemplate {
         constructor() {
             super(SlotType.Engine, "Rocket Engine", "First-era conventional deep-space engine, based on gas exhausts pushed through a nozzle", 120);

@@ -1,4 +1,4 @@
-module TS.SpaceTac.Multi.Specs {
+module TK.SpaceTac.Multi.Specs {
     describe("Connection", function () {
         async_it("finds an unused token", async function () {
             let storage = new FakeRemoteStorage();
@@ -17,7 +17,7 @@ module TS.SpaceTac.Multi.Specs {
 
         async_it("loads a session by its id", async function () {
             let session = new GameSession();
-            let serializer = new Serializer(TS.SpaceTac);
+            let serializer = new Serializer(TK.SpaceTac);
             let storage = new FakeRemoteStorage();
             let connection = new Connection("test", storage);
 

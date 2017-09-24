@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Range of number values
     export class Range {
         // Minimal value

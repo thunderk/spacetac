@@ -1,6 +1,6 @@
 /// <reference path="MissionPart.ts" />
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * A single conversation piece
      */

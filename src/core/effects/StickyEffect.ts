@@ -1,6 +1,6 @@
 /// <reference path="BaseEffect.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Wrapper around another effect, to make it stick to a ship.
      * 

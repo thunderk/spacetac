@@ -1,7 +1,7 @@
 /// <reference path="battle/BattleView.ts"/>
 /// <reference path="map/UniverseMapView.ts"/>
 
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     let test_ui: MainUI;
 
     /**

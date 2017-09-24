@@ -1,6 +1,6 @@
 /// <reference path="events/BaseBattleEvent.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Check a single game log event
     function checkEvent(got: BaseBattleEvent, ship: Ship, code: string,
         target_ship: Ship | null = null, target_x: number | null = null, target_y: number | null = null): void {

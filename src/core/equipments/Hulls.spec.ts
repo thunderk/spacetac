@@ -1,4 +1,4 @@
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     describe("Hulls", function () {
         it("generates IronHull based on level", function () {
             let template = new IronHull();

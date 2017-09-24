@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     class GameOption<T> {
         code: string
         current: T

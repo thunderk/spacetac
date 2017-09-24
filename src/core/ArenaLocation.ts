@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Location in the arena (coordinates only)
      */

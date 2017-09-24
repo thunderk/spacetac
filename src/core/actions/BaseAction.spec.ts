@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("BaseAction", function () {
         it("check if equipment can be used with remaining AP", function () {
             var equipment = new Equipment(SlotType.Hull);

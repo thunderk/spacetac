@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Marker to show a mission location on the map
      */

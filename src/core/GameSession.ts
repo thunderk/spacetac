@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * A game session, binding a universe and a player
      * 
@@ -41,13 +41,13 @@ module TS.SpaceTac {
 
         // Load a game state from a string
         static loadFromString(serialized: string): GameSession {
-            var serializer = new Serializer(TS.SpaceTac);
+            var serializer = new Serializer(TK.SpaceTac);
             return <GameSession>serializer.unserialize(serialized);
         }
 
         // Serializes the game state to a string
         saveToString(): string {
-            var serializer = new Serializer(TS.SpaceTac);
+            var serializer = new Serializer(TK.SpaceTac);
             return serializer.serialize(this);
         }
 

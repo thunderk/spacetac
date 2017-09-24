@@ -1,4 +1,4 @@
-module TS.SpaceTac.Multi.Specs {
+module TK.SpaceTac.Multi.Specs {
     describe("FakeRemoteStorage", function () {
         async_it("can fetch a single record", async function () {
             let storage = new FakeRemoteStorage();

@@ -1,10 +1,10 @@
-module TS.SpaceTac.Multi {
+module TK.SpaceTac.Multi {
     /**
      * Multiplayer connection to a Parse server
      */
     export class Connection {
         device_id: string
-        serializer = new Serializer(TS.SpaceTac)
+        serializer = new Serializer(TK.SpaceTac)
         token_chars = "abcdefghjkmnpqrstuvwxyz123456789"
         storage: IRemoteStorage
 

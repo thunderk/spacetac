@@ -1,6 +1,6 @@
 /// <reference path="../effects/BaseEffect.ts" />
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("DeployDroneAction", function () {
         it("stores useful information", function () {
             let equipment = new Equipment(SlotType.Weapon, "testdrone");

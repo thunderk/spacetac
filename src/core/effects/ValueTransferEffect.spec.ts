@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("ValueTransferEffect", function () {
         it("takes or gives value", function () {
             let ship1 = new Ship();

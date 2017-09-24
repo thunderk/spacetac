@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Cooldown system for equipments
      */

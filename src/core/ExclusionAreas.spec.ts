@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("ExclusionAreas", function () {
         it("constructs from a ship or battle", function () {
             let battle = new Battle();

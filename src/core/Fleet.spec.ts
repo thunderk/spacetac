@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("Fleet", function () {
         it("get average level", function () {
             var fleet = new Fleet();

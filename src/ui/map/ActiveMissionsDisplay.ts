@@ -1,6 +1,6 @@
 /// <reference path="../common/UIComponent.ts" />
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Widget to display the active missions list
      */

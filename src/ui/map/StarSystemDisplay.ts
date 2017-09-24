@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     // Group to display a star system
     export class StarSystemDisplay extends Phaser.Image {
         view: UniverseMapView

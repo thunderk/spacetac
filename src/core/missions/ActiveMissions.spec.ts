@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("ActiveMissions", () => {
         it("starts the main story arc", function () {
             let missions = new ActiveMissions();

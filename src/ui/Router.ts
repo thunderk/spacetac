@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     // Router to other states
     export class Router extends Phaser.State {
         create() {

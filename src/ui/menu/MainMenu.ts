@@ -1,6 +1,6 @@
 /// <reference path="../BaseView.ts"/>
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Main menu (first interactive screen)
      */

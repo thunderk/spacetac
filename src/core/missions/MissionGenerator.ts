@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     const POOL_SHIP_NAMES = [
         "Zert",
         "Ob'tec",

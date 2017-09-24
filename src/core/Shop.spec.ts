@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Shop", () => {
         it("generates a stock", () => {
             let shop = new Shop();

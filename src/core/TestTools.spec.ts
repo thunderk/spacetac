@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("TestTools", () => {
         it("set ship power", () => {
             let ship = new Ship();

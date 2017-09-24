@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
 
     class TooltipContainer extends Phaser.Group {
         view: BaseView

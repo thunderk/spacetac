@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     const SCALING = 0.00005;
     const LOCATIONS: [number, number][] = [
         [80, 0],

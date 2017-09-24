@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Generator of balanced ships to form a fleet
     export class FleetGenerator {
         // Random generator to use

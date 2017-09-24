@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // One player (human or IA)
     export class Player {
         // Player's name

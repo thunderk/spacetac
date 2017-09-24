@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     describe("WeaponEffect", function () {
         let testgame = setupBattleview();
 

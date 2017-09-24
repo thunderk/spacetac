@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("Player", function () {
         it("keeps track of visited locations", function () {
             let player = new Player();

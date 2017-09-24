@@ -65,17 +65,17 @@
 
     <script>
         window.onload = function () {
-            var generator = new TS.SpaceTac.LootGenerator();
+            var generator = new TK.SpaceTac.LootGenerator();
             var result = document.getElementById("result");
             var current_level = 1;
             var current_name = "";
             var qualities = {}
 
-            qualities[TS.SpaceTac.EquipmentQuality.WEAK] = "#e66";
-            qualities[TS.SpaceTac.EquipmentQuality.COMMON] = "#eee";
-            qualities[TS.SpaceTac.EquipmentQuality.FINE] = "#669";
-            qualities[TS.SpaceTac.EquipmentQuality.PREMIUM] = "#66b";
-            qualities[TS.SpaceTac.EquipmentQuality.LEGENDARY] = "#66e";
+            qualities[TK.SpaceTac.EquipmentQuality.WEAK] = "#e66";
+            qualities[TK.SpaceTac.EquipmentQuality.COMMON] = "#eee";
+            qualities[TK.SpaceTac.EquipmentQuality.FINE] = "#669";
+            qualities[TK.SpaceTac.EquipmentQuality.PREMIUM] = "#66b";
+            qualities[TK.SpaceTac.EquipmentQuality.LEGENDARY] = "#66e";
 
             function update() {
                 result.innerHTML = "";
@@ -83,7 +83,7 @@
                     if (template.name != current_name) {
                         return;
                     }
-                    TS.iterenum(TS.SpaceTac.EquipmentQuality, function (quality) {
+                    TK.iterenum(TK.SpaceTac.EquipmentQuality, function (quality) {
                         var loot = template.generate(current_level, quality);
 
                         var block = document.createElement("div");
@@ -101,7 +101,7 @@
                 });
             }
 
-            TS.sortedBy(generator.templates, function (template) {
+            TK.sortedBy(generator.templates, function (template) {
                 return template.name;
             }).forEach(function (template) {
                 var opt = document.createElement('option');

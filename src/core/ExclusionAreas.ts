@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Helper for working with exclusion areas (areas where a ship cannot go)
      * 

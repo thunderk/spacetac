@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("BaseEffect", function () {
         it("gets a fixed or variable amount", function () {
             let effect = new BaseEffect("test");

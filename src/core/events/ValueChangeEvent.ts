@@ -1,6 +1,6 @@
 /// <reference path="BaseBattleEvent.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Event logged when a ship value or attribute changed
      */

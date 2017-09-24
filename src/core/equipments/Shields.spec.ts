@@ -1,4 +1,4 @@
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     describe("Shields", function () {
         it("generates ForceField based on level", function () {
             let template = new ForceField();

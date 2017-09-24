@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("MissionGenerator", function () {
         it("generates escort missions", function () {
             let universe = new Universe();

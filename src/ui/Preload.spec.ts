@@ -1,7 +1,7 @@
 /// <reference path="TestGame.ts" />
 /// <reference path="Preload.ts" />
 
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     describe("Preload", () => {
         let testgame = setupSingleView(testgame => [new Preload(), []]);
 

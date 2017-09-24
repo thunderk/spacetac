@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("ShipLevel", () => {
         it("level up from experience points", () => {
             let level = new ShipLevel();

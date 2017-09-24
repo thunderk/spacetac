@@ -1,6 +1,6 @@
 /// <reference path="CharacterEquipment.ts" />
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Display a fleet member in the side of character sheet
      */

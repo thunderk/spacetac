@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Types of slots
     export enum SlotType {
         Hull,

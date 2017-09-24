@@ -1,6 +1,6 @@
 /// <reference path="../common/UIDialog.ts" />
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Dialog to display game options
      */

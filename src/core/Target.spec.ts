@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Target", () => {
         it("initializes from ship or location", () => {
             var target: Target;

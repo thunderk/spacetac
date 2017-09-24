@@ -1,6 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     export class ShieldTransfer extends LootTemplate {
         constructor() {
             super(SlotType.Weapon, "Shield Transfer", "Generates small gravity wells between the ship's and the target's shields, stealing physical properties and energy");

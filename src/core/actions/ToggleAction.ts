@@ -1,6 +1,6 @@
 /// <reference path="BaseAction.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Action to toggle some effects on the ship or around it, until next turn start
      */

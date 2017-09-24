@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Modifiers of basic loot, to obtain different quality levels
      */

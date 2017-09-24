@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     describe("UITools", function () {
         describe("in UI", function () {
             let testgame = setupEmptyView();

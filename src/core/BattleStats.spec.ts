@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("BattleStats", function () {
         it("collects stats", function () {
             let stats = new BattleStats();

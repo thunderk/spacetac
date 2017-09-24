@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // unit testing utilities
     export class TestTools {
 

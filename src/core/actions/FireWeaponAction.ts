@@ -1,6 +1,6 @@
 /// <reference path="BaseAction.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Action to fire a weapon on another ship, or in space
      */

@@ -57,6 +57,7 @@ Battle
 * Add a battle log display
 * Allow to move targetting indicator with arrow keys
 * Add targetting shortcuts for "previous target", "next enemy" and "next ally"
+* Area targetting should include the hotkeyed ship at best (apply exclusion and power limit), not necessarily center on it
 
 Ships models and equipments
 ---------------------------
@@ -89,6 +90,7 @@ Common UI
 
 * Add caret/focus to text input
 * Add a standard confirm dialog
+* Hover out when using keyboard shortcuts
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator

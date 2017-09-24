@@ -1,6 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     export class PowerDepleter extends LootTemplate {
         constructor() {
             super(SlotType.Weapon, "Power Depleter", "Direct-hit weapon that creates an antimatter well near the target, sucking its power surplus");

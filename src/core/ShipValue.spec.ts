@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("ShipValue", function () {
         it("is initially not limited", function () {
             var attr = new ShipValue("test");

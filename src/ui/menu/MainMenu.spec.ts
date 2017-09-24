@@ -1,7 +1,7 @@
 /// <reference path="../TestGame.ts" />
 /// <reference path="MainMenu.ts" />
 
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     describe("MainMenu", () => {
         let testgame = setupSingleView(testgame => [new MainMenu(), []]);
 

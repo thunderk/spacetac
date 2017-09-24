@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // A unique name generator
     export class NameGenerator {
         // List of available choices

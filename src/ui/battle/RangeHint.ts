@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Graphical hints for movement and weapon range
      */

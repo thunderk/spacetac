@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Drones are static objects that apply effects in a circular zone around themselves.
      */

@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("BattleOutcome", () => {
         it("generates loot from defeated ships", () => {
             var fleet1 = new Fleet();

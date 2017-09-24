@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("TacticalAIHelpers", function () {
         it("produces direct weapon shots", function () {
             let battle = new Battle();

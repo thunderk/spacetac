@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("AttributeEffect", function () {
         it("is not applied directly", function () {
             let ship = new Ship();

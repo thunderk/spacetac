@@ -1,6 +1,6 @@
 /// <reference path="BaseBattleEvent.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Event logged when a drone is deployed by a ship
     export class DroneDeployedEvent extends BaseLogShipEvent {
         // Pointer to the drone

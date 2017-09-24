@@ -1,7 +1,7 @@
 /// <reference path="CharacterCargo.ts" />
 /// <reference path="CharacterEquipment.ts" />
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Display a loot slot
      */

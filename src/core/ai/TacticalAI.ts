@@ -1,6 +1,6 @@
 /// <reference path="AbstractAI.ts"/>
 /// <reference path="Maneuver.ts"/>
-module TS.SpaceTac {
+module TK.SpaceTac {
 
     export type TacticalProducer = Iterator<Maneuver>;
     export type TacticalEvaluator = (maneuver: Maneuver) => number;

@@ -1,6 +1,6 @@
 /// <reference path="BaseBattleEvent.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Event logged when a weapon is used on a target
     export class FireEvent extends BaseLogShipTargetEvent {
         // Weapon used

@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     export type EffectAmount = number | { base: number, span: number };
 
     /**

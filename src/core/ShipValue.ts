@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     const SHIP_VALUES_DESCRIPTIONS: { [name: string]: string } = {
         "materials skill": "Usage of physical materials such as bullets, shells...",
         "photons skill": "Forces of light, and electromagnetic radiation",

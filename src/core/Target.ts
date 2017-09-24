@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Find the nearest intersection between a line and a circle
     //  Circle is supposed to be centered at (0,0)
     //  Nearest intersection to (x1,y1) is returned

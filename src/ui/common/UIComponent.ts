@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     export type UIInternalComponent = Phaser.Group | Phaser.Image | Phaser.Button | Phaser.Sprite | Phaser.Graphics;
 
     export type UIImageInfo = string | { key: string, frame?: number, frame1?: number, frame2?: number };

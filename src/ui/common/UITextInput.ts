@@ -1,6 +1,6 @@
 /// <reference path="UIComponent.ts" />
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * UI component to allow the user to enter a small text
      */

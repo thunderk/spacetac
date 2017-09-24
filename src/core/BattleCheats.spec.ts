@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("BattleCheats", function () {
         it("wins a battle", function () {
             let battle = Battle.newQuickRandom();

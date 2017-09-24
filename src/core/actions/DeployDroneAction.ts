@@ -1,6 +1,6 @@
 /// <reference path="BaseAction.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Action to deploy a drone in space
      */

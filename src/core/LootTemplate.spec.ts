@@ -1,6 +1,6 @@
 /// <reference path="effects/BaseEffect.ts" />
 
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     class FakeEffect extends BaseEffect {
         fakevalue: number
         constructor(val = 5) {

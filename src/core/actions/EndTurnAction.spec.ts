@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("EndTurnAction", () => {
         it("can't be applied to non-playing ship", () => {
             spyOn(console, "warn").and.stub();

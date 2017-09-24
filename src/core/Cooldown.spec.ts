@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Cooldown", function () {
         it("applies overheat and cooldown", function () {
             let cooldown = new Cooldown();

@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Iterator of a list of "random" arena coordinates, based on a grid
      */

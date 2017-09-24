@@ -1,7 +1,7 @@
 /// <reference path="../TestGame.ts"/>
 /// <reference path="../../core/events/BaseBattleEvent.ts"/>
 
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     class FakeEvent extends BaseBattleEvent {
         diff: number
 

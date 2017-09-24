@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Slot", () => {
         it("checks equipment type", () => {
             var ship = new Ship();

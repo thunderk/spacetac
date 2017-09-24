@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("AttributeLimitEffect", function () {
         it("limits an attribute", function () {
             let battle = new Battle();

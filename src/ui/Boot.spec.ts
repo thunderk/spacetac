@@ -1,7 +1,7 @@
 /// <reference path="TestGame.ts" />
 /// <reference path="Boot.ts" />
 
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     describe("Boot", () => {
         let testgame = setupSingleView(testgame => [new Boot(), []]);
 

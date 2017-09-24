@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * A leveled value is an iterator yielding the desired value for each level (first item is for level 1, and so on)
      */

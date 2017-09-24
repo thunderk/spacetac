@@ -1,4 +1,4 @@
-module TS.SpaceTac.Multi {
+module TK.SpaceTac.Multi {
     /**
      * Network communication of two peers around a shared session
      * 

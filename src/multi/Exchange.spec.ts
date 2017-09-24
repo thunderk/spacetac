@@ -1,4 +1,4 @@
-module TS.SpaceTac.Multi.Specs {
+module TK.SpaceTac.Multi.Specs {
     describe("Exchange", function () {
         function newExchange(token: string, storage = new FakeRemoteStorage()): [FakeRemoteStorage, Exchange, Exchange] {
             let connection = new Connection("test", storage);

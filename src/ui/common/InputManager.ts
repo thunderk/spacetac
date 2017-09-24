@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     type KeyPressedCallback = (key: string) => void;
 
     /**

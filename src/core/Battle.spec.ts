@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("Battle", function () {
         it("defines play order by initiative throws", function () {
             var fleet1 = new Fleet();
@@ -372,7 +372,7 @@ module TS.SpaceTac {
             let battle = Battle.newQuickRandom();
             battle.ai_playing = true;
 
-            let serializer = new Serializer(TS.SpaceTac);
+            let serializer = new Serializer(TK.SpaceTac);
             let data = serializer.serialize(battle);
 
             let loaded = serializer.unserialize(data);

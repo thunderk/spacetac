@@ -4,7 +4,7 @@ if (typeof window != "undefined") {
     (<any>window).describe = (<any>window).describe || function () { };
 }
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Router between game views
     export class MainUI extends Phaser.Game {
         // Current game session

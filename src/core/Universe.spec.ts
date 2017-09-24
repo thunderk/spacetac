@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Universe", () => {
         it("generates star systems", () => {
             var universe = new Universe();

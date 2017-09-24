@@ -1,4 +1,4 @@
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     describe("NuclearReactor", function () {
         it("generates equipment based on level", function () {
             let template = new NuclearReactor();

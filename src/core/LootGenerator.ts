@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Equipment generator from loot templates
      * 
@@ -34,7 +34,7 @@ module TS.SpaceTac {
         // Fill the list of templates
         populate(): void {
             let templates: LootTemplate[] = [];
-            let namespace: any = TS.SpaceTac.Equipments;
+            let namespace: any = TK.SpaceTac.Equipments;
             for (var template_name in namespace) {
                 if (template_name && template_name.indexOf("Abstract") != 0) {
                     let template_class = namespace[template_name];

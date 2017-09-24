@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Tool to synchronize two players sharing a battle over network
      */
@@ -35,7 +35,7 @@ module TS.SpaceTac.UI {
             this.exchange = new Multi.Exchange(view.getConnection(), token, primary);
             await this.exchange.start();
 
-            this.serializer = new Serializer(TS.SpaceTac);
+            this.serializer = new Serializer(TK.SpaceTac);
             this.processed = this.battle.log.events.length;
             this.timer = view.timer;
 

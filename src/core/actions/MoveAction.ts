@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Action to move to a given location
     export class MoveAction extends BaseAction {
         // Distance allowed for each power point (raw, without applying maneuvrability)

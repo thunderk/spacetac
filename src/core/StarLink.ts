@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // An hyperspace link between two star systems
     export class StarLink {
         // Stars

@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("RepelEffect", function () {
         it("shows a textual description", function () {
             expect(new RepelEffect(34).getDescription()).toEqual("repel ships 34km away");

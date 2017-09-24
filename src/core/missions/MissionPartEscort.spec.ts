@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("MissionPartEscort", () => {
         it("completes when the fleet is at location, with its escort", function () {
             let destination = new StarLocation(new Star(null, 0, 0, "Atanax"));

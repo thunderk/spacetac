@@ -1,6 +1,6 @@
 /// <reference path="../common/Tooltip.ts" />
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Tooltip to display ship information on hover
      */

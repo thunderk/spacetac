@@ -1,6 +1,6 @@
 /// <reference path="../TestGame.ts"/>
 
-module TS.SpaceTac.UI.Specs {
+module TK.SpaceTac.UI.Specs {
     describe("ArenaShip", function () {
         let testgame = setupBattleview();
 

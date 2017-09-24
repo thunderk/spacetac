@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Processor of events coming from the battle log
      * 

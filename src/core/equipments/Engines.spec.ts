@@ -1,4 +1,4 @@
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     describe("Engines", function () {
         it("generates RocketEngine based on level", function () {
             let template = new RocketEngine();

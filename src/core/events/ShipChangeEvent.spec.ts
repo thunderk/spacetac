@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("ShipChangeEvent", function () {
         it("get reverse event", function () {
             let ship1 = new Ship();

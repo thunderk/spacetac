@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("DamageEffect", function () {
         it("applies damage and wear", function () {
             var ship = new Ship();

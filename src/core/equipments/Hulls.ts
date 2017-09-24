@@ -1,6 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     export class IronHull extends LootTemplate {
         constructor() {
             super(SlotType.Hull, "Iron Hull", "Protective hull, based on layered iron alloys");

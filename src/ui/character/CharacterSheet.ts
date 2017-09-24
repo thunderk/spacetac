@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     export type CharacterEquipmentDrop = {
         message: string
         callback: (equipment: Equipment) => any

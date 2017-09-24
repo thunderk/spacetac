@@ -1,6 +1,6 @@
 /// <reference path="../LootTemplate.ts"/>
 
-module TS.SpaceTac.Equipments {
+module TK.SpaceTac.Equipments {
     export class DamageProtector extends LootTemplate {
         constructor() {
             super(SlotType.Weapon, "Damage Protector", "Extend a time-displacement subfield, to reduce damage taken by ships around", 145);

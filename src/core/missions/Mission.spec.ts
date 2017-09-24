@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Mission", () => {
         it("check step status", function () {
             let universe = new Universe();

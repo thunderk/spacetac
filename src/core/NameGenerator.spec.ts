@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("NameGenerator", () => {
         it("generates unique names", () => {
             var random = new SkewedRandomGenerator([0.48, 0.9, 0.1]);

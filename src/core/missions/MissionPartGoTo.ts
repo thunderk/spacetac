@@ -1,6 +1,6 @@
 /// <reference path="MissionPart.ts" />
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Level of hint to help find a destination
      */

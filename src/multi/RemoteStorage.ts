@@ -1,6 +1,6 @@
 /// <reference path="../lib/parse.d.ts" />
 
-module TS.SpaceTac.Multi {
+module TK.SpaceTac.Multi {
     /**
      * Interface for a remote storage, used for networking/multiplayer features
      */

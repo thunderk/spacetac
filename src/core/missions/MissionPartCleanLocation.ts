@@ -1,6 +1,6 @@
 /// <reference path="MissionPartGoTo.ts" />
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * A mission part that requires the fleet to clean a specific location of enemies
      */

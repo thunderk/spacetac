@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     // Utility functions for sounds
     export class Audio {
         private game: MainUI

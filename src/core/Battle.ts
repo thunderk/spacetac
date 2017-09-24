@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // A turn-based battle between fleets
     export class Battle {
         // Flag indicating if the battle is ended

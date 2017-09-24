@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Maneuver", function () {
         it("guesses weapon effects", function () {
             let battle = new Battle();

@@ -1,6 +1,6 @@
 /// <reference path="Mission.ts" />
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     function randomLocation(random: RandomGenerator, stars: Star[], excludes: StarLocation[] = []) {
         let star = stars.length == 1 ? stars[0] : random.choice(stars);
         return RandomGenerator.global.choice(star.locations.filter(loc => !contains(excludes, loc)));

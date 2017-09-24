@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     // Action to end the ship's turn
     export class EndTurnAction extends BaseAction {
         constructor() {

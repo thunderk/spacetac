@@ -1,4 +1,4 @@
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     // A single displayed message
     class Message extends Phaser.Group {
         view: BaseView

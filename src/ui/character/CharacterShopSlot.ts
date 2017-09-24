@@ -1,6 +1,6 @@
 /// <reference path="CharacterLootSlot.ts" />
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * Display a shop slot
      */

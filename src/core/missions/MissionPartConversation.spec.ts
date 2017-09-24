@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("MissionPartConversation", () => {
         it("advances through conversation", function () {
             let universe = new Universe();

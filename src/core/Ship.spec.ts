@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Ship", function () {
         it("creates a full name", function () {
             let ship = new Ship();

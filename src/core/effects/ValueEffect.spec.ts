@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     describe("ValueEffect", function () {
         it("adds an amount to a ship value", function () {
             let effect = new ValueEffect("shield", 20);

@@ -1,6 +1,6 @@
 /// <reference path="effects/BaseEffect.ts" />
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Fake effect to capture apply requests
      */

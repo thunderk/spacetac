@@ -1,4 +1,4 @@
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("Equipment", () => {
         it("generates a full name", function () {
             let equipment = new Equipment(SlotType.Weapon, "rayofdeath");

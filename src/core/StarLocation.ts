@@ -1,4 +1,4 @@
-module TS.SpaceTac {
+module TK.SpaceTac {
     export enum StarLocationType {
         STAR,
         WARP,

@@ -1,6 +1,6 @@
 /// <reference path="UIComponent.ts" />
 
-module TS.SpaceTac.UI {
+module TK.SpaceTac.UI {
     /**
      * UI component to display a text
      */

@@ -1,6 +1,6 @@
 /// <reference path="BaseEffect.ts"/>
 
-module TS.SpaceTac {
+module TK.SpaceTac {
     /**
      * Transfer a value between two ships.
      */

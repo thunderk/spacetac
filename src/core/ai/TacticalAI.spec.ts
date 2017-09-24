@@ -1,6 +1,6 @@
 /// <reference path="Maneuver.ts" />
 
-module TS.SpaceTac.Specs {
+module TK.SpaceTac.Specs {
     describe("TacticalAI", function () {
         class FixedManeuver extends Maneuver {
             score: number;
