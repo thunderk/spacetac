@@ -101,7 +101,9 @@ module TK.SpaceTac.UI {
 
             // Add UI elements
             this.action_bar = new ActionBar(this);
+            this.action_bar.position.set(0, this.getHeight() - 132);
             this.ship_list = new ShipList(this);
+            this.ship_list.position.set(this.getWidth() - 112, 0);
             this.ship_tooltip = new ShipTooltip(this);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
             this.layer_sheets.add(this.character_sheet);

@@ -19,7 +19,7 @@ module TK.SpaceTac.UI {
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
-            super(battleview.game, 0, 133, "battle-shiplist-background");
+            super(battleview.game, 0, 0, "battle-shiplist-background");
 
             this.battleview = battleview;
             this.ships = [];
@@ -27,7 +27,6 @@ module TK.SpaceTac.UI {
             this.hovered = null;
 
             this.info_button = new Phaser.Button(this.game, 0, 0, "battle-shiplist-info-button");
-            this.info_button.position.set(0, this.height - this.info_button.height);
             UITools.setHoverClick(this.info_button,
                 () => this.battleview.toggle_tactical_mode.manipulate("button")(true),
                 () => this.battleview.toggle_tactical_mode.manipulate("button")(false),
@@ -61,7 +60,7 @@ module TK.SpaceTac.UI {
         // Add a ship icon
         addShip(ship: Ship): ShipListItem {
             var owned = ship.getPlayer() === this.battleview.player;
-            var result = new ShipListItem(this, -200, 0, ship, owned);
+            var result = new ShipListItem(this, 200, this.height / 2, ship, owned);
             this.ships.push(result);
             this.addChild(result);
             return result;
@@ -95,9 +94,9 @@ module TK.SpaceTac.UI {
             this.ships.forEach((item: ShipListItem) => {
                 var position = this.findPlayPosition(item.ship);
                 if (position === 0) {
-                    item.moveTo(18, 15 - this.y, animate);
+                    item.moveTo(-18, 962, animate);
                 } else {
-                    item.moveTo(0, 33 + position * 99 - this.y, animate);
+                    item.moveTo(2, 942 - position * 99, animate);
                 }
                 this.setChildIndex(item, position);
             });

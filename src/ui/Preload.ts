@@ -33,6 +33,7 @@ module TK.SpaceTac.UI {
             this.loadSheet("battle/splash/shipcard.png", 99, 114);
             this.loadImage("battle/background.jpg");
             this.loadImage("battle/actionbar/background.png");
+            this.loadImage("battle/actionbar/actions-background.png");
             this.loadSheet("battle/actionbar/button-menu.png", 79, 132);
             this.loadImage("battle/arena/background.png");
             this.loadImage("battle/arena/blast.png");

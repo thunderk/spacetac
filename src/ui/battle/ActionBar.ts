@@ -2,22 +2,23 @@ module TK.SpaceTac.UI {
     // Bar with all available action icons displayed
     export class ActionBar extends Phaser.Group {
         // Link to the parent battleview
-        battleview: BattleView;
+        battleview: BattleView
 
         // List of action icons
-        actions: Phaser.Group;
-        action_icons: ActionIcon[];
+        actions: Phaser.Group
+        action_icons: ActionIcon[]
 
-        // Power bar
-        power: Phaser.Group;
+        // Power indicator
+        power: Phaser.Group
+        power_icons: Phaser.Group
 
         // Indicator of interaction disabled
-        icon_waiting: Phaser.Image;
+        icon_waiting: Phaser.Image
 
         // Current ship, whose actions are displayed
-        ship: Ship | null;
-        ship_power_capacity: number;
-        ship_power_value: number;
+        ship: Ship | null
+        ship_power_capacity: number
+        ship_power_value: number
 
         // Interactivity
         interactive = true;
@@ -35,14 +36,20 @@ module TK.SpaceTac.UI {
             // Background
             this.add(new Phaser.Image(this.game, 0, 0, "battle-actionbar-background", 0));
 
-            // Power bar
-            this.power = this.game.add.group();
-            this.power.position.set(1600, 14);
-            this.add(this.power);
-
             // Group for actions
-            this.actions = new Phaser.Group(this.game);
-            this.add(this.actions);
+            this.actions = this.game.add.group(this, "actions");
+            this.actions.position.set(86, 6);
+            this.actions.add(new Phaser.Image(this.game, 0, 0, "battle-actionbar-actions-background"));
+
+            // Power bar
+            this.power = this.game.add.group(this, "power");
+            this.power.position.set(1468, 0);
+            this.power.add(battleview.newImage("battle-actionbar-power-background", 0, 6));
+            this.power_icons = this.game.add.group(this.power, "power icons");
+            this.power_icons.position.set(50, 14);
+
+            // Playing ship
+            this.add(battleview.newImage("battle-actionbar-ship", 1730, -2));
 
             // Waiting icon
             this.icon_waiting = new Phaser.Image(this.game, this.width / 2, this.height / 2, "common-waiting", 0);
@@ -51,7 +58,7 @@ module TK.SpaceTac.UI {
             this.add(this.icon_waiting);
 
             // Options button
-            let button = battleview.add.button(1841, 0, "battle-actionbar-button-menu", () => battleview.showOptions(), null, 1, 0, 0, 1, this);
+            let button = battleview.add.button(0, 0, "battle-actionbar-button-menu", () => battleview.showOptions(), null, 1, 0, 0, 1, this);
             battleview.tooltip.bindStaticText(button, "Game options");
 
             // Key bindings
@@ -94,7 +101,8 @@ module TK.SpaceTac.UI {
                 this.interactive = interactive;
 
                 this.battleview.animations.setVisible(this.icon_waiting, !this.interactive, 100);
-                this.battleview.animations.setVisible(this.actions, interactive, 100, 1, 0.2);
+                this.battleview.animations.setVisible(this.power, interactive, 100, 1, 0);
+                this.battleview.animations.setVisible(this.actions, interactive, 100, 1, 0);
             }
         }
 
@@ -111,17 +119,20 @@ module TK.SpaceTac.UI {
             }
         }
 
-        // Clear the action icons
+        /**
+         * Remove all the action icons
+         */
         clearAll(): void {
-            this.action_icons.forEach((action: ActionIcon) => {
-                action.destroy();
-            });
+            this.action_icons.forEach(action => action.destroy());
             this.action_icons = [];
         }
 
-        // Add an action icon
+        /**
+         * Add an action icon
+         */
         addAction(ship: Ship, action: BaseAction): ActionIcon {
-            var icon = new ActionIcon(this, 170 + this.action_icons.length * 124, 2, ship, action, this.action_icons.length);
+            var icon = new ActionIcon(this, ship, action, this.action_icons.length);
+            icon.moveTo(this.actions, 74 + this.action_icons.length * 138, 58);
             this.action_icons.push(icon);
 
             return icon;
@@ -131,12 +142,12 @@ module TK.SpaceTac.UI {
          * Update the power indicator
          */
         updatePower(move_power = 0, fire_power = 0): void {
-            let current_power = this.power.children.length;
+            let current_power = this.power_icons.children.length;
             let power_capacity = this.ship_power_capacity;
 
             if (current_power > power_capacity) {
                 range(current_power - power_capacity).forEach(i => {
-                    this.power.removeChildAt(current_power - 1 - i)
+                    this.power_icons.removeChildAt(current_power - 1 - i)
                 });
                 //this.power.removeChildren(ship_power, current_power);  // TODO bugged in phaser 2.6
             } else if (power_capacity > current_power) {
@@ -144,13 +155,13 @@ module TK.SpaceTac.UI {
                     let x = (current_power + i) % 5;
                     let y = ((current_power + i) - x) / 5;
                     let image = this.battleview.newImage("battle-actionbar-power-used", x * 43, y * 22);
-                    this.power.add(image);
+                    this.power_icons.add(image);
                 });
             }
 
             let power_value = this.ship_power_value;
             let remaining_power = power_value - move_power - fire_power;
-            this.power.children.forEach((obj, idx) => {
+            this.power_icons.children.forEach((obj, idx) => {
                 let img = <Phaser.Image>obj;
                 if (idx < remaining_power) {
                     this.battleview.changeImage(img, "battle-actionbar-power-available");
@@ -173,14 +184,7 @@ module TK.SpaceTac.UI {
          * *move_power* and *fire_power* is the consumption of currently selected action/target.
          */
         updateSelectedActionPower(move_power: number, fire_power: number, action: BaseAction): void {
-            var remaining_ap = this.ship ? (this.ship.getValue("power") - move_power - fire_power) : 0;
-            if (remaining_ap < 0) {
-                remaining_ap = 0;
-            }
-
-            this.action_icons.forEach(icon => {
-                icon.updateFadingStatus(remaining_ap, action);
-            });
+            this.action_icons.forEach(icon => icon.refresh(action, move_power + fire_power));
             this.updatePower(move_power, fire_power);
         }
 
@@ -226,12 +230,10 @@ module TK.SpaceTac.UI {
 
         // Called by an action icon when the action has been applied
         actionEnded(): void {
-            // TODO Lock interactivity until animation is ended
-            this.updatePower();
-            this.action_icons.forEach((action: ActionIcon) => {
-                action.resetState();
-            });
             this.battleview.exitTargettingMode();
+
+            this.updatePower();
+            this.action_icons.forEach(action => action.refresh());
         }
     }
 }

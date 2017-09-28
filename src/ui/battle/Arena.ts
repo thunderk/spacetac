@@ -9,7 +9,7 @@ module TK.SpaceTac.UI {
         view: BattleView
 
         // Boundaries of the arena
-        boundaries: IBounded = { x: 112, y: 132, width: 1808, height: 948 }
+        boundaries: IBounded = { x: 0, y: 0, width: 1808, height: 948 }
 
         // Hint for weapon or move range
         range_hint: RangeHint

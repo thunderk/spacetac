@@ -1,11 +1,14 @@
 module TK.SpaceTac.UI {
-    // Icon to activate a ship capability (move, fire...)
-    export class ActionIcon extends Phaser.Button {
-        // Link to the parent bar
+    /**
+     * Icon to activate a ship ability
+     */
+    export class ActionIcon {
+        // Link to parents
         bar: ActionBar
+        view: BattleView
 
-        // Link to the parent battle view
-        battleview: BattleView
+        // Container
+        container: Phaser.Button
 
         // Related ship
         ship: Ship
@@ -13,81 +16,91 @@ module TK.SpaceTac.UI {
         // Related game action
         action: BaseAction
 
-        // True if the action can be used
-        active: boolean
+        // Current state
+        fading = false
+        disabled = true
+        selected = false
+        toggled = false
 
-        // True if the action is selected for use
-        selected: boolean
+        // Images
+        img_targetting: Phaser.Image
+        img_bottom: Phaser.Image
+        img_power: Phaser.Image
+        img_sticky: Phaser.Image
+        img_action: Phaser.Image
 
-        // True if an action is currently selected, and this one won't be available after its use
-        fading: boolean
+        // Indicators
+        text_power: Phaser.Text
 
-        // Current targetting
-        private targetting: Targetting | null
-
-        // Action icon - image representing the action
-        private layer_icon: Phaser.Image
-
-        // Layer applied when the action is active
-        private layer_active: Phaser.Image
-
-        // Layer applied when the action is selected
-        private layer_selected: Phaser.Image
-
-        // Cooldown indicators
-        private cooldown: Phaser.Image
-        private cooldown_count: Phaser.Text
-
-        // Create an icon for a single ship action
-        constructor(bar: ActionBar, x: number, y: number, ship: Ship, action: BaseAction, position: number) {
-            super(bar.game, x, y, bar.battleview.getImageInfo("battle-actionbar-icon").key, () => this.processClick(),
-                undefined, bar.battleview.getImageInfo("battle-actionbar-icon").frame, bar.battleview.getImageInfo("battle-actionbar-icon").frame);
-
+        constructor(bar: ActionBar, ship: Ship, action: BaseAction, position: number) {
             this.bar = bar;
-            this.battleview = bar.battleview;
+            this.view = bar.battleview;
+
+            let info = this.view.getImageInfo("battle-actionbar-frame-disabled");
+            this.container = this.view.add.button(0, 0, info.key, () => this.processClick(), undefined, info.frame, info.frame);
+            this.container.anchor.set(0.5);
+            this.container.input.useHandCursor = false;
+
             this.ship = ship;
             this.action = action;
 
-            bar.actions.add(this);
+            // Action icon
+            let icon = this.view.getFirstImage(`action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
+            this.img_action = new Phaser.Image(bar.game, 0, 0, icon.key, icon.frame);
+            this.img_action.anchor.set(0.5);
+            this.img_action.scale.set(0.35);
+            this.img_action.alpha = 0.2;
+            this.container.addChild(this.img_action);
 
-            // Icon layer
-            let icon = this.battleview.getFirstImage(`action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
-            this.layer_icon = new Phaser.Image(this.game, this.width / 2, this.height / 2, icon.key, icon.frame);
-            this.layer_icon.anchor.set(0.5, 0.5);
-            this.layer_icon.scale.set(0.35, 0.35);
-            this.addChild(this.layer_icon);
+            // Bottom indicator
+            this.img_bottom = this.view.newImage("battle-actionbar-bottom-disabled", 0, 40);
+            this.img_bottom.anchor.set(0.5);
+            this.container.addChild(this.img_bottom);
+            this.img_targetting = this.view.newImage("battle-actionbar-bottom-targetting", 0, 12);
+            this.img_targetting.anchor.set(0.5);
+            this.img_targetting.visible = false;
+            this.img_bottom.addChild(this.img_targetting);
 
-            // Active layer
-            this.active = false;
-            this.layer_active = this.battleview.newImage("battle-actionbar-icon-available", this.width / 2, this.height / 2);
-            this.layer_active.anchor.set(0.5, 0.5);
-            this.layer_active.visible = false;
-            this.addChild(this.layer_active);
-
-            // Selected layer
+            // Left indicator
             this.selected = false;
-            this.layer_selected = this.battleview.newImage("battle-actionbar-icon-selected", this.width / 2, this.height / 2);
-            this.layer_selected.anchor.set(0.5, 0.5);
-            this.layer_selected.visible = false;
-            this.addChild(this.layer_selected);
+            this.img_power = this.view.newImage("battle-actionbar-consumption-disabled", -46);
+            this.img_power.anchor.set(0.5);
+            this.img_power.visible = false;
+            this.container.addChild(this.img_power);
+            this.text_power = new Phaser.Text(bar.game, 0, 0, "", { align: "left", font: "16pt SpaceTac", fill: "#ffdd4b" });
+            this.text_power.setShadow(1, 1, "#000000");
+            this.text_power.anchor.set(0.5);
+            this.img_power.addChild(this.text_power);
 
-            // Cooldown layer
-            this.cooldown = this.battleview.newImage("battle-actionbar-icon-cooldown", this.width / 2, this.height / 2);
-            this.cooldown.anchor.set(0.5, 0.5);
-            this.cooldown_count = new Phaser.Text(this.game, 0, 0, "", { align: "center", font: "bold 34pt SpaceTac", fill: "#aaaaaa" });
-            this.cooldown_count.anchor.set(0.5, 0.45);
-            this.cooldown.addChild(this.cooldown_count);
-            this.addChild(this.cooldown);
+            // Right indicator
+            this.img_sticky = this.view.newImage("battle-actionbar-sticky-untoggled", 46);
+            this.img_sticky.anchor.set(0.5);
+            this.img_sticky.visible = action instanceof ToggleAction;
+            this.container.addChild(this.img_sticky);
 
             // Events
-            this.battleview.tooltip.bind(this, filler => {
+            this.view.tooltip.bind(this.container, filler => {
                 ActionTooltip.fill(filler, this.ship, this.action, position);
                 return true;
             });
 
             // Initialize
-            this.updateActiveStatus(true);
-            this.updateCooldownStatus(0);
+            this.refresh();
+        }
+
+        /**
+         * Destroy the icon
+         */
+        destroy(): void {
+            this.container.destroy();
+        }
+
+        /**
+         * Move to a given layer and position
+         */
+        moveTo(layer: Phaser.Group, x = 0, y = 0): void {
+            layer.add(this.container);
+            this.container.position.set(x, y);
         }
 
         /**
@@ -103,7 +116,7 @@ module TK.SpaceTac.UI {
                 return;
             }
 
-            this.battleview.audio.playOnce("ui-button-click");
+            this.view.audio.playOnce("ui-button-click");
 
             if (this.selected) {
                 this.bar.actionEnded();
@@ -114,20 +127,14 @@ module TK.SpaceTac.UI {
             this.bar.actionEnded();
             this.bar.actionStarted();
 
-            // Set the selected state
-            this.setSelected(true);
-
             let mode = this.action.getTargettingMode(this.ship);
             if (mode == ActionTargettingMode.SELF || mode == ActionTargettingMode.SELF_CONFIRM) {
                 // Apply immediately on the ship
                 // TODO Handle confirm
                 this.processSelection(Target.newFromShip(this.ship));
             } else {
-                let sprite = this.battleview.arena.findShipSprite(this.ship);
-                if (sprite) {
-                    // Switch to targetting mode (will apply action when a target is selected)
-                    this.targetting = this.battleview.enterTargettingMode(this.action, mode);
-                }
+                // Switch to targetting mode (will apply action when a target is selected)
+                this.view.enterTargettingMode(this.action, mode);
             }
         }
 
@@ -142,71 +149,88 @@ module TK.SpaceTac.UI {
             }
         }
 
-        // Called to clear the current state
-        resetState(): void {
-            if (this.targetting) {
-                this.targetting = null;
-            }
-            this.setSelected(false);
-            this.updateCooldownStatus();
-            this.updateActiveStatus();
-            this.updateFadingStatus(this.ship.values.power.get());
-            this.battleview.arena.range_hint.clear();
-        }
+        /**
+         * Update the display elements
+         * 
+         * A currently targetting action may be passed, with power usage, to display potential fading and cooldown.
+         */
+        refresh(used: BaseAction | null = null, power_consumption = 0): void {
+            let disabled = bool(this.action.checkCannotBeApplied(this.ship));
+            let selected = (used === this.action);
+            let fading = bool(this.action.checkCannotBeApplied(this.ship, this.ship.getValue("power") - power_consumption));
+            let toggled = (this.action instanceof ToggleAction) && this.action.activated;
 
-        // Set the selected state on this icon
-        setSelected(selected: boolean) {
+            // inputs
+            if (disabled != this.disabled) {
+                this.container.input.useHandCursor = !disabled;
+            }
+
+            // frame
+            if (disabled != this.disabled) {
+                let name = disabled ? "battle-actionbar-frame-disabled" : "battle-actionbar-frame-enabled";
+                let info = this.view.getImageInfo(name);
+                this.container.name = name;
+                this.container.loadTexture(info.key);
+                this.container.setFrames(info.frame, info.frame, info.frame, info.frame);
+            }
+
+            // action icon
+            if (disabled != this.disabled) {
+                this.img_action.alpha = disabled ? 0.2 : 1;
+            }
+
+            // bottom
+            if (disabled != this.disabled || toggled != this.toggled) {
+                if (disabled) {
+                    this.view.changeImage(this.img_bottom, "battle-actionbar-bottom-disabled");
+                } else if (toggled) {
+                    this.view.changeImage(this.img_bottom, "battle-actionbar-bottom-toggled");
+                } else {
+                    this.view.changeImage(this.img_bottom, "battle-actionbar-bottom-enabled");
+                }
+            }
+            if (selected != this.selected) {
+                this.view.animations.setVisible(this.img_targetting, selected, 200);
+            }
+
+            // left
+            if (disabled != this.disabled || selected != this.selected || fading != this.fading || toggled != this.toggled) {
+                let power = this.action.getActionPointsUsage(this.ship, null);
+                this.img_power.visible = toggled || (power > 0);
+                this.text_power.text = `${power}`;
+                this.text_power.alpha = disabled ? 0.2 : 1;
+                if (disabled) {
+                    this.view.changeImage(this.img_power, "battle-actionbar-consumption-disabled");
+                } else if (toggled) {
+                    this.view.changeImage(this.img_power, "battle-actionbar-consumption-toggled");
+                } else if (fading) {
+                    this.view.changeImage(this.img_power, "battle-actionbar-consumption-fading");
+                } else if (selected) {
+                    this.view.changeImage(this.img_power, "battle-actionbar-consumption-targetting");
+                } else {
+                    this.view.changeImage(this.img_power, "battle-actionbar-consumption-enabled");
+                }
+            }
+
+            // right
+            if (toggled != this.toggled || disabled != this.disabled) {
+                if (this.action instanceof ToggleAction) {
+                    if (toggled) {
+                        this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-toggled");
+                    } else {
+                        this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-untoggled");
+                    }
+                    this.img_sticky.visible = !disabled;
+                } else {
+                    // TODO overheat
+                    this.img_sticky.visible = false;
+                }
+            }
+
+            this.disabled = disabled;
             this.selected = selected;
-            this.battleview.animations.setVisible(this.layer_selected, this.selected, 300);
-            this.updateCooldownStatus();
-        }
-
-        // Update the cooldown status
-        updateCooldownStatus(animate = 300): void {
-            let remaining = this.action.getUsesBeforeOverheat();
-            if (this.selected && remaining == 1) {
-                // will overheat, hint at the cooldown time
-                let cooldown = this.action.getCooldownDuration(true);
-                this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-cooldown");
-                this.cooldown.scale.set(0.7);
-                this.cooldown_count.text = `${cooldown}`;
-                this.battleview.animations.setVisible(this.cooldown, true, animate);
-            } else if (remaining == 0) {
-                // overheated, show cooldown time
-                let cooldown = this.action.getCooldownDuration(false);
-                this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-cooldown");
-                this.cooldown.scale.set(1);
-                this.cooldown_count.text = `${cooldown}`;
-                this.battleview.animations.setVisible(this.cooldown, true, animate);
-            } else if (this.action instanceof ToggleAction && this.action.activated) {
-                this.battleview.changeImage(this.cooldown, "battle-actionbar-icon-toggled");
-                this.cooldown.scale.set(1);
-                this.cooldown_count.text = "";
-                this.battleview.animations.setVisible(this.cooldown, true, animate);
-            } else {
-                this.battleview.animations.setVisible(this.cooldown, false, animate);
-            }
-        }
-
-        // Update the active status, from the action canBeUsed result
-        updateActiveStatus(force = false): void {
-            var old_active = this.active;
-            this.active = !this.action.checkCannotBeApplied(this.ship);
-            if (force || (this.active != old_active)) {
-                this.battleview.animations.setVisible(this.layer_active, this.active, 500);
-                this.game.tweens.create(this.layer_icon).to({ alpha: this.active ? 1 : 0.3 }, 500).start();
-                this.input.useHandCursor = this.active;
-            }
-        }
-
-        // Update the fading status, given an hypothetical remaining AP
-        updateFadingStatus(remaining_ap: number, action: BaseAction | null = null): void {
-            let old_fading = this.fading;
-            let overheat = (action == this.action && this.action.equipment !== null && this.action.equipment.cooldown.willOverheat());
-            this.fading = this.active && (this.action.checkCannotBeApplied(this.ship, remaining_ap) != null || overheat);
-            if (this.fading != old_fading) {
-                this.battleview.animations.setVisible(this.layer_active, this.active && !this.fading, 500);
-            }
+            this.fading = fading;
+            this.toggled = toggled;
         }
     }
 }

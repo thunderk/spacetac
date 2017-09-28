@@ -191,8 +191,7 @@ module TK.SpaceTac.UI {
         changeImage(image: Phaser.Image, name: string): void {
             let info = this.getImageInfo(name);
             image.name = name;
-            image.loadTexture(info.key);
-            image.frame = info.frame;
+            image.loadTexture(info.key, info.frame);
         }
 
         /**
