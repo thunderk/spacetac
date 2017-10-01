@@ -187,13 +187,12 @@ module TK.SpaceTac.UI {
         cursorHovered(location: ArenaLocation | null, ship: Ship | null) {
             if (this.targetting.active) {
                 this.targetting.setTargetFromLocation(location);
-            }
-
-            if (ship && this.ship_hovered != ship) {
-                // TODO if targetting is active, this may hide targetting info with the tooltip
-                this.cursorOnShip(ship);
-            } else if (!ship && this.ship_hovered) {
-                this.cursorOffShip(this.ship_hovered);
+            } else {
+                if (ship && this.ship_hovered != ship) {
+                    this.cursorOnShip(ship);
+                } else if (!ship && this.ship_hovered) {
+                    this.cursorOffShip(this.ship_hovered);
+                }
             }
         }
 
@@ -254,6 +253,10 @@ module TK.SpaceTac.UI {
                 this.exitTargettingMode();
                 this.interacting = enabled;
             }
+
+            if (!enabled) {
+                this.setShipHovered(null);
+            }
         }
 
         // Enter targetting mode
@@ -262,6 +265,8 @@ module TK.SpaceTac.UI {
             if (!this.interacting) {
                 return null;
             }
+
+            this.setShipHovered(null);
 
             this.targetting.setAction(action, mode);
             return this.targetting;

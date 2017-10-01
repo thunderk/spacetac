@@ -45,7 +45,7 @@ module TK.SpaceTac.UI.Specs {
             let ship = battleview.battle.play_order[3];
             battleview.cursorHovered(ship.location, ship);
             expect(battleview.targetting.target).toEqual(Target.newFromLocation(ship.arena_x, ship.arena_y));
-            expect(battleview.ship_hovered).toBe(ship);
+            expect(battleview.ship_hovered).toBeNull();
 
             spyOn(battleview.targetting, "validate").and.stub();
 
@@ -58,6 +58,11 @@ module TK.SpaceTac.UI.Specs {
 
             battleview.cursorHovered(new ArenaLocation(5, 8), null);
             expect(battleview.targetting.target).toBeNull();
+            expect(battleview.ship_hovered).toBeNull();
+
+            battleview.cursorHovered(ship.location, ship);
+            expect(battleview.targetting.target).toBeNull();
+            expect(battleview.ship_hovered).toBe(ship);
         });
 
         it("allows to choose an action and a target with shortcut keys", function () {
