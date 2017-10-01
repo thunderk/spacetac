@@ -82,7 +82,33 @@ module TK.SpaceTac.UI.Specs {
         })
 
         it("displays overheat/cooldown", function () {
+            let bar = testgame.battleview.action_bar;
+            let ship = new Ship();
+            TestTools.setShipAP(ship, 5);
+            let action = nn(TestTools.addWeapon(ship, 50, 3).action);
+            action.cooldown.configure(1, 3);
+            let icon = new ActionIcon(bar, ship, action, 0);
+            expect(icon.img_sticky.visible).toBe(false, "initial");
+            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-untoggled", "initial");
+            expect(icon.img_sticky.children.length).toBe(0, "initial");
 
+            icon.refresh(action);
+            expect(icon.img_sticky.visible).toBe(true, "overheat");
+            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-overheat", "overheat");
+            expect(icon.img_sticky.children.length).toBe(3, "overheat");
+
+            action.cooldown.configure(1, 12);
+            icon.refresh(action);
+            expect(icon.img_sticky.visible).toBe(true, "superheat");
+            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-overheat", "superheat");
+            expect(icon.img_sticky.children.length).toBe(5, "superheat");
+
+            action.cooldown.configure(1, 4);
+            action.cooldown.use();
+            icon.refresh(action);
+            expect(icon.img_sticky.visible).toBe(true, "cooling");
+            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-disabled", "cooling");
+            expect(icon.img_sticky.children.length).toBe(4, "cooling");
         })
 
         it("displays currently targetting", function () {

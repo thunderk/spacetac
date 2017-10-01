@@ -3,6 +3,21 @@ module TK.SpaceTac.UI.Specs {
         describe("in UI", function () {
             let testgame = setupEmptyView();
 
+            it("destroys children", function () {
+                let parent = testgame.baseview.add.group();
+                let child1 = testgame.baseview.add.graphics(0, 0, parent);
+                let child2 = testgame.baseview.add.image(0, 0, "", 0, parent);
+                let child3 = testgame.baseview.add.button(0, 0, "", undefined, undefined, undefined, undefined, undefined, undefined, parent);
+                let child4 = testgame.baseview.add.text(0, 0, "", {}, parent);
+                expect(parent.children.length).toBe(4);
+
+                destroyChildren(parent, 1, 2);
+                expect(parent.children.length).toBe(2);
+
+                destroyChildren(parent);
+                expect(parent.children.length).toBe(0);
+            });
+
             it("keeps objects inside bounds", function () {
                 let image = testgame.baseview.add.graphics(150, 100);
                 image.beginFill(0xff0000);

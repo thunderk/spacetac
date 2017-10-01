@@ -43,18 +43,17 @@ module TK.SpaceTac.UI {
         /**
          * Update displayed information
          */
-        update(ship: Ship, action: BaseAction, location: ArenaLocation = ship.location): void {
+        update(ship: Ship, action: BaseAction, radius = action.getRangeRadius(ship)): void {
             let yescolor = 0x000000;
             let nocolor = 0x242022;
             this.info.clear();
 
-            var radius = action.getRangeRadius(ship);
             if (radius) {
                 this.info.beginFill(nocolor);
                 this.info.drawRect(0, 0, this.width, this.height);
 
                 this.info.beginFill(yescolor);
-                this.info.drawCircle(location.x, location.y, radius * 2);
+                this.info.drawCircle(ship.arena_x, ship.arena_y, radius * 2);
 
                 if (action instanceof MoveAction) {
                     let exclusions = action.getExclusionAreas(ship);

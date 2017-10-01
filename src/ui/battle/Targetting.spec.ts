@@ -148,5 +148,33 @@ module TK.SpaceTac.UI.Specs {
             targetting.setTargetFromLocation({ x: 0, y: 0 });
             expect(targetting.target).toEqual(Target.newFromShip(playing_ship), "self 2");
         })
+
+        it("updates the range hint display", function () {
+            let targetting = newTargetting();
+            let ship = nn(testgame.battleview.battle.playing_ship);
+            ship.setArenaPosition(0, 0);
+            ship.listEquipment(SlotType.Engine).forEach(engine => engine.detach());
+            TestTools.setShipAP(ship, 8);
+            let move = TestTools.addEngine(ship, 100).action;
+            let fire = TestTools.addWeapon(ship, 50, 2, 300, 100).action;
+            let last_call: any = null;
+            spyOn(targetting.range_hint, "clear").and.callFake(() => last_call = null);
+            spyOn(targetting.range_hint, "update").and.callFake((ship: Ship, action: BaseAction, radius: number) => last_call = [ship, action, radius]);
+
+            // move action
+            targetting.setAction(move);
+            targetting.setTargetFromLocation({ x: 200, y: 0 });
+            expect(last_call).toEqual([ship, move, 800]);
+
+            // fire action
+            targetting.setAction(fire);
+            targetting.setTargetFromLocation({ x: 200, y: 0 });
+            expect(last_call).toEqual([ship, fire, undefined]);
+
+            // move+fire
+            targetting.setAction(fire);
+            targetting.setTargetFromLocation({ x: 400, y: 0 });
+            expect(last_call).toEqual([ship, move, 600]);
+        });
     });
 }

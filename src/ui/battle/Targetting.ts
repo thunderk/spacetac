@@ -216,20 +216,27 @@ module TK.SpaceTac.UI {
             // Toggle range hint
             if (this.ship && this.action) {
                 if (this.simulation.need_move) {
+                    let move_action: MoveAction | null = null;
                     if (this.simulation.success) {
                         let last_move = first(acopy(this.simulation.parts).reverse(), part => part.action instanceof MoveAction);
                         if (last_move) {
-                            this.range_hint.update(this.ship, last_move.action);
-                        } else {
-                            this.range_hint.clear();
+                            move_action = <MoveAction>last_move.action;
                         }
                     } else {
                         let engine = new MoveFireSimulator(this.ship).findBestEngine();
                         if (engine && engine.action) {
-                            this.range_hint.update(this.ship, engine.action);
-                        } else {
-                            this.range_hint.clear();
+                            move_action = <MoveAction>engine.action;
                         }
+                    }
+                    if (move_action) {
+                        let power = this.ship.getValue("power");
+                        if (this.action !== move_action) {
+                            power = Math.max(power - this.action.getActionPointsUsage(this.ship, this.target), 0);
+                        }
+                        let radius = move_action.getRangeRadiusForPower(this.ship, power);
+                        this.range_hint.update(this.ship, move_action, radius);
+                    } else {
+                        this.range_hint.clear();
                     }
                 } else {
                     this.range_hint.update(this.ship, this.action);

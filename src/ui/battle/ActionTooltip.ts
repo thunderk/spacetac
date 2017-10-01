@@ -39,7 +39,7 @@ module TK.SpaceTac.UI {
                     filler.addText(150, 80, "Cooling down ...", "#c9604c", 20);
                 } else if (cooldown.willOverheat() && cost != "Not enough power") {
                     if (cooldown.cooling > 1) {
-                        let turns = cooldown.cooling;
+                        let turns = cooldown.cooling - 1;
                         filler.addText(150, 80, `Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, "#c9604c", 20);
                     } else {
                         filler.addText(150, 80, "Unavailable until next turn if used", "#c9604c", 20);

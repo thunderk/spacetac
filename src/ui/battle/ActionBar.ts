@@ -146,10 +146,7 @@ module TK.SpaceTac.UI {
             let power_capacity = this.ship_power_capacity;
 
             if (current_power > power_capacity) {
-                range(current_power - power_capacity).forEach(i => {
-                    this.power_icons.removeChildAt(current_power - 1 - i)
-                });
-                //this.power.removeChildren(ship_power, current_power);  // TODO bugged in phaser 2.6
+                destroyChildren(this.power_icons, power_capacity, current_power);
             } else if (power_capacity > current_power) {
                 range(power_capacity - current_power).forEach(i => {
                     let x = (current_power + i) % 5;

@@ -21,6 +21,7 @@ module TK.SpaceTac.UI {
         disabled = true
         selected = false
         toggled = false
+        cooldown = 0
 
         // Images
         img_targetting: Phaser.Image
@@ -159,8 +160,10 @@ module TK.SpaceTac.UI {
             let selected = (used === this.action);
             let toggled = (this.action instanceof ToggleAction) && this.action.activated;
             let fading = bool(this.action.checkCannotBeApplied(this.ship, this.ship.getValue("power") - power_consumption));
+            let cooldown = this.action.cooldown.heat;
             if (this.action == used && this.action.cooldown.willOverheat()) {
                 fading = true;
+                cooldown = this.action.cooldown.cooling;
             }
 
             // inputs
@@ -220,7 +223,8 @@ module TK.SpaceTac.UI {
             }
 
             // right
-            if (toggled != this.toggled || disabled != this.disabled) {
+            if (toggled != this.toggled || disabled != this.disabled || cooldown != this.cooldown) {
+                destroyChildren(this.img_sticky);
                 if (this.action instanceof ToggleAction) {
                     if (toggled) {
                         this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-toggled");
@@ -228,8 +232,18 @@ module TK.SpaceTac.UI {
                         this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-untoggled");
                     }
                     this.img_sticky.visible = !disabled;
+                } else if (cooldown) {
+                    if (disabled) {
+                        this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-disabled");
+                    } else {
+                        this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-overheat");
+                    }
+                    range(Math.min(cooldown - 1, 4)).forEach(i => {
+                        this.img_sticky.addChild(this.view.newImage("battle-actionbar-cooldown-one", -4, 2 - i * 7));
+                    });
+                    this.img_sticky.addChild(this.view.newImage("battle-actionbar-cooldown-front", -8, -20));
+                    this.img_sticky.visible = true;
                 } else {
-                    // TODO overheat
                     this.img_sticky.visible = false;
                 }
             }
@@ -238,6 +252,7 @@ module TK.SpaceTac.UI {
             this.selected = selected;
             this.fading = fading;
             this.toggled = toggled;
+            this.cooldown = cooldown;
         }
     }
 }

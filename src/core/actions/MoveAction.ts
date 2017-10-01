@@ -56,11 +56,20 @@ module TK.SpaceTac {
         }
 
         getRangeRadius(ship: Ship): number {
-            return ship.getValue("power") * this.getDistanceByActionPoint(ship);
+            return this.getRangeRadiusForPower(ship);
+        }
+
+        /**
+         * Get the distance reachable with a given power 
+         */
+        getRangeRadiusForPower(ship: Ship, power = ship.getValue("power")): number {
+            return power * this.getDistanceByActionPoint(ship);
         }
 
         /**
          * Get the distance range that may be traveled with 1 action point
+         * 
+         * The actual range will then depend on the ship maneuvrability
          */
         getDistanceRangeByActionPoint(): IntegerRange {
             let min_distance = Math.ceil(this.distance_per_power * (1 - this.maneuvrability_factor * 0.01));

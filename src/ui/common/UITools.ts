@@ -6,6 +6,15 @@ module TK.SpaceTac.UI {
         height: number
     }
 
+    /**
+     * Destroy all children of a Phaser object
+     * 
+     * This is a workaround for a removeChildren bug
+     */
+    export function destroyChildren(obj: Phaser.Image | Phaser.Sprite | Phaser.Group, start = 0, end = obj.children.length - 1) {
+        obj.children.slice(start, end + 1).forEach(child => (<any>child).destroy());
+    }
+
     // Common UI tools functions
     export class UITools {
         static hovered: Phaser.Button | null = null;
