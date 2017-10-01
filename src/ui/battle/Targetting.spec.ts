@@ -39,7 +39,7 @@ module TK.SpaceTac.UI.Specs {
             targetting.drawPart(part, true, null);
             expect(drawvector).toHaveBeenCalledTimes(3);
             expect(drawvector).toHaveBeenCalledWith(0xe09c47, 10, 20, 50, 30, 12);
-        });
+        })
 
         it("updates impact indicators on ships inside the blast radius", function () {
             let targetting = newTargetting();
@@ -75,7 +75,7 @@ module TK.SpaceTac.UI.Specs {
             expect(collect).toHaveBeenCalledTimes(3);
             expect(collect).toHaveBeenCalledWith(new Target(20, 12), 50, true);
             expect(targetting.fire_impact.visible).toBe(false);
-        });
+        })
 
         it("updates graphics from simulation", function () {
             let targetting = newTargetting();
@@ -114,6 +114,39 @@ module TK.SpaceTac.UI.Specs {
             expect(targetting.move_ghost.visible).toBe(true);
             expect(targetting.move_ghost.position).toEqual(jasmine.objectContaining({ x: 80, y: 20 }));
             expect(targetting.move_ghost.rotation).toBeCloseTo(0.534594, 5);
-        });
+        })
+
+        it("snaps on ships according to targetting mode", function () {
+            let targetting = newTargetting();
+            let playing_ship = nn(testgame.battleview.battle.playing_ship);
+            let action = TestTools.addWeapon(playing_ship).action;
+
+            let ship1 = testgame.battleview.battle.play_order[1];
+            let ship2 = testgame.battleview.battle.play_order[2];
+            ship1.setArenaPosition(8000, 50);
+            ship2.setArenaPosition(8000, 230);
+
+            targetting.setAction(action, ActionTargettingMode.SPACE);
+            targetting.setTargetFromLocation({ x: 8000, y: 60 });
+            expect(targetting.target).toEqual(Target.newFromLocation(8000, 60), "space");
+
+            targetting.setAction(action, ActionTargettingMode.SHIP);
+            targetting.setTargetFromLocation({ x: 8000, y: 60 });
+            expect(targetting.target).toEqual(Target.newFromShip(ship1), "ship 1");
+            targetting.setTargetFromLocation({ x: 8100, y: 200 });
+            expect(targetting.target).toEqual(Target.newFromShip(ship2), "ship 2");
+
+            targetting.setAction(action, ActionTargettingMode.SURROUNDINGS);
+            targetting.setTargetFromLocation({ x: 8000, y: 60 });
+            expect(targetting.target).toEqual(Target.newFromLocation(8000, 60), "surroundings 1");
+            targetting.setTargetFromLocation({ x: playing_ship.arena_x + 10, y: playing_ship.arena_y - 20 });
+            expect(targetting.target).toEqual(Target.newFromShip(playing_ship), "surroundings 2");
+
+            targetting.setAction(action, ActionTargettingMode.SELF);
+            targetting.setTargetFromLocation({ x: 8000, y: 60 });
+            expect(targetting.target).toEqual(Target.newFromShip(playing_ship), "self 1");
+            targetting.setTargetFromLocation({ x: 0, y: 0 });
+            expect(targetting.target).toEqual(Target.newFromShip(playing_ship), "self 2");
+        })
     });
 }

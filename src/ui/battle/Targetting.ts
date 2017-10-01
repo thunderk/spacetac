@@ -286,6 +286,12 @@ module TK.SpaceTac.UI {
                     this.setTarget(Target.newFromShip(nearest ? nearest : this.ship));
                 } else if (this.mode == ActionTargettingMode.SPACE) {
                     this.setTarget(Target.newFromLocation(location.x, location.y));
+                } else if (this.mode == ActionTargettingMode.SURROUNDINGS) {
+                    if (arenaDistance(this.ship.location, location) < 50) {
+                        this.setTarget(Target.newFromShip(this.ship));
+                    } else {
+                        this.setTarget(Target.newFromLocation(location.x, location.y));
+                    }
                 } else {
                     this.setTarget(Target.newFromShip(this.ship));
                 }

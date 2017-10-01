@@ -101,8 +101,8 @@ module TK.SpaceTac.UI {
                 this.interactive = interactive;
 
                 this.battleview.animations.setVisible(this.icon_waiting, !this.interactive, 100);
-                this.battleview.animations.setVisible(this.power, interactive, 100, 1, 0);
-                this.battleview.animations.setVisible(this.actions, interactive, 100, 1, 0);
+                this.battleview.animations.setVisible(this.power, interactive, 100, 1, 0.3);
+                this.battleview.animations.setVisible(this.actions, interactive, 100, 1, 0.3);
             }
         }
 

@@ -28,6 +28,14 @@ module TK.SpaceTac {
             this.effects = effects;
         }
 
+        getTargettingMode(ship: Ship): ActionTargettingMode {
+            if (this.activated) {
+                return ActionTargettingMode.SELF;
+            } else {
+                return super.getTargettingMode(ship);
+            }
+        }
+
         getActionPointsUsage(ship: Ship, target: Target | null): number {
             return this.activated ? 0 : this.power;
         }

@@ -24,7 +24,7 @@ module TK.SpaceTac {
             ship.values.power.set(2);
 
             expect(action.checkCannotBeApplied(ship)).toBe("not enough power");
-        });
+        })
 
         it("check if equipment can be used with overheat", function () {
             let equipment = new Equipment();
@@ -64,7 +64,7 @@ module TK.SpaceTac {
             expect(action.checkCannotBeApplied(ship)).toBe(null);
             expect(action.getCooldownDuration()).toBe(0);
             expect(action.getCooldownDuration(true)).toBe(3);
-        });
+        })
 
         it("wears down equipment and power generators", function () {
             let ship = new Ship();
@@ -81,6 +81,25 @@ module TK.SpaceTac {
 
             expect(power.wear).toBe(1);
             expect(equipment.wear).toBe(1);
-        });
+        })
+
+        it("guesses targetting mode", function () {
+            let ship = new Ship();
+            let action = new BaseAction("test", "Test");
+            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SELF_CONFIRM);
+
+            action = new BaseAction("test", "Test");
+            spyOn(action, "getRangeRadius").and.returnValue(50);
+            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SHIP);
+
+            action = new BaseAction("test", "Test");
+            spyOn(action, "getRangeRadius").and.returnValue(50);
+            spyOn(action, "getBlastRadius").and.returnValue(20);
+            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SPACE);
+
+            action = new BaseAction("test", "Test");
+            spyOn(action, "getBlastRadius").and.returnValue(20);
+            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SURROUNDINGS);
+        })
     });
 }

@@ -157,8 +157,11 @@ module TK.SpaceTac.UI {
         refresh(used: BaseAction | null = null, power_consumption = 0): void {
             let disabled = bool(this.action.checkCannotBeApplied(this.ship));
             let selected = (used === this.action);
-            let fading = bool(this.action.checkCannotBeApplied(this.ship, this.ship.getValue("power") - power_consumption));
             let toggled = (this.action instanceof ToggleAction) && this.action.activated;
+            let fading = bool(this.action.checkCannotBeApplied(this.ship, this.ship.getValue("power") - power_consumption));
+            if (this.action == used && this.action.cooldown.willOverheat()) {
+                fading = true;
+            }
 
             // inputs
             if (disabled != this.disabled) {
@@ -166,8 +169,14 @@ module TK.SpaceTac.UI {
             }
 
             // frame
-            if (disabled != this.disabled) {
-                let name = disabled ? "battle-actionbar-frame-disabled" : "battle-actionbar-frame-enabled";
+            if (disabled != this.disabled || fading != this.fading) {
+                let name = "battle-actionbar-frame-enabled";
+                if (disabled) {
+                    name = "battle-actionbar-frame-disabled";
+                } else if (fading) {
+                    name = "battle-actionbar-frame-fading";
+                }
+
                 let info = this.view.getImageInfo(name);
                 this.container.name = name;
                 this.container.loadTexture(info.key);
@@ -194,7 +203,7 @@ module TK.SpaceTac.UI {
             }
 
             // left
-            if (disabled != this.disabled || selected != this.selected || fading != this.fading || toggled != this.toggled) {
+            if (disabled != this.disabled || selected != this.selected || toggled != this.toggled) {
                 let power = this.action.getActionPointsUsage(this.ship, null);
                 this.img_power.visible = toggled || (power > 0);
                 this.text_power.text = `${power}`;
@@ -203,8 +212,6 @@ module TK.SpaceTac.UI {
                     this.view.changeImage(this.img_power, "battle-actionbar-consumption-disabled");
                 } else if (toggled) {
                     this.view.changeImage(this.img_power, "battle-actionbar-consumption-toggled");
-                } else if (fading) {
-                    this.view.changeImage(this.img_power, "battle-actionbar-consumption-fading");
                 } else if (selected) {
                     this.view.changeImage(this.img_power, "battle-actionbar-consumption-targetting");
                 } else {

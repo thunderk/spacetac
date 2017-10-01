@@ -23,10 +23,20 @@ module TK.SpaceTac.UI {
      * This is a wrapper around phaser's tweens.
      */
     export class Animations {
-        private tweens: Phaser.TweenManager;
+        private tweens: Phaser.TweenManager
+        private immediate = false
 
         constructor(tweens: Phaser.TweenManager) {
             this.tweens = tweens;
+        }
+
+        /**
+         * Set all future animations to be immediate (and synchronous)
+         * 
+         * This is mostly useful in tests
+         */
+        setImmediate(immediate = true): void {
+            this.immediate = immediate;
         }
 
         /**
@@ -63,7 +73,7 @@ module TK.SpaceTac.UI {
                 obj.visible = true;
             }
 
-            if (duration) {
+            if (duration && !this.immediate) {
                 let tween = this.createTween(obj);
                 tween.to({ alpha: alpha }, duration);
                 if (obj.input) {
@@ -96,7 +106,7 @@ module TK.SpaceTac.UI {
                 obj.input.enabled = false;
             }
 
-            if (duration) {
+            if (duration && !this.immediate) {
                 let tween = this.createTween(obj);
                 tween.to({ alpha: alpha }, duration);
                 if (alpha == 0) {

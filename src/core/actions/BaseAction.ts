@@ -12,7 +12,9 @@ module TK.SpaceTac {
         // Apply on one selected ship
         SHIP,
         // Apply on a space area
-        SPACE
+        SPACE,
+        // Apply on the ship owning the action, but has an effect on surroundings
+        SURROUNDINGS
     }
 
     /**
@@ -31,7 +33,7 @@ module TK.SpaceTac {
         equipment: Equipment | null
 
         // Create the action
-        constructor(code: string, name: string, equipment: Equipment | null = null) {
+        constructor(code = "nothing", name = "Idle", equipment: Equipment | null = null) {
             this.code = code;
             this.name = name;
             this.equipment = equipment;
@@ -48,9 +50,16 @@ module TK.SpaceTac {
          * Get the targetting mode
          */
         getTargettingMode(ship: Ship): ActionTargettingMode {
-            if (this.getBlastRadius(ship)) {
-                return ActionTargettingMode.SPACE;
-            } else if (this.getRangeRadius(ship)) {
+            let blast = this.getBlastRadius(ship);
+            let range = this.getRangeRadius(ship);
+
+            if (blast) {
+                if (range) {
+                    return ActionTargettingMode.SPACE;
+                } else {
+                    return ActionTargettingMode.SURROUNDINGS;
+                }
+            } else if (range) {
                 return ActionTargettingMode.SHIP;
             } else {
                 return ActionTargettingMode.SELF_CONFIRM;

@@ -2043,6 +2043,286 @@
          stdDeviation="0.32193829"
          id="feGaussianBlur9015-4" />
     </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5642"
+       id="radialGradient7427-3"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,1.8700249,0,21.900508)"
+       cx="359.19373"
+       cy="-25.506496"
+       fx="359.19373"
+       fy="-25.506496"
+       r="16.402095" />
+    <filter
+       inkscape:label="Evanescent"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Blur the contents of objects, preserving the outline and adding progressive transparency at edges"
+       style="color-interpolation-filters:sRGB"
+       id="filter5649-3">
+      <feGaussianBlur
+         result="result6"
+         stdDeviation="3"
+         in="SourceGraphic"
+         id="feGaussianBlur5651-5" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result7"
+         in="SourceGraphic"
+         id="feColorMatrix5653-6" />
+      <feComposite
+         operator="in"
+         in="result6"
+         in2="result7"
+         id="feComposite5655-29" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Digit shadow"
+       id="filter10663-6-1">
+      <feFlood
+         flood-opacity="0.709804"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood10653-7-27" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite10655-5-0" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0"
+         result="blur"
+         id="feGaussianBlur10657-3-9" />
+      <feOffset
+         dx="1"
+         dy="1"
+         result="offset"
+         id="feOffset10659-5-3" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite10661-6-6" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5642"
+       id="radialGradient5570"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,1.8700249,0,21.900508)"
+       cx="359.19373"
+       cy="-25.506496"
+       fx="359.19373"
+       fy="-25.506496"
+       r="16.402095" />
+    <filter
+       inkscape:label="Evanescent"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Blur the contents of objects, preserving the outline and adding progressive transparency at edges"
+       style="color-interpolation-filters:sRGB"
+       id="filter5586">
+      <feGaussianBlur
+         result="result6"
+         stdDeviation="3"
+         in="SourceGraphic"
+         id="feGaussianBlur5580" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result7"
+         in="SourceGraphic"
+         id="feColorMatrix5582" />
+      <feComposite
+         operator="in"
+         in="result6"
+         in2="result7"
+         id="feComposite5584" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Digit shadow"
+       id="filter5598">
+      <feFlood
+         flood-opacity="0.709804"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood5588" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite5590" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0"
+         result="blur"
+         id="feGaussianBlur5592" />
+      <feOffset
+         dx="1"
+         dy="1"
+         result="offset"
+         id="feOffset5594" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite5596" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4953"
+       id="radialGradient7411-2"
+       gradientUnits="userSpaceOnUse"
+       cx="128"
+       cy="128"
+       fx="128"
+       fy="128"
+       r="110.79634" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4953"
+       id="radialGradient5900"
+       gradientUnits="userSpaceOnUse"
+       cx="128"
+       cy="128"
+       fx="128"
+       fy="128"
+       r="110.79634" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5642"
+       id="radialGradient7427-2"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,1.8700249,0,21.900508)"
+       cx="359.19373"
+       cy="-25.506496"
+       fx="359.19373"
+       fy="-25.506496"
+       r="16.402095" />
+    <filter
+       inkscape:label="Evanescent"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Blur the contents of objects, preserving the outline and adding progressive transparency at edges"
+       style="color-interpolation-filters:sRGB"
+       id="filter5649-36">
+      <feGaussianBlur
+         result="result6"
+         stdDeviation="3"
+         in="SourceGraphic"
+         id="feGaussianBlur5651-12" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result7"
+         in="SourceGraphic"
+         id="feColorMatrix5653-93" />
+      <feComposite
+         operator="in"
+         in="result6"
+         in2="result7"
+         id="feComposite5655-1" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Digit shadow"
+       id="filter10663-6-9">
+      <feFlood
+         flood-opacity="0.709804"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood10653-7-4" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite10655-5-7" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0"
+         result="blur"
+         id="feGaussianBlur10657-3-8" />
+      <feOffset
+         dx="1"
+         dy="1"
+         result="offset"
+         id="feOffset10659-5-4" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite10661-6-5" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5642"
+       id="radialGradient6676"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,1.8700249,0,21.900508)"
+       cx="359.19373"
+       cy="-25.506496"
+       fx="359.19373"
+       fy="-25.506496"
+       r="16.402095" />
+    <filter
+       inkscape:label="Evanescent"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Blur the contents of objects, preserving the outline and adding progressive transparency at edges"
+       style="color-interpolation-filters:sRGB"
+       id="filter6692">
+      <feGaussianBlur
+         result="result6"
+         stdDeviation="3"
+         in="SourceGraphic"
+         id="feGaussianBlur6686" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result7"
+         in="SourceGraphic"
+         id="feColorMatrix6688" />
+      <feComposite
+         operator="in"
+         in="result6"
+         in2="result7"
+         id="feComposite6690" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Digit shadow"
+       id="filter6704">
+      <feFlood
+         flood-opacity="0.709804"
+         flood-color="rgb(0,0,0)"
+         result="flood"
+         id="feFlood6694" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite6696" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="0"
+         result="blur"
+         id="feGaussianBlur6698" />
+      <feOffset
+         dx="1"
+         dy="1"
+         result="offset"
+         id="feOffset6700" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite6702" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2051,11 +2331,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="1030.8433"
-     inkscape:cy="-58.928706"
+     inkscape:zoom="2.8284272"
+     inkscape:cx="553.74511"
+     inkscape:cy="-146.19875"
      inkscape:document-units="px"
-     inkscape:current-layer="use5861"
+     inkscape:current-layer="use6422"
      showgrid="false"
      units="px"
      showguides="true"
@@ -2086,7 +2366,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -4716,42 +4996,58 @@
            inkscape:export-ydpi="96"
            inkscape:export-xdpi="96"
            inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/action-active.png"
-           transform="matrix(1.4676871,0,0,1.4676871,236.16704,1372.3105)"
+           transform="matrix(1.4676871,0,0,1.4676871,235.74578,1372.3105)"
            inkscape:tile-y0="-85.964287"
            inkscape:tile-x0="195"
            id="use6422">
+          <g
+             inkscape:export-ydpi="96"
+             inkscape:export-xdpi="96"
+             inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/actionbar/frame-fading.png"
+             transform="matrix(0.68134414,0,0,0.68134414,-45.404679,-33.276515)"
+             style="display:inline;enable-background:new"
+             id="use5659">
+            <path
+               sodipodi:nodetypes="ccccc"
+               inkscape:connector-curvature="0"
+               id="path6765"
+               d="m 355.99997,-72.499939 h 99.99999 l 10.5,99.999992 H 345.49997 Z"
+               style="display:inline;fill:#505050;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.4595745;filter:url(#filter9715);enable-background:new" />
+            <rect
+               y="-68.999939"
+               x="359.49997"
+               height="92.999992"
+               width="92.999992"
+               id="rect6767"
+               style="display:inline;fill:#181c1f;fill-opacity:1;fill-rule:evenodd;stroke:#a0a0a0;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.16382979;enable-background:new" />
+          </g>
           <use
+             transform="translate(0.28703373)"
              style="display:inline;enable-background:new"
              x="0"
              y="0"
-             xlink:href="#g7815"
-             id="use9149"
+             xlink:href="#g7801"
+             id="use5661"
              width="100%"
-             height="100%"
-             transform="matrix(0.68134414,0,0,0.68134414,179.47397,-935.01564)" />
-          <g
-             id="g10139">
-            <path
-               transform="matrix(0.68134414,0,0,0.68134414,-48.536808,-33.276515)"
-               style="fill:#1e282b;fill-opacity:1;fill-rule:evenodd;stroke:#bb621e;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5649)"
-               d="M 346.99998,-48.74995 V 4.000051 h 20.5 l 9,-58.000001 z"
-               id="path7715"
-               inkscape:connector-curvature="0"
-               inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/actionbar/consumption-fading.png"
-               inkscape:export-xdpi="96"
-               inkscape:export-ydpi="96" />
-            <text
-               xml:space="preserve"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.33333397px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffdd4b;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter10663-6);enable-background:new"
-               x="9.1257"
-               y="53.499992"
-               id="text7723"
-               transform="matrix(0.68134414,0,0,0.68134414,185.87963,-82.673919)"><tspan
-                 sodipodi:role="line"
-                 id="tspan7721"
-                 x="9.1257"
-                 y="53.499992">3</tspan></text>
-          </g>
+             height="100%" />
+          <use
+             transform="translate(0.28703373)"
+             style="display:inline;enable-background:new"
+             x="0"
+             y="0"
+             xlink:href="#path7813"
+             id="use5663"
+             width="100%"
+             height="100%" />
+          <use
+             transform="translate(0.28706073,1.5565435e-6)"
+             style="display:inline;enable-background:new"
+             x="0"
+             y="0"
+             xlink:href="#g7666"
+             id="use5545"
+             width="100%"
+             height="100%" />
         </g>
         <g
            id="g6108"

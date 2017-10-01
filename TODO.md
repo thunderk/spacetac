@@ -44,7 +44,6 @@ Battle
 * Display effects description instead of attribute changes
 * End the battle as soon as victory or defeat condition is detected (do not wait for the turn to end)
 * Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat
-* Mark action icons unavailable next turn, if if will overheat
 * Any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
 * Add engine trail effect, and sound
 * Allow to skip animations, and allow no animation mode
@@ -58,6 +57,7 @@ Battle
 * Allow to move targetting indicator with arrow keys
 * Add targetting shortcuts for "previous target", "next enemy" and "next ally"
 * Area targetting should include the hotkeyed ship at best (apply exclusion and power limit), not necessarily center on it
+* Fix "toggle action" targetting with simulated move not activating the action after the move
 
 Ships models and equipments
 ---------------------------
