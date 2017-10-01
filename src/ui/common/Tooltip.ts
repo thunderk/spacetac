@@ -160,7 +160,7 @@ module TK.SpaceTac.UI {
          * When the component is hovered, the function is called to allow filling the tooltip container
          */
         bind(obj: Phaser.Button, func: (filler: TooltipFiller) => boolean): void {
-            UITools.setHoverClick(obj,
+            this.view.inputs.setHoverClick(obj,
                 // enter
                 () => {
                     this.hide();

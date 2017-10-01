@@ -1,5 +1,5 @@
 module TK.SpaceTac.UI {
-    type KeyPressedCallback = (key: string) => void;
+    export type KeyPressedCallback = (key: string) => void
 
     /**
      * Manager for keyboard/mouse/touch events.
@@ -12,6 +12,8 @@ module TK.SpaceTac.UI {
 
         private cheats_allowed: boolean
         private cheat: boolean
+
+        private hovered: Phaser.Button | null = null
 
         private binds: { [key: string]: KeyPressedCallback } = {}
 
@@ -52,6 +54,8 @@ module TK.SpaceTac.UI {
                 if (this.debug) {
                     console.log(event);
                 }
+
+                this.forceLeaveHovered();
 
                 if (!contains(["Control", "Shift", "Alt", "Meta"], event.key)) {
                     this.keyPress(event.key);
@@ -114,6 +118,124 @@ module TK.SpaceTac.UI {
                 this.keyboard_grabber = null;
                 this.keyboard_callback = null;
             }
+        }
+
+        /**
+         * Force the cursor out of currently hovered object
+         */
+        private forceLeaveHovered() {
+            if (this.hovered && this.hovered.data.hover_pointer) {
+                (<any>this.hovered.input)._pointerOutHandler(this.hovered.data.hover_pointer);
+            }
+        }
+
+        /**
+         * Setup hover/click handlers on an UI element
+         * 
+         * This is done in a way that should be compatible with touch-enabled screen
+         * 
+         * Returns functions that may be used to force the behavior
+         */
+        setHoverClick(obj: Phaser.Button, enter = nop, leave = nop, click = nop, hovertime = 300, holdtime = 600) {
+            let holdstart = new Date();
+            let enternext: Function | null = null;
+            let entercalled = false;
+            let cursorinside = false;
+            let destroyed = false;
+
+            obj.input.useHandCursor = true;
+
+            let prevententer = () => {
+                if (enternext != null) {
+                    Timer.global.cancel(enternext);
+                    enternext = null;
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+
+            let effectiveenter = () => {
+                if (!destroyed) {
+                    enternext = null;
+                    entercalled = true;
+                    enter();
+                }
+            }
+
+            let effectiveleave = () => {
+                prevententer();
+                if (entercalled) {
+                    entercalled = false;
+                    leave();
+                }
+            }
+
+            if (obj.events) {
+                obj.events.onDestroy.addOnce(() => {
+                    destroyed = true;
+                    effectiveleave();
+                });
+            }
+
+            obj.onInputOver.add((_: any, pointer: Phaser.Pointer) => {
+                if (destroyed) return;
+
+                if (this.hovered) {
+                    if (this.hovered === obj) {
+                        return;
+                    } else {
+                        this.forceLeaveHovered();
+                    }
+                }
+                this.hovered = obj;
+                this.hovered.data.hover_pointer = pointer;
+
+                if (obj.visible && obj.alpha) {
+                    cursorinside = true;
+                    enternext = Timer.global.schedule(hovertime, effectiveenter);
+                }
+            });
+
+            obj.onInputOut.add(() => {
+                if (destroyed) return;
+
+                if (this.hovered === obj) {
+                    this.hovered = null;
+                }
+
+                cursorinside = false;
+                effectiveleave();
+            });
+
+            obj.onInputDown.add(() => {
+                if (destroyed) return;
+
+                if (obj.visible && obj.alpha) {
+                    holdstart = new Date();
+                    if (!cursorinside && !enternext) {
+                        enternext = Timer.global.schedule(holdtime, effectiveenter);
+                    }
+                }
+            });
+
+            obj.onInputUp.add(() => {
+                if (destroyed) return;
+
+                if (!cursorinside) {
+                    effectiveleave();
+                }
+
+                if (new Date().getTime() - holdstart.getTime() < holdtime) {
+                    if (!cursorinside) {
+                        effectiveenter();
+                    }
+                    click();
+                    if (!cursorinside) {
+                        effectiveleave();
+                    }
+                }
+            });
         }
     }
 }

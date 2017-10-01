@@ -43,7 +43,11 @@ module TK.SpaceTac.UI {
             this.hover_indicator.visible = false;
             this.addChild(this.hover_indicator);
 
-            UITools.setHoverClick(this, () => list.battleview.cursorOnShip(ship), () => list.battleview.cursorOffShip(ship), () => list.battleview.cursorClicked());
+            this.view.inputs.setHoverClick(this,
+                () => list.battleview.cursorOnShip(ship),
+                () => list.battleview.cursorOffShip(ship),
+                () => list.battleview.cursorClicked()
+            );
         }
 
         // Flash a damage indicator

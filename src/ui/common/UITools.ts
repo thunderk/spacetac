@@ -17,8 +17,6 @@ module TK.SpaceTac.UI {
 
     // Common UI tools functions
     export class UITools {
-        static hovered: Phaser.Button | null = null;
-
         /**
          * Get the position of an object, adjusted to remain inside a container
          */
@@ -52,113 +50,6 @@ module TK.SpaceTac.UI {
             if (x != obj.x || y != obj.y) {
                 obj.position.set(x, y);
             }
-        }
-
-        /**
-         * Setup a hover/hold/click routine on an object
-         * 
-         * This should span the bridge between desktop and mobile targets.
-         */
-        static setHoverClick(obj: Phaser.Button, enter: Function, leave: Function, click: Function, hovertime = 300, holdtime = 600) {
-            let holdstart = new Date();
-            let enternext: Function | null = null;
-            let entercalled = false;
-            let cursorinside = false;
-            let destroyed = false;
-
-            obj.input.useHandCursor = true;
-
-            let prevententer = () => {
-                if (enternext != null) {
-                    Timer.global.cancel(enternext);
-                    enternext = null;
-                    return true;
-                } else {
-                    return false;
-                }
-            };
-
-            let effectiveenter = () => {
-                if (!destroyed) {
-                    enternext = null;
-                    entercalled = true;
-                    enter();
-                }
-            }
-
-            let effectiveleave = () => {
-                prevententer();
-                if (entercalled) {
-                    entercalled = false;
-                    leave();
-                }
-            }
-
-            if (obj.events) {
-                obj.events.onDestroy.addOnce(() => {
-                    destroyed = true;
-                    effectiveleave();
-                });
-            }
-
-            obj.onInputOver.add((_: any, pointer: Phaser.Pointer) => {
-                if (destroyed) return;
-
-                if (UITools.hovered) {
-                    if (UITools.hovered === obj) {
-                        return;
-                    } else {
-                        // Dirty fix - Force a "pointer out" on previously hovered, if it did not go out cleanly
-                        (<any>UITools.hovered.input)._pointerOutHandler(pointer);
-                    }
-                }
-                UITools.hovered = obj;
-
-                if (obj.visible && obj.alpha) {
-                    cursorinside = true;
-                    enternext = Timer.global.schedule(hovertime, effectiveenter);
-                }
-            });
-
-            obj.onInputOut.add(() => {
-                if (destroyed) return;
-
-                if (UITools.hovered === obj) {
-                    UITools.hovered = null;
-                }
-
-                cursorinside = false;
-                effectiveleave();
-            });
-
-            obj.onInputDown.add(() => {
-                if (destroyed) return;
-
-                if (obj.visible && obj.alpha) {
-                    holdstart = new Date();
-                    if (!cursorinside && !enternext) {
-                        enternext = Timer.global.schedule(holdtime, effectiveenter);
-                    }
-                }
-            });
-
-            obj.onInputUp.add(() => {
-                if (destroyed) return;
-
-                if (!cursorinside) {
-                    effectiveleave();
-                }
-
-                if (new Date().getTime() - holdstart.getTime() < holdtime) {
-                    if (!cursorinside) {
-                        effectiveenter();
-                    }
-                    click();
-                    if (!cursorinside) {
-                        effectiveleave();
-                    }
-                }
-            });
         }
 
         // Constraint an angle in radians the ]-pi;pi] range.

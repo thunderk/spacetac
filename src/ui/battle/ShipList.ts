@@ -27,7 +27,7 @@ module TK.SpaceTac.UI {
             this.hovered = null;
 
             this.info_button = new Phaser.Button(this.game, 0, 0, "battle-shiplist-info-button");
-            UITools.setHoverClick(this.info_button,
+            this.battleview.inputs.setHoverClick(this.info_button,
                 () => this.battleview.toggle_tactical_mode.manipulate("button")(true),
                 () => this.battleview.toggle_tactical_mode.manipulate("button")(false),
                 () => null);
