@@ -65,10 +65,7 @@ module TK.SpaceTac.UI {
             }
 
             if (sprite) {
-                let bounds = sprite.getBounds();
-                bounds.x = sprite.worldPosition.x + sprite.width * sprite.worldScale.x * 0.5;  // TODO Should not be necessary
-                bounds.y = sprite.worldPosition.y - sprite.height * sprite.worldScale.y * 0.5;
-                this.container.show(sprite.getBounds());
+                this.container.show(sprite.frame.getBounds());
             }
         }
     }

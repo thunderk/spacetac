@@ -40,7 +40,6 @@ Battle
 * Remove dead ships from ship list and play order
 * Add quick animation of playing ship indicator, on ship change
 * Toggle bar/text display in power section of action bar
-* Fix ship's active effect radius pushing the tooltip far from the ship
 * Display effects description instead of attribute changes
 * End the battle as soon as victory or defeat condition is detected (do not wait for the turn to end)
 * Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat
