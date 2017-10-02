@@ -18,7 +18,7 @@ module TK.SpaceTac {
             let models = this.random.sample(ShipModel.getDefaultCollection(), ship_count);
 
             range(ship_count).forEach(i => {
-                var ship = ship_generator.generate(level, models[i] || null, upgrade, i < ship_count * 0.6);
+                var ship = ship_generator.generate(level, models[i] || null, upgrade);
                 ship.name = ship.model.name;
                 fleet.addShip(ship);
             });

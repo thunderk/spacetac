@@ -94,7 +94,7 @@ module TK.SpaceTac {
 
         // Start a new "quick battle" game
         startQuickBattle(with_ai: boolean = false): void {
-            var battle = Battle.newQuickRandom();
+            let battle = Battle.newQuickRandom(true, RandomGenerator.global.randInt(1, 10));
             this.player = battle.fleets[0].player;
             this.player.setBattle(battle);
         }

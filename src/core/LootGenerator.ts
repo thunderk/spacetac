@@ -67,21 +67,13 @@ module TK.SpaceTac {
          */
         generateHighest(skills: ShipSkills, quality = EquipmentQuality.COMMON, slot: SlotType | null = null): Equipment | null {
             let templates = this.templates.filter(this.templatefilter).filter(template => slot == null || slot == template.slot);
-            let candidates: Equipment[] = [];
-            let level = 1;
-
-            templates.forEach(template => {
-                let equipment = template.generateHighest(skills, quality, this.random);
-                if (equipment && equipment.level >= level) {
-                    if (equipment.level > level) {
-                        candidates.splice(0);
-                        level = equipment.level;
-                    }
-                    candidates.push(equipment);
-                }
-            });
-
-            return (candidates.length == 0) ? null : this.random.choice(candidates);
+            let candidates = nna(templates.map(template => template.generateHighest(skills, quality, this.random)));
+            if (candidates.length) {
+                let chosen = this.random.weighted(candidates.map(equ => equ.level));
+                return candidates[chosen];
+            } else {
+                return null;
+            }
         }
     }
 }

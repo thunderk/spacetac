@@ -56,6 +56,9 @@ module TK.SpaceTac {
                     simpleFactor(effect, 'factor');
                 } else if (effect instanceof ValueTransferEffect) {
                     simpleFactor(effect, 'amount');
+                } else if (effect instanceof CooldownEffect) {
+                    simpleFactor(effect, 'cooling');
+                    simpleFactor(effect, 'maxcount');
                 }
             }
 

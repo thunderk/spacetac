@@ -72,10 +72,8 @@ module TK.SpaceTac {
         /**
          * Apply one cooling-down step if necessary
          */
-        cool(): void {
-            if (this.heat > 0) {
-                this.heat -= 1;
-            }
+        cool(steps = 1): void {
+            this.heat = Math.max(this.heat - steps, 0);
 
             if (this.heat == 0) {
                 this.uses = 0;

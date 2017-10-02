@@ -20,7 +20,7 @@ module TK.SpaceTac {
         // Equipment cannot be null
         equipment: Equipment
 
-        constructor(equipment: Equipment, power = 1, range = 0, blast = 0, effects: BaseEffect[] = [], name = "Fire") {
+        constructor(equipment: Equipment, power = 1, range = 0, blast = 0, effects: BaseEffect[] = [], name = range ? "Fire" : "Trigger") {
             super("fire-" + equipment.code, name, equipment);
 
             this.power = power;
@@ -116,9 +116,17 @@ module TK.SpaceTac {
                 return "";
             }
 
-            let desc = `${this.name} (power usage ${this.power}, max range ${this.range}km)`;
+            let info: string[] = [];
+            if (this.power) {
+                info.push(`power usage ${this.power}`);
+            }
+            if (this.range) {
+                info.push(`max range ${this.range}km`);
+            }
+
+            let desc = `${this.name} (${info.join(", ")})`;
             let effects = this.effects.map(effect => {
-                let suffix = this.blast ? `in ${this.blast}km radius` : "on target";
+                let suffix = this.blast ? `in ${this.blast}km radius` : (this.range ? "on target" : "on self");
                 return "• " + effect.getDescription() + " " + suffix;
             });
             return `${desc}:\n${effects.join("\n")}`;
