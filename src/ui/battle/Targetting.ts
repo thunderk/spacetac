@@ -184,7 +184,7 @@ module TK.SpaceTac.UI {
                 this.fire_arrow.visible = false;
                 this.move_ghost.visible = false;
 
-                let from = simulation.need_fire ? simulation.move_location : this.ship.location;
+                let from = (simulation.need_fire && this.mode != ActionTargettingMode.SURROUNDINGS) ? simulation.move_location : this.ship.location;
                 let angle = Math.atan2(this.target.y - from.y, this.target.x - from.x);
 
                 if (simulation.success) {

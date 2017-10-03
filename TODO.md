@@ -57,6 +57,8 @@ Battle
 * Add targetting shortcuts for "previous target", "next enemy" and "next ally"
 * Area targetting should include the hotkeyed ship at best (apply exclusion and power limit), not necessarily center on it
 * Fix "toggle action" targetting with simulated move not activating the action after the move
+* Add shorcut to perform only the "move" part of a move+fire simulation
+* Fix delay of shield/hull impact effects (should depend on weapon animation, and ship location)
 
 Ships models and equipments
 ---------------------------
@@ -66,7 +68,6 @@ Ships models and equipments
 * Add damage over time effect (tricky to make intuitive)
 * Chance to hit should increase with precision
 * Add actions with cost dependent of distance (like current move actions)
-* Add "cone" targetting
 * Add disc targetting (for some jump move actions)
 * Add "chain" effects
 * Add mines equivalent (drones that apply only at the end)
