@@ -47,9 +47,7 @@ module TK.SpaceTac.Specs {
             let equipment = new Equipment();
             expect(equipment.getEffectsDescription()).toEqual("does nothing");
 
-            let action = new FireWeaponAction(equipment, 1, 200, 0, [
-                new DamageEffect(50)
-            ]);
+            let action = new TriggerAction(equipment, [new DamageEffect(50)], 1, 200, 0);
             equipment.action = action;
             expect(equipment.getEffectsDescription()).toEqual("Fire (power usage 1, max range 200km):\n• do 50 damage on target");
 

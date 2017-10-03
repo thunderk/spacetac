@@ -5,7 +5,7 @@ module TK.SpaceTac.Specs {
             let ship = new Ship();
             TestTools.setShipAP(ship, ship_ap);
             TestTools.addEngine(ship, engine_distance);
-            let action = new FireWeaponAction(new Equipment(), weapon_ap, distance);
+            let action = new TriggerAction(new Equipment(), [], weapon_ap, distance);
             let simulator = new MoveFireSimulator(ship);
             return [ship, simulator, action];
         }

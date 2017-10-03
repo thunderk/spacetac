@@ -115,7 +115,7 @@ module TK.SpaceTac.Specs {
 
             slot = ship.addSlot(SlotType.Power);
             equipment = new Equipment(slot.type);
-            equipment.action = new FireWeaponAction(equipment);
+            equipment.action = new TriggerAction(equipment);
             slot.attach(equipment);
 
             actions = ship.getAvailableActions();

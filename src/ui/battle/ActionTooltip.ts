@@ -51,7 +51,7 @@ module TK.SpaceTac.UI {
 
             let description = action.getEffectsDescription();
             if (description) {
-                filler.addText(0, 150, description, "#ffffff", 14);
+                filler.addText(30, 170, description, "#ffffff", 16);
             }
 
             let shortcut = "";

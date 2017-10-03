@@ -2,17 +2,20 @@
 
 module TK.SpaceTac {
     /**
-     * Action to fire a weapon on another ship, or in space
+     * Action to trigger an equipment (for example a weapon), with an optional target
      */
-    export class FireWeaponAction extends BaseAction {
+    export class TriggerAction extends BaseAction {
         // Power consumption
         power: number
 
-        // Maximal range of the weapon
+        // Maximal range of the weapon (distance to target)
         range: number
 
-        // Blast radius
+        // Radius around the target that will be impacted
         blast: number
+
+        // Angle of the area between the source and the target that will be impacted
+        angle: number
 
         // Effects applied on target
         effects: BaseEffect[]
@@ -20,13 +23,14 @@ module TK.SpaceTac {
         // Equipment cannot be null
         equipment: Equipment
 
-        constructor(equipment: Equipment, power = 1, range = 0, blast = 0, effects: BaseEffect[] = [], name = range ? "Fire" : "Trigger") {
+        constructor(equipment: Equipment, effects: BaseEffect[] = [], power = 1, range = 0, blast = 0, angle = 0, name = range ? "Fire" : "Trigger") {
             super("fire-" + equipment.code, name, equipment);
 
             this.power = power;
             this.range = range;
             this.effects = effects;
             this.blast = blast;
+            this.angle = angle;
         }
 
         getDefaultTarget(ship: Ship): Target {
@@ -46,6 +50,24 @@ module TK.SpaceTac {
             }
         }
 
+        getTargettingMode(ship: Ship): ActionTargettingMode {
+            if (this.blast) {
+                if (this.range) {
+                    return ActionTargettingMode.SPACE;
+                } else {
+                    return ActionTargettingMode.SURROUNDINGS;
+                }
+            } else if (this.range) {
+                if (this.angle) {
+                    return ActionTargettingMode.SPACE;
+                } else {
+                    return ActionTargettingMode.SHIP;
+                }
+            } else {
+                return ActionTargettingMode.SELF_CONFIRM;
+            }
+        }
+
         getActionPointsUsage(ship: Ship, target: Target | null): number {
             return this.power;
         }
@@ -54,12 +76,20 @@ module TK.SpaceTac {
             return this.range;
         }
 
-        getBlastRadius(ship: Ship): number {
-            return this.blast;
+        filterImpactedShips(source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
+            if (this.blast) {
+                return ships.filter(ship => arenaDistance(ship.location, target) <= this.blast);
+            } else if (this.angle) {
+                let angle = arenaAngle(source, target);
+                let maxangle = (this.angle * 0.5) * Math.PI / 180;
+                return ships.filter(ship => arenaDistance(source, ship.location) <= this.range && Math.abs(angularDistance(arenaAngle(source, ship.location), angle)) < maxangle);
+            } else {
+                return ships.filter(ship => target.ship === ship);
+            }
         }
 
         checkLocationTarget(ship: Ship, target: Target): Target | null {
-            if (target && this.blast > 0) {
+            if (target && (this.blast > 0 || this.angle > 0)) {
                 target = target.constraintInRange(ship.arena_x, ship.arena_y, this.range);
                 return target;
             } else {
@@ -73,7 +103,7 @@ module TK.SpaceTac {
                 return null;
             } else {
                 // Check if target is in range
-                if (this.blast > 0) {
+                if (this.blast > 0 || this.angle > 0) {
                     return this.checkLocationTarget(ship, new Target(target.x, target.y));
                 } else if (target.isInRange(ship.arena_x, ship.arena_y, this.range)) {
                     return target;
@@ -86,11 +116,9 @@ module TK.SpaceTac {
         /**
          * Collect the effects applied by this action
          */
-        getEffects(ship: Ship, target: Target): [Ship, BaseEffect][] {
+        getEffects(ship: Ship, target: Target, source = ship.location): [Ship, BaseEffect][] {
             let result: [Ship, BaseEffect][] = [];
-            let blast = this.getBlastRadius(ship);
-            let battle = ship.getBattle();
-            let ships = (blast && battle) ? battle.collectShipsInCircle(target, blast, true) : ((target.ship && target.ship.alive) ? [target.ship] : []);
+            let ships = this.getImpactedShips(ship, target, source);
             ships.forEach(ship => {
                 this.effects.forEach(effect => result.push([ship, effect]));
             });
@@ -126,7 +154,16 @@ module TK.SpaceTac {
 
             let desc = `${this.name} (${info.join(", ")})`;
             let effects = this.effects.map(effect => {
-                let suffix = this.blast ? `in ${this.blast}km radius` : (this.range ? "on target" : "on self");
+                let suffix: string;
+                if (this.blast) {
+                    suffix = `in ${this.blast}km radius`;
+                } else if (this.angle) {
+                    suffix = `in ${this.angle}° arc`;
+                } else if (this.range) {
+                    suffix = "on target";
+                } else {
+                    suffix = "on self";
+                }
                 return "• " + effect.getDescription() + " " + suffix;
             });
             return `${desc}:\n${effects.join("\n")}`;

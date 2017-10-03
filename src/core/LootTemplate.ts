@@ -203,12 +203,12 @@ module TK.SpaceTac {
         }
 
         /**
-         * Add a fire weapon action.
+         * Add a trigger action.
          */
-        addFireAction(power: LeveledValue, range: LeveledValue, blast: LeveledValue, effects: EffectTemplate<BaseEffect>[]): void {
+        addTriggerAction(power: LeveledValue, effects: EffectTemplate<BaseEffect>[], range: LeveledValue = irepeat(0), blast: LeveledValue = irepeat(0), angle: LeveledValue = irepeat(0)): void {
             this.base_modifiers.push((equipment, level) => {
                 let reffects = effects.map(effect => effect.generate(level));
-                equipment.action = new FireWeaponAction(equipment, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(blast, level), reffects);
+                equipment.action = new TriggerAction(equipment, reffects, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(blast, level), resolveForLevel(angle, level));
             });
         }
 
@@ -238,7 +238,7 @@ module TK.SpaceTac {
         hasDamageEffect(): boolean {
             let example = this.generate(1);
             let action = example.action;
-            if (action instanceof FireWeaponAction || action instanceof DeployDroneAction) {
+            if (action instanceof TriggerAction || action instanceof DeployDroneAction) {
                 return any(action.effects, effect => effect instanceof DamageEffect || (effect instanceof StickyEffect && effect.base instanceof DamageEffect));
             } else {
                 return false;

@@ -44,37 +44,32 @@ module TK.SpaceTac.UI.Specs {
         it("updates impact indicators on ships inside the blast radius", function () {
             let targetting = newTargetting();
             let ship = nn(testgame.battleview.battle.playing_ship);
+            let impacts = targetting.impact_indicators;
+            let action = new TriggerAction(new Equipment(), [], 1, 0, 50);
 
-            let collect = spyOn(testgame.battleview.battle, "collectShipsInCircle").and.returnValues(
+            let collect = spyOn(action, "getImpactedShips").and.returnValues(
                 [new Ship(), new Ship(), new Ship()],
                 [new Ship(), new Ship()],
                 []);
-            targetting.updateImpactIndicators(ship, new Target(20, 10), 50);
+            targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 10));
 
             expect(collect).toHaveBeenCalledTimes(1);
-            expect(collect).toHaveBeenCalledWith(new Target(20, 10), 50, true);
-            expect(targetting.fire_impact.children.length).toBe(3);
-            expect(targetting.fire_impact.visible).toBe(true);
+            expect(collect).toHaveBeenCalledWith(ship, new Target(20, 10), ship.location);
+            expect(targetting.impact_indicators.children.length).toBe(3);
+            expect(targetting.impact_indicators.visible).toBe(true);
 
-            targetting.updateImpactIndicators(ship, new Target(20, 11), 50);
-
-            expect(collect).toHaveBeenCalledTimes(2);
-            expect(collect).toHaveBeenCalledWith(new Target(20, 11), 50, true);
-            expect(targetting.fire_impact.children.length).toBe(2);
-            expect(targetting.fire_impact.visible).toBe(true);
-
-            let target = Target.newFromShip(new Ship());
-            targetting.updateImpactIndicators(ship, target, 0);
+            targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 11));
 
             expect(collect).toHaveBeenCalledTimes(2);
-            expect(targetting.fire_impact.children.length).toBe(1);
-            expect(targetting.fire_impact.visible).toBe(true);
+            expect(collect).toHaveBeenCalledWith(ship, new Target(20, 11), ship.location);
+            expect(targetting.impact_indicators.children.length).toBe(2);
+            expect(targetting.impact_indicators.visible).toBe(true);
 
-            targetting.updateImpactIndicators(ship, new Target(20, 12), 50);
+            targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 12));
 
             expect(collect).toHaveBeenCalledTimes(3);
-            expect(collect).toHaveBeenCalledWith(new Target(20, 12), 50, true);
-            expect(targetting.fire_impact.visible).toBe(false);
+            expect(collect).toHaveBeenCalledWith(ship, new Target(20, 12), ship.location);
+            expect(targetting.impact_indicators.visible).toBe(false);
         })
 
         it("updates graphics from simulation", function () {
@@ -109,8 +104,8 @@ module TK.SpaceTac.UI.Specs {
             expect(targetting.fire_arrow.visible).toBe(true);
             expect(targetting.fire_arrow.position).toEqual(jasmine.objectContaining({ x: 156, y: 65 }));
             expect(targetting.fire_arrow.rotation).toBeCloseTo(0.534594, 5);
-            expect(targetting.fire_blast.visible).toBe(true);
-            expect(targetting.fire_blast.position).toEqual(jasmine.objectContaining({ x: 156, y: 65 }));
+            expect(targetting.impact_area.visible).toBe(true);
+            expect(targetting.impact_area.position).toEqual(jasmine.objectContaining({ x: 156, y: 65 }));
             expect(targetting.move_ghost.visible).toBe(true);
             expect(targetting.move_ghost.position).toEqual(jasmine.objectContaining({ x: 80, y: 20 }));
             expect(targetting.move_ghost.rotation).toBeCloseTo(0.534594, 5);

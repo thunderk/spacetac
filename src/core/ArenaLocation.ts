@@ -52,16 +52,23 @@ module TK.SpaceTac {
     }
 
     /**
-     * Get the normalized angle between two locations
+     * Get the normalized angle (in radians) between two locations
      */
-    export function arenaAngle(loc1: IArenaLocation, loc2: IArenaLocation) {
+    export function arenaAngle(loc1: IArenaLocation, loc2: IArenaLocation): number {
         return Math.atan2(loc2.y - loc1.y, loc2.x - loc1.x);
+    }
+
+    /**
+     * Get the "angular distance" between two angles in radians
+     */
+    export function angularDistance(angle1: number, angle2: number): number {
+        return (angle2 - angle1) % (Math.PI * 2);
     }
 
     /**
      * Get the normalized distance between two locations
      */
-    export function arenaDistance(loc1: IArenaLocation, loc2: IArenaLocation) {
+    export function arenaDistance(loc1: IArenaLocation, loc2: IArenaLocation): number {
         let dx = loc2.x - loc1.x;
         let dy = loc2.y - loc1.y;
         return Math.sqrt(dx * dx + dy * dy);
@@ -70,7 +77,7 @@ module TK.SpaceTac {
     /**
      * Check if a location is inside an area
      */
-    export function arenaInside(loc1: IArenaLocation, loc2: IArenaCircleArea, border_inclusive = true) {
+    export function arenaInside(loc1: IArenaLocation, loc2: IArenaCircleArea, border_inclusive = true): boolean {
         let dist = arenaDistance(loc1, loc2);
         return border_inclusive ? (dist <= loc2.radius) : (dist < loc2.radius);
     }

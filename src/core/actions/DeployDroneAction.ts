@@ -33,6 +33,10 @@ module TK.SpaceTac {
             this.effects = effects;
         }
 
+        getTargettingMode(ship: Ship): ActionTargettingMode {
+            return ActionTargettingMode.SPACE;
+        }
+
         getActionPointsUsage(ship: Ship, target: Target | null): number {
             return this.power;
         }
@@ -41,8 +45,8 @@ module TK.SpaceTac {
             return this.deploy_distance;
         }
 
-        getBlastRadius(ship: Ship): number {
-            return this.effect_radius;
+        filterImpactedShips(source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
+            return ships.filter(ship => arenaDistance(ship.location, target) <= this.effect_radius);
         }
 
         checkLocationTarget(ship: Ship, target: Target): Target {

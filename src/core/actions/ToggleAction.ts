@@ -29,10 +29,10 @@ module TK.SpaceTac {
         }
 
         getTargettingMode(ship: Ship): ActionTargettingMode {
-            if (this.activated) {
-                return ActionTargettingMode.SELF;
+            if (this.activated || !this.radius) {
+                return ActionTargettingMode.SELF_CONFIRM;
             } else {
-                return super.getTargettingMode(ship);
+                return ActionTargettingMode.SURROUNDINGS;
             }
         }
 
@@ -44,8 +44,8 @@ module TK.SpaceTac {
             return 0;
         }
 
-        getBlastRadius(ship: Ship): number {
-            return this.radius;
+        filterImpactedShips(source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
+            return ships.filter(ship => arenaDistance(ship.location, source) <= this.radius);
         }
 
         checkShipTarget(ship: Ship, target: Target): Target | null {
@@ -53,21 +53,11 @@ module TK.SpaceTac {
         }
 
         /**
-         * Get the list of ships in range to be affected
-         */
-        getAffectedShips(ship: Ship): Ship[] {
-            let target = Target.newFromShip(ship);
-            let radius = this.getBlastRadius(ship);
-            let battle = ship.getBattle();
-            return (radius && battle) ? battle.collectShipsInCircle(target, radius, true) : ((target.ship && target.ship.alive) ? [target.ship] : []);
-        }
-
-        /**
          * Collect the effects applied by this action
          */
-        getEffects(ship: Ship): [Ship, BaseEffect][] {
+        getEffects(ship: Ship, target: Target, source = ship.location): [Ship, BaseEffect][] {
             let result: [Ship, BaseEffect][] = [];
-            let ships = this.getAffectedShips(ship);
+            let ships = this.getImpactedShips(ship, target, source);
             ships.forEach(ship => {
                 this.effects.forEach(effect => result.push([ship, effect]));
             });
@@ -77,7 +67,7 @@ module TK.SpaceTac {
         protected customApply(ship: Ship, target: Target) {
             this.activated = !this.activated;
             ship.addBattleEvent(new ToggleEvent(ship, this, this.activated));
-            this.getAffectedShips(ship).forEach(iship => iship.setActiveEffectsChanged());
+            this.getImpactedShips(ship, target).forEach(iship => iship.setActiveEffectsChanged());
         }
 
         getEffectsDescription(): string {

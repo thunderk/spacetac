@@ -19,7 +19,7 @@ module TK.SpaceTac.Equipments {
             this.setSkillsRequirements({ "skill_time": leveled(1, 1.7), "skill_gravity": leveled(0.3, 0.4) });
             this.addAttributeEffect("power_capacity", leveled(5.5, 0.5));
             this.addAttributeEffect("power_generation", leveled(4, 0.5));
-            this.addFireAction(leveled(1, 0.4), irepeat(0), irepeat(0), [
+            this.addTriggerAction(leveled(1, 0.4), [
                 new EffectTemplate(new CooldownEffect(), { cooling: leveled(1, 0.2), maxcount: leveled(1, 0.4) })
             ])
         }

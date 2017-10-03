@@ -12,7 +12,7 @@ module TK.SpaceTac.UI.Specs {
             let action1 = new MoveAction(new Equipment());
             nn(action1.equipment).name = "Engine";
             action1.name = "Move";
-            let action2 = new FireWeaponAction(new Equipment(), 2, 50, 0, [new DamageEffect(12)]);
+            let action2 = new TriggerAction(new Equipment(), [new DamageEffect(12)], 2, 50, 0);
             nn(action2.equipment).name = "Weapon";
             action2.name = "Fire";
             let action3 = new EndTurnAction();

@@ -78,7 +78,7 @@ module TK.SpaceTac {
             let result: [Ship, BaseEffect][] = [];
 
             // Effects of weapon
-            if (this.action instanceof FireWeaponAction) {
+            if (this.action instanceof TriggerAction) {
                 result = result.concat(this.action.getEffects(this.ship, this.target));
             } else if (this.action instanceof DeployDroneAction) {
                 let ships = this.battle.collectShipsInCircle(this.target, this.action.effect_radius, true);

@@ -16,9 +16,9 @@ module TK.SpaceTac.Equipments {
 
             this.setSkillsRequirements({ "skill_gravity": leveled(2, 3) });
             this.addAttributeEffect("shield_capacity", leveled(60));
-            this.addFireAction(irepeat(2), irepeat(0), leveled(300, 10), [
+            this.addTriggerAction(irepeat(2), [
                 new EffectTemplate(new RepelEffect(), { value: leveled(100, 5) })
-            ]);
+            ], irepeat(0), leveled(300, 10));
         }
     }
 

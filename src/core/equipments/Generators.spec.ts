@@ -49,9 +49,7 @@ module TK.SpaceTac.Equipments {
                 new AttributeEffect("power_capacity", 5),
                 new AttributeEffect("power_generation", 4),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 1, 0, 0, [
-                new CooldownEffect(1, 1)
-            ]));
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
             expect(equipment.price).toEqual(420);
 
             equipment = template.generate(2);
@@ -60,9 +58,7 @@ module TK.SpaceTac.Equipments {
                 new AttributeEffect("power_capacity", 6),
                 new AttributeEffect("power_generation", 4),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 1, 0, 0, [
-                new CooldownEffect(1, 1)
-            ]));
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
             expect(equipment.price).toEqual(1470);
 
             equipment = template.generate(3);
@@ -71,9 +67,7 @@ module TK.SpaceTac.Equipments {
                 new AttributeEffect("power_capacity", 6),
                 new AttributeEffect("power_generation", 5),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 1, 0, 0, [
-                new CooldownEffect(1, 1)
-            ]));
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
             expect(equipment.price).toEqual(3570);
 
             equipment = template.generate(10);
@@ -82,9 +76,7 @@ module TK.SpaceTac.Equipments {
                 new AttributeEffect("power_capacity", 13),
                 new AttributeEffect("power_generation", 12),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 7, 0, 0, [
-                new CooldownEffect(4, 7)
-            ]));
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new CooldownEffect(4, 7)], 7));
             expect(equipment.price).toEqual(47670);
         })
     })

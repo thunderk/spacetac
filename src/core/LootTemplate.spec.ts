@@ -95,15 +95,15 @@ module TK.SpaceTac.Specs {
 
         it("adds fire actions", function () {
             let template = new LootTemplate(SlotType.Weapon, "Weapon");
-            template.addFireAction(istep(1), istep(100), istep(50), [
+            template.addTriggerAction(istep(1), [
                 new EffectTemplate(new FakeEffect(3), { "fakevalue": istep(8) })
-            ]);
+            ], istep(100), istep(50), istep(10));
 
             let result = template.generate(1);
-            expect(result.action).toEqual(new FireWeaponAction(result, 1, 100, 50, [new FakeEffect(8)]));
+            expect(result.action).toEqual(new TriggerAction(result, [new FakeEffect(8)], 1, 100, 50, 10));
 
             result = template.generate(2);
-            expect(result.action).toEqual(new FireWeaponAction(result, 2, 101, 51, [new FakeEffect(9)]));
+            expect(result.action).toEqual(new TriggerAction(result, [new FakeEffect(9)], 2, 101, 51, 11));
         });
 
         it("adds drone actions", function () {
@@ -126,10 +126,10 @@ module TK.SpaceTac.Specs {
             template.addAttributeEffect("maneuvrability", irepeat(1));
             expect(template.hasDamageEffect()).toBe(false);
 
-            template.addFireAction(irepeat(1), irepeat(50), irepeat(50), [new EffectTemplate(new BaseEffect("test"), {})]);
+            template.addTriggerAction(irepeat(1), [new EffectTemplate(new BaseEffect("test"), {})], irepeat(50), irepeat(50));
             expect(template.hasDamageEffect()).toBe(false);
 
-            template.addFireAction(irepeat(1), irepeat(50), irepeat(50), [new EffectTemplate(new DamageEffect(20), {})]);
+            template.addTriggerAction(irepeat(1), [new EffectTemplate(new DamageEffect(20), {})], irepeat(50), irepeat(50));
             expect(template.hasDamageEffect()).toBe(true);
         });
     });

@@ -50,20 +50,7 @@ module TK.SpaceTac {
          * Get the targetting mode
          */
         getTargettingMode(ship: Ship): ActionTargettingMode {
-            let blast = this.getBlastRadius(ship);
-            let range = this.getRangeRadius(ship);
-
-            if (blast) {
-                if (range) {
-                    return ActionTargettingMode.SPACE;
-                } else {
-                    return ActionTargettingMode.SURROUNDINGS;
-                }
-            } else if (range) {
-                return ActionTargettingMode.SHIP;
-            } else {
-                return ActionTargettingMode.SELF_CONFIRM;
-            }
+            return ActionTargettingMode.SELF;
         }
 
         /**
@@ -119,7 +106,11 @@ module TK.SpaceTac {
             return null;
         }
 
-        // Get the number of action points the action applied to a target would use
+        /**
+         * Get the number of action points the action applied to a target would use
+         * 
+         * If target is null, an estimated cost is returned.
+         */
         getActionPointsUsage(ship: Ship, target: Target | null): number {
             return 0;
         }
@@ -129,9 +120,25 @@ module TK.SpaceTac {
             return 0;
         }
 
-        // Get the effect area radius of this action
-        getBlastRadius(ship: Ship): number {
-            return 0;
+        /**
+         * Filter a list of ships to return only those impacted by this action
+         * 
+         * This may be used as an indicator for helping the player in targetting, or to effectively apply the effects
+         */
+        filterImpactedShips(source: IArenaLocation, target: Target, ships: Ship[]): Ship[] {
+            return [];
+        }
+
+        /**
+         * Get a list of ships impacted by this action
+         */
+        getImpactedShips(ship: Ship, target: Target, source: IArenaLocation = ship.location): Ship[] {
+            let battle = ship.getBattle();
+            if (battle) {
+                return this.filterImpactedShips(source, target, imaterialize(battle.iships(true)));
+            } else {
+                return [];
+            }
         }
 
         /**

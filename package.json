@@ -36,7 +36,7 @@
     "typescript": "^2.5.3"
   },
   "dependencies": {
-    "jasmine-core": "^2.8.0",
+    "jasmine-core": "2.8.0",
     "parse": "^1.9.2",
     "phaser": "^2.6.2",
     "phaser-plugin-scene-graph": "^1.0.4"

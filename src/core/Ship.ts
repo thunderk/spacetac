@@ -436,7 +436,7 @@ module TK.SpaceTac {
                 let start = copy(this.location);
 
                 let area_effects = imaterialize(this.iToggleActions(true));
-                let old_impacted_ships = area_effects.map(action => action.getAffectedShips(this));
+                let old_impacted_ships = area_effects.map(action => action.getImpactedShips(this, Target.newFromShip(this)));
                 let old_area_effects = this.getActiveEffects().area;
 
                 if (engine) {
@@ -450,7 +450,7 @@ module TK.SpaceTac {
                     this.addBattleEvent(new MoveEvent(this, start, copy(this.location), engine));
                 }
 
-                let new_impacted_ships = area_effects.map(action => action.getAffectedShips(this));
+                let new_impacted_ships = area_effects.map(action => action.getImpactedShips(this, Target.newFromShip(this)));
                 let diff_impacted_ships = flatten(zip(old_impacted_ships, new_impacted_ships).map(([a, b]) => disjunctunion(a, b)));
                 let new_area_effects = this.getActiveEffects().area;
                 if (disjunctunion(old_area_effects, new_area_effects).length > 0) {

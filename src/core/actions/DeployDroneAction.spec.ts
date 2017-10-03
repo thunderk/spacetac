@@ -1,5 +1,3 @@
-/// <reference path="../effects/BaseEffect.ts" />
-
 module TK.SpaceTac {
     describe("DeployDroneAction", function () {
         it("stores useful information", function () {

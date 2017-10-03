@@ -64,7 +64,7 @@ module TK.SpaceTac {
 
             equipment.effects.forEach(effectFactor);
 
-            if (equipment.action instanceof FireWeaponAction) {
+            if (equipment.action instanceof TriggerAction) {
                 simpleFactor(equipment.action, 'power', true);
                 simpleFactor(equipment.action, 'blast');
                 simpleFactor(equipment.action, 'range');

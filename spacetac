@@ -11,5 +11,5 @@ dir=$(dirname $0)
 
 test -x "${dir}/.env/bin/nodeenv" || ( virtualenv -p python3 "${dir}/.env" && "${dir}/.env/bin/pip" install --upgrade nodeenv )
 test -e "${dir}/.env/node/bin/activate" || "${dir}/.env/bin/nodeenv" --node=6.11.1 --force "${dir}/.env/node"
-test -e "${dir}/.env/node/bin/yarn" || "${dir}/.env/node/bin/shim" "${dir}/.env/node/bin/npm" install -g yarn@0.27.5
+test -e "${dir}/.env/node/bin/yarn" || "${dir}/.env/node/bin/shim" "${dir}/.env/node/bin/npm" install -g yarn@1.1.0
 PATH="${dir}/.env/node/bin:${PATH}" yarn "$@"

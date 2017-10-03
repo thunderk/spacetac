@@ -32,7 +32,7 @@ module TK.SpaceTac.Equipments {
             expect(equipment.effects).toEqual([
                 new AttributeEffect("shield_capacity", 60),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 2, 0, 300, [new RepelEffect(100)]));
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new RepelEffect(100)], 2, 0, 300));
             expect(equipment.price).toEqual(140);
 
             equipment = template.generate(2);
@@ -40,7 +40,7 @@ module TK.SpaceTac.Equipments {
             expect(equipment.effects).toEqual([
                 new AttributeEffect("shield_capacity", 84),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 2, 0, 310, [new RepelEffect(105)]));
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new RepelEffect(105)], 2, 0, 310));
             expect(equipment.price).toEqual(490);
 
             equipment = template.generate(3);
@@ -48,7 +48,7 @@ module TK.SpaceTac.Equipments {
             expect(equipment.effects).toEqual([
                 new AttributeEffect("shield_capacity", 112),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 2, 0, 322, [new RepelEffect(111)]));
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new RepelEffect(111)], 2, 0, 322));
             expect(equipment.price).toEqual(1190);
 
             equipment = template.generate(10);
@@ -56,7 +56,7 @@ module TK.SpaceTac.Equipments {
             expect(equipment.effects).toEqual([
                 new AttributeEffect("shield_capacity", 448),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 2, 0, 462, [new RepelEffect(181)]));
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new RepelEffect(181)], 2, 0, 462));
             expect(equipment.price).toEqual(15890);
         });
 

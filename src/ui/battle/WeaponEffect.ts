@@ -161,7 +161,7 @@ module TK.SpaceTac.UI {
             missile.rotation = arenaAngle(this.source, this.destination);
             this.layer.add(missile);
 
-            let blast_radius = this.weapon.action ? this.weapon.action.getBlastRadius(this.ship) : 0;
+            let blast_radius = (this.weapon.action instanceof TriggerAction) ? this.weapon.action.blast : 0;
 
             let projectile_duration = arenaDistance(this.source, this.destination) * 1.5;
             let tween = this.ui.tweens.create(missile);
@@ -185,7 +185,7 @@ module TK.SpaceTac.UI {
             });
             tween.start();
 
-            if (blast_radius > 0 && this.weapon.action instanceof FireWeaponAction) {
+            if (blast_radius > 0 && this.weapon.action instanceof TriggerAction) {
                 if (any(this.weapon.action.effects, effect => effect instanceof DamageEffect)) {
                     let ships = this.arena.getShipsInCircle(new ArenaCircleArea(this.destination.x, this.destination.y, blast_radius));
                     ships.forEach(sprite => {

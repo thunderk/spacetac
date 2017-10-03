@@ -71,7 +71,7 @@ module TK.SpaceTac {
          */
         static produceDirectShots(ship: Ship, battle: Battle): TacticalProducer {
             let enemies = ifilter(battle.iships(), iship => iship.alive && iship.getPlayer() !== ship.getPlayer());
-            let weapons = ifilter(getPlayableActions(ship), action => action instanceof FireWeaponAction);
+            let weapons = ifilter(getPlayableActions(ship), action => action instanceof TriggerAction);
             return imap(icombine(enemies, weapons), ([enemy, weapon]) => new Maneuver(ship, weapon, Target.newFromShip(enemy)));
         }
 
@@ -91,11 +91,11 @@ module TK.SpaceTac {
          */
         static produceInterestingBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             // TODO Work with groups of 3, 4 ...
-            let weapons = ifilter(getPlayableActions(ship), action => action instanceof FireWeaponAction && action.blast > 0);
+            let weapons = <Iterator<TriggerAction>>ifilter(getPlayableActions(ship), action => action instanceof TriggerAction && action.blast > 0);
             let enemies = battle.ienemies(ship.getPlayer(), true);
             // FIXME This produces duplicates (x, y) and (y, x)
             let couples = ifilter(icombine(enemies, enemies), ([e1, e2]) => e1 != e2);
-            let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.getBlastRadius(ship) * 2);
+            let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.blast * 2);
             let result = imap(candidates, ([weapon, [e1, e2]]) => new Maneuver(ship, weapon, Target.newFromLocation((e1.arena_x + e2.arena_x) / 2, (e1.arena_y + e2.arena_y) / 2)));
             return result;
         }
@@ -104,8 +104,8 @@ module TK.SpaceTac {
          * Produce random blast weapon shots, on a grid.
          */
         static produceRandomBlastShots(ship: Ship, battle: Battle): TacticalProducer {
-            let weapons = ifilter(getPlayableActions(ship), action => action instanceof FireWeaponAction && action.blast > 0);
-            let candidates = ifilter(icombine(weapons, scanArena(battle)), ([weapon, location]) => (<FireWeaponAction>weapon).getEffects(ship, location).length > 0);
+            let weapons = ifilter(getPlayableActions(ship), action => action instanceof TriggerAction && action.blast > 0);
+            let candidates = ifilter(icombine(weapons, scanArena(battle)), ([weapon, location]) => (<TriggerAction>weapon).getEffects(ship, location).length > 0);
             let result = imap(candidates, ([weapon, location]) => new Maneuver(ship, weapon, location));
             return result;
         }
@@ -149,7 +149,7 @@ module TK.SpaceTac {
             let lost = ship.getValue("power") - maneuver.getPowerUsage() + ship.getAttribute("power_generation") - ship.getAttribute("power_capacity");
             if (lost > 0) {
                 return -lost / ship.getAttribute("power_capacity");
-            } else if (maneuver.action instanceof FireWeaponAction || maneuver.action instanceof DeployDroneAction) {
+            } else if (maneuver.action instanceof TriggerAction || maneuver.action instanceof DeployDroneAction) {
                 if (maneuver.effects.length == 0) {
                     return -1;
                 } else {

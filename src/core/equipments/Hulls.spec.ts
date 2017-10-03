@@ -69,9 +69,7 @@ module TK.SpaceTac.Equipments {
                 new AttributeEffect("hull_capacity", 60),
                 new AttributeEffect("precision", 2),
             ]);
-            expect(equipment.action).toEqual(new FireWeaponAction(equipment, 1, 0, 0, [
-                new ValueEffect("hull", 60)
-            ]))
+            expect(equipment.action).toEqual(new TriggerAction(equipment, [new ValueEffect("hull", 60)]));
             expect(equipment.cooldown).toEqual(new Cooldown(1, 4));
             expect(equipment.price).toEqual(250);
 

@@ -15,14 +15,14 @@ module TK.SpaceTac.UI {
         mode: ActionTargettingMode
         simulation = new MoveFireResult()
 
-        // Movement projector
+        // Move and fire lines
         drawn_info: Phaser.Graphics
         move_ghost: Phaser.Image
-
-        // Fire projector
         fire_arrow: Phaser.Image
-        fire_blast: Phaser.Image
-        fire_impact: Phaser.Group
+
+        // Impact area
+        impact_area: Phaser.Graphics
+        impact_indicators: Phaser.Group
 
         // Collaborators to update
         actionbar: ActionBar
@@ -50,17 +50,16 @@ module TK.SpaceTac.UI {
             this.fire_arrow = this.view.newImage("battle-hud-simulator-ok");
             this.fire_arrow.anchor.set(1, 0.5);
             this.fire_arrow.visible = false;
-            this.fire_impact = new Phaser.Group(view.game);
-            this.fire_impact.visible = false;
-            this.fire_blast = new Phaser.Image(view.game, 0, 0, "battle-arena-blast");
-            this.fire_blast.anchor.set(0.5, 0.5);
-            this.fire_blast.visible = false;
+            this.impact_indicators = new Phaser.Group(view.game);
+            this.impact_indicators.visible = false;
+            this.impact_area = new Phaser.Graphics(view.game);
+            this.impact_area.visible = false;
 
-            this.container.add(this.fire_impact);
-            this.container.add(this.fire_blast);
+            this.container.add(this.impact_indicators);
+            this.container.add(this.impact_area);
             this.container.add(this.drawn_info);
-            this.container.add(this.fire_arrow);
             this.container.add(this.move_ghost);
+            this.container.add(this.fire_arrow);
         }
 
         /**
@@ -118,31 +117,58 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Update impact indicators
+         * Update impact indicators (highlighting impacted ships)
          */
-        updateImpactIndicators(ship: Ship, target: Target, radius: number): void {
-            let ships: Ship[];
-            if (radius) {
-                let battle = ship.getBattle();
-                if (battle) {
-                    ships = battle.collectShipsInCircle(target, radius, true);
-                } else {
-                    ships = [];
-                }
-            } else {
-                ships = target.ship ? [target.ship] : [];
-            }
-
+        updateImpactIndicators(impacts: Phaser.Group, ship: Ship, action: BaseAction, target: Target, source: IArenaLocation = ship.location): void {
+            let ships = action.getImpactedShips(ship, target, source);
             if (ships.length) {
-                this.fire_impact.removeAll(true);
+                // TODO differential
+                impacts.removeAll(true);
                 ships.forEach(iship => {
                     let indicator = this.view.newImage("battle-hud-ship-impacted", iship.arena_x, iship.arena_y);
                     indicator.anchor.set(0.5);
-                    this.fire_impact.add(indicator);
+                    impacts.add(indicator);
                 });
-                this.fire_impact.visible = true;
+                impacts.visible = true;
             } else {
-                this.fire_impact.visible = false;
+                impacts.visible = false;
+            }
+        }
+
+        /**
+         * Update impact graphics (area display)
+         */
+        updateImpactArea(area: Phaser.Graphics, action: BaseAction): void {
+            area.clear();
+
+            let color = 0;
+            let radius = 0;
+            let angle = 0;
+            if (action instanceof TriggerAction) {
+                color = 0x90481e;
+                if (action.angle) {
+                    angle = (action.angle * 0.5) * Math.PI / 180;
+                    radius = action.range;
+                } else {
+                    radius = action.blast;
+                }
+            } else if (action instanceof DeployDroneAction) {
+                color = 0xe9f2f9;
+                radius = action.effect_radius;
+            } else if (action instanceof ToggleAction) {
+                color = 0xd3e448;
+                radius = action.radius;
+            }
+
+            if (radius) {
+                area.lineStyle(2, 0x90481e, 0.6);
+                area.beginFill(0x90481e, 0.2);
+                if (angle) {
+                    area.arc(0, 0, radius, angle, -angle, true);
+                } else {
+                    area.drawCircle(0, 0, radius * 2);
+                }
+                area.endFill();
             }
         }
 
@@ -177,24 +203,24 @@ module TK.SpaceTac.UI {
                     }
 
                     if (simulation.need_fire) {
-                        let blast = this.action.getBlastRadius(this.ship);
-                        if (blast) {
-                            this.fire_blast.position.set(this.target.x, this.target.y);
-                            this.fire_blast.scale.set(blast * 2 / 365);
-                            this.fire_blast.alpha = simulation.can_fire ? 1 : 0.5;
-                            this.fire_blast.visible = true;
+                        if (this.action instanceof TriggerAction && this.action.angle) {
+                            this.impact_area.position.set(simulation.move_location.x, simulation.move_location.y);
+                            this.impact_area.rotation = arenaAngle(simulation.move_location, simulation.fire_location);
                         } else {
-                            this.fire_blast.visible = false;
+                            this.impact_area.position.set(this.target.x, this.target.y);
                         }
-                        this.updateImpactIndicators(this.ship, this.target, blast);
+                        this.impact_area.alpha = simulation.can_fire ? 1 : 0.5;
+                        this.impact_area.visible = true;
+
+                        this.updateImpactIndicators(this.impact_indicators, this.ship, this.action, this.target, this.simulation.move_location);
 
                         this.fire_arrow.position.set(this.target.x, this.target.y);
                         this.fire_arrow.rotation = angle;
                         this.view.changeImage(this.fire_arrow, simulation.complete ? "battle-hud-simulator-ok" : "battle-hud-simulator-power");
                         this.fire_arrow.visible = true;
                     } else {
-                        this.fire_blast.visible = false;
-                        this.fire_impact.visible = false;
+                        this.impact_area.visible = false;
+                        this.impact_indicators.visible = false;
                         this.fire_arrow.visible = false;
                     }
                 } else {
@@ -203,7 +229,7 @@ module TK.SpaceTac.UI {
                     this.fire_arrow.rotation = angle;
                     this.view.changeImage(this.fire_arrow, "battle-hud-simulator-failed");
                     this.fire_arrow.visible = true;
-                    this.fire_blast.visible = false;
+                    this.impact_area.visible = false;
                 }
                 this.container.visible = true;
             } else {
@@ -269,6 +295,8 @@ module TK.SpaceTac.UI {
 
                 this.view.changeImage(this.move_ghost, `ship-${this.ship.model.code}-sprite`);
                 this.move_ghost.scale.set(0.4);
+
+                this.updateImpactArea(this.impact_area, this.action);
 
                 this.setTarget(action.getDefaultTarget(this.ship));
             } else {
