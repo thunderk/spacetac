@@ -61,10 +61,6 @@ module TK.SpaceTac.UI {
             let button = battleview.add.button(0, 0, "battle-actionbar-button-menu", () => battleview.showOptions(), null, 1, 0, 0, 1, this);
             battleview.tooltip.bindStaticText(button, "Game options");
 
-            // Key bindings
-            battleview.inputs.bind("Escape", "Cancel action", () => this.actionEnded());
-            battleview.inputs.bind(" ", "End turn", () => this.keyActionPressed(-1));
-
             // Log processing
             battleview.log_processor.register(event => {
                 if (event instanceof ShipChangeEvent) {

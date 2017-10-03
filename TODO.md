@@ -59,6 +59,7 @@ Battle
 * Fix "toggle action" targetting with simulated move not activating the action after the move
 * Add shorcut to perform only the "move" part of a move+fire simulation
 * Fix delay of shield/hull impact effects (should depend on weapon animation, and ship location)
+* Indicate visually the power gain of "end turn"
 
 Ships models and equipments
 ---------------------------

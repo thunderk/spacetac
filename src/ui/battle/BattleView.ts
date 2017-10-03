@@ -117,7 +117,9 @@ module TK.SpaceTac.UI {
 
             // Key mapping
             this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.manipulate("keyboard")(3000));
-            this.inputs.bind("Enter", "Validate action", () => this.targetting.validate());
+            this.inputs.bind("Enter", "Validate action", () => this.validationPressed());
+            this.inputs.bind(" ", "Validate action", () => this.validationPressed());
+            this.inputs.bind("Escape", "Cancel action", () => this.action_bar.actionEnded());
             range(10).forEach(i => this.inputs.bind(`Numpad${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
             range(10).forEach(i => this.inputs.bind(`Digit${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
             this.inputs.bindCheat("w", "Win current battle", () => this.battle.cheats.win());
@@ -178,6 +180,17 @@ module TK.SpaceTac.UI {
                 } else {
                     this.action_bar.keyActionPressed(num - 1);
                 }
+            }
+        }
+
+        /**
+         * Handle the pression of a validation key (enter or space)
+         */
+        validationPressed(): void {
+            if (this.targetting.active) {
+                this.targetting.validate();
+            } else {
+                this.action_bar.keyActionPressed(-1);
             }
         }
 
