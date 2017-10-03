@@ -11,5 +11,10 @@ module TK.SpaceTac.Specs {
             expect(angularDistance(0.5, -0.5)).toBe(-1.0);
             expect(angularDistance(0.5, -0.3 - Math.PI * 4)).toBeCloseTo(-0.8, 0.000001);
         })
+
+        it("converts between degrees and radians", function () {
+            expect(degrees(Math.PI / 2)).toBeCloseTo(90, 0.000001);
+            expect(radians(45)).toBeCloseTo(Math.PI / 4, 0.000001);
+        });
     });
 }

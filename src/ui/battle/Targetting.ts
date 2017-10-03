@@ -161,8 +161,8 @@ module TK.SpaceTac.UI {
             }
 
             if (radius) {
-                area.lineStyle(2, 0x90481e, 0.6);
-                area.beginFill(0x90481e, 0.2);
+                area.lineStyle(2, color, 0.6);
+                area.beginFill(color, 0.2);
                 if (angle) {
                     area.arc(0, 0, radius, angle, -angle, true);
                 } else {

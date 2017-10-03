@@ -35,9 +35,6 @@ module TK.SpaceTac.UI {
         // Weapon used
         private weapon: Equipment
 
-        // Effect in use
-        private effect: Function
-
         constructor(arena: Arena, ship: Ship, target: Target, weapon: Equipment) {
             this.ui = arena.game;
             this.arena = arena;
@@ -47,7 +44,6 @@ module TK.SpaceTac.UI {
             this.ship = ship;
             this.target = target;
             this.weapon = weapon;
-            this.effect = this.getEffectForWeapon(weapon.code);
 
             this.source = this.getCoords(Target.newFromShip(this.ship));
             this.destination = this.getCoords(this.target);
@@ -59,11 +55,45 @@ module TK.SpaceTac.UI {
          * Returns the duration of the effect.
          */
         start(): number {
-            if (this.effect) {
-                return this.effect();
-            } else {
-                return 0;
+            // Fire effect
+            let effect = this.getEffectForWeapon(this.weapon.code, this.weapon.action);
+            let duration = effect();
+
+            // Damage effect
+            let action = this.weapon.action;
+            if (action instanceof TriggerAction && any(action.effects, effect => effect instanceof DamageEffect)) {
+                let ships = action.getImpactedShips(this.ship, this.target, this.source);
+                let source = action.blast ? this.target : this.source;
+                let damage_duration = this.damageEffect(source, ships, duration * 0.4, this.weapon.code == "gatlinggun");
+                duration = Math.max(duration, damage_duration);
             }
+
+            return duration;
+        }
+
+        /**
+         * Add a damage effect on ships impacted by a weapon
+         */
+        damageEffect(source: IArenaLocation, ships: Ship[], base_delay = 0, shield_flares = false): number {
+            let duration = 0;
+
+            // TODO For each ship, delay should depend on fire effect animation
+            let delay = base_delay;
+
+            ships.forEach(ship => {
+                let sprite = this.arena.findShipSprite(ship);
+                if (sprite) {
+                    if (sprite.getValue("shield") > 0) {
+                        this.shieldImpactEffect(source, sprite, delay, 800, shield_flares);
+                        duration = Math.max(duration, delay + 800);
+                    } else {
+                        this.hullImpactEffect(source, sprite, delay, 400);
+                        duration = Math.max(duration, delay + 400);
+                    }
+                }
+            });
+
+            return duration;
         }
 
         /**
@@ -85,12 +115,17 @@ module TK.SpaceTac.UI {
         /**
          * Get the function that will be called to start the visual effect
          */
-        getEffectForWeapon(weapon: string): Function {
+        getEffectForWeapon(weapon: string, action: BaseAction | null): () => number {
             switch (weapon) {
                 case "gatlinggun":
-                    return this.gunEffect.bind(this);
+                    return () => this.gunEffect();
+                case "prokhorovlaser":
+                    let trigger = <TriggerAction>nn(action);
+                    let angle = arenaAngle(this.source, this.target);
+                    let dangle = radians(trigger.angle) * 0.5;
+                    return () => this.angularLaser(this.source, trigger.range, angle - dangle, angle + dangle);
                 default:
-                    return this.defaultEffect.bind(this);
+                    return () => this.defaultEffect();
             }
         }
 
@@ -185,20 +220,26 @@ module TK.SpaceTac.UI {
             });
             tween.start();
 
-            if (blast_radius > 0 && this.weapon.action instanceof TriggerAction) {
-                if (any(this.weapon.action.effects, effect => effect instanceof DamageEffect)) {
-                    let ships = this.arena.getShipsInCircle(new ArenaCircleArea(this.destination.x, this.destination.y, blast_radius));
-                    ships.forEach(sprite => {
-                        if (sprite.getValue("shield") > 0) {
-                            this.shieldImpactEffect(this.target, sprite, 1200, 800);
-                        } else {
-                            this.hullImpactEffect(this.target, sprite, 1200, 400);
-                        }
-                    });
-                }
-            }
-
             return projectile_duration + (blast_radius ? 1500 : 0);
+        }
+
+        /**
+         * Laser effect, scanning from one angle to the other
+         */
+        angularLaser(source: IArenaLocation, radius: number, start_angle: number, end_angle: number, speed = 1): number {
+            let duration = 1000 / speed;
+
+            let laser = this.view.newImage("battle-effects-laser", source.x, source.y);
+            laser.anchor.set(0, 0.5);
+            laser.rotation = start_angle;
+            laser.scale.set(radius / laser.width);
+            this.layer.add(laser);
+
+            let tween = this.view.tweens.create(laser).to({ rotation: end_angle }, duration);
+            tween.onComplete.addOnce(() => laser.destroy());
+            tween.start();
+
+            return duration;
         }
 
         /**
@@ -229,12 +270,6 @@ module TK.SpaceTac.UI {
             emitter.start(false, 1000 * (distance - guard) / speed, 50, 10);
             this.layer.add(emitter);
             this.timer.schedule(5000, () => emitter.destroy());
-
-            if (has_shield) {
-                this.shieldImpactEffect(this.source, this.target, 100, 800, true);
-            } else {
-                this.hullImpactEffect(this.source, this.target, 100, 800);
-            }
 
             return 1000;
         }

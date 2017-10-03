@@ -15,7 +15,7 @@
    viewBox="0 0 128 128"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.0 r15299"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="weaponeffects.svg"
    inkscape:export-filename="/tmp/image.png"
    inkscape:export-xdpi="96.000008"
@@ -198,6 +198,19 @@
        r="30.446428"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(1.0997067,0,0,1.0997067,-4.1425418,-8.3253595)" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter5826"
+       x="-0.047145694"
+       width="1.0942914"
+       y="-0.98874992"
+       height="2.9775">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="7.6811109"
+         id="feGaussianBlur5828" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -206,11 +219,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9195959"
-     inkscape:cx="61.820614"
-     inkscape:cy="63.238329"
+     inkscape:zoom="1.979899"
+     inkscape:cx="60.541466"
+     inkscape:cy="49.925567"
      inkscape:document-units="px"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer7"
      showgrid="false"
      units="px"
      inkscape:measure-start="35.2291,59.599"
@@ -406,7 +419,8 @@
   <g
      inkscape:groupmode="layer"
      id="layer5"
-     inkscape:label="Stasis">
+     inkscape:label="Stasis"
+     style="display:none">
     <circle
        style="fill:url(#radialGradient4556);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.10143852;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path4548"
@@ -429,6 +443,22 @@
        cy="64"
        r="152.61015"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/battle/weapon/blast.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer7"
+     inkscape:label="Laser">
+    <rect
+       transform="matrix(1.0666667,-1.4605933e-5,6.2967195e-5,0.24742509,-63.824421,36.000686)"
+       y="117.72057"
+       x="-62.353645"
+       height="18.644417"
+       width="391.01483"
+       id="rect5544"
+       style="display:inline;fill:#f1a581;fill-opacity:1;fill-rule:evenodd;stroke:#ff2300;stroke-width:7.31692886;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5826)"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/effects/laser.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
   </g>

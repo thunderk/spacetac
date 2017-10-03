@@ -58,7 +58,7 @@ module TK.SpaceTac.UI {
         simulate(obj: any, property: string, points = 5, duration = 1000): number[] {
             let tween = first(this.tweens.getAll().concat((<any>this.tweens)._add), tween => tween.target === obj && !tween.pendingDelete);
             if (tween) {
-                return [obj[property]].concat(tween.generateData(points - 1).map(data => data[property]));
+                return [obj[property]].concat(tween.generateData(1000 * (points - 1) / duration).map(data => data[property]));
             } else {
                 return [];
             }

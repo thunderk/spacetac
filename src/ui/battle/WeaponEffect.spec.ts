@@ -34,30 +34,44 @@ module TK.SpaceTac.UI.Specs {
             battleview.timer = new Timer();
 
             let ship = nn(battleview.battle.playing_ship);
+            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), new Equipment());
+            effect.gunEffect();
+
+            let layer = battleview.arena.layer_weapon_effects;
+            expect(layer.children.length).toBe(1);
+            expect(layer.children[0] instanceof Phaser.Particles.Arcade.Emitter).toBe(true);
+        });
+
+        it("displays shield and hull effect on impacted ships", function () {
+            let battleview = testgame.battleview;
+            battleview.timer = new Timer();
+
+            let ship = nn(battleview.battle.playing_ship);
             let sprite = nn(battleview.arena.findShipSprite(ship));
             ship.setArenaPosition(50, 30);
             sprite.position.set(50, 30);
             sprite.hull_bar.setValue(10, 10);
             sprite.shield_bar.setValue(0, 10);
-            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), new Equipment());
+
+            let weapon = new Equipment();
+            weapon.action = new TriggerAction(weapon, [new DamageEffect()], 1, 500);
+            spyOn(weapon.action, "getImpactedShips").and.returnValue([ship]);
+
+            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), weapon);
+            spyOn(effect, "getEffectForWeapon").and.returnValue(() => 100);
 
             let mock_shield_impact = spyOn(effect, "shieldImpactEffect").and.stub();
             let mock_hull_impact = spyOn(effect, "hullImpactEffect").and.stub();
 
-            effect.gunEffect();
-
-            let layer = battleview.arena.layer_weapon_effects;
-            expect(layer.children.length).toBe(1);
-
-            expect(layer.children[0] instanceof Phaser.Particles.Arcade.Emitter).toBe(true);
+            effect.start();
             expect(mock_shield_impact).toHaveBeenCalledTimes(0);
             expect(mock_hull_impact).toHaveBeenCalledTimes(1);
-            expect(mock_hull_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800);
+            expect(mock_hull_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 40, 400);
 
             sprite.shield_bar.setValue(10, 10);
-            effect.gunEffect();
+            effect.start();
             expect(mock_shield_impact).toHaveBeenCalledTimes(1);
-            expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 100, 800, true);
+            expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 40, 800, false);
             expect(mock_hull_impact).toHaveBeenCalledTimes(1);
         });
 
@@ -68,7 +82,7 @@ module TK.SpaceTac.UI.Specs {
             let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(50, 50), new Equipment());
 
             effect.gunEffect();
-            checkEmitters("gun effect started", 2);
+            checkEmitters("gun effect started", 1);
             fastForward(6000);
             checkEmitters("gun effect ended", 0);
 
@@ -76,6 +90,32 @@ module TK.SpaceTac.UI.Specs {
             checkEmitters("hull effect started", 1);
             fastForward(8500);
             checkEmitters("hull effect ended", 0);
+        });
+
+        it("adds a laser effect", function () {
+            let battleview = testgame.battleview;
+            battleview.timer = new Timer();
+
+            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(31, 49), new Equipment());
+
+            let result = effect.angularLaser({ x: 20, y: 30 }, 300, Math.PI / 4, -Math.PI / 2, 5);
+            expect(result).toBe(200);
+
+            let layer = battleview.arena.layer_weapon_effects;
+            expect(layer.children.length).toBe(1);
+            expect(layer.children[0] instanceof Phaser.Image).toBe(true, "is image");
+            let image = <Phaser.Image>layer.children[0];
+            expect(image.name).toEqual("battle-effects-laser");
+            expect(image.width).toBe(300);
+            expect(image.x).toEqual(20);
+            expect(image.y).toEqual(30);
+            expect(image.rotation).toBeCloseTo(Math.PI / 4, 0.000001);
+
+            let values = battleview.animations.simulate(image, "rotation", 4, result);
+            expect(values[0]).toBeCloseTo(Math.PI / 4, 0.000001);
+            expect(values[1]).toBeCloseTo(0, 0.000001);
+            expect(values[2]).toBeCloseTo(-Math.PI / 4, 0.000001);
+            expect(values[3]).toBeCloseTo(-Math.PI / 2, 0.000001);
         });
     });
 }

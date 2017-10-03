@@ -81,4 +81,18 @@ module TK.SpaceTac {
         let dist = arenaDistance(loc1, loc2);
         return border_inclusive ? (dist <= loc2.radius) : (dist < loc2.radius);
     }
+
+    /**
+     * Convert radians angle to degrees
+     */
+    export function degrees(angle: number): number {
+        return angle * 180 / Math.PI;
+    }
+
+    /**
+     * Convert degrees angle to radians
+     */
+    export function radians(angle: number): number {
+        return angle * Math.PI / 180;
+    }
 }

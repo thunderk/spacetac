@@ -133,6 +133,10 @@ module TK.SpaceTac.UI {
             this.battleview.log_processor.registerForShip(ship, event => this.processShipLogEvent(event));
         }
 
+        jasmineToString(): string {
+            return `ArenaShip ${this.ship.jasmineToString()}`;
+        }
+
         /**
          * Process a battle log event
          */
