@@ -229,6 +229,8 @@ module TK.SpaceTac.UI {
         angularLaser(source: IArenaLocation, radius: number, start_angle: number, end_angle: number, speed = 1): number {
             let duration = 1000 / speed;
 
+            this.view.audio.playOnce("battle-weapon-laser");
+
             let laser = this.view.newImage("battle-effects-laser", source.x, source.y);
             laser.anchor.set(0, 0.5);
             laser.rotation = start_angle;

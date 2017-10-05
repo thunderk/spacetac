@@ -73,6 +73,7 @@ module TK.SpaceTac.UI {
             this.loadSound("ui/drag.wav");
             this.loadSound("ui/drop.wav");
             this.loadSound("battle/ship-change.wav");
+            this.loadSound("battle/weapon-laser.wav");
             this.loadSound("battle/weapon-bullets.wav");
             this.loadSound("battle/weapon-missile-launch.wav");
             this.loadSound("battle/weapon-missile-explosion.wav");
