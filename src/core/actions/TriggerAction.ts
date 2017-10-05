@@ -82,7 +82,14 @@ module TK.SpaceTac {
             } else if (this.angle) {
                 let angle = arenaAngle(source, target);
                 let maxangle = (this.angle * 0.5) * Math.PI / 180;
-                return ships.filter(ship => arenaDistance(source, ship.location) <= this.range && Math.abs(angularDistance(arenaAngle(source, ship.location), angle)) < maxangle);
+                return ships.filter(ship => {
+                    let dist = arenaDistance(source, ship.location);
+                    if (dist < 0.000001 || dist > this.range) {
+                        return false;
+                    } else {
+                        return Math.abs(angularDistance(arenaAngle(source, ship.location), angle)) < maxangle;
+                    }
+                });
             } else {
                 return ships.filter(ship => target.ship === ship);
             }

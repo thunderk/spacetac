@@ -98,7 +98,6 @@ Common UI
 Technical
 ---------
 
-* Run jasmine tests in random order by default, and fix problems
 * Pack all images in atlases
 * Pack sounds
 
