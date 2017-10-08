@@ -203,7 +203,7 @@ module TK.SpaceTac.UI {
             while (this.game.cache.checkImageKey(`atlas-${i}`)) {
                 let data = this.game.cache.getFrameData(`atlas-${i}`);
                 let frames = data.getFrames();
-                let frame = first(frames, frame => Preload.getKey(frame.name) == `graphics-exported-${name}`);
+                let frame = first(frames, frame => AssetLoading.getKey(frame.name) == `graphics-exported-${name}`);
                 if (frame) {
                     return { key: `atlas-${i}`, frame: frame.index };
                 }

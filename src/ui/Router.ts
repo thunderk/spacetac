@@ -1,5 +1,11 @@
 module TK.SpaceTac.UI {
-    // Router to other states
+    /**
+     * Router to other views
+     * 
+     * It will go to the expected view, by examining the current game session.
+     * 
+     * If needed, it will go back to the asset loading state.
+     */
     export class Router extends Phaser.State {
         create() {
             var ui = <MainUI>this.game;
@@ -7,20 +13,28 @@ module TK.SpaceTac.UI {
 
             if (!session) {
                 // No session, go back to main menu
-                this.game.state.start("mainmenu", true, false);
+                this.goToState("mainmenu", AssetLoadingRange.MENU);
             } else if (session.getBattle()) {
                 // A battle is raging, go to it
-                this.game.state.start("battle", true, false, session.player, session.getBattle());
+                this.goToState("battle", AssetLoadingRange.BATTLE, session.player, session.getBattle());
             } else if (session.hasUniverse()) {
                 if (session.isFleetCreated()) {
                     // Go to the universe map
-                    this.game.state.start("universe", true, false, session.universe, session.player);
+                    this.goToState("universe", AssetLoadingRange.CAMPAIGN, session.universe, session.player);
                 } else {
-                    this.game.state.start("intro", true, false);
+                    this.goToState("intro", AssetLoadingRange.CAMPAIGN);
                 }
             } else {
                 // No battle, no universe, go back to menu
-                this.game.state.start("mainmenu", true, false);
+                this.goToState("mainmenu", AssetLoadingRange.MENU);
+            }
+        }
+
+        goToState(name: string, asset_range: AssetLoadingRange, ...args: any[]) {
+            if (AssetLoading.isRangeLoaded(this.game, asset_range)) {
+                this.game.state.start(name, true, false, ...args);
+            } else {
+                this.game.state.start("loading", true, false, asset_range);
             }
         }
     }

@@ -38,7 +38,7 @@ module TK.SpaceTac {
                 this.state.onStateChange.add((state: string) => console.log(`View change: ${state}`));
 
                 this.state.add('boot', UI.Boot);
-                this.state.add('preload', UI.Preload);
+                this.state.add('loading', UI.AssetLoading);
                 this.state.add('mainmenu', UI.MainMenu);
                 this.state.add('router', UI.Router);
                 this.state.add('battle', UI.BattleView);
