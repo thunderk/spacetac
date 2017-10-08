@@ -150,9 +150,9 @@ module TK.SpaceTac.UI {
          */
         protected message(message: string, layer = 2, clear = true): Function {
             return () => {
-                let style = new ProgressiveMessageStyle();
+                let style = new UIConversationStyle();
                 style.center = true;
-                let display = new ProgressiveMessage(this.view, 900, 200, message, style);
+                let display = new UIConversationMessage(this.view, 900, 200, message, style);
                 display.setPositionInsideParent(0.5, 0.9);
                 display.moveToLayer(this.getLayer(layer, clear));
                 display.setVisible(false);

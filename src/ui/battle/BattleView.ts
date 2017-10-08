@@ -142,6 +142,12 @@ module TK.SpaceTac.UI {
             }
         }
 
+        shutdown() {
+            super.shutdown();
+
+            this.log_processor.destroy();
+        }
+
         /**
          * Make the AI play current ship
          * 
@@ -265,10 +271,10 @@ module TK.SpaceTac.UI {
                 this.action_bar.setInteractive(enabled);
                 this.exitTargettingMode();
                 this.interacting = enabled;
-            }
 
-            if (!enabled) {
-                this.setShipHovered(null);
+                if (!enabled) {
+                    this.setShipHovered(null);
+                }
             }
         }
 

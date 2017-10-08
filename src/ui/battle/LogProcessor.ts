@@ -23,6 +23,9 @@ module TK.SpaceTac.UI {
         // Current position in the battle log
         private cursor = -1
 
+        // Indicator that the log is destroyed
+        private destroyed = false
+
         // Indicator that the log is being played continuously
         private playing = false
 
@@ -31,6 +34,9 @@ module TK.SpaceTac.UI {
 
         // Time at which the last action was applied
         private last_action: number
+
+        // Playing ship (at current log position)
+        private current_ship = new Ship()
 
         constructor(view: BattleView) {
             this.view = view;
@@ -56,58 +62,70 @@ module TK.SpaceTac.UI {
          */
         start() {
             this.cursor = this.log.events.length - 1;
+            this.current_ship = new Ship();
             this.battle.getBootstrapEvents().forEach(event => this.processBattleEvent(event));
 
             this.playing = true;
             if (!this.view.gameui.headless) {
+                // This will be asynchronous background work, until "destroy" is called
                 this.playContinuous();
             }
         }
 
         /**
+         * Destroy the processor
+         * 
+         * This should be done to ensure it will stop processing and free resources
+         */
+        destroy() {
+            this.destroyed = true;
+        }
+
+        /**
          * Play the log continuously
          */
-        playContinuous() {
+        async playContinuous() {
             let delay = 0;
 
-            if (this.playing && !this.view.game.paused) {
-                delay = this.stepForward();
-                if (delay == 0) {
-                    delay = this.transferControl();
+            while (!this.destroyed) {
+                if (this.playing && !this.view.game.paused) {
+                    await this.stepForward();
+                    await this.transferControl();
+                }
+
+                if (this.atEnd()) {
+                    await this.view.timer.sleep(50);
                 }
             }
-
-            this.view.timer.schedule(Math.max(delay, 50), () => this.playContinuous());
         }
 
         /**
          * Make a step backward in time
          */
-        stepBackward() {
+        stepBackward(): Promise<void> {
             if (!this.atStart()) {
                 this.cursor -= 1;
                 this.playing = false;
-                this.processBattleEvent(this.log.events[this.cursor + 1].getReverse());
+
+                return this.processBattleEvent(this.log.events[this.cursor + 1].getReverse());
+            } else {
+                return Promise.resolve();
             }
         }
 
         /**
          * Make a step forward in time
-         * 
-         * Returns the duration of the step processing
          */
-        stepForward(): number {
+        stepForward(): Promise<void> {
             if (!this.atEnd()) {
                 this.cursor += 1;
-                let result = this.processBattleEvent(this.log.events[this.cursor]);
-
                 if (this.atEnd()) {
                     this.playing = true;
                 }
 
-                return result;
+                return this.processBattleEvent(this.log.events[this.cursor]);
             } else {
-                return 0;
+                return Promise.resolve();
             }
         }
 
@@ -151,7 +169,7 @@ module TK.SpaceTac.UI {
          * Check if we need a player or AI to interact at this point
          */
         getPlayerNeeded(): Player | null {
-            if (this.atEnd()) {
+            if (this.playing && this.atEnd()) {
                 return this.battle.playing_ship ? this.battle.playing_ship.getPlayer() : null;
             } else {
                 return null;
@@ -186,7 +204,7 @@ module TK.SpaceTac.UI {
         /**
          * Process a single event
          */
-        processBattleEvent(event: BaseBattleEvent): number {
+        async processBattleEvent(event: BaseBattleEvent): Promise<void> {
             if (this.debug) {
                 console.log("Battle event", event);
             }
@@ -221,34 +239,54 @@ module TK.SpaceTac.UI {
                 durations.push(this.processDroneAppliedEvent(event));
             }
 
-            return max([0].concat(durations));
+            let delay = max([0].concat(durations));
+            if (delay) {
+                await this.view.timer.sleep(delay);
+            }
+
+            if (this.playing) {
+                let reaction = this.view.session.reactions.check(this.view.player, this.battle, this.current_ship, event);
+                if (reaction) {
+                    await this.processReaction(reaction);
+                }
+            }
         }
 
         /**
          * Transfer control to the needed player (or not)
          */
-        private transferControl(): number {
+        private async transferControl(): Promise<void> {
             let player = this.getPlayerNeeded();
             if (player) {
                 if (this.battle.playing_ship && !this.battle.playing_ship.alive) {
                     this.view.setInteractionEnabled(false);
                     this.battle.advanceToNextShip();
-                    return 200;
+                    await this.view.timer.sleep(200);
                 } else if (player === this.view.player) {
                     this.view.setInteractionEnabled(true);
-                    return 0;
                 } else {
                     this.view.playAI();
-                    return 0;
                 }
             } else {
                 this.view.setInteractionEnabled(false);
-                return 0;
+            }
+        }
+
+        /**
+         * Process a personality reaction
+         */
+        private async processReaction(reaction: PersonalityReaction): Promise<void> {
+            if (reaction instanceof PersonalityReactionConversation) {
+                let conversation = UIConversation.newFromPieces(this.view, reaction.messages);
+                await conversation.waitEnd();
+            } else {
+                console.warn("[LogProcessor] Unknown personality reaction type", reaction);
             }
         }
 
         // Playing ship changed
         private processShipChangeEvent(event: ShipChangeEvent): number {
+            this.current_ship = event.new_ship;
             this.view.arena.setShipPlaying(event.new_ship);
             this.view.ship_list.setPlaying(event.new_ship);
             if (event.ship !== event.new_ship) {

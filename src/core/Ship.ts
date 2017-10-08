@@ -45,6 +45,9 @@ module TK.SpaceTac {
         // Ship values
         values = new ShipValues()
 
+        // Personality
+        personality = new Personality()
+
         // Boolean set to true if the ship is currently playing its turn
         playing = false
 

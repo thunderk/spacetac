@@ -14,6 +14,9 @@ module TK.SpaceTac {
         // Current connected player
         player: Player
 
+        // Personality reactions
+        reactions: PersonalityReactions
+
         // Starting location
         start_location: StarLocation
 
@@ -27,6 +30,7 @@ module TK.SpaceTac {
             this.id = RandomGenerator.global.id(20);
             this.universe = new Universe();
             this.player = new Player(this.universe);
+            this.reactions = new PersonalityReactions();
             this.start_location = new StarLocation();
         }
 
@@ -66,6 +70,8 @@ module TK.SpaceTac {
 
             this.player = new Player(this.universe);
 
+            this.reactions = new PersonalityReactions();
+
             if (fleet) {
                 this.setCampaignFleet(null, story);
             }
@@ -97,6 +103,7 @@ module TK.SpaceTac {
             let battle = Battle.newQuickRandom(true, RandomGenerator.global.randInt(1, 10));
             this.player = battle.fleets[0].player;
             this.player.setBattle(battle);
+            this.reactions = new PersonalityReactions();
         }
 
         // Get currently played battle, null when none is in progress

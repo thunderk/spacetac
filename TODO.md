@@ -100,6 +100,7 @@ Technical
 
 * Pack all images in atlases
 * Pack sounds
+* Replace jasmine with mocha+chai
 
 Network
 -------

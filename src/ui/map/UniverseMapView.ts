@@ -37,7 +37,7 @@ module TK.SpaceTac.UI {
 
         // Active missions
         missions: ActiveMissionsDisplay
-        conversation: ConversationDisplay
+        conversation: MissionConversationDisplay
 
         // Character sheet
         character_sheet: CharacterSheet
@@ -127,13 +127,13 @@ module TK.SpaceTac.UI {
             this.character_sheet.hide(false);
             this.layer_overlay.add(this.character_sheet);
 
-            this.conversation = new ConversationDisplay(this, this.player);
+            this.conversation = new MissionConversationDisplay(this);
             this.conversation.moveToLayer(this.layer_overlay);
 
             this.gameui.audio.startMusic("spring-thaw");
 
             // Inputs
-            this.inputs.bind(" ", "Conversation step", () => this.conversation.nextPiece());
+            this.inputs.bind(" ", "Conversation step", () => this.conversation.forward());
             this.inputs.bind("Escape", "Skip conversation", () => this.conversation.skipConversation());
             this.inputs.bindCheat("r", "Reveal whole map", () => this.revealAll());
             this.inputs.bindCheat("n", "Next story step", () => {
