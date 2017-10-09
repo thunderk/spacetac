@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("displays active missions", function () {
-            let view = testgame.baseview;
+            let view = testgame.view;
             let missions = new ActiveMissions();
             let display = new ActiveMissionsDisplay(view, missions);
 

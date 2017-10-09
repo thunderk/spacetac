@@ -3,16 +3,16 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         function newTargetting(): Targetting {
-            return new Targetting(testgame.battleview,
-                testgame.battleview.action_bar,
-                testgame.battleview.toggle_tactical_mode,
-                testgame.battleview.arena.range_hint);
+            return new Targetting(testgame.view,
+                testgame.view.action_bar,
+                testgame.view.toggle_tactical_mode,
+                testgame.view.arena.range_hint);
         }
 
         it("draws simulation parts", function () {
             let targetting = newTargetting();
 
-            let ship = nn(testgame.battleview.battle.playing_ship);
+            let ship = nn(testgame.view.battle.playing_ship);
             ship.setArenaPosition(10, 20);
             let weapon = TestTools.addWeapon(ship);
             let engine = TestTools.addEngine(ship, 12);
@@ -43,7 +43,7 @@ module TK.SpaceTac.UI.Specs {
 
         it("updates impact indicators on ships inside the blast radius", function () {
             let targetting = newTargetting();
-            let ship = nn(testgame.battleview.battle.playing_ship);
+            let ship = nn(testgame.view.battle.playing_ship);
             let impacts = targetting.impact_indicators;
             let action = new TriggerAction(new Equipment(), [], 1, 0, 50);
 
@@ -74,7 +74,7 @@ module TK.SpaceTac.UI.Specs {
 
         it("updates graphics from simulation", function () {
             let targetting = newTargetting();
-            let ship = nn(testgame.battleview.battle.playing_ship);
+            let ship = nn(testgame.view.battle.playing_ship);
 
             let engine = TestTools.addEngine(ship, 8000);
             let weapon = TestTools.addWeapon(ship, 30, 5, 100, 50);
@@ -113,11 +113,11 @@ module TK.SpaceTac.UI.Specs {
 
         it("snaps on ships according to targetting mode", function () {
             let targetting = newTargetting();
-            let playing_ship = nn(testgame.battleview.battle.playing_ship);
+            let playing_ship = nn(testgame.view.battle.playing_ship);
             let action = TestTools.addWeapon(playing_ship).action;
 
-            let ship1 = testgame.battleview.battle.play_order[1];
-            let ship2 = testgame.battleview.battle.play_order[2];
+            let ship1 = testgame.view.battle.play_order[1];
+            let ship2 = testgame.view.battle.play_order[2];
             ship1.setArenaPosition(8000, 50);
             ship2.setArenaPosition(8000, 230);
 
@@ -146,7 +146,7 @@ module TK.SpaceTac.UI.Specs {
 
         it("updates the range hint display", function () {
             let targetting = newTargetting();
-            let ship = nn(testgame.battleview.battle.playing_ship);
+            let ship = nn(testgame.view.battle.playing_ship);
             ship.setArenaPosition(0, 0);
             ship.listEquipment(SlotType.Engine).forEach(engine => engine.detach());
             TestTools.setShipAP(ship, 8);

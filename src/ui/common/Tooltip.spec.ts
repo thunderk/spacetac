@@ -3,10 +3,10 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("shows near the hovered button", function () {
-            let button = testgame.baseview.add.button();
+            let button = testgame.view.add.button();
             spyOn(button, "getBounds").and.returnValue({ x: 100, y: 50, width: 50, height: 25 });
 
-            let tooltip = new Tooltip(testgame.baseview);
+            let tooltip = new Tooltip(testgame.view);
             tooltip.bind(button, filler => true);
 
             let container = <Phaser.Group>(<any>tooltip).container;

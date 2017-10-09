@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("handles hover and click on desktops and mobile targets", function (done) {
-            let inputs = testgame.baseview.inputs;
+            let inputs = testgame.view.inputs;
 
             let pointer = new Phaser.Pointer(testgame.ui, 0);
             function newButton(): [Phaser.Button, any] {

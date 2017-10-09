@@ -20,7 +20,7 @@ module TK.SpaceTac.UI.Specs {
             let shop_missions: Mission[] = [];
             spyOn(shop, "getMissions").and.callFake(() => shop_missions);
 
-            let missions = new MissionsDialog(testgame.baseview, shop, player);
+            let missions = new MissionsDialog(testgame.view, shop, player);
             checkTexts(missions, []);
 
             let mission = new Mission(universe);

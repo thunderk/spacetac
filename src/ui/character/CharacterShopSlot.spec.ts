@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("buys and sell if bound to a shop", function () {
-            let view = testgame.baseview;
+            let view = testgame.view;
             let sheet = new CharacterSheet(view);
 
             let fleet = new Fleet();

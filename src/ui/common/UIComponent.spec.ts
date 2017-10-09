@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("controls visibility", function () {
-            let component = new UIComponent(testgame.baseview, 50, 50);
+            let component = new UIComponent(testgame.view, 50, 50);
 
             let container = <Phaser.Group>(<any>component).container;
             expect(container.visible).toBe(true);
@@ -17,11 +17,11 @@ module TK.SpaceTac.UI.Specs {
             // with transition
             component.setVisible(false, 500);
             expect(container.visible).toBe(true);
-            expect(testgame.baseview.animations.simulate(container, 'alpha')).toEqual([1, 0.5, 0]);
+            expect(testgame.view.animations.simulate(container, 'alpha')).toEqual([1, 0.5, 0]);
         });
 
         it("sets position inside parent", function () {
-            let comp1 = new UIComponent(testgame.baseview, 100, 100);
+            let comp1 = new UIComponent(testgame.view, 100, 100);
             expect(comp1.getPosition()).toEqual([0, 0]);
             comp1.setPositionInsideParent(1, 1);
             expect(comp1.getPosition()).toEqual([1820, 980]);

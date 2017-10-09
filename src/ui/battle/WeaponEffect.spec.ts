@@ -3,8 +3,8 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         function checkEmitters(step: string, expected: number) {
-            expect(testgame.battleview.arena.layer_weapon_effects.children.length).toBe(expected, `${step} - layer children`);
-            expect(keys(testgame.battleview.game.particles.emitters).length).toBe(expected, `${step} - registered emitters`);
+            expect(testgame.view.arena.layer_weapon_effects.children.length).toBe(expected, `${step} - layer children`);
+            expect(keys(testgame.view.game.particles.emitters).length).toBe(expected, `${step} - registered emitters`);
         }
 
         function fastForward(milliseconds: number) {
@@ -13,7 +13,7 @@ module TK.SpaceTac.UI.Specs {
         }
 
         it("displays shield hit effect", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             battleview.timer = new Timer();
 
             let effect = new WeaponEffect(battleview.arena, new Ship(), new Target(0, 0), new Equipment());
@@ -30,7 +30,7 @@ module TK.SpaceTac.UI.Specs {
         });
 
         it("displays gatling gun effect", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             battleview.timer = new Timer();
 
             let ship = nn(battleview.battle.playing_ship);
@@ -43,7 +43,7 @@ module TK.SpaceTac.UI.Specs {
         });
 
         it("displays shield and hull effect on impacted ships", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             battleview.timer = new Timer();
 
             let ship = nn(battleview.battle.playing_ship);
@@ -76,7 +76,7 @@ module TK.SpaceTac.UI.Specs {
         });
 
         it("removes particle emitters when done", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             battleview.timer = new Timer();
 
             let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(50, 50), new Equipment());
@@ -93,7 +93,7 @@ module TK.SpaceTac.UI.Specs {
         });
 
         it("adds a laser effect", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             battleview.timer = new Timer();
 
             let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(31, 49), new Equipment());

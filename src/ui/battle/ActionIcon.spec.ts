@@ -5,7 +5,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("displays power usage", function () {
-            let bar = testgame.battleview.action_bar;
+            let bar = testgame.view.action_bar;
             let ship = new Ship();
             let action = new BaseAction("something", "Do something");
             let icon = new ActionIcon(bar, ship, action, 0);
@@ -21,7 +21,7 @@ module TK.SpaceTac.UI.Specs {
         })
 
         it("displays disabled and fading states", function () {
-            let bar = testgame.battleview.action_bar;
+            let bar = testgame.view.action_bar;
             let ship = new Ship();
             TestTools.setShipAP(ship, 5);
             let action = nn(TestTools.addWeapon(ship, 50, 3).action);
@@ -59,7 +59,7 @@ module TK.SpaceTac.UI.Specs {
         })
 
         it("displays toggle state", function () {
-            let bar = testgame.battleview.action_bar;
+            let bar = testgame.view.action_bar;
             let ship = new Ship();
             TestTools.setShipAP(ship, 5);
             let equipment = new Equipment(SlotType.Weapon);
@@ -82,7 +82,7 @@ module TK.SpaceTac.UI.Specs {
         })
 
         it("displays overheat/cooldown", function () {
-            let bar = testgame.battleview.action_bar;
+            let bar = testgame.view.action_bar;
             let ship = new Ship();
             TestTools.setShipAP(ship, 5);
             let action = nn(TestTools.addWeapon(ship, 50, 3).action);
@@ -112,9 +112,9 @@ module TK.SpaceTac.UI.Specs {
         })
 
         it("displays currently targetting", function () {
-            testgame.battleview.animations.setImmediate();
+            testgame.view.animations.setImmediate();
 
-            let bar = testgame.battleview.action_bar;
+            let bar = testgame.view.action_bar;
             let ship = new Ship();
             TestTools.setShipAP(ship, 5);
             let action = nn(TestTools.addWeapon(ship, 50, 3).action);

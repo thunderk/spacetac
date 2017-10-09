@@ -5,7 +5,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("handles play position of ships", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             var list = battleview.ship_list;
 
             expect(battleview.battle.play_order.length).toBe(10);

@@ -3,7 +3,7 @@
 
 module TK.SpaceTac.UI.Specs {
     describe("LoadDialog", () => {
-        let testgame = setupSingleView(testgame => [new MainMenu(), []]);
+        let testgame = setupSingleView(() => [new MainMenu(), []]);
 
         it("joins remote sessions as spectator", function (done) {
             let view = <MainMenu>testgame.ui.state.getCurrentState();

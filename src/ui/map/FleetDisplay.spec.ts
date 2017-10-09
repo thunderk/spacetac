@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupMapview();
 
         it("orbits the fleet around its current location", function () {
-            let mapview = testgame.mapview;
+            let mapview = testgame.view;
             let fleet = mapview.player_fleet;
 
             fleet.loopOrbit();

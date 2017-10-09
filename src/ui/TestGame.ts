@@ -1,6 +1,3 @@
-/// <reference path="battle/BattleView.ts"/>
-/// <reference path="map/UniverseMapView.ts"/>
-
 module TK.SpaceTac.UI.Specs {
     let test_ui: MainUI;
 
@@ -9,19 +6,17 @@ module TK.SpaceTac.UI.Specs {
      * 
      * Attributes should only be accessed from inside corresponding "it" blocks (they are initialized by the setup).
      */
-    export class TestGame {
+    export class TestGame<T extends Phaser.State> {
         ui: MainUI;
-        baseview: BaseView;
-        battleview: BattleView;
-        mapview: UniverseMapView;
+        view: T;
         multistorage: Multi.FakeRemoteStorage;
     }
 
     /**
      * Setup a headless test UI, with a single view started.
      */
-    export function setupSingleView(buildView: (testgame: TestGame) => [Phaser.State, any[]]) {
-        let testgame = new TestGame();
+    export function setupSingleView<T extends Phaser.State>(buildView: () => [T, any[]]) {
+        let testgame = new TestGame<T>();
 
         beforeEach(function (done) {
             spyOn(console, "log").and.stub();
@@ -40,7 +35,7 @@ module TK.SpaceTac.UI.Specs {
 
             testgame.ui = test_ui;
 
-            let [state, stateargs] = buildView(testgame);
+            let [state, stateargs] = buildView();
 
             if (state instanceof BaseView) {
                 testgame.multistorage = new Multi.FakeRemoteStorage();
@@ -61,6 +56,8 @@ module TK.SpaceTac.UI.Specs {
                 testgame.ui.device.canvas = true;
                 testgame.ui.boot();
             }
+
+            testgame.view = state;
         });
 
         afterEach(function () {
@@ -73,40 +70,37 @@ module TK.SpaceTac.UI.Specs {
     /**
      * Test setup of an empty BaseView
      */
-    export function setupEmptyView(): TestGame {
-        return setupSingleView(testgame => {
-            testgame.baseview = new BaseView();
-            return [testgame.baseview, []];
+    export function setupEmptyView(): TestGame<BaseView> {
+        return setupSingleView(() => {
+            return [new BaseView(), []];
         });
     }
 
     /**
      * Test setup of a battleview bound to a battle, to be called inside a "describe" block.
      */
-    export function setupBattleview(): TestGame {
-        return setupSingleView(testgame => {
-            testgame.battleview = new BattleView();
-            testgame.battleview.splash = false;
+    export function setupBattleview(): TestGame<BattleView> {
+        return setupSingleView(() => {
+            let view = new BattleView();
+            view.splash = false;
 
             let battle = Battle.newQuickRandom();
             let player = battle.playing_ship ? battle.playing_ship.getPlayer() : new Player();
 
-            return [testgame.battleview, [player, battle]];
+            return [view, [player, battle]];
         });
     }
 
     /**
      * Test setup of a mapview bound to a universe, to be called inside a "describe" block.
      */
-    export function setupMapview(): TestGame {
-        return setupSingleView(testgame => {
-            testgame.mapview = new UniverseMapView();
-
+    export function setupMapview(): TestGame<UniverseMapView> {
+        return setupSingleView(() => {
             let mapview = new UniverseMapView();
             let session = new GameSession();
             session.startNewGame();
 
-            return [testgame.mapview, [session.universe, session.player]];
+            return [mapview, [session.universe, session.player]];
         });
     }
 

@@ -46,7 +46,7 @@ module TK.SpaceTac.UI.Specs {
         }
 
         it("handles drag-and-drop to move equipment", function () {
-            let view = testgame.baseview;
+            let view = testgame.view;
             let sheet = new CharacterSheet(view);
             sheet.show(new Ship());
             let refresh = spyOn(sheet, "refresh").and.stub();

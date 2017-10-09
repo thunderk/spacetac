@@ -4,11 +4,11 @@ module TK.SpaceTac.UI.Specs {
             let testgame = setupEmptyView();
 
             it("destroys children", function () {
-                let parent = testgame.baseview.add.group();
-                let child1 = testgame.baseview.add.graphics(0, 0, parent);
-                let child2 = testgame.baseview.add.image(0, 0, "", 0, parent);
-                let child3 = testgame.baseview.add.button(0, 0, "", undefined, undefined, undefined, undefined, undefined, undefined, parent);
-                let child4 = testgame.baseview.add.text(0, 0, "", {}, parent);
+                let parent = testgame.view.add.group();
+                let child1 = testgame.view.add.graphics(0, 0, parent);
+                let child2 = testgame.view.add.image(0, 0, "", 0, parent);
+                let child3 = testgame.view.add.button(0, 0, "", undefined, undefined, undefined, undefined, undefined, undefined, parent);
+                let child4 = testgame.view.add.text(0, 0, "", {}, parent);
                 expect(parent.children.length).toBe(4);
 
                 destroyChildren(parent, 1, 2);
@@ -19,7 +19,7 @@ module TK.SpaceTac.UI.Specs {
             });
 
             it("keeps objects inside bounds", function () {
-                let image = testgame.baseview.add.graphics(150, 100);
+                let image = testgame.view.add.graphics(150, 100);
                 image.beginFill(0xff0000);
                 image.drawEllipse(50, 25, 50, 25);
                 image.endFill();

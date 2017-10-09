@@ -3,28 +3,30 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupMapview();
 
         it("displays a badge with the current state for a star location", function () {
-            let mapview = testgame.mapview;
+            let mapview = testgame.view;
             let location = nn(mapview.player.fleet.location);
 
             let ssdisplay = nn(first(mapview.starsystems, ss => ss.starsystem == location.star));
-            let l1display = nn(first(ssdisplay.locations, loc => loc[0] == location));
-            expect(l1display[2].name).toEqual("map-status-dockyard");
 
-            let l2display = nn(first(ssdisplay.locations, loc => loc[0] != location));
-            expect(l2display[2].name).toEqual("map-status-unvisited");
+            let ldisplay = nn(first(ssdisplay.locations, loc => loc[0] != location));
+            expect(ldisplay[2].name).toEqual("map-status-unvisited");
 
-            l2display[0].setupEncounter();
+            ldisplay[0].setupEncounter();
             ssdisplay.updateInfo(2, true);
-            expect(l2display[2].name).toEqual("map-status-unvisited");
+            expect(ldisplay[2].name).toEqual("map-status-unvisited");
 
-            mapview.player.setVisited(l2display[0]);
+            mapview.player.setVisited(ldisplay[0]);
             ssdisplay.updateInfo(2, true);
-            expect(l2display[2].name).toEqual("map-status-enemy");
+            expect(ldisplay[2].name).toEqual("map-status-enemy");
 
-            l2display[0].shop = null;
-            l2display[0].clearEncounter();
+            ldisplay[0].shop = null;
+            ldisplay[0].clearEncounter();
             ssdisplay.updateInfo(2, true);
-            expect(l2display[2].name).toEqual("map-status-clear");
+            expect(ldisplay[2].name).toEqual("map-status-clear");
+
+            ldisplay[0].shop = new Shop();
+            ssdisplay.updateInfo(2, true);
+            expect(ldisplay[2].name).toEqual("map-status-dockyard");
         });
     });
 }

@@ -5,7 +5,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("lists available actions for selected ship", function () {
-            var bar = testgame.battleview.action_bar;
+            var bar = testgame.view.action_bar;
 
             // Ship not owned by current battleview player
             var ship = new Ship();
@@ -13,7 +13,7 @@ module TK.SpaceTac.UI.Specs {
             expect(bar.action_icons.length).toBe(0);
 
             // Ship with no equipment (only endturn action)
-            testgame.battleview.player = ship.getPlayer();
+            testgame.view.player = ship.getPlayer();
             bar.setShip(ship);
             expect(bar.action_icons.length).toBe(1);
             expect(bar.action_icons[0].action.code).toEqual("endturn");
@@ -32,7 +32,7 @@ module TK.SpaceTac.UI.Specs {
         });
 
         it("updates power points display", function () {
-            let bar = testgame.battleview.action_bar;
+            let bar = testgame.view.action_bar;
 
             function check(available = 0, using = 0, used = 0) {
                 expect(bar.power_icons.children.length).toBe(available + using + used);
@@ -55,13 +55,13 @@ module TK.SpaceTac.UI.Specs {
             check();
 
             // owned ship
-            ship.fleet = testgame.battleview.player.fleet;
+            ship.fleet = testgame.view.player.fleet;
             bar.setShip(ship);
             check(8);
 
             // used points
             ship.setValue("power", 6);
-            testgame.battleview.log_processor.jumpToEnd();
+            testgame.view.log_processor.jumpToEnd();
             check(6, 0, 2);
 
             // using points
@@ -70,7 +70,7 @@ module TK.SpaceTac.UI.Specs {
 
             // decrease
             ship.setAttribute("power_capacity", 3);
-            testgame.battleview.log_processor.jumpToEnd();
+            testgame.view.log_processor.jumpToEnd();
             check(3);
         });
     });

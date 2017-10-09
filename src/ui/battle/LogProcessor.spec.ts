@@ -24,9 +24,9 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("steps forward and backward in time", function () {
-            let battle = testgame.battleview.battle;
+            let battle = testgame.view.battle;
             battle.log.clear();
-            let processor = new LogProcessor(testgame.battleview);
+            let processor = new LogProcessor(testgame.view);
             processor.register(event => {
                 event.apply(battle);
                 return 0;

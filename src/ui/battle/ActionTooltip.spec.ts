@@ -5,7 +5,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("displays action information", () => {
-            let tooltip = new Tooltip(testgame.baseview);
+            let tooltip = new Tooltip(testgame.view);
             let ship = new Ship();
             TestTools.setShipAP(ship, 10);
 

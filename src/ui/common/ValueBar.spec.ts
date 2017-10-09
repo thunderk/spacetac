@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("computes proportional value", function () {
-            var bar = new ValueBar(testgame.baseview, "default", ValueBarOrientation.EAST);
+            var bar = new ValueBar(testgame.view, "default", ValueBarOrientation.EAST);
             expect(bar.getProportionalValue()).toBe(0);
 
             bar.setValue(20, 100);

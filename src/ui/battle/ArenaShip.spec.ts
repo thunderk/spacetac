@@ -5,8 +5,8 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("adds effects display", function () {
-            let ship = nn(testgame.battleview.battle.playing_ship);
-            let sprite = nn(testgame.battleview.arena.findShipSprite(ship));
+            let ship = nn(testgame.view.battle.playing_ship);
+            let sprite = nn(testgame.view.arena.findShipSprite(ship));
 
             expect(sprite.effects_messages.children.length).toBe(0);
 
@@ -24,21 +24,21 @@ module TK.SpaceTac.UI.Specs {
         });
 
         it("adds sticky effects display", function () {
-            let ship = nn(testgame.battleview.battle.playing_ship);
-            let sprite = nn(testgame.battleview.arena.findShipSprite(ship));
+            let ship = nn(testgame.view.battle.playing_ship);
+            let sprite = nn(testgame.view.arena.findShipSprite(ship));
 
             expect(sprite.active_effects_display.children.length).toBe(0);
 
             ship.addStickyEffect(new StickyEffect(new BaseEffect("test")));
-            testgame.battleview.log_processor.jumpToEnd();
+            testgame.view.log_processor.jumpToEnd();
             expect(sprite.active_effects_display.children.length).toBe(1);
 
             ship.addStickyEffect(new StickyEffect(new BaseEffect("test")));
-            testgame.battleview.log_processor.jumpToEnd();
+            testgame.view.log_processor.jumpToEnd();
             expect(sprite.active_effects_display.children.length).toBe(2);
 
             ship.cleanStickyEffects();
-            testgame.battleview.log_processor.jumpToEnd();
+            testgame.view.log_processor.jumpToEnd();
             expect(sprite.active_effects_display.children.length).toBe(0);
         });
     });

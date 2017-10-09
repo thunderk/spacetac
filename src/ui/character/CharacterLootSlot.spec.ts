@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("takes or discard loot", function () {
-            let view = testgame.baseview;
+            let view = testgame.view;
             let sheet = new CharacterSheet(view);
 
             let fleet = new Fleet();

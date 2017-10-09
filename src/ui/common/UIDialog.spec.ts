@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("sets up an overlay", function () {
-            let view = testgame.baseview;
+            let view = testgame.view;
             expect(view.dialogs_layer.children.length).toBe(0);
 
             let dialog1 = new UIDialog(view, 10, 10, "fake");

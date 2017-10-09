@@ -5,7 +5,7 @@ module TK.SpaceTac.UI.Specs {
             let testgame = setupEmptyView();
 
             it("displays fleet and ship information", function () {
-                let view = testgame.baseview;
+                let view = testgame.view;
                 let sheet = new CharacterSheet(view, -1000);
 
                 expect(sheet.x).toEqual(-1000);
@@ -52,7 +52,7 @@ module TK.SpaceTac.UI.Specs {
                 let loot = [equ3, equ4];
                 ship.addSlot(SlotType.Weapon);
 
-                let sheet = new CharacterSheet(testgame.baseview);
+                let sheet = new CharacterSheet(testgame.view);
                 sheet.show(ship, false);
 
                 expect(sheet.loot_slots.visible).toBe(false);

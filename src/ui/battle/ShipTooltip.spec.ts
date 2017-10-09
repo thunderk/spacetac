@@ -3,8 +3,8 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("fills ship details", function () {
-            let tooltip = new ShipTooltip(testgame.battleview);
-            let ship = testgame.battleview.battle.play_order[2];
+            let tooltip = new ShipTooltip(testgame.view);
+            let ship = testgame.view.battle.play_order[2];
             ship.fleet.player.name = "Phil";
             ship.name = "Fury";
             ship.model = new ShipModel("fake", "Fury");
@@ -13,7 +13,7 @@ module TK.SpaceTac.UI.Specs {
             TestTools.setShipAP(ship, 12);
             TestTools.addWeapon(ship, 50);
 
-            let sprite = nn(testgame.battleview.arena.findShipSprite(ship));
+            let sprite = nn(testgame.view.arena.findShipSprite(ship));
             sprite.active_effects = new ActiveEffectsEvent(ship,
                 [new AttributeEffect("hull_capacity", 50)],
                 [new StickyEffect(new DamageModifierEffect(-15), 3)],

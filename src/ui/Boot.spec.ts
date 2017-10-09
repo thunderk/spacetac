@@ -3,7 +3,7 @@
 
 module TK.SpaceTac.UI.Specs {
     describe("Boot", () => {
-        let testgame = setupSingleView(testgame => [new Boot(), []]);
+        let testgame = setupSingleView(() => [new Boot(), []]);
 
         it("places empty loading background", function () {
             expect(testgame.ui.world.children.length).toBe(1);

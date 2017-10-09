@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("allows dragging equipment", function () {
-            let view = testgame.baseview;
+            let view = testgame.view;
             let ship = new Ship();
             ship.addSlot(SlotType.Hull);
             let sheet = new CharacterSheet(view);

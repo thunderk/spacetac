@@ -5,7 +5,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupBattleview();
 
         it("handles ship hovering to display tooltip", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             expect(battleview.ship_hovered).toBeNull("initial state");
 
             let ship = nn(battleview.battle.playing_ship);
@@ -30,7 +30,7 @@ module TK.SpaceTac.UI.Specs {
         });
 
         it("forwards cursor hovering and click to targetting", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             expect(battleview.targetting.active).toBe(false);
             battleview.setInteractionEnabled(true);
 
@@ -66,7 +66,7 @@ module TK.SpaceTac.UI.Specs {
         });
 
         it("allows to choose an action and a target with shortcut keys", function () {
-            let battleview = testgame.battleview;
+            let battleview = testgame.view;
             battleview.setInteractionEnabled(true);
             let action_icon = battleview.action_bar.action_icons[0];
 

@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("checks conditions for adding/removing equipment", function () {
-            let view = testgame.baseview;
+            let view = testgame.view;
             let sheet = new CharacterSheet(view);
             let ship = new Ship();
             sheet.show(ship);

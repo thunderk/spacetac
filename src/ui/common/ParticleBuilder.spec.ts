@@ -3,7 +3,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView();
 
         it("builds composed particles", function () {
-            let builder = new ParticleBuilder(testgame.baseview);
+            let builder = new ParticleBuilder(testgame.view);
             let particle = builder.build([
                 new ParticleConfig(ParticleShape.ROUND, ParticleColor.BLUE, 2, 1, 45, 10, -20),
                 new ParticleConfig(ParticleShape.DISK_HALO, ParticleColor.WHITE, 0.5, 1, 0, 5, 0)
