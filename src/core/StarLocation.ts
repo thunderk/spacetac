@@ -52,6 +52,13 @@ module TK.SpaceTac {
         }
 
         /**
+         * Remove a potential shop in this location
+         */
+        removeShop(): void {
+            this.shop = null;
+        }
+
+        /**
          * Check if the location is clear of encounter
          */
         isClear(): boolean {

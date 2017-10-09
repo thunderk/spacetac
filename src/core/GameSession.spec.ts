@@ -80,14 +80,13 @@ module TK.SpaceTac.Specs {
             expect(session.player.fleet.credits).toBe(0);
             expect(session.player.universe.stars.length).toBe(50);
             expect(session.getBattle()).toBeNull();
-            expect(session.start_location.shop).not.toBeNull();
-            expect(nn(session.start_location.shop).getStock().length).toBeGreaterThan(20);
+            expect(session.start_location.shop).toBeNull();
             expect(session.start_location.encounter).toBeNull();
             expect(session.start_location.encounter_gen).toBe(true);
 
             session.setCampaignFleet();
             expect(session.player.fleet.ships.length).toBe(2);
-            expect(session.player.fleet.credits).toBe(500);
+            expect(session.player.fleet.credits).toBe(0);
             expect(session.player.fleet.location).toBe(session.start_location);
         });
 

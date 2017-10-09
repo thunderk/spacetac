@@ -27,6 +27,7 @@ module TK.SpaceTac.UI {
 
         // Modal dialogs
         dialogs_layer: Phaser.Group
+        dialogs_opened: UIDialog[] = []
 
         // Get the size of display
         getWidth(): number {
@@ -81,6 +82,8 @@ module TK.SpaceTac.UI {
         }
 
         shutdown() {
+            this.audio.stopMusic();
+
             super.shutdown();
 
             this.timer.cancelAll(true);

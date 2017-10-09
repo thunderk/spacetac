@@ -11,21 +11,23 @@ module TK.SpaceTac.UI {
             var ui = <MainUI>this.game;
             var session = ui.session;
 
-            if (!session) {
-                // No session, go back to main menu
-                this.goToState("mainmenu", AssetLoadingRange.MENU);
-            } else if (session.getBattle()) {
+            if (session.getBattle()) {
                 // A battle is raging, go to it
                 this.goToState("battle", AssetLoadingRange.BATTLE, session.player, session.getBattle());
             } else if (session.hasUniverse()) {
+                // Campaign mode
                 if (session.isFleetCreated()) {
                     // Go to the universe map
                     this.goToState("universe", AssetLoadingRange.CAMPAIGN, session.universe, session.player);
+                } else if (session.isIntroViewed()) {
+                    // Build initial fleet
+                    this.goToState("creation", AssetLoadingRange.CAMPAIGN);
                 } else {
+                    // Show intro
                     this.goToState("intro", AssetLoadingRange.CAMPAIGN);
                 }
             } else {
-                // No battle, no universe, go back to menu
+                // No battle, no campaign, go back to menu to decide what to do
                 this.goToState("mainmenu", AssetLoadingRange.MENU);
             }
         }

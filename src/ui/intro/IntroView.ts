@@ -14,8 +14,7 @@ module TK.SpaceTac.UI {
 
             let nextStep = () => {
                 if (!steps.nextStep()) {
-                    // For now, we create a random fleet
-                    this.gameui.session.setCampaignFleet();
+                    this.session.introduced = true;
                     this.backToRouter();
                     return false;
                 } else {

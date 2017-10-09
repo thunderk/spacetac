@@ -10,9 +10,10 @@ module TK.SpaceTac.UI {
         constructor(parent: BaseView, width = 1495, height = 1080, background = "common-dialog") {
             super(parent, width, height, background);
 
-            if (parent.dialogs_layer.children.length == 0) {
+            if (parent.dialogs_opened.length == 0) {
                 this.addOverlay(parent.dialogs_layer);
             }
+            add(parent.dialogs_opened, this);
 
             this.view.audio.playOnce("ui-dialog-open");
 
@@ -46,7 +47,9 @@ module TK.SpaceTac.UI {
 
             this.view.audio.playOnce("ui-dialog-close");
 
-            if (this.view.dialogs_layer.children.length == 1) {
+            remove(this.view.dialogs_opened, this);
+            if (this.view.dialogs_opened.length == 0) {
+                // Remove overlay
                 this.view.dialogs_layer.removeAll(true);
             }
         }

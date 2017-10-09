@@ -12,10 +12,8 @@ Menu/settings/saves
 Map/story
 ---------
 
-* Add initial character creation
 * Add sound effects and more visual effects (jumps...)
 * Fix quickly zooming in twice preventing to display some UI parts
-* Allow to change/buy ship model
 * Add factions and reputation
 * Allow to cancel secondary missions
 * Forbid to end up with more than 5 ships in the fleet because of escorts
@@ -27,14 +25,20 @@ Character sheet
 
 * Disable interaction during battle (except for loot screen)
 * Improve eye-catching for shop and loot section
-* Highlight allowed destinations during drag-and-drop, with text hints
+* Highlight allowed destinations during drag-and-drop, with text hints (for success or error)
 * When transferring to another ship, if the item can't be equipped (unmatched requirements), the transfer is cancelled instead of trying cargo
 * Effective skill is sometimes not updated when upgrading base skill
 * Add merged cargo display for the whole fleet
+* Allow to change/buy ship model
+* Add personality indicators (editable in creation view)
+* Allow to cancel spent skill points (and confirm when closing the sheet)
+* Add filters and sort options for cargo and shop
+* Display level and slot type on equipment
 
 Battle
 ------
 
+* Fix arena's ship hovering happening even when the character sheet is open on top
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
 * Remove dead ships from ship list and play order
@@ -90,7 +94,6 @@ Common UI
 ---------
 
 * Add caret/focus to text input
-* Add a standard confirm dialog
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator

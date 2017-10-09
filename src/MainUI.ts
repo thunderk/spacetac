@@ -43,6 +43,7 @@ module TK.SpaceTac {
                 this.state.add('router', UI.Router);
                 this.state.add('battle', UI.BattleView);
                 this.state.add('intro', UI.IntroView);
+                this.state.add('creation', UI.FleetCreationView);
                 this.state.add('universe', UI.UniverseMapView);
 
                 this.state.start('boot');
@@ -65,6 +66,14 @@ module TK.SpaceTac {
         }
 
         /**
+         * Reset the game session
+         */
+        resetSession(): void {
+            this.session = new GameSession();
+            this.session_token = null;
+        }
+
+        /**
          * Display a popup message in current view
          */
         displayMessage(message: string) {
@@ -78,8 +87,7 @@ module TK.SpaceTac {
          * Quit the current session, and go back to mainmenu
          */
         quitGame() {
-            this.session = new GameSession();
-            this.session_token = null;
+            this.resetSession();
             this.state.start('router');
         }
 

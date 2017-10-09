@@ -10,6 +10,7 @@ module TK.SpaceTac.UI.Specs {
         ui: MainUI;
         view: T;
         multistorage: Multi.FakeRemoteStorage;
+        state: string;
     }
 
     /**
@@ -34,6 +35,7 @@ module TK.SpaceTac.UI.Specs {
             }
 
             testgame.ui = test_ui;
+            testgame.ui.resetSession();
 
             let [state, stateargs] = buildView();
 
@@ -51,6 +53,11 @@ module TK.SpaceTac.UI.Specs {
 
             testgame.ui.state.add("test", state);
             testgame.ui.state.start("test", true, false, ...stateargs);
+
+            testgame.state = "test_initial";
+            spyOn(testgame.ui.state, "start").and.callFake((name: string) => {
+                testgame.state = name;
+            });
 
             if (!testgame.ui.isBooted) {
                 testgame.ui.device.canvas = true;
@@ -126,5 +133,13 @@ module TK.SpaceTac.UI.Specs {
                 fail(`${component} is not at index ${index} in ${layer.name}`);
             }
         }
+    }
+
+    /**
+     * Simulate a click on a button
+     */
+    export function testClick(button: Phaser.Button): void {
+        button.onInputDown.dispatch();
+        button.onInputUp.dispatch();
     }
 }

@@ -17,7 +17,7 @@ module TK.SpaceTac {
         // Available slots
         slots: SlotType[];
 
-        constructor(code: string, name: string, level = 1, cargo = 6, default_slots = true, weapon_slots = 2) {
+        constructor(code = "unknown", name = "Unknown", level = 1, cargo = 6, default_slots = true, weapon_slots = 2) {
             this.code = code;
             this.name = name;
             this.level = level;
@@ -51,7 +51,7 @@ module TK.SpaceTac {
         /**
          * Pick a random model in the default collection
          */
-        static getRandomModel(level?: number, random: RandomGenerator = new RandomGenerator()): ShipModel {
+        static getRandomModel(level?: number, random = RandomGenerator.global): ShipModel {
             let collection = this.getDefaultCollection();
             if (level) {
                 collection = collection.filter(model => model.level <= level);
@@ -59,9 +59,34 @@ module TK.SpaceTac {
 
             if (collection.length == 0) {
                 console.error("Couldn't pick a random model");
-                return new ShipModel("undefined", "Undefined");
+                return new ShipModel();
             } else {
                 return random.choice(collection);
+            }
+        }
+
+        /**
+         * Pick random models in the default collection
+         * 
+         * At first it tries to pick unique models, then fill with duplicates
+         */
+        static getRandomModels(count: number, level?: number, random = RandomGenerator.global): ShipModel[] {
+            let collection = this.getDefaultCollection();
+            if (level) {
+                collection = collection.filter(model => model.level <= level);
+            }
+
+            if (collection.length == 0) {
+                console.error("Couldn't pick a random model");
+                return range(count).map(() => new ShipModel());
+            } else {
+                let result: ShipModel[] = [];
+                while (count > 0) {
+                    let picked = random.sample(collection, Math.min(count, collection.length));
+                    result = result.concat(picked);
+                    count -= picked.length;
+                }
+                return result;
             }
         }
     }

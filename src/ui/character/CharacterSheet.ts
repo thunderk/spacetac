@@ -9,59 +9,62 @@ module TK.SpaceTac.UI {
      */
     export class CharacterSheet extends Phaser.Image {
         // Parent view
-        view: BaseView;
+        view: BaseView
 
         // X positions
-        xshown: number;
-        xhidden: number;
+        xshown: number
+        xhidden: number
+
+        // Close button
+        close_button: Phaser.Button
 
         // Currently displayed fleet
-        fleet: Fleet;
+        fleet: Fleet
 
         // Currently displayed ship
-        ship: Ship;
+        ship: Ship
 
         // Ship name
-        ship_name: Phaser.Text;
+        ship_name: Phaser.Text
 
         // Ship level
-        ship_level: Phaser.Text;
-        ship_experience: ValueBar;
+        ship_level: Phaser.Text
+        ship_experience: ValueBar
 
         // Ship skill upgrade
-        ship_upgrade_points: Phaser.Text;
-        ship_upgrades: Phaser.Group;
+        ship_upgrade_points: Phaser.Text
+        ship_upgrades: Phaser.Group
 
         // Ship slots
-        ship_slots: Phaser.Group;
+        ship_slots: Phaser.Group
 
         // Ship cargo
-        ship_cargo: Phaser.Group;
+        ship_cargo: Phaser.Group
 
         // Mode title
-        mode_title: Phaser.Text;
+        mode_title: Phaser.Text
 
         // Loot items
-        loot_slots: Phaser.Group;
-        loot_items: Equipment[] = [];
-        loot_page = 0;
-        loot_next: Phaser.Button;
-        loot_prev: Phaser.Button;
+        loot_slots: Phaser.Group
+        loot_items: Equipment[] = []
+        loot_page = 0
+        loot_next: Phaser.Button
+        loot_prev: Phaser.Button
 
         // Shop
-        shop: Shop | null = null;
+        shop: Shop | null = null
 
         // Fleet's portraits
-        portraits: Phaser.Group;
+        portraits: Phaser.Group
 
         // Layer for draggable equipments
-        equipments: Phaser.Group;
+        equipments: Phaser.Group
 
         // Credits
-        credits: Phaser.Text;
+        credits: Phaser.Text
 
         // Attributes and skills
-        attributes: { [key: string]: Phaser.Text } = {};
+        attributes: { [key: string]: Phaser.Text } = {}
 
         constructor(view: BaseView, xhidden = -2000, xshown = 0, onclose?: Function) {
             super(view.game, 0, 0, "character-sheet");
@@ -76,11 +79,11 @@ module TK.SpaceTac.UI {
             if (!onclose) {
                 onclose = () => this.hide();
             }
-            let close_button = new Phaser.Button(this.game, view.getWidth(), 0, "character-close", onclose);
-            close_button.anchor.set(1, 0);
-            UIComponent.setButtonSound(close_button);
-            this.addChild(close_button);
-            view.tooltip.bindStaticText(close_button, "Close the character sheet");
+            this.close_button = new Phaser.Button(this.game, view.getWidth(), 0, "character-close", onclose);
+            this.close_button.anchor.set(1, 0);
+            UIComponent.setButtonSound(this.close_button);
+            this.addChild(this.close_button);
+            view.tooltip.bindStaticText(this.close_button, "Close the character sheet");
 
             this.ship_name = new Phaser.Text(this.game, 758, 48, "", { align: "center", font: "30pt SpaceTac", fill: "#FFFFFF" });
             this.ship_name.anchor.set(0.5, 0.5);
@@ -335,14 +338,14 @@ module TK.SpaceTac.UI {
          * 
          * This shop will be shown until sheet is closed
          */
-        setShop(shop: Shop) {
+        setShop(shop: Shop, title = "Dockyard's equipment") {
             this.loot_page = 0;
 
             this.shop = shop;
             this.updateLoot();
             this.loot_slots.visible = true;
 
-            this.mode_title.setText("Dockyard's equipment");
+            this.mode_title.setText(title);
             this.mode_title.visible = true;
         }
 

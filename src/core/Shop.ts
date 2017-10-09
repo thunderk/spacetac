@@ -1,4 +1,6 @@
 module TK.SpaceTac {
+    type ShopStockCallback = (stock: Equipment[]) => Equipment[]
+
     /**
      * A shop is a place to buy/sell equipments
      */
@@ -18,24 +20,27 @@ module TK.SpaceTac {
         // Available missions
         private missions: Mission[] = []
 
-        constructor(level = 1, stock: Equipment[] = [], count = 40) {
+        // Callback when the equipment changes
+        private onchange: ShopStockCallback
+
+        constructor(level = 1, stock: Equipment[] = [], count = 40, onchange?: ShopStockCallback) {
             this.level = level;
             this.stock = stock;
             this.count = count;
             this.random = new RandomGenerator();
+            this.onchange = onchange || (stock => stock);
         }
 
         /**
-         * Get available stock to display
+         * Get available stock to display (sorted by level then price by default)
          */
         getStock() {
             if (this.stock.length < this.count * 0.5) {
                 let count = this.random.randInt(Math.floor(this.count * 0.8), Math.ceil(this.count * 1.2));
                 this.stock = this.stock.concat(this.generateStock(count - this.stock.length, this.level, this.random));
-                this.sortStock();
             }
 
-            return this.stock;
+            return sorted(this.stock, (a, b) => (a.level == b.level) ? cmp(a.getPrice(), b.getPrice()) : cmp(a.level, b.level));
         }
 
         /**
@@ -54,10 +59,10 @@ module TK.SpaceTac {
         }
 
         /**
-         * Sort the stock by equipment level, then by value
+         * Update the stock after a buying or selling occured
          */
-        sortStock() {
-            this.stock.sort((a, b) => (a.level == b.level) ? cmp(a.getPrice(), b.getPrice()) : cmp(a.level, b.level));
+        refreshStock() {
+            this.stock = this.onchange(this.stock);
         }
 
         /**
@@ -76,6 +81,7 @@ module TK.SpaceTac {
             let price = this.getPrice(equipment);
             if (price <= fleet.credits) {
                 if (remove(this.stock, equipment)) {
+                    this.refreshStock();
                     fleet.credits -= price;
                     return true;
                 } else {
@@ -94,7 +100,7 @@ module TK.SpaceTac {
         buyFromFleet(equipment: Equipment, fleet: Fleet) {
             let price = this.getPrice(equipment);
             if (add(this.stock, equipment)) {
-                this.sortStock();
+                this.refreshStock();
                 fleet.credits += price;
                 return true;
             } else {

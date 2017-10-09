@@ -26,6 +26,9 @@ module TK.SpaceTac {
         // Indicator of spectator mode
         spectator = false
 
+        // Indicator that introduction has been watched
+        introduced = false
+
         constructor() {
             this.id = RandomGenerator.global.id(20);
             this.universe = new Universe();
@@ -66,7 +69,7 @@ module TK.SpaceTac {
 
             this.start_location = this.universe.getStartLocation();
             this.start_location.clearEncounter();
-            this.start_location.addShop();
+            this.start_location.removeShop();
 
             this.player = new Player(this.universe);
 
@@ -85,13 +88,13 @@ module TK.SpaceTac {
         setCampaignFleet(fleet: Fleet | null = null, story = true) {
             if (fleet) {
                 this.player.fleet = fleet;
+                fleet.player = this.player;
             } else {
                 let fleet_generator = new FleetGenerator();
                 this.player.fleet = fleet_generator.generate(1, this.player, 2);
             }
 
-            this.player.fleet.setLocation(this.start_location);
-            this.player.fleet.credits = 500;
+            this.player.fleet.setLocation(this.start_location, true);
 
             if (story) {
                 this.player.missions.startMainStory(this.universe, this.player.fleet);
@@ -135,7 +138,7 @@ module TK.SpaceTac {
         }
 
         /**
-         * Returns true if the session has a universe to explore
+         * Returns true if the session has an universe to explore (campaign mode)
          */
         hasUniverse(): boolean {
             return this.universe.stars.length > 0;
@@ -146,6 +149,13 @@ module TK.SpaceTac {
          */
         isFleetCreated(): boolean {
             return this.player.fleet.ships.length > 0;
+        }
+
+        /**
+         * Returns true if campaign introduction has been watched
+         */
+        isIntroViewed(): boolean {
+            return this.introduced;
         }
     }
 }
