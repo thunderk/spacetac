@@ -24,28 +24,30 @@ module TK.SpaceTac.UI {
 
             filler.configure(10, 6, this.battleview.arena.getBoundaries());
 
-            filler.addImageA(0, 0, `ship-${ship.model.code}-portrait`, 0.5);
+            let portrait = filler.image(`ship-${ship.model.code}-portrait`);
+            portrait.scale.set(0.5);
 
             let enemy = ship.getPlayer() != this.battleview.player;
-            filler.addText(140, 0, ship.getFullName(), enemy ? "#cc0d00" : "#ffffff", 22, false, true);
+            filler.text(ship.getFullName(), 140, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
 
             if (ship.alive) {
                 let turns = this.battleview.battle.getTurnsBefore(ship);
-                filler.addText(140, 36, (turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), "#cccccc", 18);
+                filler.text((turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), 140, 36, { color: "#cccccc", size: 18 });
 
-                filler.addText(140, 72, `Hull\n${ship.getValue("hull")}/${ship.getAttribute("hull_capacity")}`, "#eb4e4a", 20, true, true);
-                filler.addText(288, 72, `Shield\n${ship.getValue("shield")}/${ship.getAttribute("shield_capacity")}`, "#2ad8dc", 20, true, true);
-                filler.addText(408, 72, `Power\n${ship.getValue("power")}/${ship.getAttribute("power_capacity")}`, "#ffdd4b", 20, true, true);
+                let hsp_builder = filler.styled({ color: "#eb4e4a", size: 20, center: true, vcenter: true, bold: true });
+                hsp_builder.text(`Hull\n${ship.getValue("hull")}/${ship.getAttribute("hull_capacity")}`, 200, 106, { color: "#eb4e4a" });
+                hsp_builder.text(`Shield\n${ship.getValue("shield")}/${ship.getAttribute("shield_capacity")}`, 340, 106, { color: "#2ad8dc" });
+                hsp_builder.text(`Power\n${ship.getValue("power")}/${ship.getAttribute("power_capacity")}`, 480, 106, { color: "#ffdd4b" });
 
                 let iy = 148;
 
                 if (sprite) {
                     let effects = sprite.active_effects.area.concat(sprite.active_effects.sticky);
                     if (effects.length > 0) {
-                        filler.addText(0, iy, "Active effects", "#ffffff", 18, false, true);
+                        filler.text("Active effects", 0, iy, { color: "#ffffff", size: 18, bold: true });
                         iy += 30;
                         effects.forEach(effect => {
-                            filler.addText(0, iy, `• ${effect.getDescription()}`, effect.isBeneficial() ? "#afe9c6" : "#e9afaf", 16);
+                            filler.text(`• ${effect.getDescription()}`, 0, iy, { color: effect.isBeneficial() ? "#afe9c6" : "#e9afaf" });
                             iy += 26;
                         });
                     }
@@ -53,15 +55,15 @@ module TK.SpaceTac.UI {
 
                 let weapons = ship.listEquipment(SlotType.Weapon);
                 if (weapons.length > 0) {
-                    filler.addText(0, iy, "Weapons", "#ffffff", 18, false, true);
+                    filler.text("Weapons", 0, iy, { size: 18, bold: true });
                     iy += 30;
                     weapons.forEach(weapon => {
-                        filler.addText(0, iy, `• ${weapon.getFullName()}`, "#ffffff", 16);
+                        filler.text(`• ${weapon.getFullName()}`, 0, iy);
                         iy += 26;
                     });
                 }
             } else {
-                filler.addText(140, 36, "Emergency Stasis Protocol\nship disabled", "#a899db", 20, true, true);
+                filler.text("Emergency Stasis Protocol\nship disabled", 140, 36, { color: "#a899db", size: 20, center: true, vcenter: true });
             }
 
             if (sprite) {

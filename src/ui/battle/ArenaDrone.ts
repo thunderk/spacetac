@@ -42,8 +42,8 @@ module TK.SpaceTac.UI {
             this.activation.visible = false;
             this.add(this.activation);
 
-            let info = battleview.getFirstImage(`equipment-${drone.code}`, `battle-actions-deploy-${drone.code}`);
-            this.sprite = new Phaser.Button(this.game, 0, 0, info.key, undefined, undefined, info.frame, info.frame);
+            let name = this.view.getFirstImage(`equipment-${drone.code}`, `battle-actions-deploy-${drone.code}`);
+            this.sprite = this.view.newButton(name);
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(0.1, 0.1);
             this.add(this.sprite);

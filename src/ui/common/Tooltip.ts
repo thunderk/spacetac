@@ -1,3 +1,5 @@
+/// <reference path="UIBuilder.ts" />
+
 module TK.SpaceTac.UI {
 
     class TooltipContainer extends Phaser.Group {
@@ -75,15 +77,16 @@ module TK.SpaceTac.UI {
     /**
      * Functions used to fill a tooltip content
      */
-    export class TooltipFiller {
+    export class TooltipFiller extends UIBuilder {
         private container: TooltipContainer;
 
         constructor(container: TooltipContainer) {
-            this.container = container;
-        }
+            let style = new UITextStyle();
+            style.center = false;
+            style.vcenter = false;
+            super(container.view, container.content, style);
 
-        get view(): BaseView {
-            return this.container.view;
+            this.container = container;
         }
 
         /**
@@ -95,39 +98,6 @@ module TK.SpaceTac.UI {
             if (viewport) {
                 this.container.viewport = viewport;
             }
-        }
-
-        /**
-         * Add an image to the content
-         */
-        addImage(x: number, y: number, key: string, frame = 0, scale = 1): void {
-            let image = new Phaser.Image(this.container.game, x, y, key, frame);
-            image.data.key = key;
-            image.scale.set(scale);
-            this.container.content.add(image);
-        }
-
-        /**
-         * Add an image to the content, coming from an atlas
-         */
-        addImageA(x: number, y: number, name: string, scale = 1): void {
-            let image = this.view.newImage(name, x, y);
-            image.scale.set(scale);
-            this.container.content.add(image);
-        }
-
-        /**
-         * Add a text to the content
-         */
-        addText(x: number, y: number, content: string, color = "#ffffff", size = 16, center = false, bold = false, width = 0): void {
-            let style = { font: `${bold ? "bold " : ""}${size}pt SpaceTac`, fill: color, align: center ? "center" : "left" };
-            let text = new Phaser.Text(this.container.game, x, y, content, style);
-            if (width) {
-                text.wordWrap = true;
-                text.wordWrapWidth = width;
-            }
-            text.setShadow(3, 4, "rgba(0,0,0,0.6)", 6);
-            this.container.content.add(text);
         }
     }
 
@@ -183,7 +153,7 @@ module TK.SpaceTac.UI {
             this.bind(obj, filler => {
                 let content = text_getter();
                 if (content) {
-                    filler.addText(0, 0, content, "#cccccc", 20);
+                    filler.text(content, 0, 0, { color: "#cccccc", size: 20 });
                     return true;
                 } else {
                     return false;

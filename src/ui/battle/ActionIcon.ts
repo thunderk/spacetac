@@ -47,7 +47,7 @@ module TK.SpaceTac.UI {
 
             // Action icon
             let icon = this.view.getFirstImage(`action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`);
-            this.img_action = new Phaser.Image(bar.game, 0, 0, icon.key, icon.frame);
+            this.img_action = this.view.newImage(icon);
             this.img_action.anchor.set(0.5);
             this.img_action.scale.set(0.35);
             this.img_action.alpha = 0.2;

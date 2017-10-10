@@ -252,11 +252,10 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Get the first image found in atlases
+         * Returns the first image found in atlases
          */
-        getFirstImage(...names: string[]): { key: string, frame: number } {
-            let infos = names.map(name => this.getImageInfo(name));
-            return first(infos, info => info.key.substr(0, 9) != "-missing-") || infos[0];
+        getFirstImage(...names: string[]): string {
+            return first(names, name => this.getImageInfo(name).key.substr(0, 9) != '-missing-') || names[names.length - 1];
         }
     }
 }

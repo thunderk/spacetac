@@ -164,8 +164,8 @@ module TK.SpaceTac.UI {
             if (this.item.slot_type !== null) {
                 title += ` (${SlotType[this.item.slot_type]})`;
             }
-            filler.addText(0, 0, title, "#cccccc", 20, false, true);
-            filler.addText(0, 40, this.item.getFullDescription(), "#cccccc", 18, false, false, 700);
+            filler.text(title, 0, 0, { color: "#cccccc", size: 20, bold: true });
+            filler.text(this.item.getFullDescription(), 0, 40, { color: "#cccccc", size: 18, width: 700 });
             return true;
         }
     }

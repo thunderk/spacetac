@@ -7,10 +7,12 @@ module TK.SpaceTac.UI {
          * Fill the tooltip
          */
         static fill(filler: TooltipFiller, ship: Ship, action: BaseAction, position: number) {
-            let icon = filler.view.getFirstImage(`equipment-${action.equipment ? action.equipment.code : "---"}`, `action-${action.code}`);
-            filler.addImage(0, 0, icon.key, icon.frame, 0.5);
+            let builder = filler.styled({ size: 20 });
 
-            filler.addText(150, 0, action.equipment ? action.equipment.name : action.name, "#ffffff", 24);
+            let icon = builder.image([`equipment-${action.equipment ? action.equipment.code : "---"}`, `action-${action.code}`]);
+            icon.scale.set(0.5);
+
+            builder.text(action.equipment ? action.equipment.name : action.name, 150, 0, { size: 24 });
 
             let cost = "";
             if (action instanceof MoveAction) {
@@ -30,28 +32,28 @@ module TK.SpaceTac.UI {
                 }
             }
             if (cost) {
-                filler.addText(150, 40, cost, "#ffdd4b", 20);
+                builder.text(cost, 150, 40, { color: "#ffdd4b" });
             }
 
             if (action.equipment && action.equipment.cooldown.overheat) {
                 let cooldown = action.equipment.cooldown;
                 if (cooldown.heat > 0) {
-                    filler.addText(150, 80, "Cooling down ...", "#c9604c", 20);
+                    builder.text("Cooling down ...", 150, 80, { color: "#c9604c" });
                 } else if (cooldown.willOverheat() && cost != "Not enough power") {
                     if (cooldown.cooling > 1) {
                         let turns = cooldown.cooling - 1;
-                        filler.addText(150, 80, `Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, "#c9604c", 20);
+                        builder.text(`Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, 150, 80, { color: "#c9604c" });
                     } else {
-                        filler.addText(150, 80, "Unavailable until next turn if used", "#c9604c", 20);
+                        builder.text("Unavailable until next turn if used", 150, 80, { color: "#c9604c" });
                     }
                 }
             } else if (action instanceof ToggleAction && action.activated) {
-                filler.addText(150, 80, `Activated`, "#b1d549", 20);
+                builder.text(`Activated`, 150, 80, { color: "#c9604c" });
             }
 
             let description = action.getEffectsDescription();
             if (description) {
-                filler.addText(30, 170, description, "#ffffff", 16);
+                builder.text(description, 30, 170, { size: 16 });
             }
 
             let shortcut = "";
@@ -63,7 +65,7 @@ module TK.SpaceTac.UI {
                 shortcut = `[ ${position + 1} ]`;
             }
             if (shortcut) {
-                filler.addText(150, 120, shortcut, "#aaaaaa", 12);
+                builder.text(shortcut, 150, 120, { color: "#aaaaaa", size: 12 });
             }
         }
     }

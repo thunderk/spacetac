@@ -64,14 +64,58 @@ module TK.SpaceTac.UI.Specs {
 
         it("can create texts", function () {
             let builder = new UIBuilder(testgame.view);
-            builder.text("Test content", 12, 41, { size: 61 });
-            check(["View layers", "base", 0], Phaser.Text, "", { text: "Test content", x: 12, y: 41, cssFont: "61pt 'SpaceTac'" });
+            builder.text("Test content", 12, 41);
+            check(["View layers", "base", 0], Phaser.Text, "", { text: "Test content", x: 12, y: 41 });
+
+            builder.clear();
+            builder.text("", 0, 0, {});
+            builder.text("", 0, 0, { size: 61 });
+            check(["View layers", "base", 0], Phaser.Text, "", { cssFont: "16pt 'SpaceTac'" });
+            check(["View layers", "base", 1], Phaser.Text, "", { cssFont: "61pt 'SpaceTac'" });
+
+            builder.clear();
+            builder.text("", 0, 0, {});
+            builder.text("", 0, 0, { color: "#252627" });
+            check(["View layers", "base", 0], Phaser.Text, "", { fill: "#ffffff" });
+            check(["View layers", "base", 1], Phaser.Text, "", { fill: "#252627" });
+
+            builder.clear();
+            builder.text("", 0, 0, {});
+            builder.text("", 0, 0, { shadow: true });
+            check(["View layers", "base", 0], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0)" });
+            check(["View layers", "base", 1], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0.6)", shadowFill: true, shadowOffsetX: 3, shadowOffsetY: 4, shadowBlur: 6, shadowStroke: true });
+
+            builder.clear();
+            builder.text("", 0, 0, {});
+            builder.text("", 0, 0, { bold: true });
+            check(["View layers", "base", 0], Phaser.Text, "", { fontWeight: "normal" });
+            check(["View layers", "base", 1], Phaser.Text, "", { fontWeight: "bold" });
+
+            builder.clear();
+            builder.text("", 0, 0, {});
+            builder.text("", 0, 0, { center: false });
+            builder.text("", 0, 0, { vcenter: false });
+            builder.text("", 0, 0, { center: false, vcenter: false });
+            check(["View layers", "base", 0], Phaser.Text, "", { anchor: new Phaser.Point(0.5, 0.5), align: "center" });
+            check(["View layers", "base", 1], Phaser.Text, "", { anchor: new Phaser.Point(0, 0.5), align: "left" });
+            check(["View layers", "base", 2], Phaser.Text, "", { anchor: new Phaser.Point(0.5, 0), align: "center" });
+            check(["View layers", "base", 3], Phaser.Text, "", { anchor: new Phaser.Point(0, 0), align: "left" });
+
+            builder.clear();
+            builder.text("", 0, 0, { width: 0 });
+            builder.text("", 0, 0, { width: 1100 });
+            check(["View layers", "base", 0], Phaser.Text, "", { wordWrap: false });
+            check(["View layers", "base", 1], Phaser.Text, "", { wordWrap: true, wordWrapWidth: 1100 });
         })
 
         it("can create images", function () {
             let builder = new UIBuilder(testgame.view);
             builder.image("test-image", 100, 50);
             check(["View layers", "base", 0], Phaser.Image, "test-image", { x: 100, y: 50, key: "__missing", inputEnabled: null });
+
+            spyOn(testgame.view, "getFirstImage").and.callFake((...images: string[]) => images[1]);
+            builder.image(["test-image1", "test-image2", "test-image3"]);
+            check(["View layers", "base", 1], Phaser.Image, "test-image2");
         })
 
         it("can create buttons", function () {
