@@ -179,6 +179,23 @@ module TK.SpaceTac.UI {
         }
 
         /**
+         * Create a simple text
+         */
+        newText(content: string, x = 0, y = 0, size = 16, color = "#ffffff", shadow = true, bold = false, center = true, vcenter = center, width = 0): Phaser.Text {
+            let style = { font: `${bold ? "bold " : ""}${size}pt SpaceTac`, fill: color, align: center ? "center" : "left" };
+            let text = new Phaser.Text(this.game, x, y, content, style);
+            text.anchor.set(center ? 0.5 : 0, vcenter ? 0.5 : 0);
+            if (width) {
+                text.wordWrap = true;
+                text.wordWrapWidth = width;
+            }
+            if (shadow) {
+                text.setShadow(3, 4, "rgba(0,0,0,0.6)", 6);
+            }
+            return text;
+        }
+
+        /**
          * Get a new image from an atlas name
          */
         newImage(name: string, x = 0, y = 0): Phaser.Image {
@@ -189,12 +206,31 @@ module TK.SpaceTac.UI {
         }
 
         /**
+         * Get a new button from an atlas name
+         */
+        newButton(name: string, x = 0, y = 0, onclick?: Function): Phaser.Button {
+            let info = this.getImageInfo(name);
+            let button = new Phaser.Button(this.game, x, y, info.key, onclick || nop, null, info.frame, info.frame);
+            let clickable = bool(onclick);
+            button.input.useHandCursor = clickable;
+            if (clickable) {
+                UIComponent.setButtonSound(button);
+            }
+            return button;
+        }
+
+        /**
          * Update an image from an atlas name
          */
-        changeImage(image: Phaser.Image, name: string): void {
+        changeImage(image: Phaser.Image | Phaser.Button, name: string): void {
             let info = this.getImageInfo(name);
             image.name = name;
-            image.loadTexture(info.key, info.frame);
+            if (image instanceof Phaser.Button) {
+                image.loadTexture(info.key);
+                image.setFrames(info.frame, info.frame);
+            } else {
+                image.loadTexture(info.key, info.frame);
+            }
         }
 
         /**

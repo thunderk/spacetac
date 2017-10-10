@@ -8,7 +8,8 @@ module TK.SpaceTac.UI {
         sheet: CharacterSheet;
 
         constructor(sheet: CharacterSheet, x: number, y: number) {
-            super(sheet.game, x, y, "character-cargo-slot");
+            let info = sheet.view.getImageInfo("character-cargo-slot");
+            super(sheet.game, x, y, info.key, info.frame);
 
             this.sheet = sheet;
         }

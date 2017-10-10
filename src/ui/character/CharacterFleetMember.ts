@@ -10,7 +10,8 @@ module TK.SpaceTac.UI {
         levelup: Phaser.Image;
 
         constructor(sheet: CharacterSheet, x: number, y: number, ship: Ship) {
-            super(sheet.game, x, y, "character-ship", () => sheet.show(ship));
+            let info = sheet.view.getImageInfo("character-ship");
+            super(sheet.game, x, y, info.key, () => sheet.show(ship), null, info.frame, info.frame);
             this.anchor.set(0.5, 0.5);
 
             this.sheet = sheet;
@@ -20,7 +21,7 @@ module TK.SpaceTac.UI {
             portrait_pic.anchor.set(0.5, 0.5);
             this.addChild(portrait_pic);
 
-            this.levelup = new Phaser.Image(this.game, this.width / 2 - 40, -this.height / 2 + 40, "character-upgrade-available");
+            this.levelup = sheet.view.newImage("character-upgrade-available", this.width / 2 - 40, -this.height / 2 + 40);
             this.levelup.anchor.set(1, 0);
             this.levelup.visible = this.ship.getAvailableUpgradePoints() > 0;
             this.addChild(this.levelup);
@@ -32,7 +33,7 @@ module TK.SpaceTac.UI {
          * Set the selected state of the ship
          */
         setSelected(selected: boolean) {
-            this.loadTexture(selected ? "character-ship-selected" : "character-ship");
+            this.sheet.view.changeImage(this, selected ? "character-ship-selected" : "character-ship");
             this.sheet.view.animations.setVisible(this.levelup, this.ship.getAvailableUpgradePoints() > 0, 200);
         }
 

@@ -8,13 +8,13 @@ module TK.SpaceTac.UI {
         sheet: CharacterSheet;
 
         constructor(sheet: CharacterSheet, x: number, y: number, slot: SlotType) {
-            super(sheet.game, x, y, "character-equipment-slot");
+            let info = sheet.view.getImageInfo("character-equipment-slot");
+            super(sheet.game, x, y, info.key, info.frame);
 
             this.sheet = sheet;
 
-            let sloticon = new Phaser.Button(this.game, 150, 150, `character-slots`);
-            sloticon.frame = slot;
-            sloticon.anchor.set(0.5, 0.5);
+            let sloticon = sheet.view.newButton(`character-slot-${SlotType[slot].toLowerCase()}`, 150, 150);
+            sloticon.anchor.set(0.5);
             this.addChild(sloticon);
             sheet.view.tooltip.bindStaticText(sloticon, `${SlotType[slot]} slot`);
         }

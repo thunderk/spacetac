@@ -93,6 +93,7 @@ Artificial Intelligence
 Common UI
 ---------
 
+* Remove UIComponent, and refactor UI tools from BaseView to have an UI creation/modification framework
 * Add caret/focus to text input
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not

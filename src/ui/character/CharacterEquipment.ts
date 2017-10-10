@@ -71,7 +71,7 @@ module TK.SpaceTac.UI {
             }
             this.price = price;
 
-            let tag = new Phaser.Image(this.game, 0, 0, "character-price-tag");
+            let tag = this.sheet.view.newImage("character-price-tag");
             let yoffset = this.container.getPriceOffset();
             tag.position.set(0, -yoffset * 2 + tag.height);
             tag.anchor.set(0.5, 0.5);
@@ -79,8 +79,7 @@ module TK.SpaceTac.UI {
             tag.alpha = 0.85;
             this.addChild(tag);
 
-            let text = new Phaser.Text(this.game, -10, 4, price.toString(), { align: "center", font: "18pt SpaceTac", fill: "#FFFFCC" });
-            text.anchor.set(0.5, 0.5);
+            let text = this.sheet.view.newText(price.toString(), -8, 2, 18, "#ffffcc");
             tag.addChild(text);
         }
 

@@ -73,7 +73,7 @@ module TK.SpaceTac.UI {
                 console.log("Loading battle assets");
 
                 // TODO automatic range
-                range(3).forEach(i => this.loadAtlas(i + 1));
+                range(4).forEach(i => this.loadAtlas(i + 1));
 
                 this.loadImage("options/background.png");
                 this.loadSheet("options/button.png", 497, 134);
@@ -93,15 +93,6 @@ module TK.SpaceTac.UI {
                 this.loadImage("battle/shiplist/info-button.png");
 
                 this.loadImage("character/sheet.png");
-                this.loadImage("character/close.png");
-                this.loadImage("character/ship.png");
-                this.loadImage("character/ship-selected.png");
-                this.loadImage("character/skill-upgrade.png");
-                this.loadImage("character/cargo-slot.png");
-                this.loadImage("character/equipment-slot.png");
-                this.loadSheet("character/slots.png", 52);
-                this.loadImage("character/upgrade-available.png");
-                this.loadImage("character/price-tag.png");
 
                 this.loadSound("ui/drag.wav");
                 this.loadSound("ui/drop.wav");
