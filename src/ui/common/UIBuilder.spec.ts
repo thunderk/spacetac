@@ -32,8 +32,34 @@ module TK.SpaceTac.UI.Specs {
             return component;
         }
 
+        it("can work on view layers", function () {
+            let builder = new UIBuilder(testgame.view, "tl1");
+            builder.group("tg1");
+            check(["View layers", "tl1", 0], Phaser.Group, "tg1");
+
+            builder = new UIBuilder(testgame.view, "tl2");
+            builder.group("tg2");
+            check(["View layers", "tl2", 0], Phaser.Group, "tg2");
+
+            builder = new UIBuilder(testgame.view, "tl1");
+            builder.group("tg3");
+            check(["View layers", "tl1", 0], Phaser.Group, "tg1");
+            check(["View layers", "tl1", 1], Phaser.Group, "tg3");
+
+            builder = new UIBuilder(testgame.view);
+            builder.group("tg4");
+            check(["View layers", "base", 0], Phaser.Group, "tg4");
+
+            builder = new UIBuilder(testgame.view);
+            builder.group("tg5");
+            check(["View layers", "base", 0], Phaser.Group, "tg4");
+            check(["View layers", "base", 1], Phaser.Group, "tg5");
+
+            expect(testgame.view.layers.children.map((child: any) => child.name)).toEqual(["tl1", "tl2", "base"]);
+        })
+
         it("creates component inside the parent container", function () {
-            let builder = new UIBuilder(testgame.view, testgame.view.addLayer("testlayer"));
+            let builder = new UIBuilder(testgame.view, testgame.view.getLayer("testlayer"));
             let group = builder.group("test1");
             check(["View layers", "testlayer", 0], Phaser.Group, "test1");
 

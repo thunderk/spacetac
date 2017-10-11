@@ -165,7 +165,7 @@ module TK.SpaceTac.UI {
          */
         protected getLayer(layer: number, clear = false): Phaser.Group {
             while (this.layers.length <= layer) {
-                this.layers.push(this.view.addLayer(`Layer ${this.layers.length}`));
+                this.layers.push(this.view.getLayer(`Layer ${this.layers.length}`));
             }
 
             if (clear) {

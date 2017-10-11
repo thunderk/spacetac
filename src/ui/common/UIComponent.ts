@@ -37,6 +37,7 @@ module TK.SpaceTac.UI {
         private readonly container: Phaser.Group
         protected readonly width: number
         protected readonly height: number
+        protected readonly builder: UIBuilder
 
         constructor(parent: BaseView | UIComponent, width: number, height: number, background_key: string | null = null) {
             this.width = width;
@@ -56,6 +57,7 @@ module TK.SpaceTac.UI {
             } else {
                 this.view.add.existing(this.container);
             }
+            this.builder = new UIBuilder(this.view, this.container);
 
             if (background_key) {
                 this.background = this.addInternalChild(new Phaser.Image(this.view.game, 0, 0, background_key));
@@ -227,15 +229,7 @@ module TK.SpaceTac.UI {
          * Add a static text.
          */
         addText(x: number, y: number, content: string, color = "#ffffff", size = 16, bold = false, center = true, width = 0, vcenter = center): Phaser.Text {
-            let style = { font: `${bold ? "bold " : ""}${size}pt SpaceTac`, fill: color, align: center ? "center" : "left" };
-            let text = new Phaser.Text(this.view.game, x, y, content, style);
-            text.anchor.set(center ? 0.5 : 0, vcenter ? 0.5 : 0);
-            if (width) {
-                text.wordWrap = true;
-                text.wordWrapWidth = width;
-            }
-            this.addInternalChild(text);
-            return text;
+            return this.builder.text(content, x, y, { color: color, size: size, bold: bold, center: center, width: width, vcenter: vcenter });
         }
 
         /**
@@ -254,12 +248,10 @@ module TK.SpaceTac.UI {
          * Add a static image, from atlases, positioning its center.
          */
         addImage(x: number, y: number, name: string, scale = 1): Phaser.Image {
-            let info = this.view.getImageInfo(name);
-            let image = new Phaser.Image(this.container.game, x, y, info.key, info.frame);
-            image.anchor.set(0.5, 0.5);
-            image.scale.set(scale);
-            this.addInternalChild(image);
-            return image;
+            let result = this.builder.image(name, x, y);
+            result.anchor.set(0.5);
+            result.scale.set(scale);
+            return result;
         }
 
         /**

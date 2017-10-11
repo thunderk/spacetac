@@ -34,6 +34,7 @@ Character sheet
 * Allow to cancel spent skill points (and confirm when closing the sheet)
 * Add filters and sort options for cargo and shop
 * Display level and slot type on equipment
+* Fix dragged equipment being under attributes (put attributes in a layer)
 
 Battle
 ------
@@ -93,7 +94,8 @@ Artificial Intelligence
 Common UI
 ---------
 
-* Remove UIComponent, and refactor UI tools from BaseView to have an UI creation/modification framework
+* Split atlases by asset stage
+* UIBuilder.button should be able to handle hover and pushed images
 * Add caret/focus to text input
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not

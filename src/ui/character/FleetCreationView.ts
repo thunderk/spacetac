@@ -29,7 +29,7 @@ module TK.SpaceTac.UI {
             this.character_sheet = new CharacterSheet(this, undefined, undefined, () => this.validateFleet());
             this.character_sheet.setShop(this.infinite_shop, "Initial basic equipment");
             this.character_sheet.show(this.built_fleet.ships[0], false);
-            this.addLayer("characters").add(this.character_sheet);
+            this.getLayer("characters").add(this.character_sheet);
         }
 
         /**

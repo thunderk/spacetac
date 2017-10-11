@@ -15,8 +15,8 @@ module TK.SpaceTac.UI {
         create() {
             super.create();
 
-            this.layer_stars = this.addLayer("stars");
-            this.layer_title = this.addLayer("title");
+            this.layer_stars = this.getLayer("stars");
+            this.layer_title = this.getLayer("title");
 
             // Stars
             for (let i = 0; i < 300; i++) {

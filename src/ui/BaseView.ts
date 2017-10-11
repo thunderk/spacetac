@@ -107,10 +107,13 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Add a new layer in the view
+         * Get or create a layer in the view, by its name
          */
-        addLayer(name: string): Phaser.Group {
-            let layer = this.add.group(this.layers, name);
+        getLayer(name: string): Phaser.Group {
+            let layer = <Phaser.Group>this.layers.getByName(name);
+            if (!layer) {
+                layer = this.add.group(this.layers, name);
+            }
             return layer;
         }
 

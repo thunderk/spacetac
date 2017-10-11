@@ -57,8 +57,7 @@ module TK.SpaceTac.UI {
             this.view = view;
             this.game = view.gameui;
             if (typeof parent == "string") {
-                // TODO get or create
-                this.parent = view.addLayer(parent);
+                this.parent = view.getLayer(parent);
             } else {
                 this.parent = parent;
             }

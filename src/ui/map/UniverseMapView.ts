@@ -66,8 +66,8 @@ module TK.SpaceTac.UI {
         create() {
             super.create();
 
-            this.layer_universe = this.addLayer("universe");
-            this.layer_overlay = this.addLayer("overlay");
+            this.layer_universe = this.getLayer("universe");
+            this.layer_overlay = this.getLayer("overlay");
 
             this.starlinks_group = this.game.add.group(this.layer_universe);
             this.starlinks = this.universe.starlinks.map(starlink => {
