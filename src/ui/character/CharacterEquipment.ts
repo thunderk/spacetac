@@ -45,7 +45,7 @@ module TK.SpaceTac.UI {
 
             this.anchor.set(0.5, 0.5);
 
-            this.setupDragDrop(sheet);
+            this.setupDragDrop();
             this.snapToContainer();
 
             sheet.view.tooltip.bind(this, filler => this.fillTooltip(filler));
@@ -96,32 +96,30 @@ module TK.SpaceTac.UI {
         /**
          * Enable dragging to another slot
          */
-        setupDragDrop(sheet: CharacterSheet) {
-            this.inputEnabled = true;
+        setupDragDrop() {
             if (this.container.removeEquipment(this, null, true)) {
-                this.input.enableDrag(false, true);
-            }
-
-            this.events.onDragStart.add(() => {
-                this.sheet.view.audio.playOnce("ui-drag");
-                this.scale.set(0.5, 0.5);
-                this.alpha = 0.8;
-            });
-            this.events.onDragStop.add(() => {
-                this.sheet.view.audio.playOnce("ui-drop");
-                let destination = this.findContainerAt(this.x, this.y);
-                if (destination && destination != this.container) {
-                    if (this.applyDragDrop(this.container, destination, false)) {
-                        this.container = destination;
-                        this.snapToContainer();
-                        sheet.refresh();  // TODO Only if required (destination is "virtual")
+                this.sheet.view.inputs.setDragDrop(this, () => {
+                    // Drag
+                    this.scale.set(0.5, 0.5);
+                    this.alpha = 0.8;
+                }, () => {
+                    // Drop
+                    let destination = this.findContainerAt(this.x, this.y);
+                    if (destination && destination != this.container) {
+                        if (this.applyDragDrop(this.container, destination, false)) {
+                            this.container = destination;
+                            this.snapToContainer();
+                            this.sheet.refresh();  // TODO Only if required (destination is "virtual")
+                        } else {
+                            this.snapToContainer();
+                        }
                     } else {
                         this.snapToContainer();
                     }
-                } else {
-                    this.snapToContainer();
-                }
-            });
+                });
+            } else {
+                this.sheet.view.inputs.setDragDrop(this);
+            }
         }
 
         /**
@@ -136,6 +134,7 @@ module TK.SpaceTac.UI {
             } else if (possible) {
                 if (source.removeEquipment(this, destination, false)) {
                     if (destination.addEquipment(this, source, false)) {
+                        this.setupDragDrop();
                         return true;
                     } else {
                         console.error("Destination container refused to accept equipment", this, source, destination);

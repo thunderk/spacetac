@@ -132,6 +132,30 @@ module TK.SpaceTac.UI {
         }
 
         /**
+         * Setup dragging on an UI component
+         * 
+         * If no drag or drop function is defined, dragging is disabled
+         */
+        setDragDrop(obj: Phaser.Button | Phaser.Image, drag?: Function, drop?: Function): void {
+            if (drag && drop) {
+                obj.inputEnabled = true;
+                obj.input.enableDrag(false, true);
+
+                obj.events.onDragStart.add(() => {
+                    this.forceLeaveHovered();
+                    this.view.audio.playOnce("ui-drag");
+                    drag();
+                });
+                obj.events.onDragStop.add(() => {
+                    this.view.audio.playOnce("ui-drop");
+                    drop();
+                });
+            } else {
+                obj.input.disableDrag();
+            }
+        }
+
+        /**
          * Setup hover/click handlers on an UI element
          * 
          * This is done in a way that should be compatible with touch-enabled screen

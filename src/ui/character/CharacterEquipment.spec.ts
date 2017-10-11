@@ -34,7 +34,7 @@ module TK.SpaceTac.UI.Specs {
                 }
             }
             removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
-                if (this.x < 150 && this.inside == equipment) {
+                if (this.inside === equipment) {
                     if (!test) {
                         this.inside = null;
                     }
@@ -56,14 +56,19 @@ module TK.SpaceTac.UI.Specs {
             let container3 = new FakeContainer("container3", 200);
             let equipment = new CharacterEquipment(sheet, new Equipment(), container1);
             container1.inside = equipment;
+            equipment.setupDragDrop();
             spyOn(sheet, "iEquipmentContainers").and.returnValue(iarray([container1, container2, container3]));
 
+            expect(equipment.inputEnabled).toBe(true, "Input should be enabled");
+            expect(equipment.input.draggable).toBe(true, "Equipment should be draggable");
             expect(equipment.container).toBe(container1);
             expect(equipment.x).toBe(0);
             expect(equipment.scale.x).toBe(0.25);
 
             // drop on nothing
+            expect(equipment.alpha).toBe(1);
             equipment.events.onDragStart.dispatch();
+            expect(equipment.alpha).toBe(0.8);
             equipment.x = 812;
             equipment.events.onDragStop.dispatch();
             expect(equipment.container).toBe(container1);
