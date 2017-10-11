@@ -21,13 +21,13 @@ module TK.SpaceTac.UI.Specs {
 
             sheet.show(ship1);
             expect(sheet.portraits.length).toBe(2);
-            expect(sheet.equipments.length).toBe(3);
+            expect(sheet.layer_equipments.length).toBe(3);
             expect(sheet.ship_cargo.length).toBe(3);
 
             // First item fits in the free slot
             let source = <CharacterCargo>sheet.ship_cargo.children[0];
             let dest = <CharacterFleetMember>sheet.portraits.children[1];
-            let equ = <CharacterEquipment>sheet.equipments.children[0];
+            let equ = <CharacterEquipment>sheet.layer_equipments.children[0];
             expect(dest.ship).toBe(ship2);
             expect(equ.item).toBe(equ1);
             expect(ship1.cargo).toContain(equ1);
@@ -39,7 +39,7 @@ module TK.SpaceTac.UI.Specs {
             // Second item goes to cargo
             source = <CharacterCargo>sheet.ship_cargo.children[0];
             dest = <CharacterFleetMember>sheet.portraits.children[1];
-            equ = <CharacterEquipment>sheet.equipments.children[1];
+            equ = <CharacterEquipment>sheet.layer_equipments.children[1];
             expect(dest.ship).toBe(ship2);
             expect(equ.item).toBe(equ2);
             expect(ship1.cargo).toContain(equ2);
@@ -51,7 +51,7 @@ module TK.SpaceTac.UI.Specs {
             // Third item has no more room
             source = <CharacterCargo>sheet.ship_cargo.children[0];
             dest = <CharacterFleetMember>sheet.portraits.children[1];
-            equ = <CharacterEquipment>sheet.equipments.children[2];
+            equ = <CharacterEquipment>sheet.layer_equipments.children[2];
             expect(dest.ship).toBe(ship2);
             expect(equ.item).toBe(equ3);
             expect(ship1.cargo).toContain(equ3);

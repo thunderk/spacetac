@@ -26,14 +26,14 @@ module TK.SpaceTac.UI.Specs {
             expect(loot_slot instanceof CharacterLootSlot).toBe(true);
 
             // loot to cargo
-            let equ2s = <CharacterEquipment>sheet.equipments.children[1];
+            let equ2s = <CharacterEquipment>sheet.layer_equipments.children[1];
             expect(equ2s.item).toBe(equ2);
             equ2s.applyDragDrop(loot_slot, cargo_slot, false);
             expect(ship.cargo).toEqual([equ1, equ2]);
             expect(loot).toEqual([]);
 
             // discard to cargo
-            let equ1s = <CharacterEquipment>sheet.equipments.children[0];
+            let equ1s = <CharacterEquipment>sheet.layer_equipments.children[0];
             expect(equ1s.item).toBe(equ1);
             equ1s.applyDragDrop(cargo_slot, loot_slot, false);
             expect(ship.cargo).toEqual([equ2]);

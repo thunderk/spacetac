@@ -11,6 +11,9 @@ module TK.SpaceTac.UI {
         // Parent view
         view: BaseView
 
+        // UI components builder
+        builder: UIBuilder
+
         // X positions
         xshown: number
         xhidden: number
@@ -33,7 +36,7 @@ module TK.SpaceTac.UI {
 
         // Ship skill upgrade
         ship_upgrade_points: Phaser.Text
-        ship_upgrades: Phaser.Group
+        layer_upgrades: Phaser.Group
 
         // Ship slots
         ship_slots: Phaser.Group
@@ -58,8 +61,9 @@ module TK.SpaceTac.UI {
         members: CharacterFleetMember[] = []
         portraits: Phaser.Group
 
-        // Layer for draggable equipments
-        equipments: Phaser.Group
+        // Layers
+        layer_attibutes: Phaser.Group
+        layer_equipments: Phaser.Group
 
         // Credits
         credits: Phaser.Text
@@ -71,6 +75,7 @@ module TK.SpaceTac.UI {
             super(view.game, 0, 0, "character-sheet");
 
             this.view = view;
+            this.builder = new UIBuilder(view, this);
 
             this.x = xhidden;
             this.xshown = xshown;
@@ -80,65 +85,33 @@ module TK.SpaceTac.UI {
             if (!onclose) {
                 onclose = () => this.hide();
             }
-            this.close_button = view.newButton("character-close", 1920, 0, onclose);
+            this.close_button = this.builder.button("character-close", 1920, 0, onclose, "Close the character sheet");
             this.close_button.anchor.set(1, 0);
-            this.addChild(this.close_button);
-            view.tooltip.bindStaticText(this.close_button, "Close the character sheet");
 
-            this.addChild(view.newText("Level", 420, 1052, 24));
-            this.addChild(view.newText("Available points", 894, 1052, 24));
+            this.builder.text("Level", 420, 1052, { size: 24 });
+            this.builder.text("Available points", 894, 1052, { size: 24 });
 
-            this.ship_name = view.newText("", 758, 48, 30);
-            this.addChild(this.ship_name);
-
-            this.ship_level = view.newText("", 554, 1052, 30);
-            this.addChild(this.ship_level);
+            this.ship_name = this.builder.text("", 758, 48, { size: 30 });
+            this.ship_level = this.builder.text("", 554, 1052, { size: 30 });
+            this.ship_upgrade_points = this.builder.text("", 1068, 1052, { size: 30 });
+            this.ship_slots = this.builder.group("slots", 372, 120);
+            this.ship_cargo = this.builder.group("cargo", 1240, 86);
+            this.loot_slots = this.builder.group("loot", 1270, 670);
+            this.loot_slots.visible = false;
+            this.portraits = this.builder.group("portraits", 152, 0);
+            this.credits = this.builder.text("", 136, 38, { size: 30 });
+            this.mode_title = this.builder.text("", 1566, 648, { size: 18 });
+            this.loot_next = this.builder.button("common-arrow-right", 1890, 850, () => this.paginate(1), "Show next items");
+            this.loot_next.anchor.set(0.5);
+            this.loot_prev = this.builder.button("common-arrow-left", 1238, 850, () => this.paginate(-1), "Show previous items");
+            this.loot_prev.anchor.set(0.5);
 
             this.ship_experience = new ValueBar(this.view, "character-experience", ValueBarOrientation.EAST, 516, 1067);
             this.addChild(this.ship_experience.node);
 
-            this.ship_upgrade_points = view.newText("", 1068, 1052, 30);
-            this.addChild(this.ship_upgrade_points);
-
-            this.ship_upgrades = new Phaser.Group(this.game);
-            this.addChild(this.ship_upgrades);
-
-            this.ship_slots = new Phaser.Group(this.game);
-            this.ship_slots.position.set(372, 120);
-            this.addChild(this.ship_slots);
-
-            this.ship_cargo = new Phaser.Group(this.game);
-            this.ship_cargo.position.set(1240, 86);
-            this.addChild(this.ship_cargo);
-
-            this.loot_slots = new Phaser.Group(this.game);
-            this.loot_slots.position.set(1270, 670);
-            this.loot_slots.visible = false;
-            this.addChild(this.loot_slots);
-
-            this.portraits = new Phaser.Group(this.game);
-            this.portraits.position.set(152, 0);
-            this.addChild(this.portraits);
-
-            this.credits = view.newText("", 136, 38, 30);
-            this.addChild(this.credits);
-
-            this.equipments = new Phaser.Group(this.game);
-            this.addChild(this.equipments);
-
-            this.mode_title = view.newText("", 1566, 648, 18);
-            this.addChild(this.mode_title);
-
-            this.loot_next = new Phaser.Button(this.game, 1890, 850, "common-arrow", () => this.paginate(1));
-            this.loot_next.anchor.set(0.5, 0.5);
-            UIComponent.setButtonSound(this.loot_next);
-            this.addChild(this.loot_next);
-
-            this.loot_prev = new Phaser.Button(this.game, 1238, 850, "common-arrow", () => this.paginate(-1));
-            this.loot_prev.anchor.set(0.5, 0.5);
-            this.loot_prev.angle = 180;
-            UIComponent.setButtonSound(this.loot_prev);
-            this.addChild(this.loot_prev);
+            this.layer_attibutes = this.builder.group("attributes");
+            this.layer_upgrades = this.builder.group("upgrades");
+            this.layer_equipments = this.builder.group("equipments");
 
             let x1 = 402;
             let x2 = 802;
@@ -161,29 +134,22 @@ module TK.SpaceTac.UI {
          * Add an attribute display
          */
         private addAttribute(attribute: keyof ShipAttributes, x: number, y: number) {
-            let button = this.view.newButton("character-attribute", x, y);
-            this.addChild(button);
-            this.view.tooltip.bindDynamicText(button, () => this.ship.getAttributeDescription(attribute));
+            let builder = this.builder.in(this.layer_attibutes);
+
+            let button = builder.button("character-attribute", x, y, undefined, () => this.ship.getAttributeDescription(attribute));
 
             let attrname = capitalize(SHIP_ATTRIBUTES[attribute].name);
-            let name = new Phaser.Text(this.game, 120, 22, attrname,
-                { align: "center", font: "20pt SpaceTac", fill: "#c9d8ef", stroke: "#395665", strokeThickness: 1 });
-            name.anchor.set(0.5);
-            button.addChild(name);
+            builder.in(button).text(attrname, 120, 22, { size: 20, color: "#c9d8ef", stroke_width: 1, stroke_color: "#395665" });
 
-            let value = this.view.newText("", 264, 24, 18, "#ffffff", true, true);
-            button.addChild(value);
+            let value = builder.in(button).text("", 264, 24, { size: 18, bold: true });
 
             this.attributes[attribute] = value;
 
             if (SHIP_SKILLS.hasOwnProperty(attribute)) {
-                let upgrade_button = this.view.newButton("character-skill-upgrade", x + 292, y, () => {
+                this.builder.in(this.layer_upgrades).button("character-skill-upgrade", x + 292, y, () => {
                     this.ship.upgradeSkill(<keyof ShipSkills>attribute);
                     this.refresh();
-                });
-                this.ship_upgrades.add(upgrade_button);
-
-                this.view.tooltip.bindStaticText(upgrade_button, `Spend one point to upgrade ${attrname}`);
+                }, `Spend one point to upgrade ${attrname}`);
             }
         }
 
@@ -222,7 +188,7 @@ module TK.SpaceTac.UI {
         show(ship: Ship, animate = true, sound = true) {
             this.ship = ship;
 
-            this.equipments.removeAll(true);
+            this.layer_equipments.removeAll(true);
 
             let upgrade_points = ship.getAvailableUpgradePoints();
 
@@ -230,7 +196,7 @@ module TK.SpaceTac.UI {
             this.ship_level.setText(ship.level.get().toString());
             this.ship_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
             this.ship_upgrade_points.setText(upgrade_points.toString());
-            this.ship_upgrades.visible = !ship.critical && upgrade_points > 0;
+            this.layer_upgrades.visible = !ship.critical && upgrade_points > 0;
 
             iteritems(<any>ship.attributes, (key, value: ShipAttribute) => {
                 let text = this.attributes[key];
@@ -249,7 +215,7 @@ module TK.SpaceTac.UI {
 
                 if (slot.attached) {
                     let equipment = new CharacterEquipment(this, slot.attached, slot_display);
-                    this.equipments.addChild(equipment);
+                    this.layer_equipments.addChild(equipment);
                 }
             });
 
@@ -263,7 +229,7 @@ module TK.SpaceTac.UI {
 
                 if (idx < this.ship.cargo.length) {
                     let equipment = new CharacterEquipment(this, this.ship.cargo[idx], cargo_slot);
-                    this.equipments.addChild(equipment);
+                    this.layer_equipments.addChild(equipment);
                 }
             });
 
@@ -345,7 +311,7 @@ module TK.SpaceTac.UI {
          * Update the price tags on each equipment, for a specific shop
          */
         updatePrices(shop: Shop) {
-            this.equipments.children.forEach((equipement: CharacterEquipment) => {
+            this.layer_equipments.children.forEach((equipement: CharacterEquipment) => {
                 equipement.setPrice(shop.getPrice(equipement.item));
             });
         }
@@ -377,7 +343,7 @@ module TK.SpaceTac.UI {
 
                 if (idx < items.length) {
                     let equipment = new CharacterEquipment(this, items[idx], loot_slot);
-                    this.equipments.addChild(equipment);
+                    this.layer_equipments.addChild(equipment);
                 }
             });
 

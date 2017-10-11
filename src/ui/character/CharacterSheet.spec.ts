@@ -56,14 +56,14 @@ module TK.SpaceTac.UI.Specs {
                 sheet.show(ship, false);
 
                 expect(sheet.loot_slots.visible).toBe(false);
-                expect(sheet.equipments.children.length).toBe(2);
+                expect(sheet.layer_equipments.children.length).toBe(2);
 
                 sheet.setLoot(loot);
 
                 expect(sheet.loot_slots.visible).toBe(true);
-                expect(sheet.equipments.children.length).toBe(4);
+                expect(sheet.layer_equipments.children.length).toBe(4);
 
-                let findsprite = (equ: Equipment) => nn(first(<CharacterEquipment[]>sheet.equipments.children, sp => sp.item == equ));
+                let findsprite = (equ: Equipment) => nn(first(<CharacterEquipment[]>sheet.layer_equipments.children, sp => sp.item == equ));
                 let draddrop = (sp: CharacterEquipment, dest: CharacterCargo | CharacterSlot) => {
                     sp.applyDragDrop(sp.container, dest, false);
                 }

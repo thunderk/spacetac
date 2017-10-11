@@ -50,20 +50,22 @@ module TK.SpaceTac.UI {
                 }
             });
 
-            this.input.keyboard.addCallbacks(this, undefined, (event: KeyboardEvent) => {
-                if (this.debug) {
-                    console.log(event);
-                }
-
-                this.forceLeaveHovered();
-
-                if (!contains(["Control", "Shift", "Alt", "Meta"], event.key)) {
-                    this.keyPress(event.key);
-                    if (event.code != event.key) {
-                        this.keyPress(event.code);
+            if (!this.game.headless) {
+                this.input.keyboard.addCallbacks(this, undefined, (event: KeyboardEvent) => {
+                    if (this.debug) {
+                        console.log(event);
                     }
-                }
-            });
+
+                    this.forceLeaveHovered();
+
+                    if (!contains(["Control", "Shift", "Alt", "Meta"], event.key)) {
+                        this.keyPress(event.key);
+                        if (event.code != event.key) {
+                            this.keyPress(event.code);
+                        }
+                    }
+                });
+            }
         }
 
         /**

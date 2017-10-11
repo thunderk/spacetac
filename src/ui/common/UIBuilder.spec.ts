@@ -113,6 +113,12 @@ module TK.SpaceTac.UI.Specs {
 
             builder.clear();
             builder.text("", 0, 0, {});
+            builder.text("", 0, 0, { stroke_width: 2, stroke_color: "#ff0000" });
+            check(["View layers", "base", 0], Phaser.Text, "", { stroke: "black", strokeThickness: 0 });
+            check(["View layers", "base", 1], Phaser.Text, "", { stroke: "#ff0000", strokeThickness: 2 });
+
+            builder.clear();
+            builder.text("", 0, 0, {});
             builder.text("", 0, 0, { bold: true });
             check(["View layers", "base", 0], Phaser.Text, "", { fontWeight: "normal" });
             check(["View layers", "base", 1], Phaser.Text, "", { fontWeight: "bold" });

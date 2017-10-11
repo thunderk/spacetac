@@ -5,6 +5,7 @@ module TK.SpaceTac.UI {
     export type UIText = Phaser.Text
     export type UIImage = Phaser.Image
     export type UIButton = Phaser.Button
+    export type UIGroup = Phaser.Group
     export type UIContainer = Phaser.Group | Phaser.Image
 
     /**
@@ -14,6 +15,8 @@ module TK.SpaceTac.UI {
         size?: number
         color?: string
         shadow?: boolean
+        stroke_width?: number
+        stroke_color?: string
         bold?: boolean
         center?: boolean
         vcenter?: boolean
@@ -32,6 +35,10 @@ module TK.SpaceTac.UI {
 
         // Shadow under the text
         shadow = false
+
+        // Stroke around the letters
+        stroke_width = 0
+        stroke_color = "#ffffff"
 
         // Bold text
         bold = false
@@ -105,7 +112,7 @@ module TK.SpaceTac.UI {
         /**
          * Add a group of components
          */
-        group(name: string, x = 0, y = 0): UIContainer {
+        group(name: string, x = 0, y = 0): UIGroup {
             let result = new Phaser.Group(this.game, undefined, name);
             result.position.set(x, y);
             this.add(result);
@@ -132,6 +139,10 @@ module TK.SpaceTac.UI {
             if (style.shadow) {
                 result.setShadow(3, 4, "rgba(0,0,0,0.6)", 6);
             }
+            if (style.stroke_width) {
+                result.stroke = style.stroke_color;
+                result.strokeThickness = style.stroke_width;
+            }
             this.add(result);
             return result;
         }
@@ -154,7 +165,7 @@ module TK.SpaceTac.UI {
         /**
          * Add a clickable button
          */
-        button(name: string, x = 0, y = 0, onclick?: Function): UIButton {
+        button(name: string, x = 0, y = 0, onclick?: Function, tooltip?: string | (() => string)): UIButton {
             let info = this.view.getImageInfo(name);
             let result = new Phaser.Button(this.game, x, y, info.key, onclick || nop, null, info.frame, info.frame);
             result.name = name;
@@ -162,6 +173,13 @@ module TK.SpaceTac.UI {
             result.input.useHandCursor = clickable;
             if (clickable) {
                 UIComponent.setButtonSound(result);
+            }
+            if (tooltip) {
+                if (typeof tooltip == "string") {
+                    this.view.tooltip.bindStaticText(result, tooltip);
+                } else {
+                    this.view.tooltip.bindDynamicText(result, tooltip);
+                }
             }
             this.add(result);
             return result;

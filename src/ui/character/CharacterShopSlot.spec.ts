@@ -29,7 +29,7 @@ module TK.SpaceTac.UI.Specs {
             expect(shop_slot instanceof CharacterShopSlot).toBe(true);
 
             // sell
-            let equ1s = <CharacterEquipment>sheet.equipments.children[0];
+            let equ1s = <CharacterEquipment>sheet.layer_equipments.children[0];
             expect(equ1s.item).toBe(equ1);
             equ1s.applyDragDrop(cargo_slot, shop_slot, false);
             expect(ship.cargo).toEqual([]);
@@ -37,7 +37,7 @@ module TK.SpaceTac.UI.Specs {
             expect(fleet.credits).toBe(220);
 
             // buy
-            let equ2s = <CharacterEquipment>sheet.equipments.children[1];
+            let equ2s = <CharacterEquipment>sheet.layer_equipments.children[1];
             expect(equ2s.item).toBe(equ2);
             equ2s.applyDragDrop(shop_slot, cargo_slot, false);
             expect(ship.cargo).toEqual([equ2]);
@@ -45,7 +45,7 @@ module TK.SpaceTac.UI.Specs {
             expect(fleet.credits).toBe(100);
 
             // not enough money
-            equ1s = <CharacterEquipment>sheet.equipments.children[0];
+            equ1s = <CharacterEquipment>sheet.layer_equipments.children[0];
             expect(equ1s.item).toBe(equ1);
             equ1s.applyDragDrop(shop_slot, cargo_slot, false);
             expect(ship.cargo).toEqual([equ2]);
