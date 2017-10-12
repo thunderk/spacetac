@@ -127,8 +127,14 @@ module TK.SpaceTac.UI.Specs {
 
             testgame.view.inputs.setDragDrop(button);
 
+            button.events.onDragStart.dispatch();
+            expect(x).toBe(0, "drag signal should be disabled");
             expect(button.inputEnabled).toBe(true, "input should remain enabled");
             expect(button.input.draggable).toBe(false, "dragging should be disabled at the end");
+
+            testgame.view.inputs.setDragDrop(button, () => x += 1, () => x -= 1);
+            button.events.onDragStart.dispatch();
+            expect(x).toBe(1, "drag signal should be dispatch once");
         });
     });
 }

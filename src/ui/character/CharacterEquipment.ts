@@ -109,6 +109,7 @@ module TK.SpaceTac.UI {
                         if (this.applyDragDrop(this.container, destination, false)) {
                             this.container = destination;
                             this.snapToContainer();
+                            this.setupDragDrop();
                             this.sheet.refresh();  // TODO Only if required (destination is "virtual")
                         } else {
                             this.snapToContainer();
@@ -134,7 +135,6 @@ module TK.SpaceTac.UI {
             } else if (possible) {
                 if (source.removeEquipment(this, destination, false)) {
                     if (destination.addEquipment(this, source, false)) {
-                        this.setupDragDrop();
                         return true;
                     } else {
                         console.error("Destination container refused to accept equipment", this, source, destination);

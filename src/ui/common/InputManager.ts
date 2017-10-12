@@ -137,6 +137,9 @@ module TK.SpaceTac.UI {
          * If no drag or drop function is defined, dragging is disabled
          */
         setDragDrop(obj: Phaser.Button | Phaser.Image, drag?: Function, drop?: Function): void {
+            obj.events.onDragStart.removeAll();
+            obj.events.onDragStop.removeAll();
+
             if (drag && drop) {
                 obj.inputEnabled = true;
                 obj.input.enableDrag(false, true);
