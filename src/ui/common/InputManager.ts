@@ -135,10 +135,13 @@ module TK.SpaceTac.UI {
          * Setup dragging on an UI component
          * 
          * If no drag or drop function is defined, dragging is disabled
+         * 
+         * If update function is defined, it will receive (a lot of) cursor moves while dragging
          */
-        setDragDrop(obj: Phaser.Button | Phaser.Image, drag?: Function, drop?: Function): void {
+        setDragDrop(obj: Phaser.Button | Phaser.Image, drag?: Function, drop?: Function, update?: Function): void {
             obj.events.onDragStart.removeAll();
             obj.events.onDragStop.removeAll();
+            obj.events.onDragUpdate.removeAll();
 
             if (drag && drop) {
                 obj.inputEnabled = true;
@@ -149,10 +152,17 @@ module TK.SpaceTac.UI {
                     this.view.audio.playOnce("ui-drag");
                     drag();
                 });
+
                 obj.events.onDragStop.add(() => {
                     this.view.audio.playOnce("ui-drop");
                     drop();
                 });
+
+                if (update) {
+                    obj.events.onDragUpdate.add(() => {
+                        update();
+                    });
+                }
             } else {
                 obj.input.disableDrag();
             }

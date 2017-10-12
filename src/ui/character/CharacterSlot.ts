@@ -37,30 +37,36 @@ module TK.SpaceTac.UI {
         getPriceOffset(): number {
             return 66;
         }
-        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
+        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
+            let info = equipment.item.slot_type ? `equip in ${SlotType[equipment.item.slot_type].toLowerCase()} slot` : "equip";
             if (this.sheet.ship.critical) {
-                return false;
-            } if (this.sheet.ship.canEquip(equipment.item)) {
-                if (test) {
-                    return true;
-                } else {
-                    return this.sheet.ship.equip(equipment.item, false);
-                }
+                return { success: false, info: info, error: "not a fleet member" };
+            } else if (!equipment.item.canBeEquipped(this.sheet.ship.attributes, false)) {
+                return { success: false, info: info, error: "missing skills" };
+            } else if (equipment.item.slot_type && !this.sheet.ship.getFreeSlot(equipment.item.slot_type)) {
+                return { success: false, info: info, error: "no free slot" };
             } else {
-                return false;
+                if (test) {
+                    return { success: true, info: info };
+                } else {
+                    let success = this.sheet.ship.equip(equipment.item, false);
+                    return { success: success, info: info };
+                }
             }
         }
-        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
+        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
+            let info = equipment.item.slot_type ? `unequip from ${SlotType[equipment.item.slot_type].toLowerCase()} slot` : "unequip";
             if (this.sheet.ship.critical) {
-                return false;
-            } if (contains(this.sheet.ship.listEquipment(equipment.item.slot_type), equipment.item)) {
-                if (test) {
-                    return true;
-                } else {
-                    return this.sheet.ship.unequip(equipment.item, false);
-                }
+                return { success: false, info: info, error: "not a fleet member" };
+            } if (!contains(this.sheet.ship.listEquipment(equipment.item.slot_type), equipment.item)) {
+                return { success: false, info: info, error: "not equipped!" };
             } else {
-                return false;
+                if (test) {
+                    return { success: true, info: info };
+                } else {
+                    let success = this.sheet.ship.unequip(equipment.item, false);
+                    return { success: success, info: info };
+                }
             }
         }
     }

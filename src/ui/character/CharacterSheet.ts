@@ -44,8 +44,9 @@ module TK.SpaceTac.UI {
         // Ship cargo
         ship_cargo: Phaser.Group
 
-        // Mode title
-        mode_title: Phaser.Text
+        // Dynamic texts
+        mode_title: UIText
+        action_message: UIText
 
         // Loot items
         loot_slots: Phaser.Group
@@ -88,6 +89,7 @@ module TK.SpaceTac.UI {
             this.close_button = this.builder.button("character-close", 1920, 0, onclose, "Close the character sheet");
             this.close_button.anchor.set(1, 0);
 
+            this.builder.text("Cargo", 1566, 36, { size: 24 });
             this.builder.text("Level", 420, 1052, { size: 24 });
             this.builder.text("Available points", 894, 1052, { size: 24 });
 
@@ -101,6 +103,7 @@ module TK.SpaceTac.UI {
             this.portraits = this.builder.group("portraits", 152, 0);
             this.credits = this.builder.text("", 136, 38, { size: 30 });
             this.mode_title = this.builder.text("", 1566, 648, { size: 18 });
+            this.action_message = this.builder.text("", 1566, 1056, { size: 18 });
             this.loot_next = this.builder.button("common-arrow-right", 1890, 850, () => this.paginate(1), "Show next items");
             this.loot_next.anchor.set(0.5);
             this.loot_prev = this.builder.button("common-arrow-left", 1238, 850, () => this.paginate(-1), "Show previous items");
@@ -189,6 +192,7 @@ module TK.SpaceTac.UI {
             this.ship = ship;
 
             this.layer_equipments.removeAll(true);
+            this.setActionMessage();
 
             let upgrade_points = ship.getAvailableUpgradePoints();
 
@@ -211,11 +215,11 @@ module TK.SpaceTac.UI {
                 let slot_display = new CharacterSlot(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y, slot.type);
                 slot_display.scale.set(slotsinfo.scaling, slotsinfo.scaling);
                 slot_display.alpha = ship.critical ? 0.5 : 1;
-                this.ship_slots.addChild(slot_display);
+                this.ship_slots.add(slot_display);
 
                 if (slot.attached) {
                     let equipment = new CharacterEquipment(this, slot.attached, slot_display);
-                    this.layer_equipments.addChild(equipment);
+                    this.layer_equipments.add(equipment);
                 }
             });
 
@@ -225,11 +229,11 @@ module TK.SpaceTac.UI {
                 let cargo_slot = new CharacterCargo(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y);
                 cargo_slot.scale.set(slotsinfo.scaling, slotsinfo.scaling);
                 cargo_slot.alpha = ship.critical ? 0.5 : 1;
-                this.ship_cargo.addChild(cargo_slot);
+                this.ship_cargo.add(cargo_slot);
 
                 if (idx < this.ship.cargo.length) {
                     let equipment = new CharacterEquipment(this, this.ship.cargo[idx], cargo_slot);
-                    this.layer_equipments.addChild(equipment);
+                    this.layer_equipments.add(equipment);
                 }
             });
 
@@ -270,6 +274,16 @@ module TK.SpaceTac.UI {
                 this.game.tweens.create(this).to({ x: this.xhidden }, 400, Phaser.Easing.Circular.InOut, true);
             } else {
                 this.x = this.xhidden;
+            }
+        }
+
+        /**
+         * Set the action message (mainly used while dragging equipment to explain what is happening)
+         */
+        setActionMessage(message = "", color = "#ffffff"): void {
+            if (message != this.action_message.text) {
+                this.action_message.setText(message);
+                this.action_message.fill = color;
             }
         }
 
@@ -337,13 +351,13 @@ module TK.SpaceTac.UI {
             range(per_page).forEach(idx => {
                 let loot_slot = this.shop ? new CharacterShopSlot(this, info.positions[idx].x, info.positions[idx].y) : new CharacterLootSlot(this, info.positions[idx].x, info.positions[idx].y);
                 loot_slot.scale.set(info.scaling, info.scaling);
-                this.loot_slots.addChild(loot_slot);
+                this.loot_slots.add(loot_slot);
 
                 idx += per_page * this.loot_page;
 
                 if (idx < items.length) {
                     let equipment = new CharacterEquipment(this, items[idx], loot_slot);
-                    this.layer_equipments.addChild(equipment);
+                    this.layer_equipments.add(equipment);
                 }
             });
 

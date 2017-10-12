@@ -60,9 +60,9 @@ module TK.SpaceTac.UI.Specs {
 
             // Cannot transfer to escorted ship
             ship2.setCargoSpace(2);
-            expect(equ.applyDragDrop(source, dest, true)).toBe(true);
+            expect(equ.applyDragDrop(source, dest, true)).toEqual({ success: true, info: 'remove from cargo, transfer to unnamed', error: undefined });
             ship2.critical = true;
-            expect(equ.applyDragDrop(source, dest, true)).toBe(false);
+            expect(equ.applyDragDrop(source, dest, true)).toEqual({ success: false, info: 'remove from cargo, transfer to unnamed', error: 'not a fleet member' });
         });
     });
 }

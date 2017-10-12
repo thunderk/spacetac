@@ -124,8 +124,8 @@ module TK.SpaceTac {
          * 
          * This does not check where the equipment currently is (except if is it already attached and should be detached first).
          */
-        canBeEquipped(skills: ShipAttributes): boolean {
-            if (this.attached_to) {
+        canBeEquipped(skills: ShipAttributes, check_unattached = true): boolean {
+            if (check_unattached && this.attached_to) {
                 return false;
             } else {
                 var able = true;

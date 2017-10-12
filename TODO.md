@@ -25,8 +25,7 @@ Character sheet
 
 * Disable interaction during battle (except for loot screen)
 * Improve eye-catching for shop and loot section
-* Highlight allowed destinations during drag-and-drop, with text hints (for success or error)
-* When transferring to another ship, if the item can't be equipped (unmatched requirements), the transfer is cancelled instead of trying cargo
+* Highlight allowed destinations during drag-and-drop
 * Effective skill is sometimes not updated when upgrading base skill
 * Add merged cargo display for the whole fleet
 * Allow to change/buy ship model
@@ -34,6 +33,7 @@ Character sheet
 * Allow to cancel spent skill points (and confirm when closing the sheet)
 * Add filters and sort options for cargo and shop
 * Display level and slot type on equipment
+* Fixed tooltips not being visible in loot mode (at the end of battle)
 
 Battle
 ------
@@ -93,7 +93,6 @@ Artificial Intelligence
 Common UI
 ---------
 
-* Split atlases by asset stage
 * UIBuilder.button should be able to handle hover and pushed images
 * If ProgressiveMessage animation performance is bad, show the text directly
 * Add caret/focus to text input
@@ -104,8 +103,9 @@ Common UI
 Technical
 ---------
 
-* Pack all images in atlases
+* Pack all images in atlases, and split them by stage
 * Pack sounds
+* Use shaders for backgrounds, with fallback images
 * Replace jasmine with mocha+chai
 
 Network
@@ -126,7 +126,6 @@ Postponed
 * Formation or deployment phase
 * Add ship personality (with icons to identify?), with reaction dialogs
 * New battle internal flow: any game state change should be done through revertable events
-* Animated arena background, instead of big picture
 * Hide enemy information (shield, hull, weapons), until they are in play, or until a "spy" effect is used
 * Invocation/reinforcements (need to up the 10 ships limit)
 * Dynamic music composition

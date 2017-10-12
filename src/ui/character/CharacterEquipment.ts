@@ -18,11 +18,28 @@ module TK.SpaceTac.UI {
         /**
          * Add an equipment to the container
          */
-        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean
+        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer
         /**
          * Remove an equipment from the container
          */
-        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean
+        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer
+    }
+
+    /**
+     * Result of an equipment transfer operation
+     */
+    export type CharacterEquipmentTransfer = {
+        success: boolean,
+        info: string,
+        error?: string
+    }
+
+    function mergeTransfer(leave: CharacterEquipmentTransfer, enter: CharacterEquipmentTransfer): CharacterEquipmentTransfer {
+        return {
+            success: leave.success && enter.success,
+            info: [leave.info, enter.info].join(', '),
+            error: leave.error || enter.error
+        }
     }
 
     /**
@@ -104,9 +121,10 @@ module TK.SpaceTac.UI {
                     this.alpha = 0.8;
                 }, () => {
                     // Drop
+                    this.sheet.setActionMessage();
                     let destination = this.findContainerAt(this.x, this.y);
                     if (destination && destination != this.container) {
-                        if (this.applyDragDrop(this.container, destination, false)) {
+                        if (this.applyDragDrop(this.container, destination, false).success) {
                             this.container = destination;
                             this.snapToContainer();
                             this.setupDragDrop();
@@ -116,6 +134,19 @@ module TK.SpaceTac.UI {
                         }
                     } else {
                         this.snapToContainer();
+                    }
+                }, () => {
+                    // Update
+                    let destination = this.findContainerAt(this.x, this.y);
+                    if (destination && destination != this.container) {
+                        let simulation = this.applyDragDrop(this.container, destination, true);
+                        let message = capitalize(simulation.info);
+                        if (simulation.error) {
+                            message += ` (${simulation.error})`;
+                        }
+                        this.sheet.setActionMessage(message, simulation.success ? "#ffffff" : "#f04240");
+                    } else {
+                        this.sheet.setActionMessage();
                     }
                 });
             } else {
@@ -128,30 +159,39 @@ module TK.SpaceTac.UI {
          * 
          * Return true if something changed (or would change, if test=true).
          */
-        applyDragDrop(source: CharacterEquipmentContainer, destination: CharacterEquipmentContainer, test: boolean): boolean {
-            let possible = source.removeEquipment(this, destination, true) && destination.addEquipment(this, source, true);
+        applyDragDrop(source: CharacterEquipmentContainer, destination: CharacterEquipmentContainer, test: boolean): CharacterEquipmentTransfer {
+            let transfer_test = mergeTransfer(source.removeEquipment(this, destination, true), destination.addEquipment(this, source, true));
+
             if (test) {
-                return possible;
-            } else if (possible) {
-                if (source.removeEquipment(this, destination, false)) {
-                    if (destination.addEquipment(this, source, false)) {
-                        return true;
+                return transfer_test;
+            } else if (transfer_test.success) {
+                let transfer_out = source.removeEquipment(this, destination, false);
+                if (transfer_out.success) {
+                    let transfer_in = destination.addEquipment(this, source, false);
+                    let transfer = mergeTransfer(transfer_out, transfer_in);
+                    if (transfer_in.success) {
+                        return transfer;
                     } else {
                         console.error("Destination container refused to accept equipment", this, source, destination);
                         // Go back to source
-                        if (source.addEquipment(this, null, false)) {
-                            return false;
+                        let transfer_back = source.addEquipment(this, null, false);
+                        if (transfer_back.success) {
+                            return transfer;
                         } else {
-                            console.error("Equipment lost in bad exchange !", this, source, destination);
-                            return true;
+                            console.error("Equipment lost in bad exchange!", this, source, destination);
+                            return {
+                                success: true,
+                                info: transfer.info,
+                                error: "Equipment was critically damaged in transfer!"
+                            };
                         }
                     }
                 } else {
                     console.error("Source container refused to give away equipment", this, source, destination);
-                    return false;
+                    return transfer_out;
                 }
             } else {
-                return false;
+                return transfer_test;
             }
         }
 

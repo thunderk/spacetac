@@ -35,30 +35,34 @@ module TK.SpaceTac.UI {
         getPriceOffset(): number {
             return 66;
         }
-        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
+        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
+            let info = "put in cargo";
             if (this.sheet.ship.critical) {
-                return false;
+                return { success: false, info: info, error: "not a fleet member" };
             } if (this.sheet.ship.getFreeCargoSpace() > 0) {
                 if (test) {
-                    return true;
+                    return { success: true, info: info };
                 } else {
-                    return this.sheet.ship.addCargo(equipment.item);
+                    let success = this.sheet.ship.addCargo(equipment.item);
+                    return { success: success, info: info };
                 }
             } else {
-                return false;
+                return { success: false, info: info, error: "not enough cargo space" };
             }
         }
-        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
+        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
+            let info = "remove from cargo";
             if (this.sheet.ship.critical) {
-                return false;
+                return { success: false, info: info, error: "not a fleet member" };
             } else if (contains(this.sheet.ship.cargo, equipment.item)) {
                 if (test) {
-                    return true;
+                    return { success: true, info: info };
                 } else {
-                    return this.sheet.ship.removeCargo(equipment.item);
+                    let success = this.sheet.ship.removeCargo(equipment.item);
+                    return { success: success, info: info };
                 }
             } else {
-                return false;
+                return { success: false, info: info, error: "not in cargo!" };
             }
         }
     }

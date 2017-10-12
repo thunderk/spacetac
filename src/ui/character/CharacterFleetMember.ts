@@ -41,7 +41,7 @@ module TK.SpaceTac.UI {
          * CharacterEquipmentContainer interface
          */
         isInside(x: number, y: number): boolean {
-            return this.getBounds().contains(x, y);
+            return this.getBounds().contains(x, y) && this.ship !== this.sheet.ship;
         }
         getEquipmentAnchor(): { x: number, y: number, scale: number, alpha: number } {
             // not needed, equipment is never shown snapped in the slot
@@ -50,35 +50,41 @@ module TK.SpaceTac.UI {
         getPriceOffset(): number {
             return 0;
         }
-        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
+        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
+            let info = `transfer to ${this.ship.name}`;
             if (this.ship.critical) {
-                return false;
+                return { success: false, info: info, error: "not a fleet member" };
             } else if (this.ship != this.sheet.ship && equipment.item.slot_type !== null) {
+                // First, try to equip
                 let slot = this.ship.getFreeSlot(equipment.item.slot_type);
-                if (slot) {
+                if (slot && equipment.item.canBeEquipped(this.ship.attributes, false)) {
+                    info = `equip on ${this.ship.name}`;
                     if (test) {
-                        return true;
+                        return { success: true, info: info };
                     } else {
-                        return this.ship.equip(equipment.item, false);
-                    }
-                } else {
-                    if (this.ship.getFreeCargoSpace() > 0) {
-                        if (test) {
-                            return true;
-                        } else {
-                            return this.ship.addCargo(equipment.item);
-                        }
-                    } else {
-                        return false;
+                        let success = this.ship.equip(equipment.item, false);
+                        return { success: true, info: info };
                     }
                 }
+
+                // If cannot be equipped, go to cargo
+                if (this.ship.getFreeCargoSpace() > 0) {
+                    if (test) {
+                        return { success: true, info: info };
+                    } else {
+                        let success = this.ship.addCargo(equipment.item);
+                        return { success: success, info: info };
+                    }
+                } else {
+                    return { success: false, info: info, error: "not enough cargo space" };
+                }
             } else {
-                return false;
+                return { success: false, info: info, error: "drop on cargo or slots" };
             }
         }
-        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
+        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
             // should never happen
-            return false;
+            return { success: false, info: "" };
         }
     }
 }

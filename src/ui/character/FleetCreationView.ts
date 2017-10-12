@@ -27,7 +27,7 @@ module TK.SpaceTac.UI {
             this.infinite_shop = new Shop(1, basic_equipments(), 0, basic_equipments);
 
             this.character_sheet = new CharacterSheet(this, undefined, undefined, () => this.validateFleet());
-            this.character_sheet.setShop(this.infinite_shop, "Initial basic equipment");
+            this.character_sheet.setShop(this.infinite_shop, "Available stock (from Master Merchant Guild)");
             this.character_sheet.show(this.built_fleet.ships[0], false);
             this.getLayer("characters").add(this.character_sheet);
         }

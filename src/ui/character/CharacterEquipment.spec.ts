@@ -23,41 +23,45 @@ module TK.SpaceTac.UI.Specs {
             getPriceOffset(): number {
                 return 12;
             }
-            addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
+            addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
                 if (this.x < 150) {
                     if (!test) {
                         this.inside = equipment;
                     }
-                    return true;
+                    return { success: true, info: "" };
                 } else {
-                    return false;
+                    return { success: false, info: "" };
                 }
             }
-            removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
+            removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
                 if (this.inside === equipment) {
                     if (!test) {
                         this.inside = null;
                     }
-                    return true;
+                    return { success: true, info: "" };
                 } else {
-                    return false;
+                    return { success: false, info: "" };
                 }
             }
         }
 
-        it("handles drag-and-drop to move equipment", function () {
+        function createBasicCase(positions: number[]): [CharacterSheet, CharacterEquipment, FakeContainer[], Function] {
             let view = testgame.view;
             let sheet = new CharacterSheet(view);
             sheet.show(new Ship());
             let refresh = spyOn(sheet, "refresh").and.stub();
 
-            let container1 = new FakeContainer("container1", 0);
-            let container2 = new FakeContainer("container2", 100);
-            let container3 = new FakeContainer("container3", 200);
-            let equipment = new CharacterEquipment(sheet, new Equipment(), container1);
-            container1.inside = equipment;
+            let containers = positions.map((x, idx) => new FakeContainer(`container${idx + 1}`, x));
+            let equipment = new CharacterEquipment(sheet, new Equipment(), containers[0]);
+            containers[0].inside = equipment;
             equipment.setupDragDrop();
-            spyOn(sheet, "iEquipmentContainers").and.returnValue(iarray([container1, container2, container3]));
+            spyOn(sheet, "iEquipmentContainers").and.returnValue(iarray(containers));
+
+            return [sheet, equipment, containers, refresh];
+        }
+
+        it("handles drag-and-drop to move equipment", function () {
+            let [sheet, equipment, [container1, container2, container3], refresh] = createBasicCase([0, 100, 200]);
 
             expect(equipment.inputEnabled).toBe(true, "Input should be enabled");
             expect(equipment.input.draggable).toBe(true, "Equipment should be draggable");
@@ -97,7 +101,7 @@ module TK.SpaceTac.UI.Specs {
 
             // broken destination, should return to source
             let log = spyOn(console, "error").and.stub();
-            spyOn(container3, "addEquipment").and.returnValues(true, false, true, false);
+            spyOn(container3, "addEquipment").and.callFake((equ: any, src: any, test: boolean) => { return { success: test } });
             equipment.events.onDragStart.dispatch();
             equipment.x = 200;
             equipment.events.onDragStop.dispatch();
@@ -107,14 +111,44 @@ module TK.SpaceTac.UI.Specs {
             expect(log).toHaveBeenCalledWith('Destination container refused to accept equipment', equipment, container2, container3);
 
             // broken destination and source, item is lost !
-            spyOn(container2, "addEquipment").and.returnValue(false);
+            spyOn(container2, "addEquipment").and.callFake((equ: any, src: any, test: boolean) => { return { success: test } });
             equipment.events.onDragStart.dispatch();
             equipment.x = 200;
             equipment.events.onDragStop.dispatch();
             expect(equipment.container).toBe(container3);
             expect(equipment.x).toBe(200);
             expect(refresh).toHaveBeenCalledTimes(2);
-            expect(log).toHaveBeenCalledWith('Equipment lost in bad exchange !', equipment, container2, container3);
+            expect(log).toHaveBeenCalledWith('Equipment lost in bad exchange!', equipment, container2, container3);
+        });
+
+        it("defines the sheet's action message", function () {
+            let [sheet, equipment, [container1, container2], refresh] = createBasicCase([0, 1]);
+
+            spyOn(container1, "removeEquipment").and.returnValues(
+                { success: true, info: "detach" },
+                { success: false, info: "detach", error: "cannot detach" },
+                { success: true, info: "detach" },
+                { success: false, info: "detach", error: "cannot detach" }
+            )
+            spyOn(container2, "addEquipment").and.returnValues(
+                { success: true, info: "attach" },
+                { success: true, info: "attach" },
+                { success: false, info: "attach", error: "cannot attach" },
+                { success: false, info: "attach", error: "cannot attach" }
+            )
+
+            expect(sheet.action_message.text).toEqual("");
+            equipment.events.onDragStart.dispatch();
+            expect(sheet.action_message.text).toEqual("");
+            equipment.x = 1;
+            equipment.events.onDragUpdate.dispatch();
+            expect(sheet.action_message.text).toEqual("Detach, attach");
+            equipment.events.onDragUpdate.dispatch();
+            expect(sheet.action_message.text).toEqual("Detach, attach (cannot detach)");
+            equipment.events.onDragUpdate.dispatch();
+            expect(sheet.action_message.text).toEqual("Detach, attach (cannot attach)");
+            equipment.events.onDragUpdate.dispatch();
+            expect(sheet.action_message.text).toEqual("Detach, attach (cannot detach)");
         });
     });
 }

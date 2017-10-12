@@ -5,34 +5,41 @@ module TK.SpaceTac.UI {
      * Display a shop slot
      */
     export class CharacterShopSlot extends CharacterLootSlot {
-        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): boolean {
+        addEquipment(equipment: CharacterEquipment, source: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
             let shop = this.sheet.shop;
             if (shop && !contains(shop.getStock(), equipment.item)) {
+                let price = shop.getPrice(equipment.item);
+                let info = `sell for ${price} zotys`;
                 if (test) {
-                    return true;
+                    return { success: true, info: info };
                 } else {
-                    return shop.buyFromFleet(equipment.item, this.sheet.fleet);
+                    let success = shop.buyFromFleet(equipment.item, this.sheet.fleet);
+                    return { success: success, info: info };
                 }
             } else {
-                return false;
+                return { success: false, info: "sell equipment", error: "it's already mine!" };
             }
         }
 
-        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): boolean {
+        removeEquipment(equipment: CharacterEquipment, destination: CharacterEquipmentContainer | null, test: boolean): CharacterEquipmentTransfer {
             let shop = this.sheet.shop;
             if (shop && contains(shop.getStock(), equipment.item)) {
+                let price = shop.getPrice(equipment.item);
+                let info = `buy for ${price} zotys`;
                 if (destination) {
-                    let price = shop.getPrice(equipment.item);
-                    if (test) {
-                        return price <= this.sheet.fleet.credits;
+                    if (price > this.sheet.fleet.credits) {
+                        return { success: false, info: info, error: "not enough zotys" };
+                    } else if (test) {
+                        return { success: true, info: info };
                     } else {
-                        return shop.sellToFleet(equipment.item, this.sheet.fleet);
+                        let success = shop.sellToFleet(equipment.item, this.sheet.fleet);
+                        return { success: success, info: info };
                     }
                 } else {
-                    return test;
+                    return { success: test, info: info };
                 }
             } else {
-                return false;
+                return { success: false, info: "buy equipment", error: "it's not mine to sell!" };
             }
         }
     }
