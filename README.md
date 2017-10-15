@@ -16,7 +16,9 @@
 
 ## How to develop
 
-The only hard dependency of the toolchain is Python3.
+The only hard dependency of the toolchain is [yarn](https://yarnpkg.com).
+
+If yarn is not installed on your system but Python3 is, yarn will be automatically installed in a local virtual environment.
 
 If you want to build on your computer, clone the repository, then run:
 

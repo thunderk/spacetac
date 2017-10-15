@@ -8,6 +8,8 @@ module TK.SpaceTac.UI {
     export type UIGroup = Phaser.Group
     export type UIContainer = Phaser.Group | Phaser.Image
 
+    export type ShaderValue = number | { x: number, y: number }
+
     /**
      * Text style interface
      */
@@ -182,6 +184,38 @@ module TK.SpaceTac.UI {
                 }
             }
             this.add(result);
+            return result;
+        }
+
+        /**
+         * Add a fragment shader area, with optional fallback image
+         */
+        shader(name: string, base: string | { width: number, height: number }, x = 0, y = 0, updater?: () => { [name: string]: ShaderValue }): UIImage {
+            let source = this.game.cache.getShader(name);
+            source = "" + source;
+            let uniforms: any = {};
+            if (updater) {
+                iteritems(updater(), (key, value) => {
+                    uniforms[key] = { type: (typeof value == "number") ? "1f" : "2f", value: value };
+                });
+            }
+            let filter = new Phaser.Filter(this.game, uniforms, source);
+            let result: Phaser.Image;
+            if (typeof base == "string") {
+                result = this.image(base, x, y);
+                result.filters = [filter];
+                filter.setResolution(result.width, result.height);
+            } else {
+                result = filter.addToWorld(x, y, base.width, base.height);
+                this.add(result);
+            }
+            if (updater) {
+                result.update = () => {
+                    iteritems(updater(), (key, value) => filter.uniforms[key].value = value);
+                    filter.update();
+                }
+            }
+            filter.update();
             return result;
         }
 

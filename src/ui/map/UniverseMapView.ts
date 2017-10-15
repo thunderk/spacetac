@@ -66,6 +66,8 @@ module TK.SpaceTac.UI {
         create() {
             super.create();
 
+            let builder = new UIBuilder(this);
+
             this.layer_universe = this.getLayer("universe");
             this.layer_overlay = this.getLayer("overlay");
 
@@ -143,7 +145,16 @@ module TK.SpaceTac.UI {
                 }
             });
 
-            this.setZoom(2);
+            this.setZoom(2, 0);
+
+            // Add a shader background
+            builder.shader("map-background", { width: this.getWidth(), height: this.getHeight() }, 0, 0, () => {
+                let scale = this.layer_universe.scale.x;
+                return {
+                    offset: { x: (920 - this.layer_universe.x) / scale, y: -(540 - this.layer_universe.y) / scale },
+                    scale: scale
+                }
+            });
 
             // Trigger an auto-save any time we go back to the map
             this.autoSave();
@@ -226,46 +237,57 @@ module TK.SpaceTac.UI {
          */
         setCamera(x: number, y: number, span: number, duration = 500, easing = Phaser.Easing.Cubic.InOut) {
             let scale = 1000 / span;
-            this.tweens.create(this.layer_universe.position).to({ x: 920 - x * scale, y: 540 - y * scale }, duration, easing).start();
-            this.tweens.create(this.layer_universe.scale).to({ x: scale, y: scale }, duration, easing).start();
+            let dest_x = 920 - x * scale;
+            let dest_y = 540 - y * scale;
+            if (duration) {
+                this.tweens.create(this.layer_universe.position).to({ x: dest_x, y: dest_y }, duration, easing).start();
+                this.tweens.create(this.layer_universe.scale).to({ x: scale, y: scale }, duration, easing).start();
+            } else {
+                this.layer_universe.position.set(dest_x, dest_y);
+                this.layer_universe.scale.set(scale);
+            }
         }
 
         /**
          * Set the camera to include all direct-jump accessible stars
          */
-        setCameraOnAccessible(star: Star) {
+        setCameraOnAccessible(star: Star, duration: number) {
             let accessible = star.getNeighbors().concat([star]);
             let xmin = min(accessible.map(star => star.x));
             let xmax = max(accessible.map(star => star.x));
             let ymin = min(accessible.map(star => star.y));
             let ymax = max(accessible.map(star => star.y));
             let dmax = Math.max(xmax - xmin, ymax - ymin);
-            this.setCamera(xmin + (xmax - xmin) * 0.5, ymin + (ymax - ymin) * 0.5, dmax * 1.2);
+            this.setCamera(xmin + (xmax - xmin) * 0.5, ymin + (ymax - ymin) * 0.5, dmax * 1.2, duration);
         }
 
         /**
          * Set the alpha value for all links
          */
-        setLinksAlpha(alpha: number) {
-            this.game.add.tween(this.starlinks_group).to({ alpha: alpha }, 500 * Math.abs(this.starlinks_group.alpha - alpha)).start();
+        setLinksAlpha(alpha: number, duration = 500) {
+            if (duration) {
+                this.game.add.tween(this.starlinks_group).to({ alpha: alpha }, duration * Math.abs(this.starlinks_group.alpha - alpha)).start();
+            } else {
+                this.starlinks_group.alpha = alpha;
+            }
         }
 
         /**
          * Set the current zoom level (0, 1 or 2)
          */
-        setZoom(level: number) {
+        setZoom(level: number, duration = 500) {
             let current_star = this.player.fleet.location ? this.player.fleet.location.star : null;
             if (!current_star || level <= 0) {
-                this.setCamera(0, 0, this.universe.radius * 2);
-                this.setLinksAlpha(1);
+                this.setCamera(0, 0, this.universe.radius * 2, duration);
+                this.setLinksAlpha(1, duration);
                 this.zoom = 0;
             } else if (level == 1) {
-                this.setCameraOnAccessible(current_star);
-                this.setLinksAlpha(0.6);
+                this.setCameraOnAccessible(current_star, duration);
+                this.setLinksAlpha(0.6, duration);
                 this.zoom = 1;
             } else {
-                this.setCamera(current_star.x, current_star.y, current_star.radius * 2);
-                this.setLinksAlpha(0.2);
+                this.setCamera(current_star.x, current_star.y, current_star.radius * 2, duration);
+                this.setLinksAlpha(0.2, duration);
                 this.zoom = 2;
             }
 

@@ -105,7 +105,7 @@ Technical
 
 * Pack all images in atlases, and split them by stage
 * Pack sounds
-* Use shaders for backgrounds, with fallback images
+* Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile
 * Replace jasmine with mocha+chai
 
 Network

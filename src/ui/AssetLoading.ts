@@ -123,6 +123,8 @@ module TK.SpaceTac.UI {
 
                 this.loadSound("music/division.mp3");
                 this.loadSound("music/spring-thaw.mp3");
+
+                this.loadShader("map-background.glsl");
             }
 
             this.load.start();
@@ -157,6 +159,10 @@ module TK.SpaceTac.UI {
 
         loadSound(path: string) {
             this.load.audio(AssetLoading.getKey(path), "assets/sounds/" + path);
+        }
+
+        loadShader(path: string) {
+            this.load.shader(AssetLoading.getKey(path), "assets/shaders/" + path);
         }
     }
 }

@@ -1,15 +1,19 @@
 #!/bin/bash
 # Main build/run tool for SpaceTac
-# Uses yarn installed in local node.js environment
-# REQUIRES python3, else falls back to system-wide npm
+# REQUIRES yarn
+# If yarn is not found, python3 may be used to create a local node.js environment with yarn in it, and use it
 
+yarn=$(which yarn 2>/dev/null)
 set -e
 
-which python3 > /dev/null 2>&1 || ( npm "$@" && exit 0 )
+if [ "x${yarn}" != "x" ]
+then
+    "${yarn}" "$@"
+else
+    dir=$(dirname $0)
 
-dir=$(dirname $0)
-
-test -x "${dir}/.env/bin/nodeenv" || ( virtualenv -p python3 "${dir}/.env" && "${dir}/.env/bin/pip" install --upgrade nodeenv )
-test -e "${dir}/.env/node/bin/activate" || "${dir}/.env/bin/nodeenv" --node=6.11.1 --force "${dir}/.env/node"
-test -e "${dir}/.env/node/bin/yarn" || "${dir}/.env/node/bin/shim" "${dir}/.env/node/bin/npm" install -g yarn@1.1.0
-PATH="${dir}/.env/node/bin:${PATH}" yarn "$@"
+    test -x "${dir}/.env/bin/nodeenv" || ( virtualenv -p python3 "${dir}/.env" && "${dir}/.env/bin/pip" install --upgrade nodeenv )
+    test -e "${dir}/.env/node/bin/activate" || "${dir}/.env/bin/nodeenv" --node=6.11.1 --force "${dir}/.env/node"
+    test -e "${dir}/.env/node/bin/yarn" || "${dir}/.env/node/bin/shim" "${dir}/.env/node/bin/npm" install -g yarn@1.1.0
+    PATH="${dir}/.env/node/bin:${PATH}" yarn "$@"
+fi

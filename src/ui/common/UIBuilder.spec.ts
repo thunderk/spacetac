@@ -169,6 +169,33 @@ module TK.SpaceTac.UI.Specs {
             expect(a).toBe(3);
         })
 
+        it("can create shaders", function () {
+            let builder = new UIBuilder(testgame.view);
+
+            let shader1 = builder.shader("test-shader-1", "test-image-1");
+            expect(shader1 instanceof Phaser.Image).toBe(true);
+            expect(shader1.name).toEqual("test-image-1");
+            expect(shader1.filters.length).toBe(1, "one filter set on shader1");
+
+            let shader2 = builder.shader("test-shader-2", { width: 500, height: 300 });
+            expect(shader2 instanceof Phaser.Image).toBe(true);
+            expect(shader2.width).toEqual(500);
+            expect(shader2.height).toEqual(300);
+            expect(shader2.filters.length).toBe(1, "one filter set on shader2");
+
+            let i = 0;
+            let shader3 = builder.shader("test-shader-3", "test-image-3", 50, 30, () => { return { a: i++, b: { x: 1, y: 2 } } });
+            expect(shader3.x).toEqual(50);
+            expect(shader3.y).toEqual(30);
+            expect(shader3.filters[0].uniforms["a"]).toEqual({ type: '1f', value: 0 }, "uniform a initial");
+            expect(shader3.filters[0].uniforms["b"]).toEqual({ type: '2f', value: Object({ x: 1, y: 2 }) }, "uniform b initial");
+            shader3.update();
+            expect(shader3.filters[0].uniforms["a"]).toEqual({ type: '1f', value: 1 }, "uniform a updated");
+            expect(shader3.filters[0].uniforms["b"]).toEqual({ type: '2f', value: Object({ x: 1, y: 2 }) }, "uniform b updated");
+
+            expect(testgame.view.getLayer("base").children.length).toBe(3, "view layer should have three children");
+        })
+
         it("creates sub-builders, preserving text style", function () {
             let base_style = new UITextStyle();
             base_style.width = 123;
