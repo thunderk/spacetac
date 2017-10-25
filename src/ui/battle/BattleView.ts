@@ -1,8 +1,19 @@
 /// <reference path="../BaseView.ts"/>
 
 module TK.SpaceTac.UI {
-    // Interactive view of a Battle
-    export class BattleView extends BaseView {
+    /**
+     * Interface for interacting with a ship (hover and click)
+     */
+    export interface IShipButton {
+        cursorOnShip: (ship: Ship) => void;
+        cursorOffShip: (ship: Ship) => void;
+        cursorClicked: () => void;
+    }
+
+    /**
+     * Interactive view of a Battle
+     */
+    export class BattleView extends BaseView implements IShipButton {
         // Displayed battle
         battle: Battle
 
@@ -102,8 +113,8 @@ module TK.SpaceTac.UI {
             // Add UI elements
             this.action_bar = new ActionBar(this);
             this.action_bar.position.set(0, this.getHeight() - 132);
-            this.ship_list = new ShipList(this);
-            this.ship_list.position.set(this.getWidth() - 112, 0);
+            this.ship_list = new ShipList(this, this.battle, this.player, this.toggle_tactical_mode, this, 
+                this.layer_borders, this.getWidth() - 112, 0);
             this.ship_tooltip = new ShipTooltip(this);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
             this.layer_sheets.add(this.character_sheet);
@@ -179,7 +190,7 @@ module TK.SpaceTac.UI {
         numberPressed(num: number): void {
             if (this.interacting) {
                 if (this.targetting.active) {
-                    let ship = ifirst(this.battle.iships(true), ship => this.battle.getTurnsBefore(ship) == num % 10);
+                    let ship = ifirst(this.battle.iships(true), ship => this.battle.getPlayOrder(ship) == num % 10);
                     if (ship) {
                         this.targetting.setTarget(Target.newFromShip(ship));
                     }

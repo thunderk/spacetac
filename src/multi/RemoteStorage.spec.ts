@@ -1,6 +1,6 @@
 module TK.SpaceTac.Multi.Specs {
-    describe("FakeRemoteStorage", function () {
-        async_it("can fetch a single record", async function () {
+    testing("FakeRemoteStorage", test => {
+        test.acase("can fetch a single record", async function () {
             let storage = new FakeRemoteStorage();
 
             let result = await storage.find("test", { key: 5 });
@@ -21,7 +21,7 @@ module TK.SpaceTac.Multi.Specs {
             expect(result).toBeNull();
         });
 
-        async_it("inserts or updates objects", async function () {
+        test.acase("inserts or updates objects", async function () {
             let storage = new FakeRemoteStorage();
 
             let result = await storage.search("test", { key: 5 });

@@ -24,7 +24,7 @@ module TK.SpaceTac.Specs {
         it("applies the highest evaluated maneuver", function () {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
             ship.playing = true;
             let ai = new TacticalAI(ship, Timer.synchronous);
 

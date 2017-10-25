@@ -29,7 +29,7 @@ module TK.SpaceTac {
 
             let battle = new Battle(fleet);
             battle.play_order = [ship, ship1, ship2, ship3];
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
             fleet.setBattle(battle);
 
             action.apply(ship, Target.newFromLocation(50, 50));

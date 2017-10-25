@@ -1,6 +1,6 @@
 module TK.SpaceTac.Multi.Specs {
-    describe("Connection", function () {
-        async_it("finds an unused token", async function () {
+    testing("Connection", test => {
+        test.acase("finds an unused token", async check => {
             let storage = new FakeRemoteStorage();
             let connection = new Connection("test", storage);
 
@@ -15,7 +15,7 @@ module TK.SpaceTac.Multi.Specs {
             expect(other).toEqual("123456");
         });
 
-        async_it("loads a session by its id", async function () {
+        test.acase("loads a session by its id", async check => {
             let session = new GameSession();
             let serializer = new Serializer(TK.SpaceTac);
             let storage = new FakeRemoteStorage();
@@ -42,7 +42,7 @@ module TK.SpaceTac.Multi.Specs {
             expect(result).toBeNull();
         });
 
-        async_it("lists saves from a device", async function () {
+        test.acase("lists saves from a device", async check => {
             let storage = new FakeRemoteStorage();
             let connection = new Connection("test", storage);
 
@@ -57,7 +57,7 @@ module TK.SpaceTac.Multi.Specs {
             expect(result).toEqual({ abc: "ABC", cba: "CBA" });
         });
 
-        async_it("publishes saves and retrieves them by token", async function () {
+        test.acase("publishes saves and retrieves them by token", async check => {
             let session = new GameSession();
             let storage = new FakeRemoteStorage();
             let connection = new Connection("test", storage);

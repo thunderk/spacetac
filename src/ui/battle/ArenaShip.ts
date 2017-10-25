@@ -121,7 +121,7 @@ module TK.SpaceTac.UI {
             this.updateEffectsRadius();
 
             // Set location
-            if (this.battleview.battle.turn == 1 && ship.alive && ship.fleet.player === this.battleview.player) {
+            if (this.battleview.battle.cycle == 1 && this.battleview.battle.play_index == 0 && ship.alive && ship.fleet.player === this.battleview.player) {
                 this.position.set(ship.arena_x - 500 * Math.cos(ship.arena_angle), ship.arena_y - 500 * Math.sin(ship.arena_angle));
                 this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle);
             } else {
@@ -145,7 +145,7 @@ module TK.SpaceTac.UI {
                 if (event.new_ship === this.ship) {
                     this.play_order.text = "-";
                 } else {
-                    this.play_order.text = this.battleview.battle.getTurnsBefore(this.ship).toString();
+                    this.play_order.text = this.battleview.battle.getPlayOrder(this.ship).toString();
                 }
             }
             return 0;

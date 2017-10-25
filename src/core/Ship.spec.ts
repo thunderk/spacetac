@@ -236,7 +236,7 @@ module TK.SpaceTac.Specs {
             expect(action.activated).toBe(false);
 
             let battle = new Battle(ship.fleet);
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
 
             ship.startTurn();
             expect(action.activated).toBe(false);
@@ -273,7 +273,7 @@ module TK.SpaceTac.Specs {
 
             let shield = ship1.addSlot(SlotType.Shield).attach(new Equipment(SlotType.Shield));
             shield.action = new ToggleAction(shield, 0, 15, [new AttributeEffect("shield_capacity", 5)]);
-            battle.playing_ship = ship1;
+            TestTools.setShipPlaying(battle, ship1);
             shield.action.apply(ship1);
 
             expect(ship1.getAttribute("shield_capacity")).toBe(5);
@@ -325,15 +325,15 @@ module TK.SpaceTac.Specs {
             ship.addDamage(5, 0);
 
             expect(ship.alive).toBe(false);
-            expect(battle.log.events.length).toBe(4);
+            expect(battle.log.events.length).toBe(3);
             expect(battle.log.events[0].code).toEqual("value");
             expect(battle.log.events[1].code).toEqual("damage");
-            expect(battle.log.events[2].code).toEqual("activeeffects");
-            expect(battle.log.events[3].code).toEqual("death");
+            expect(battle.log.events[2].code).toEqual("death");
         });
 
         it("checks if a ship is able to play", function () {
-            var ship = new Ship();
+            let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
 
             expect(ship.isAbleToPlay()).toBe(false);
             expect(ship.isAbleToPlay(false)).toBe(true);

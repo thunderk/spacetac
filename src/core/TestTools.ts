@@ -53,6 +53,13 @@ module TK.SpaceTac {
             return equipment;
         }
 
+        // Set the current playing ship
+        static setShipPlaying(battle: Battle, ship: Ship): void {
+            add(battle.play_order, ship);
+            battle.play_index = battle.play_order.indexOf(ship);
+            ship.playing = true;
+        }
+
         // Set a ship action points, adding/updating an equipment if needed
         static setShipAP(ship: Ship, points: number, recovery: number = 0): void {
             var equipment = this.getOrGenEquipment(ship, SlotType.Power, new Equipments.NuclearReactor());

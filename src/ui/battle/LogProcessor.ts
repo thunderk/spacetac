@@ -288,7 +288,7 @@ module TK.SpaceTac.UI {
         private processShipChangeEvent(event: ShipChangeEvent): number {
             this.current_ship = event.new_ship;
             this.view.arena.setShipPlaying(event.new_ship);
-            this.view.ship_list.setPlaying(event.new_ship);
+            this.view.ship_list.refresh(!event.initial);
             if (event.ship !== event.new_ship) {
                 this.view.audio.playOnce("battle-ship-change");
             }
@@ -306,13 +306,19 @@ module TK.SpaceTac.UI {
 
         // A ship died
         private processDeathEvent(event: DeathEvent): number {
-            if (this.view.ship_hovered === event.ship) {
-                this.view.setShipHovered(null);
-            }
-            this.view.arena.markAsDead(event.ship);
-            this.view.ship_list.markAsDead(event.ship);
+            let ship = this.battle.getShip(event.ship_id);
 
-            return event.initial ? 0 : 1000;
+            if (ship) {
+                if (this.view.ship_hovered === ship) {
+                    this.view.setShipHovered(null);
+                }
+                this.view.arena.markAsDead(ship);
+                this.view.ship_list.refresh(!event.initial);
+
+                return event.initial ? 0 : 3000;
+            } else {
+                return 0;
+            }
         }
 
         // Weapon used

@@ -3,7 +3,7 @@ module TK.SpaceTac {
         it("checks movement against remaining AP", function () {
             var ship = new Ship();
             var battle = new Battle(ship.fleet);
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
             ship.values.power.setMaximal(20);
             ship.values.power.set(6);
             ship.arena_x = 0;
@@ -45,7 +45,7 @@ module TK.SpaceTac {
             ship.arena_y = 0;
             var engine = new Equipment();
             var action = new MoveAction(engine, 1);
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
 
             spyOn(console, "warn").and.stub();
 

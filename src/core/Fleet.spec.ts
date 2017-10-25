@@ -83,7 +83,8 @@ module TK.SpaceTac {
         });
 
         it("checks if a fleet is alive", function () {
-            let fleet = new Fleet();
+            let battle = new Battle();
+            let fleet = battle.fleets[0];
             expect(fleet.isAlive()).toBe(false);
 
             let ship1 = fleet.addShip();

@@ -1,5 +1,5 @@
 module TK.SpaceTac.Multi.Specs {
-    describe("Exchange", function () {
+    testing("Exchange", test => {
         function newExchange(token: string, storage = new FakeRemoteStorage()): [FakeRemoteStorage, Exchange, Exchange] {
             let connection = new Connection("test", storage);
 
@@ -17,7 +17,7 @@ module TK.SpaceTac.Multi.Specs {
             spyOn(console, "log").and.stub();
         });
 
-        async_it("says hello on start", async function () {
+        test.acase("says hello on start", async function () {
             let [storage, peer1, peer2] = newExchange("abc");
             spyOn(peer1, "getNextId").and.returnValues("1A", "1B", "1C");
             spyOn(peer2, "getNextId").and.returnValues("2A", "2B", "2C");

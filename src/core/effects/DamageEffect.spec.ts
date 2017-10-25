@@ -1,7 +1,8 @@
 module TK.SpaceTac.Specs {
     describe("DamageEffect", function () {
         it("applies damage and wear", function () {
-            var ship = new Ship();
+            let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
 
             TestTools.setShipHP(ship, 150, 400);
             let hull = ship.listEquipment(SlotType.Hull)[0];

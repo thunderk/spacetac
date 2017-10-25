@@ -8,7 +8,7 @@ module TK.SpaceTac.Specs {
             let ship1b = battle.fleets[1].addShip(new Ship(null, "1B"));
 
             TestTools.setShipAP(ship0a, 10);
-            battle.playing_ship = ship0a;
+            TestTools.setShipPlaying(battle, ship0a);
 
             let result = imaterialize(TacticalAIHelpers.produceDirectShots(ship0a, battle));
             expect(result.length).toBe(0);
@@ -30,7 +30,7 @@ module TK.SpaceTac.Specs {
             let ship = battle.fleets[0].addShip();
 
             TestTools.setShipAP(ship, 10);
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
 
             let result = imaterialize(TacticalAIHelpers.produceRandomMoves(ship, battle, 2, 1));
             expect(result.length).toBe(0);
@@ -52,7 +52,7 @@ module TK.SpaceTac.Specs {
             let weapon = TestTools.addWeapon(ship, 50, 1, 1000, 105);
 
             TestTools.setShipAP(ship, 10);
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
 
             let result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             expect(result.length).toBe(0);

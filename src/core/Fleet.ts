@@ -61,6 +61,9 @@ module TK.SpaceTac {
             }
             add(this.ships, ship);
             ship.fleet = this;
+            if (this.battle) {
+                this.battle.ships.add(ship);
+            }
             return ship;
         }
 

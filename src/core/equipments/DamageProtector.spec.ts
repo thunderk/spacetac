@@ -40,8 +40,7 @@ module TK.SpaceTac.Equipments {
             ship1.setArenaPosition(0, 0);
             ship2.setArenaPosition(100, 0);
             ship3.setArenaPosition(800, 0);
-            battle.playing_ship = ship1;
-            ship1.playing = true;
+            TestTools.setShipPlaying(battle, ship1);
             expect(ship1.getAvailableActions()).toEqual([action, new EndTurnAction()]);
 
             TestTools.setShipHP(ship1, 100, 0);

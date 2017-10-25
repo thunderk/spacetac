@@ -19,15 +19,15 @@ module TK.SpaceTac {
         // List of fleets engaged in battle
         fleets: Fleet[]
 
-        // List of ships, sorted by their initiative throw
+        // Container of all engaged ships
+        ships: RObjectContainer<Ship>
+
+        // List of playing ships, sorted by their initiative throw
         play_order: Ship[]
+        play_index = -1
 
-        // Current turn
-        turn: number
-
-        // Current ship whose turn it is to play
-        playing_ship_index: number | null
-        playing_ship: Ship | null
+        // Current battle "cycle" (one cycle is one turn done for all ships in the play order)
+        cycle: number
 
         // List of deployed drones
         drones: Drone[] = []
@@ -47,9 +47,8 @@ module TK.SpaceTac {
         // Create a battle between two fleets
         constructor(fleet1 = new Fleet(), fleet2 = new Fleet(), width = 1808, height = 948) {
             this.fleets = [fleet1, fleet2];
+            this.ships = new RObjectContainer(fleet1.ships.concat(fleet2.ships));
             this.play_order = [];
-            this.playing_ship_index = null;
-            this.playing_ship = null;
             this.ended = false;
             this.width = width;
             this.height = height;
@@ -82,21 +81,17 @@ module TK.SpaceTac {
         }
 
         /**
-         * Get the number of turns in a game cycle.
+         * Get the currently playing ship
          */
-        getCycleLength(): number {
-            return this.play_order.length;
+        get playing_ship(): Ship | null {
+            return this.play_order[this.play_index] || null;
         }
 
         /**
-         * Get the number of turns before a specific ship plays (currently playing ship will return 0).
+         * Get a ship by its ID.
          */
-        getTurnsBefore(ship: Ship): number {
-            let pos = this.play_order.indexOf(ship) - (this.playing_ship_index || 0);
-            if (pos < 0) {
-                pos += this.play_order.length;
-            }
-            return pos;
+        getShip(id: RObjectId): Ship | null {
+            return this.ships.get(id);
         }
 
         /**
@@ -150,6 +145,42 @@ module TK.SpaceTac {
                 return (ship2.play_priority - ship1.play_priority);
             });
             this.play_order = play_order;
+            this.play_index = -1;
+        }
+
+        /**
+         * Get the number of turns before a specific ship plays (currently playing ship will return 0).
+         * 
+         * Returns -1 if the ship is not in the play list.
+         */
+        getPlayOrder(ship: Ship): number {
+            let index = this.play_order.indexOf(ship);
+            if (index < 0) {
+                return -1;
+            } else {
+                let result = index - this.play_index;
+                return (result < 0) ? result + this.play_order.length : result;
+            }
+        }
+
+        /**
+         * Add a ship in the play order list
+         */
+        removeFromPlayOrder(idx: number): void {
+            this.play_order.splice(idx, 1);
+            if (idx <= this.play_index) {
+                this.play_index -= 1;
+            }
+        }
+
+        /**
+         * Remove a ship from the play order list
+         */
+        insertInPlayOrder(idx: number, ship: Ship): void {
+            this.play_order.splice(idx, 0, ship);
+            if (idx <= this.play_index) {
+                this.play_index += 1;
+            }
         }
 
         // Defines the initial ship positions of all engaged fleets
@@ -195,7 +226,7 @@ module TK.SpaceTac {
             }
 
             // Apply to all ships
-            iforeach(this.iships(), ship => ship.endBattle(this.turn));
+            iforeach(this.iships(), ship => ship.endBattle(this.cycle));
             this.stats.onBattleEnd(this.fleets[0], this.fleets[1]);
         }
 
@@ -228,10 +259,10 @@ module TK.SpaceTac {
         //  If at the end of the play order, next turn will start automatically
         //  Member 'play_order' must be defined before calling this function
         advanceToNextShip(log: boolean = true): void {
-            var previous_ship = this.playing_ship;
+            let previous_ship = this.playing_ship;
 
-            if (this.playing_ship && this.playing_ship.playing) {
-                this.playing_ship.endTurn();
+            if (previous_ship && previous_ship.playing) {
+                previous_ship.endTurn();
             }
 
             if (this.checkEndBattle(log)) {
@@ -240,21 +271,14 @@ module TK.SpaceTac {
 
             this.drones.forEach(drone => drone.activate());
 
-            if (this.play_order.length === 0) {
-                this.playing_ship_index = null;
-                this.playing_ship = null;
-            } else {
-                if (this.playing_ship_index == null) {
-                    this.playing_ship_index = 0;
-                } else {
-                    this.playing_ship_index = (this.playing_ship_index + 1) % this.play_order.length;
-                }
-                this.playing_ship = this.play_order[this.playing_ship_index];
+            this.play_index += 1;
+            if (this.play_index >= this.play_order.length) {
+                this.play_index = 0;
             }
 
             if (this.playing_ship) {
-                if (this.playing_ship_index == 0) {
-                    this.turn += 1;
+                if (this.play_index == 0) {
+                    this.cycle += 1;
                 }
                 this.playing_ship.startTurn();
             }
@@ -288,7 +312,7 @@ module TK.SpaceTac {
         //  This will not add any event to the battle log
         start(): void {
             this.ended = false;
-            this.turn = 0;
+            this.cycle = 0;
             this.placeShips();
             this.stats.onBattleStart(this.fleets[0], this.fleets[1]);
             this.throwInitiative();
@@ -324,7 +348,7 @@ module TK.SpaceTac {
             // Indicate emergency stasis
             this.play_order.forEach(ship => {
                 if (!ship.alive) {
-                    let event = new DeathEvent(ship);
+                    let event = new DeathEvent(this, ship);
                     event.initial = true;
                     result.push(event);
                 }
@@ -345,6 +369,18 @@ module TK.SpaceTac {
             }
 
             return result;
+        }
+
+        /**
+         * Apply a list of events on this game state (and optionally store the events in the battle log)
+         */
+        applyEvents(events: BaseBattleEvent[], log = true): void {
+            events.forEach(event => {
+                event.apply(this);
+                if (log) {
+                    this.log.add(event);
+                }
+            });
         }
 
         /**

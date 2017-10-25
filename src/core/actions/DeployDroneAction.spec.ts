@@ -26,7 +26,7 @@ module TK.SpaceTac {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
             ship.setArenaPosition(0, 0);
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
             TestTools.setShipAP(ship, 3);
             let equipment = new Equipment(SlotType.Weapon, "testdrone");
             let action = new DeployDroneAction(equipment, 2, 8, 2, 4, [new DamageEffect(50)]);

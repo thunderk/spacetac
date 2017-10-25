@@ -1,126 +1,117 @@
 module TK.SpaceTac.UI {
-    // Bar with all playing ships, by play order
-    export class ShipList extends Phaser.Image {
-        // Link to the parent battleview
-        battleview: BattleView;
+    /**
+     * Side bar with all playing ships, sorted by play order
+     */
+    export class ShipList {
+        // Link to the parent view
+        view: BaseView
+
+        // Current battle
+        battle: Battle
+
+        // Current player
+        player: Player
+
+        // Interface for acting as ship button
+        ship_buttons: IShipButton
+
+        // Container
+        container: Phaser.Image
 
         // List of ship items
-        ships_container: Phaser.Group;
-        ships: ShipListItem[];
-
-        // Playing ship
-        playing: ShipListItem | null;
+        items: ShipListItem[]
 
         // Hovered ship
-        hovered: ShipListItem | null;
+        hovered: ShipListItem | null
 
         // Info button
-        info_button: Phaser.Button;
+        info_button: Phaser.Button
 
-        // Create an empty action bar
-        constructor(battleview: BattleView) {
-            super(battleview.game, 0, 0, "battle-shiplist-background");
+        constructor(view: BaseView, battle: Battle, player: Player, tactical_mode: Toggle, ship_buttons: IShipButton, parent?: UIContainer, x = 0, y = 0) {
+            let builder = new UIBuilder(view, parent);
+            this.container = builder.image("battle-shiplist-background", x, y);
 
-            this.battleview = battleview;
-            this.ships = [];
-            this.playing = null;
+            this.view = view;
+            // TODO Should use an UI game state, not the actual game state
+            this.battle = battle;
+            this.player = player;
+            this.ship_buttons = ship_buttons;
+
+            this.items = [];
             this.hovered = null;
 
-            this.info_button = new Phaser.Button(this.game, 0, 0, "battle-shiplist-info-button");
-            this.battleview.inputs.setHoverClick(this.info_button,
-                () => this.battleview.toggle_tactical_mode.manipulate("button")(true),
-                () => this.battleview.toggle_tactical_mode.manipulate("button")(false),
+            this.info_button = new Phaser.Button(view.game, 0, 0, "battle-shiplist-info-button");
+            this.view.inputs.setHoverClick(this.info_button,
+                () => tactical_mode.manipulate("shiplist")(true),
+                () => tactical_mode.manipulate("shiplist")(false),
                 () => null);
-            this.addChild(this.info_button);
+            this.container.addChild(this.info_button);
 
-            battleview.layer_borders.add(this);
-
-            if (battleview.battle) {
-                this.setShipsFromBattle(battleview.battle);
-            }
+            this.setShipsFromBattle(battle);
         }
 
-        // Clear the action icons
+        /**
+         * Clear all ship cards
+         */
         clearAll(): void {
-            this.ships.forEach((ship: ShipListItem) => {
-                ship.destroy();
-            });
-            this.ships = [];
+            this.items.forEach(ship => ship.destroy());
+            this.items = [];
         }
 
-        // Set the ship list from a battle
-        setShipsFromBattle(battle: Battle): void {
+        /**
+         * Rebuild the ship list from an ongoing battle
+         */
+        setShipsFromBattle(battle: Battle, animate = true): void {
             this.clearAll();
-            battle.play_order.forEach((ship: Ship) => {
-                this.addShip(ship);
-            }, this);
-            this.updateItemsLocation();
+            iforeach(battle.iships(true), ship => this.addShip(ship));
+            this.refresh(animate);
         }
 
-        // Add a ship icon
+        /**
+         * Add a ship card
+         */
         addShip(ship: Ship): ShipListItem {
-            var owned = ship.getPlayer() === this.battleview.player;
-            var result = new ShipListItem(this, 200, this.height / 2, ship, owned);
-            this.ships.push(result);
-            this.addChild(result);
+            var owned = ship.getPlayer() === this.player;
+            var result = new ShipListItem(this, 200, this.container.height / 2, ship, owned, this.ship_buttons);
+            this.items.push(result);
+            this.container.addChild(result);
             return result;
         }
 
-        // Find an item for a ship
-        //  Returns null if not found
+        /**
+         * Find the item (card) that displays a given ship
+         */
         findItem(ship: Ship): ShipListItem | null {
-            var found: ShipListItem | null = null;
-            this.ships.forEach((item: ShipListItem) => {
-                if (item.ship === ship) {
-                    found = item;
-                }
-            });
-            return found;
+            return first(this.items, item => item.ship == ship);
         }
 
-        // Find the play position in play_order for a given ship (0 is currently playing)
-        findPlayPosition(ship: Ship): number {
-            var battle = this.battleview.battle;
-            var idx = battle.play_order.indexOf(ship);
-            var diff = idx - (battle.playing_ship_index || 0);
-            if (diff < 0) {
-                diff += battle.play_order.length;
-            }
-            return diff;
-        }
-
-        // Update the locations of all items
-        updateItemsLocation(animate: boolean = true): void {
-            this.ships.forEach((item: ShipListItem) => {
-                var position = this.findPlayPosition(item.ship);
-                if (position === 0) {
-                    item.moveTo(-18, 962, animate);
+        /**
+         * Update the locations of all items
+         */
+        refresh(animate = true): void {
+            this.items.forEach(item => {
+                if (item.ship.alive) {
+                    let position = this.battle.getPlayOrder(item.ship);
+                    if (position < 0) {
+                        item.visible = false;
+                    } else {
+                        if (position == 0) {
+                            item.moveTo(-18, 962, animate ? 1000 : 0);
+                        } else {
+                            item.moveTo(2, 942 - position * 99, animate ? 1000 : 0);
+                        }
+                        item.visible = true;
+                        this.container.setChildIndex(item, position);
+                    }
                 } else {
-                    item.moveTo(2, 942 - position * 99, animate);
+                    item.moveTo(200, item.y, animate ? 1000 : 0);
                 }
-                this.setChildIndex(item, position);
             });
         }
 
-        // Remove a ship from the list
-        markAsDead(ship: Ship): void {
-            var item = this.findItem(ship);
-            if (item) {
-                item.alpha = 0.5;
-            }
-        }
-
-        // Set the currently playing ship
-        setPlaying(ship: Ship | null): void {
-            if (ship) {
-                this.playing = this.findItem(ship);
-            } else {
-                this.playing = null;
-            }
-            this.updateItemsLocation();
-        }
-
-        // Set the currently hovered ship
+        /**
+         * Set the currently hovered ship
+         */
         setHovered(ship: Ship | null): void {
             if (this.hovered) {
                 this.hovered.setHovered(false);

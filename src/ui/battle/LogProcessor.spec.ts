@@ -12,7 +12,7 @@ module TK.SpaceTac.UI.Specs {
         }
 
         apply(battle: Battle) {
-            battle.turn += this.diff;
+            battle.cycle += this.diff;
         }
 
         getReverse(): BaseBattleEvent {
@@ -31,42 +31,42 @@ module TK.SpaceTac.UI.Specs {
                 event.apply(battle);
                 return 0;
             });
-            expect(battle.turn).toBe(1);
+            expect(battle.cycle).toBe(1);
             expect(processor.atStart()).toBe(true);
             expect(processor.atEnd()).toBe(true);
 
             processor.stepForward();
-            expect(battle.turn).toBe(1);
+            expect(battle.cycle).toBe(1);
             expect(processor.atStart()).toBe(true);
             expect(processor.atEnd()).toBe(true);
 
             battle.log.add(new FakeEvent());
-            expect(battle.turn).toBe(1);
+            expect(battle.cycle).toBe(1);
             expect(processor.atStart()).toBe(true);
             expect(processor.atEnd()).toBe(false);
 
             processor.stepForward();
-            expect(battle.turn).toBe(2);
+            expect(battle.cycle).toBe(2);
             expect(processor.atStart()).toBe(false);
             expect(processor.atEnd()).toBe(true);
 
             processor.stepForward();
-            expect(battle.turn).toBe(2);
+            expect(battle.cycle).toBe(2);
             expect(processor.atStart()).toBe(false);
             expect(processor.atEnd()).toBe(true);
 
             processor.stepBackward();
-            expect(battle.turn).toBe(1);
+            expect(battle.cycle).toBe(1);
             expect(processor.atStart()).toBe(true);
             expect(processor.atEnd()).toBe(false);
 
             processor.stepBackward();
-            expect(battle.turn).toBe(1);
+            expect(battle.cycle).toBe(1);
             expect(processor.atStart()).toBe(true);
             expect(processor.atEnd()).toBe(false);
 
             processor.stepForward();
-            expect(battle.turn).toBe(2);
+            expect(battle.cycle).toBe(2);
             expect(processor.atStart()).toBe(false);
             expect(processor.atEnd()).toBe(true);
         })

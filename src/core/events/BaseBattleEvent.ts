@@ -28,7 +28,16 @@ module TK.SpaceTac {
          * 
          * By default it does nothing
          */
-        apply(battle: Battle) {
+        apply(battle: Battle): void {
+        }
+
+        /**
+         * Reverts the event from a battle state
+         * 
+         * By default it applies the reverse event
+         */
+        revert(battle: Battle): void {
+            this.getReverse().apply(battle);
         }
 
         /**

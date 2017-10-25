@@ -1,10 +1,10 @@
 /// <reference path="../TestGame.ts"/>
 
 module TK.SpaceTac.UI.Specs {
-    describe("FleetCreationView", function () {
+    testing("FleetCreationView", test => {
         let testgame = setupSingleView(() => [new FleetCreationView, []]);
 
-        it("has a basic equipment shop with infinite stock", function () {
+        test.case("has a basic equipment shop with infinite stock", function () {
             let shop = testgame.view.infinite_shop;
             let itemcount = shop.getStock().length;
             expect(unique(shop.getStock().map(equ => equ.code)).length).toEqual(itemcount);
@@ -21,7 +21,7 @@ module TK.SpaceTac.UI.Specs {
             expect(shop.getStock().length).toBe(itemcount);
         })
 
-        async_it("validates the fleet creation", async function () {
+        test.acase("validates the fleet creation", async function () {
             expect(testgame.ui.session.isFleetCreated()).toBe(false, "no fleet created");
             expect(testgame.ui.session.player.fleet.ships.length).toBe(0, "empty session fleet");
             expect(testgame.view.dialogs_layer.children.length).toBe(0, "no dialogs");

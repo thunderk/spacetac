@@ -63,54 +63,44 @@ module TK.SpaceTac {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 
-            var ship1 = new Ship(fleet1, "F1S1");
-            var ship2 = new Ship(fleet1, "F1S2");
-            var ship3 = new Ship(fleet2, "F2S1");
+            var ship1 = new Ship(fleet1, "ship1");
+            var ship2 = new Ship(fleet1, "ship2");
+            var ship3 = new Ship(fleet2, "ship3");
 
             var battle = new Battle(fleet1, fleet2);
 
             // Check empty play_order case
             expect(battle.playing_ship).toBeNull();
-            expect(battle.playing_ship_index).toBeNull();
             battle.advanceToNextShip();
             expect(battle.playing_ship).toBeNull();
-            expect(battle.playing_ship_index).toBeNull();
 
             // Force play order
             iforeach(battle.iships(), ship => ship.setAttribute("maneuvrability", 1));
             var gen = new SkewedRandomGenerator([0.1, 0.2, 0.0]);
             battle.throwInitiative(gen);
-
             expect(battle.playing_ship).toBeNull();
-            expect(battle.playing_ship_index).toBeNull();
 
             battle.advanceToNextShip();
-
             expect(battle.playing_ship).toBe(ship2);
-            expect(battle.playing_ship_index).toBe(0);
 
             battle.advanceToNextShip();
-
             expect(battle.playing_ship).toBe(ship1);
-            expect(battle.playing_ship_index).toBe(1);
 
             battle.advanceToNextShip();
-
             expect(battle.playing_ship).toBe(ship3);
-            expect(battle.playing_ship_index).toBe(2);
 
             battle.advanceToNextShip();
-
             expect(battle.playing_ship).toBe(ship2);
-            expect(battle.playing_ship_index).toBe(0);
 
-            // A dead ship is not skipped
+            // A dead ship is skipped
             ship1.setDead();
-
             battle.advanceToNextShip();
+            expect(battle.playing_ship).toBe(ship3);
 
-            expect(battle.playing_ship).toBe(ship1);
-            expect(battle.playing_ship_index).toBe(1);
+            // Playing ship dies
+            ship3.setDead();
+            battle.advanceToNextShip();
+            expect(battle.playing_ship).toBe(ship2);
         });
 
         it("calls startTurn on ships", function () {
@@ -290,7 +280,7 @@ module TK.SpaceTac {
             expect(battle.canPlay(player)).toBe(false);
 
             let ship = new Ship();
-            battle.playing_ship = ship;
+            TestTools.setShipPlaying(battle, ship);
 
             expect(battle.canPlay(player)).toBe(false);
 
@@ -306,28 +296,28 @@ module TK.SpaceTac {
             battle.advanceToNextShip();
 
             expect(battle.playing_ship).toBe(battle.play_order[0]);
-            expect(battle.getTurnsBefore(battle.play_order[0])).toBe(0);
-            expect(battle.getTurnsBefore(battle.play_order[1])).toBe(1);
-            expect(battle.getTurnsBefore(battle.play_order[2])).toBe(2);
+            expect(battle.getPlayOrder(battle.play_order[0])).toBe(0);
+            expect(battle.getPlayOrder(battle.play_order[1])).toBe(1);
+            expect(battle.getPlayOrder(battle.play_order[2])).toBe(2);
 
             battle.advanceToNextShip();
 
             expect(battle.playing_ship).toBe(battle.play_order[1]);
-            expect(battle.getTurnsBefore(battle.play_order[0])).toBe(2);
-            expect(battle.getTurnsBefore(battle.play_order[1])).toBe(0);
-            expect(battle.getTurnsBefore(battle.play_order[2])).toBe(1);
+            expect(battle.getPlayOrder(battle.play_order[0])).toBe(2);
+            expect(battle.getPlayOrder(battle.play_order[1])).toBe(0);
+            expect(battle.getPlayOrder(battle.play_order[2])).toBe(1);
 
             battle.advanceToNextShip();
 
-            expect(battle.getTurnsBefore(battle.play_order[0])).toBe(1);
-            expect(battle.getTurnsBefore(battle.play_order[1])).toBe(2);
-            expect(battle.getTurnsBefore(battle.play_order[2])).toBe(0);
+            expect(battle.getPlayOrder(battle.play_order[0])).toBe(1);
+            expect(battle.getPlayOrder(battle.play_order[1])).toBe(2);
+            expect(battle.getPlayOrder(battle.play_order[2])).toBe(0);
 
             battle.advanceToNextShip();
 
-            expect(battle.getTurnsBefore(battle.play_order[0])).toBe(0);
-            expect(battle.getTurnsBefore(battle.play_order[1])).toBe(1);
-            expect(battle.getTurnsBefore(battle.play_order[2])).toBe(2);
+            expect(battle.getPlayOrder(battle.play_order[0])).toBe(0);
+            expect(battle.getPlayOrder(battle.play_order[1])).toBe(1);
+            expect(battle.getPlayOrder(battle.play_order[2])).toBe(2);
         });
 
         it("lists area effects", function () {

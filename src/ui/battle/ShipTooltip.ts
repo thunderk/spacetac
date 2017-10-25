@@ -31,7 +31,7 @@ module TK.SpaceTac.UI {
             filler.text(ship.getFullName(), 140, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
 
             if (ship.alive) {
-                let turns = this.battleview.battle.getTurnsBefore(ship);
+                let turns = this.battleview.battle.getPlayOrder(ship);
                 filler.text((turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), 140, 36, { color: "#cccccc", size: 18 });
 
                 let hsp_builder = filler.styled({ color: "#eb4e4a", size: 20, center: true, vcenter: true, bold: true });

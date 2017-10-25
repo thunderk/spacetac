@@ -241,17 +241,21 @@ module TK.SpaceTac.UI {
          */
         getImageInfo(name: string): { key: string, frame: number } {
             // TODO Cache
-            let i = 1;
-            while (this.game.cache.checkImageKey(`atlas-${i}`)) {
-                let data = this.game.cache.getFrameData(`atlas-${i}`);
-                let frames = data.getFrames();
-                let frame = first(frames, frame => AssetLoading.getKey(frame.name) == `graphics-exported-${name}`);
-                if (frame) {
-                    return { key: `atlas-${i}`, frame: frame.index };
+            if (this.game.cache.checkImageKey(name)) {
+                return { key: name, frame: 0 };
+            } else {
+                let i = 1;
+                while (this.game.cache.checkImageKey(`atlas-${i}`)) {
+                    let data = this.game.cache.getFrameData(`atlas-${i}`);
+                    let frames = data.getFrames();
+                    let frame = first(frames, frame => AssetLoading.getKey(frame.name) == `graphics-exported-${name}`);
+                    if (frame) {
+                        return { key: `atlas-${i}`, frame: frame.index };
+                    }
+                    i++;
                 }
-                i++;
+                return { key: `-missing-${name}`, frame: 0 };
             }
-            return { key: `-missing-${name}`, frame: 0 };
         }
 
         /**

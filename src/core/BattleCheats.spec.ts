@@ -22,12 +22,13 @@ module TK.SpaceTac.Specs {
 
         it("adds an equipment", function () {
             let battle = new Battle();
-            battle.playing_ship = new Ship();
-            battle.playing_ship.upgradeSkill("skill_materials");
+            let ship = new Ship();
+            TestTools.setShipPlaying(battle, ship);
+            ship.upgradeSkill("skill_materials");
 
-            expect(battle.playing_ship.listEquipment()).toEqual([]);
+            expect(ship.listEquipment()).toEqual([]);
             battle.cheats.equip("Iron Hull");
-            expect(battle.playing_ship.listEquipment()).toEqual([<any>jasmine.objectContaining({name: "Iron Hull", level: 1})]);
+            expect(ship.listEquipment()).toEqual([<any>jasmine.objectContaining({ name: "Iron Hull", level: 1 })]);
         })
     })
 }

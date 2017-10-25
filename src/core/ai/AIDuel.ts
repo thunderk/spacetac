@@ -78,7 +78,7 @@ module TK.SpaceTac {
             });
 
             // Run battle
-            while (!battle.ended && battle.turn < 100) {
+            while (!battle.ended && battle.cycle < 100) {
                 if (this.stopped) {
                     return;
                 }

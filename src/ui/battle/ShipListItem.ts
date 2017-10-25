@@ -2,10 +2,13 @@ module TK.SpaceTac.UI {
     // One item in a ship list (used in BattleView)
     export class ShipListItem extends Phaser.Button {
         // Reference to the view
-        view: BattleView
+        view: BaseView
 
         // Reference to the ship game object
         ship: Ship
+
+        // Callbacks to act as buttons
+        ship_buttons: IShipButton
 
         // Player indicator
         player_indicator: Phaser.Image
@@ -20,9 +23,9 @@ module TK.SpaceTac.UI {
         hover_indicator: Phaser.Image
 
         // Create a ship button for the battle ship list
-        constructor(list: ShipList, x: number, y: number, ship: Ship, owned: boolean) {
-            super(list.battleview.game, x, y, "battle-shiplist-item-background");
-            this.view = list.battleview;
+        constructor(list: ShipList, x: number, y: number, ship: Ship, owned: boolean, ship_buttons: IShipButton) {
+            super(list.view.game, x, y, "battle-shiplist-item-background");
+            this.view = list.view;
 
             this.ship = ship;
 
@@ -44,9 +47,9 @@ module TK.SpaceTac.UI {
             this.addChild(this.hover_indicator);
 
             this.view.inputs.setHoverClick(this,
-                () => list.battleview.cursorOnShip(ship),
-                () => list.battleview.cursorOffShip(ship),
-                () => list.battleview.cursorClicked()
+                () => ship_buttons.cursorOnShip(ship),
+                () => ship_buttons.cursorOffShip(ship),
+                () => ship_buttons.cursorClicked()
             );
         }
 
@@ -56,11 +59,9 @@ module TK.SpaceTac.UI {
         }
 
         // Move to a given location on screen
-        moveTo(x: number, y: number, animate: boolean) {
-            if (animate) {
-                var tween = this.game.tweens.create(this);
-                tween.to({ x: x, y: y });
-                tween.start();
+        moveTo(x: number, y: number, duration: number) {
+            if (duration && (this.x != x || this.y != y)) {
+                this.view.animations.addAnimation(this, {x: x, y: y}, duration, Phaser.Easing.Linear.None);
             } else {
                 this.x = x;
                 this.y = y;

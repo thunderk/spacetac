@@ -1,8 +1,10 @@
+/// <reference path="../common/RObject.ts" />
+
 module TK.SpaceTac {
     /**
      * A single ship in a fleet
      */
-    export class Ship {
+    export class Ship extends RObject {
         // Fleet this ship is a member of
         fleet: Fleet
 
@@ -56,6 +58,8 @@ module TK.SpaceTac {
 
         // Create a new ship inside a fleet
         constructor(fleet: Fleet | null = null, name = "unnamed", model = new ShipModel("default", "Default", 1, 0, false, 0)) {
+            super();
+
             this.fleet = fleet || new Fleet();
             this.name = name;
             this.alive = true;
@@ -464,19 +468,48 @@ module TK.SpaceTac {
         }
 
         /**
+         * Get the events needed to apply changes to ship values or attributes
+         */
+        getValueEvents(name: keyof ShipValues, value: number): BaseBattleEvent[] {
+            let result: BaseBattleEvent[] = [];
+
+            let current = this.values[name];
+            if (current.get() != value) {
+                let newval = copy(current);
+                newval.set(value);
+                result.push(new ValueChangeEvent(this, newval, value - current.get()));
+            }
+
+            return result;
+        }
+
+        /**
+         * Produce events to set the ship in emergency stasis
+         */
+        getDeathEvents(battle: Battle): BaseBattleEvent[] {
+            let result: BaseBattleEvent[] = [];
+
+            keys(SHIP_VALUES).forEach(value => {
+                result = result.concat(this.getValueEvents(value, 0));
+            });
+
+            // TODO Remove sticky effects
+
+            result.push(new DeathEvent(battle, this));
+
+            return result;
+        }
+
+        /**
          * Set the death status on this ship
          */
-        setDead(log: boolean = true): void {
-            this.alive = false;
-            this.values.hull.set(0);
-            this.values.shield.set(0);
-            this.values.power.set(0);
-
-            this.sticky_effects = [];
-            this.setActiveEffectsChanged();
-
-            if (log) {
-                this.addBattleEvent(new DeathEvent(this));
+        setDead(): void {
+            let battle = this.getBattle();
+            if (battle) {
+                let events = this.getDeathEvents(battle);
+                battle.applyEvents(events);
+            } else {
+                console.error("Cannot set ship dead outside of battle", this);
             }
         }
 
@@ -500,7 +533,7 @@ module TK.SpaceTac {
 
             if (this.values.hull.get() === 0) {
                 // Ship is dead
-                this.setDead(log);
+                this.setDead();
             }
         }
 

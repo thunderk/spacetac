@@ -41,7 +41,6 @@ Battle
 * Fix arena's ship hovering happening even when the character sheet is open on top
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
-* Remove dead ships from ship list and play order
 * Add quick animation of playing ship indicator, on ship change
 * Toggle bar/text display in power section of action bar
 * Display effects description instead of attribute changes
@@ -64,6 +63,7 @@ Battle
 * Add shorcut to perform only the "move" part of a move+fire simulation
 * Fix delay of shield/hull impact effects (should depend on weapon animation, and ship location)
 * Indicate visually the power gain of "end turn"
+* Add a turn count marker in the ship list
 
 Ships models and equipments
 ---------------------------
