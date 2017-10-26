@@ -1,8 +1,8 @@
 module TK.SpaceTac.UI.Specs {
-    describe("CharacterFleetMember", function () {
+    testing("CharacterFleetMember", test => {
         let testgame = setupEmptyView();
 
-        it("transfers equipment to another ship", function () {
+        test.case("transfers equipment to another ship", check => {
             let view = testgame.view;
             let sheet = new CharacterSheet(view);
 
@@ -20,49 +20,49 @@ module TK.SpaceTac.UI.Specs {
             ship2.setCargoSpace(1);
 
             sheet.show(ship1);
-            expect(sheet.portraits.length).toBe(2);
-            expect(sheet.layer_equipments.length).toBe(3);
-            expect(sheet.ship_cargo.length).toBe(3);
+            check.equals(sheet.portraits.length, 2);
+            check.equals(sheet.layer_equipments.length, 3);
+            check.equals(sheet.ship_cargo.length, 3);
 
             // First item fits in the free slot
             let source = <CharacterCargo>sheet.ship_cargo.children[0];
             let dest = <CharacterFleetMember>sheet.portraits.children[1];
             let equ = <CharacterEquipment>sheet.layer_equipments.children[0];
-            expect(dest.ship).toBe(ship2);
-            expect(equ.item).toBe(equ1);
-            expect(ship1.cargo).toContain(equ1);
-            expect(ship2engine.attached).toBe(null);
+            check.same(dest.ship, ship2);
+            check.same(equ.item, equ1);
+            check.contains(ship1.cargo, equ1);
+            check.equals(ship2engine.attached, null);
             equ.applyDragDrop(source, dest, false);
-            expect(ship1.cargo).not.toContain(equ1);
-            expect(ship2engine.attached).toBe(equ1);
+            check.notcontains(ship1.cargo, equ1);
+            check.same(ship2engine.attached, equ1);
 
             // Second item goes to cargo
             source = <CharacterCargo>sheet.ship_cargo.children[0];
             dest = <CharacterFleetMember>sheet.portraits.children[1];
             equ = <CharacterEquipment>sheet.layer_equipments.children[1];
-            expect(dest.ship).toBe(ship2);
-            expect(equ.item).toBe(equ2);
-            expect(ship1.cargo).toContain(equ2);
-            expect(ship2.cargo).not.toContain(equ2);
+            check.same(dest.ship, ship2);
+            check.same(equ.item, equ2);
+            check.contains(ship1.cargo, equ2);
+            check.notcontains(ship2.cargo, equ2);
             equ.applyDragDrop(source, dest, false);
-            expect(ship1.cargo).not.toContain(equ2);
-            expect(ship2.cargo).toContain(equ2);
+            check.notcontains(ship1.cargo, equ2);
+            check.contains(ship2.cargo, equ2);
 
             // Third item has no more room
             source = <CharacterCargo>sheet.ship_cargo.children[0];
             dest = <CharacterFleetMember>sheet.portraits.children[1];
             equ = <CharacterEquipment>sheet.layer_equipments.children[2];
-            expect(dest.ship).toBe(ship2);
-            expect(equ.item).toBe(equ3);
-            expect(ship1.cargo).toContain(equ3);
+            check.same(dest.ship, ship2);
+            check.same(equ.item, equ3);
+            check.contains(ship1.cargo, equ3);
             equ.applyDragDrop(source, dest, false);
-            expect(ship1.cargo).toContain(equ3);
+            check.contains(ship1.cargo, equ3);
 
             // Cannot transfer to escorted ship
             ship2.setCargoSpace(2);
-            expect(equ.applyDragDrop(source, dest, true)).toEqual({ success: true, info: 'remove from cargo, transfer to unnamed', error: undefined });
+            check.equals(equ.applyDragDrop(source, dest, true), { success: true, info: 'remove from cargo, transfer to unnamed', error: undefined });
             ship2.critical = true;
-            expect(equ.applyDragDrop(source, dest, true)).toEqual({ success: false, info: 'remove from cargo, transfer to unnamed', error: 'not a fleet member' });
+            check.equals(equ.applyDragDrop(source, dest, true), { success: false, info: 'remove from cargo, transfer to unnamed', error: 'not a fleet member' });
         });
     });
 }

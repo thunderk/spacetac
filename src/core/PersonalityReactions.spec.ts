@@ -1,7 +1,7 @@
 /// <reference path="PersonalityReactions.ts" />
 
 module TK.SpaceTac.Specs {
-    describe("PersonalityReactions", function () {
+    testing("PersonalityReactions", test => {
         function apply(pool: ReactionPool): PersonalityReaction | null {
             let reactions = new PersonalityReactions();
             return reactions.check(new Player(), null, null, null, pool);
@@ -18,9 +18,9 @@ module TK.SpaceTac.Specs {
             }
         }
 
-        it("fetches ships from conditions", function () {
+        test.case("fetches ships from conditions", check => {
             let reaction = apply({});
-            expect(reaction).toBeNull();
+            check.equals(reaction, null);
 
             let s1 = new Ship(null, "S1");
             let s2 = new Ship(null, "S2");
@@ -28,10 +28,10 @@ module TK.SpaceTac.Specs {
             reaction = apply({
                 a: [() => [s1, s2], 1, [[() => 1, FakeReaction.cons]]],
             });
-            expect(reaction).toEqual(new FakeReaction([s1, s2]));
+            check.equals(reaction, new FakeReaction([s1, s2]));
         })
 
-        it("applies weight on conditions", function () {
+        test.case("applies weight on conditions", check => {
             let s1 = new Ship(null, "S1");
             let s2 = new Ship(null, "S2");
 
@@ -39,16 +39,16 @@ module TK.SpaceTac.Specs {
                 a: [() => [s1], 1, [[() => 1, FakeReaction.cons]]],
                 b: [() => [s2], 0, [[() => 1, FakeReaction.cons]]],
             });
-            expect(reaction).toEqual(new FakeReaction([s1]));
+            check.equals(reaction, new FakeReaction([s1]));
 
             reaction = apply({
                 a: [() => [s1], 0, [[() => 1, FakeReaction.cons]]],
                 b: [() => [s2], 1, [[() => 1, FakeReaction.cons]]],
             });
-            expect(reaction).toEqual(new FakeReaction([s2]));
+            check.equals(reaction, new FakeReaction([s2]));
         })
 
-        it("checks for friendly fire", function () {
+        test.case("checks for friendly fire", check => {
             let condition = BUILTIN_REACTION_POOL['friendly_fire'][0];
             let battle = new Battle();
             let ship1a = battle.fleets[0].addShip();
@@ -56,10 +56,10 @@ module TK.SpaceTac.Specs {
             let ship2a = battle.fleets[1].addShip();
             let ship2b = battle.fleets[1].addShip();
 
-            expect(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship1a, 50, 10))).toEqual([], "self shoot");
-            expect(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship1b, 50, 10))).toEqual([ship1b, ship1a]);
-            expect(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship2a, 50, 10))).toEqual([], "enemy shoot");
-            expect(condition(ship1a.getPlayer(), battle, ship2a, new DamageEvent(ship2a, 50, 10))).toEqual([], "other player event");
+            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship1a, 50, 10)), [], "self shoot");
+            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship1b, 50, 10)), [ship1b, ship1a]);
+            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship2a, 50, 10)), [], "enemy shoot");
+            check.equals(condition(ship1a.getPlayer(), battle, ship2a, new DamageEvent(ship2a, 50, 10)), [], "other player event");
         })
     })
 }

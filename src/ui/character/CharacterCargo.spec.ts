@@ -1,8 +1,8 @@
 module TK.SpaceTac.UI.Specs {
-    describe("CharacterCargo", function () {
+    testing("CharacterCargo", test => {
         let testgame = setupEmptyView();
 
-        it("checks conditions for adding/removing equipment", function () {
+        test.case("checks conditions for adding/removing equipment", check => {
             let view = testgame.view;
             let sheet = new CharacterSheet(view);
             let ship = new Ship();
@@ -12,18 +12,18 @@ module TK.SpaceTac.UI.Specs {
             let equipment = new CharacterEquipment(sheet, new Equipment(), source);
 
             let destination = new CharacterCargo(sheet, 0, 0);
-            expect(destination.addEquipment(equipment, null, true)).toEqual({ success: false, info: 'put in cargo', error: 'not enough cargo space' });
+            check.equals(destination.addEquipment(equipment, null, true), { success: false, info: 'put in cargo', error: 'not enough cargo space' });
             ship.setCargoSpace(1);
-            expect(destination.addEquipment(equipment, null, true)).toEqual({ success: true, info: 'put in cargo' });
+            check.equals(destination.addEquipment(equipment, null, true), { success: true, info: 'put in cargo' });
             ship.critical = true;
-            expect(destination.addEquipment(equipment, null, true)).toEqual({ success: false, info: 'put in cargo', error: 'not a fleet member' });
+            check.equals(destination.addEquipment(equipment, null, true), { success: false, info: 'put in cargo', error: 'not a fleet member' });
             ship.critical = false;
 
-            expect(source.removeEquipment(equipment, null, true)).toEqual({ success: false, info: 'remove from cargo', error: 'not in cargo!' });
+            check.equals(source.removeEquipment(equipment, null, true), { success: false, info: 'remove from cargo', error: 'not in cargo!' });
             ship.addCargo(equipment.item);
-            expect(source.removeEquipment(equipment, null, true)).toEqual({ success: true, info: 'remove from cargo' });
+            check.equals(source.removeEquipment(equipment, null, true), { success: true, info: 'remove from cargo' });
             ship.critical = true;
-            expect(source.removeEquipment(equipment, null, true)).toEqual({ success: false, info: 'remove from cargo', error: 'not a fleet member' });
+            check.equals(source.removeEquipment(equipment, null, true), { success: false, info: 'remove from cargo', error: 'not a fleet member' });
         });
     });
 }

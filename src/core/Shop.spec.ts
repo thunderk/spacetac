@@ -1,12 +1,12 @@
 module TK.SpaceTac.Specs {
-    describe("Shop", () => {
-        it("generates a stock", () => {
+    testing("Shop", test => {
+        test.case("generates a stock", check => {
             let shop = new Shop();
-            expect((<any>shop).stock.length).toBe(0);
+            check.equals((<any>shop).stock.length, 0);
             expect(shop.getStock().length).toBeGreaterThan(20);
         });
 
-        it("buys and sells items", function () {
+        test.case("buys and sells items", check => {
             let equ1 = new Equipment(SlotType.Shield, "shield");
             equ1.price = 50;
             let equ2 = new Equipment(SlotType.Hull, "hull");
@@ -17,54 +17,54 @@ module TK.SpaceTac.Specs {
             spyOn(shop, "getPrice").and.returnValue(800);
 
             let result = shop.sellToFleet(equ1, fleet);
-            expect(result).toBe(true);
-            expect(shop.getStock()).toEqual([equ2]);
-            expect(fleet.credits).toEqual(200);
+            check.equals(result, true);
+            check.equals(shop.getStock(), [equ2]);
+            check.equals(fleet.credits, 200);
             result = shop.sellToFleet(equ2, fleet);
-            expect(result).toBe(false);
-            expect(shop.getStock()).toEqual([equ2]);
-            expect(fleet.credits).toEqual(200);
+            check.equals(result, false);
+            check.equals(shop.getStock(), [equ2]);
+            check.equals(fleet.credits, 200);
 
             result = shop.buyFromFleet(equ1, fleet);
-            expect(result).toBe(true);
-            expect(shop.getStock()).toEqual([equ1, equ2]);
-            expect(fleet.credits).toEqual(1000);
+            check.equals(result, true);
+            check.equals(shop.getStock(), [equ1, equ2]);
+            check.equals(fleet.credits, 1000);
         });
 
-        it("generates secondary missions", function () {
+        test.case("generates secondary missions", check => {
             let universe = new Universe();
             universe.generate(4);
             let start = universe.getStartLocation();
 
             let shop = new Shop();
-            expect((<any>shop).missions.length).toBe(0);
+            check.equals((<any>shop).missions.length, 0);
 
             let result = shop.getMissions(start, 4);
-            expect(result.length).toBe(4);
-            expect((<any>shop).missions.length).toBe(4);
+            check.equals(result.length, 4);
+            check.equals((<any>shop).missions.length, 4);
 
             let oresult = shop.getMissions(start, 4);
-            expect(oresult).toEqual(result);
+            check.equals(oresult, result);
 
             result.forEach(mission => {
-                expect(mission.main).toBe(false);
+                check.equals(mission.main, false);
             });
         });
 
-        it("assigns missions to a fleet", function () {
+        test.case("assigns missions to a fleet", check => {
             let shop = new Shop();
             let player = new Player();
             let mission = new Mission(new Universe());
             (<any>shop).missions = [mission];
 
-            expect(shop.getMissions(new StarLocation(), 1)).toEqual([mission]);
-            expect(player.missions.secondary).toEqual([]);
+            check.equals(shop.getMissions(new StarLocation(), 1), [mission]);
+            check.equals(player.missions.secondary, []);
 
             shop.acceptMission(mission, player);
 
-            expect((<any>shop).missions).toEqual([]);
-            expect(player.missions.secondary).toEqual([mission]);
-            expect(mission.fleet).toBe(player.fleet);
+            check.equals((<any>shop).missions, []);
+            check.equals(player.missions.secondary, [mission]);
+            check.same(mission.fleet, player.fleet);
         });
     });
 }

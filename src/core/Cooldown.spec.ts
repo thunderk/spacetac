@@ -1,38 +1,38 @@
 module TK.SpaceTac.Specs {
-    describe("Cooldown", function () {
-        it("applies overheat and cooldown", function () {
+    testing("Cooldown", test => {
+        test.case("applies overheat and cooldown", check => {
             let cooldown = new Cooldown();
-            expect(cooldown.canUse()).toBe(true);
+            check.equals(cooldown.canUse(), true);
 
             cooldown.use();
-            expect(cooldown.canUse()).toBe(true);
+            check.equals(cooldown.canUse(), true);
 
             cooldown.configure(2, 3);
-            expect(cooldown.canUse()).toBe(true);
+            check.equals(cooldown.canUse(), true);
 
             cooldown.use();
-            expect(cooldown.canUse()).toBe(true);
+            check.equals(cooldown.canUse(), true);
 
             cooldown.use();
-            expect(cooldown.canUse()).toBe(false);
+            check.equals(cooldown.canUse(), false);
 
             cooldown.cool();
-            expect(cooldown.canUse()).toBe(false);
+            check.equals(cooldown.canUse(), false);
 
             cooldown.cool();
-            expect(cooldown.canUse()).toBe(false);
+            check.equals(cooldown.canUse(), false);
 
             cooldown.cool();
-            expect(cooldown.canUse()).toBe(true);
+            check.equals(cooldown.canUse(), true);
 
             cooldown.configure(1, 0);
-            expect(cooldown.canUse()).toBe(true);
+            check.equals(cooldown.canUse(), true);
 
             cooldown.use();
-            expect(cooldown.canUse()).toBe(false);
+            check.equals(cooldown.canUse(), false);
 
             cooldown.cool();
-            expect(cooldown.canUse()).toBe(true);
+            check.equals(cooldown.canUse(), true);
         });
     });
 }

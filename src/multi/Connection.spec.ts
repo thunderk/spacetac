@@ -5,14 +5,14 @@ module TK.SpaceTac.Multi.Specs {
             let connection = new Connection("test", storage);
 
             let token = await connection.getUnusedToken(5);
-            expect(token.length).toBe(5);
+            check.equals(token.length, 5);
 
             await storage.upsert("sessioninfo", { token: token }, {});
 
             spyOn(connection, "generateToken").and.returnValues(token, "123456");
 
             let other = await connection.getUnusedToken(5);
-            expect(other).toEqual("123456");
+            check.equals(other, "123456");
         });
 
         test.acase("loads a session by its id", async check => {
@@ -22,24 +22,24 @@ module TK.SpaceTac.Multi.Specs {
             let connection = new Connection("test", storage);
 
             let result = await connection.loadById("abc");
-            expect(result).toBeNull();
+            check.equals(result, null);
 
             await storage.upsert("session", { ref: "abc" }, { data: serializer.serialize(session) });
 
             result = await connection.loadById("abc");
-            expect(result).toEqual(session);
+            check.equals(result, session);
             result = await connection.loadById("abcd");
-            expect(result).toBeNull();
+            check.equals(result, null);
 
             // even from another device
             let other = new Connection("notest", storage);
             result = await other.loadById("abc");
-            expect(result).toEqual(session);
+            check.equals(result, session);
 
             // do not load if it is not a GameSession
             await storage.upsert("session", { ref: "abcd" }, { data: serializer.serialize(new Player()) });
             result = await connection.loadById("abcd");
-            expect(result).toBeNull();
+            check.equals(result, null);
         });
 
         test.acase("lists saves from a device", async check => {
@@ -47,14 +47,14 @@ module TK.SpaceTac.Multi.Specs {
             let connection = new Connection("test", storage);
 
             let result = await connection.listSaves();
-            expect(result).toEqual({});
+            check.equals(result, {});
 
             await storage.upsert("sessioninfo", { device: "test", ref: "abc" }, { info: "ABC" });
             await storage.upsert("sessioninfo", { device: "other", ref: "abcd" }, { info: "ABCD" });
             await storage.upsert("sessioninfo", { device: "test", ref: "cba" }, { info: "CBA" });
 
             result = await connection.listSaves();
-            expect(result).toEqual({ abc: "ABC", cba: "CBA" });
+            check.equals(result, { abc: "ABC", cba: "CBA" });
         });
 
         test.acase("publishes saves and retrieves them by token", async check => {
@@ -63,24 +63,24 @@ module TK.SpaceTac.Multi.Specs {
             let connection = new Connection("test", storage);
 
             let saves = await connection.listSaves();
-            expect(items(saves).length).toEqual(0);
+            check.equals(items(saves).length, 0);
 
             let token = await connection.publish(session, "TEST");
 
             saves = await connection.listSaves();
-            expect(items(saves).length).toEqual(1);
+            check.equals(items(saves).length, 1);
 
             let loaded = await connection.loadByToken(token);
-            expect(loaded).toEqual(session);
+            check.equals(loaded, session);
 
             let newtoken = await connection.publish(nn(loaded), "TEST");
-            expect(token).toEqual(newtoken);
+            check.equals(token, newtoken);
 
             loaded = await connection.loadByToken(token);
-            expect(loaded).toEqual(session);
+            check.equals(loaded, session);
 
             saves = await connection.listSaves();
-            expect(items(saves).length).toEqual(1);
+            check.equals(items(saves).length, 1);
         });
     });
 }

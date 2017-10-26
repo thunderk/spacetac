@@ -2,11 +2,11 @@
 /// <reference path="Router.ts" />
 
 module TK.SpaceTac.UI.Specs {
-    describe("Router", () => {
+    testing("Router", test => {
         let testgame = setupSingleView(() => [new Router(), []]);
 
-        it("loads correctly", function () {
-            expect(testgame.ui.state.current).toEqual("test");
+        test.case("loads correctly", check => {
+            check.equals(testgame.ui.state.current, "test");
             // TODO test routing
         });
     });

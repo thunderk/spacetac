@@ -1,50 +1,50 @@
 module TK.SpaceTac.Specs {
-    describe("Mission", () => {
-        it("check step status", function () {
+    testing("Mission", test => {
+        test.case("check step status", check => {
             let universe = new Universe();
             let fleet = new Fleet();
             let mission = new Mission(universe, fleet);
             mission.addPart(new MissionPart(mission, "Part 1"));
             mission.addPart(new MissionPart(mission, "Part 2"));
 
-            expect(mission.current_part).toBe(mission.parts[0]);
+            check.same(mission.current_part, mission.parts[0]);
 
             let result = mission.checkStatus();
-            expect(result).toBe(true);
-            expect(mission.current_part).toBe(mission.parts[0]);
+            check.equals(result, true);
+            check.same(mission.current_part, mission.parts[0]);
 
             spyOn(mission.parts[0], "checkCompleted").and.returnValues(false, true);
 
             result = mission.checkStatus();
-            expect(result).toBe(true);
-            expect(mission.current_part).toBe(mission.parts[0]);
+            check.equals(result, true);
+            check.same(mission.current_part, mission.parts[0]);
             result = mission.checkStatus();
-            expect(result).toBe(true);
-            expect(mission.current_part).toBe(mission.parts[1]);
+            check.equals(result, true);
+            check.same(mission.current_part, mission.parts[1]);
             result = mission.checkStatus();
-            expect(result).toBe(true);
-            expect(mission.current_part).toBe(mission.parts[1]);
+            check.equals(result, true);
+            check.same(mission.current_part, mission.parts[1]);
 
             spyOn(mission.parts[1], "checkCompleted").and.returnValue(true);
 
             result = mission.checkStatus();
-            expect(result).toBe(false);
-            expect(mission.current_part).toBe(mission.parts[1]);
+            check.equals(result, false);
+            check.same(mission.current_part, mission.parts[1]);
         })
 
-        it("stores a reward", function () {
+        test.case("stores a reward", check => {
             let mission = new Mission(new Universe());
-            expect(mission.getRewardText()).toEqual("-");
+            check.equals(mission.getRewardText(), "-");
 
             mission.reward = 720;
-            expect(mission.getRewardText()).toEqual("720 zotys");
+            check.equals(mission.getRewardText(), "720 zotys");
 
             mission.reward = new Equipment();
             mission.reward.name = "Super Equipment";
-            expect(mission.getRewardText()).toEqual("Super Equipment Mk1");
+            check.equals(mission.getRewardText(), "Super Equipment Mk1");
         })
 
-        it("gives the reward on completion", function () {
+        test.case("gives the reward on completion", check => {
             let fleet = new Fleet();
             let ship = fleet.addShip();
             ship.cargo_space = 5;
@@ -53,19 +53,19 @@ module TK.SpaceTac.Specs {
             let mission = new Mission(new Universe(), fleet);
             mission.reward = 75;
             mission.setCompleted();
-            expect(mission.completed).toBe(true);
-            expect(fleet.credits).toBe(225);
+            check.equals(mission.completed, true);
+            check.equals(fleet.credits, 225);
 
             mission.setCompleted();
-            expect(fleet.credits).toBe(225);
+            check.equals(fleet.credits, 225);
 
             mission = new Mission(new Universe(), fleet);
             mission.reward = new Equipment();
-            expect(ship.cargo).toEqual([]);
+            check.equals(ship.cargo, []);
             mission.setCompleted();
-            expect(mission.completed).toBe(true);
-            expect(fleet.credits).toBe(225);
-            expect(ship.cargo).toEqual([mission.reward]);
+            check.equals(mission.completed, true);
+            check.equals(fleet.credits, 225);
+            check.equals(ship.cargo, [mission.reward]);
         })
     })
 }

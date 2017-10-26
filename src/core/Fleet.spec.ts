@@ -1,8 +1,8 @@
 module TK.SpaceTac {
-    describe("Fleet", function () {
-        it("get average level", function () {
+    testing("Fleet", test => {
+        test.case("get average level", check => {
             var fleet = new Fleet();
-            expect(fleet.getLevel()).toEqual(0);
+            check.equals(fleet.getLevel(), 0);
 
             fleet.addShip(new Ship());
             fleet.addShip(new Ship());
@@ -11,43 +11,43 @@ module TK.SpaceTac {
             fleet.ships[0].level.forceLevel(2);
             fleet.ships[1].level.forceLevel(4);
             fleet.ships[2].level.forceLevel(7);
-            expect(fleet.getLevel()).toEqual(4);
+            check.equals(fleet.getLevel(), 4);
         });
 
-        it("adds and removes ships", function () {
+        test.case("adds and removes ships", check => {
             let fleet1 = new Fleet();
             let fleet2 = new Fleet();
 
             let ship1 = fleet1.addShip();
-            expect(fleet1.ships).toEqual([ship1]);
-            expect(fleet2.ships).toEqual([]);
+            check.equals(fleet1.ships, [ship1]);
+            check.equals(fleet2.ships, []);
 
             let ship2 = new Ship();
-            expect(fleet1.ships).toEqual([ship1]);
-            expect(fleet2.ships).toEqual([]);
+            check.equals(fleet1.ships, [ship1]);
+            check.equals(fleet2.ships, []);
 
             fleet2.addShip(ship2);
-            expect(fleet1.ships).toEqual([ship1]);
-            expect(fleet2.ships).toEqual([ship2]);
+            check.equals(fleet1.ships, [ship1]);
+            check.equals(fleet2.ships, [ship2]);
 
             fleet1.addShip(ship2);
-            expect(fleet1.ships).toEqual([ship1, ship2]);
-            expect(fleet2.ships).toEqual([]);
+            check.equals(fleet1.ships, [ship1, ship2]);
+            check.equals(fleet2.ships, []);
 
             fleet1.removeShip(ship1, fleet2);
-            expect(fleet1.ships).toEqual([ship2]);
-            expect(fleet2.ships).toEqual([ship1]);
+            check.equals(fleet1.ships, [ship2]);
+            check.equals(fleet2.ships, [ship1]);
 
             fleet1.removeShip(ship1);
-            expect(fleet1.ships).toEqual([ship2]);
-            expect(fleet2.ships).toEqual([ship1]);
+            check.equals(fleet1.ships, [ship2]);
+            check.equals(fleet2.ships, [ship1]);
 
             fleet1.removeShip(ship2);
-            expect(fleet1.ships).toEqual([]);
-            expect(fleet2.ships).toEqual([ship1]);
+            check.equals(fleet1.ships, []);
+            check.equals(fleet2.ships, [ship1]);
         });
 
-        it("changes location, only using jumps to travel between systems", function () {
+        test.case("changes location, only using jumps to travel between systems", check => {
             let fleet = new Fleet();
             let system1 = new Star();
             let system2 = new Star();
@@ -58,87 +58,87 @@ module TK.SpaceTac {
             let other1 = new StarLocation(system1, StarLocationType.PLANET);
 
             let result = fleet.setLocation(other1);
-            expect(result).toBe(true);
-            expect(fleet.location).toBe(other1);
+            check.equals(result, true);
+            check.same(fleet.location, other1);
 
             result = fleet.setLocation(jump2);
-            expect(result).toBe(false);
-            expect(fleet.location).toBe(other1);
+            check.equals(result, false);
+            check.same(fleet.location, other1);
 
             result = fleet.setLocation(jump1);
-            expect(result).toBe(true);
-            expect(fleet.location).toBe(jump1);
+            check.equals(result, true);
+            check.same(fleet.location, jump1);
 
             result = fleet.setLocation(jump2);
-            expect(result).toBe(true);
-            expect(fleet.location).toBe(jump2);
+            check.equals(result, true);
+            check.same(fleet.location, jump2);
 
             result = fleet.setLocation(other1);
-            expect(result).toBe(false);
-            expect(fleet.location).toBe(jump2);
+            check.equals(result, false);
+            check.same(fleet.location, jump2);
 
             result = fleet.setLocation(jump1);
-            expect(result).toBe(true);
-            expect(fleet.location).toBe(jump1);
+            check.equals(result, true);
+            check.same(fleet.location, jump1);
         });
 
-        it("checks if a fleet is alive", function () {
+        test.case("checks if a fleet is alive", check => {
             let battle = new Battle();
             let fleet = battle.fleets[0];
-            expect(fleet.isAlive()).toBe(false);
+            check.equals(fleet.isAlive(), false);
 
             let ship1 = fleet.addShip();
-            expect(fleet.isAlive()).toBe(true);
+            check.equals(fleet.isAlive(), true);
 
             let ship2 = fleet.addShip();
-            expect(fleet.isAlive()).toBe(true);
+            check.equals(fleet.isAlive(), true);
 
             ship1.setDead();
-            expect(fleet.isAlive()).toBe(true);
+            check.equals(fleet.isAlive(), true);
 
             ship2.setDead();
-            expect(fleet.isAlive()).toBe(false);
+            check.equals(fleet.isAlive(), false);
 
             let ship3 = fleet.addShip();
-            expect(fleet.isAlive()).toBe(true);
+            check.equals(fleet.isAlive(), true);
 
             let ship4 = fleet.addShip();
             ship4.critical = true;
-            expect(fleet.isAlive()).toBe(true);
+            check.equals(fleet.isAlive(), true);
 
             ship4.setDead();
-            expect(fleet.isAlive()).toBe(false);
+            check.equals(fleet.isAlive(), false);
         });
 
-        it("adds cargo in first empty slot", function () {
+        test.case("adds cargo in first empty slot", check => {
             let fleet = new Fleet();
             let ship1 = fleet.addShip();
             ship1.cargo_space = 1;
             let ship2 = fleet.addShip();
             ship2.cargo_space = 2;
 
-            expect(ship1.cargo).toEqual([]);
-            expect(ship2.cargo).toEqual([]);
+            check.equals(ship1.cargo, []);
+            check.equals(ship2.cargo, []);
 
             let result = fleet.addCargo(new Equipment());
-            expect(result).toBe(true);
-            expect(ship1.cargo).toEqual([new Equipment()]);
-            expect(ship2.cargo).toEqual([]);
+            check.equals(result, true);
+            check.equals(ship1.cargo, [new Equipment()]);
+            check.equals(ship2.cargo, []);
 
             result = fleet.addCargo(new Equipment());
-            expect(result).toBe(true);
-            expect(ship1.cargo).toEqual([new Equipment()]);
-            expect(ship2.cargo).toEqual([new Equipment()]);
+            check.equals(result, true);
+            check.equals(ship1.cargo, [new Equipment()]);
+            check.equals(ship2.cargo, [new Equipment()]);
 
             result = fleet.addCargo(new Equipment());
-            expect(result).toBe(true);
-            expect(ship1.cargo).toEqual([new Equipment()]);
-            expect(ship2.cargo).toEqual([new Equipment(), new Equipment()]);
+            check.equals(result, true);
+            check.equals(ship1.cargo, [new Equipment()]);
+            check.equals(ship2.cargo, [new Equipment(), new Equipment()]);
 
             result = fleet.addCargo(new Equipment());
-            expect(result).toBe(false);
-            expect(ship1.cargo).toEqual([new Equipment()]);
-            expect(ship2.cargo).toEqual([new Equipment(), new Equipment()]);
+            check.equals(result, false);
+            check.equals(ship1.cargo, [new Equipment()]);
+            check.equals(ship2.cargo, [new Equipment(), new Equipment()]);
         });
     });
 }

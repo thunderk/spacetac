@@ -1,9 +1,5 @@
 /// <reference path="ui/TestGame.ts" />
 
-if (typeof window != "undefined") {
-    (<any>window).describe = (<any>window).describe || function () { };
-}
-
 module TK.SpaceTac.UI.Specs {
     class FakeStorage {
         data: any = {}
@@ -15,31 +11,31 @@ module TK.SpaceTac.UI.Specs {
         }
     }
 
-    describe("MainUI", () => {
+    testing("MainUI", test => {
         let testgame = setupEmptyView();
 
-        it("saves games in local browser storage", function () {
+        test.case("saves games in local browser storage", check => {
             let ui = testgame.ui;
             ui.storage = <any>new FakeStorage();
 
             let result = ui.loadGame("spacetac-test-save");
-            expect(result).toBe(false);
+            check.equals(result, false);
 
             ui.session.startNewGame();
             let systems = ui.session.universe.stars.length;
             let links = ui.session.universe.starlinks.length;
 
             result = ui.saveGame("spacetac-test-save");
-            expect(result).toBe(true);
+            check.equals(result, true);
             expect(ui.storage.getItem("spacetac-test-save")).toBeTruthy();
 
             ui.session = new GameSession();
-            expect(ui.session.universe.stars.length).not.toBe(systems);
+            check.notsame(ui.session.universe.stars.length, systems);
 
             result = ui.loadGame("spacetac-test-save");
-            expect(result).toBe(true);
-            expect(ui.session.universe.stars.length).toBe(systems);
-            expect(ui.session.universe.starlinks.length).toBe(links);
+            check.equals(result, true);
+            check.same(ui.session.universe.stars.length, systems);
+            check.same(ui.session.universe.starlinks.length, links);
         });
     });
 }

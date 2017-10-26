@@ -1,8 +1,9 @@
 module TK.SpaceTac.UI.Specs {
-    describe("InputManager", function () {
+    testing("InputManager", test => {
         let testgame = setupEmptyView();
+        let clock = test.clock();
 
-        it("handles hover and click on desktops and mobile targets", function (done) {
+        test.case("handles hover and click on desktops and mobile targets", check => {
             let inputs = testgame.view.inputs;
 
             let pointer = new Phaser.Pointer(testgame.ui, 0);
@@ -46,7 +47,7 @@ module TK.SpaceTac.UI.Specs {
             // Leaves on destroy
             [button, funcs] = newButton();
             press(button);
-            jasmine.clock().tick(150);
+            clock.forward(150);
             expect(funcs.enter).toHaveBeenCalledTimes(1);
             expect(funcs.leave).toHaveBeenCalledTimes(0);
             expect(funcs.click).toHaveBeenCalledTimes(0);
@@ -64,7 +65,7 @@ module TK.SpaceTac.UI.Specs {
             let [button1, funcs1] = newButton();
             let [button2, funcs2] = newButton();
             enter(button1);
-            jasmine.clock().tick(150);
+            clock.forward(150);
             expect(funcs1.enter).toHaveBeenCalledTimes(1);
             expect(funcs1.leave).toHaveBeenCalledTimes(0);
             expect(funcs1.click).toHaveBeenCalledTimes(0);
@@ -75,7 +76,7 @@ module TK.SpaceTac.UI.Specs {
             expect(funcs2.enter).toHaveBeenCalledTimes(0);
             expect(funcs2.leave).toHaveBeenCalledTimes(0);
             expect(funcs2.click).toHaveBeenCalledTimes(0);
-            jasmine.clock().tick(150);
+            clock.forward(150);
             expect(funcs1.enter).toHaveBeenCalledTimes(1);
             expect(funcs1.leave).toHaveBeenCalledTimes(1);
             expect(funcs1.click).toHaveBeenCalledTimes(0);
@@ -84,57 +85,54 @@ module TK.SpaceTac.UI.Specs {
             expect(funcs2.click).toHaveBeenCalledTimes(0);
 
             // Hold to hover on mobile
-            jasmine.clock().uninstall();
             [button, funcs] = newButton();
             button.onInputDown.dispatch(button, pointer);
-            Timer.global.schedule(150, () => {
-                expect(funcs.enter).toHaveBeenCalledTimes(1);
-                expect(funcs.leave).toHaveBeenCalledTimes(0);
-                expect(funcs.click).toHaveBeenCalledTimes(0);
-                button.onInputUp.dispatch(button, pointer);
-                expect(funcs.enter).toHaveBeenCalledTimes(1);
-                expect(funcs.leave).toHaveBeenCalledTimes(1);
-                expect(funcs.click).toHaveBeenCalledTimes(0);
-                done();
-            });
+            clock.forward(150);
+            expect(funcs.enter).toHaveBeenCalledTimes(1);
+            expect(funcs.leave).toHaveBeenCalledTimes(0);
+            expect(funcs.click).toHaveBeenCalledTimes(0);
+            button.onInputUp.dispatch(button, pointer);
+            expect(funcs.enter).toHaveBeenCalledTimes(1);
+            expect(funcs.leave).toHaveBeenCalledTimes(1);
+            expect(funcs.click).toHaveBeenCalledTimes(0);
         });
 
-        it("handles drag and drop", function () {
+        test.case("handles drag and drop", check => {
             let builder = new UIBuilder(testgame.view);
             let button = builder.button("test", 0, 0, () => null, "test tooltip");
             let tooltip = (<any>testgame.view.tooltip).container;
 
-            expect(button.inputEnabled).toBe(true, "input should be enabled initially");
-            expect(button.input.draggable).toBe(false, "dragging should be disabled initially");
+            check.same(button.inputEnabled, true, "input should be enabled initially");
+            check.same(button.input.draggable, false, "dragging should be disabled initially");
 
             let x = 0;
             testgame.view.inputs.setDragDrop(button, () => x += 1, () => x -= 1);
 
-            expect(button.inputEnabled).toBe(true, "input should still be enabled");
-            expect(button.input.draggable).toBe(true, "dragging should be enabled");
+            check.same(button.inputEnabled, true, "input should still be enabled");
+            check.same(button.input.draggable, true, "dragging should be enabled");
 
-            expect(tooltip.visible).toBe(false, "tooltip hidden initially");
-            expect(button.onInputOver.dispatch(button, testgame.ui.input.pointer1));
-            jasmine.clock().tick(1000);
-            expect(tooltip.visible).toBe(true, "tooltip shown");
+            check.same(tooltip.visible, false, "tooltip hidden initially");
+            button.onInputOver.dispatch(button, testgame.ui.input.pointer1);
+            clock.forward(1000);
+            check.same(tooltip.visible, true, "tooltip shown");
 
-            expect(x).toBe(0, "initial state");
+            check.same(x, 0, "initial state");
             button.events.onDragStart.dispatch();
-            expect(x).toBe(1, "dragged");
-            expect(tooltip.visible).toBe(false, "tooltip hidden on dragging");
+            check.same(x, 1, "dragged");
+            check.same(tooltip.visible, false, "tooltip hidden on dragging");
             button.events.onDragStop.dispatch();
-            expect(x).toBe(0, "dropped");
+            check.same(x, 0, "dropped");
 
             testgame.view.inputs.setDragDrop(button);
 
             button.events.onDragStart.dispatch();
-            expect(x).toBe(0, "drag signal should be disabled");
-            expect(button.inputEnabled).toBe(true, "input should remain enabled");
-            expect(button.input.draggable).toBe(false, "dragging should be disabled at the end");
+            check.same(x, 0, "drag signal should be disabled");
+            check.same(button.inputEnabled, true, "input should remain enabled");
+            check.same(button.input.draggable, false, "dragging should be disabled at the end");
 
             testgame.view.inputs.setDragDrop(button, () => x += 1, () => x -= 1);
             button.events.onDragStart.dispatch();
-            expect(x).toBe(1, "drag signal should be dispatch once");
+            check.same(x, 1, "drag signal should be dispatch once");
         });
     });
 }

@@ -1,95 +1,95 @@
 module TK.SpaceTac.Specs {
-    describe("BattleStats", function () {
-        it("collects stats", function () {
+    testing("BattleStats", test => {
+        test.case("collects stats", check => {
             let stats = new BattleStats();
-            expect(stats.stats).toEqual({});
+            check.equals(stats.stats, {});
 
             stats.addStat("Test", 1, true);
-            expect(stats.stats).toEqual({ Test: [1, 0] });
+            check.equals(stats.stats, { Test: [1, 0] });
 
             stats.addStat("Test", 1, true);
-            expect(stats.stats).toEqual({ Test: [2, 0] });
+            check.equals(stats.stats, { Test: [2, 0] });
 
             stats.addStat("Test", 1, false);
-            expect(stats.stats).toEqual({ Test: [2, 1] });
+            check.equals(stats.stats, { Test: [2, 1] });
 
             stats.addStat("Other Test", 10, true);
-            expect(stats.stats).toEqual({ Test: [2, 1], "Other Test": [10, 0] });
+            check.equals(stats.stats, { Test: [2, 1], "Other Test": [10, 0] });
         })
 
-        it("collects damage dealt", function () {
+        test.case("collects damage dealt", check => {
             let stats = new BattleStats();
             let battle = new Battle();
             let attacker = battle.fleets[0].addShip();
             let defender = battle.fleets[1].addShip();
             stats.processLog(battle.log, battle.fleets[0]);
-            expect(stats.stats).toEqual({});
+            check.equals(stats.stats, {});
 
             battle.log.add(new DamageEvent(attacker, 10, 12));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Damage dealt": [0, 22] });
+            check.equals(stats.stats, { "Damage dealt": [0, 22] });
 
             battle.log.add(new DamageEvent(defender, 40, 0));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Damage dealt": [40, 22] });
+            check.equals(stats.stats, { "Damage dealt": [40, 22] });
 
             battle.log.add(new DamageEvent(attacker, 5, 4));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Damage dealt": [40, 31] });
+            check.equals(stats.stats, { "Damage dealt": [40, 31] });
         })
 
-        it("collects distance moved", function () {
+        test.case("collects distance moved", check => {
             let stats = new BattleStats();
             let battle = new Battle();
             let attacker = battle.fleets[0].addShip();
             let defender = battle.fleets[1].addShip();
             stats.processLog(battle.log, battle.fleets[0]);
-            expect(stats.stats).toEqual({});
+            check.equals(stats.stats, {});
 
             battle.log.add(new MoveEvent(attacker, new ArenaLocationAngle(0, 0), new ArenaLocationAngle(10, 0)));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Move distance (km)": [10, 0] });
+            check.equals(stats.stats, { "Move distance (km)": [10, 0] });
 
             battle.log.add(new MoveEvent(defender, new ArenaLocationAngle(10, 5), new ArenaLocationAngle(10, 63)));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Move distance (km)": [10, 58] });
+            check.equals(stats.stats, { "Move distance (km)": [10, 58] });
         })
 
-        it("collects deployed drones", function () {
+        test.case("collects deployed drones", check => {
             let stats = new BattleStats();
             let battle = new Battle();
             let attacker = battle.fleets[0].addShip();
             let defender = battle.fleets[1].addShip();
             stats.processLog(battle.log, battle.fleets[0]);
-            expect(stats.stats).toEqual({});
+            check.equals(stats.stats, {});
 
             battle.log.add(new DroneDeployedEvent(new Drone(attacker)));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Drones deployed": [1, 0] });
+            check.equals(stats.stats, { "Drones deployed": [1, 0] });
 
             battle.log.add(new DroneDeployedEvent(new Drone(defender)));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Drones deployed": [1, 1] });
+            check.equals(stats.stats, { "Drones deployed": [1, 1] });
         })
 
-        it("collects power usage", function () {
+        test.case("collects power usage", check => {
             let stats = new BattleStats();
             let battle = new Battle();
             let attacker = battle.fleets[0].addShip();
             let defender = battle.fleets[1].addShip();
             stats.processLog(battle.log, battle.fleets[0]);
-            expect(stats.stats).toEqual({});
+            check.equals(stats.stats, {});
 
             battle.log.add(new ActionAppliedEvent(attacker, new BaseAction("nop", "nop"), null, 4));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Power used": [4, 0] });
+            check.equals(stats.stats, { "Power used": [4, 0] });
 
             battle.log.add(new ActionAppliedEvent(defender, new BaseAction("nop", "nop"), null, 2));
             stats.processLog(battle.log, battle.fleets[0], true);
-            expect(stats.stats).toEqual({ "Power used": [4, 2] });
+            check.equals(stats.stats, { "Power used": [4, 2] });
         })
 
-        it("evaluates equipment depreciation", function () {
+        test.case("evaluates equipment depreciation", check => {
             let stats = new BattleStats();
             let battle = new Battle();
             let attacker = battle.fleets[0].addShip();
@@ -101,13 +101,13 @@ module TK.SpaceTac.Specs {
             equ2.price = 1100;
 
             stats.onBattleStart(attacker.fleet, defender.fleet);
-            expect(stats.stats).toEqual({ "Equipment wear (zotys)": [1000, 1100] });
+            check.equals(stats.stats, { "Equipment wear (zotys)": [1000, 1100] });
 
             equ1.price = 500;
             equ2.price = 800;
 
             stats.onBattleEnd(attacker.fleet, defender.fleet);
-            expect(stats.stats).toEqual({ "Equipment wear (zotys)": [500, 300] });
+            check.equals(stats.stats, { "Equipment wear (zotys)": [500, 300] });
         })
     })
 }

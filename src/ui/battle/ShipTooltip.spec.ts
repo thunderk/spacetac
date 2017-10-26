@@ -1,8 +1,8 @@
 module TK.SpaceTac.UI.Specs {
-    describe("ShipTooltip", function () {
+    testing("ShipTooltip", test => {
         let testgame = setupBattleview();
 
-        it("fills ship details", function () {
+        test.case("fills ship details", check => {
             let tooltip = new ShipTooltip(testgame.view);
             let ship = testgame.view.battle.play_order[2];
             ship.fleet.player.name = "Phil";
@@ -22,17 +22,17 @@ module TK.SpaceTac.UI.Specs {
             tooltip.setShip(ship);
 
             let content = (<any>tooltip).container.content;
-            expect(content.children[0].name).toBe("ship-fake-portrait");
-            expect(content.children[1].text).toBe("Phil's Level 1 Fury");
-            expect(content.children[2].text).toBe("Plays in 2 turns");
-            expect(content.children[3].text).toBe("Hull\n58/58");
-            expect(content.children[4].text).toBe("Shield\n140/140");
-            expect(content.children[5].text).toBe("Power\n12/12");
-            expect(content.children[6].text).toBe("Active effects");
-            expect(content.children[7].text).toBe("• limit precision to 10");
-            expect(content.children[8].text).toBe("• damage -15% for 3 turns");
-            expect(content.children[9].text).toBe("Weapons");
-            expect(content.children[10].text).toBe("• equipment Mk1");
+            check.equals(content.children[0].name, "ship-fake-portrait");
+            check.equals(content.children[1].text, "Phil's Level 1 Fury");
+            check.equals(content.children[2].text, "Plays in 2 turns");
+            check.equals(content.children[3].text, "Hull\n58/58");
+            check.equals(content.children[4].text, "Shield\n140/140");
+            check.equals(content.children[5].text, "Power\n12/12");
+            check.equals(content.children[6].text, "Active effects");
+            check.equals(content.children[7].text, "• limit precision to 10");
+            check.equals(content.children[8].text, "• damage -15% for 3 turns");
+            check.equals(content.children[9].text, "Weapons");
+            check.equals(content.children[10].text, "• equipment Mk1");
         });
     });
 }

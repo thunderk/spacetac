@@ -1,11 +1,11 @@
 module TK.SpaceTac.Specs {
-    describe("BaseEffect", function () {
-        it("gets a fixed or variable amount", function () {
+    testing("BaseEffect", test => {
+        test.case("gets a fixed or variable amount", check => {
             let effect = new BaseEffect("test");
 
-            expect(effect.resolveAmount(50)).toBe(50);
-            expect(effect.resolveAmount({ base: 20, span: 10 }, new SkewedRandomGenerator([0.3]))).toBe(23);
-            expect(effect.resolveAmount({ base: 20, span: 0 }, new SkewedRandomGenerator([0.3]))).toBe(20);
+            check.equals(effect.resolveAmount(50), 50);
+            check.equals(effect.resolveAmount({ base: 20, span: 10 }, new SkewedRandomGenerator([0.3])), 23);
+            check.equals(effect.resolveAmount({ base: 20, span: 0 }, new SkewedRandomGenerator([0.3])), 20);
         })
     })
 }

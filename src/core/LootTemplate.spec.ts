@@ -9,128 +9,128 @@ module TK.SpaceTac.Specs {
         }
     }
 
-    describe("LootTemplate", () => {
-        it("generates equipment with correct information", function () {
+    testing("LootTemplate", test => {
+        test.case("generates equipment with correct information", check => {
             let template = new LootTemplate(SlotType.Power, "Power Generator", "A great power generator !");
             let result = template.generate(2, EquipmentQuality.PREMIUM);
 
-            expect(result.slot_type).toEqual(SlotType.Power);
-            expect(result.code).toEqual("powergenerator");
-            expect(result.name).toEqual("Power Generator");
-            expect(result.price).toEqual(350);
-            expect(result.level).toEqual(2);
-            expect(result.quality).toEqual(EquipmentQuality.COMMON);
-            expect(result.description).toEqual("A great power generator !");
+            check.equals(result.slot_type, SlotType.Power);
+            check.equals(result.code, "powergenerator");
+            check.equals(result.name, "Power Generator");
+            check.equals(result.price, 350);
+            check.equals(result.level, 2);
+            check.equals(result.quality, EquipmentQuality.COMMON);
+            check.equals(result.description, "A great power generator !");
 
             template.addAttributeEffect("power_capacity", istep(10));
             result = template.generate(1, EquipmentQuality.COMMON);
-            expect(result.quality).toEqual(EquipmentQuality.COMMON);
-            expect(result.effects).toEqual([new AttributeEffect("power_capacity", 10)]);
+            check.equals(result.quality, EquipmentQuality.COMMON);
+            check.equals(result.effects, [new AttributeEffect("power_capacity", 10)]);
             result = template.generate(1, EquipmentQuality.PREMIUM);
-            expect(result.quality).toEqual(EquipmentQuality.PREMIUM);
-            expect(result.effects).toEqual([new AttributeEffect("power_capacity", 13)]);
+            check.equals(result.quality, EquipmentQuality.PREMIUM);
+            check.equals(result.effects, [new AttributeEffect("power_capacity", 13)]);
         });
 
-        it("applies requirements on skills", function () {
+        test.case("applies requirements on skills", check => {
             let template = new LootTemplate(SlotType.Hull, "Hull");
             template.setSkillsRequirements({ "skill_photons": istep(1), "skill_gravity": istep(2, istep(1)) });
 
             let result = template.generate(1);
-            expect(result.requirements).toEqual({
+            check.equals(result.requirements, {
                 "skill_photons": 1,
                 "skill_gravity": 2
             });
 
             result = template.generate(2);
-            expect(result.requirements).toEqual({
+            check.equals(result.requirements, {
                 "skill_photons": 2,
                 "skill_gravity": 3
             });
 
             result = template.generate(10);
-            expect(result.requirements).toEqual({
+            check.equals(result.requirements, {
                 "skill_photons": 10,
                 "skill_gravity": 47
             });
         });
 
-        it("applies cooldown", function () {
+        test.case("applies cooldown", check => {
             let template = new LootTemplate(SlotType.Weapon, "Weapon");
             template.setCooldown(istep(1), istep(2));
 
             let result = template.generate(1);
-            expect(result.cooldown.overheat).toBe(1);
-            expect(result.cooldown.cooling).toBe(2);
+            check.equals(result.cooldown.overheat, 1);
+            check.equals(result.cooldown.cooling, 2);
 
             result = template.generate(2);
-            expect(result.cooldown.overheat).toBe(2);
-            expect(result.cooldown.cooling).toBe(3);
+            check.equals(result.cooldown.overheat, 2);
+            check.equals(result.cooldown.cooling, 3);
 
             result = template.generate(10);
-            expect(result.cooldown.overheat).toBe(10);
-            expect(result.cooldown.cooling).toBe(11);
+            check.equals(result.cooldown.overheat, 10);
+            check.equals(result.cooldown.cooling, 11);
         });
 
-        it("applies attributes permenant effects", function () {
+        test.case("applies attributes permenant effects", check => {
             let template = new LootTemplate(SlotType.Shield, "Shield");
             template.addAttributeEffect("shield_capacity", irange(undefined, 50, 10));
 
             let result = template.generate(1);
-            expect(result.effects).toEqual([new AttributeEffect("shield_capacity", 50)]);
+            check.equals(result.effects, [new AttributeEffect("shield_capacity", 50)]);
 
             result = template.generate(2);
-            expect(result.effects).toEqual([new AttributeEffect("shield_capacity", 60)]);
+            check.equals(result.effects, [new AttributeEffect("shield_capacity", 60)]);
         });
 
-        it("adds move actions", function () {
+        test.case("adds move actions", check => {
             let template = new LootTemplate(SlotType.Engine, "Engine");
             template.addMoveAction(irange(undefined, 100, 10), istep(50, irepeat(10)), irepeat(95));
 
             let result = template.generate(1);
-            expect(result.action).toEqual(new MoveAction(result, 100, 50, 95));
+            check.equals(result.action, new MoveAction(result, 100, 50, 95));
 
             result = template.generate(2);
-            expect(result.action).toEqual(new MoveAction(result, 110, 60, 95));
+            check.equals(result.action, new MoveAction(result, 110, 60, 95));
         });
 
-        it("adds fire actions", function () {
+        test.case("adds fire actions", check => {
             let template = new LootTemplate(SlotType.Weapon, "Weapon");
             template.addTriggerAction(istep(1), [
                 new EffectTemplate(new FakeEffect(3), { "fakevalue": istep(8) })
             ], istep(100), istep(50), istep(10));
 
             let result = template.generate(1);
-            expect(result.action).toEqual(new TriggerAction(result, [new FakeEffect(8)], 1, 100, 50, 10));
+            check.equals(result.action, new TriggerAction(result, [new FakeEffect(8)], 1, 100, 50, 10));
 
             result = template.generate(2);
-            expect(result.action).toEqual(new TriggerAction(result, [new FakeEffect(9)], 2, 101, 51, 11));
+            check.equals(result.action, new TriggerAction(result, [new FakeEffect(9)], 2, 101, 51, 11));
         });
 
-        it("adds drone actions", function () {
+        test.case("adds drone actions", check => {
             let template = new LootTemplate(SlotType.Weapon, "Weapon");
             template.addDroneAction(istep(1), istep(100), istep(2), istep(50), [
                 new EffectTemplate(new FakeEffect(3), { "fakevalue": istep(8) })
             ]);
 
             let result = template.generate(1);
-            expect(result.action).toEqual(new DeployDroneAction(result, 1, 100, 2, 50, [new FakeEffect(8)]));
+            check.equals(result.action, new DeployDroneAction(result, 1, 100, 2, 50, [new FakeEffect(8)]));
 
             result = template.generate(2);
-            expect(result.action).toEqual(new DeployDroneAction(result, 2, 101, 3, 51, [new FakeEffect(9)]));
+            check.equals(result.action, new DeployDroneAction(result, 2, 101, 3, 51, [new FakeEffect(9)]));
         });
 
-        it("checks the presence of damaging effects", function () {
+        test.case("checks the presence of damaging effects", check => {
             let template = new LootTemplate(SlotType.Weapon, "Weapon");
-            expect(template.hasDamageEffect()).toBe(false);
+            check.equals(template.hasDamageEffect(), false);
 
             template.addAttributeEffect("maneuvrability", irepeat(1));
-            expect(template.hasDamageEffect()).toBe(false);
+            check.equals(template.hasDamageEffect(), false);
 
             template.addTriggerAction(irepeat(1), [new EffectTemplate(new BaseEffect("test"), {})], irepeat(50), irepeat(50));
-            expect(template.hasDamageEffect()).toBe(false);
+            check.equals(template.hasDamageEffect(), false);
 
             template.addTriggerAction(irepeat(1), [new EffectTemplate(new DamageEffect(20), {})], irepeat(50), irepeat(50));
-            expect(template.hasDamageEffect()).toBe(true);
+            check.equals(template.hasDamageEffect(), true);
         });
     });
 }

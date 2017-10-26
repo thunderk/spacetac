@@ -1,5 +1,5 @@
 module TK.SpaceTac.UI.Specs {
-    describe("Targetting", function () {
+    testing("Targetting", test => {
         let testgame = setupBattleview();
 
         function newTargetting(): Targetting {
@@ -9,7 +9,7 @@ module TK.SpaceTac.UI.Specs {
                 testgame.view.arena.range_hint);
         }
 
-        it("draws simulation parts", function () {
+        test.case("draws simulation parts", check => {
             let targetting = newTargetting();
 
             let ship = nn(testgame.view.battle.playing_ship);
@@ -41,7 +41,7 @@ module TK.SpaceTac.UI.Specs {
             expect(drawvector).toHaveBeenCalledWith(0xe09c47, 10, 20, 50, 30, 12);
         })
 
-        it("updates impact indicators on ships inside the blast radius", function () {
+        test.case("updates impact indicators on ships inside the blast radius", check => {
             let targetting = newTargetting();
             let ship = nn(testgame.view.battle.playing_ship);
             let impacts = targetting.impact_indicators;
@@ -55,24 +55,24 @@ module TK.SpaceTac.UI.Specs {
 
             expect(collect).toHaveBeenCalledTimes(1);
             expect(collect).toHaveBeenCalledWith(ship, new Target(20, 10), ship.location);
-            expect(targetting.impact_indicators.children.length).toBe(3);
-            expect(targetting.impact_indicators.visible).toBe(true);
+            check.equals(targetting.impact_indicators.children.length, 3);
+            check.equals(targetting.impact_indicators.visible, true);
 
             targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 11));
 
             expect(collect).toHaveBeenCalledTimes(2);
             expect(collect).toHaveBeenCalledWith(ship, new Target(20, 11), ship.location);
-            expect(targetting.impact_indicators.children.length).toBe(2);
-            expect(targetting.impact_indicators.visible).toBe(true);
+            check.equals(targetting.impact_indicators.children.length, 2);
+            check.equals(targetting.impact_indicators.visible, true);
 
             targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 12));
 
             expect(collect).toHaveBeenCalledTimes(3);
             expect(collect).toHaveBeenCalledWith(ship, new Target(20, 12), ship.location);
-            expect(targetting.impact_indicators.visible).toBe(false);
+            check.equals(targetting.impact_indicators.visible, false);
         })
 
-        it("updates graphics from simulation", function () {
+        test.case("updates graphics from simulation", check => {
             let targetting = newTargetting();
             let ship = nn(testgame.view.battle.playing_ship);
 
@@ -99,19 +99,19 @@ module TK.SpaceTac.UI.Specs {
             });
             targetting.update();
 
-            expect(targetting.container.visible).toBe(true);
-            expect(targetting.drawn_info.visible).toBe(true);
-            expect(targetting.fire_arrow.visible).toBe(true);
-            expect(targetting.fire_arrow.position).toEqual(jasmine.objectContaining({ x: 156, y: 65 }));
-            expect(targetting.fire_arrow.rotation).toBeCloseTo(0.534594, 5);
-            expect(targetting.impact_area.visible).toBe(true);
-            expect(targetting.impact_area.position).toEqual(jasmine.objectContaining({ x: 156, y: 65 }));
-            expect(targetting.move_ghost.visible).toBe(true);
-            expect(targetting.move_ghost.position).toEqual(jasmine.objectContaining({ x: 80, y: 20 }));
-            expect(targetting.move_ghost.rotation).toBeCloseTo(0.534594, 5);
+            check.equals(targetting.container.visible, true);
+            check.equals(targetting.drawn_info.visible, true);
+            check.equals(targetting.fire_arrow.visible, true);
+            check.containing(targetting.fire_arrow.position, { x: 156, y: 65 });
+            check.nears(targetting.fire_arrow.rotation, 0.534594, 5);
+            check.equals(targetting.impact_area.visible, true);
+            check.containing(targetting.impact_area.position, { x: 156, y: 65 });
+            check.equals(targetting.move_ghost.visible, true);
+            check.containing(targetting.move_ghost.position, { x: 80, y: 20 });
+            check.nears(targetting.move_ghost.rotation, 0.534594, 5);
         })
 
-        it("snaps on ships according to targetting mode", function () {
+        test.case("snaps on ships according to targetting mode", check => {
             let targetting = newTargetting();
             let playing_ship = nn(testgame.view.battle.playing_ship);
             let action = TestTools.addWeapon(playing_ship).action;
@@ -123,28 +123,28 @@ module TK.SpaceTac.UI.Specs {
 
             targetting.setAction(action, ActionTargettingMode.SPACE);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
-            expect(targetting.target).toEqual(Target.newFromLocation(8000, 60), "space");
+            check.equals(targetting.target, Target.newFromLocation(8000, 60), "space");
 
             targetting.setAction(action, ActionTargettingMode.SHIP);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
-            expect(targetting.target).toEqual(Target.newFromShip(ship1), "ship 1");
+            check.equals(targetting.target, Target.newFromShip(ship1), "ship 1");
             targetting.setTargetFromLocation({ x: 8100, y: 200 });
-            expect(targetting.target).toEqual(Target.newFromShip(ship2), "ship 2");
+            check.equals(targetting.target, Target.newFromShip(ship2), "ship 2");
 
             targetting.setAction(action, ActionTargettingMode.SURROUNDINGS);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
-            expect(targetting.target).toEqual(Target.newFromLocation(8000, 60), "surroundings 1");
+            check.equals(targetting.target, Target.newFromLocation(8000, 60), "surroundings 1");
             targetting.setTargetFromLocation({ x: playing_ship.arena_x + 10, y: playing_ship.arena_y - 20 });
-            expect(targetting.target).toEqual(Target.newFromShip(playing_ship), "surroundings 2");
+            check.equals(targetting.target, Target.newFromShip(playing_ship), "surroundings 2");
 
             targetting.setAction(action, ActionTargettingMode.SELF);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
-            expect(targetting.target).toEqual(Target.newFromShip(playing_ship), "self 1");
+            check.equals(targetting.target, Target.newFromShip(playing_ship), "self 1");
             targetting.setTargetFromLocation({ x: 0, y: 0 });
-            expect(targetting.target).toEqual(Target.newFromShip(playing_ship), "self 2");
+            check.equals(targetting.target, Target.newFromShip(playing_ship), "self 2");
         })
 
-        it("updates the range hint display", function () {
+        test.case("updates the range hint display", check => {
             let targetting = newTargetting();
             let ship = nn(testgame.view.battle.playing_ship);
             ship.setArenaPosition(0, 0);
@@ -159,17 +159,17 @@ module TK.SpaceTac.UI.Specs {
             // move action
             targetting.setAction(move);
             targetting.setTargetFromLocation({ x: 200, y: 0 });
-            expect(last_call).toEqual([ship, move, 800]);
+            check.equals(last_call, [ship, move, 800]);
 
             // fire action
             targetting.setAction(fire);
             targetting.setTargetFromLocation({ x: 200, y: 0 });
-            expect(last_call).toEqual([ship, fire, undefined]);
+            check.equals(last_call, [ship, fire, undefined]);
 
             // move+fire
             targetting.setAction(fire);
             targetting.setTargetFromLocation({ x: 400, y: 0 });
-            expect(last_call).toEqual([ship, move, 600]);
+            check.equals(last_call, [ship, move, 600]);
         });
     });
 }

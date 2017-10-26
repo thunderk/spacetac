@@ -1,34 +1,34 @@
 module TK.SpaceTac.Equipments {
-    describe("DamageProtector", function () {
-        it("generates equipment based on level", function () {
+    testing("DamageProtector", test => {
+        test.case("generates equipment based on level", check => {
             let template = new DamageProtector();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_time": 3 });
-            expect(equipment.action).toEqual(new ToggleAction(equipment, 2, 300, [
+            check.equals(equipment.requirements, { "skill_time": 3 });
+            check.equals(equipment.action, new ToggleAction(equipment, 2, 300, [
                 new DamageModifierEffect(-17)
             ]));
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_time": 4 });
-            expect(equipment.action).toEqual(new ToggleAction(equipment, 2, 310, [
+            check.equals(equipment.requirements, { "skill_time": 4 });
+            check.equals(equipment.action, new ToggleAction(equipment, 2, 310, [
                 new DamageModifierEffect(-22)
             ]));
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_time": 5 });
-            expect(equipment.action).toEqual(new ToggleAction(equipment, 2, 322, [
+            check.equals(equipment.requirements, { "skill_time": 5 });
+            check.equals(equipment.action, new ToggleAction(equipment, 2, 322, [
                 new DamageModifierEffect(-28)
             ]));
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_time": 22 });
-            expect(equipment.action).toEqual(new ToggleAction(equipment, 8, 462, [
+            check.equals(equipment.requirements, { "skill_time": 22 });
+            check.equals(equipment.action, new ToggleAction(equipment, 8, 462, [
                 new DamageModifierEffect(-60)
             ]));
         });
 
-        it("reduces damage around the ship", function () {
+        test.case("reduces damage around the ship", check => {
             let battle = new Battle();
             let ship1 = battle.fleets[0].addShip();
             ship1.upgradeSkill("skill_time", 3);
@@ -41,7 +41,7 @@ module TK.SpaceTac.Equipments {
             ship2.setArenaPosition(100, 0);
             ship3.setArenaPosition(800, 0);
             TestTools.setShipPlaying(battle, ship1);
-            expect(ship1.getAvailableActions()).toEqual([action, new EndTurnAction()]);
+            check.equals(ship1.getAvailableActions(), [action, new EndTurnAction()]);
 
             TestTools.setShipHP(ship1, 100, 0);
             TestTools.setShipHP(ship2, 100, 0);
@@ -49,32 +49,32 @@ module TK.SpaceTac.Equipments {
 
             iforeach(battle.iships(), ship => new DamageEffect(10).applyOnShip(ship, ship1));
 
-            expect(ship1.getValue("power")).toEqual(10);
-            expect(ship1.getValue("hull")).toEqual(90);
-            expect(ship2.getValue("hull")).toEqual(90);
-            expect(ship3.getValue("hull")).toEqual(90);
+            check.equals(ship1.getValue("power"), 10);
+            check.equals(ship1.getValue("hull"), 90);
+            check.equals(ship2.getValue("hull"), 90);
+            check.equals(ship3.getValue("hull"), 90);
 
             let result = action.apply(ship1);
-            expect(result).toBe(true);
-            expect((<ToggleAction>protector.action).activated).toBe(true);
+            check.equals(result, true);
+            check.equals((<ToggleAction>protector.action).activated, true);
 
             iforeach(battle.iships(), ship => new DamageEffect(10).applyOnShip(ship, ship1));
 
-            expect(ship1.getValue("power")).toEqual(8);
-            expect(ship1.getValue("hull")).toEqual(82);
-            expect(ship2.getValue("hull")).toEqual(82);
-            expect(ship3.getValue("hull")).toEqual(80);
+            check.equals(ship1.getValue("power"), 8);
+            check.equals(ship1.getValue("hull"), 82);
+            check.equals(ship2.getValue("hull"), 82);
+            check.equals(ship3.getValue("hull"), 80);
 
             result = action.apply(ship1);
-            expect(result).toBe(true);
-            expect((<ToggleAction>protector.action).activated).toBe(false);
+            check.equals(result, true);
+            check.equals((<ToggleAction>protector.action).activated, false);
 
             iforeach(battle.iships(), ship => new DamageEffect(10).applyOnShip(ship, ship1));
 
-            expect(ship1.getValue("power")).toEqual(8);
-            expect(ship1.getValue("hull")).toEqual(72);
-            expect(ship2.getValue("hull")).toEqual(72);
-            expect(ship3.getValue("hull")).toEqual(70);
+            check.equals(ship1.getValue("power"), 8);
+            check.equals(ship1.getValue("hull"), 72);
+            check.equals(ship2.getValue("hull"), 72);
+            check.equals(ship3.getValue("hull"), 70);
         });
     });
 }

@@ -1,6 +1,6 @@
 module TK.SpaceTac {
-    describe("BaseAction", function () {
-        it("check if equipment can be used with remaining AP", function () {
+    testing("BaseAction", test => {
+        test.case("check if equipment can be used with remaining AP", check => {
             var equipment = new Equipment(SlotType.Hull);
             var action = new BaseAction("test", "Test", equipment);
             spyOn(action, "getActionPointsUsage").and.returnValue(3);
@@ -8,65 +8,65 @@ module TK.SpaceTac {
             ship.addSlot(SlotType.Hull).attach(equipment);
             ship.values.power.setMaximal(10);
 
-            expect(action.checkCannotBeApplied(ship)).toBe("not enough power");
+            check.equals(action.checkCannotBeApplied(ship), "not enough power");
 
             ship.values.power.set(5);
 
-            expect(action.checkCannotBeApplied(ship)).toBe(null);
-            expect(action.checkCannotBeApplied(ship, 4)).toBe(null);
-            expect(action.checkCannotBeApplied(ship, 3)).toBe(null);
-            expect(action.checkCannotBeApplied(ship, 2)).toBe("not enough power");
+            check.equals(action.checkCannotBeApplied(ship), null);
+            check.equals(action.checkCannotBeApplied(ship, 4), null);
+            check.equals(action.checkCannotBeApplied(ship, 3), null);
+            check.equals(action.checkCannotBeApplied(ship, 2), "not enough power");
 
             ship.values.power.set(3);
 
-            expect(action.checkCannotBeApplied(ship)).toBe(null);
+            check.equals(action.checkCannotBeApplied(ship), null);
 
             ship.values.power.set(2);
 
-            expect(action.checkCannotBeApplied(ship)).toBe("not enough power");
+            check.equals(action.checkCannotBeApplied(ship), "not enough power");
         })
 
-        it("check if equipment can be used with overheat", function () {
+        test.case("check if equipment can be used with overheat", check => {
             let equipment = new Equipment();
             let action = new BaseAction("test", "Test", equipment);
             let ship = new Ship();
 
-            expect(action.checkCannotBeApplied(ship)).toBe(null);
-            expect(action.getUsesBeforeOverheat()).toBe(Infinity);
+            check.equals(action.checkCannotBeApplied(ship), null);
+            check.same(action.getUsesBeforeOverheat(), Infinity);
 
             equipment.cooldown.use();
-            expect(action.checkCannotBeApplied(ship)).toBe(null);
-            expect(action.getUsesBeforeOverheat()).toBe(Infinity);
+            check.equals(action.checkCannotBeApplied(ship), null);
+            check.same(action.getUsesBeforeOverheat(), Infinity);
 
             equipment.cooldown.configure(2, 3);
-            expect(action.checkCannotBeApplied(ship)).toBe(null);
-            expect(action.getUsesBeforeOverheat()).toBe(2);
+            check.equals(action.checkCannotBeApplied(ship), null);
+            check.equals(action.getUsesBeforeOverheat(), 2);
 
             equipment.cooldown.use();
-            expect(action.checkCannotBeApplied(ship)).toBe(null);
-            expect(action.getUsesBeforeOverheat()).toBe(1);
-            expect(action.getCooldownDuration()).toBe(0);
+            check.equals(action.checkCannotBeApplied(ship), null);
+            check.equals(action.getUsesBeforeOverheat(), 1);
+            check.equals(action.getCooldownDuration(), 0);
 
             equipment.cooldown.use();
-            expect(action.checkCannotBeApplied(ship)).toBe("overheated");
-            expect(action.getUsesBeforeOverheat()).toBe(0);
-            expect(action.getCooldownDuration()).toBe(3);
+            check.equals(action.checkCannotBeApplied(ship), "overheated");
+            check.equals(action.getUsesBeforeOverheat(), 0);
+            check.equals(action.getCooldownDuration(), 3);
 
             equipment.cooldown.cool();
-            expect(action.checkCannotBeApplied(ship)).toBe("overheated");
-            expect(action.getCooldownDuration()).toBe(2);
+            check.equals(action.checkCannotBeApplied(ship), "overheated");
+            check.equals(action.getCooldownDuration(), 2);
 
             equipment.cooldown.cool();
-            expect(action.checkCannotBeApplied(ship)).toBe("overheated");
-            expect(action.getCooldownDuration()).toBe(1);
+            check.equals(action.checkCannotBeApplied(ship), "overheated");
+            check.equals(action.getCooldownDuration(), 1);
 
             equipment.cooldown.cool();
-            expect(action.checkCannotBeApplied(ship)).toBe(null);
-            expect(action.getCooldownDuration()).toBe(0);
-            expect(action.getCooldownDuration(true)).toBe(3);
+            check.equals(action.checkCannotBeApplied(ship), null);
+            check.equals(action.getCooldownDuration(), 0);
+            check.equals(action.getCooldownDuration(true), 3);
         })
 
-        it("wears down equipment and power generators", function () {
+        test.case("wears down equipment and power generators", check => {
             let ship = new Ship();
             TestTools.setShipAP(ship, 10);
             let power = ship.listEquipment(SlotType.Power)[0];
@@ -75,12 +75,12 @@ module TK.SpaceTac {
 
             spyOn(action, "checkTarget").and.callFake((ship: Ship, target: Target) => target);
 
-            expect(power.wear).toBe(0);
-            expect(equipment.wear).toBe(0);
+            check.equals(power.wear, 0);
+            check.equals(equipment.wear, 0);
             action.apply(ship);
 
-            expect(power.wear).toBe(1);
-            expect(equipment.wear).toBe(1);
+            check.equals(power.wear, 1);
+            check.equals(equipment.wear, 1);
         })
     });
 }

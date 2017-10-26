@@ -1,6 +1,6 @@
 module TK.SpaceTac.Specs {
-    describe("DamageEffect", function () {
-        it("applies damage and wear", function () {
+    testing("DamageEffect", test => {
+        test.case("applies damage and wear", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
 
@@ -9,49 +9,49 @@ module TK.SpaceTac.Specs {
             let shield = ship.listEquipment(SlotType.Shield)[0];
             ship.restoreHealth();
 
-            expect(ship.getValue("hull")).toEqual(150);
-            expect(ship.getValue("shield")).toEqual(400);
-            expect(hull.wear).toBe(0);
-            expect(shield.wear).toBe(0);
+            check.equals(ship.getValue("hull"), 150);
+            check.equals(ship.getValue("shield"), 400);
+            check.equals(hull.wear, 0);
+            check.equals(shield.wear, 0);
 
             new DamageEffect(50).applyOnShip(ship, ship);
-            expect(ship.getValue("hull")).toEqual(150);
-            expect(ship.getValue("shield")).toEqual(350);
-            expect(hull.wear).toBe(0);
-            expect(shield.wear).toBe(1);
+            check.equals(ship.getValue("hull"), 150);
+            check.equals(ship.getValue("shield"), 350);
+            check.equals(hull.wear, 0);
+            check.equals(shield.wear, 1);
 
             new DamageEffect(250).applyOnShip(ship, ship);
-            expect(ship.getValue("hull")).toEqual(150);
-            expect(ship.getValue("shield")).toEqual(100);
-            expect(hull.wear).toBe(0);
-            expect(shield.wear).toBe(4);
+            check.equals(ship.getValue("hull"), 150);
+            check.equals(ship.getValue("shield"), 100);
+            check.equals(hull.wear, 0);
+            check.equals(shield.wear, 4);
 
             new DamageEffect(201).applyOnShip(ship, ship);
-            expect(ship.getValue("hull")).toEqual(49);
-            expect(ship.getValue("shield")).toEqual(0);
-            expect(hull.wear).toBe(2);
-            expect(shield.wear).toBe(5);
-            expect(ship.alive).toBe(true);
+            check.equals(ship.getValue("hull"), 49);
+            check.equals(ship.getValue("shield"), 0);
+            check.equals(hull.wear, 2);
+            check.equals(shield.wear, 5);
+            check.equals(ship.alive, true);
 
             new DamageEffect(8000).applyOnShip(ship, ship);
-            expect(ship.getValue("hull")).toEqual(0);
-            expect(ship.getValue("shield")).toEqual(0);
-            expect(hull.wear).toBe(3);
-            expect(shield.wear).toBe(5);
-            expect(ship.alive).toBe(false);
+            check.equals(ship.getValue("hull"), 0);
+            check.equals(ship.getValue("shield"), 0);
+            check.equals(hull.wear, 3);
+            check.equals(shield.wear, 5);
+            check.equals(ship.alive, false);
         });
 
-        it("gets a textual description", function () {
-            expect(new DamageEffect(10).getDescription()).toEqual("do 10 damage");
-            expect(new DamageEffect(10, 5).getDescription()).toEqual("do 10-15 damage");
+        test.case("gets a textual description", check => {
+            check.equals(new DamageEffect(10).getDescription(), "do 10 damage");
+            check.equals(new DamageEffect(10, 5).getDescription(), "do 10-15 damage");
         });
 
-        it("applies damage modifiers", function () {
+        test.case("applies damage modifiers", check => {
             let ship = new Ship();
             TestTools.setShipHP(ship, 1000, 1000);
             let damage = new DamageEffect(200);
 
-            expect(damage.getEffectiveDamage(ship)).toEqual([200, 0]);
+            check.equals(damage.getEffectiveDamage(ship), [200, 0]);
 
             spyOn(ship, "ieffects").and.returnValues(
                 isingle(new DamageModifierEffect(-15)),
@@ -62,14 +62,14 @@ module TK.SpaceTac.Specs {
                 isingle(new DamageModifierEffect(3))
             );
 
-            expect(damage.getEffectiveDamage(ship)).toEqual([170, 0]);
-            expect(damage.getEffectiveDamage(ship)).toEqual([240, 0]);
-            expect(damage.getEffectiveDamage(ship)).toEqual([0, 0]);
-            expect(damage.getEffectiveDamage(ship)).toEqual([400, 0]);
-            expect(damage.getEffectiveDamage(ship)).toEqual([190, 0]);
+            check.equals(damage.getEffectiveDamage(ship), [170, 0]);
+            check.equals(damage.getEffectiveDamage(ship), [240, 0]);
+            check.equals(damage.getEffectiveDamage(ship), [0, 0]);
+            check.equals(damage.getEffectiveDamage(ship), [400, 0]);
+            check.equals(damage.getEffectiveDamage(ship), [190, 0]);
 
             damage = new DamageEffect(40);
-            expect(damage.getEffectiveDamage(ship)).toEqual([41, 0]);
+            check.equals(damage.getEffectiveDamage(ship), [41, 0]);
         });
     });
 }

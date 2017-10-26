@@ -1,10 +1,10 @@
 module TK.SpaceTac.Specs {
-    describe("RepelEffect", function () {
-        it("shows a textual description", function () {
-            expect(new RepelEffect(34).getDescription()).toEqual("repel ships 34km away");
+    testing("RepelEffect", test => {
+        test.case("shows a textual description", check => {
+            check.equals(new RepelEffect(34).getDescription(), "repel ships 34km away");
         })
             
-        it("repel other ships from a central point", function () {
+        test.case("repel other ships from a central point", check => {
             let battle = new Battle();
             let ship1a = battle.fleets[0].addShip();
             ship1a.setArenaPosition(100, 100);
@@ -18,12 +18,12 @@ module TK.SpaceTac.Specs {
             effect.applyOnShip(ship1b, ship1a);
             effect.applyOnShip(ship2a, ship1a);
 
-            expect(ship1a.location).toEqual(new ArenaLocationAngle(100, 100));
-            expect(ship1b.location).toEqual(new ArenaLocationAngle(262, 100));
-            expect(ship2a.location).toEqual(new ArenaLocationAngle(100, 292));
+            check.equals(ship1a.location, new ArenaLocationAngle(100, 100));
+            check.equals(ship1b.location, new ArenaLocationAngle(262, 100));
+            check.equals(ship2a.location, new ArenaLocationAngle(100, 292));
         })
 
-        it("does not push a ship inside a hard exclusion area", function () {
+        test.case("does not push a ship inside a hard exclusion area", check => {
             let battle = new Battle();
             let ship1a = battle.fleets[0].addShip();
             ship1a.setArenaPosition(100, 100);
@@ -34,7 +34,7 @@ module TK.SpaceTac.Specs {
 
             let effect = new RepelEffect(85);
             effect.applyOnShip(ship2a, ship1a);
-            expect(ship2a.location).toEqual(new ArenaLocationAngle(100, 250));
+            check.equals(ship2a.location, new ArenaLocationAngle(100, 250));
         })
     })
 }

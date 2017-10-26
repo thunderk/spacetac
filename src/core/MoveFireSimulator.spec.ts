@@ -1,5 +1,5 @@
 module TK.SpaceTac.Specs {
-    describe("MoveFireSimulator", function () {
+    testing("MoveFireSimulator", test => {
 
         function simpleWeaponCase(distance = 10, ship_ap = 5, weapon_ap = 3, engine_distance = 5): [Ship, MoveFireSimulator, BaseAction] {
             let ship = new Ship();
@@ -10,90 +10,90 @@ module TK.SpaceTac.Specs {
             return [ship, simulator, action];
         }
 
-        it("finds the best engine to make a move", function () {
+        test.case("finds the best engine to make a move", check => {
             let ship = new Ship();
             let simulator = new MoveFireSimulator(ship);
-            expect(simulator.findBestEngine()).toBe(null);
+            check.equals(simulator.findBestEngine(), null);
             let engine1 = TestTools.addEngine(ship, 100);
-            expect(simulator.findBestEngine()).toBe(engine1);
+            check.same(simulator.findBestEngine(), engine1);
             let engine2 = TestTools.addEngine(ship, 120);
             let engine3 = TestTools.addEngine(ship, 150);
             let engine4 = TestTools.addEngine(ship, 70);
             let best = simulator.findBestEngine();
-            expect(best).toBe(engine3);
-            expect((<MoveAction>nn(best).action).distance_per_power).toBe(150);
+            check.same(best, engine3);
+            check.equals((<MoveAction>nn(best).action).distance_per_power, 150);
         });
 
-        it("fires directly when in range", function () {
+        test.case("fires directly when in range", check => {
             let [ship, simulator, action] = simpleWeaponCase();
             let result = simulator.simulateAction(action, new Target(ship.arena_x + 5, ship.arena_y, null));
 
-            expect(result.success).toBe(true, 'success');
-            expect(result.need_move).toBe(false, 'need_move');
-            expect(result.need_fire).toBe(true, 'need_fire');
-            expect(result.can_fire).toBe(true, 'can_fire');
-            expect(result.total_fire_ap).toBe(3, 'total_fire_ap');
+            check.same(result.success, true, 'success');
+            check.same(result.need_move, false, 'need_move');
+            check.same(result.need_fire, true, 'need_fire');
+            check.same(result.can_fire, true, 'can_fire');
+            check.same(result.total_fire_ap, 3, 'total_fire_ap');
 
-            expect(<any[]>result.parts).toEqual([
+            check.equals(<any[]>result.parts, [
                 { action: jasmine.objectContaining({ code: "fire-equipment" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: true }
             ]);
         });
 
-        it("can't fire when in range, but not enough AP", function () {
+        test.case("can't fire when in range, but not enough AP", check => {
             let [ship, simulator, action] = simpleWeaponCase(10, 2, 3);
             let result = simulator.simulateAction(action, new Target(ship.arena_x + 5, ship.arena_y, null));
-            expect(result.success).toBe(true, 'success');
-            expect(result.need_move).toBe(false, 'need_move');
-            expect(result.need_fire).toBe(true, 'need_fire');
-            expect(result.can_fire).toBe(false, 'can_fire');
-            expect(result.total_fire_ap).toBe(3, 'total_fire_ap');
+            check.same(result.success, true, 'success');
+            check.same(result.need_move, false, 'need_move');
+            check.same(result.need_fire, true, 'need_fire');
+            check.same(result.can_fire, false, 'can_fire');
+            check.same(result.total_fire_ap, 3, 'total_fire_ap');
 
-            expect(<any[]>result.parts).toEqual([
+            check.equals(<any[]>result.parts, [
                 { action: jasmine.objectContaining({ code: "fire-equipment" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: false }
             ]);
         });
 
-        it("moves straight to get within range", function () {
+        test.case("moves straight to get within range", check => {
             let [ship, simulator, action] = simpleWeaponCase();
             let result = simulator.simulateAction(action, new Target(ship.arena_x + 15, ship.arena_y, null));
-            expect(result.success).toBe(true, 'success');
-            expect(result.need_move).toBe(true, 'need_move');
-            expect(result.can_end_move).toBe(true, 'can_end_move');
-            expect(result.move_location).toEqual(new Target(ship.arena_x + 5, ship.arena_y, null));
-            expect(result.total_move_ap).toBe(1);
-            expect(result.need_fire).toBe(true, 'need_fire');
-            expect(result.can_fire).toBe(true, 'can_fire');
-            expect(result.total_fire_ap).toBe(3, 'total_fire_ap');
+            check.same(result.success, true, 'success');
+            check.same(result.need_move, true, 'need_move');
+            check.same(result.can_end_move, true, 'can_end_move');
+            check.equals(result.move_location, new Target(ship.arena_x + 5, ship.arena_y, null));
+            check.equals(result.total_move_ap, 1);
+            check.same(result.need_fire, true, 'need_fire');
+            check.same(result.can_fire, true, 'can_fire');
+            check.same(result.total_fire_ap, 3, 'total_fire_ap');
 
-            expect(<any[]>result.parts).toEqual([
+            check.equals(<any[]>result.parts, [
                 { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 1, possible: true },
                 { action: jasmine.objectContaining({ code: "fire-equipment" }), target: new Target(ship.arena_x + 15, ship.arena_y, null), ap: 3, possible: true }
             ]);
         });
 
-        it("scans a circle for move targets", function () {
+        test.case("scans a circle for move targets", check => {
             let simulator = new MoveFireSimulator(new Ship());
 
             let result = simulator.scanCircle(50, 30, 10, 1, 1);
-            expect(imaterialize(result)).toEqual([
+            check.equals(imaterialize(result), [
                 new Target(50, 30)
             ]);
 
             result = simulator.scanCircle(50, 30, 10, 2, 1);
-            expect(imaterialize(result)).toEqual([
+            check.equals(imaterialize(result), [
                 new Target(50, 30),
                 new Target(60, 30)
             ]);
 
             result = simulator.scanCircle(50, 30, 10, 2, 2);
-            expect(imaterialize(result)).toEqual([
+            check.equals(imaterialize(result), [
                 new Target(50, 30),
                 new Target(60, 30),
                 new Target(40, 30)
             ]);
 
             result = simulator.scanCircle(50, 30, 10, 3, 4);
-            expect(imaterialize(result)).toEqual([
+            check.equals(imaterialize(result), [
                 new Target(50, 30),
                 new Target(55, 30),
                 new Target(45, 30),
@@ -104,7 +104,7 @@ module TK.SpaceTac.Specs {
             ]);
         });
 
-        it("accounts for exclusion areas for the approach", function () {
+        test.case("accounts for exclusion areas for the approach", check => {
             let [ship, simulator, action] = simpleWeaponCase(100, 5, 1, 50);
             ship.setArenaPosition(300, 200);
             let battle = new Battle();
@@ -114,9 +114,9 @@ module TK.SpaceTac.Specs {
             moveaction.safety_distance = 30;
             battle.ship_separation = 30;
 
-            expect(simulator.getApproach(moveaction, Target.newFromLocation(350, 200), 100)).toBe(ApproachSimulationError.NO_MOVE_NEEDED);
-            expect(simulator.getApproach(moveaction, Target.newFromLocation(400, 200), 100)).toBe(ApproachSimulationError.NO_MOVE_NEEDED);
-            expect(simulator.getApproach(moveaction, Target.newFromLocation(500, 200), 100)).toEqual(new Target(400, 200));
+            check.same(simulator.getApproach(moveaction, Target.newFromLocation(350, 200), 100), ApproachSimulationError.NO_MOVE_NEEDED);
+            check.same(simulator.getApproach(moveaction, Target.newFromLocation(400, 200), 100), ApproachSimulationError.NO_MOVE_NEEDED);
+            check.equals(simulator.getApproach(moveaction, Target.newFromLocation(500, 200), 100), new Target(400, 200));
 
             ship1.setArenaPosition(420, 200);
 
@@ -127,46 +127,46 @@ module TK.SpaceTac.Specs {
                 new Target(420, 210),
                 new Target(480, 260),
             ]));
-            expect(simulator.getApproach(moveaction, Target.newFromLocation(500, 200), 100)).toEqual(new Target(410, 230));
+            check.equals(simulator.getApproach(moveaction, Target.newFromLocation(500, 200), 100), new Target(410, 230));
         });
 
-        it("moves to get in range, even if not enough AP to fire", function () {
+        test.case("moves to get in range, even if not enough AP to fire", check => {
             let [ship, simulator, action] = simpleWeaponCase(8, 3, 2, 5);
             let result = simulator.simulateAction(action, new Target(ship.arena_x + 18, ship.arena_y, null));
-            expect(result.success).toBe(true, 'success');
-            expect(result.need_move).toBe(true, 'need_move');
-            expect(result.can_end_move).toBe(true, 'can_end_move');
-            expect(result.move_location).toEqual(new Target(ship.arena_x + 10, ship.arena_y, null));
-            expect(result.total_move_ap).toBe(2);
-            expect(result.need_fire).toBe(true, 'need_fire');
-            expect(result.can_fire).toBe(false, 'can_fire');
-            expect(result.total_fire_ap).toBe(2, 'total_fire_ap');
+            check.same(result.success, true, 'success');
+            check.same(result.need_move, true, 'need_move');
+            check.same(result.can_end_move, true, 'can_end_move');
+            check.equals(result.move_location, new Target(ship.arena_x + 10, ship.arena_y, null));
+            check.equals(result.total_move_ap, 2);
+            check.same(result.need_fire, true, 'need_fire');
+            check.same(result.can_fire, false, 'can_fire');
+            check.same(result.total_fire_ap, 2, 'total_fire_ap');
 
-            expect(<any[]>result.parts).toEqual([
+            check.equals(<any[]>result.parts, [
                 { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 10, ship.arena_y, null), ap: 2, possible: true },
                 { action: jasmine.objectContaining({ code: "fire-equipment" }), target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2, possible: false }
             ]);
         });
 
-        it("does nothing if trying to move in the same spot", function () {
+        test.case("does nothing if trying to move in the same spot", check => {
             let [ship, simulator, action] = simpleWeaponCase();
             let move_action = nn(ship.listEquipment(SlotType.Engine)[0].action)
             let result = simulator.simulateAction(move_action, new Target(ship.arena_x, ship.arena_y, null));
-            expect(result.success).toBe(false);
-            expect(result.need_move).toBe(false);
-            expect(result.need_fire).toBe(false);
-            expect(result.parts).toEqual([]);
+            check.equals(result.success, false);
+            check.equals(result.need_move, false);
+            check.equals(result.need_fire, false);
+            check.equals(result.parts, []);
         });
 
-        it("does not move if already in range, even if in the safety margin", function () {
+        test.case("does not move if already in range, even if in the safety margin", check => {
             let [ship, simulator, action] = simpleWeaponCase(100);
             let result = simulator.simulateAction(action, new Target(ship.arena_x + 97, ship.arena_y, null), 5);
-            expect(result.success).toBe(true);
-            expect(result.need_move).toBe(false);
+            check.equals(result.success, true);
+            check.equals(result.need_move, false);
             result = simulator.simulateAction(action, new Target(ship.arena_x + 101, ship.arena_y, null), 5);
-            expect(result.success).toBe(true);
-            expect(result.need_move).toBe(true);
-            expect(result.move_location).toEqual(new Target(ship.arena_x + 6, ship.arena_y));
+            check.equals(result.success, true);
+            check.equals(result.need_move, true);
+            check.equals(result.move_location, new Target(ship.arena_x + 6, ship.arena_y));
         });
     });
 }

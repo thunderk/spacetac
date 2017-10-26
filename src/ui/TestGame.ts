@@ -1,3 +1,5 @@
+/// <reference path="../common/Testing.ts" />
+
 module TK.SpaceTac.UI.Specs {
     let test_ui: MainUI;
 
@@ -11,6 +13,7 @@ module TK.SpaceTac.UI.Specs {
         view: T;
         multistorage: Multi.FakeRemoteStorage;
         state: string;
+        clock: FakeClock;
     }
 
     /**
@@ -22,8 +25,6 @@ module TK.SpaceTac.UI.Specs {
         beforeEach(function (done) {
             spyOn(console, "log").and.stub();
             spyOn(console, "warn").and.stub();
-
-            jasmine.clock().install();
 
             if (!test_ui) {
                 test_ui = new MainUI(true);
@@ -65,10 +66,6 @@ module TK.SpaceTac.UI.Specs {
             }
 
             testgame.view = state;
-        });
-
-        afterEach(function () {
-            jasmine.clock().uninstall();
         });
 
         return testgame;
@@ -114,23 +111,23 @@ module TK.SpaceTac.UI.Specs {
     /**
      * Check a given text node
      */
-    export function checkText(node: any, content: string): void {
-        expect(node instanceof Phaser.Text).toBe(true);
+    export function checkText(check: TestContext, node: any, content: string): void {
+        check.equals(node instanceof Phaser.Text, true);
 
         let tnode = <Phaser.Text>node;
-        expect(tnode.text).toEqual(content);
+        check.equals(tnode.text, content);
     }
 
     /**
      * Check that a layer contains the given component at a given index
      */
-    export function checkComponentInLayer(layer: Phaser.Group, index: number, component: UIComponent) {
+    export function checkComponentInLayer(check: TestContext, layer: Phaser.Group, index: number, component: UIComponent) {
         if (index >= layer.children.length) {
-            fail(`Not enough children in group ${layer.name} for ${component} at index ${index}`);
+            check.fail(`Not enough children in group ${layer.name} for ${component} at index ${index}`);
         } else {
             let child = layer.children[index];
             if (child !== (<any>component).container) {
-                fail(`${component} is not at index ${index} in ${layer.name}`);
+                check.fail(`${component} is not at index ${index} in ${layer.name}`);
             }
         }
     }

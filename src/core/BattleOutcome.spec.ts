@@ -1,6 +1,6 @@
 module TK.SpaceTac.Specs {
-    describe("BattleOutcome", () => {
-        it("generates loot from defeated ships", () => {
+    testing("BattleOutcome", test => {
+        test.case("generates loot from defeated ships", check => {
             var fleet1 = new Fleet();
             fleet1.addShip(new Ship());
             var fleet2 = new Fleet();
@@ -44,19 +44,19 @@ module TK.SpaceTac.Specs {
 
             outcome.createLoot(battle, random);
 
-            expect(outcome.loot.length).toBe(3);
-            expect(outcome.loot[0].name).toBe("0a");
-            expect(outcome.loot[1].name).toBe("Nuclear Reactor");
-            expect(outcome.loot[1].level).toBe(4);
-            expect(outcome.loot[1].quality).toBe(EquipmentQuality.COMMON);
-            expect(outcome.loot[1].requirements).toEqual({ "skill_photons": 7 });
-            expect(outcome.loot[2].name).toBe("Nuclear Reactor");
-            expect(outcome.loot[2].level).toBe(6);
-            expect(outcome.loot[2].quality).toBe(EquipmentQuality.PREMIUM);
-            expect(outcome.loot[2].requirements).toEqual({ "skill_photons": 9 });
+            check.equals(outcome.loot.length, 3);
+            check.equals(outcome.loot[0].name, "0a");
+            check.equals(outcome.loot[1].name, "Nuclear Reactor");
+            check.equals(outcome.loot[1].level, 4);
+            check.same(outcome.loot[1].quality, EquipmentQuality.COMMON);
+            check.equals(outcome.loot[1].requirements, { "skill_photons": 7 });
+            check.equals(outcome.loot[2].name, "Nuclear Reactor");
+            check.equals(outcome.loot[2].level, 6);
+            check.same(outcome.loot[2].quality, EquipmentQuality.PREMIUM);
+            check.equals(outcome.loot[2].requirements, { "skill_photons": 9 });
         });
 
-        it("grants experience", function () {
+        test.case("grants experience", check => {
             let fleet1 = new Fleet();
             let ship1a = fleet1.addShip(new Ship());
             ship1a.level.forceLevel(3);
@@ -67,26 +67,26 @@ module TK.SpaceTac.Specs {
             ship2a.level.forceLevel(6);
             let ship2b = fleet2.addShip(new Ship());
             ship2b.level.forceLevel(8);
-            expect(ship1a.level.getExperience()).toEqual(300);
-            expect(ship1b.level.getExperience()).toEqual(600);
-            expect(ship2a.level.getExperience()).toEqual(1500);
-            expect(ship2b.level.getExperience()).toEqual(2800);
+            check.equals(ship1a.level.getExperience(), 300);
+            check.equals(ship1b.level.getExperience(), 600);
+            check.equals(ship2a.level.getExperience(), 1500);
+            check.equals(ship2b.level.getExperience(), 2800);
 
             // draw
             let outcome = new BattleOutcome(null);
             outcome.grantExperience([fleet1, fleet2]);
-            expect(ship1a.level.getExperience()).toEqual(345);
-            expect(ship1b.level.getExperience()).toEqual(645);
-            expect(ship2a.level.getExperience()).toEqual(1511);
-            expect(ship2b.level.getExperience()).toEqual(2811);
+            check.equals(ship1a.level.getExperience(), 345);
+            check.equals(ship1b.level.getExperience(), 645);
+            check.equals(ship2a.level.getExperience(), 1511);
+            check.equals(ship2b.level.getExperience(), 2811);
 
             // win/lose
             outcome = new BattleOutcome(fleet1);
             outcome.grantExperience([fleet1, fleet2]);
-            expect(ship1a.level.getExperience()).toEqual(480);
-            expect(ship1b.level.getExperience()).toEqual(780);
-            expect(ship2a.level.getExperience()).toEqual(1518);
-            expect(ship2b.level.getExperience()).toEqual(2818);
+            check.equals(ship1a.level.getExperience(), 480);
+            check.equals(ship1b.level.getExperience(), 780);
+            check.equals(ship2a.level.getExperience(), 1518);
+            check.equals(ship2b.level.getExperience(), 2818);
         });
     });
 }

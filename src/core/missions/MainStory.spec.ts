@@ -1,11 +1,11 @@
 module TK.SpaceTac.Specs {
-    describe("MainStory", () => {
+    testing("MainStory", test => {
         function checkPart(story: Mission, index: number, title: string, completed = false) {
             let result = story.checkStatus();
-            expect(story.parts.indexOf(story.current_part)).toBe(index);
+            test.check.same(story.parts.indexOf(story.current_part), index);
             expect(story.current_part.title).toMatch(title);
-            expect(story.completed).toBe(completed);
-            expect(result).toBe(!completed);
+            test.check.same(story.completed, completed);
+            test.check.same(result, !completed);
         }
 
         function goTo(fleet: Fleet, location: StarLocation, win_encounter = true) {
@@ -20,7 +20,7 @@ module TK.SpaceTac.Specs {
             }
         }
 
-        it("can be completed", function () {
+        test.case("can be completed", check => {
             let session = new GameSession();
             session.startNewGame(true, true);
             let fleet = nn(session.player.fleet);
@@ -39,18 +39,18 @@ module TK.SpaceTac.Specs {
             (<MissionPartConversation>story.current_part).skip();
 
             checkPart(story, 3, "^Go with .* in .* system$");
-            expect(fleet.ships.length).toBe(fleet_size + 1);
+            check.same(fleet.ships.length, fleet_size + 1);
             goTo(fleet, (<MissionPartEscort>story.current_part).destination);
 
             checkPart(story, 4, "^Listen to .*$");
             (<MissionPartConversation>story.current_part).skip();
-            expect(session.getBattle()).toBeNull();
+            check.equals(session.getBattle(), null);
 
             checkPart(story, 5, "^Fight the arrived fleet$");
-            expect(session.getBattle()).not.toBeNull();
+            check.notequals(session.getBattle(), null);
             nn(session.getBattle()).endBattle(fleet);
 
-            expect(story.checkStatus()).toBe(false, "story not complete");
+            check.same(story.checkStatus(), false, "story not complete");
         })
     })
 }

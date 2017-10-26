@@ -1,48 +1,48 @@
 module TK.SpaceTac.UI.Specs {
-    describe("UIComponent", () => {
+    testing("UIComponent", test => {
         let testgame = setupEmptyView();
 
-        it("controls visibility", function () {
+        test.case("controls visibility", check => {
             let component = new UIComponent(testgame.view, 50, 50);
 
             let container = <Phaser.Group>(<any>component).container;
-            expect(container.visible).toBe(true);
+            check.equals(container.visible, true);
 
             component.setVisible(false);
-            expect(container.visible).toBe(false);
+            check.equals(container.visible, false);
 
             component.setVisible(true);
-            expect(container.visible).toBe(true);
+            check.equals(container.visible, true);
 
             // with transition
             component.setVisible(false, 500);
-            expect(container.visible).toBe(true);
-            expect(testgame.view.animations.simulate(container, 'alpha')).toEqual([1, 0.5, 0]);
+            check.equals(container.visible, true);
+            check.equals(testgame.view.animations.simulate(container, 'alpha'), [1, 0.5, 0]);
         });
 
-        it("sets position inside parent", function () {
+        test.case("sets position inside parent", check => {
             let comp1 = new UIComponent(testgame.view, 100, 100);
-            expect(comp1.getPosition()).toEqual([0, 0]);
+            check.equals(comp1.getPosition(), [0, 0]);
             comp1.setPositionInsideParent(1, 1);
-            expect(comp1.getPosition()).toEqual([1820, 980]);
+            check.equals(comp1.getPosition(), [1820, 980]);
             comp1.setPositionInsideParent(0.5, 0.5);
-            expect(comp1.getPosition()).toEqual([910, 490]);
+            check.equals(comp1.getPosition(), [910, 490]);
 
             let comp2 = new UIComponent(comp1, 50, 50);
-            expect(comp2.getPosition()).toEqual([910, 490]);
-            expect(comp2.getPosition(true)).toEqual([0, 0]);
+            check.equals(comp2.getPosition(), [910, 490]);
+            check.equals(comp2.getPosition(true), [0, 0]);
             comp2.setPositionInsideParent(1, 0);
-            expect(comp2.getPosition()).toEqual([960, 490]);
-            expect(comp2.getPosition(true)).toEqual([50, 0]);
+            check.equals(comp2.getPosition(), [960, 490]);
+            check.equals(comp2.getPosition(true), [50, 0]);
 
             comp1.setPositionInsideParent(0, 0);
-            expect(comp1.getPosition()).toEqual([0, 0]);
-            expect(comp2.getPosition()).toEqual([50, 0]);
+            check.equals(comp1.getPosition(), [0, 0]);
+            check.equals(comp2.getPosition(), [50, 0]);
 
             comp1.setPositionInsideParent(0.654, 0.321, false);
-            expect(comp1.getPosition()).toEqual([1190.28, 314.58]);
+            check.equals(comp1.getPosition(), [1190.28, 314.58]);
             comp1.setPositionInsideParent(0.654, 0.321);
-            expect(comp1.getPosition()).toEqual([1190, 315]);
+            check.equals(comp1.getPosition(), [1190, 315]);
         });
     });
 }

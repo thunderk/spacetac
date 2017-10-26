@@ -1,19 +1,19 @@
 /// <reference path="TestGame.ts" />
 
 module TK.SpaceTac.UI.Specs {
-    describe("BaseView", function () {
+    testing("BaseView", test => {
         let testgame = setupEmptyView();
 
-        it("initializes variables", function () {
+        test.case("initializes variables", check => {
             let view = <BaseView>testgame.ui.state.getCurrentState();
 
-            expect(view.messages instanceof Messages).toBe(true);
-            expect(view.inputs instanceof InputManager).toBe(true);
+            check.equals(view.messages instanceof Messages, true);
+            check.equals(view.inputs instanceof InputManager, true);
 
-            expect(view.getWidth()).toEqual(1920);
-            expect(view.getHeight()).toEqual(1080);
-            expect(view.getMidWidth()).toEqual(960);
-            expect(view.getMidHeight()).toEqual(540);
+            check.equals(view.getWidth(), 1920);
+            check.equals(view.getHeight(), 1080);
+            check.equals(view.getMidWidth(), 960);
+            check.equals(view.getMidHeight(), 540);
         });
     });
 }

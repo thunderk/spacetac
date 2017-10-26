@@ -1,6 +1,6 @@
 module TK.SpaceTac {
-    describe("Player", function () {
-        it("keeps track of visited locations", function () {
+    testing("Player", test => {
+        test.case("keeps track of visited locations", check => {
             let player = new Player();
             let star1 = new Star();
             let star2 = new Star();
@@ -10,12 +10,12 @@ module TK.SpaceTac {
             let loc2b = new StarLocation(star2);
 
             function checkVisited(s1 = false, s2 = false, v1a = false, v1b = false, v2a = false, v2b = false) {
-                expect(player.hasVisitedSystem(star1)).toBe(s1);
-                expect(player.hasVisitedSystem(star2)).toBe(s2);
-                expect(player.hasVisitedLocation(loc1a)).toBe(v1a);
-                expect(player.hasVisitedLocation(loc1b)).toBe(v1b);
-                expect(player.hasVisitedLocation(loc2a)).toBe(v2a);
-                expect(player.hasVisitedLocation(loc2b)).toBe(v2b);
+                check.same(player.hasVisitedSystem(star1), s1);
+                check.same(player.hasVisitedSystem(star2), s2);
+                check.same(player.hasVisitedLocation(loc1a), v1a);
+                check.same(player.hasVisitedLocation(loc1b), v1b);
+                check.same(player.hasVisitedLocation(loc2a), v2a);
+                check.same(player.hasVisitedLocation(loc2b), v2b);
             }
 
             checkVisited();
@@ -37,7 +37,7 @@ module TK.SpaceTac {
             checkVisited(true, true, true, true, true, false);
         });
 
-        it("reverts battle", function () {
+        test.case("reverts battle", check => {
             let player = new Player();
             let star = new Star();
             let loc1 = new StarLocation(star);
@@ -46,25 +46,25 @@ module TK.SpaceTac {
             loc2.encounter_random = new SkewedRandomGenerator([0], true);
 
             player.fleet.setLocation(loc1);
-            expect(player.getBattle()).toBeNull();
-            expect(player.fleet.location).toBe(loc1);
+            check.equals(player.getBattle(), null);
+            check.same(player.fleet.location, loc1);
 
             player.fleet.setLocation(loc2);
-            expect(player.getBattle()).not.toBeNull();
-            expect(player.fleet.location).toBe(loc2);
-            expect(player.hasVisitedLocation(loc2)).toBe(true);
+            check.notequals(player.getBattle(), null);
+            check.same(player.fleet.location, loc2);
+            check.equals(player.hasVisitedLocation(loc2), true);
             let enemy = loc2.encounter;
 
             player.revertBattle();
-            expect(player.getBattle()).toBeNull();
-            expect(player.fleet.location).toBe(loc1);
-            expect(player.hasVisitedLocation(loc2)).toBe(true);
+            check.equals(player.getBattle(), null);
+            check.same(player.fleet.location, loc1);
+            check.equals(player.hasVisitedLocation(loc2), true);
 
             player.fleet.setLocation(loc2);
-            expect(player.getBattle()).not.toBeNull();
-            expect(player.fleet.location).toBe(loc2);
-            expect(player.hasVisitedLocation(loc2)).toBe(true);
-            expect(nn(player.getBattle()).fleets[1]).toBe(nn(enemy));
+            check.notequals(player.getBattle(), null);
+            check.same(player.fleet.location, loc2);
+            check.equals(player.hasVisitedLocation(loc2), true);
+            check.same(nn(player.getBattle()).fleets[1], nn(enemy));
         });
     });
 }

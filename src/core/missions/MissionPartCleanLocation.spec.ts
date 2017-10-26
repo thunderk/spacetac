@@ -1,6 +1,6 @@
 module TK.SpaceTac.Specs {
-    describe("MissionPartEscort", () => {
-        it("completes when the fleet is at location, and the encounter is clean", function () {
+    testing("MissionPartEscort", test => {
+        test.case("completes when the fleet is at location, and the encounter is clean", check => {
             let destination = new StarLocation(new Star(null, 0, 0, "Atanax"));
             destination.clearEncounter();
 
@@ -8,21 +8,21 @@ module TK.SpaceTac.Specs {
             let fleet = new Fleet();
             let part = new MissionPartCleanLocation(new Mission(universe, fleet), destination);
 
-            expect(part.title).toEqual("Clean a planet in Atanax system");
-            expect(part.checkCompleted()).toBe(false, "Init location");
+            check.equals(part.title, "Clean a planet in Atanax system");
+            check.same(part.checkCompleted(), false, "Init location");
 
-            expect(destination.isClear()).toBe(true);
+            check.equals(destination.isClear(), true);
             part.onStarted();
-            expect(destination.isClear()).toBe(false);
+            check.equals(destination.isClear(), false);
 
             fleet.setLocation(destination, true);
-            expect(part.checkCompleted()).toBe(false, "Encounter not clear");
+            check.same(part.checkCompleted(), false, "Encounter not clear");
 
             destination.clearEncounter();
-            expect(part.checkCompleted()).toBe(true, "Encouter cleared");
+            check.same(part.checkCompleted(), true, "Encouter cleared");
         })
 
-        it("generates the battle immediately if the fleet is already at the destination", function () {
+        test.case("generates the battle immediately if the fleet is already at the destination", check => {
             let destination = new StarLocation(new Star(null, 0, 0, "Atanax"));
             destination.clearEncounter();
 
@@ -31,11 +31,11 @@ module TK.SpaceTac.Specs {
             fleet.setLocation(destination, true);
             let part = new MissionPartCleanLocation(new Mission(universe, fleet), destination);
 
-            expect(fleet.battle).toBeNull();
+            check.equals(fleet.battle, null);
             part.onStarted();
-            expect(fleet.battle).not.toBeNull();
-            expect(nn(fleet.battle).fleets).toEqual([fleet, nn(destination.encounter)]);
-            expect(part.checkCompleted()).toBe(false);
+            check.notequals(fleet.battle, null);
+            check.equals(nn(fleet.battle).fleets, [fleet, nn(destination.encounter)]);
+            check.equals(part.checkCompleted(), false);
         })
     })
 }

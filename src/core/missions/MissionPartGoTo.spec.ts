@@ -1,6 +1,6 @@
 module TK.SpaceTac.Specs {
-    describe("MissionPartGoTo", () => {
-        it("completes when the fleet is at location, without encounter", function () {
+    testing("MissionPartGoTo", test => {
+        test.case("completes when the fleet is at location, without encounter", check => {
             let destination = new StarLocation(new Star(null, 0, 0, "Atanax"));
             destination.encounter_random = new SkewedRandomGenerator([0], true);
 
@@ -8,23 +8,23 @@ module TK.SpaceTac.Specs {
             let fleet = new Fleet();
             let part = new MissionPartGoTo(new Mission(universe, fleet), destination);
 
-            expect(part.title).toEqual("Go to Atanax system");
-            expect(part.checkCompleted()).toBe(false, "Init location");
+            check.equals(part.title, "Go to Atanax system");
+            check.same(part.checkCompleted(), false, "Init location");
 
             fleet.setLocation(destination, true);
-            expect(part.checkCompleted()).toBe(false, "Encounter not clear");
+            check.same(part.checkCompleted(), false, "Encounter not clear");
 
             destination.clearEncounter();
-            expect(part.checkCompleted()).toBe(true, "Encouter cleared");
+            check.same(part.checkCompleted(), true, "Encouter cleared");
 
             fleet.setLocation(new StarLocation(), true);
-            expect(part.checkCompleted()).toBe(false, "Went to another system");
+            check.same(part.checkCompleted(), false, "Went to another system");
 
             fleet.setLocation(destination, true);
-            expect(part.checkCompleted()).toBe(true, "Back at destination");
+            check.same(part.checkCompleted(), true, "Back at destination");
         })
 
-        it("force completes", function () {
+        test.case("force completes", check => {
             let destination = new StarLocation(new Star(null, 0, 0, "Atanax"));
             destination.encounter_random = new SkewedRandomGenerator([0], true);
 
@@ -32,10 +32,10 @@ module TK.SpaceTac.Specs {
             let fleet = new Fleet();
             let part = new MissionPartGoTo(new Mission(universe, fleet), destination, "Investigate");
 
-            expect(part.title).toEqual("Investigate");
-            expect(part.checkCompleted()).toBe(false);
+            check.equals(part.title, "Investigate");
+            check.equals(part.checkCompleted(), false);
             part.forceComplete();
-            expect(part.checkCompleted()).toBe(true);
+            check.equals(part.checkCompleted(), true);
         });
     })
 }

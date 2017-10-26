@@ -1,13 +1,13 @@
 module TK.SpaceTac.Specs {
-    describe("NameGenerator", () => {
-        it("generates unique names", () => {
+    testing("NameGenerator", test => {
+        test.case("generates unique names", check => {
             var random = new SkewedRandomGenerator([0.48, 0.9, 0.1]);
             var gen = new NameGenerator(["a", "b", "c"], random);
 
-            expect(gen.getName()).toEqual("b");
-            expect(gen.getName()).toEqual("c");
-            expect(gen.getName()).toEqual("a");
-            expect(gen.getName()).toBeNull();
+            check.equals(gen.getName(), "b");
+            check.equals(gen.getName(), "c");
+            check.equals(gen.getName(), "a");
+            check.equals(gen.getName(), null);
         });
     });
 }

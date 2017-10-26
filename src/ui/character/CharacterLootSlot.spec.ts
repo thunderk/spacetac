@@ -1,8 +1,8 @@
 module TK.SpaceTac.UI.Specs {
-    describe("CharacterLootSlot", function () {
+    testing("CharacterLootSlot", test => {
         let testgame = setupEmptyView();
 
-        it("takes or discard loot", function () {
+        test.case("takes or discard loot", check => {
             let view = testgame.view;
             let sheet = new CharacterSheet(view);
 
@@ -17,27 +17,27 @@ module TK.SpaceTac.UI.Specs {
             sheet.setLoot(loot);
             sheet.show(ship);
 
-            expect(ship.cargo).toEqual([equ1]);
-            expect(loot).toEqual([equ2]);
+            check.equals(ship.cargo, [equ1]);
+            check.equals(loot, [equ2]);
 
             let cargo_slot = <CharacterCargo>sheet.ship_cargo.children[0];
-            expect(cargo_slot instanceof CharacterCargo).toBe(true);
+            check.equals(cargo_slot instanceof CharacterCargo, true);
             let loot_slot = <CharacterLootSlot>sheet.loot_slots.children[0];
-            expect(loot_slot instanceof CharacterLootSlot).toBe(true);
+            check.equals(loot_slot instanceof CharacterLootSlot, true);
 
             // loot to cargo
             let equ2s = <CharacterEquipment>sheet.layer_equipments.children[1];
-            expect(equ2s.item).toBe(equ2);
+            check.same(equ2s.item, equ2);
             equ2s.applyDragDrop(loot_slot, cargo_slot, false);
-            expect(ship.cargo).toEqual([equ1, equ2]);
-            expect(loot).toEqual([]);
+            check.equals(ship.cargo, [equ1, equ2]);
+            check.equals(loot, []);
 
             // discard to cargo
             let equ1s = <CharacterEquipment>sheet.layer_equipments.children[0];
-            expect(equ1s.item).toBe(equ1);
+            check.same(equ1s.item, equ1);
             equ1s.applyDragDrop(cargo_slot, loot_slot, false);
-            expect(ship.cargo).toEqual([equ2]);
-            expect(loot).toEqual([equ1]);
+            check.equals(ship.cargo, [equ2]);
+            check.equals(loot, [equ1]);
         });
     });
 }

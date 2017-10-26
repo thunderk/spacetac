@@ -1,26 +1,26 @@
 module TK.SpaceTac.Specs {
-    describe("Universe", () => {
-        it("generates star systems", () => {
+    testing("Universe", test => {
+        test.case("generates star systems", check => {
             var universe = new Universe();
             var result = universe.generateStars(31);
 
-            expect(result.length).toBe(31);
+            check.equals(result.length, 31);
         });
 
-        it("lists potential links between star systems", () => {
+        test.case("lists potential links between star systems", check => {
             var universe = new Universe();
             universe.stars.push(new Star(universe, 0, 0));
             universe.stars.push(new Star(universe, 0, 1));
             universe.stars.push(new Star(universe, 1, 0));
 
             var result = universe.getPotentialLinks();
-            expect(result.length).toBe(3);
-            expect(result[0]).toEqual(new StarLink(universe.stars[0], universe.stars[1]));
-            expect(result[1]).toEqual(new StarLink(universe.stars[0], universe.stars[2]));
-            expect(result[2]).toEqual(new StarLink(universe.stars[1], universe.stars[2]));
+            check.equals(result.length, 3);
+            check.equals(result[0], new StarLink(universe.stars[0], universe.stars[1]));
+            check.equals(result[1], new StarLink(universe.stars[0], universe.stars[2]));
+            check.equals(result[2], new StarLink(universe.stars[1], universe.stars[2]));
         });
 
-        it("filters out crossing links", () => {
+        test.case("filters out crossing links", check => {
             var universe = new Universe();
             universe.stars.push(new Star(universe, 0, 0));
             universe.stars.push(new Star(universe, 0, 1));
@@ -28,15 +28,15 @@ module TK.SpaceTac.Specs {
             universe.stars.push(new Star(universe, 2, 2));
 
             var result = universe.getPotentialLinks();
-            expect(result.length).toBe(6);
+            check.equals(result.length, 6);
 
             var filtered = universe.filterCrossingLinks(result);
-            expect(filtered.length).toBe(5);
-            expect(any(filtered, link => link.isLinking(universe.stars[1], universe.stars[2]))).toBe(true);
-            expect(any(filtered, link => link.isLinking(universe.stars[0], universe.stars[3]))).toBe(false);
+            check.equals(filtered.length, 5);
+            check.equals(any(filtered, link => link.isLinking(universe.stars[1], universe.stars[2])), true);
+            check.equals(any(filtered, link => link.isLinking(universe.stars[0], universe.stars[3])), false);
         });
 
-        it("filters out redundant links", () => {
+        test.case("filters out redundant links", check => {
             let universe = new Universe();
             let s1 = universe.addStar(1, "S1", 0, 0);
             let s2 = universe.addStar(1, "S2", 0, 1);
@@ -52,12 +52,12 @@ module TK.SpaceTac.Specs {
             ]
 
             let filtered = universe.filterRedundantLinks(links);
-            expect(filtered.length).toBe(4);
-            expect(filtered).toContain(links[0]);
-            expect(filtered).not.toContain(links[2]);
+            check.equals(filtered.length, 4);
+            check.contains(filtered, links[0]);
+            check.notcontains(filtered, links[2]);
         });
 
-        it("generates warp locations", () => {
+        test.case("generates warp locations", check => {
             var universe = new Universe();
             universe.stars.push(new Star(universe, 0, 0, "0"));
             universe.stars.push(new Star(universe, 1, 0, "1"));
@@ -75,28 +75,28 @@ module TK.SpaceTac.Specs {
                 return result;
             };
 
-            expect(getWarps(universe.stars[0]).length).toBe(0);
-            expect(getWarps(universe.stars[1]).length).toBe(0);
-            expect(getWarps(universe.stars[2]).length).toBe(0);
+            check.equals(getWarps(universe.stars[0]).length, 0);
+            check.equals(getWarps(universe.stars[1]).length, 0);
+            check.equals(getWarps(universe.stars[2]).length, 0);
 
             universe.generateWarpLocations();
 
             var warps = getWarps(universe.stars[0]);
-            expect(warps.length).toBe(2);
-            expect(nn(warps[0].jump_dest).star).toBe(universe.stars[1]);
-            expect(nn(warps[1].jump_dest).star).toBe(universe.stars[2]);
-            expect(universe.stars[0].getWarpLocationTo(universe.stars[1])).toBe(warps[0]);
-            expect(universe.stars[0].getWarpLocationTo(universe.stars[2])).toBe(warps[1]);
+            check.equals(warps.length, 2);
+            check.same(nn(warps[0].jump_dest).star, universe.stars[1]);
+            check.same(nn(warps[1].jump_dest).star, universe.stars[2]);
+            check.same(universe.stars[0].getWarpLocationTo(universe.stars[1]), warps[0]);
+            check.same(universe.stars[0].getWarpLocationTo(universe.stars[2]), warps[1]);
             warps = getWarps(universe.stars[1]);
-            expect(warps.length).toBe(1);
-            expect(nn(warps[0].jump_dest).star).toBe(universe.stars[0]);
-            expect(universe.stars[1].getWarpLocationTo(universe.stars[2])).toBeNull();
+            check.equals(warps.length, 1);
+            check.same(nn(warps[0].jump_dest).star, universe.stars[0]);
+            check.equals(universe.stars[1].getWarpLocationTo(universe.stars[2]), null);
             warps = getWarps(universe.stars[2]);
-            expect(warps.length).toBe(1);
-            expect(nn(warps[0].jump_dest).star).toBe(universe.stars[0]);
+            check.equals(warps.length, 1);
+            check.same(nn(warps[0].jump_dest).star, universe.stars[0]);
         });
 
-        it("generates danger gradients", function () {
+        test.case("generates danger gradients", check => {
             let universe = new Universe();
 
             universe.stars.push(new Star(universe));
@@ -110,10 +110,10 @@ module TK.SpaceTac.Specs {
             universe.addLink(universe.stars[3], universe.stars[2]);
 
             universe.setEncounterLevels(9);
-            expect(universe.stars.map(star => star.level).sort(cmp)).toEqual([1, 5, 5, 9]);
+            check.equals(universe.stars.map(star => star.level).sort(cmp), [1, 5, 5, 9]);
         });
 
-        it("gets a good start location", function () {
+        test.case("gets a good start location", check => {
             let universe = new Universe();
 
             universe.stars.push(new Star(universe));
@@ -126,7 +126,7 @@ module TK.SpaceTac.Specs {
 
             universe.stars[1].generateLocations(5);
 
-            expect(universe.getStartLocation()).toBe(universe.stars[1].locations[0]);
+            check.same(universe.getStartLocation(), universe.stars[1].locations[0]);
         });
     });
 }

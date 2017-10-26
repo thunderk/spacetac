@@ -2,18 +2,18 @@
 /// <reference path="MainMenu.ts" />
 
 module TK.SpaceTac.UI.Specs {
-    describe("MainMenu", () => {
+    testing("MainMenu", test => {
         let testgame = setupSingleView(() => [new MainMenu(), []]);
 
-        it("adds moving stars, a title and three buttons", function () {
+        test.case("adds moving stars, a title and three buttons", check => {
             let view = <MainMenu>testgame.ui.state.getCurrentState();
 
-            expect(view.layer_stars.children.length).toBe(300);
-            expect(view.layer_title.children.length).toBe(6);
-            expect(view.layer_title.children[0] instanceof Phaser.Button).toBe(true);
-            expect(view.layer_title.children[1] instanceof Phaser.Button).toBe(true);
-            expect(view.layer_title.children[2] instanceof Phaser.Button).toBe(true);
-            expect(view.layer_title.children[3] instanceof Phaser.Image).toBe(true);
+            check.equals(view.layer_stars.children.length, 300);
+            check.equals(view.layer_title.children.length, 6);
+            check.equals(view.layer_title.children[0] instanceof Phaser.Button, true);
+            check.equals(view.layer_title.children[1] instanceof Phaser.Button, true);
+            check.equals(view.layer_title.children[2] instanceof Phaser.Button, true);
+            check.equals(view.layer_title.children[3] instanceof Phaser.Image, true);
         });
     });
 }

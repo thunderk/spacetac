@@ -1,83 +1,83 @@
 module TK.SpaceTac.Equipments {
-    describe("Generators", function () {
-        it("generates NuclearReactor based on level", function () {
+    testing("Generators", test => {
+        test.case("generates NuclearReactor based on level", check => {
             let template = new NuclearReactor();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_photons": 1 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_photons": 1 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("maneuvrability", 1),
                 new AttributeEffect("power_capacity", 7),
                 new AttributeEffect("power_generation", 4),
             ]);
-            expect(equipment.price).toEqual(395);
+            check.equals(equipment.price, 395);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_photons": 3 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_photons": 3 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("maneuvrability", 2),
                 new AttributeEffect("power_capacity", 7),
                 new AttributeEffect("power_generation", 5),
             ]);
-            expect(equipment.price).toEqual(1382);
+            check.equals(equipment.price, 1382);
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_photons": 5 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_photons": 5 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("maneuvrability", 3),
                 new AttributeEffect("power_capacity", 8),
                 new AttributeEffect("power_generation", 5),
             ]);
-            expect(equipment.price).toEqual(3357);
+            check.equals(equipment.price, 3357);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_photons": 33 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_photons": 33 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("maneuvrability", 10),
                 new AttributeEffect("power_capacity", 15),
                 new AttributeEffect("power_generation", 12),
             ]);
-            expect(equipment.price).toEqual(44832);
+            check.equals(equipment.price, 44832);
         })
 
-        it("generates KelvinGenerator based on level", function () {
+        test.case("generates KelvinGenerator based on level", check => {
             let template = new KelvinGenerator();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_time": 1 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_time": 1 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("power_capacity", 5),
                 new AttributeEffect("power_generation", 4),
             ]);
-            expect(equipment.action).toEqual(new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
-            expect(equipment.price).toEqual(420);
+            check.equals(equipment.action, new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
+            check.equals(equipment.price, 420);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_time": 2 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_time": 2 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("power_capacity", 6),
                 new AttributeEffect("power_generation", 4),
             ]);
-            expect(equipment.action).toEqual(new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
-            expect(equipment.price).toEqual(1470);
+            check.equals(equipment.action, new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
+            check.equals(equipment.price, 1470);
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_time": 4, "skill_gravity": 1 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_time": 4, "skill_gravity": 1 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("power_capacity", 6),
                 new AttributeEffect("power_generation", 5),
             ]);
-            expect(equipment.action).toEqual(new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
-            expect(equipment.price).toEqual(3570);
+            check.equals(equipment.action, new TriggerAction(equipment, [new CooldownEffect(1, 1)]));
+            check.equals(equipment.price, 3570);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_time": 28, "skill_gravity": 6 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_time": 28, "skill_gravity": 6 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("power_capacity", 13),
                 new AttributeEffect("power_generation", 12),
             ]);
-            expect(equipment.action).toEqual(new TriggerAction(equipment, [new CooldownEffect(4, 7)], 7));
-            expect(equipment.price).toEqual(47670);
+            check.equals(equipment.action, new TriggerAction(equipment, [new CooldownEffect(4, 7)], 7));
+            check.equals(equipment.price, 47670);
         })
     })
 }

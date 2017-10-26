@@ -1,33 +1,33 @@
 module TK.SpaceTac.Specs {
-    describe("StarLocation", () => {
-        it("removes generated encounters that lose", function () {
+    testing("StarLocation", test => {
+        test.case("removes generated encounters that lose", check => {
             var location = new StarLocation(undefined, StarLocationType.PLANET, 0, 0);
             var fleet = new Fleet();
             fleet.addShip();
             location.encounter_random = new SkewedRandomGenerator([0]);
             var battle = location.enterLocation(fleet);
 
-            expect(location.encounter).not.toBeNull();
-            expect(battle).not.toBeNull();
+            check.notequals(location.encounter, null);
+            check.notequals(battle, null);
 
             nn(battle).endBattle(fleet);
 
-            expect(location.encounter).toBeNull();
+            check.equals(location.encounter, null);
         });
 
-        it("leaves generated encounters that win", function () {
+        test.case("leaves generated encounters that win", check => {
             var location = new StarLocation(undefined, StarLocationType.PLANET, 0, 0);
             var fleet = new Fleet();
             fleet.addShip();
             location.encounter_random = new SkewedRandomGenerator([0]);
             var battle = location.enterLocation(fleet);
 
-            expect(location.encounter).not.toBeNull();
-            expect(battle).not.toBeNull();
+            check.notequals(location.encounter, null);
+            check.notequals(battle, null);
 
             nn(battle).endBattle(location.encounter);
 
-            expect(location.encounter).not.toBeNull();
+            check.notequals(location.encounter, null);
         });
     });
 }

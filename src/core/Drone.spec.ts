@@ -33,8 +33,8 @@ module TK.SpaceTac {
         return [drone, effect];
     }
 
-    describe("Drone", function () {
-        it("applies effects on all ships inside the radius", function () {
+    testing("Drone", test => {
+        test.case("applies effects on all ships inside the radius", check => {
             let battle = new Battle();
             let ship1 = new Ship(battle.fleets[0], "ship1");
             ship1.setArenaPosition(0, 0);
@@ -47,13 +47,13 @@ module TK.SpaceTac {
             ship4.setDead();
             let [drone, effect] = newTestDrone(2, 2, 8, ship1);
 
-            expect(effect.getApplyCalls()).toEqual([]);
+            check.equals(effect.getApplyCalls(), []);
 
             drone.activate();
-            expect(effect.getApplyCalls()).toEqual([ship1, ship2]);
+            check.equals(effect.getApplyCalls(), [ship1, ship2]);
         });
 
-        it("signals the need for destruction after its lifetime", function () {
+        test.case("signals the need for destruction after its lifetime", check => {
             let battle = new Battle();
             let owner = new Ship(battle.fleets[0]);
             let [drone, effect] = newTestDrone(0, 0, 5, owner);
@@ -69,7 +69,7 @@ module TK.SpaceTac {
             expect(removeDrone).toHaveBeenCalledWith(drone, true);
         });
 
-        it("logs each activation", function () {
+        test.case("logs each activation", check => {
             let battle = new Battle();
             let ship = new Ship();
             ship.fleet.setBattle(battle);
@@ -80,23 +80,23 @@ module TK.SpaceTac {
             drone.apply([]);
             drone.apply([other]);
 
-            expect(battle.log.events).toEqual([
+            check.equals(battle.log.events, [
                 new DroneAppliedEvent(drone, [ship, other]),
                 new DroneAppliedEvent(drone, [other])
             ]);
         });
 
-        it("builds a textual description", function () {
+        test.case("builds a textual description", check => {
             let drone = new Drone(new Ship());
             drone.duration = 1;
-            expect(drone.getDescription()).toEqual("For 1 activation:\n• do nothing");
+            check.equals(drone.getDescription(), "For 1 activation:\n• do nothing");
 
             drone.duration = 3;
             drone.effects = [
                 new DamageEffect(5),
                 new AttributeEffect("skill_quantum", 1)
             ]
-            expect(drone.getDescription()).toEqual("For 3 activations:\n• do 5 damage\n• quantum skill +1");
+            check.equals(drone.getDescription(), "For 3 activations:\n• do 5 damage\n• quantum skill +1");
         });
     });
 }

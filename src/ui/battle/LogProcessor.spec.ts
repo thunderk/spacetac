@@ -20,10 +20,10 @@ module TK.SpaceTac.UI.Specs {
         }
     }
 
-    describe("LogProcessor", function () {
+    testing("LogProcessor", test => {
         let testgame = setupBattleview();
 
-        it("steps forward and backward in time", function () {
+        test.case("steps forward and backward in time", check => {
             let battle = testgame.view.battle;
             battle.log.clear();
             let processor = new LogProcessor(testgame.view);
@@ -31,44 +31,44 @@ module TK.SpaceTac.UI.Specs {
                 event.apply(battle);
                 return 0;
             });
-            expect(battle.cycle).toBe(1);
-            expect(processor.atStart()).toBe(true);
-            expect(processor.atEnd()).toBe(true);
+            check.equals(battle.cycle, 1);
+            check.equals(processor.atStart(), true);
+            check.equals(processor.atEnd(), true);
 
             processor.stepForward();
-            expect(battle.cycle).toBe(1);
-            expect(processor.atStart()).toBe(true);
-            expect(processor.atEnd()).toBe(true);
+            check.equals(battle.cycle, 1);
+            check.equals(processor.atStart(), true);
+            check.equals(processor.atEnd(), true);
 
             battle.log.add(new FakeEvent());
-            expect(battle.cycle).toBe(1);
-            expect(processor.atStart()).toBe(true);
-            expect(processor.atEnd()).toBe(false);
+            check.equals(battle.cycle, 1);
+            check.equals(processor.atStart(), true);
+            check.equals(processor.atEnd(), false);
 
             processor.stepForward();
-            expect(battle.cycle).toBe(2);
-            expect(processor.atStart()).toBe(false);
-            expect(processor.atEnd()).toBe(true);
+            check.equals(battle.cycle, 2);
+            check.equals(processor.atStart(), false);
+            check.equals(processor.atEnd(), true);
 
             processor.stepForward();
-            expect(battle.cycle).toBe(2);
-            expect(processor.atStart()).toBe(false);
-            expect(processor.atEnd()).toBe(true);
+            check.equals(battle.cycle, 2);
+            check.equals(processor.atStart(), false);
+            check.equals(processor.atEnd(), true);
 
             processor.stepBackward();
-            expect(battle.cycle).toBe(1);
-            expect(processor.atStart()).toBe(true);
-            expect(processor.atEnd()).toBe(false);
+            check.equals(battle.cycle, 1);
+            check.equals(processor.atStart(), true);
+            check.equals(processor.atEnd(), false);
 
             processor.stepBackward();
-            expect(battle.cycle).toBe(1);
-            expect(processor.atStart()).toBe(true);
-            expect(processor.atEnd()).toBe(false);
+            check.equals(battle.cycle, 1);
+            check.equals(processor.atStart(), true);
+            check.equals(processor.atEnd(), false);
 
             processor.stepForward();
-            expect(battle.cycle).toBe(2);
-            expect(processor.atStart()).toBe(false);
-            expect(processor.atEnd()).toBe(true);
+            check.equals(battle.cycle, 2);
+            check.equals(processor.atStart(), false);
+            check.equals(processor.atEnd(), true);
         })
     })
 }

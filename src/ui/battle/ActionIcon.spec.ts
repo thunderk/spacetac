@@ -1,64 +1,64 @@
 /// <reference path="../TestGame.ts"/>
 
 module TK.SpaceTac.UI.Specs {
-    describe("ActionIcon", function () {
+    testing("ActionIcon", test => {
         let testgame = setupBattleview();
 
-        it("displays power usage", function () {
+        test.case("displays power usage", check => {
             let bar = testgame.view.action_bar;
             let ship = new Ship();
             let action = new BaseAction("something", "Do something");
             let icon = new ActionIcon(bar, ship, action, 0);
-            expect(icon.img_power.visible).toBe(false, "initial state");
+            check.same(icon.img_power.visible, false, "initial state");
 
             icon.refresh();
-            expect(icon.img_power.visible).toBe(false, "no change");
+            check.same(icon.img_power.visible, false, "no change");
 
             spyOn(action, "getActionPointsUsage").and.returnValue(3);
             icon.refresh();
-            expect(icon.img_power.visible).toBe(true);
-            expect(icon.text_power.text).toBe("3");
+            check.equals(icon.img_power.visible, true);
+            check.equals(icon.text_power.text, "3");
         })
 
-        it("displays disabled and fading states", function () {
+        test.case("displays disabled and fading states", check => {
             let bar = testgame.view.action_bar;
             let ship = new Ship();
             TestTools.setShipAP(ship, 5);
             let action = nn(TestTools.addWeapon(ship, 50, 3).action);
             let icon = new ActionIcon(bar, ship, action, 0);
 
-            expect(icon.container.name).toBe("battle-actionbar-frame-enabled", "5/5");
-            expect(icon.img_power.name).toBe("battle-actionbar-consumption-enabled", "5/5");
-            expect(icon.img_power.visible).toBe(true, "5/5");
-            expect(icon.img_bottom.name).toBe("battle-actionbar-bottom-enabled", "5/5");
+            check.equals(icon.container.name, "battle-actionbar-frame-enabled", "5/5");
+            check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "5/5");
+            check.same(icon.img_power.visible, true, "5/5");
+            check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "5/5");
 
             icon.refresh(null, 1);
-            expect(icon.container.name).toBe("battle-actionbar-frame-enabled", "4/5");
-            expect(icon.img_power.name).toBe("battle-actionbar-consumption-enabled", "4/5");
-            expect(icon.img_power.visible).toBe(true, "4/5");
-            expect(icon.img_bottom.name).toBe("battle-actionbar-bottom-enabled", "4/5");
+            check.equals(icon.container.name, "battle-actionbar-frame-enabled", "4/5");
+            check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "4/5");
+            check.same(icon.img_power.visible, true, "4/5");
+            check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "4/5");
 
             icon.refresh(null, 4);
-            expect(icon.container.name).toBe("battle-actionbar-frame-fading", "1/5");
-            expect(icon.img_power.name).toBe("battle-actionbar-consumption-enabled", "1/5");
-            expect(icon.img_power.visible).toBe(true, "1/5");
-            expect(icon.img_bottom.name).toBe("battle-actionbar-bottom-enabled", "1/5");
+            check.equals(icon.container.name, "battle-actionbar-frame-fading", "1/5");
+            check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "1/5");
+            check.same(icon.img_power.visible, true, "1/5");
+            check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "1/5");
 
             ship.setValue("power", 2);
             icon.refresh();
-            expect(icon.container.name).toBe("battle-actionbar-frame-disabled", "2/2");
-            expect(icon.img_power.name).toBe("battle-actionbar-consumption-disabled", "2/2");
-            expect(icon.img_power.visible).toBe(true, "2/2");
-            expect(icon.img_bottom.name).toBe("battle-actionbar-bottom-disabled", "2/2");
+            check.equals(icon.container.name, "battle-actionbar-frame-disabled", "2/2");
+            check.equals(icon.img_power.name, "battle-actionbar-consumption-disabled", "2/2");
+            check.same(icon.img_power.visible, true, "2/2");
+            check.equals(icon.img_bottom.name, "battle-actionbar-bottom-disabled", "2/2");
 
             icon.refresh(null, 6);
-            expect(icon.container.name).toBe("battle-actionbar-frame-disabled", "0/2");
-            expect(icon.img_power.name).toBe("battle-actionbar-consumption-disabled", "0/2");
-            expect(icon.img_power.visible).toBe(true, "0/2");
-            expect(icon.img_bottom.name).toBe("battle-actionbar-bottom-disabled", "0/2");
+            check.equals(icon.container.name, "battle-actionbar-frame-disabled", "0/2");
+            check.equals(icon.img_power.name, "battle-actionbar-consumption-disabled", "0/2");
+            check.same(icon.img_power.visible, true, "0/2");
+            check.equals(icon.img_bottom.name, "battle-actionbar-bottom-disabled", "0/2");
         })
 
-        it("displays toggle state", function () {
+        test.case("displays toggle state", check => {
             let bar = testgame.view.action_bar;
             let ship = new Ship();
             TestTools.setShipAP(ship, 5);
@@ -68,50 +68,50 @@ module TK.SpaceTac.UI.Specs {
             equipment.action = action;
             let icon = new ActionIcon(bar, ship, action, 0);
 
-            expect(icon.img_bottom.name).toBe("battle-actionbar-bottom-enabled", "initial");
-            expect(icon.img_power.name).toBe("battle-actionbar-consumption-enabled", "initial");
-            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-untoggled", "initial");
-            expect(icon.img_sticky.visible).toBe(true, "initial");
+            check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "initial");
+            check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "initial");
+            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-untoggled", "initial");
+            check.same(icon.img_sticky.visible, true, "initial");
 
             action.activated = true;
             icon.refresh();
-            expect(icon.img_bottom.name).toBe("battle-actionbar-bottom-toggled", "initial");
-            expect(icon.img_power.name).toBe("battle-actionbar-consumption-toggled", "initial");
-            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-toggled", "initial");
-            expect(icon.img_sticky.visible).toBe(true, "initial");
+            check.equals(icon.img_bottom.name, "battle-actionbar-bottom-toggled", "initial");
+            check.equals(icon.img_power.name, "battle-actionbar-consumption-toggled", "initial");
+            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-toggled", "initial");
+            check.same(icon.img_sticky.visible, true, "initial");
         })
 
-        it("displays overheat/cooldown", function () {
+        test.case("displays overheat/cooldown", check => {
             let bar = testgame.view.action_bar;
             let ship = new Ship();
             TestTools.setShipAP(ship, 5);
             let action = nn(TestTools.addWeapon(ship, 50, 3).action);
             action.cooldown.configure(1, 3);
             let icon = new ActionIcon(bar, ship, action, 0);
-            expect(icon.img_sticky.visible).toBe(false, "initial");
-            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-untoggled", "initial");
-            expect(icon.img_sticky.children.length).toBe(0, "initial");
+            check.same(icon.img_sticky.visible, false, "initial");
+            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-untoggled", "initial");
+            check.same(icon.img_sticky.children.length, 0, "initial");
 
             icon.refresh(action);
-            expect(icon.img_sticky.visible).toBe(true, "overheat");
-            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-overheat", "overheat");
-            expect(icon.img_sticky.children.length).toBe(3, "overheat");
+            check.same(icon.img_sticky.visible, true, "overheat");
+            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-overheat", "overheat");
+            check.same(icon.img_sticky.children.length, 3, "overheat");
 
             action.cooldown.configure(1, 12);
             icon.refresh(action);
-            expect(icon.img_sticky.visible).toBe(true, "superheat");
-            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-overheat", "superheat");
-            expect(icon.img_sticky.children.length).toBe(5, "superheat");
+            check.same(icon.img_sticky.visible, true, "superheat");
+            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-overheat", "superheat");
+            check.same(icon.img_sticky.children.length, 5, "superheat");
 
             action.cooldown.configure(1, 4);
             action.cooldown.use();
             icon.refresh(action);
-            expect(icon.img_sticky.visible).toBe(true, "cooling");
-            expect(icon.img_sticky.name).toBe("battle-actionbar-sticky-disabled", "cooling");
-            expect(icon.img_sticky.children.length).toBe(4, "cooling");
+            check.same(icon.img_sticky.visible, true, "cooling");
+            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-disabled", "cooling");
+            check.same(icon.img_sticky.children.length, 4, "cooling");
         })
 
-        it("displays currently targetting", function () {
+        test.case("displays currently targetting", check => {
             testgame.view.animations.setImmediate();
 
             let bar = testgame.view.action_bar;
@@ -119,13 +119,13 @@ module TK.SpaceTac.UI.Specs {
             TestTools.setShipAP(ship, 5);
             let action = nn(TestTools.addWeapon(ship, 50, 3).action);
             let icon = new ActionIcon(bar, ship, action, 0);
-            expect(icon.img_targetting.visible).toBe(false, "initial");
+            check.same(icon.img_targetting.visible, false, "initial");
 
             icon.refresh(action);
-            expect(icon.img_targetting.visible).toBe(true, "selected");
+            check.same(icon.img_targetting.visible, true, "selected");
 
             icon.refresh(new BaseAction("other", "Other action"));
-            expect(icon.img_targetting.visible).toBe(false, "other");
+            check.same(icon.img_targetting.visible, false, "other");
         })
     });
 }

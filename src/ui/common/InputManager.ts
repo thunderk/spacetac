@@ -176,7 +176,7 @@ module TK.SpaceTac.UI {
          * Returns functions that may be used to force the behavior
          */
         setHoverClick(obj: Phaser.Button, enter = nop, leave = nop, click = nop, hovertime = 300, holdtime = 600) {
-            let holdstart = new Date();
+            let holdstart = Timer.nowMs();
             let enternext: Function | null = null;
             let entercalled = false;
             let cursorinside = false;
@@ -251,7 +251,7 @@ module TK.SpaceTac.UI {
                 if (destroyed) return;
 
                 if (obj.visible && obj.alpha) {
-                    holdstart = new Date();
+                    holdstart = Timer.nowMs();
                     if (!cursorinside && !enternext) {
                         enternext = Timer.global.schedule(holdtime, effectiveenter);
                     }
@@ -265,7 +265,7 @@ module TK.SpaceTac.UI {
                     effectiveleave();
                 }
 
-                if (new Date().getTime() - holdstart.getTime() < holdtime) {
+                if (Timer.fromMs(holdstart) < holdtime) {
                     if (!cursorinside) {
                         effectiveenter();
                     }

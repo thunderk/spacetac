@@ -1,23 +1,23 @@
 module TK.SpaceTac.UI.Specs {
-    describe("ActiveMissionsDisplay", function () {
+    testing("ActiveMissionsDisplay", test => {
         let testgame = setupEmptyView();
 
-        it("displays active missions", function () {
+        test.case("displays active missions", check => {
             let view = testgame.view;
             let missions = new ActiveMissions();
             let display = new ActiveMissionsDisplay(view, missions);
 
             let container = <Phaser.Group>(<any>display).container;
-            expect(container.children.length).toBe(0);
+            check.equals(container.children.length, 0);
 
             let mission = new Mission(new Universe(), new Fleet());
             mission.addPart(new MissionPart(mission, "Get back to base"));
             missions.secondary = [mission];
 
             display.checkUpdate();
-            expect(container.children.length).toBe(2);
-            expect(container.children[0] instanceof Phaser.Image).toBe(true);
-            checkText(container.children[1], "Get back to base");
+            check.equals(container.children.length, 2);
+            check.equals(container.children[0] instanceof Phaser.Image, true);
+            checkText(check, container.children[1], "Get back to base");
         });
     });
 }

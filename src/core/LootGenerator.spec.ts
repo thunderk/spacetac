@@ -9,19 +9,19 @@ module TK.SpaceTac.Specs {
         }
     }
 
-    describe("LootGenerator", () => {
-        it("generates items within a given level range", () => {
+    testing("LootGenerator", test => {
+        test.case("generates items within a given level range", check => {
             var generator = new LootGenerator();
             generator.templates = [new TestTemplate()];
             generator.random = new SkewedRandomGenerator([0.5]);
 
             var equipment = generator.generate(2);
             if (equipment) {
-                expect(equipment.slot_type).toBe(SlotType.Shield);
-                expect(equipment.name).toEqual("Hexagrid Shield");
-                expect(equipment.requirements).toEqual({ "skill_time": 3 });
+                check.same(equipment.slot_type, SlotType.Shield);
+                check.equals(equipment.name, "Hexagrid Shield");
+                check.equals(equipment.requirements, { "skill_time": 3 });
             } else {
-                fail("No equipment generated");
+                check.fail("No equipment generated");
             }
         });
     });

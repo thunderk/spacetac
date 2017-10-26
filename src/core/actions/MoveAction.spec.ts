@@ -1,6 +1,6 @@
 module TK.SpaceTac {
-    describe("MoveAction", function () {
-        it("checks movement against remaining AP", function () {
+    testing("MoveAction", test => {
+        test.case("checks movement against remaining AP", check => {
             var ship = new Ship();
             var battle = new Battle(ship.fleet);
             TestTools.setShipPlaying(battle, ship);
@@ -11,32 +11,32 @@ module TK.SpaceTac {
             var engine = new Equipment();
             var action = new MoveAction(engine, 10);
 
-            expect(action.getDistanceByActionPoint(ship)).toBe(10);
+            check.equals(action.getDistanceByActionPoint(ship), 10);
 
             var result = action.checkTarget(ship, Target.newFromLocation(0, 20));
-            expect(result).toEqual(Target.newFromLocation(0, 20));
+            check.equals(result, Target.newFromLocation(0, 20));
 
             result = action.checkTarget(ship, Target.newFromLocation(0, 80));
-            expect(nn(result).y).toBeCloseTo(59.9, 0.000001);
+            check.nears(nn(result).y, 59.9);
 
             ship.values.power.set(0);
             result = action.checkTarget(ship, Target.newFromLocation(0, 80));
-            expect(result).toBeNull();
+            check.equals(result, null);
         });
 
-        it("forbids targetting a ship", function () {
+        test.case("forbids targetting a ship", check => {
             var ship1 = new Ship(null, "Test1");
             var ship2 = new Ship(null, "Test2");
             var action = new MoveAction(new Equipment());
 
             var result = action.checkTarget(ship1, Target.newFromShip(ship1));
-            expect(result).toBeNull();
+            check.equals(result, null);
 
             result = action.checkTarget(ship1, Target.newFromShip(ship2));
-            expect(result).toBeNull();
+            check.equals(result, null);
         });
 
-        it("applies to ship location, battle log and AP", function () {
+        test.case("applies to ship location, battle log and AP", check => {
             var ship = new Ship();
             var battle = new Battle(ship.fleet);
             ship.values.power.setMaximal(20);
@@ -50,35 +50,35 @@ module TK.SpaceTac {
             spyOn(console, "warn").and.stub();
 
             var result = action.apply(ship, Target.newFromLocation(10, 10));
-            expect(result).toBe(true);
-            expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
-            expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
-            expect(ship.values.power.get()).toEqual(0);
+            check.equals(result, true);
+            check.nears(ship.arena_x, 3.464823, 5);
+            check.nears(ship.arena_y, 3.464823, 5);
+            check.equals(ship.values.power.get(), 0);
 
             result = action.apply(ship, Target.newFromLocation(10, 10));
-            expect(result).toBe(false);
-            expect(ship.arena_x).toBeCloseTo(3.535533, 0.00001);
-            expect(ship.arena_y).toBeCloseTo(3.535533, 0.00001);
-            expect(ship.values.power.get()).toEqual(0);
+            check.equals(result, false);
+            check.nears(ship.arena_x, 3.464823, 5);
+            check.nears(ship.arena_y, 3.464823, 5);
+            check.equals(ship.values.power.get(), 0);
 
-            expect(battle.log.events.length).toBe(3);
+            check.equals(battle.log.events.length, 3);
 
-            expect(battle.log.events[0].code).toEqual("value");
-            expect(battle.log.events[0].ship).toBe(ship);
-            expect((<ValueChangeEvent>battle.log.events[0]).value).toEqual(
+            check.equals(battle.log.events[0].code, "value");
+            check.same(battle.log.events[0].ship, ship);
+            check.equals((<ValueChangeEvent>battle.log.events[0]).value,
                 new ShipValue("power", 0, 20));
 
-            expect(battle.log.events[1].code).toEqual("action");
-            expect(battle.log.events[1].ship).toBe(ship);
+            check.equals(battle.log.events[1].code, "action");
+            check.same(battle.log.events[1].ship, ship);
 
-            expect(battle.log.events[2].code).toEqual("move");
-            expect(battle.log.events[2].ship).toBe(ship);
+            check.equals(battle.log.events[2].code, "move");
+            check.same(battle.log.events[2].ship, ship);
             let dest = (<MoveEvent>battle.log.events[2]).end;
-            expect(dest.x).toBeCloseTo(3.535533, 0.00001);
-            expect(dest.y).toBeCloseTo(3.535533, 0.00001);
+            check.nears(dest.x, 3.464823, 5);
+            check.nears(dest.y, 3.464823, 5);
         });
 
-        it("can't move too much near another ship", function () {
+        test.case("can't move too much near another ship", check => {
             var battle = TestTools.createBattle(1, 1);
             var ship = battle.fleets[0].ships[0];
             var enemy = battle.fleets[1].ships[0];
@@ -91,22 +91,22 @@ module TK.SpaceTac {
             action.safety_distance = 200;
 
             var result = action.checkLocationTarget(ship, Target.newFromLocation(700, 500));
-            expect(result).toEqual(Target.newFromLocation(700, 500));
+            check.equals(result, Target.newFromLocation(700, 500));
 
             result = action.checkLocationTarget(ship, Target.newFromLocation(800, 500));
-            expect(result).toEqual(Target.newFromLocation(800, 500));
+            check.equals(result, Target.newFromLocation(800, 500));
 
             result = action.checkLocationTarget(ship, Target.newFromLocation(900, 500));
-            expect(result).toEqual(Target.newFromLocation(800, 500));
+            check.equals(result, Target.newFromLocation(800, 500));
 
             result = action.checkLocationTarget(ship, Target.newFromLocation(1000, 500));
-            expect(result).toEqual(Target.newFromLocation(800, 500));
+            check.equals(result, Target.newFromLocation(800, 500));
 
             result = action.checkLocationTarget(ship, Target.newFromLocation(1200, 500));
-            expect(result).toEqual(Target.newFromLocation(1200, 500));
+            check.equals(result, Target.newFromLocation(1200, 500));
         });
 
-        it("exclusion radius is applied correctly over two ships", function () {
+        test.case("exclusion radius is applied correctly over two ships", check => {
             var battle = TestTools.createBattle(1, 2);
             var ship = battle.fleets[0].ships[0];
             var enemy1 = battle.fleets[1].ships[0];
@@ -120,10 +120,10 @@ module TK.SpaceTac {
             action.safety_distance = 150;
 
             var result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1100));
-            expect(result).toEqual(Target.newFromLocation(0, 650));
+            check.equals(result, Target.newFromLocation(0, 650));
         });
 
-        it("exclusion radius does not make the ship go back", function () {
+        test.case("exclusion radius does not make the ship go back", check => {
             var battle = TestTools.createBattle(1, 2);
             var ship = battle.fleets[0].ships[0];
             var enemy1 = battle.fleets[1].ships[0];
@@ -137,40 +137,40 @@ module TK.SpaceTac {
             action.safety_distance = 600;
 
             let result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1000));
-            expect(result).toBeNull();
+            check.equals(result, null);
             result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1400));
-            expect(result).toEqual(Target.newFromLocation(0, 1400));
+            check.equals(result, Target.newFromLocation(0, 1400));
         });
 
-        it("applies ship maneuvrability to determine distance per power point", function () {
+        test.case("applies ship maneuvrability to determine distance per power point", check => {
             let ship = new Ship();
 
             let action = new MoveAction(new Equipment(), 100, undefined, 60);
             ship.setAttribute("maneuvrability", 0);
-            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(40, 0.01);
+            check.nears(action.getDistanceByActionPoint(ship), 40);
             ship.setAttribute("maneuvrability", 1);
-            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(60, 0.01);
+            check.nears(action.getDistanceByActionPoint(ship), 60);
             ship.setAttribute("maneuvrability", 2);
-            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(70, 0.01);
+            check.nears(action.getDistanceByActionPoint(ship), 70);
             ship.setAttribute("maneuvrability", 10);
-            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(90, 0.01);
+            check.nears(action.getDistanceByActionPoint(ship), 90);
 
             action = new MoveAction(new Equipment(), 100, undefined, 0);
             ship.setAttribute("maneuvrability", 0);
-            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(100, 0.01);
+            check.nears(action.getDistanceByActionPoint(ship), 100);
             ship.setAttribute("maneuvrability", 10);
-            expect(action.getDistanceByActionPoint(ship)).toBeCloseTo(100, 0.01);
+            check.nears(action.getDistanceByActionPoint(ship), 100);
         });
 
-        it("builds a textual description", function () {
+        test.case("builds a textual description", check => {
             let action = new MoveAction(new Equipment(), 58, 0, 0);
-            expect(action.getEffectsDescription()).toEqual("Move: 58km per power point");
+            check.equals(action.getEffectsDescription(), "Move: 58km per power point");
 
             action = new MoveAction(new Equipment(), 58, 12, 0);
-            expect(action.getEffectsDescription()).toEqual("Move: 58km per power point (safety: 12km)");
+            check.equals(action.getEffectsDescription(), "Move: 58km per power point (safety: 12km)");
 
             action = new MoveAction(new Equipment(), 58, 12, 80);
-            expect(action.getEffectsDescription()).toEqual("Move: 12-58km per power point (safety: 12km)");
+            check.equals(action.getEffectsDescription(), "Move: 12-58km per power point (safety: 12km)");
         });
     });
 }

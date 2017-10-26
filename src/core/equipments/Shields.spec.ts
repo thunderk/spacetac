@@ -1,99 +1,99 @@
 module TK.SpaceTac.Equipments {
-    describe("Shields", function () {
-        it("generates ForceField based on level", function () {
+    testing("Shields", test => {
+        test.case("generates ForceField based on level", check => {
             let template = new ForceField();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_photons": 1 });
-            expect(equipment.effects).toEqual([new AttributeEffect("shield_capacity", 80)]);
-            expect(equipment.price).toEqual(95);
+            check.equals(equipment.requirements, { "skill_photons": 1 });
+            check.equals(equipment.effects, [new AttributeEffect("shield_capacity", 80)]);
+            check.equals(equipment.price, 95);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_photons": 3 });
-            expect(equipment.effects).toEqual([new AttributeEffect("shield_capacity", 112)]);
-            expect(equipment.price).toEqual(332);
+            check.equals(equipment.requirements, { "skill_photons": 3 });
+            check.equals(equipment.effects, [new AttributeEffect("shield_capacity", 112)]);
+            check.equals(equipment.price, 332);
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_photons": 5 });
-            expect(equipment.effects).toEqual([new AttributeEffect("shield_capacity", 150)]);
-            expect(equipment.price).toEqual(807);
+            check.equals(equipment.requirements, { "skill_photons": 5 });
+            check.equals(equipment.effects, [new AttributeEffect("shield_capacity", 150)]);
+            check.equals(equipment.price, 807);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_photons": 33 });
-            expect(equipment.effects).toEqual([new AttributeEffect("shield_capacity", 598)]);
-            expect(equipment.price).toEqual(10782);
+            check.equals(equipment.requirements, { "skill_photons": 33 });
+            check.equals(equipment.effects, [new AttributeEffect("shield_capacity", 598)]);
+            check.equals(equipment.price, 10782);
         });
 
-        it("generates GravitShield based on level", function () {
+        test.case("generates GravitShield based on level", check => {
             let template = new GravitShield();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_gravity": 2 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_gravity": 2 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("shield_capacity", 60),
             ]);
-            expect(equipment.action).toEqual(new TriggerAction(equipment, [new RepelEffect(100)], 2, 0, 300));
-            expect(equipment.price).toEqual(140);
+            check.equals(equipment.action, new TriggerAction(equipment, [new RepelEffect(100)], 2, 0, 300));
+            check.equals(equipment.price, 140);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_gravity": 5 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_gravity": 5 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("shield_capacity", 84),
             ]);
-            expect(equipment.action).toEqual(new TriggerAction(equipment, [new RepelEffect(105)], 2, 0, 310));
-            expect(equipment.price).toEqual(490);
+            check.equals(equipment.action, new TriggerAction(equipment, [new RepelEffect(105)], 2, 0, 310));
+            check.equals(equipment.price, 490);
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_gravity": 8 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_gravity": 8 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("shield_capacity", 112),
             ]);
-            expect(equipment.action).toEqual(new TriggerAction(equipment, [new RepelEffect(111)], 2, 0, 322));
-            expect(equipment.price).toEqual(1190);
+            check.equals(equipment.action, new TriggerAction(equipment, [new RepelEffect(111)], 2, 0, 322));
+            check.equals(equipment.price, 1190);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_gravity": 50 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_gravity": 50 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("shield_capacity", 448),
             ]);
-            expect(equipment.action).toEqual(new TriggerAction(equipment, [new RepelEffect(181)], 2, 0, 462));
-            expect(equipment.price).toEqual(15890);
+            check.equals(equipment.action, new TriggerAction(equipment, [new RepelEffect(181)], 2, 0, 462));
+            check.equals(equipment.price, 15890);
         });
 
-        it("generates InverterShield based on level", function () {
+        test.case("generates InverterShield based on level", check => {
             let template = new InverterShield();
 
             let equipment = template.generate(1);
-            expect(equipment.requirements).toEqual({ "skill_antimatter": 2, "skill_time": 1 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_antimatter": 2, "skill_time": 1 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("shield_capacity", 140),
                 new AttributeEffect("power_capacity", -1),
             ]);
-            expect(equipment.price).toEqual(258);
+            check.equals(equipment.price, 258);
 
             equipment = template.generate(2);
-            expect(equipment.requirements).toEqual({ "skill_antimatter": 3, "skill_time": 2 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_antimatter": 3, "skill_time": 2 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("shield_capacity", 196),
                 new AttributeEffect("power_capacity", -1),
             ]);
-            expect(equipment.price).toEqual(903);
+            check.equals(equipment.price, 903);
 
             equipment = template.generate(3);
-            expect(equipment.requirements).toEqual({ "skill_antimatter": 5, "skill_time": 3 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_antimatter": 5, "skill_time": 3 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("shield_capacity", 263),
                 new AttributeEffect("power_capacity", -1),
             ]);
-            expect(equipment.price).toEqual(2193);
+            check.equals(equipment.price, 2193);
 
             equipment = template.generate(10);
-            expect(equipment.requirements).toEqual({ "skill_antimatter": 26, "skill_time": 17 });
-            expect(equipment.effects).toEqual([
+            check.equals(equipment.requirements, { "skill_antimatter": 26, "skill_time": 17 });
+            check.equals(equipment.effects, [
                 new AttributeEffect("shield_capacity", 1047),
                 new AttributeEffect("power_capacity", -4),
             ]);
-            expect(equipment.price).toEqual(29283);
+            check.equals(equipment.price, 29283);
         });
     });
 }

@@ -1,8 +1,9 @@
 module TK.SpaceTac.UI.Specs {
-    describe("Tooltip", () => {
+    testing("Tooltip", test => {
         let testgame = setupEmptyView();
+        let clock = test.clock();
 
-        it("shows near the hovered button", function () {
+        test.case("shows near the hovered button", check => {
             let button = testgame.view.add.button();
             spyOn(button, "getBounds").and.returnValue({ x: 100, y: 50, width: 50, height: 25 });
 
@@ -11,19 +12,19 @@ module TK.SpaceTac.UI.Specs {
 
             let container = <Phaser.Group>(<any>tooltip).container;
             spyOn((<any>container).content, "getBounds").and.returnValue({ x: 0, y: 0, width: 32, height: 32 });
-            expect(container.visible).toBe(false);
+            check.equals(container.visible, false);
 
             button.onInputOver.dispatch();
-            expect(container.visible).toBe(false);
+            check.equals(container.visible, false);
 
-            jasmine.clock().tick(1000);
+            clock.forward(1000);
             container.update();
-            expect(container.visible).toBe(true);
-            expect(container.x).toEqual(109);
-            expect(container.y).toEqual(91);
+            check.equals(container.visible, true);
+            check.equals(container.x, 109);
+            check.equals(container.y, 91);
 
             button.onInputOut.dispatch();
-            expect(container.visible).toBe(false);
+            check.equals(container.visible, false);
         });
     });
 }

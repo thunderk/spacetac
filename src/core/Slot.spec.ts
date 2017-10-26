@@ -1,23 +1,23 @@
 module TK.SpaceTac.Specs {
-    describe("Slot", () => {
-        it("checks equipment type", () => {
+    testing("Slot", test => {
+        test.case("checks equipment type", check => {
             var ship = new Ship();
             var slot = ship.addSlot(SlotType.Engine);
 
             var equipment = new Equipment();
             equipment.slot_type = SlotType.Weapon;
 
-            expect(slot.attached).toBeNull();
+            check.equals(slot.attached, null);
             slot.attach(equipment);
-            expect(slot.attached).toBeNull();
+            check.equals(slot.attached, null);
 
             equipment.slot_type = SlotType.Engine;
 
             slot.attach(equipment);
-            expect(slot.attached).toBe(equipment);
+            check.same(slot.attached, equipment);
         });
 
-        it("checks equipment capabilities", () => {
+        test.case("checks equipment capabilities", check => {
             var ship = new Ship();
             var slot = ship.addSlot(SlotType.Shield);
 
@@ -25,14 +25,14 @@ module TK.SpaceTac.Specs {
             equipment.slot_type = SlotType.Shield;
             equipment.requirements["skill_gravity"] = 5;
 
-            expect(slot.attached).toBeNull();
+            check.equals(slot.attached, null);
             slot.attach(equipment);
-            expect(slot.attached).toBeNull();
+            check.equals(slot.attached, null);
 
             ship.attributes.skill_gravity.set(6);
 
             slot.attach(equipment);
-            expect(slot.attached).toBe(equipment);
+            check.same(slot.attached, equipment);
         });
     });
 }

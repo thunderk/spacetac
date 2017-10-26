@@ -1,18 +1,19 @@
 module TK.SpaceTac.UI.Specs {
-    describe("WeaponEffect", function () {
+    testing("WeaponEffect", test => {
         let testgame = setupBattleview();
+        let clock = test.clock();
 
         function checkEmitters(step: string, expected: number) {
-            expect(testgame.view.arena.layer_weapon_effects.children.length).toBe(expected, `${step} - layer children`);
-            expect(keys(testgame.view.game.particles.emitters).length).toBe(expected, `${step} - registered emitters`);
+            test.check.same(testgame.view.arena.layer_weapon_effects.children.length, expected, `${step} - layer children`);
+            test.check.same(keys(testgame.view.game.particles.emitters).length, expected, `${step} - registered emitters`);
         }
 
         function fastForward(milliseconds: number) {
-            jasmine.clock().tick(milliseconds);
+            clock.forward(milliseconds);
             testgame.ui.updateLogic(milliseconds);
         }
 
-        it("displays shield hit effect", function () {
+        test.case("displays shield hit effect", check => {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
@@ -20,16 +21,16 @@ module TK.SpaceTac.UI.Specs {
             effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1000, 3000, true);
 
             let layer = battleview.arena.layer_weapon_effects;
-            expect(layer.children.length).toBe(2);
+            check.equals(layer.children.length, 2);
 
-            expect(layer.children[0] instanceof Phaser.Image).toBe(true);
-            expect(layer.children[0].rotation).toBeCloseTo(-2.677945044588987, 10);
-            expect(layer.children[0].position).toEqual(jasmine.objectContaining({ x: 20, y: 15 }));
+            check.equals(layer.children[0] instanceof Phaser.Image, true);
+            check.nears(layer.children[0].rotation, -2.677945044588987, 10);
+            check.containing(layer.children[0].position, { x: 20, y: 15 });
 
-            expect(layer.children[1] instanceof Phaser.Particles.Arcade.Emitter).toBe(true);
+            check.equals(layer.children[1] instanceof Phaser.Particles.Arcade.Emitter, true);
         });
 
-        it("displays gatling gun effect", function () {
+        test.case("displays gatling gun effect", check => {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
@@ -38,11 +39,11 @@ module TK.SpaceTac.UI.Specs {
             effect.gunEffect();
 
             let layer = battleview.arena.layer_weapon_effects;
-            expect(layer.children.length).toBe(1);
-            expect(layer.children[0] instanceof Phaser.Particles.Arcade.Emitter).toBe(true);
+            check.equals(layer.children.length, 1);
+            check.equals(layer.children[0] instanceof Phaser.Particles.Arcade.Emitter, true);
         });
 
-        it("displays shield and hull effect on impacted ships", function () {
+        test.case("displays shield and hull effect on impacted ships", check => {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
@@ -75,7 +76,7 @@ module TK.SpaceTac.UI.Specs {
             expect(mock_hull_impact).toHaveBeenCalledTimes(1);
         });
 
-        it("removes particle emitters when done", function () {
+        test.case("removes particle emitters when done", check => {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
@@ -92,30 +93,30 @@ module TK.SpaceTac.UI.Specs {
             checkEmitters("hull effect ended", 0);
         });
 
-        it("adds a laser effect", function () {
+        test.case("adds a laser effect", check => {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
             let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(31, 49), new Equipment());
 
             let result = effect.angularLaser({ x: 20, y: 30 }, 300, Math.PI / 4, -Math.PI / 2, 5);
-            expect(result).toBe(200);
+            check.equals(result, 200);
 
             let layer = battleview.arena.layer_weapon_effects;
-            expect(layer.children.length).toBe(1);
-            expect(layer.children[0] instanceof Phaser.Image).toBe(true, "is image");
+            check.equals(layer.children.length, 1);
+            check.same(layer.children[0] instanceof Phaser.Image, true, "is image");
             let image = <Phaser.Image>layer.children[0];
-            expect(image.name).toEqual("battle-effects-laser");
-            //expect(image.width).toBe(300);
-            expect(image.x).toEqual(20);
-            expect(image.y).toEqual(30);
-            expect(image.rotation).toBeCloseTo(Math.PI / 4, 0.000001);
+            check.equals(image.name, "battle-effects-laser");
+            //check.equals(image.width, 300);
+            check.equals(image.x, 20);
+            check.equals(image.y, 30);
+            check.nears(image.rotation, Math.PI / 4);
 
             let values = battleview.animations.simulate(image, "rotation", 4, result);
-            expect(values[0]).toBeCloseTo(Math.PI / 4, 0.000001);
-            expect(values[1]).toBeCloseTo(0, 0.000001);
-            expect(values[2]).toBeCloseTo(-Math.PI / 4, 0.000001);
-            expect(values[3]).toBeCloseTo(-Math.PI / 2, 0.000001);
+            check.nears(values[0], Math.PI / 4);
+            check.nears(values[1], 0);
+            check.nears(values[2], -Math.PI / 4);
+            check.nears(values[3], -Math.PI / 2);
         });
     });
 }

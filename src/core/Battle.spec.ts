@@ -1,6 +1,6 @@
 module TK.SpaceTac {
-    describe("Battle", function () {
-        it("defines play order by initiative throws", function () {
+    testing("Battle", test => {
+        test.case("defines play order by initiative throws", check => {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 
@@ -16,16 +16,16 @@ module TK.SpaceTac {
             ship5.setAttribute("maneuvrability", 2);
 
             var battle = new Battle(fleet1, fleet2);
-            expect(battle.play_order.length).toBe(0);
+            check.equals(battle.play_order.length, 0);
 
             var gen = new SkewedRandomGenerator([1.0, 0.1, 1.0, 0.2, 0.6]);
             battle.throwInitiative(gen);
 
-            expect(battle.play_order.length).toBe(5);
-            expect(battle.play_order).toEqual([ship1, ship4, ship5, ship3, ship2]);
+            check.equals(battle.play_order.length, 5);
+            check.equals(battle.play_order, [ship1, ship4, ship5, ship3, ship2]);
         });
 
-        it("places ships on lines, facing the arena center", function () {
+        test.case("places ships on lines, facing the arena center", check => {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 
@@ -38,28 +38,28 @@ module TK.SpaceTac {
             var battle = new Battle(fleet1, fleet2, 1000, 500);
             battle.placeShips();
 
-            expect(ship1.arena_x).toBeCloseTo(250, 0.0001);
-            expect(ship1.arena_y).toBeCloseTo(150, 0.0001);
-            expect(ship1.arena_angle).toBeCloseTo(0, 0.0001);
+            check.nears(ship1.arena_x, 250);
+            check.nears(ship1.arena_y, 150);
+            check.nears(ship1.arena_angle, 0);
 
-            expect(ship2.arena_x).toBeCloseTo(250, 0.0001);
-            expect(ship2.arena_y).toBeCloseTo(250, 0.0001);
-            expect(ship2.arena_angle).toBeCloseTo(0, 0.0001);
+            check.nears(ship2.arena_x, 250);
+            check.nears(ship2.arena_y, 250);
+            check.nears(ship2.arena_angle, 0);
 
-            expect(ship3.arena_x).toBeCloseTo(250, 0.0001);
-            expect(ship3.arena_y).toBeCloseTo(350, 0.0001);
-            expect(ship3.arena_angle).toBeCloseTo(0, 0.0001);
+            check.nears(ship3.arena_x, 250);
+            check.nears(ship3.arena_y, 350);
+            check.nears(ship3.arena_angle, 0);
 
-            expect(ship4.arena_x).toBeCloseTo(750, 0.0001);
-            expect(ship4.arena_y).toBeCloseTo(300, 0.0001);
-            expect(ship4.arena_angle).toBeCloseTo(Math.PI, 0.0001);
+            check.nears(ship4.arena_x, 750);
+            check.nears(ship4.arena_y, 300);
+            check.nears(ship4.arena_angle, Math.PI);
 
-            expect(ship5.arena_x).toBeCloseTo(750, 0.0001);
-            expect(ship5.arena_y).toBeCloseTo(200, 0.0001);
-            expect(ship5.arena_angle).toBeCloseTo(Math.PI, 0.0001);
+            check.nears(ship5.arena_x, 750);
+            check.nears(ship5.arena_y, 200);
+            check.nears(ship5.arena_angle, Math.PI);
         });
 
-        it("advances to next ship in play order", function () {
+        test.case("advances to next ship in play order", check => {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 
@@ -70,40 +70,40 @@ module TK.SpaceTac {
             var battle = new Battle(fleet1, fleet2);
 
             // Check empty play_order case
-            expect(battle.playing_ship).toBeNull();
+            check.equals(battle.playing_ship, null);
             battle.advanceToNextShip();
-            expect(battle.playing_ship).toBeNull();
+            check.equals(battle.playing_ship, null);
 
             // Force play order
             iforeach(battle.iships(), ship => ship.setAttribute("maneuvrability", 1));
             var gen = new SkewedRandomGenerator([0.1, 0.2, 0.0]);
             battle.throwInitiative(gen);
-            expect(battle.playing_ship).toBeNull();
+            check.equals(battle.playing_ship, null);
 
             battle.advanceToNextShip();
-            expect(battle.playing_ship).toBe(ship2);
+            check.same(battle.playing_ship, ship2);
 
             battle.advanceToNextShip();
-            expect(battle.playing_ship).toBe(ship1);
+            check.same(battle.playing_ship, ship1);
 
             battle.advanceToNextShip();
-            expect(battle.playing_ship).toBe(ship3);
+            check.same(battle.playing_ship, ship3);
 
             battle.advanceToNextShip();
-            expect(battle.playing_ship).toBe(ship2);
+            check.same(battle.playing_ship, ship2);
 
             // A dead ship is skipped
             ship1.setDead();
             battle.advanceToNextShip();
-            expect(battle.playing_ship).toBe(ship3);
+            check.same(battle.playing_ship, ship3);
 
             // Playing ship dies
             ship3.setDead();
             battle.advanceToNextShip();
-            expect(battle.playing_ship).toBe(ship2);
+            check.same(battle.playing_ship, ship2);
         });
 
-        it("calls startTurn on ships", function () {
+        test.case("calls startTurn on ships", check => {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 
@@ -134,7 +134,7 @@ module TK.SpaceTac {
             expect(ship1.startTurn).toHaveBeenCalledWith();
         });
 
-        it("detects victory condition and logs a final EndBattleEvent", function () {
+        test.case("detects victory condition and logs a final EndBattleEvent", check => {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 
@@ -145,7 +145,7 @@ module TK.SpaceTac {
             var battle = new Battle(fleet1, fleet2);
 
             battle.start();
-            expect(battle.ended).toBe(false);
+            check.equals(battle.ended, false);
 
             ship1.setDead();
             ship2.setDead();
@@ -153,14 +153,14 @@ module TK.SpaceTac {
             battle.log.clear();
             battle.advanceToNextShip();
 
-            expect(battle.ended).toBe(true);
-            expect(battle.log.events.length).toBe(1);
-            expect(battle.log.events[0].code).toBe("endbattle");
-            expect((<EndBattleEvent>battle.log.events[0]).outcome.winner).not.toBeNull();
-            expect((<EndBattleEvent>battle.log.events[0]).outcome.winner).toBe(fleet2);
+            check.equals(battle.ended, true);
+            check.equals(battle.log.events.length, 1);
+            check.equals(battle.log.events[0].code, "endbattle");
+            check.notequals((<EndBattleEvent>battle.log.events[0]).outcome.winner, null);
+            check.same((<EndBattleEvent>battle.log.events[0]).outcome.winner, fleet2);
         });
 
-        it("wear down equipment at the end of battle", function () {
+        test.case("wear down equipment at the end of battle", check => {
             let fleet1 = new Fleet();
             let ship1a = fleet1.addShip();
             let equ1a = TestTools.addWeapon(ship1a);
@@ -174,27 +174,27 @@ module TK.SpaceTac {
             let battle = new Battle(fleet1, fleet2);
             battle.start();
 
-            expect(equ1a.wear).toBe(0);
-            expect(equ1b.wear).toBe(0);
-            expect(equ2a.wear).toBe(0);
-            expect(eng2a.wear).toBe(0);
+            check.equals(equ1a.wear, 0);
+            check.equals(equ1b.wear, 0);
+            check.equals(equ2a.wear, 0);
+            check.equals(eng2a.wear, 0);
 
             range(8).forEach(() => battle.advanceToNextShip());
 
-            expect(equ1a.wear).toBe(0);
-            expect(equ1b.wear).toBe(0);
-            expect(equ2a.wear).toBe(0);
-            expect(eng2a.wear).toBe(0);
+            check.equals(equ1a.wear, 0);
+            check.equals(equ1b.wear, 0);
+            check.equals(equ2a.wear, 0);
+            check.equals(eng2a.wear, 0);
 
             battle.endBattle(null);
 
-            expect(equ1a.wear).toBe(3);
-            expect(equ1b.wear).toBe(3);
-            expect(equ2a.wear).toBe(3);
-            expect(eng2a.wear).toBe(3);
+            check.equals(equ1a.wear, 3);
+            check.equals(equ1b.wear, 3);
+            check.equals(equ2a.wear, 3);
+            check.equals(eng2a.wear, 3);
         });
 
-        it("handles a draw in end battle", function () {
+        test.case("handles a draw in end battle", check => {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 
@@ -205,7 +205,7 @@ module TK.SpaceTac {
             var battle = new Battle(fleet1, fleet2);
 
             battle.start();
-            expect(battle.ended).toBe(false);
+            check.equals(battle.ended, false);
 
             ship1.setDead();
             ship2.setDead();
@@ -214,13 +214,13 @@ module TK.SpaceTac {
             battle.log.clear();
             battle.advanceToNextShip();
 
-            expect(battle.ended).toBe(true);
-            expect(battle.log.events.length).toBe(1);
-            expect(battle.log.events[0].code).toBe("endbattle");
-            expect((<EndBattleEvent>battle.log.events[0]).outcome.winner).toBeNull();
+            check.equals(battle.ended, true);
+            check.equals(battle.log.events.length, 1);
+            check.equals(battle.log.events[0].code, "endbattle");
+            check.equals((<EndBattleEvent>battle.log.events[0]).outcome.winner, null);
         });
 
-        it("collects ships present in a circle", function () {
+        test.case("collects ships present in a circle", check => {
             var fleet1 = new Fleet();
             var ship1 = new Ship(fleet1, "F1S1");
             ship1.setArenaPosition(0, 0);
@@ -235,96 +235,96 @@ module TK.SpaceTac {
             battle.throwInitiative(new SkewedRandomGenerator([5, 4, 3, 2]));
 
             var result = battle.collectShipsInCircle(Target.newFromLocation(5, 8), 3);
-            expect(result).toEqual([ship2, ship3]);
+            check.equals(result, [ship2, ship3]);
         });
 
-        it("adds and remove drones", function () {
+        test.case("adds and remove drones", check => {
             let battle = new Battle();
             let ship = new Ship();
             let drone = new Drone(ship);
 
-            expect(battle.drones).toEqual([]);
-            expect(battle.log.events).toEqual([]);
+            check.equals(battle.drones, []);
+            check.equals(battle.log.events, []);
 
             battle.addDrone(drone);
 
-            expect(battle.drones).toEqual([drone]);
-            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone)]);
+            check.equals(battle.drones, [drone]);
+            check.equals(battle.log.events, [new DroneDeployedEvent(drone)]);
 
             battle.addDrone(drone);
 
-            expect(battle.drones).toEqual([drone]);
-            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone)]);
+            check.equals(battle.drones, [drone]);
+            check.equals(battle.log.events, [new DroneDeployedEvent(drone)]);
 
             battle.removeDrone(drone);
 
-            expect(battle.drones).toEqual([]);
-            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone), new DroneDestroyedEvent(drone)]);
+            check.equals(battle.drones, []);
+            check.equals(battle.log.events, [new DroneDeployedEvent(drone), new DroneDestroyedEvent(drone)]);
 
             battle.removeDrone(drone);
 
-            expect(battle.drones).toEqual([]);
-            expect(battle.log.events).toEqual([new DroneDeployedEvent(drone), new DroneDestroyedEvent(drone)]);
+            check.equals(battle.drones, []);
+            check.equals(battle.log.events, [new DroneDeployedEvent(drone), new DroneDestroyedEvent(drone)]);
 
             // check initial log fill
             battle.drones = [drone];
             let expected = new DroneDeployedEvent(drone);
             expected.initial = true;
-            expect(battle.getBootstrapEvents()).toEqual([expected]);
+            check.equals(battle.getBootstrapEvents(), [expected]);
         });
 
-        it("checks if a player is able to play", function () {
+        test.case("checks if a player is able to play", check => {
             let battle = new Battle();
             let player = new Player();
 
-            expect(battle.canPlay(player)).toBe(false);
+            check.equals(battle.canPlay(player), false);
 
             let ship = new Ship();
             TestTools.setShipPlaying(battle, ship);
 
-            expect(battle.canPlay(player)).toBe(false);
+            check.equals(battle.canPlay(player), false);
 
             ship.fleet.player = player;
 
-            expect(battle.canPlay(player)).toBe(true);
+            check.equals(battle.canPlay(player), true);
         });
 
-        it("gets the number of turns before a specific ship plays", function () {
+        test.case("gets the number of turns before a specific ship plays", check => {
             let battle = new Battle();
             spyOn(battle, "checkEndBattle").and.returnValue(false);
             battle.play_order = [new Ship(), new Ship(), new Ship()];
             battle.advanceToNextShip();
 
-            expect(battle.playing_ship).toBe(battle.play_order[0]);
-            expect(battle.getPlayOrder(battle.play_order[0])).toBe(0);
-            expect(battle.getPlayOrder(battle.play_order[1])).toBe(1);
-            expect(battle.getPlayOrder(battle.play_order[2])).toBe(2);
+            check.same(battle.playing_ship, battle.play_order[0]);
+            check.equals(battle.getPlayOrder(battle.play_order[0]), 0);
+            check.equals(battle.getPlayOrder(battle.play_order[1]), 1);
+            check.equals(battle.getPlayOrder(battle.play_order[2]), 2);
 
             battle.advanceToNextShip();
 
-            expect(battle.playing_ship).toBe(battle.play_order[1]);
-            expect(battle.getPlayOrder(battle.play_order[0])).toBe(2);
-            expect(battle.getPlayOrder(battle.play_order[1])).toBe(0);
-            expect(battle.getPlayOrder(battle.play_order[2])).toBe(1);
+            check.same(battle.playing_ship, battle.play_order[1]);
+            check.equals(battle.getPlayOrder(battle.play_order[0]), 2);
+            check.equals(battle.getPlayOrder(battle.play_order[1]), 0);
+            check.equals(battle.getPlayOrder(battle.play_order[2]), 1);
 
             battle.advanceToNextShip();
 
-            expect(battle.getPlayOrder(battle.play_order[0])).toBe(1);
-            expect(battle.getPlayOrder(battle.play_order[1])).toBe(2);
-            expect(battle.getPlayOrder(battle.play_order[2])).toBe(0);
+            check.equals(battle.getPlayOrder(battle.play_order[0]), 1);
+            check.equals(battle.getPlayOrder(battle.play_order[1]), 2);
+            check.equals(battle.getPlayOrder(battle.play_order[2]), 0);
 
             battle.advanceToNextShip();
 
-            expect(battle.getPlayOrder(battle.play_order[0])).toBe(0);
-            expect(battle.getPlayOrder(battle.play_order[1])).toBe(1);
-            expect(battle.getPlayOrder(battle.play_order[2])).toBe(2);
+            check.equals(battle.getPlayOrder(battle.play_order[0]), 0);
+            check.equals(battle.getPlayOrder(battle.play_order[1]), 1);
+            check.equals(battle.getPlayOrder(battle.play_order[2]), 2);
         });
 
-        it("lists area effects", function () {
+        test.case("lists area effects", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
 
-            expect(imaterialize(battle.iAreaEffects(100, 50))).toEqual([]);
+            check.equals(imaterialize(battle.iAreaEffects(100, 50)), []);
 
             let drone1 = new Drone(ship);
             drone1.x = 120;
@@ -339,7 +339,7 @@ module TK.SpaceTac {
             drone2.effects = [new DamageEffect(14)];
             battle.addDrone(drone2);
 
-            expect(imaterialize(battle.iAreaEffects(100, 50))).toEqual([
+            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [
                 new DamageEffect(12)
             ]);
 
@@ -353,12 +353,12 @@ module TK.SpaceTac {
             eq3.action = new ToggleAction(eq3, 0, 100, [new AttributeEffect("maneuvrability", 3)]);
             (<ToggleAction>eq3.action).activated = true;
 
-            expect(imaterialize(battle.iAreaEffects(100, 50))).toEqual([
+            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [
                 new DamageEffect(12), new AttributeEffect("maneuvrability", 1)
             ]);
         });
 
-        it("is serializable", function () {
+        test.case("is serializable", check => {
             let battle = Battle.newQuickRandom();
             battle.ai_playing = true;
 
@@ -367,9 +367,9 @@ module TK.SpaceTac {
 
             let loaded = serializer.unserialize(data);
 
-            expect(loaded.ai_playing).toBe(false);
+            check.equals(loaded.ai_playing, false);
             battle.ai_playing = false;
-            expect(loaded).toEqual(battle);
+            check.equals(loaded, battle);
         });
     });
 }

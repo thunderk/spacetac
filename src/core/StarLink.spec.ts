@@ -1,6 +1,6 @@
 module TK.SpaceTac.Specs {
-    describe("StarLink", () => {
-        it("checks link intersection", () => {
+    testing("StarLink", test => {
+        test.case("checks link intersection", check => {
             var star1 = new Star(null, 0, 0);
             var star2 = new Star(null, 0, 1);
             var star3 = new Star(null, 1, 0);
@@ -17,22 +17,22 @@ module TK.SpaceTac.Specs {
                     if (first !== second) {
                         var expected = (first === link3 && second === link4) ||
                             (first === link4 && second === link3);
-                        expect(first.isCrossing(second)).toBe(expected);
-                        expect(second.isCrossing(first)).toBe(expected);
+                        check.same(first.isCrossing(second), expected);
+                        check.same(second.isCrossing(first), expected);
                     }
                 });
             });
         });
 
-        it("gets the peer of a given sector", () => {
+        test.case("gets the peer of a given sector", check => {
             var star1 = new Star(null, 0, 0);
             var star2 = new Star(null, 0, 1);
             var star3 = new Star(null, 0, 1);
             var link1 = new StarLink(star1, star2);
 
-            expect(link1.getPeer(star1)).toBe(star2);
-            expect(link1.getPeer(star2)).toBe(star1);
-            expect(link1.getPeer(star3)).toBeNull();
+            check.same(link1.getPeer(star1), star2);
+            check.same(link1.getPeer(star2), star1);
+            check.equals(link1.getPeer(star3), null);
         });
     });
 }

@@ -1,8 +1,8 @@
 module TK.SpaceTac.UI.Specs {
-    describe("CharacterShopSlot", function () {
+    testing("CharacterShopSlot", test => {
         let testgame = setupEmptyView();
 
-        it("buys and sell if bound to a shop", function () {
+        test.case("buys and sell if bound to a shop", check => {
             let view = testgame.view;
             let sheet = new CharacterSheet(view);
 
@@ -19,38 +19,38 @@ module TK.SpaceTac.UI.Specs {
             sheet.setShop(shop);
             sheet.show(ship);
 
-            expect(ship.cargo).toEqual([equ1]);
-            expect(shop.stock).toEqual([equ2]);
-            expect(fleet.credits).toBe(100);
+            check.equals(ship.cargo, [equ1]);
+            check.equals(shop.stock, [equ2]);
+            check.equals(fleet.credits, 100);
 
             let cargo_slot = <CharacterCargo>sheet.ship_cargo.children[0];
-            expect(cargo_slot instanceof CharacterCargo).toBe(true);
+            check.equals(cargo_slot instanceof CharacterCargo, true);
             let shop_slot = <CharacterShopSlot>sheet.loot_slots.children[0];
-            expect(shop_slot instanceof CharacterShopSlot).toBe(true);
+            check.equals(shop_slot instanceof CharacterShopSlot, true);
 
             // sell
             let equ1s = <CharacterEquipment>sheet.layer_equipments.children[0];
-            expect(equ1s.item).toBe(equ1);
+            check.same(equ1s.item, equ1);
             equ1s.applyDragDrop(cargo_slot, shop_slot, false);
-            expect(ship.cargo).toEqual([]);
-            expect(shop.stock).toEqual([equ2, equ1]);
-            expect(fleet.credits).toBe(220);
+            check.equals(ship.cargo, []);
+            check.equals(shop.stock, [equ2, equ1]);
+            check.equals(fleet.credits, 220);
 
             // buy
             let equ2s = <CharacterEquipment>sheet.layer_equipments.children[1];
-            expect(equ2s.item).toBe(equ2);
+            check.same(equ2s.item, equ2);
             equ2s.applyDragDrop(shop_slot, cargo_slot, false);
-            expect(ship.cargo).toEqual([equ2]);
-            expect(shop.stock).toEqual([equ1]);
-            expect(fleet.credits).toBe(100);
+            check.equals(ship.cargo, [equ2]);
+            check.equals(shop.stock, [equ1]);
+            check.equals(fleet.credits, 100);
 
             // not enough money
             equ1s = <CharacterEquipment>sheet.layer_equipments.children[0];
-            expect(equ1s.item).toBe(equ1);
+            check.same(equ1s.item, equ1);
             equ1s.applyDragDrop(shop_slot, cargo_slot, false);
-            expect(ship.cargo).toEqual([equ2]);
-            expect(shop.stock).toEqual([equ1]);
-            expect(fleet.credits).toBe(100);
+            check.equals(ship.cargo, [equ2]);
+            check.equals(shop.stock, [equ1]);
+            check.equals(fleet.credits, 100);
         });
     });
 }

@@ -1,24 +1,24 @@
 module TK.SpaceTac.UI.Specs {
-    describe("UITools", function () {
-        describe("in UI", function () {
+    testing("UITools", test => {
+        testing("in UI", test => {
             let testgame = setupEmptyView();
 
-            it("destroys children", function () {
+            test.case("destroys children", check => {
                 let parent = testgame.view.add.group();
                 let child1 = testgame.view.add.graphics(0, 0, parent);
                 let child2 = testgame.view.add.image(0, 0, "", 0, parent);
                 let child3 = testgame.view.add.button(0, 0, "", undefined, undefined, undefined, undefined, undefined, undefined, parent);
                 let child4 = testgame.view.add.text(0, 0, "", {}, parent);
-                expect(parent.children.length).toBe(4);
+                check.equals(parent.children.length, 4);
 
                 destroyChildren(parent, 1, 2);
-                expect(parent.children.length).toBe(2);
+                check.equals(parent.children.length, 2);
 
                 destroyChildren(parent);
-                expect(parent.children.length).toBe(0);
+                check.equals(parent.children.length, 0);
             });
 
-            it("keeps objects inside bounds", function () {
+            test.case("keeps objects inside bounds", check => {
                 let image = testgame.view.add.graphics(150, 100);
                 image.beginFill(0xff0000);
                 image.drawEllipse(50, 25, 50, 25);
@@ -26,26 +26,26 @@ module TK.SpaceTac.UI.Specs {
 
                 UITools.keepInside(image, { x: 0, y: 0, width: 200, height: 200 });
 
-                expect(image.x).toBe(100);
-                expect(image.y).toBe(100);
+                check.equals(image.x, 100);
+                check.equals(image.y, 100);
             });
         });
 
-        it("normalizes angles", function () {
-            expect(UITools.normalizeAngle(0)).toEqual(0);
-            expect(UITools.normalizeAngle(0.1)).toBeCloseTo(0.1, 0.000001);
-            expect(UITools.normalizeAngle(Math.PI)).toBeCloseTo(Math.PI, 0.000001);
-            expect(UITools.normalizeAngle(Math.PI + 0.5)).toBeCloseTo(-Math.PI + 0.5, 0.000001);
-            expect(UITools.normalizeAngle(-Math.PI)).toBeCloseTo(Math.PI, 0.000001);
-            expect(UITools.normalizeAngle(-Math.PI - 0.5)).toBeCloseTo(Math.PI - 0.5, 0.000001);
+        test.case("normalizes angles", check => {
+            check.equals(UITools.normalizeAngle(0), 0);
+            check.nears(UITools.normalizeAngle(0.1), 0.1);
+            check.nears(UITools.normalizeAngle(Math.PI), Math.PI);
+            check.nears(UITools.normalizeAngle(Math.PI + 0.5), -Math.PI + 0.5);
+            check.nears(UITools.normalizeAngle(-Math.PI), Math.PI);
+            check.nears(UITools.normalizeAngle(-Math.PI - 0.5), Math.PI - 0.5);
         });
 
-        it("spaces items evenly", function () {
-            expect(UITools.evenlySpace(100, 20, 0)).toEqual([]);
-            expect(UITools.evenlySpace(100, 20, 1)).toEqual([50]);
-            expect(UITools.evenlySpace(100, 20, 2)).toEqual([25, 75]);
-            expect(UITools.evenlySpace(100, 20, 5)).toEqual([10, 30, 50, 70, 90]);
-            expect(UITools.evenlySpace(100, 20, 6)).toEqual([10, 26, 42, 58, 74, 90]);
+        test.case("spaces items evenly", check => {
+            check.equals(UITools.evenlySpace(100, 20, 0), []);
+            check.equals(UITools.evenlySpace(100, 20, 1), [50]);
+            check.equals(UITools.evenlySpace(100, 20, 2), [25, 75]);
+            check.equals(UITools.evenlySpace(100, 20, 5), [10, 30, 50, 70, 90]);
+            check.equals(UITools.evenlySpace(100, 20, 6), [10, 26, 42, 58, 74, 90]);
         });
     });
 }

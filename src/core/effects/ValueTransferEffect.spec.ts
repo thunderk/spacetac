@@ -1,6 +1,6 @@
 module TK.SpaceTac.Specs {
-    describe("ValueTransferEffect", function () {
-        it("takes or gives value", function () {
+    testing("ValueTransferEffect", test => {
+        test.case("takes or gives value", check => {
             let ship1 = new Ship();
             TestTools.setShipHP(ship1, 100, 50);
             ship1.setValue("hull", 10);
@@ -9,23 +9,23 @@ module TK.SpaceTac.Specs {
 
             let effect = new ValueTransferEffect("hull", -30);
             effect.applyOnShip(ship2, ship1);
-            expect(ship1.getValue("hull")).toEqual(40);
-            expect(ship2.getValue("hull")).toEqual(70);
+            check.equals(ship1.getValue("hull"), 40);
+            check.equals(ship2.getValue("hull"), 70);
 
             effect = new ValueTransferEffect("hull", 1000);
             effect.applyOnShip(ship2, ship1);
-            expect(ship1.getValue("hull")).toEqual(0);
-            expect(ship2.getValue("hull")).toEqual(100);
+            check.equals(ship1.getValue("hull"), 0);
+            check.equals(ship2.getValue("hull"), 100);
         })
 
-        it("builds a description", function () {
+        test.case("builds a description", check => {
             let effect = new ValueTransferEffect("power", 12);
-            expect(effect.getDescription()).toEqual("give 12 power");
-            expect(effect.isBeneficial()).toBe(true);
+            check.equals(effect.getDescription(), "give 12 power");
+            check.equals(effect.isBeneficial(), true);
 
             effect = new ValueTransferEffect("shield", -20);
-            expect(effect.getDescription()).toEqual("steal 20 shield");
-            expect(effect.isBeneficial()).toBe(false);
+            check.equals(effect.getDescription(), "steal 20 shield");
+            check.equals(effect.isBeneficial(), false);
         })
     })
 }

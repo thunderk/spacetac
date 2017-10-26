@@ -1,30 +1,30 @@
 module TK.SpaceTac.Specs {
-    describe("EndTurnAction", () => {
-        it("can't be applied to non-playing ship", () => {
+    testing("EndTurnAction", test => {
+        test.case("can't be applied to non-playing ship", check => {
             spyOn(console, "warn").and.stub();
 
             let battle = Battle.newQuickRandom();
             let action = new EndTurnAction();
 
-            expect(action.checkCannotBeApplied(battle.play_order[0])).toBe(null);
-            expect(action.checkCannotBeApplied(battle.play_order[1])).toBe("ship not playing");
+            check.equals(action.checkCannotBeApplied(battle.play_order[0]), null);
+            check.equals(action.checkCannotBeApplied(battle.play_order[1]), "ship not playing");
 
             let ship = battle.play_order[1];
             let result = action.apply(battle.play_order[1]);
-            expect(result).toBe(false);
+            check.equals(result, false);
 
             expect(console.warn).toHaveBeenCalledWith("Action rejected - ship not playing", ship, action, Target.newFromShip(ship));
         });
 
-        it("ends turn when applied", () => {
+        test.case("ends turn when applied", check => {
             let battle = Battle.newQuickRandom();
             let action = new EndTurnAction();
 
-            expect(battle.play_index).toBe(0);
+            check.equals(battle.play_index, 0);
 
             let result = action.apply(battle.play_order[0], Target.newFromShip(battle.play_order[0]));
-            expect(result).toBe(true);
-            expect(battle.play_index).toBe(1);
+            check.equals(result, true);
+            check.equals(battle.play_index, 1);
         });
     });
 }

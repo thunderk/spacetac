@@ -1,18 +1,18 @@
 /// <reference path="TestGame.ts" />
 
 module TK.SpaceTac.UI.Specs {
-    describe("AssetLoading", () => {
+    testing("AssetLoading", test => {
         let testgame = setupSingleView(() => [new AssetLoading(), []]);
 
-        it("loads correctly", function () {
-            expect(testgame.ui.state.current).toEqual("test");
+        test.case("loads correctly", check => {
+            check.equals(testgame.ui.state.current, "test");
             // TODO test asset loading
         });
 
-        it("builds cache keys from path", function () {
-            expect(AssetLoading.getKey("dir/file-path")).toEqual("dir-file-path");
-            expect(AssetLoading.getKey("dir/file-path.ext")).toEqual("dir-file-path");
-            expect(AssetLoading.getKey("dir/file-path.mp3")).toEqual("dir-file-path");
+        test.case("builds cache keys from path", check => {
+            check.equals(AssetLoading.getKey("dir/file-path"), "dir-file-path");
+            check.equals(AssetLoading.getKey("dir/file-path.ext"), "dir-file-path");
+            check.equals(AssetLoading.getKey("dir/file-path.mp3"), "dir-file-path");
         });
     });
 }

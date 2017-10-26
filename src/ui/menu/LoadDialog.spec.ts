@@ -2,27 +2,29 @@
 /// <reference path="MainMenu.ts" />
 
 module TK.SpaceTac.UI.Specs {
-    describe("LoadDialog", () => {
+    testing("LoadDialog", test => {
         let testgame = setupSingleView(() => [new MainMenu(), []]);
 
-        it("joins remote sessions as spectator", function (done) {
-            let view = <MainMenu>testgame.ui.state.getCurrentState();
+        test.acase("joins remote sessions as spectator", async check => {
+            return new Promise((resolve, reject) => {
+                let view = <MainMenu>testgame.ui.state.getCurrentState();
 
-            let session = new GameSession();
-            expect(session.primary).toBe(true);
-            expect(session.spectator).toBe(false);
-            view.getConnection().publish(session, "Test").then(token => {
-                let dialog = new LoadDialog(view);
-                dialog.token_input.setContent(token);
+                let session = new GameSession();
+                check.equals(session.primary, true);
+                check.equals(session.spectator, false);
+                view.getConnection().publish(session, "Test").then(token => {
+                    let dialog = new LoadDialog(view);
+                    dialog.token_input.setContent(token);
 
-                spyOn(view.gameui, "setSession").and.callFake((joined: GameSession) => {
-                    expect(joined.id).toEqual(session.id);
-                    expect(joined.primary).toBe(false);
-                    expect(joined.spectator).toBe(true);
-                    done();
+                    spyOn(view.gameui, "setSession").and.callFake((joined: GameSession) => {
+                        test.check.equals(joined.id, session.id);
+                        check.equals(joined.primary, false);
+                        check.equals(joined.spectator, true);
+                        resolve();
+                    });
+
+                    dialog.join();
                 });
-
-                dialog.join();
             });
         });
     });

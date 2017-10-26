@@ -1,45 +1,45 @@
 module TK.SpaceTac.Specs {
-    function checkProportional(range: Range, value1: number, value2: number) {
-        expect(range.getProportional(value1)).toEqual(value2);
-        expect(range.getReverseProportional(value2)).toEqual(value1);
-    }
-
-    describe("Range", () => {
-        it("can work with proportional values", () => {
+    testing("Range", test => {
+        test.case("can work with proportional values", check => {
             var range = new Range(1, 5);
+
+            function checkProportional(range: Range, value1: number, value2: number) {
+                check.equals(range.getProportional(value1), value2);
+                check.equals(range.getReverseProportional(value2), value1);
+            }
 
             checkProportional(range, 0, 1);
             checkProportional(range, 1, 5);
             checkProportional(range, 0.5, 3);
             checkProportional(range, 0.4, 2.6);
 
-            expect(range.getProportional(-0.25)).toEqual(1);
-            expect(range.getProportional(1.8)).toEqual(5);
+            check.equals(range.getProportional(-0.25), 1);
+            check.equals(range.getProportional(1.8), 5);
 
-            expect(range.getReverseProportional(0)).toEqual(0);
-            expect(range.getReverseProportional(6)).toEqual(1);
+            check.equals(range.getReverseProportional(0), 0);
+            check.equals(range.getReverseProportional(6), 1);
         });
     });
 
-    describe("IntegerRange", () => {
-        it("can work with proportional values", () => {
+    testing("IntegerRange", test => {
+        test.case("can work with proportional values", check => {
             var range = new IntegerRange(1, 5);
 
-            expect(range.getProportional(0)).toEqual(1);
-            expect(range.getProportional(0.1)).toEqual(1);
-            expect(range.getProportional(0.2)).toEqual(2);
-            expect(range.getProportional(0.45)).toEqual(3);
-            expect(range.getProportional(0.5)).toEqual(3);
-            expect(range.getProportional(0.75)).toEqual(4);
-            expect(range.getProportional(0.8)).toEqual(5);
-            expect(range.getProportional(0.99)).toEqual(5);
-            expect(range.getProportional(1)).toEqual(5);
+            check.equals(range.getProportional(0), 1);
+            check.equals(range.getProportional(0.1), 1);
+            check.equals(range.getProportional(0.2), 2);
+            check.equals(range.getProportional(0.45), 3);
+            check.equals(range.getProportional(0.5), 3);
+            check.equals(range.getProportional(0.75), 4);
+            check.equals(range.getProportional(0.8), 5);
+            check.equals(range.getProportional(0.99), 5);
+            check.equals(range.getProportional(1), 5);
 
-            expect(range.getReverseProportional(1)).toEqual(0);
-            expect(range.getReverseProportional(2)).toEqual(0.2);
-            expect(range.getReverseProportional(3)).toEqual(0.4);
-            expect(range.getReverseProportional(4)).toEqual(0.6);
-            expect(range.getReverseProportional(5)).toEqual(0.8);
+            check.equals(range.getReverseProportional(1), 0);
+            check.equals(range.getReverseProportional(2), 0.2);
+            check.equals(range.getReverseProportional(3), 0.4);
+            check.equals(range.getReverseProportional(4), 0.6);
+            check.equals(range.getReverseProportional(5), 0.8);
         });
     });
 }

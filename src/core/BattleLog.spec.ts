@@ -1,46 +1,47 @@
 /// <reference path="events/BaseBattleEvent.ts"/>
 
 module TK.SpaceTac {
-    // Check a single game log event
-    function checkEvent(got: BaseBattleEvent, ship: Ship, code: string,
-        target_ship: Ship | null = null, target_x: number | null = null, target_y: number | null = null): void {
-        if (target_ship) {
-            if (target_x === null) {
-                target_x = target_ship.arena_x;
+    testing("BattleLog", test => {
+        // Check a single game log event
+        function checkEvent(got: BaseBattleEvent, ship: Ship, code: string,
+            target_ship: Ship | null = null, target_x: number | null = null, target_y: number | null = null): void {
+            if (target_ship) {
+                if (target_x === null) {
+                    target_x = target_ship.arena_x;
+                }
+                if (target_y === null) {
+                    target_y = target_ship.arena_y;
+                }
             }
-            if (target_y === null) {
-                target_y = target_ship.arena_y;
+
+            let check = test.check;
+            check.same(got.ship, ship);
+            check.equals(got.code, code);
+            if (got.target) {
+                check.same(got.target.ship, target_ship);
+                if (target_x === null) {
+                    check.equals(got.target.x, null);
+                } else {
+                    check.nears(got.target.x, target_x);
+                }
+                if (target_y === null) {
+                    check.equals(got.target.y, null);
+                } else {
+                    check.nears(got.target.y, target_y);
+                }
+            } else if (target_ship || target_x || target_y) {
+                check.fail("Got no target");
             }
         }
 
-        expect(got.ship).toBe(ship);
-        expect(got.code).toEqual(code);
-        if (got.target) {
-            expect(got.target.ship).toBe(target_ship);
-            if (target_x === null) {
-                expect(got.target.x).toBeNull();
-            } else {
-                expect(got.target.x).toBeCloseTo(target_x, 0.000001);
+        // Fake event
+        class FakeEvent extends BaseBattleEvent {
+            constructor() {
+                super("fake", new Ship());
             }
-            if (target_y === null) {
-                expect(got.target.y).toBeNull();
-            } else {
-                expect(got.target.y).toBeCloseTo(target_y, 0.000001);
-            }
-        } else if (target_ship || target_x || target_y) {
-            fail("Got no target");
         }
-    }
 
-    // Fake event
-    class FakeEvent extends BaseBattleEvent {
-        constructor() {
-            super("fake", new Ship());
-        }
-    }
-
-    describe("BattleLog", function () {
-        it("forwards events to subscribers, until unsubscribe", function () {
+        test.case("forwards events to subscribers, until unsubscribe", check => {
             var log = new BattleLog();
             var received: BaseBattleEvent[] = [];
             var fake = new FakeEvent();
@@ -50,33 +51,33 @@ module TK.SpaceTac {
             });
 
             log.add(fake);
-            expect(received).toEqual([fake]);
+            check.equals(received, [fake]);
 
             log.add(fake);
-            expect(received).toEqual([fake, fake]);
+            check.equals(received, [fake, fake]);
 
             log.unsubscribe(sub);
             log.add(fake);
-            expect(received).toEqual([fake, fake]);
+            check.equals(received, [fake, fake]);
         });
 
-        it("logs ship change events", function () {
+        test.case("logs ship change events", check => {
             var battle = Battle.newQuickRandom();
             battle.log.clear();
             battle.log.addFilter("value");
-            expect(battle.log.events.length).toBe(0);
+            check.equals(battle.log.events.length, 0);
 
             battle.advanceToNextShip();
-            expect(battle.log.events.length).toBe(1);
+            check.equals(battle.log.events.length, 1);
             checkEvent(battle.log.events[0], battle.play_order[0], "ship_change", battle.play_order[1]);
         });
 
-        it("can receive simulated initial state events", function () {
+        test.case("can receive simulated initial state events", check => {
             let battle = Battle.newQuickRandom(true, 1, 4);
             let playing = nn(battle.playing_ship);
 
             let result = battle.getBootstrapEvents();
-            expect(result.length).toBe(17);
+            check.equals(result.length, 17);
             for (var i = 0; i < 8; i++) {
                 checkEvent(result[i], battle.play_order[i], "move", null,
                     battle.play_order[i].arena_x, battle.play_order[i].arena_y);
@@ -87,16 +88,16 @@ module TK.SpaceTac {
             checkEvent(result[16], playing, "ship_change", playing);
         });
 
-        it("stop accepting events once the battle is ended", function () {
+        test.case("stop accepting events once the battle is ended", check => {
             let log = new BattleLog();
 
             log.add(new ValueChangeEvent(new Ship(), new ShipValue("test"), 1));
             log.add(new EndBattleEvent(new BattleOutcome(null)));
             log.add(new ShipChangeEvent(new Ship(), new Ship()));
 
-            expect(log.events.length).toBe(2);
-            expect(log.events[0] instanceof ValueChangeEvent).toBe(true);
-            expect(log.events[1] instanceof EndBattleEvent).toBe(true);
+            check.equals(log.events.length, 2);
+            check.equals(log.events[0] instanceof ValueChangeEvent, true);
+            check.equals(log.events[1] instanceof EndBattleEvent, true);
         });
     });
 }

@@ -1,6 +1,6 @@
 module TK.SpaceTac.Specs {
-    describe("MissionGenerator", function () {
-        it("generates escort missions", function () {
+    testing("MissionGenerator", test => {
+        test.case("generates escort missions", check => {
             let universe = new Universe();
             let star1 = universe.addStar(1);
             let loc1 = star1.locations[0];
@@ -11,17 +11,17 @@ module TK.SpaceTac.Specs {
             let generator = new MissionGenerator(universe, loc1);
             let mission = generator.generateEscort();
 
-            expect(mission.title).toBe("Escort a ship to a level 2 system");
-            expect(mission.parts.length).toBe(3);
-            expect(mission.parts[0] instanceof MissionPartConversation).toBe(true);
-            expect(mission.parts[1] instanceof MissionPartEscort).toBe(true);
+            check.equals(mission.title, "Escort a ship to a level 2 system");
+            check.equals(mission.parts.length, 3);
+            check.equals(mission.parts[0] instanceof MissionPartConversation, true);
+            check.equals(mission.parts[1] instanceof MissionPartEscort, true);
             let escort = <MissionPartEscort>mission.parts[1];
-            expect(escort.destination).toBe(loc2);
-            expect(escort.ship.level.get()).toBe(2);
-            expect(mission.parts[2] instanceof MissionPartConversation).toBe(true);
+            check.same(escort.destination, loc2);
+            check.equals(escort.ship.level.get(), 2);
+            check.equals(mission.parts[2] instanceof MissionPartConversation, true);
         })
 
-        it("generates location cleaning missions", function () {
+        test.case("generates location cleaning missions", check => {
             let universe = new Universe();
             let star1 = universe.addStar(1, "TTX");
             let loc1 = star1.locations[0];
@@ -30,77 +30,77 @@ module TK.SpaceTac.Specs {
             let generator = new MissionGenerator(universe, loc1);
             let mission = generator.generateCleanLocation();
 
-            expect(mission.title).toBe("Defeat a level 1 fleet in this system");
-            expect(mission.parts.length).toBe(4);
-            expect(mission.parts[0] instanceof MissionPartConversation).toBe(true);
-            expect(mission.parts[1] instanceof MissionPartCleanLocation).toBe(true);
+            check.equals(mission.title, "Defeat a level 1 fleet in this system");
+            check.equals(mission.parts.length, 4);
+            check.equals(mission.parts[0] instanceof MissionPartConversation, true);
+            check.equals(mission.parts[1] instanceof MissionPartCleanLocation, true);
             let part1 = <MissionPartCleanLocation>mission.parts[1];
-            expect(part1.destination).toBe(loc2);
-            expect(part1.title).toEqual("Clean a planet in TTX system");
-            expect(mission.parts[2] instanceof MissionPartGoTo).toBe(true);
+            check.same(part1.destination, loc2);
+            check.equals(part1.title, "Clean a planet in TTX system");
+            check.equals(mission.parts[2] instanceof MissionPartGoTo, true);
             let part2 = <MissionPartGoTo>mission.parts[2];
-            expect(part2.destination).toBe(loc1);
-            expect(part2.title).toEqual("Go back to collect your reward");
-            expect(mission.parts[3] instanceof MissionPartConversation).toBe(true);
+            check.same(part2.destination, loc1);
+            check.equals(part2.title, "Go back to collect your reward");
+            check.equals(mission.parts[3] instanceof MissionPartConversation, true);
         })
 
-        it("helps to evaluate mission difficulty", function () {
+        test.case("helps to evaluate mission difficulty", check => {
             let generator = new MissionGenerator(new Universe(), new StarLocation());
             let mission = new Mission(generator.universe);
-            expect(mission.difficulty).toBe(MissionDifficulty.normal);
-            expect(mission.value).toBe(0);
+            check.same(mission.difficulty, MissionDifficulty.normal);
+            check.equals(mission.value, 0);
 
             generator.setDifficulty(mission, 1000, 1);
-            expect(mission.difficulty).toBe(MissionDifficulty.normal);
-            expect(mission.value).toBe(1000);
+            check.same(mission.difficulty, MissionDifficulty.normal);
+            check.equals(mission.value, 1000);
 
             generator.setDifficulty(mission, 1000, 2);
-            expect(mission.difficulty).toBe(MissionDifficulty.hard);
-            expect(mission.value).toBe(2200);
+            check.same(mission.difficulty, MissionDifficulty.hard);
+            check.equals(mission.value, 2200);
 
             generator.setDifficulty(mission, 1000, 3);
-            expect(mission.difficulty).toBe(MissionDifficulty.hard);
-            expect(mission.value).toBe(3600);
+            check.same(mission.difficulty, MissionDifficulty.hard);
+            check.equals(mission.value, 3600);
 
             generator.around.star.level = 10;
 
             generator.setDifficulty(mission, 1000, 10);
-            expect(mission.difficulty).toBe(MissionDifficulty.normal);
-            expect(mission.value).toBe(10000);
+            check.same(mission.difficulty, MissionDifficulty.normal);
+            check.equals(mission.value, 10000);
 
             generator.setDifficulty(mission, 1000, 9);
-            expect(mission.difficulty).toBe(MissionDifficulty.easy);
-            expect(mission.value).toBe(8100);
+            check.same(mission.difficulty, MissionDifficulty.easy);
+            check.equals(mission.value, 8100);
 
             generator.setDifficulty(mission, 1000, 8);
-            expect(mission.difficulty).toBe(MissionDifficulty.easy);
-            expect(mission.value).toBe(6400);
+            check.same(mission.difficulty, MissionDifficulty.easy);
+            check.equals(mission.value, 6400);
         })
 
-        it("generates equipment reward", function () {
+        test.case("generates equipment reward", check => {
             let generator = new MissionGenerator(new Universe(), new StarLocation());
             let template = new LootTemplate(SlotType.Weapon, "Test Weapon");
             generator.equipment_generator.templates = [template];
 
             template.price = irepeat(350);
             let result = generator.tryGenerateEquipmentReward(500);
-            expect(result).toBeNull();
+            check.equals(result, null);
 
             template.price = irepeat(800);
             result = generator.tryGenerateEquipmentReward(500);
-            expect(result).toBeNull();
+            check.equals(result, null);
 
             template.price = irepeat(500);
             result = generator.tryGenerateEquipmentReward(500);
-            expect(result).not.toBeNull();
+            check.notequals(result, null);
         })
 
-        it("falls back to money reward when no suitable equipment have been generated", function () {
+        test.case("falls back to money reward when no suitable equipment have been generated", check => {
             let generator = new MissionGenerator(new Universe(), new StarLocation());
             generator.equipment_generator.templates = [];
 
             let result = generator.generateReward(15000);
-            expect(result).toBe(15000);
+            check.equals(result, 15000);
 
             let template = new LootTemplate(SlotType.Weapon, "Test Weapon");
             template.price = irepeat(15000);
@@ -108,7 +108,7 @@ module TK.SpaceTac.Specs {
 
             generator.random = new SkewedRandomGenerator([0], true);
             result = generator.generateReward(15000);
-            expect(result instanceof Equipment).toBe(true);
+            check.equals(result instanceof Equipment, true);
         })
     });
 }

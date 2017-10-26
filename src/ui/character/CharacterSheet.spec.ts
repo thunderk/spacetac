@@ -1,14 +1,14 @@
 module TK.SpaceTac.UI.Specs {
-    describe("CharacterSheet", function () {
+    testing("CharacterSheet", test => {
 
-        describe("in UI", function () {
+        testing("in UI", test => {
             let testgame = setupEmptyView();
 
-            it("displays fleet and ship information", function () {
+            test.case("displays fleet and ship information", check => {
                 let view = testgame.view;
                 let sheet = new CharacterSheet(view, -1000);
 
-                expect(sheet.x).toEqual(-1000);
+                check.equals(sheet.x, -1000);
 
                 let fleet = new Fleet();
                 let ship1 = fleet.addShip();
@@ -25,22 +25,22 @@ module TK.SpaceTac.UI.Specs {
 
                 sheet.show(ship1, false);
 
-                expect(sheet.x).toEqual(0);
-                expect(sheet.portraits.length).toBe(2);
+                check.equals(sheet.x, 0);
+                check.equals(sheet.portraits.length, 2);
 
-                expect(sheet.ship_name.text).toEqual("Player's Level 1 Ship 1");
-                expect(sheet.ship_slots.length).toBe(4);
-                expect(sheet.ship_cargo.length).toBe(3);
+                check.equals(sheet.ship_name.text, "Player's Level 1 Ship 1");
+                check.equals(sheet.ship_slots.length, 4);
+                check.equals(sheet.ship_cargo.length, 3);
 
                 let portrait = <Phaser.Button>sheet.portraits.getChildAt(1);
                 portrait.onInputUp.dispatch();
 
-                expect(sheet.ship_name.text).toEqual("Player's Level 1 Ship 2");
-                expect(sheet.ship_slots.length).toBe(1);
-                expect(sheet.ship_cargo.length).toBe(2);
+                check.equals(sheet.ship_name.text, "Player's Level 1 Ship 2");
+                check.equals(sheet.ship_slots.length, 1);
+                check.equals(sheet.ship_cargo.length, 2);
             });
 
-            it("moves equipment around", function () {
+            test.case("moves equipment around", check => {
                 let fleet = new Fleet();
                 let ship = fleet.addShip();
                 ship.setCargoSpace(2);
@@ -55,13 +55,13 @@ module TK.SpaceTac.UI.Specs {
                 let sheet = new CharacterSheet(testgame.view);
                 sheet.show(ship, false);
 
-                expect(sheet.loot_slots.visible).toBe(false);
-                expect(sheet.layer_equipments.children.length).toBe(2);
+                check.equals(sheet.loot_slots.visible, false);
+                check.equals(sheet.layer_equipments.children.length, 2);
 
                 sheet.setLoot(loot);
 
-                expect(sheet.loot_slots.visible).toBe(true);
-                expect(sheet.layer_equipments.children.length).toBe(4);
+                check.equals(sheet.loot_slots.visible, true);
+                check.equals(sheet.layer_equipments.children.length, 4);
 
                 let findsprite = (equ: Equipment) => nn(first(<CharacterEquipment[]>sheet.layer_equipments.children, sp => sp.item == equ));
                 let draddrop = (sp: CharacterEquipment, dest: CharacterCargo | CharacterSlot) => {
@@ -70,64 +70,64 @@ module TK.SpaceTac.UI.Specs {
 
                 // Unequip
                 let sprite = findsprite(equ1);
-                expect(equ1.attached_to).not.toBeNull();
-                expect(ship.cargo.length).toBe(1);
+                check.notequals(equ1.attached_to, null);
+                check.equals(ship.cargo.length, 1);
                 draddrop(sprite, <CharacterCargo>sheet.ship_cargo.children[0]);
-                expect(equ1.attached_to).toBeNull();
-                expect(ship.cargo.length).toBe(2);
-                expect(ship.cargo).toContain(equ1);
+                check.equals(equ1.attached_to, null);
+                check.equals(ship.cargo.length, 2);
+                check.contains(ship.cargo, equ1);
 
                 // Equip
                 sprite = findsprite(equ2);
-                expect(equ2.attached_to).toBeNull();
-                expect(ship.cargo).toContain(equ2);
+                check.equals(equ2.attached_to, null);
+                check.contains(ship.cargo, equ2);
                 draddrop(sprite, <CharacterSlot>sheet.ship_slots.children[0]);
-                expect(equ2.attached_to).toBe(ship.slots[1]);
-                expect(ship.cargo).not.toContain(equ2);
+                check.same(equ2.attached_to, ship.slots[1]);
+                check.notcontains(ship.cargo, equ2);
 
                 // Loot
                 sprite = findsprite(equ3);
-                expect(equ3.attached_to).toBeNull();
-                expect(ship.cargo).not.toContain(equ3);
-                expect(loot).toContain(equ3);
+                check.equals(equ3.attached_to, null);
+                check.notcontains(ship.cargo, equ3);
+                check.contains(loot, equ3);
                 draddrop(sprite, <CharacterCargo>sheet.ship_cargo.children[0]);
-                expect(equ3.attached_to).toBeNull();
-                expect(ship.cargo).toContain(equ3);
-                expect(loot).not.toContain(equ3);
+                check.equals(equ3.attached_to, null);
+                check.contains(ship.cargo, equ3);
+                check.notcontains(loot, equ3);
 
                 // Can't loop - no cargo space available
                 sprite = findsprite(equ4);
-                expect(ship.cargo).not.toContain(equ4);
-                expect(loot).toContain(equ4);
+                check.notcontains(ship.cargo, equ4);
+                check.contains(loot, equ4);
                 draddrop(sprite, <CharacterCargo>sheet.ship_cargo.children[0]);
-                expect(ship.cargo).not.toContain(equ4);
-                expect(loot).toContain(equ4);
+                check.notcontains(ship.cargo, equ4);
+                check.contains(loot, equ4);
 
                 // Discard
                 sprite = findsprite(equ1);
-                expect(ship.cargo).toContain(equ1);
-                expect(loot).not.toContain(equ1);
+                check.contains(ship.cargo, equ1);
+                check.notcontains(loot, equ1);
                 draddrop(sprite, <CharacterCargo>sheet.ship_cargo.children[0]);
-                expect(equ1.attached_to).toBeNull();
-                expect(loot).not.toContain(equ1);
+                check.equals(equ1.attached_to, null);
+                check.notcontains(loot, equ1);
 
                 // Can't equip - no slot available
                 sprite = findsprite(equ3);
-                expect(equ3.attached_to).toBeNull();
+                check.equals(equ3.attached_to, null);
                 draddrop(sprite, <CharacterSlot>sheet.ship_slots.children[0]);
-                expect(equ3.attached_to).toBeNull();
+                check.equals(equ3.attached_to, null);
             });
         });
 
-        it("fits slots in area", function () {
+        test.case("fits slots in area", check => {
             let result = CharacterSheet.getSlotPositions(6, 300, 200, 100, 100);
-            expect(result).toEqual({
+            check.equals(result, {
                 positions: [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 200, y: 0 }, { x: 0, y: 100 }, { x: 100, y: 100 }, { x: 200, y: 100 }],
                 scaling: 1
             });
 
             result = CharacterSheet.getSlotPositions(6, 299, 199, 100, 100);
-            expect(result).toEqual({
+            check.equals(result, {
                 positions: [{ x: 0, y: 0 }, { x: 100, y: 0 }, { x: 200, y: 0 }, { x: 0, y: 100 }, { x: 100, y: 100 }, { x: 200, y: 100 }],
                 scaling: 0.99
             });

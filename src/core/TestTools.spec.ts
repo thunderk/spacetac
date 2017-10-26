@@ -1,33 +1,33 @@
 module TK.SpaceTac.Specs {
-    describe("TestTools", () => {
-        it("set ship power", () => {
+    testing("TestTools", test => {
+        test.case("set ship power", check => {
             let ship = new Ship();
 
-            expect(ship.getAttribute("power_capacity")).toBe(0);
-            expect(ship.getAttribute("power_generation")).toBe(0);
-            expect(ship.getValue("power")).toBe(0);
+            check.equals(ship.getAttribute("power_capacity"), 0);
+            check.equals(ship.getAttribute("power_generation"), 0);
+            check.equals(ship.getValue("power"), 0);
 
             TestTools.setShipAP(ship, 12, 4);
 
-            expect(ship.getAttribute("power_capacity")).toBe(12);
-            expect(ship.getAttribute("power_generation")).toBe(4);
-            expect(ship.getValue("power")).toBe(12);
+            check.equals(ship.getAttribute("power_capacity"), 12);
+            check.equals(ship.getAttribute("power_generation"), 4);
+            check.equals(ship.getValue("power"), 12);
         });
 
-        it("set ship health", () => {
+        test.case("set ship health", check => {
             let ship = new Ship();
 
-            expect(ship.getAttribute("hull_capacity")).toBe(0);
-            expect(ship.getAttribute("shield_capacity")).toBe(0);
-            expect(ship.getValue("hull")).toBe(0);
-            expect(ship.getValue("shield")).toBe(0);
+            check.equals(ship.getAttribute("hull_capacity"), 0);
+            check.equals(ship.getAttribute("shield_capacity"), 0);
+            check.equals(ship.getValue("hull"), 0);
+            check.equals(ship.getValue("shield"), 0);
 
             TestTools.setShipHP(ship, 100, 200);
 
-            expect(ship.getAttribute("hull_capacity")).toBe(100);
-            expect(ship.getAttribute("shield_capacity")).toBe(200);
-            expect(ship.getValue("hull")).toBe(100);
-            expect(ship.getValue("shield")).toBe(200);
+            check.equals(ship.getAttribute("hull_capacity"), 100);
+            check.equals(ship.getAttribute("shield_capacity"), 200);
+            check.equals(ship.getValue("hull"), 100);
+            check.equals(ship.getValue("shield"), 200);
         });
     });
 }

@@ -1,5 +1,5 @@
 module TK.SpaceTac.UI.Specs {
-    describe("CharacterEquipment", function () {
+    testing("CharacterEquipment", test => {
         let testgame = setupEmptyView();
 
         class FakeContainer implements CharacterEquipmentContainer {
@@ -60,43 +60,43 @@ module TK.SpaceTac.UI.Specs {
             return [sheet, equipment, containers, refresh];
         }
 
-        it("handles drag-and-drop to move equipment", function () {
+        test.case("handles drag-and-drop to move equipment", check => {
             let [sheet, equipment, [container1, container2, container3], refresh] = createBasicCase([0, 100, 200]);
 
-            expect(equipment.inputEnabled).toBe(true, "Input should be enabled");
-            expect(equipment.input.draggable).toBe(true, "Equipment should be draggable");
-            expect(equipment.container).toBe(container1);
-            expect(equipment.x).toBe(0);
-            expect(equipment.scale.x).toBe(0.25);
+            check.same(equipment.inputEnabled, true, "Input should be enabled");
+            check.same(equipment.input.draggable, true, "Equipment should be draggable");
+            check.same(equipment.container, container1);
+            check.equals(equipment.x, 0);
+            check.equals(equipment.scale.x, 0.25);
 
             // drop on nothing
-            expect(equipment.alpha).toBe(1);
+            check.equals(equipment.alpha, 1);
             equipment.events.onDragStart.dispatch();
-            expect(equipment.alpha).toBe(0.8);
+            check.equals(equipment.alpha, 0.8);
             equipment.x = 812;
             equipment.events.onDragStop.dispatch();
-            expect(equipment.container).toBe(container1);
-            expect(equipment.x).toBe(0);
+            check.same(equipment.container, container1);
+            check.equals(equipment.x, 0);
             expect(refresh).toHaveBeenCalledTimes(0);
 
             // drop on accepting destination
             equipment.events.onDragStart.dispatch();
             equipment.x = 100;
             equipment.events.onDragStop.dispatch();
-            expect(equipment.container).toBe(container2);
-            expect(equipment.x).toBe(100);
-            expect(container1.inside).toBeNull();
-            expect(container2.inside).toBe(equipment);
+            check.same(equipment.container, container2);
+            check.equals(equipment.x, 100);
+            check.equals(container1.inside, null);
+            check.same(container2.inside, equipment);
             expect(refresh).toHaveBeenCalledTimes(1);
 
             // drop on refusing destination
             equipment.events.onDragStart.dispatch();
             equipment.x = 200;
             equipment.events.onDragStop.dispatch();
-            expect(equipment.container).toBe(container2);
-            expect(equipment.x).toBe(100);
-            expect(container2.inside).toBe(equipment);
-            expect(container3.inside).toBe(null);
+            check.same(equipment.container, container2);
+            check.equals(equipment.x, 100);
+            check.same(container2.inside, equipment);
+            check.equals(container3.inside, null);
             expect(refresh).toHaveBeenCalledTimes(1);
 
             // broken destination, should return to source
@@ -105,8 +105,8 @@ module TK.SpaceTac.UI.Specs {
             equipment.events.onDragStart.dispatch();
             equipment.x = 200;
             equipment.events.onDragStop.dispatch();
-            expect(equipment.container).toBe(container2);
-            expect(equipment.x).toBe(100);
+            check.same(equipment.container, container2);
+            check.equals(equipment.x, 100);
             expect(refresh).toHaveBeenCalledTimes(1);
             expect(log).toHaveBeenCalledWith('Destination container refused to accept equipment', equipment, container2, container3);
 
@@ -115,13 +115,13 @@ module TK.SpaceTac.UI.Specs {
             equipment.events.onDragStart.dispatch();
             equipment.x = 200;
             equipment.events.onDragStop.dispatch();
-            expect(equipment.container).toBe(container3);
-            expect(equipment.x).toBe(200);
+            check.same(equipment.container, container3);
+            check.equals(equipment.x, 200);
             expect(refresh).toHaveBeenCalledTimes(2);
             expect(log).toHaveBeenCalledWith('Equipment lost in bad exchange!', equipment, container2, container3);
         });
 
-        it("defines the sheet's action message", function () {
+        test.case("defines the sheet's action message", check => {
             let [sheet, equipment, [container1, container2], refresh] = createBasicCase([0, 1]);
 
             spyOn(container1, "removeEquipment").and.returnValues(
@@ -137,18 +137,18 @@ module TK.SpaceTac.UI.Specs {
                 { success: false, info: "attach", error: "cannot attach" }
             )
 
-            expect(sheet.action_message.text).toEqual("");
+            check.equals(sheet.action_message.text, "");
             equipment.events.onDragStart.dispatch();
-            expect(sheet.action_message.text).toEqual("");
+            check.equals(sheet.action_message.text, "");
             equipment.x = 1;
             equipment.events.onDragUpdate.dispatch();
-            expect(sheet.action_message.text).toEqual("Detach, attach");
+            check.equals(sheet.action_message.text, "Detach, attach");
             equipment.events.onDragUpdate.dispatch();
-            expect(sheet.action_message.text).toEqual("Detach, attach (cannot detach)");
+            check.equals(sheet.action_message.text, "Detach, attach (cannot detach)");
             equipment.events.onDragUpdate.dispatch();
-            expect(sheet.action_message.text).toEqual("Detach, attach (cannot attach)");
+            check.equals(sheet.action_message.text, "Detach, attach (cannot attach)");
             equipment.events.onDragUpdate.dispatch();
-            expect(sheet.action_message.text).toEqual("Detach, attach (cannot detach)");
+            check.equals(sheet.action_message.text, "Detach, attach (cannot detach)");
         });
     });
 }

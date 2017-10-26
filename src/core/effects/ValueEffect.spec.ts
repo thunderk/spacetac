@@ -1,26 +1,26 @@
 module TK.SpaceTac {
-    describe("ValueEffect", function () {
-        it("adds an amount to a ship value", function () {
+    testing("ValueEffect", test => {
+        test.case("adds an amount to a ship value", check => {
             let effect = new ValueEffect("shield", 20);
 
             let ship = new Ship();
             ship.values.shield.setMaximal(80);
             ship.setValue("shield", 55);
-            expect(ship.values.shield.get()).toEqual(55);
+            check.equals(ship.values.shield.get(), 55);
 
             effect.applyOnShip(ship, ship);
-            expect(ship.values.shield.get()).toEqual(75);
+            check.equals(ship.values.shield.get(), 75);
 
             effect.applyOnShip(ship, ship);
-            expect(ship.values.shield.get()).toEqual(80);
+            check.equals(ship.values.shield.get(), 80);
         });
 
-        it("has a description", function () {
+        test.case("has a description", check => {
             let effect = new ValueEffect("power", 12);
-            expect(effect.getDescription()).toEqual("power +12");
+            check.equals(effect.getDescription(), "power +12");
 
             effect = new ValueEffect("power", -4);
-            expect(effect.getDescription()).toEqual("power -4");
+            check.equals(effect.getDescription(), "power -4");
         });
     });
 }

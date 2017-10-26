@@ -1,24 +1,24 @@
 module TK.SpaceTac.UI.Specs {
-    describe("MissionsDialog", function () {
+    testing("MissionsDialog", test => {
         let testgame = setupEmptyView();
 
-        function checkTexts(dialog: MissionsDialog, expected: string[]) {
-            let i = 0;
-            let container = <Phaser.Group>(<any>dialog).container;
-            container.children.forEach(child => {
-                if (child instanceof Phaser.Text) {
-                    expect(child.text).toEqual(expected[i++]);
-                }
-            });
-            expect(i).toEqual(expected.length);
-        }
-
-        it("displays active and proposed missions", function () {
+        test.case("displays active and proposed missions", check => {
             let universe = new Universe();
             let player = new Player();
             let shop = new Shop();
             let shop_missions: Mission[] = [];
             spyOn(shop, "getMissions").and.callFake(() => shop_missions);
+
+            function checkTexts(dialog: MissionsDialog, expected: string[]) {
+                let i = 0;
+                let container = <Phaser.Group>(<any>dialog).container;
+                container.children.forEach(child => {
+                    if (child instanceof Phaser.Text) {
+                        check.equals(child.text, expected[i++]);
+                    }
+                });
+                check.equals(i, expected.length);
+            }
 
             let missions = new MissionsDialog(testgame.view, shop, player);
             checkTexts(missions, []);

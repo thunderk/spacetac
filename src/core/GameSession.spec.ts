@@ -1,10 +1,10 @@
 module TK.SpaceTac.Specs {
-    describe("GameSession", () => {
+    testing("GameSession", test => {
         /**
          * Compare two sessions
          */
         function compare(session1: GameSession, session2: GameSession) {
-            expect(session1).toEqual(session2);
+            test.check.equals(session1, session2);
         }
 
         /**
@@ -17,7 +17,7 @@ module TK.SpaceTac.Specs {
             battle.endBattle(battle.fleets[0]);
         }
 
-        it("serializes to a string", function () {
+        test.case("serializes to a string", check => {
             var session = new GameSession();
             session.startQuickBattle();
 
@@ -36,65 +36,65 @@ module TK.SpaceTac.Specs {
             compare(loaded_session, session);
         });
 
-        it("applies battle outcome to bound player", function () {
+        test.case("applies battle outcome to bound player", check => {
             let session = new GameSession();
-            expect(session.getBattle()).toBeNull();
+            check.equals(session.getBattle(), null);
 
             // Victory case
             let location1 = new StarLocation();
             location1.encounter = new Fleet();
             session.player.fleet.setLocation(location1);
-            expect(session.getBattle()).not.toBeNull();
-            expect(location1.encounter).not.toBeNull();
+            check.notequals(session.getBattle(), null);
+            check.notequals(location1.encounter, null);
 
             let battle = nn(session.getBattle());
             battle.endBattle(session.player.fleet);
             let spyloot = spyOn(battle.outcome, "createLoot").and.stub();
             session.setBattleEnded();
-            expect(session.getBattle()).not.toBeNull();
-            expect(location1.encounter).toBeNull();
+            check.notequals(session.getBattle(), null);
+            check.equals(location1.encounter, null);
             expect(spyloot).toHaveBeenCalledTimes(1);
 
             // Defeat case
             let location2 = new StarLocation(location1.star);
             location2.encounter = new Fleet();
             session.player.fleet.setLocation(location2);
-            expect(session.getBattle()).not.toBeNull();
-            expect(location2.encounter).not.toBeNull();
+            check.notequals(session.getBattle(), null);
+            check.notequals(location2.encounter, null);
 
             battle = nn(session.getBattle());
             battle.endBattle(null);
             spyloot = spyOn(battle.outcome, "createLoot").and.stub();
             session.setBattleEnded();
-            expect(session.getBattle()).not.toBeNull();
-            expect(location2.encounter).not.toBeNull();
+            check.notequals(session.getBattle(), null);
+            check.notequals(location2.encounter, null);
             expect(spyloot).toHaveBeenCalledTimes(0);
         });
 
-        it("generates a new campaign", function () {
+        test.case("generates a new campaign", check => {
             let session = new GameSession();
 
             session.startNewGame(false);
-            expect(session.player).not.toBeNull();
-            expect(session.player.fleet.ships.length).toBe(0);
-            expect(session.player.fleet.credits).toBe(0);
-            expect(session.player.universe.stars.length).toBe(50);
-            expect(session.getBattle()).toBeNull();
-            expect(session.start_location.shop).toBeNull();
-            expect(session.start_location.encounter).toBeNull();
-            expect(session.start_location.encounter_gen).toBe(true);
+            check.notequals(session.player, null);
+            check.equals(session.player.fleet.ships.length, 0);
+            check.equals(session.player.fleet.credits, 0);
+            check.equals(session.player.universe.stars.length, 50);
+            check.equals(session.getBattle(), null);
+            check.equals(session.start_location.shop, null);
+            check.equals(session.start_location.encounter, null);
+            check.equals(session.start_location.encounter_gen, true);
 
             session.setCampaignFleet();
-            expect(session.player.fleet.ships.length).toBe(2);
-            expect(session.player.fleet.credits).toBe(0);
-            expect(session.player.fleet.location).toBe(session.start_location);
+            check.equals(session.player.fleet.ships.length, 2);
+            check.equals(session.player.fleet.credits, 0);
+            check.same(session.player.fleet.location, session.start_location);
         });
 
-        /*it("can generate lots of new games", function () {
+        /*test.case("can generate lots of new games", check => {
             range(20).forEach(() => {
                 let session = new GameSession();
                 session.startNewGame();
-                expect(session.universe.stars.length).toBe(50);
+                check.equals(session.universe.stars.length, 50);
             });
         });*/
     });

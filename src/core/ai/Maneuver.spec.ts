@@ -1,6 +1,6 @@
 module TK.SpaceTac.Specs {
-    describe("Maneuver", function () {
-        it("guesses weapon effects", function () {
+    testing("Maneuver", test => {
+        test.case("guesses weapon effects", check => {
             let battle = new Battle();
             let ship1 = battle.fleets[0].addShip();
             let ship2 = battle.fleets[0].addShip();
@@ -13,13 +13,13 @@ module TK.SpaceTac.Specs {
             ship3.setArenaPosition(0, 15);
             TestTools.setShipHP(ship3, 30, 30);
             let maneuver = new Maneuver(ship1, nn(weapon.action), Target.newFromLocation(0, 0));
-            expect(maneuver.effects).toEqual([
+            check.equals(maneuver.effects, [
                 [ship1, new DamageEffect(50)],
                 [ship2, new DamageEffect(50)]
             ]);
         });
 
-        it("guesses drone effects", function () {
+        test.case("guesses drone effects", check => {
             let battle = new Battle();
             let ship1 = battle.fleets[0].addShip();
             let ship2 = battle.fleets[0].addShip();
@@ -33,13 +33,13 @@ module TK.SpaceTac.Specs {
             ship3.setArenaPosition(0, 15);
             TestTools.setShipHP(ship3, 30, 30);
             let maneuver = new Maneuver(ship1, weapon.action, Target.newFromLocation(0, 0));
-            expect(maneuver.effects).toEqual([
+            check.equals(maneuver.effects, [
                 [ship1, new ValueEffect("shield", 10)],
                 [ship2, new ValueEffect("shield", 10)]
             ]);
         });
 
-        it("guesses area effects on final location", function () {
+        test.case("guesses area effects on final location", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
             let engine = TestTools.addEngine(ship, 500);
@@ -53,12 +53,12 @@ module TK.SpaceTac.Specs {
             battle.addDrone(drone);
 
             let maneuver = new Maneuver(ship, move, Target.newFromLocation(40, 30));
-            expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 40, y: 30 }));
-            expect(maneuver.effects).toEqual([]);
+            check.containing(maneuver.getFinalLocation(), { x: 40, y: 30 });
+            check.equals(maneuver.effects, []);
 
             maneuver = new Maneuver(ship, move, Target.newFromLocation(100, 30));
-            expect(maneuver.getFinalLocation()).toEqual(jasmine.objectContaining({ x: 100, y: 30 }));
-            expect(maneuver.effects).toEqual([[ship, new AttributeEffect("maneuvrability", 1)]]);
+            check.containing(maneuver.getFinalLocation(), { x: 100, y: 30 });
+            check.equals(maneuver.effects, [[ship, new AttributeEffect("maneuvrability", 1)]]);
         });
     });
 }

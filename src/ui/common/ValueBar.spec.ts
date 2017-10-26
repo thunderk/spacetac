@@ -1,19 +1,19 @@
 module TK.SpaceTac.UI.Specs {
-    describe("ValueBar", function () {
+    testing("ValueBar", test => {
         let testgame = setupEmptyView();
 
-        it("computes proportional value", function () {
+        test.case("computes proportional value", check => {
             var bar = new ValueBar(testgame.view, "default", ValueBarOrientation.EAST);
-            expect(bar.getProportionalValue()).toBe(0);
+            check.equals(bar.getProportionalValue(), 0);
 
             bar.setValue(20, 100);
-            expect(bar.getProportionalValue()).toBeCloseTo(0.2, 0.000001);
+            check.nears(bar.getProportionalValue(), 0.2);
 
             bar.setValue(40);
-            expect(bar.getProportionalValue()).toBeCloseTo(0.4, 0.000001);
+            check.nears(bar.getProportionalValue(), 0.4);
 
             bar.setValue(0, 0);
-            expect(bar.getProportionalValue()).toBe(0);
+            check.equals(bar.getProportionalValue(), 0);
         });
     });
 }

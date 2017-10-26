@@ -1,5 +1,5 @@
 module TK.SpaceTac.UI.Specs {
-    describe("UIBuilder", () => {
+    testing("UIBuilder", test => {
         let testgame = setupEmptyView();
 
         function get(path: (number | string)[]): [string, any] {
@@ -14,189 +14,189 @@ module TK.SpaceTac.UI.Specs {
             return [spath, component];
         }
 
-        function check(path: (number | string)[], ctype?: any, name?: string, attrs?: any): any {
+        function checkcomp(path: (number | string)[], ctype?: any, name?: string, attrs?: any): any {
             let [spath, component] = get(path);
 
             if (typeof ctype != "undefined") {
-                expect(component instanceof ctype).toBe(true, `${spath} is not of good type`);
+                test.check.same(component instanceof ctype, true, `${spath} is not of good type`);
             }
             if (typeof name != "undefined") {
-                expect(component.name).toEqual(name, spath);
+                test.check.equals(component.name, name, spath);
             }
             if (typeof attrs != "undefined") {
                 iteritems(attrs, (key, value) => {
-                    expect(component[key]).toEqual(value, spath);
+                    test.check.equals(component[key], value, spath);
                 });
             }
 
             return component;
         }
 
-        it("can work on view layers", function () {
+        test.case("can work on view layers", check => {
             let builder = new UIBuilder(testgame.view, "tl1");
             builder.group("tg1");
-            check(["View layers", "tl1", 0], Phaser.Group, "tg1");
+            checkcomp(["View layers", "tl1", 0], Phaser.Group, "tg1");
 
             builder = new UIBuilder(testgame.view, "tl2");
             builder.group("tg2");
-            check(["View layers", "tl2", 0], Phaser.Group, "tg2");
+            checkcomp(["View layers", "tl2", 0], Phaser.Group, "tg2");
 
             builder = new UIBuilder(testgame.view, "tl1");
             builder.group("tg3");
-            check(["View layers", "tl1", 0], Phaser.Group, "tg1");
-            check(["View layers", "tl1", 1], Phaser.Group, "tg3");
+            checkcomp(["View layers", "tl1", 0], Phaser.Group, "tg1");
+            checkcomp(["View layers", "tl1", 1], Phaser.Group, "tg3");
 
             builder = new UIBuilder(testgame.view);
             builder.group("tg4");
-            check(["View layers", "base", 0], Phaser.Group, "tg4");
+            checkcomp(["View layers", "base", 0], Phaser.Group, "tg4");
 
             builder = new UIBuilder(testgame.view);
             builder.group("tg5");
-            check(["View layers", "base", 0], Phaser.Group, "tg4");
-            check(["View layers", "base", 1], Phaser.Group, "tg5");
+            checkcomp(["View layers", "base", 0], Phaser.Group, "tg4");
+            checkcomp(["View layers", "base", 1], Phaser.Group, "tg5");
 
-            expect(testgame.view.layers.children.map((child: any) => child.name)).toEqual(["tl1", "tl2", "base"]);
+            check.equals(testgame.view.layers.children.map((child: any) => child.name), ["tl1", "tl2", "base"]);
         })
 
-        it("creates component inside the parent container", function () {
+        test.case("creates component inside the parent container", check => {
             let builder = new UIBuilder(testgame.view, testgame.view.getLayer("testlayer"));
             let group = builder.group("test1");
-            check(["View layers", "testlayer", 0], Phaser.Group, "test1");
+            checkcomp(["View layers", "testlayer", 0], Phaser.Group, "test1");
 
             builder = new UIBuilder(testgame.view, group);
             builder.text("test2");
-            check(["View layers", "testlayer", 0, 0], Phaser.Text, "", { text: "test2", parent: group });
+            checkcomp(["View layers", "testlayer", 0, 0], Phaser.Text, "", { text: "test2", parent: group });
 
             builder = new UIBuilder(testgame.view, "anothertestlayer");
             builder.text("test3");
-            check(["View layers", "anothertestlayer", 0], Phaser.Text, "", { text: "test3" });
+            checkcomp(["View layers", "anothertestlayer", 0], Phaser.Text, "", { text: "test3" });
         })
 
-        it("can clear a container", function () {
+        test.case("can clear a container", check => {
             let builder = new UIBuilder(testgame.view);
             builder.group("group1", 50, 30);
             builder.text("text1");
             let [spath, container] = get(["View layers", "base"]);
-            expect(container.children.length).toBe(2);
+            check.equals(container.children.length, 2);
             builder.clear();
-            expect(container.children.length).toBe(0);
+            check.equals(container.children.length, 0);
         })
 
-        it("can create groups", function () {
+        test.case("can create groups", check => {
             let builder = new UIBuilder(testgame.view);
             builder.group("group1", 50, 30);
-            check(["View layers", "base", 0], Phaser.Group, "group1", { x: 50, y: 30 });
+            checkcomp(["View layers", "base", 0], Phaser.Group, "group1", { x: 50, y: 30 });
         })
 
-        it("can create texts", function () {
+        test.case("can create texts", check => {
             let builder = new UIBuilder(testgame.view);
             builder.text("Test content", 12, 41);
-            check(["View layers", "base", 0], Phaser.Text, "", { text: "Test content", x: 12, y: 41 });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { text: "Test content", x: 12, y: 41 });
 
             builder.clear();
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { size: 61 });
-            check(["View layers", "base", 0], Phaser.Text, "", { cssFont: "16pt 'SpaceTac'" });
-            check(["View layers", "base", 1], Phaser.Text, "", { cssFont: "61pt 'SpaceTac'" });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { cssFont: "16pt 'SpaceTac'" });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { cssFont: "61pt 'SpaceTac'" });
 
             builder.clear();
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { color: "#252627" });
-            check(["View layers", "base", 0], Phaser.Text, "", { fill: "#ffffff" });
-            check(["View layers", "base", 1], Phaser.Text, "", { fill: "#252627" });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { fill: "#ffffff" });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { fill: "#252627" });
 
             builder.clear();
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { shadow: true });
-            check(["View layers", "base", 0], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0)" });
-            check(["View layers", "base", 1], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0.6)", shadowFill: true, shadowOffsetX: 3, shadowOffsetY: 4, shadowBlur: 6, shadowStroke: true });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0)" });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0.6)", shadowFill: true, shadowOffsetX: 3, shadowOffsetY: 4, shadowBlur: 6, shadowStroke: true });
 
             builder.clear();
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { stroke_width: 2, stroke_color: "#ff0000" });
-            check(["View layers", "base", 0], Phaser.Text, "", { stroke: "black", strokeThickness: 0 });
-            check(["View layers", "base", 1], Phaser.Text, "", { stroke: "#ff0000", strokeThickness: 2 });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { stroke: "black", strokeThickness: 0 });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { stroke: "#ff0000", strokeThickness: 2 });
 
             builder.clear();
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { bold: true });
-            check(["View layers", "base", 0], Phaser.Text, "", { fontWeight: "normal" });
-            check(["View layers", "base", 1], Phaser.Text, "", { fontWeight: "bold" });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { fontWeight: "normal" });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { fontWeight: "bold" });
 
             builder.clear();
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { center: false });
             builder.text("", 0, 0, { vcenter: false });
             builder.text("", 0, 0, { center: false, vcenter: false });
-            check(["View layers", "base", 0], Phaser.Text, "", { anchor: new Phaser.Point(0.5, 0.5), align: "center" });
-            check(["View layers", "base", 1], Phaser.Text, "", { anchor: new Phaser.Point(0, 0.5), align: "left" });
-            check(["View layers", "base", 2], Phaser.Text, "", { anchor: new Phaser.Point(0.5, 0), align: "center" });
-            check(["View layers", "base", 3], Phaser.Text, "", { anchor: new Phaser.Point(0, 0), align: "left" });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { anchor: new Phaser.Point(0.5, 0.5), align: "center" });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { anchor: new Phaser.Point(0, 0.5), align: "left" });
+            checkcomp(["View layers", "base", 2], Phaser.Text, "", { anchor: new Phaser.Point(0.5, 0), align: "center" });
+            checkcomp(["View layers", "base", 3], Phaser.Text, "", { anchor: new Phaser.Point(0, 0), align: "left" });
 
             builder.clear();
             builder.text("", 0, 0, { width: 0 });
             builder.text("", 0, 0, { width: 1100 });
-            check(["View layers", "base", 0], Phaser.Text, "", { wordWrap: false });
-            check(["View layers", "base", 1], Phaser.Text, "", { wordWrap: true, wordWrapWidth: 1100 });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { wordWrap: false });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { wordWrap: true, wordWrapWidth: 1100 });
         })
 
-        it("can create images", function () {
+        test.case("can create images", check => {
             let builder = new UIBuilder(testgame.view);
             builder.image("test-image", 100, 50);
-            check(["View layers", "base", 0], Phaser.Image, "test-image", { x: 100, y: 50, key: "__missing", inputEnabled: null });
+            checkcomp(["View layers", "base", 0], Phaser.Image, "test-image", { x: 100, y: 50, key: "__missing", inputEnabled: null });
 
             spyOn(testgame.view, "getFirstImage").and.callFake((...images: string[]) => images[1]);
             builder.image(["test-image1", "test-image2", "test-image3"]);
-            check(["View layers", "base", 1], Phaser.Image, "test-image2");
+            checkcomp(["View layers", "base", 1], Phaser.Image, "test-image2");
         })
 
-        it("can create buttons", function () {
+        test.case("can create buttons", check => {
             let builder = new UIBuilder(testgame.view);
             let a = 1;
             let button1 = builder.button("test-image1", 100, 50, () => a += 1);
-            check(["View layers", "base", 0], Phaser.Button, "test-image1", { x: 100, y: 50, key: "__missing", inputEnabled: true });
-            expect(button1.input.useHandCursor).toBe(true, "button1 should use hand cursor");
+            checkcomp(["View layers", "base", 0], Phaser.Button, "test-image1", { x: 100, y: 50, key: "__missing", inputEnabled: true });
+            check.same(button1.input.useHandCursor, true, "button1 should use hand cursor");
             let button2 = builder.button("test-image2", 20, 10);
-            check(["View layers", "base", 1], Phaser.Button, "test-image2", { x: 20, y: 10, key: "__missing", inputEnabled: true });
-            expect(button2.input.useHandCursor).toBe(false, "button2 should not use hand cursor");
+            checkcomp(["View layers", "base", 1], Phaser.Button, "test-image2", { x: 20, y: 10, key: "__missing", inputEnabled: true });
+            check.same(button2.input.useHandCursor, false, "button2 should not use hand cursor");
 
-            expect(a).toBe(1);
+            check.equals(a, 1);
             testClick(button1);
-            expect(a).toBe(2);
+            check.equals(a, 2);
             testClick(button2);
-            expect(a).toBe(2);
+            check.equals(a, 2);
             testClick(button1);
-            expect(a).toBe(3);
+            check.equals(a, 3);
         })
 
-        it("can create shaders", function () {
+        test.case("can create shaders", check => {
             let builder = new UIBuilder(testgame.view);
 
             let shader1 = builder.shader("test-shader-1", "test-image-1");
-            expect(shader1 instanceof Phaser.Image).toBe(true);
-            expect(shader1.name).toEqual("test-image-1");
-            expect(shader1.filters.length).toBe(1, "one filter set on shader1");
+            check.equals(shader1 instanceof Phaser.Image, true);
+            check.equals(shader1.name, "test-image-1");
+            check.same(shader1.filters.length, 1, "one filter set on shader1");
 
             let shader2 = builder.shader("test-shader-2", { width: 500, height: 300 });
-            expect(shader2 instanceof Phaser.Image).toBe(true);
-            expect(shader2.width).toEqual(500);
-            expect(shader2.height).toEqual(300);
-            expect(shader2.filters.length).toBe(1, "one filter set on shader2");
+            check.equals(shader2 instanceof Phaser.Image, true);
+            check.equals(shader2.width, 500);
+            check.equals(shader2.height, 300);
+            check.same(shader2.filters.length, 1, "one filter set on shader2");
 
             let i = 0;
             let shader3 = builder.shader("test-shader-3", "test-image-3", 50, 30, () => { return { a: i++, b: { x: 1, y: 2 } } });
-            expect(shader3.x).toEqual(50);
-            expect(shader3.y).toEqual(30);
-            expect(shader3.filters[0].uniforms["a"]).toEqual({ type: '1f', value: 0 }, "uniform a initial");
-            expect(shader3.filters[0].uniforms["b"]).toEqual({ type: '2f', value: Object({ x: 1, y: 2 }) }, "uniform b initial");
+            check.equals(shader3.x, 50);
+            check.equals(shader3.y, 30);
+            check.equals(shader3.filters[0].uniforms["a"], { type: '1f', value: 0 }, "uniform a initial");
+            check.equals(shader3.filters[0].uniforms["b"], { type: '2f', value: Object({ x: 1, y: 2 }) }, "uniform b initial");
             shader3.update();
-            expect(shader3.filters[0].uniforms["a"]).toEqual({ type: '1f', value: 1 }, "uniform a updated");
-            expect(shader3.filters[0].uniforms["b"]).toEqual({ type: '2f', value: Object({ x: 1, y: 2 }) }, "uniform b updated");
+            check.equals(shader3.filters[0].uniforms["a"], { type: '1f', value: 1 }, "uniform a updated");
+            check.equals(shader3.filters[0].uniforms["b"], { type: '2f', value: Object({ x: 1, y: 2 }) }, "uniform b updated");
 
-            expect(testgame.view.getLayer("base").children.length).toBe(3, "view layer should have three children");
+            check.same(testgame.view.getLayer("base").children.length, 3, "view layer should have three children");
         })
 
-        it("creates sub-builders, preserving text style", function () {
+        test.case("creates sub-builders, preserving text style", check => {
             let base_style = new UITextStyle();
             base_style.width = 123;
             let builder = new UIBuilder(testgame.view, undefined, base_style);
@@ -206,40 +206,40 @@ module TK.SpaceTac.UI.Specs {
             let subbuilder = builder.in(group);
             subbuilder.text("Test 2");
 
-            check(["View layers", "base", 0], Phaser.Text, "", { text: "Test 1", wordWrapWidth: 123 });
-            check(["View layers", "base", 1, 0], Phaser.Text, "", { text: "Test 2", wordWrapWidth: 123 });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { text: "Test 1", wordWrapWidth: 123 });
+            checkcomp(["View layers", "base", 1, 0], Phaser.Text, "", { text: "Test 2", wordWrapWidth: 123 });
         })
 
-        it("allows to alter text style", function () {
+        test.case("allows to alter text style", check => {
             let builder = new UIBuilder(testgame.view);
             builder.text("t1");
             builder.styled({ bold: true }).text("t2");
             builder.text("t3");
             builder.text("t4", undefined, undefined, { bold: true });
 
-            check(["View layers", "base", 0], Phaser.Text, "", { text: "t1", fontWeight: "normal" });
-            check(["View layers", "base", 1], Phaser.Text, "", { text: "t2", fontWeight: "bold" });
-            check(["View layers", "base", 2], Phaser.Text, "", { text: "t3", fontWeight: "normal" });
-            check(["View layers", "base", 3], Phaser.Text, "", { text: "t4", fontWeight: "bold" });
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { text: "t1", fontWeight: "normal" });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { text: "t2", fontWeight: "bold" });
+            checkcomp(["View layers", "base", 2], Phaser.Text, "", { text: "t3", fontWeight: "normal" });
+            checkcomp(["View layers", "base", 3], Phaser.Text, "", { text: "t4", fontWeight: "bold" });
         })
 
-        it("allows to change text, image or button content", function () {
+        test.case("allows to change text, image or button content", check => {
             let builder = new UIBuilder(testgame.view);
             let text = builder.text("test-text");
             let image = builder.image("test-image");
             let button = builder.button("test-button");
 
-            check(["View layers", "base", 0], Phaser.Text, "", { text: "test-text" });
-            check(["View layers", "base", 1], Phaser.Image, "test-image");
-            check(["View layers", "base", 2], Phaser.Button, "test-button");
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { text: "test-text" });
+            checkcomp(["View layers", "base", 1], Phaser.Image, "test-image");
+            checkcomp(["View layers", "base", 2], Phaser.Button, "test-button");
 
             builder.change(text, "test-mod-text");
             builder.change(image, "test-mod-image");
             builder.change(button, "test-mod-button");
 
-            check(["View layers", "base", 0], Phaser.Text, "", { text: "test-mod-text" });
-            check(["View layers", "base", 1], Phaser.Image, "test-mod-image");
-            check(["View layers", "base", 2], Phaser.Button, "test-mod-button");
+            checkcomp(["View layers", "base", 0], Phaser.Text, "", { text: "test-mod-text" });
+            checkcomp(["View layers", "base", 1], Phaser.Image, "test-mod-image");
+            checkcomp(["View layers", "base", 2], Phaser.Button, "test-mod-button");
         })
     })
 }

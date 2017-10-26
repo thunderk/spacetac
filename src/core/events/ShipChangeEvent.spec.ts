@@ -1,10 +1,10 @@
 module TK.SpaceTac.Specs {
-    describe("ShipChangeEvent", function () {
-        it("get reverse event", function () {
+    testing("ShipChangeEvent", test => {
+        test.case("get reverse event", check => {
             let ship1 = new Ship();
             let ship2 = new Ship();
             let event = new ShipChangeEvent(ship1, ship2);
-            expect(event.getReverse()).toEqual(new ShipChangeEvent(ship2, ship1));
+            check.equals(event.getReverse(), new ShipChangeEvent(ship2, ship1));
         });
     });
 }

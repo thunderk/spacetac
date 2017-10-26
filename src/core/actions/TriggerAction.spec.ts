@@ -1,15 +1,15 @@
 module TK.SpaceTac {
-    describe("TriggerAction", function () {
-        it("constructs correctly", function () {
+    testing("TriggerAction", test => {
+        test.case("constructs correctly", check => {
             let equipment = new Equipment(SlotType.Weapon, "testweapon");
             let action = new TriggerAction(equipment, [], 4, 30, 10);
 
-            expect(action.code).toEqual("fire-testweapon");
-            expect(action.name).toEqual("Fire");
-            expect(action.equipment).toBe(equipment);
+            check.equals(action.code, "fire-testweapon");
+            check.equals(action.name, "Fire");
+            check.same(action.equipment, equipment);
         })
 
-        it("applies effects to alive ships in blast radius", function () {
+        test.case("applies effects to alive ships in blast radius", check => {
             let fleet = new Fleet();
             let ship = new Ship(fleet, "ship");
             let equipment = new Equipment(SlotType.Weapon, "testweapon");
@@ -37,7 +37,7 @@ module TK.SpaceTac {
             expect(mock_apply).toHaveBeenCalledWith(ship2, ship);
         })
 
-        it("transforms ship target in location target, when the weapon has blast radius", function () {
+        test.case("transforms ship target in location target, when the weapon has blast radius", check => {
             let ship1 = new Ship();
             ship1.setArenaPosition(50, 10);
             let ship2 = new Ship();
@@ -46,23 +46,23 @@ module TK.SpaceTac {
             let action = nn(weapon.action);
 
             let target = action.checkTarget(ship1, new Target(150, 10));
-            expect(target).toEqual(new Target(150, 10));
+            check.equals(target, new Target(150, 10));
 
             target = action.checkTarget(ship1, Target.newFromShip(ship2));
-            expect(target).toEqual(new Target(150, 10));
+            check.equals(target, new Target(150, 10));
 
             ship1.setArenaPosition(30, 10);
 
             target = action.checkTarget(ship1, Target.newFromShip(ship2));
-            expect(target).toEqual(new Target(130, 10));
+            check.equals(target, new Target(130, 10));
 
             ship1.setArenaPosition(0, 10);
 
             target = action.checkTarget(ship1, Target.newFromShip(ship2));
-            expect(target).toEqual(new Target(100, 10));
+            check.equals(target, new Target(100, 10));
         })
 
-        it("lists impacted ships", function () {
+        test.case("lists impacted ships", check => {
             let ship1 = new Ship(null, "S1");
             ship1.setArenaPosition(10, 50);
             let ship2 = new Ship(null, "S2");
@@ -72,49 +72,49 @@ module TK.SpaceTac {
             let ships = [ship1, ship2, ship3];
 
             let action = new TriggerAction(new Equipment(), [], 1, 50);
-            expect(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromShip(ship2), ships)).toEqual([ship2]);
-            expect(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromLocation(10, 50), ships)).toEqual([]);
+            check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromShip(ship2), ships), [ship2]);
+            check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromLocation(10, 50), ships), []);
 
             action = new TriggerAction(new Equipment(), [], 1, 50, 40);
-            expect(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromLocation(20, 20), ships)).toEqual([ship1, ship3]);
+            check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromLocation(20, 20), ships), [ship1, ship3]);
 
             action = new TriggerAction(new Equipment(), [], 1, 100, 0, 30);
-            expect(action.filterImpactedShips({ x: 0, y: 51 }, Target.newFromLocation(30, 50), ships)).toEqual([ship1, ship2]);
+            check.equals(action.filterImpactedShips({ x: 0, y: 51 }, Target.newFromLocation(30, 50), ships), [ship1, ship2]);
         })
 
-        it("guesses targetting mode", function () {
+        test.case("guesses targetting mode", check => {
             let ship = new Ship();
             let equ = new Equipment();
             let action = new TriggerAction(equ, []);
-            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SELF_CONFIRM, "self");
+            check.equals(action.getTargettingMode(ship), ActionTargettingMode.SELF_CONFIRM, "self");
 
             action = new TriggerAction(equ, [], 1, 50);
-            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SHIP, "ship");
+            check.equals(action.getTargettingMode(ship), ActionTargettingMode.SHIP, "ship");
 
             action = new TriggerAction(equ, [], 1, 50, 20);
-            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SPACE, "blast");
+            check.equals(action.getTargettingMode(ship), ActionTargettingMode.SPACE, "blast");
 
             action = new TriggerAction(equ, [], 1, 0, 20);
-            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SURROUNDINGS, "surroundings");
+            check.equals(action.getTargettingMode(ship), ActionTargettingMode.SURROUNDINGS, "surroundings");
 
             action = new TriggerAction(equ, [], 1, 50, 0, 15);
-            expect(action.getTargettingMode(ship)).toEqual(ActionTargettingMode.SPACE, "angle");
+            check.equals(action.getTargettingMode(ship), ActionTargettingMode.SPACE, "angle");
         })
 
-        it("rotates toward the target", function () {
+        test.case("rotates toward the target", check => {
             let ship = new Ship();
             let weapon = TestTools.addWeapon(ship, 1, 0, 100, 30);
             let action = nn(weapon.action);
             spyOn(action, "checkTarget").and.callFake((ship: Ship, target: Target) => target);
-            expect(ship.arena_angle).toEqual(0);
+            check.equals(ship.arena_angle, 0);
 
             let result = action.apply(ship, Target.newFromLocation(10, 20));
-            expect(result).toBe(true);
-            expect(ship.arena_angle).toBeCloseTo(1.107, 0.001);
+            check.equals(result, true);
+            check.nears(ship.arena_angle, 1.107, 3);
 
             result = action.apply(ship, Target.newFromShip(ship));
-            expect(result).toBe(true);
-            expect(ship.arena_angle).toBeCloseTo(1.107, 0.001);
+            check.equals(result, true);
+            check.nears(ship.arena_angle, 1.107, 3);
         })
     });
 }

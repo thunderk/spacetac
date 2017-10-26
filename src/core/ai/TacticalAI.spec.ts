@@ -1,7 +1,7 @@
 /// <reference path="Maneuver.ts" />
 
 module TK.SpaceTac.Specs {
-    describe("TacticalAI", function () {
+    testing("TacticalAI", test => {
         class FixedManeuver extends Maneuver {
             score: number;
             constructor(score: number) {
@@ -21,7 +21,7 @@ module TK.SpaceTac.Specs {
             applied = [];
         });
 
-        it("applies the highest evaluated maneuver", function () {
+        test.case("applies the highest evaluated maneuver", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
             TestTools.setShipPlaying(battle, ship);
@@ -38,7 +38,7 @@ module TK.SpaceTac.Specs {
             spyOn(ai, "applyManeuver").and.callFake((maneuver: FixedManeuver) => applied.push(maneuver.score));
 
             ai.play();
-            expect(applied).toEqual([7]);
+            check.equals(applied, [7]);
         });
     });
 }
