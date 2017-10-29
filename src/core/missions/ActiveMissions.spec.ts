@@ -39,7 +39,7 @@ module TK.SpaceTac.Specs {
                 "Surely do something",
             ]);
 
-            spyOn(missions.secondary[0].current_part, "checkCompleted").and.returnValue(true);
+            check.patch(missions.secondary[0].current_part, "checkCompleted", () => true);
             missions.checkStatus();
 
             check.equals(missions.getCurrent().map(mission => mission.current_part.title), [
@@ -47,7 +47,7 @@ module TK.SpaceTac.Specs {
                 "Surely do something",
             ]);
 
-            spyOn(missions.main.current_part, "checkCompleted").and.returnValue(true);
+            check.patch(missions.main.current_part, "checkCompleted", () => true);
             missions.checkStatus();
 
             check.equals(missions.getCurrent().map(mission => mission.current_part.title), [

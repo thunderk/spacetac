@@ -1,25 +1,22 @@
 module TK.SpaceTac.UI.Specs {
     testing("InputManager", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
         let clock = test.clock();
 
         test.case("handles hover and click on desktops and mobile targets", check => {
             let inputs = testgame.view.inputs;
 
             let pointer = new Phaser.Pointer(testgame.ui, 0);
-            function newButton(): [Phaser.Button, any] {
-                var button = new Phaser.Button(testgame.ui);
-                var funcs = {
-                    enter: () => null,
-                    leave: () => null,
-                    click: () => null,
+            function newButton(): [Phaser.Button, { enter: Mock, leave: Mock, click: Mock }] {
+                let button = new Phaser.Button(testgame.ui);
+                let mocks = {
+                    enter: check.mockfunc("enter"),
+                    leave: check.mockfunc("leave"),
+                    click: check.mockfunc("click"),
                 };
-                spyOn(funcs, "enter");
-                spyOn(funcs, "leave");
-                spyOn(funcs, "click");
-                inputs.setHoverClick(button, funcs.enter, funcs.leave, funcs.click, 50, 100);
+                inputs.setHoverClick(button, mocks.enter.func, mocks.leave.func, mocks.click.func, 50, 100);
                 (<any>inputs).hovered = null;
-                return [button, funcs];
+                return [button, mocks];
             }
             let enter = (button: Phaser.Button) => (<any>button.input)._pointerOverHandler(pointer);
             let leave = (button: Phaser.Button) => (<any>button.input)._pointerOutHandler(pointer);
@@ -28,73 +25,73 @@ module TK.SpaceTac.UI.Specs {
             let destroy = (button: Phaser.Button) => button.events.onDestroy.dispatch();
 
             // Simple click on desktop
-            let [button, funcs] = newButton();
+            let [button, mocks] = newButton();
             enter(button);
             press(button);
             release(button);
-            expect(funcs.enter).toHaveBeenCalledTimes(0);
-            expect(funcs.leave).toHaveBeenCalledTimes(0);
-            expect(funcs.click).toHaveBeenCalledTimes(1);
+            check.called(mocks.enter, 0);
+            check.called(mocks.leave, 0);
+            check.called(mocks.click, 1);
 
             // Simple click on mobile
-            [button, funcs] = newButton();
+            [button, mocks] = newButton();
             press(button);
             release(button);
-            expect(funcs.enter).toHaveBeenCalledTimes(1);
-            expect(funcs.leave).toHaveBeenCalledTimes(1);
-            expect(funcs.click).toHaveBeenCalledTimes(1);
+            check.called(mocks.enter, 1);
+            check.called(mocks.leave, 1);
+            check.called(mocks.click, 1);
 
             // Leaves on destroy
-            [button, funcs] = newButton();
+            [button, mocks] = newButton();
             press(button);
             clock.forward(150);
-            expect(funcs.enter).toHaveBeenCalledTimes(1);
-            expect(funcs.leave).toHaveBeenCalledTimes(0);
-            expect(funcs.click).toHaveBeenCalledTimes(0);
+            check.called(mocks.enter, 1);
+            check.called(mocks.leave, 0);
+            check.called(mocks.click, 0);
             destroy(button);
-            expect(funcs.enter).toHaveBeenCalledTimes(1);
-            expect(funcs.leave).toHaveBeenCalledTimes(1);
-            expect(funcs.click).toHaveBeenCalledTimes(0);
+            check.called(mocks.enter, 0);
+            check.called(mocks.leave, 1);
+            check.called(mocks.click, 0);
             press(button);
             release(button);
-            expect(funcs.enter).toHaveBeenCalledTimes(1);
-            expect(funcs.leave).toHaveBeenCalledTimes(1);
-            expect(funcs.click).toHaveBeenCalledTimes(0);
+            check.called(mocks.enter, 0);
+            check.called(mocks.leave, 0);
+            check.called(mocks.click, 0);
 
             // Force-leave when hovering another button without clean leaving a first one
             let [button1, funcs1] = newButton();
             let [button2, funcs2] = newButton();
             enter(button1);
             clock.forward(150);
-            expect(funcs1.enter).toHaveBeenCalledTimes(1);
-            expect(funcs1.leave).toHaveBeenCalledTimes(0);
-            expect(funcs1.click).toHaveBeenCalledTimes(0);
+            check.called(funcs1.enter, 1);
+            check.called(funcs1.leave, 0);
+            check.called(funcs1.click, 0);
             enter(button2);
-            expect(funcs1.enter).toHaveBeenCalledTimes(1);
-            expect(funcs1.leave).toHaveBeenCalledTimes(1);
-            expect(funcs1.click).toHaveBeenCalledTimes(0);
-            expect(funcs2.enter).toHaveBeenCalledTimes(0);
-            expect(funcs2.leave).toHaveBeenCalledTimes(0);
-            expect(funcs2.click).toHaveBeenCalledTimes(0);
+            check.called(funcs1.enter, 0);
+            check.called(funcs1.leave, 1);
+            check.called(funcs1.click, 0);
+            check.called(funcs2.enter, 0);
+            check.called(funcs2.leave, 0);
+            check.called(funcs2.click, 0);
             clock.forward(150);
-            expect(funcs1.enter).toHaveBeenCalledTimes(1);
-            expect(funcs1.leave).toHaveBeenCalledTimes(1);
-            expect(funcs1.click).toHaveBeenCalledTimes(0);
-            expect(funcs2.enter).toHaveBeenCalledTimes(1);
-            expect(funcs2.leave).toHaveBeenCalledTimes(0);
-            expect(funcs2.click).toHaveBeenCalledTimes(0);
+            check.called(funcs1.enter, 0);
+            check.called(funcs1.leave, 0);
+            check.called(funcs1.click, 0);
+            check.called(funcs2.enter, 1);
+            check.called(funcs2.leave, 0);
+            check.called(funcs2.click, 0);
 
             // Hold to hover on mobile
-            [button, funcs] = newButton();
+            [button, mocks] = newButton();
             button.onInputDown.dispatch(button, pointer);
             clock.forward(150);
-            expect(funcs.enter).toHaveBeenCalledTimes(1);
-            expect(funcs.leave).toHaveBeenCalledTimes(0);
-            expect(funcs.click).toHaveBeenCalledTimes(0);
+            check.called(mocks.enter, 1);
+            check.called(mocks.leave, 0);
+            check.called(mocks.click, 0);
             button.onInputUp.dispatch(button, pointer);
-            expect(funcs.enter).toHaveBeenCalledTimes(1);
-            expect(funcs.leave).toHaveBeenCalledTimes(1);
-            expect(funcs.click).toHaveBeenCalledTimes(0);
+            check.called(mocks.enter, 0);
+            check.called(mocks.leave, 1);
+            check.called(mocks.click, 0);
         });
 
         test.case("handles drag and drop", check => {

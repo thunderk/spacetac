@@ -21,7 +21,7 @@ module TK.SpaceTac.UI.Specs {
     }
 
     testing("LogProcessor", test => {
-        let testgame = setupBattleview();
+        let testgame = setupBattleview(test);
 
         test.case("steps forward and backward in time", check => {
             let battle = testgame.view.battle;

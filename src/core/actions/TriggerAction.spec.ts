@@ -14,7 +14,7 @@ module TK.SpaceTac {
             let ship = new Ship(fleet, "ship");
             let equipment = new Equipment(SlotType.Weapon, "testweapon");
             let effect = new BaseEffect("testeffect");
-            let mock_apply = spyOn(effect, "applyOnShip").and.stub();
+            let mock_apply = check.patch(effect, "applyOnShip", null);
             let action = new TriggerAction(equipment, [effect], 5, 100, 10);
 
             TestTools.setShipAP(ship, 10);
@@ -33,8 +33,9 @@ module TK.SpaceTac {
             fleet.setBattle(battle);
 
             action.apply(ship, Target.newFromLocation(50, 50));
-            expect(mock_apply).toHaveBeenCalledTimes(1);
-            expect(mock_apply).toHaveBeenCalledWith(ship2, ship);
+            check.called(mock_apply, [
+                [ship2, ship]
+            ]);
         })
 
         test.case("transforms ship target in location target, when the weapon has blast radius", check => {
@@ -105,7 +106,7 @@ module TK.SpaceTac {
             let ship = new Ship();
             let weapon = TestTools.addWeapon(ship, 1, 0, 100, 30);
             let action = nn(weapon.action);
-            spyOn(action, "checkTarget").and.callFake((ship: Ship, target: Target) => target);
+            check.patch(action, "checkTarget", (ship: Ship, target: Target) => target);
             check.equals(ship.arena_angle, 0);
 
             let result = action.apply(ship, Target.newFromLocation(10, 20));

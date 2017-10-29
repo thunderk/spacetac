@@ -1,13 +1,13 @@
 module TK.SpaceTac.UI.Specs {
     testing("MissionsDialog", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("displays active and proposed missions", check => {
             let universe = new Universe();
             let player = new Player();
             let shop = new Shop();
             let shop_missions: Mission[] = [];
-            spyOn(shop, "getMissions").and.callFake(() => shop_missions);
+            check.patch(shop, "getMissions", () => shop_missions);
 
             function checkTexts(dialog: MissionsDialog, expected: string[]) {
                 let i = 0;

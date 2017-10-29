@@ -1,7 +1,7 @@
 module TK.SpaceTac.Specs {
     testing("EndTurnAction", test => {
         test.case("can't be applied to non-playing ship", check => {
-            spyOn(console, "warn").and.stub();
+            let mock_warn = check.patch(console, "warn", null);
 
             let battle = Battle.newQuickRandom();
             let action = new EndTurnAction();
@@ -12,8 +12,9 @@ module TK.SpaceTac.Specs {
             let ship = battle.play_order[1];
             let result = action.apply(battle.play_order[1]);
             check.equals(result, false);
-
-            expect(console.warn).toHaveBeenCalledWith("Action rejected - ship not playing", ship, action, Target.newFromShip(ship));
+            check.called(mock_warn, [
+                ["Action rejected - ship not playing", ship, action, Target.newFromShip(ship)]
+            ]);
         });
 
         test.case("ends turn when applied", check => {

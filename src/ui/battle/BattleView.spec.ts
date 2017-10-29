@@ -2,11 +2,11 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("BattleView", test => {
-        let testgame = setupBattleview();
+        let testgame = setupBattleview(test);
 
         test.case("handles ship hovering to display tooltip", check => {
             let battleview = testgame.view;
-            expect(battleview.ship_hovered).toBeNull("initial state");
+            check.equals(battleview.ship_hovered, null, "initial state");
 
             let ship = nn(battleview.battle.playing_ship);
             battleview.cursorHovered(ship.location, ship);
@@ -17,7 +17,7 @@ module TK.SpaceTac.UI.Specs {
             check.same(battleview.ship_hovered, ship, "ship2 hovered");
 
             battleview.cursorHovered(new ArenaLocation(0, 0), null);
-            expect(battleview.ship_hovered).toBeNull("out");
+            check.equals(battleview.ship_hovered, null, "out");
 
             battleview.cursorOnShip(ship);
             check.same(battleview.ship_hovered, ship, "force on");
@@ -26,7 +26,7 @@ module TK.SpaceTac.UI.Specs {
             check.same(battleview.ship_hovered, ship, "force off on wrong ship");
 
             battleview.cursorOffShip(ship);
-            expect(battleview.ship_hovered).toBeNull("force off");
+            check.equals(battleview.ship_hovered, null, "force off");
         });
 
         test.case("forwards cursor hovering and click to targetting", check => {
@@ -47,11 +47,11 @@ module TK.SpaceTac.UI.Specs {
             check.equals(battleview.targetting.target, Target.newFromLocation(ship.arena_x, ship.arena_y));
             check.equals(battleview.ship_hovered, null);
 
-            spyOn(battleview.targetting, "validate").and.stub();
+            let validate = check.patch(battleview.targetting, "validate", null);
 
-            expect(battleview.targetting.validate).toHaveBeenCalledTimes(0);
+            check.called(validate, 0);
             battleview.cursorClicked();
-            expect(battleview.targetting.validate).toHaveBeenCalledTimes(1);
+            check.called(validate, 1);
 
             battleview.exitTargettingMode();
             check.equals(battleview.targetting.active, false);

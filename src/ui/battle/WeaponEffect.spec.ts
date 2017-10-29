@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("WeaponEffect", test => {
-        let testgame = setupBattleview();
+        let testgame = setupBattleview(test);
         let clock = test.clock();
 
         function checkEmitters(step: string, expected: number) {
@@ -56,24 +56,27 @@ module TK.SpaceTac.UI.Specs {
 
             let weapon = new Equipment();
             weapon.action = new TriggerAction(weapon, [new DamageEffect()], 1, 500);
-            spyOn(weapon.action, "getImpactedShips").and.returnValue([ship]);
+            check.patch(weapon.action, "getImpactedShips", () => [ship]);
 
-            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), weapon);
-            spyOn(effect, "getEffectForWeapon").and.returnValue(() => 100);
+            let dest = new Ship();
+            let effect = new WeaponEffect(battleview.arena, dest, Target.newFromShip(dest), weapon);
+            check.patch(effect, "getEffectForWeapon", () => (() => 100));
 
-            let mock_shield_impact = spyOn(effect, "shieldImpactEffect").and.stub();
-            let mock_hull_impact = spyOn(effect, "hullImpactEffect").and.stub();
+            let mock_shield_impact = check.patch(effect, "shieldImpactEffect", null);
+            let mock_hull_impact = check.patch(effect, "hullImpactEffect", null);
 
             effect.start();
-            expect(mock_shield_impact).toHaveBeenCalledTimes(0);
-            expect(mock_hull_impact).toHaveBeenCalledTimes(1);
-            expect(mock_hull_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 40, 400);
+            check.called(mock_shield_impact, 0);
+            check.called(mock_hull_impact, [
+                [dest.location, battleview.arena.findShipSprite(ship), 40, 400]
+            ]);
 
             sprite.shield_bar.setValue(10, 10);
             effect.start();
-            expect(mock_shield_impact).toHaveBeenCalledTimes(1);
-            expect(mock_shield_impact).toHaveBeenCalledWith(jasmine.objectContaining({ x: 0, y: 0 }), jasmine.objectContaining({ x: 50, y: 30 }), 40, 800, false);
-            expect(mock_hull_impact).toHaveBeenCalledTimes(1);
+            check.called(mock_shield_impact, [
+                [dest.location, battleview.arena.findShipSprite(ship), 40, 800, false]
+            ]);
+            check.called(mock_hull_impact, 0);
         });
 
         test.case("removes particle emitters when done", check => {

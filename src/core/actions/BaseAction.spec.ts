@@ -3,7 +3,7 @@ module TK.SpaceTac {
         test.case("check if equipment can be used with remaining AP", check => {
             var equipment = new Equipment(SlotType.Hull);
             var action = new BaseAction("test", "Test", equipment);
-            spyOn(action, "getActionPointsUsage").and.returnValue(3);
+            check.patch(action, "getActionPointsUsage", () => 3);
             var ship = new Ship();
             ship.addSlot(SlotType.Hull).attach(equipment);
             ship.values.power.setMaximal(10);
@@ -73,7 +73,7 @@ module TK.SpaceTac {
             let equipment = new Equipment(SlotType.Weapon);
             let action = new BaseAction("test", "Test", equipment);
 
-            spyOn(action, "checkTarget").and.callFake((ship: Ship, target: Target) => target);
+            check.patch(action, "checkTarget", (ship: Ship, target: Target) => target);
 
             check.equals(power.wear, 0);
             check.equals(equipment.wear, 0);

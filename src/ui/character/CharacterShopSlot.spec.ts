@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("CharacterShopSlot", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("buys and sell if bound to a shop", check => {
             let view = testgame.view;
@@ -15,7 +15,7 @@ module TK.SpaceTac.UI.Specs {
 
             let equ2 = new Equipment(SlotType.Weapon, "equ2");
             let shop = <any>new Shop(1, [equ2], 0);
-            spyOn(shop, "getPrice").and.returnValue(120);
+            check.patch(shop, "getPrice", () => 120);
             sheet.setShop(shop);
             sheet.show(ship);
 

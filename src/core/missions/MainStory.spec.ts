@@ -1,9 +1,9 @@
 module TK.SpaceTac.Specs {
     testing("MainStory", test => {
-        function checkPart(story: Mission, index: number, title: string, completed = false) {
+        function checkPart(story: Mission, index: number, title: RegExp, completed = false) {
             let result = story.checkStatus();
             test.check.same(story.parts.indexOf(story.current_part), index);
-            expect(story.current_part.title).toMatch(title);
+            test.check.regex(title, story.current_part.title);
             test.check.same(story.completed, completed);
             test.check.same(result, !completed);
         }
@@ -29,24 +29,24 @@ module TK.SpaceTac.Specs {
             let story = nn(missions.main);
             let fleet_size = fleet.ships.length;
 
-            checkPart(story, 0, "^Travel to Terranax galaxy$");
+            checkPart(story, 0, /^Travel to Terranax galaxy$/);
             (<MissionPartConversation>story.current_part).skip();
 
-            checkPart(story, 1, "^Find your contact in .*$");
+            checkPart(story, 1, /^Find your contact in .*$/);
             goTo(fleet, (<MissionPartGoTo>story.current_part).destination);
 
-            checkPart(story, 2, "^Speak with your contact");
+            checkPart(story, 2, /^Speak with your contact/);
             (<MissionPartConversation>story.current_part).skip();
 
-            checkPart(story, 3, "^Go with .* in .* system$");
+            checkPart(story, 3, /^Go with .* in .* system$/);
             check.same(fleet.ships.length, fleet_size + 1);
             goTo(fleet, (<MissionPartEscort>story.current_part).destination);
 
-            checkPart(story, 4, "^Listen to .*$");
+            checkPart(story, 4, /^Listen to .*$/);
             (<MissionPartConversation>story.current_part).skip();
             check.equals(session.getBattle(), null);
 
-            checkPart(story, 5, "^Fight the arrived fleet$");
+            checkPart(story, 5, /^Fight the arrived fleet$/);
             check.notequals(session.getBattle(), null);
             nn(session.getBattle()).endBattle(fleet);
 

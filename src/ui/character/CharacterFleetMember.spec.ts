@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("CharacterFleetMember", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("transfers equipment to another ship", check => {
             let view = testgame.view;

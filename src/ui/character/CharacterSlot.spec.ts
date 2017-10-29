@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("CharacterSlot", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("allows dragging equipment", check => {
             let view = testgame.view;

@@ -53,14 +53,14 @@ module TK.SpaceTac.Specs {
 
             check.equals(damage.getEffectiveDamage(ship), [200, 0]);
 
-            spyOn(ship, "ieffects").and.returnValues(
+            check.patch(ship, "ieffects", iterator([
                 isingle(new DamageModifierEffect(-15)),
                 isingle(new DamageModifierEffect(20)),
                 isingle(new DamageModifierEffect(-150)),
                 isingle(new DamageModifierEffect(180)),
                 iarray([new DamageModifierEffect(10), new DamageModifierEffect(-15)]),
                 isingle(new DamageModifierEffect(3))
-            );
+            ]));
 
             check.equals(damage.getEffectiveDamage(ship), [170, 0]);
             check.equals(damage.getEffectiveDamage(ship), [240, 0]);

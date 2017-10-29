@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("ParticleBuilder", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("builds composed particles", check => {
             let builder = new ParticleBuilder(testgame.view);

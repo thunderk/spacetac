@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("CharacterEquipment", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         class FakeContainer implements CharacterEquipmentContainer {
             name: string;
@@ -45,17 +45,17 @@ module TK.SpaceTac.UI.Specs {
             }
         }
 
-        function createBasicCase(positions: number[]): [CharacterSheet, CharacterEquipment, FakeContainer[], Function] {
+        function createBasicCase(positions: number[]): [CharacterSheet, CharacterEquipment, FakeContainer[], Mock] {
             let view = testgame.view;
             let sheet = new CharacterSheet(view);
             sheet.show(new Ship());
-            let refresh = spyOn(sheet, "refresh").and.stub();
+            let refresh = test.check.patch(sheet, "refresh", null);
 
             let containers = positions.map((x, idx) => new FakeContainer(`container${idx + 1}`, x));
             let equipment = new CharacterEquipment(sheet, new Equipment(), containers[0]);
             containers[0].inside = equipment;
             equipment.setupDragDrop();
-            spyOn(sheet, "iEquipmentContainers").and.returnValue(iarray(containers));
+            test.check.patch(sheet, "iEquipmentContainers", () => iarray(containers));
 
             return [sheet, equipment, containers, refresh];
         }
@@ -77,7 +77,7 @@ module TK.SpaceTac.UI.Specs {
             equipment.events.onDragStop.dispatch();
             check.same(equipment.container, container1);
             check.equals(equipment.x, 0);
-            expect(refresh).toHaveBeenCalledTimes(0);
+            check.called(refresh, 0);
 
             // drop on accepting destination
             equipment.events.onDragStart.dispatch();
@@ -87,7 +87,7 @@ module TK.SpaceTac.UI.Specs {
             check.equals(equipment.x, 100);
             check.equals(container1.inside, null);
             check.same(container2.inside, equipment);
-            expect(refresh).toHaveBeenCalledTimes(1);
+            check.called(refresh, 1);
 
             // drop on refusing destination
             equipment.events.onDragStart.dispatch();
@@ -97,45 +97,50 @@ module TK.SpaceTac.UI.Specs {
             check.equals(equipment.x, 100);
             check.same(container2.inside, equipment);
             check.equals(container3.inside, null);
-            expect(refresh).toHaveBeenCalledTimes(1);
+            check.called(refresh, 0);
 
             // broken destination, should return to source
-            let log = spyOn(console, "error").and.stub();
-            spyOn(container3, "addEquipment").and.callFake((equ: any, src: any, test: boolean) => { return { success: test } });
+            let log = check.patch(console, "error", null);
+            check.patch(container3, "addEquipment", (equ: any, src: any, test: boolean) => { return { success: test } });
             equipment.events.onDragStart.dispatch();
             equipment.x = 200;
             equipment.events.onDragStop.dispatch();
             check.same(equipment.container, container2);
             check.equals(equipment.x, 100);
-            expect(refresh).toHaveBeenCalledTimes(1);
-            expect(log).toHaveBeenCalledWith('Destination container refused to accept equipment', equipment, container2, container3);
+            check.called(refresh, 0);
+            check.called(log, [
+                ['Destination container refused to accept equipment', equipment, container2, container3]
+            ]);
 
             // broken destination and source, item is lost !
-            spyOn(container2, "addEquipment").and.callFake((equ: any, src: any, test: boolean) => { return { success: test } });
+            check.patch(container2, "addEquipment", (equ: any, src: any, test: boolean) => { return { success: test } });
             equipment.events.onDragStart.dispatch();
             equipment.x = 200;
             equipment.events.onDragStop.dispatch();
             check.same(equipment.container, container3);
             check.equals(equipment.x, 200);
-            expect(refresh).toHaveBeenCalledTimes(2);
-            expect(log).toHaveBeenCalledWith('Equipment lost in bad exchange!', equipment, container2, container3);
+            check.called(refresh, 1);
+            check.called(log, [
+                ['Destination container refused to accept equipment', equipment, container2, container3],
+                ['Equipment lost in bad exchange!', equipment, container2, container3]
+            ]);
         });
 
         test.case("defines the sheet's action message", check => {
             let [sheet, equipment, [container1, container2], refresh] = createBasicCase([0, 1]);
 
-            spyOn(container1, "removeEquipment").and.returnValues(
+            check.patch(container1, "removeEquipment", iterator([
                 { success: true, info: "detach" },
                 { success: false, info: "detach", error: "cannot detach" },
                 { success: true, info: "detach" },
                 { success: false, info: "detach", error: "cannot detach" }
-            )
-            spyOn(container2, "addEquipment").and.returnValues(
+            ]))
+            check.patch(container2, "addEquipment", iterator([
                 { success: true, info: "attach" },
                 { success: true, info: "attach" },
                 { success: false, info: "attach", error: "cannot attach" },
                 { success: false, info: "attach", error: "cannot attach" }
-            )
+            ]))
 
             check.equals(sheet.action_message.text, "");
             equipment.events.onDragStart.dispatch();

@@ -175,7 +175,7 @@ module TK.SpaceTac.UI {
          * 
          * Returns functions that may be used to force the behavior
          */
-        setHoverClick(obj: Phaser.Button, enter = nop, leave = nop, click = nop, hovertime = 300, holdtime = 600) {
+        setHoverClick(obj: Phaser.Button, enter: Function = nop, leave: Function = nop, click: Function = nop, hovertime = 300, holdtime = 600) {
             let holdstart = Timer.nowMs();
             let enternext: Function | null = null;
             let entercalled = false;

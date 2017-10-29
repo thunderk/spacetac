@@ -2,7 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("FleetCreationView", test => {
-        let testgame = setupSingleView(() => [new FleetCreationView, []]);
+        let testgame = setupSingleView(test, () => [new FleetCreationView, []]);
 
         test.case("has a basic equipment shop with infinite stock", check => {
             let shop = testgame.view.infinite_shop;

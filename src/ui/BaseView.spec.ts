@@ -2,7 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("BaseView", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("initializes variables", check => {
             let view = <BaseView>testgame.ui.state.getCurrentState();

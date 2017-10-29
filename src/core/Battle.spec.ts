@@ -113,25 +113,33 @@ module TK.SpaceTac {
 
             var battle = new Battle(fleet1, fleet2);
 
-            spyOn(ship1, "startTurn").and.callThrough();
-            spyOn(ship2, "startTurn").and.callThrough();
-            spyOn(ship3, "startTurn").and.callThrough();
+            let mock1 = check.patch(ship1, "startTurn");
+            let mock2 = check.patch(ship2, "startTurn");
+            let mock3 = check.patch(ship3, "startTurn");
 
             // Force play order
             var gen = new SkewedRandomGenerator([0.3, 0.2, 0.1]);
             battle.throwInitiative(gen);
 
             battle.advanceToNextShip();
-            expect(ship1.startTurn).toHaveBeenCalledWith();
+            check.called(mock1, 1);
+            check.called(mock2, 0);
+            check.called(mock3, 0);
 
             battle.advanceToNextShip();
-            expect(ship2.startTurn).toHaveBeenCalledWith();
+            check.called(mock1, 0);
+            check.called(mock2, 1);
+            check.called(mock3, 0);
 
             battle.advanceToNextShip();
-            expect(ship3.startTurn).toHaveBeenCalledWith();
+            check.called(mock1, 0);
+            check.called(mock2, 0);
+            check.called(mock3, 1);
 
             battle.advanceToNextShip();
-            expect(ship1.startTurn).toHaveBeenCalledWith();
+            check.called(mock1, 1);
+            check.called(mock2, 0);
+            check.called(mock3, 0);
         });
 
         test.case("detects victory condition and logs a final EndBattleEvent", check => {
@@ -291,7 +299,7 @@ module TK.SpaceTac {
 
         test.case("gets the number of turns before a specific ship plays", check => {
             let battle = new Battle();
-            spyOn(battle, "checkEndBattle").and.returnValue(false);
+            check.patch(battle, "checkEndBattle", () => false);
             battle.play_order = [new Ship(), new Ship(), new Ship()];
             battle.advanceToNextShip();
 

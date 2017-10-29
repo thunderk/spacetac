@@ -1,7 +1,7 @@
 module TK.SpaceTac.UI.Specs {
     testing("UITools", test => {
         testing("in UI", test => {
-            let testgame = setupEmptyView();
+            let testgame = setupEmptyView(test);
 
             test.case("destroys children", check => {
                 let parent = testgame.view.add.group();

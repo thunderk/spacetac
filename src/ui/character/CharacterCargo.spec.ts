@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("CharacterCargo", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("checks conditions for adding/removing equipment", check => {
             let view = testgame.view;

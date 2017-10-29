@@ -2,13 +2,17 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("ShipList", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         function createList(): ShipList {
             let view = testgame.view;
             let battle = new Battle();
             let tactical_mode = new Toggle();
-            let ship_buttons = jasmine.createSpyObj("ship_buttons", ["cursorOnShip", "cursorOffShip", "cursorClicked"]);
+            let ship_buttons = {
+                cursorOnShip: nop,
+                cursorOffShip: nop,
+                cursorClicked: nop,
+            };
             let list = new ShipList(view, battle, battle.fleets[0].player, tactical_mode, ship_buttons);
             return list;
         }
@@ -43,7 +47,7 @@ module TK.SpaceTac.UI.Specs {
             list.refresh(false);
             check.equals(nn(list.findItem(battle.play_order[0])).position, new Phaser.Point(2, 843));
             check.equals(nn(list.findItem(battle.play_order[1])).position, new Phaser.Point(-18, 962));
-            
+
             battle.fleets[1].addShip();
             battle.throwInitiative();
             battle.advanceToNextShip();

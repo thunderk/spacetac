@@ -2,7 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("ActionIcon", test => {
-        let testgame = setupBattleview();
+        let testgame = setupBattleview(test);
 
         test.case("displays power usage", check => {
             let bar = testgame.view.action_bar;
@@ -14,7 +14,7 @@ module TK.SpaceTac.UI.Specs {
             icon.refresh();
             check.same(icon.img_power.visible, false, "no change");
 
-            spyOn(action, "getActionPointsUsage").and.returnValue(3);
+            check.patch(action, "getActionPointsUsage", () => 3);
             icon.refresh();
             check.equals(icon.img_power.visible, true);
             check.equals(icon.text_power.text, "3");

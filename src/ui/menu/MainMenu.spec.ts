@@ -3,7 +3,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("MainMenu", test => {
-        let testgame = setupSingleView(() => [new MainMenu(), []]);
+        let testgame = setupSingleView(test, () => [new MainMenu(), []]);
 
         test.case("adds moving stars, a title and three buttons", check => {
             let view = <MainMenu>testgame.ui.state.getCurrentState();

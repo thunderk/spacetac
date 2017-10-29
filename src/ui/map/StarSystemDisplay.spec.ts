@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("StarSystemDisplay", test => {
-        let testgame = setupMapview();
+        let testgame = setupMapview(test);
 
         test.case("displays a badge with the current state for a star location", check => {
             let mapview = testgame.view;

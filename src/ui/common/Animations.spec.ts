@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("Animations", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("shows and hides objects", check => {
             let obj = { visible: false, alpha: 0.5 };
@@ -36,20 +36,21 @@ module TK.SpaceTac.UI.Specs {
         });
 
         test.case("blocks input while object is hidden", check => {
-            let obj = { visible: true, alpha: 1, input: { enabled: true }, changeStateFrame: jasmine.createSpy("changeStateFrame"), freezeFrames: false };
+            let changeStateFrame = check.mockfunc("changeStateFrame");
+            let obj = { visible: true, alpha: 1, input: { enabled: true }, changeStateFrame: changeStateFrame.func, freezeFrames: false };
 
             testgame.view.animations.setVisible(obj, false, 0);
             check.equals(obj.visible, false);
             check.equals(obj.alpha, 0);
             check.equals(obj.input.enabled, false);
-            expect(obj.changeStateFrame).toHaveBeenCalledWith("Out");
+            check.called(changeStateFrame, [["Out"]])
             check.equals(obj.freezeFrames, true);
 
             testgame.view.animations.setVisible(obj, true, 0);
             check.equals(obj.visible, true);
             check.equals(obj.alpha, 1);
             check.equals(obj.input.enabled, true);
-            expect(obj.changeStateFrame).toHaveBeenCalledTimes(1);
+            check.called(changeStateFrame, 0);
             check.equals(obj.freezeFrames, false);
         });
 

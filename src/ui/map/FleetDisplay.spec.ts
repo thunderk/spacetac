@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("FleetDisplay", test => {
-        let testgame = setupMapview();
+        let testgame = setupMapview(test);
 
         test.case("orbits the fleet around its current location", check => {
             let mapview = testgame.view;

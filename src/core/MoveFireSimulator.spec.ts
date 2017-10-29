@@ -34,8 +34,8 @@ module TK.SpaceTac.Specs {
             check.same(result.can_fire, true, 'can_fire');
             check.same(result.total_fire_ap, 3, 'total_fire_ap');
 
-            check.equals(<any[]>result.parts, [
-                { action: jasmine.objectContaining({ code: "fire-equipment" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: true }
+            check.equals(result.parts, [
+                { action: action, target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: true }
             ]);
         });
 
@@ -48,8 +48,8 @@ module TK.SpaceTac.Specs {
             check.same(result.can_fire, false, 'can_fire');
             check.same(result.total_fire_ap, 3, 'total_fire_ap');
 
-            check.equals(<any[]>result.parts, [
-                { action: jasmine.objectContaining({ code: "fire-equipment" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: false }
+            check.equals(result.parts, [
+                { action: action, target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 3, possible: false }
             ]);
         });
 
@@ -65,9 +65,10 @@ module TK.SpaceTac.Specs {
             check.same(result.can_fire, true, 'can_fire');
             check.same(result.total_fire_ap, 3, 'total_fire_ap');
 
-            check.equals(<any[]>result.parts, [
-                { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 1, possible: true },
-                { action: jasmine.objectContaining({ code: "fire-equipment" }), target: new Target(ship.arena_x + 15, ship.arena_y, null), ap: 3, possible: true }
+            let move_action = ship.listEquipment(SlotType.Engine)[0].action;
+            check.equals(result.parts, [
+                { action: move_action, target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 1, possible: true },
+                { action: action, target: new Target(ship.arena_x + 15, ship.arena_y, null), ap: 3, possible: true }
             ]);
         });
 
@@ -120,7 +121,7 @@ module TK.SpaceTac.Specs {
 
             ship1.setArenaPosition(420, 200);
 
-            spyOn(simulator, "scanCircle").and.returnValue(iarray([
+            check.patch(simulator, "scanCircle", () => iarray([
                 new Target(400, 200),
                 new Target(410, 200),
                 new Target(410, 230),
@@ -142,9 +143,10 @@ module TK.SpaceTac.Specs {
             check.same(result.can_fire, false, 'can_fire');
             check.same(result.total_fire_ap, 2, 'total_fire_ap');
 
-            check.equals(<any[]>result.parts, [
-                { action: jasmine.objectContaining({ code: "move" }), target: new Target(ship.arena_x + 10, ship.arena_y, null), ap: 2, possible: true },
-                { action: jasmine.objectContaining({ code: "fire-equipment" }), target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2, possible: false }
+            let move_action = ship.listEquipment(SlotType.Engine)[0].action;
+            check.equals(result.parts, [
+                { action: move_action, target: new Target(ship.arena_x + 10, ship.arena_y, null), ap: 2, possible: true },
+                { action: action, target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2, possible: false }
             ]);
         });
 

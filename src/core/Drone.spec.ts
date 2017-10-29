@@ -59,14 +59,18 @@ module TK.SpaceTac {
             let [drone, effect] = newTestDrone(0, 0, 5, owner);
             drone.duration = 3;
 
-            let removeDrone = spyOn(battle, "removeDrone").and.callThrough();
+            let removeDrone = check.patch(battle, "removeDrone", null);
 
             drone.activate();
-            expect(removeDrone).not.toHaveBeenCalled();
+            check.called(removeDrone, 0);
+
             drone.activate();
-            expect(removeDrone).not.toHaveBeenCalled();
+            check.called(removeDrone, 0);
+
             drone.activate();
-            expect(removeDrone).toHaveBeenCalledWith(drone, true);
+            check.called(removeDrone, [
+                [drone, true]
+            ]);
         });
 
         test.case("logs each activation", check => {

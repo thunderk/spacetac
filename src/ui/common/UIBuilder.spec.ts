@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("UIBuilder", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         function get(path: (number | string)[]): [string, any] {
             let spath = `[${path.join(" -> ")}]`;
@@ -145,7 +145,7 @@ module TK.SpaceTac.UI.Specs {
             builder.image("test-image", 100, 50);
             checkcomp(["View layers", "base", 0], Phaser.Image, "test-image", { x: 100, y: 50, key: "__missing", inputEnabled: null });
 
-            spyOn(testgame.view, "getFirstImage").and.callFake((...images: string[]) => images[1]);
+            check.patch(testgame.view, "getFirstImage", (...images: string[]) => images[1]);
             builder.image(["test-image1", "test-image2", "test-image3"]);
             checkcomp(["View layers", "base", 1], Phaser.Image, "test-image2");
         })

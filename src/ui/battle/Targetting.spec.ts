@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("Targetting", test => {
-        let testgame = setupBattleview();
+        let testgame = setupBattleview(test);
 
         function newTargetting(): Targetting {
             return new Targetting(testgame.view,
@@ -18,7 +18,7 @@ module TK.SpaceTac.UI.Specs {
             let engine = TestTools.addEngine(ship, 12);
             targetting.setAction(weapon.action);
 
-            let drawvector = spyOn(targetting, "drawVector").and.stub();
+            let drawvector = check.patch(targetting, "drawVector", null);
 
             let part = {
                 action: nn(weapon.action),
@@ -27,18 +27,21 @@ module TK.SpaceTac.UI.Specs {
                 possible: true
             };
             targetting.drawPart(part, true, null);
-            expect(drawvector).toHaveBeenCalledTimes(1);
-            expect(drawvector).toHaveBeenCalledWith(0xdc6441, 10, 20, 50, 30, 0);
+            check.called(drawvector, [
+                [0xdc6441, 10, 20, 50, 30, 0]
+            ]);
 
             targetting.drawPart(part, false, null);
-            expect(drawvector).toHaveBeenCalledTimes(2);
-            expect(drawvector).toHaveBeenCalledWith(0x8e8e8e, 10, 20, 50, 30, 0);
+            check.called(drawvector, [
+                [0x8e8e8e, 10, 20, 50, 30, 0]
+            ]);
 
             targetting.action = engine.action;
             part.action = nn(engine.action);
             targetting.drawPart(part, true, null);
-            expect(drawvector).toHaveBeenCalledTimes(3);
-            expect(drawvector).toHaveBeenCalledWith(0xe09c47, 10, 20, 50, 30, 12);
+            check.called(drawvector, [
+                [0xe09c47, 10, 20, 50, 30, 12]
+            ]);
         })
 
         test.case("updates impact indicators on ships inside the blast radius", check => {
@@ -47,28 +50,32 @@ module TK.SpaceTac.UI.Specs {
             let impacts = targetting.impact_indicators;
             let action = new TriggerAction(new Equipment(), [], 1, 0, 50);
 
-            let collect = spyOn(action, "getImpactedShips").and.returnValues(
+            let collect = check.patch(action, "getImpactedShips", iterator([
                 [new Ship(), new Ship(), new Ship()],
                 [new Ship(), new Ship()],
-                []);
+                []
+            ]));
             targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 10));
 
-            expect(collect).toHaveBeenCalledTimes(1);
-            expect(collect).toHaveBeenCalledWith(ship, new Target(20, 10), ship.location);
+            check.called(collect, [
+                [ship, new Target(20, 10), ship.location]
+            ])
             check.equals(targetting.impact_indicators.children.length, 3);
             check.equals(targetting.impact_indicators.visible, true);
 
             targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 11));
 
-            expect(collect).toHaveBeenCalledTimes(2);
-            expect(collect).toHaveBeenCalledWith(ship, new Target(20, 11), ship.location);
+            check.called(collect, [
+                [ship, new Target(20, 11), ship.location]
+            ])
             check.equals(targetting.impact_indicators.children.length, 2);
             check.equals(targetting.impact_indicators.visible, true);
 
             targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 12));
 
-            expect(collect).toHaveBeenCalledTimes(3);
-            expect(collect).toHaveBeenCalledWith(ship, new Target(20, 12), ship.location);
+            check.called(collect, [
+                [ship, new Target(20, 12), ship.location]
+            ])
             check.equals(targetting.impact_indicators.visible, false);
         })
 
@@ -81,7 +88,7 @@ module TK.SpaceTac.UI.Specs {
             targetting.setAction(weapon.action);
             targetting.setTarget(Target.newFromLocation(156, 65));
 
-            spyOn(targetting, "simulate").and.callFake(() => {
+            check.patch(targetting, "simulate", () => {
                 let result = new MoveFireResult();
                 result.success = true;
                 result.complete = true;
@@ -153,8 +160,8 @@ module TK.SpaceTac.UI.Specs {
             let move = TestTools.addEngine(ship, 100).action;
             let fire = TestTools.addWeapon(ship, 50, 2, 300, 100).action;
             let last_call: any = null;
-            spyOn(targetting.range_hint, "clear").and.callFake(() => last_call = null);
-            spyOn(targetting.range_hint, "update").and.callFake((ship: Ship, action: BaseAction, radius: number) => last_call = [ship, action, radius]);
+            check.patch(targetting.range_hint, "clear", () => last_call = null);
+            check.patch(targetting.range_hint, "update", (ship: Ship, action: BaseAction, radius: number) => last_call = [ship, action, radius]);
 
             // move action
             targetting.setAction(move);

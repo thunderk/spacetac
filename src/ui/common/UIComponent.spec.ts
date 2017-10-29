@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("UIComponent", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("controls visibility", check => {
             let component = new UIComponent(testgame.view, 50, 50);

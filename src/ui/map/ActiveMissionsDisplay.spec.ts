@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("ActiveMissionsDisplay", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("displays active missions", check => {
             let view = testgame.view;

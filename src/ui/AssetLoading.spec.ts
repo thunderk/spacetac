@@ -2,7 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("AssetLoading", test => {
-        let testgame = setupSingleView(() => [new AssetLoading(), []]);
+        let testgame = setupSingleView(test, () => [new AssetLoading(), []]);
 
         test.case("loads correctly", check => {
             check.equals(testgame.ui.state.current, "test");

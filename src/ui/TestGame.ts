@@ -19,19 +19,20 @@ module TK.SpaceTac.UI.Specs {
     /**
      * Setup a headless test UI, with a single view started.
      */
-    export function setupSingleView<T extends Phaser.State>(buildView: () => [T, any[]]) {
+    export function setupSingleView<T extends Phaser.State>(test: TestSuite, buildView: () => [T, any[]]) {
         let testgame = new TestGame<T>();
 
-        beforeEach(function (done) {
-            spyOn(console, "log").and.stub();
-            spyOn(console, "warn").and.stub();
+        test.asetup(() => new Promise((resolve, reject) => {
+            let check = new TestContext();  // TODO Should be taken from test suite
+            check.patch(console, "log", null);
+            check.patch(console, "warn", null);
 
             if (!test_ui) {
                 test_ui = new MainUI(true);
 
                 if (test_ui.load) {
-                    spyOn(test_ui.load, 'image').and.stub();
-                    spyOn(test_ui.load, 'audio').and.stub();
+                    check.patch(test_ui.load, 'image', null);
+                    check.patch(test_ui.load, 'audio', null);
                 }
             }
 
@@ -43,20 +44,20 @@ module TK.SpaceTac.UI.Specs {
             if (state instanceof BaseView) {
                 testgame.multistorage = new Multi.FakeRemoteStorage();
                 let connection = new Multi.Connection(RandomGenerator.global.id(12), testgame.multistorage);
-                spyOn(state, "getConnection").and.returnValue(connection);
+                check.patch(state, "getConnection", () => connection);
             }
 
             let orig_create = bound(state, "create");
-            spyOn(state, "create").and.callFake(() => {
+            check.patch(state, "create", () => {
                 orig_create();
-                done();
+                resolve();
             });
 
             testgame.ui.state.add("test", state);
             testgame.ui.state.start("test", true, false, ...stateargs);
 
             testgame.state = "test_initial";
-            spyOn(testgame.ui.state, "start").and.callFake((name: string) => {
+            check.patch(testgame.ui.state, "start", (name: string) => {
                 testgame.state = name;
             });
 
@@ -66,7 +67,7 @@ module TK.SpaceTac.UI.Specs {
             }
 
             testgame.view = state;
-        });
+        }));
 
         return testgame;
     }
@@ -74,8 +75,8 @@ module TK.SpaceTac.UI.Specs {
     /**
      * Test setup of an empty BaseView
      */
-    export function setupEmptyView(): TestGame<BaseView> {
-        return setupSingleView(() => {
+    export function setupEmptyView(test: TestSuite): TestGame<BaseView> {
+        return setupSingleView(test, () => {
             return [new BaseView(), []];
         });
     }
@@ -83,8 +84,8 @@ module TK.SpaceTac.UI.Specs {
     /**
      * Test setup of a battleview bound to a battle, to be called inside a "describe" block.
      */
-    export function setupBattleview(): TestGame<BattleView> {
-        return setupSingleView(() => {
+    export function setupBattleview(test: TestSuite): TestGame<BattleView> {
+        return setupSingleView(test, () => {
             let view = new BattleView();
             view.splash = false;
 
@@ -98,8 +99,8 @@ module TK.SpaceTac.UI.Specs {
     /**
      * Test setup of a mapview bound to a universe, to be called inside a "describe" block.
      */
-    export function setupMapview(): TestGame<UniverseMapView> {
-        return setupSingleView(() => {
+    export function setupMapview(test: TestSuite): TestGame<UniverseMapView> {
+        return setupSingleView(test, () => {
             let mapview = new UniverseMapView();
             let session = new GameSession();
             session.startNewGame();

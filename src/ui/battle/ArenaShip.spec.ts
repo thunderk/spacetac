@@ -2,7 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("ArenaShip", test => {
-        let testgame = setupBattleview();
+        let testgame = setupBattleview(test);
 
         test.case("adds effects display", check => {
             let ship = nn(testgame.view.battle.playing_ship);

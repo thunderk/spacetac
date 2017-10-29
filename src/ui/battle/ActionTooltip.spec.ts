@@ -2,7 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("ActionTooltip", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("displays action information", check => {
             let tooltip = new Tooltip(testgame.view);

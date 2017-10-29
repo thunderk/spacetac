@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("UIDialog", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("sets up an overlay", check => {
             let view = testgame.view;

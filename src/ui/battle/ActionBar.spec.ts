@@ -2,7 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("ActionBar", test => {
-        let testgame = setupBattleview();
+        let testgame = setupBattleview(test);
 
         test.case("lists available actions for selected ship", check => {
             var bar = testgame.view.action_bar;

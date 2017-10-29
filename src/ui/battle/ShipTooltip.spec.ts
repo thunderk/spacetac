@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("ShipTooltip", test => {
-        let testgame = setupBattleview();
+        let testgame = setupBattleview(test);
 
         test.case("fills ship details", check => {
             let tooltip = new ShipTooltip(testgame.view);

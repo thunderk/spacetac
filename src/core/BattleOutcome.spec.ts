@@ -40,7 +40,7 @@ module TK.SpaceTac.Specs {
             template.setSkillsRequirements({ "skill_photons": istep(4) });
             template.addAttributeEffect("power_capacity", istep(1));
             looter.templates = [template];
-            spyOn(outcome, "getLootGenerator").and.returnValue(looter);
+            check.patch(outcome, "getLootGenerator", () => looter);
 
             outcome.createLoot(battle, random);
 

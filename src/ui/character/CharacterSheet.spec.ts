@@ -2,7 +2,7 @@ module TK.SpaceTac.UI.Specs {
     testing("CharacterSheet", test => {
 
         testing("in UI", test => {
-            let testgame = setupEmptyView();
+            let testgame = setupEmptyView(test);
 
             test.case("displays fleet and ship information", check => {
                 let view = testgame.view;

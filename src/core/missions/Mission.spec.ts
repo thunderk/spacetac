@@ -13,7 +13,7 @@ module TK.SpaceTac.Specs {
             check.equals(result, true);
             check.same(mission.current_part, mission.parts[0]);
 
-            spyOn(mission.parts[0], "checkCompleted").and.returnValues(false, true);
+            check.patch(mission.parts[0], "checkCompleted", iterator([false, true]));
 
             result = mission.checkStatus();
             check.equals(result, true);
@@ -25,7 +25,7 @@ module TK.SpaceTac.Specs {
             check.equals(result, true);
             check.same(mission.current_part, mission.parts[1]);
 
-            spyOn(mission.parts[1], "checkCompleted").and.returnValue(true);
+            check.patch(mission.parts[1], "checkCompleted", () => true);
 
             result = mission.checkStatus();
             check.equals(result, false);

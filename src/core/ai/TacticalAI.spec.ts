@@ -16,8 +16,8 @@ module TK.SpaceTac.Specs {
         let producer = (...scores: number[]) => imap(iarray(scores), score => new FixedManeuver(score));
         let applied: number[] = [];
 
-        beforeEach(function () {
-            spyOn(console, "log").and.stub();
+        test.setup(function () {
+            test.check.patch(console, "log", null);
             applied = [];
         });
 
@@ -28,14 +28,14 @@ module TK.SpaceTac.Specs {
             ship.playing = true;
             let ai = new TacticalAI(ship, Timer.synchronous);
 
-            spyOn(ai, "getDefaultProducers").and.returnValue([
+            check.patch(ai, "getDefaultProducers", () => [
                 producer(1, -8, 4),
                 producer(3, 7, 0, 6, 1)
             ]);
-            spyOn(ai, "getDefaultEvaluators").and.returnValue([
+            check.patch(ai, "getDefaultEvaluators", () => [
                 (maneuver: Maneuver) => (<FixedManeuver>maneuver).score
             ]);
-            spyOn(ai, "applyManeuver").and.callFake((maneuver: FixedManeuver) => applied.push(maneuver.score));
+            check.patch(ai, "applyManeuver", (maneuver: FixedManeuver) => applied.push(maneuver.score));
 
             ai.play();
             check.equals(applied, [7]);

@@ -28,7 +28,9 @@ module TK.SpaceTac.Specs {
 
             check.equals(ship.listEquipment(), []);
             battle.cheats.equip("Iron Hull");
-            check.equals(ship.listEquipment(), [<any>jasmine.objectContaining({ name: "Iron Hull", level: 1 })]);
+            let result = ship.listEquipment();
+            check.equals(result.length, 1);
+            check.containing(result[0], { name: "Iron Hull", level: 1 });
         })
     })
 }

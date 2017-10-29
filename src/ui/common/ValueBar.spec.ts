@@ -1,6 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("ValueBar", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("computes proportional value", check => {
             var bar = new ValueBar(testgame.view, "default", ValueBarOrientation.EAST);

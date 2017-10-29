@@ -12,7 +12,7 @@ module TK.SpaceTac.UI.Specs {
     }
 
     testing("MainUI", test => {
-        let testgame = setupEmptyView();
+        let testgame = setupEmptyView(test);
 
         test.case("saves games in local browser storage", check => {
             let ui = testgame.ui;
@@ -27,7 +27,7 @@ module TK.SpaceTac.UI.Specs {
 
             result = ui.saveGame("spacetac-test-save");
             check.equals(result, true);
-            expect(ui.storage.getItem("spacetac-test-save")).toBeTruthy();
+            check.equals(bool(ui.storage.getItem("spacetac-test-save")), true);
 
             ui.session = new GameSession();
             check.notsame(ui.session.universe.stars.length, systems);

@@ -47,7 +47,7 @@ module TK.SpaceTac {
             var action = new MoveAction(engine, 1);
             TestTools.setShipPlaying(battle, ship);
 
-            spyOn(console, "warn").and.stub();
+            check.patch(console, "warn", null);
 
             var result = action.apply(ship, Target.newFromLocation(10, 10));
             check.equals(result, true);

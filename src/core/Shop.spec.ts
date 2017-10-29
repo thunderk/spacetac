@@ -3,7 +3,7 @@ module TK.SpaceTac.Specs {
         test.case("generates a stock", check => {
             let shop = new Shop();
             check.equals((<any>shop).stock.length, 0);
-            expect(shop.getStock().length).toBeGreaterThan(20);
+            check.greater(shop.getStock().length, 20);
         });
 
         test.case("buys and sells items", check => {
@@ -14,7 +14,7 @@ module TK.SpaceTac.Specs {
             let shop = new Shop(1, [equ1, equ2], 0);
             let fleet = new Fleet();
             fleet.credits = 1000;
-            spyOn(shop, "getPrice").and.returnValue(800);
+            check.patch(shop, "getPrice", () => 800);
 
             let result = shop.sellToFleet(equ1, fleet);
             check.equals(result, true);
