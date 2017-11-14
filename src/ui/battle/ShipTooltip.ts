@@ -20,14 +20,13 @@ module TK.SpaceTac.UI {
             this.hide();
 
             let filler = this.getFiller();
-            let sprite = this.battleview.arena.findShipSprite(ship);
 
             filler.configure(10, 6, this.battleview.arena.getBoundaries());
 
             let portrait = filler.image(`ship-${ship.model.code}-portrait`);
             portrait.scale.set(0.5);
 
-            let enemy = ship.getPlayer() != this.battleview.player;
+            let enemy = !ship.getPlayer().is(this.battleview.player);
             filler.text(ship.getFullName(), 140, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
 
             if (ship.alive) {
@@ -40,17 +39,14 @@ module TK.SpaceTac.UI {
                 hsp_builder.text(`Power\n${ship.getValue("power")}/${ship.getAttribute("power_capacity")}`, 480, 106, { color: "#ffdd4b" });
 
                 let iy = 148;
-
-                if (sprite) {
-                    let effects = sprite.active_effects.area.concat(sprite.active_effects.sticky);
-                    if (effects.length > 0) {
-                        filler.text("Active effects", 0, iy, { color: "#ffffff", size: 18, bold: true });
-                        iy += 30;
-                        effects.forEach(effect => {
-                            filler.text(`• ${effect.getDescription()}`, 0, iy, { color: effect.isBeneficial() ? "#afe9c6" : "#e9afaf" });
-                            iy += 26;
-                        });
-                    }
+                let effects = ship.active_effects.list();
+                if (effects.length > 0) {
+                    filler.text("Active effects", 0, iy, { color: "#ffffff", size: 18, bold: true });
+                    iy += 30;
+                    effects.forEach(effect => {
+                        filler.text(`• ${effect.getDescription()}`, 0, iy, { color: effect.isBeneficial() ? "#afe9c6" : "#e9afaf" });
+                        iy += 26;
+                    });
                 }
 
                 let weapons = ship.listEquipment(SlotType.Weapon);
@@ -66,6 +62,7 @@ module TK.SpaceTac.UI {
                 filler.text("Emergency Stasis Protocol\nship disabled", 140, 36, { color: "#a899db", size: 20, center: true, vcenter: true });
             }
 
+            let sprite = this.battleview.arena.findShipSprite(ship);
             if (sprite) {
                 this.container.show(sprite.frame.getBounds());
             }

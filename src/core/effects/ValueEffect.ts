@@ -8,10 +8,10 @@ module TK.SpaceTac {
      */
     export class ValueEffect extends BaseEffect {
         // Affected value
-        valuetype: keyof ShipValues;
+        valuetype: keyof ShipValues
 
         // Value to add (or subtract if negative)
-        value: number;
+        value: number
 
         constructor(valuetype: keyof ShipValues, value: number = 0) {
             super("value");
@@ -20,8 +20,8 @@ module TK.SpaceTac {
             this.value = value;
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
-            return ship.setValue(this.valuetype, this.value, true);
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            return ship.getValueDiffs(this.valuetype, this.value, true);
         }
 
         isBeneficial(): boolean {
@@ -33,7 +33,7 @@ module TK.SpaceTac {
         }
 
         getDescription(): string {
-            let attrname = SHIP_VALUES[this.valuetype].name;
+            let attrname = SHIP_VALUES_NAMES[this.valuetype];
             return `${attrname} ${this.value > 0 ? "+" : "-"}${Math.abs(this.value)}`;
         }
     }

@@ -5,13 +5,15 @@ module TK.SpaceTac.Specs {
             var fleet = new Fleet();
             fleet.addShip();
             location.encounter_random = new SkewedRandomGenerator([0]);
-            var battle = location.enterLocation(fleet);
+            var battle = nn(location.enterLocation(fleet));
 
             check.notequals(location.encounter, null);
             check.notequals(battle, null);
 
-            nn(battle).endBattle(fleet);
+            battle.endBattle(fleet);
+            check.notequals(location.encounter, null);
 
+            location.resolveEncounter(nn(battle.outcome));
             check.equals(location.encounter, null);
         });
 
@@ -20,13 +22,15 @@ module TK.SpaceTac.Specs {
             var fleet = new Fleet();
             fleet.addShip();
             location.encounter_random = new SkewedRandomGenerator([0]);
-            var battle = location.enterLocation(fleet);
+            var battle = nn(location.enterLocation(fleet));
 
             check.notequals(location.encounter, null);
             check.notequals(battle, null);
 
-            nn(battle).endBattle(location.encounter);
+            battle.endBattle(location.encounter);
+            check.notequals(location.encounter, null);
 
+            location.resolveEncounter(nn(battle.outcome));
             check.notequals(location.encounter, null);
         });
     });

@@ -1,4 +1,4 @@
-module TK.SpaceTac {
+module TK.SpaceTac.Specs {
     testing("BaseAction", test => {
         test.case("check if equipment can be used with remaining AP", check => {
             var equipment = new Equipment(SlotType.Hull);
@@ -6,22 +6,21 @@ module TK.SpaceTac {
             check.patch(action, "getActionPointsUsage", () => 3);
             var ship = new Ship();
             ship.addSlot(SlotType.Hull).attach(equipment);
-            ship.values.power.setMaximal(10);
 
             check.equals(action.checkCannotBeApplied(ship), "not enough power");
 
-            ship.values.power.set(5);
+            ship.setValue("power", 5);
 
             check.equals(action.checkCannotBeApplied(ship), null);
             check.equals(action.checkCannotBeApplied(ship, 4), null);
             check.equals(action.checkCannotBeApplied(ship, 3), null);
             check.equals(action.checkCannotBeApplied(ship, 2), "not enough power");
 
-            ship.values.power.set(3);
+            ship.setValue("power", 3);
 
             check.equals(action.checkCannotBeApplied(ship), null);
 
-            ship.values.power.set(2);
+            ship.setValue("power", 2);
 
             check.equals(action.checkCannotBeApplied(ship), "not enough power");
         })
@@ -67,20 +66,23 @@ module TK.SpaceTac {
         })
 
         test.case("wears down equipment and power generators", check => {
-            let ship = new Ship();
+            let battle = TestTools.createBattle();
+            let ship = battle.play_order[0];
             TestTools.setShipAP(ship, 10);
             let power = ship.listEquipment(SlotType.Power)[0];
             let equipment = new Equipment(SlotType.Weapon);
             let action = new BaseAction("test", "Test", equipment);
+            equipment.action = action;
+            ship.addSlot(SlotType.Weapon).attach(equipment);
 
             check.patch(action, "checkTarget", (ship: Ship, target: Target) => target);
 
-            check.equals(power.wear, 0);
-            check.equals(equipment.wear, 0);
-            action.apply(ship);
+            check.equals(power.wear, 0, "power wear");
+            check.equals(equipment.wear, 0, "equipment wear");
+            action.apply(battle, ship);
 
-            check.equals(power.wear, 1);
-            check.equals(equipment.wear, 1);
+            check.equals(power.wear, 1, "power wear");
+            check.equals(equipment.wear, 1, "equipment wear");
         })
     });
 }

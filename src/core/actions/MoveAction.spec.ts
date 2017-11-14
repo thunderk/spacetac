@@ -1,11 +1,10 @@
-module TK.SpaceTac {
+module TK.SpaceTac.Specs {
     testing("MoveAction", test => {
         test.case("checks movement against remaining AP", check => {
             var ship = new Ship();
             var battle = new Battle(ship.fleet);
             TestTools.setShipPlaying(battle, ship);
-            ship.values.power.setMaximal(20);
-            ship.values.power.set(6);
+            ship.setValue("power", 6);
             ship.arena_x = 0;
             ship.arena_y = 0;
             var engine = new Equipment();
@@ -19,7 +18,7 @@ module TK.SpaceTac {
             result = action.checkTarget(ship, Target.newFromLocation(0, 80));
             check.nears(nn(result).y, 59.9);
 
-            ship.values.power.set(0);
+            ship.setValue("power", 0);
             result = action.checkTarget(ship, Target.newFromLocation(0, 80));
             check.equals(result, null);
         });
@@ -36,46 +35,31 @@ module TK.SpaceTac {
             check.equals(result, null);
         });
 
-        test.case("applies to ship location, battle log and AP", check => {
-            var ship = new Ship();
-            var battle = new Battle(ship.fleet);
-            ship.values.power.setMaximal(20);
-            ship.values.power.set(5);
-            ship.arena_x = 0;
-            ship.arena_y = 0;
-            var engine = new Equipment();
-            var action = new MoveAction(engine, 1);
-            TestTools.setShipPlaying(battle, ship);
+        test.case("applies and reverts", check => {
+            let battle = TestTools.createBattle();
+            let ship = battle.play_order[0];
+            TestTools.setShipAP(ship, 20);
+            ship.setValue("power", 5);
 
-            check.patch(console, "warn", null);
+            let engine = new Equipment(SlotType.Engine);
+            let action = new MoveAction(engine, 1);
+            engine.action = action;
+            ship.addSlot(SlotType.Engine).attach(engine);
 
-            var result = action.apply(ship, Target.newFromLocation(10, 10));
-            check.equals(result, true);
-            check.nears(ship.arena_x, 3.464823, 5);
-            check.nears(ship.arena_y, 3.464823, 5);
-            check.equals(ship.values.power.get(), 0);
-
-            result = action.apply(ship, Target.newFromLocation(10, 10));
-            check.equals(result, false);
-            check.nears(ship.arena_x, 3.464823, 5);
-            check.nears(ship.arena_y, 3.464823, 5);
-            check.equals(ship.values.power.get(), 0);
-
-            check.equals(battle.log.events.length, 3);
-
-            check.equals(battle.log.events[0].code, "value");
-            check.same(battle.log.events[0].ship, ship);
-            check.equals((<ValueChangeEvent>battle.log.events[0]).value,
-                new ShipValue("power", 0, 20));
-
-            check.equals(battle.log.events[1].code, "action");
-            check.same(battle.log.events[1].ship, ship);
-
-            check.equals(battle.log.events[2].code, "move");
-            check.same(battle.log.events[2].ship, ship);
-            let dest = (<MoveEvent>battle.log.events[2]).end;
-            check.nears(dest.x, 3.464823, 5);
-            check.nears(dest.y, 3.464823, 5);
+            TestTools.actionChain(check, battle, [
+                [ship, action, Target.newFromLocation(10, 5)],
+            ], [
+                    check => {
+                        check.equals(ship.arena_x, 0, "ship X");
+                        check.equals(ship.arena_y, 0, "ship Y");
+                        check.equals(ship.getValue("power"), 5, "power");
+                    },
+                    check => {
+                        check.nears(ship.arena_x, 4.382693, 5, "ship X");
+                        check.nears(ship.arena_y, 2.191346, 5, "ship Y");
+                        check.equals(ship.getValue("power"), 0, "power");
+                    }
+                ]);
         });
 
         test.case("can't move too much near another ship", check => {
@@ -146,19 +130,19 @@ module TK.SpaceTac {
             let ship = new Ship();
 
             let action = new MoveAction(new Equipment(), 100, undefined, 60);
-            ship.setAttribute("maneuvrability", 0);
+            TestTools.setAttribute(ship, "maneuvrability", 0);
             check.nears(action.getDistanceByActionPoint(ship), 40);
-            ship.setAttribute("maneuvrability", 1);
+            TestTools.setAttribute(ship, "maneuvrability", 1);
             check.nears(action.getDistanceByActionPoint(ship), 60);
-            ship.setAttribute("maneuvrability", 2);
+            TestTools.setAttribute(ship, "maneuvrability", 2);
             check.nears(action.getDistanceByActionPoint(ship), 70);
-            ship.setAttribute("maneuvrability", 10);
+            TestTools.setAttribute(ship, "maneuvrability", 10);
             check.nears(action.getDistanceByActionPoint(ship), 90);
 
             action = new MoveAction(new Equipment(), 100, undefined, 0);
-            ship.setAttribute("maneuvrability", 0);
+            TestTools.setAttribute(ship, "maneuvrability", 0);
             check.nears(action.getDistanceByActionPoint(ship), 100);
-            ship.setAttribute("maneuvrability", 10);
+            TestTools.setAttribute(ship, "maneuvrability", 10);
             check.nears(action.getDistanceByActionPoint(ship), 100);
         });
 

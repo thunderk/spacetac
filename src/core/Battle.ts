@@ -1,11 +1,10 @@
 module TK.SpaceTac {
-    // A turn-based battle between fleets
+    /**
+     * A turn-based battle between fleets
+     */
     export class Battle {
-        // Flag indicating if the battle is ended
-        ended: boolean
-
-        // Battle outcome, if *ended* is true
-        outcome: BattleOutcome
+        // Battle outcome, if the battle has ended
+        outcome: BattleOutcome | null = null
 
         // Battle cheats
         cheats: BattleCheats
@@ -27,10 +26,10 @@ module TK.SpaceTac {
         play_index = -1
 
         // Current battle "cycle" (one cycle is one turn done for all ships in the play order)
-        cycle: number
+        cycle = 0
 
         // List of deployed drones
-        drones: Drone[] = []
+        drones = new RObjectContainer<Drone>()
 
         // Size of the battle area
         width: number
@@ -44,12 +43,10 @@ module TK.SpaceTac {
         // Indicator that an AI is playing
         ai_playing = false
 
-        // Create a battle between two fleets
-        constructor(fleet1 = new Fleet(), fleet2 = new Fleet(), width = 1808, height = 948) {
+        constructor(fleet1 = new Fleet(new Player(undefined, "Attacker")), fleet2 = new Fleet(new Player(undefined, "Defender")), width = 1808, height = 948) {
             this.fleets = [fleet1, fleet2];
             this.ships = new RObjectContainer(fleet1.ships.concat(fleet2.ships));
             this.play_order = [];
-            this.ended = false;
             this.width = width;
             this.height = height;
 
@@ -64,6 +61,23 @@ module TK.SpaceTac {
 
         postUnserialize() {
             this.ai_playing = false;
+        }
+
+        /**
+         * Property is true if the battle has ended
+         */
+        get ended(): boolean {
+            return bool(this.outcome);
+        }
+
+        /**
+         * Apply a list of diffs to the game state, and add them to the log.
+         * 
+         * This should be the main way to modify the game state.
+         */
+        applyDiffs(diffs: BaseBattleDiff[]): void {
+            let client = new BattleLogClient(this, this.log);
+            diffs.forEach(diff => client.add(diff));
         }
 
         /**
@@ -90,8 +104,12 @@ module TK.SpaceTac {
         /**
          * Get a ship by its ID.
          */
-        getShip(id: RObjectId): Ship | null {
-            return this.ships.get(id);
+        getShip(id: RObjectId | null): Ship | null {
+            if (id === null) {
+                return null;
+            } else {
+                return this.ships.get(id);
+            }
         }
 
         /**
@@ -159,7 +177,7 @@ module TK.SpaceTac {
                 return -1;
             } else {
                 let result = index - this.play_index;
-                return (result < 0) ? result + this.play_order.length : result;
+                return (result < 0) ? (result + this.play_order.length) : result;
             }
         }
 
@@ -183,6 +201,24 @@ module TK.SpaceTac {
             }
         }
 
+        /**
+         * Set the currently playing ship
+         */
+        setPlayingShip(ship: Ship): void {
+            let current = this.playing_ship;
+            if (current) {
+                current.playing = false;
+            }
+
+            this.play_index = this.play_order.indexOf(ship);
+            this.ai_playing = false;
+
+            current = this.playing_ship;
+            if (current) {
+                current.playing = true;
+            }
+        }
+
         // Defines the initial ship positions of all engaged fleets
         placeShips(vertical = true): void {
             if (vertical) {
@@ -194,100 +230,23 @@ module TK.SpaceTac {
             }
         }
 
-        // Count the number of fleets still alive
-        countAliveFleets(): number {
-            var result = 0;
-            this.fleets.forEach((fleet: Fleet) => {
-                if (fleet.isAlive()) {
-                    result += 1;
-                }
-            });
-            return result;
-        }
-
         // Collect all ships within a given radius of a target
         collectShipsInCircle(center: Target, radius: number, alive_only = false): Ship[] {
             return imaterialize(ifilter(this.iships(), ship => (ship.alive || !alive_only) && Target.newFromShip(ship).getDistanceTo(center) <= radius));
         }
 
         /**
-         * Ends a battle and sets the outcome
+         * Ends the battle and sets the outcome
          */
-        endBattle(winner: Fleet | null, log = true) {
-            this.ended = true;
-            this.outcome = new BattleOutcome(winner);
-
-            // Apply experience
-            this.outcome.grantExperience(this.fleets);
-
-            // Broadcast
-            if (log && this.log) {
-                this.log.add(new EndBattleEvent(this.outcome));
-            }
-
-            // Apply to all ships
-            iforeach(this.iships(), ship => ship.endBattle(this.cycle));
-            this.stats.onBattleEnd(this.fleets[0], this.fleets[1]);
+        endBattle(winner: Fleet | null) {
+            this.applyDiffs([new EndBattleDiff(winner, this.cycle)]);
         }
 
-        // Checks end battle conditions, returns true if the battle ended
-        checkEndBattle(log: boolean = true) {
-            if (this.ended) {
-                return true;
-            }
-
-            var alive_fleets = this.countAliveFleets();
-
-            if (alive_fleets === 0) {
-                // It's a draw
-                this.endBattle(null, log);
-            } else if (alive_fleets === 1) {
-                // We have a winner
-                var winner: Fleet | null = null;
-                this.fleets.forEach((fleet: Fleet) => {
-                    if (fleet.isAlive()) {
-                        winner = fleet;
-                    }
-                });
-                this.endBattle(winner, log);
-            }
-
-            return this.ended;
-        }
-
-        // End the current ship turn, passing control to the next one in play order
-        //  If at the end of the play order, next turn will start automatically
-        //  Member 'play_order' must be defined before calling this function
-        advanceToNextShip(log: boolean = true): void {
-            let previous_ship = this.playing_ship;
-
-            if (previous_ship && previous_ship.playing) {
-                previous_ship.endTurn();
-            }
-
-            if (this.checkEndBattle(log)) {
-                return;
-            }
-
-            this.drones.forEach(drone => drone.activate());
-
-            this.play_index += 1;
-            if (this.play_index >= this.play_order.length) {
-                this.play_index = 0;
-            }
-
-            if (this.playing_ship) {
-                if (this.play_index == 0) {
-                    this.cycle += 1;
-                }
-                this.playing_ship.startTurn();
-            }
-
-            this.ai_playing = false;
-
-            if (log && previous_ship && this.playing_ship) {
-                this.log.add(new ShipChangeEvent(previous_ship, this.playing_ship));
-            }
+        /**
+         * Get the next playing ship
+         */
+        getNextShip(): Ship {
+            return this.play_order[(this.play_index + 1) % this.play_order.length];
         }
 
         /**
@@ -307,80 +266,32 @@ module TK.SpaceTac {
             }
         }
 
-        // Start the battle
-        //  This will call all necessary initialization steps (initiative, placement...)
-        //  This will not add any event to the battle log
+        /**
+         * Start the battle
+         * 
+         * This will call all necessary initialization steps (initiative, placement...)
+         * 
+         * This should not put any diff in the log
+         */
         start(): void {
-            this.ended = false;
-            this.cycle = 0;
+            this.outcome = null;
+            this.cycle = 1;
             this.placeShips();
             this.stats.onBattleStart(this.fleets[0], this.fleets[1]);
             this.throwInitiative();
-            iforeach(this.iships(), ship => ship.startBattle());
-            this.advanceToNextShip();
-
-            // For now, we inject bootstrap events in the log
-            this.getBootstrapEvents().forEach(event => this.log.add(event));
+            iforeach(this.iships(), ship => ship.restoreInitialState());
+            this.setPlayingShip(this.play_order[0]);
         }
 
         /**
-         * Get a set of minimal events required to reach current state from an empty state.
+         * Force current ship's turn to end, then advance to the next one
          */
-        getBootstrapEvents(): BaseBattleEvent[] {
-            let result: BaseBattleEvent[] = [];
-
-            // Simulate initial ship placement
-            this.play_order.forEach(ship => {
-                let event = new MoveEvent(ship, ship.location, ship.location);
-                event.initial = true;
-                result.push(event);
-            });
-
-            // Simulate active effects
-            this.play_order.forEach(ship => {
-                if (ship.alive) {
-                    let event = ship.getActiveEffects();
-                    event.initial = true;
-                    result.push(event);
-                }
-            });
-
-            // Indicate emergency stasis
-            this.play_order.forEach(ship => {
-                if (!ship.alive) {
-                    let event = new DeathEvent(this, ship);
-                    event.initial = true;
-                    result.push(event);
-                }
-            });
-
-            // Simulate drones deployment
-            this.drones.forEach(drone => {
-                let event = new DroneDeployedEvent(drone);
-                event.initial = true;
-                result.push(event);
-            });
-
-            // Simulate game turn
+        advanceToNextShip(): void {
             if (this.playing_ship) {
-                let event = new ShipChangeEvent(this.playing_ship, this.playing_ship);
-                event.initial = true;
-                result.push(event);
+                this.applyOneAction(EndTurnAction.SINGLETON);
+            } else if (this.play_order.length) {
+                this.setPlayingShip(this.play_order[0]);
             }
-
-            return result;
-        }
-
-        /**
-         * Apply a list of events on this game state (and optionally store the events in the battle log)
-         */
-        applyEvents(events: BaseBattleEvent[], log = true): void {
-            events.forEach(event => {
-                event.apply(this);
-                if (log) {
-                    this.log.add(event);
-                }
-            });
         }
 
         /**
@@ -407,35 +318,71 @@ module TK.SpaceTac {
         /**
          * Add a drone to the battle
          */
-        addDrone(drone: Drone, log = true) {
-            if (add(this.drones, drone)) {
-                if (log) {
-                    this.log.add(new DroneDeployedEvent(drone));
-                }
-            }
+        addDrone(drone: Drone) {
+            this.drones.add(drone);
         }
 
         /**
          * Remove a drone from the battle
          */
-        removeDrone(drone: Drone, log = true) {
-            if (remove(this.drones, drone)) {
-                if (log) {
-                    this.log.add(new DroneDestroyedEvent(drone));
-                }
-            }
+        removeDrone(drone: Drone) {
+            this.drones.remove(drone);
         }
 
         /**
          * Get the list of area effects at a given location
          */
         iAreaEffects(x: number, y: number): Iterator<BaseEffect> {
-            let drones_in_range = ifilter(iarray(this.drones), drone => drone.isInRange(x, y));
+            let drones_in_range = ifilter(this.drones.iterator(), drone => drone.isInRange(x, y));
 
             return ichain(
                 ichainit(imap(drones_in_range, drone => iarray(drone.effects))),
                 ichainit(imap(this.iships(), ship => ship.iAreaEffects(x, y)))
             );
+        }
+
+        /**
+         * Perform all battle checks to ensure the state is consistent
+         */
+        performChecks(): void {
+            let checks = new BattleChecks(this);
+            checks.apply();
+        }
+
+        /**
+         * Apply one action to the battle state
+         * 
+         * At the end of the action, some checks will be applied to ensure the battle state is consistent
+         */
+        applyOneAction(action: BaseAction, target?: Target): boolean {
+            let ship = this.playing_ship;
+            if (ship) {
+                if (action.apply(this, ship, target)) {
+                    this.performChecks();
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                console.error("Cannot apply action - ship not playing", action, this);
+                return false;
+            }
+        }
+
+        /**
+         * Revert the last applied action
+         * 
+         * This will remove diffs from the log, so pay attention to other log clients!
+         */
+        revertOneAction(): void {
+            let client = new BattleLogClient(this, this.log);
+            while (!client.atStart() && !(client.getCurrent() instanceof ShipActionUsedDiff)) {
+                client.backward();
+            }
+            if (!client.atStart()) {
+                client.backward();
+            }
+            client.truncate();
         }
     }
 }

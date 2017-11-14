@@ -56,10 +56,10 @@ module TK.SpaceTac.Specs {
             let ship2a = battle.fleets[1].addShip();
             let ship2b = battle.fleets[1].addShip();
 
-            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship1a, 50, 10)), [], "self shoot");
-            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship1b, 50, 10)), [ship1b, ship1a]);
-            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new DamageEvent(ship2a, 50, 10)), [], "enemy shoot");
-            check.equals(condition(ship1a.getPlayer(), battle, ship2a, new DamageEvent(ship2a, 50, 10)), [], "other player event");
+            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new ShipDamageDiff(ship1a, 50, 10)), [], "self shoot");
+            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new ShipDamageDiff(ship1b, 50, 10)), [ship1b, ship1a]);
+            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new ShipDamageDiff(ship2a, 50, 10)), [], "enemy shoot");
+            check.equals(condition(ship1a.getPlayer(), battle, ship2a, new ShipDamageDiff(ship2a, 50, 10)), [], "other player event");
         })
     })
 }

@@ -2,30 +2,28 @@ module TK.SpaceTac {
     /**
      * Drones are static objects that apply effects in a circular zone around themselves.
      */
-    export class Drone {
-        // Battle in which the drone is deployed
-        battle: Battle;
-
-        // Ship that launched the drone (informative, a drone is autonomous)
-        owner: Ship;
+    export class Drone extends RObject {
+        // ID of the owning ship
+        owner: RObjectId
 
         // Code of the drone
-        code: string;
+        code: string
 
         // Location in arena
-        x: number;
-        y: number;
-        radius: number;
+        x: number
+        y: number
+        radius: number
 
         // Remaining lifetime in number of turns
-        duration: number;
+        duration: number
 
         // Effects to apply
-        effects: BaseEffect[] = [];
+        effects: BaseEffect[] = []
 
         constructor(owner: Ship, code = "drone", base_duration = 1) {
-            this.battle = owner.getBattle() || new Battle();
-            this.owner = owner;
+            super();
+
+            this.owner = owner.id;
             this.code = code;
             this.duration = base_duration;
         }
@@ -58,38 +56,40 @@ module TK.SpaceTac {
         /**
          * Get the list of affected ships.
          */
-        getAffectedShips(): Ship[] {
-            let ships = ifilter(this.battle.iships(), ship => ship.alive && ship.isInCircle(this.x, this.y, this.radius));
+        getAffectedShips(battle: Battle): Ship[] {
+            let ships = ifilter(battle.iships(), ship => ship.alive && ship.isInCircle(this.x, this.y, this.radius));
             return imaterialize(ships);
         }
 
         /**
-         * Apply the effects on a list of ships
+         * Get the list of diffs needed to apply the drone effects on a list of ships.
          * 
          * This does not check if the ships are in range.
          */
-        apply(ships: Ship[], log = true) {
-            if (ships.length > 0) {
-                if (log) {
-                    this.battle.log.add(new DroneAppliedEvent(this, ships));
-                }
+        getDiffs(battle: Battle, ships: Ship[]): BaseBattleDiff[] {
+            let result: BaseBattleDiff[] = [];
+
+            if (this.duration >= 1 && ships.length > 0) {
+                result.push(new DroneAppliedDiff(this, ships));
 
                 ships.forEach(ship => {
-                    this.effects.forEach(effect => effect.applyOnShip(ship, this));
+                    result = result.concat(flatten(this.effects.map(effect => effect.getOnDiffs(ship, this))));
                 });
             }
+
+            if (this.duration <= 1) {
+                result.push(new DroneDestroyedDiff(this));
+            }
+
+            return result;
         }
 
         /**
-         * Activate the drone
+         * Apply one drone "activation"
          */
-        activate(log = true) {
-            this.apply(this.getAffectedShips(), log);
-
-            this.duration--;
-            if (this.duration == 0) {
-                this.battle.removeDrone(this, log);
-            }
+        activate(battle: Battle) {
+            let diffs = this.getDiffs(battle, this.getAffectedShips(battle));
+            battle.applyDiffs(diffs);
         }
     }
 }

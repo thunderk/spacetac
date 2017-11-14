@@ -48,20 +48,21 @@ module TK.SpaceTac.Specs {
             let enemy = new Fleet();
             enemy.addShip();
             let battle = new Battle(fleet, enemy);
+            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
             battle.start();
-            battle.checkEndBattle();
+            battle.performChecks();
             check.equals(battle.ended, false);
 
             // if a fleet member dies, it is not over
             ship1.setDead();
-            battle.checkEndBattle();
+            battle.performChecks();
             check.equals(battle.ended, false);
 
             // if the critical ship dies, it is defeat
             ship.setDead();
-            battle.checkEndBattle();
+            battle.performChecks();
             check.equals(battle.ended, true);
-            check.notsame(battle.outcome.winner, fleet);
+            check.notsame(nn(battle.outcome).winner, fleet);
         })
     })
 }

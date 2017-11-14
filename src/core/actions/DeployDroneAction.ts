@@ -55,17 +55,14 @@ module TK.SpaceTac {
             return target;
         }
 
-        protected customApply(ship: Ship, target: Target) {
+        protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
             let drone = new Drone(ship, this.equipment.code, this.lifetime);
             drone.x = target.x;
             drone.y = target.y;
             drone.radius = this.effect_radius;
             drone.effects = this.effects;
 
-            let battle = ship.getBattle();
-            if (battle) {
-                battle.addDrone(drone);
-            }
+            return [new DroneDeployedDiff(drone)];
         }
 
         getEffectsDescription(): string {

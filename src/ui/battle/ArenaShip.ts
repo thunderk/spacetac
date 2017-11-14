@@ -34,7 +34,6 @@ module TK.SpaceTac.UI {
         frame: Phaser.Image
 
         // Effects display
-        active_effects: ActiveEffectsEvent
         active_effects_display: Phaser.Group
         effects_radius: Phaser.Graphics
         effects_messages: Phaser.Group
@@ -47,7 +46,7 @@ module TK.SpaceTac.UI {
             this.battleview = parent.view;
 
             this.ship = ship;
-            this.enemy = this.ship.getPlayer() != this.battleview.player;
+            this.enemy = !this.ship.getPlayer().is(this.battleview.player);
 
             // Add effects radius
             this.effects_radius = new Phaser.Graphics(this.game);
@@ -60,7 +59,7 @@ module TK.SpaceTac.UI {
             this.setPlaying(false);
 
             // Add ship sprite
-            this.sprite = this.battleview.newImage(`ship-${ship.model.code}-sprite`)
+            this.sprite = this.battleview.newImage(`ship-${ship.model.code}-sprite`);
             this.sprite.rotation = ship.arena_angle;
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(0.4);
@@ -109,7 +108,6 @@ module TK.SpaceTac.UI {
             this.add(play_order_bg);
 
             // Effects display
-            this.active_effects = new ActiveEffectsEvent(ship);
             this.active_effects_display = new Phaser.Group(this.game);
             this.active_effects_display.position.set(0, -44);
             this.add(this.active_effects_display);
@@ -140,9 +138,9 @@ module TK.SpaceTac.UI {
         /**
          * Process a battle log event
          */
-        private processLogEvent(event: BaseBattleEvent): number {
-            if (event instanceof ShipChangeEvent) {
-                if (event.new_ship === this.ship) {
+        private processLogEvent(event: BaseBattleDiff): number {
+            if (event instanceof ShipChangeDiff) {
+                if (this.ship.is(event.new_ship)) {
                     this.play_order.text = "-";
                 } else {
                     this.play_order.text = this.battleview.battle.getPlayOrder(this.ship).toString();
@@ -154,39 +152,37 @@ module TK.SpaceTac.UI {
         /**
          * Process a log event for this ship
          */
-        private processShipLogEvent(event: BaseLogShipEvent): number {
-            if (event instanceof ActiveEffectsEvent) {
-                this.active_effects = event;
+        private processShipLogEvent(event: BaseBattleShipDiff): number {
+            if (event instanceof ShipEffectAddedDiff || event instanceof ShipEffectRemovedDiff) {
                 this.updateActiveEffects();
                 return 0;
-            } else if (event instanceof ValueChangeEvent) {
-                if (event.value.name == "hull") {
+            } else if (event instanceof ShipValueDiff) {
+                if (event.code == "hull") {
                     this.toggle_hsp.manipulate("value")(1500);
-                    this.hull_bar.setValue(event.value.get(), event.value.getMaximal() || 0);
-                    this.hull_text.text = `${event.value.get()}`;
-                    return 0;
-                } else if (event.value.name == "shield") {
+                    this.hull_bar.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity") || 0);
+                    this.hull_text.text = `${this.ship.getValue("hull")}`;
+                } else if (event.code == "shield") {
                     this.toggle_hsp.manipulate("value")(1500);
-                    this.shield_bar.setValue(event.value.get(), event.value.getMaximal() || 0);
-                    this.shield_text.text = `${event.value.get()}`;
-                    if (event.value.get() == 0) {
+                    this.shield_bar.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity") || 0);
+                    this.shield_text.text = `${this.ship.getValue("shield")}`;
+                    if (this.shield_bar.getValue() == 0) {
                         this.displayEffect("Shield failure", false);
                     }
-                    return 0;
-                } else if (event.value.name == "power") {
+                } else if (event.code == "power") {
                     this.toggle_hsp.manipulate("value")(1500);
-                    this.power_text.text = `${event.value.get()}`;
-                    return 0;
-                } else {
-                    this.displayValueChanged(event);
-                    return 0;
+                    this.power_text.text = `${this.ship.getValue("power")}`;
                 }
-            } else if (event instanceof DamageEvent) {
+                return 0;
+            } else if (event instanceof ShipAttributeDiff) {
+                this.displayAttributeChanged(event);
+                return 0;
+            } else if (event instanceof ShipDamageDiff) {
                 this.displayEffect(`${event.hull + event.shield} damage`, false);
                 return 0;
-            } else if (event instanceof ToggleEvent) {
-                if (event.action.equipment) {
-                    let equname = event.action.equipment.name;
+            } else if (event instanceof ShipActionToggleDiff) {
+                let action = this.ship.getAction(event.action);
+                if (action && action.equipment) {
+                    let equname = action.equipment.name;
                     if (event.activated) {
                         this.displayEffect(`${equname} ON`, true);
                     } else {
@@ -194,8 +190,14 @@ module TK.SpaceTac.UI {
                     }
                     this.updateEffectsRadius();
                 }
-                return 0;
-            } else if (event instanceof MoveEvent && !event.initial) {
+                return 300;
+            } else if (event instanceof ShipActionUsedDiff) {
+                let action = this.ship.getAction(event.action);
+                if (action && !(action instanceof ToggleAction) && action.equipment) {
+                    this.displayEffect(action.equipment.name, true);
+                }
+                return 300;
+            } else if (event instanceof ShipMoveDiff) {
                 this.moveTo(event.start.x, event.start.y, event.start.angle, false);
                 let duration = this.moveTo(event.end.x, event.end.y, event.end.angle, true, !!event.engine);
                 return duration;
@@ -246,27 +248,6 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Check if the ship is dead
-         */
-        isDead(): boolean {
-            return this.stasis.visible;
-        }
-
-        /**
-         * Get a ship value
-         */
-        getValue(value: keyof ShipValues): number {
-            switch (value) {
-                case "hull":
-                    return this.hull_bar.getValue();
-                case "shield":
-                    return this.shield_bar.getValue();
-                default:
-                    return 0;
-            }
-        }
-
-        /**
          * Move the sprite to a location
          * 
          * Return the duration of animation
@@ -305,12 +286,15 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Display interesting changes in ship values
+         * Display interesting changes in ship attributes
          */
-        displayValueChanged(event: ValueChangeEvent) {
-            let diff = event.diff;
-            let name = event.value.name;
-            this.displayEffect(`${name} ${diff < 0 ? "-" : "+"}${Math.abs(diff)}`, diff >= 0);
+        displayAttributeChanged(event: ShipAttributeDiff) {
+            // TODO show final diff, not just cumulative one
+            let diff = (event.added.cumulative || 0) - (event.removed.cumulative || 0);
+            if (diff) {
+                let name = SHIP_VALUES_NAMES[event.code];
+                this.displayEffect(`${name} ${diff < 0 ? "-" : "+"}${Math.abs(diff)}`, diff >= 0);
+            }
         }
 
         /**
@@ -319,7 +303,7 @@ module TK.SpaceTac.UI {
         updateActiveEffects() {
             this.active_effects_display.removeAll();
 
-            let effects = this.active_effects.sticky.map(sticky => sticky.base).concat(this.active_effects.area);
+            let effects = this.ship.active_effects.list();
 
             let count = effects.length;
             if (count) {

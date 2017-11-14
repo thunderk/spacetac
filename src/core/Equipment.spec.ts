@@ -21,15 +21,15 @@ module TK.SpaceTac.Specs {
 
             check.equals(equipment.canBeEquipped(ship.attributes), false);
 
-            ship.attributes.skill_time.set(1);
+            TestTools.setAttribute(ship, "skill_time", 1);
 
             check.equals(equipment.canBeEquipped(ship.attributes), false);
 
-            ship.attributes.skill_time.set(2);
+            TestTools.setAttribute(ship, "skill_time", 2);
 
             check.equals(equipment.canBeEquipped(ship.attributes), true);
 
-            ship.attributes.skill_time.set(3);
+            TestTools.setAttribute(ship, "skill_time", 3);
 
             check.equals(equipment.canBeEquipped(ship.attributes), true);
 
@@ -38,7 +38,7 @@ module TK.SpaceTac.Specs {
 
             check.equals(equipment.canBeEquipped(ship.attributes), false);
 
-            ship.attributes.skill_materials.set(4);
+            TestTools.setAttribute(ship, "skill_materials", 4);
 
             check.equals(equipment.canBeEquipped(ship.attributes), true);
         });

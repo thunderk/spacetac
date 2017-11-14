@@ -2,65 +2,34 @@
 
 module TK.SpaceTac {
     /**
-     * Wrapper around another effect, to make it stick to a ship.
+     * Wrapper around another effect, to make it stick to a ship for a given number of turns.
      * 
-     * The "effect" is to stick the wrapped effect to the ship, that will be applied in time.
+     * The "effect" is to stick the wrapped effect to the ship.
      */
     export class StickyEffect extends BaseEffect {
         // Wrapped effect
-        base: BaseEffect;
+        base: BaseEffect
 
         // Duration, in number of turns
-        duration: number;
-
-        // Apply the effect on stick (doesn't count against duration)
-        on_stick: boolean;
-
-        // Apply the effect on turn start instead of end
-        on_turn_end: boolean;
+        duration: number
 
         // Base constructor
-        constructor(base: BaseEffect, duration = 0, on_stick = false, on_turn_end = false) {
+        constructor(base: BaseEffect, duration = 0) {
             super(base.code);
 
             this.base = base;
             this.duration = duration;
-            this.on_stick = on_stick;
-            this.on_turn_end = on_turn_end;
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
-            ship.addStickyEffect(new StickyEffect(this.base, this.duration, this.on_stick, this.on_turn_end));
-            if (this.on_stick) {
-                this.base.applyOnShip(ship, source);
-            }
-            return true;
-        }
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            // TODO if already there, remove the previous one to replace it
+            let result: BaseBattleDiff[] = [
+                new ShipEffectAddedDiff(ship, new StickyEffect(this.base, this.duration)),
+            ]
 
-        private applyOnce(ship: Ship) {
-            if (this.duration > 0) {
-                this.base.applyOnShip(ship, ship);  // FIXME Does not remember the source
-                this.duration--;
-                ship.setActiveEffectsChanged();
-            }
-        }
+            result = result.concat(this.base.getOnDiffs(ship, source));
 
-        /**
-         * Apply the effect at the beginning of the turn, for the ship this effect is sticked to.
-         */
-        startTurn(ship: Ship) {
-            if (!this.on_turn_end) {
-                this.applyOnce(ship);
-            }
-        }
-
-        /**
-         * Apply the effect at the end of the turn, for the ship this effect is sticked to.
-         */
-        endTurn(ship: Ship) {
-            if (this.on_turn_end) {
-                this.applyOnce(ship);
-            }
+            return result;
         }
 
         isBeneficial(): boolean {

@@ -1,24 +1,35 @@
+/// <reference path="../diffs/BaseBattleDiff.ts" />
+
 module TK.SpaceTac {
     export type EffectAmount = number | { base: number, span: number };
 
     /**
      * Base class for effects of actions that can be applied on ships
      * 
-     * Effects are typically one shot, but sticky effects can be used to apply effects over a period
+     * Effects will generate diffs to modify the battle state
      */
-    export class BaseEffect {
+    export class BaseEffect extends RObject {
         // Identifier code for the type of effect
-        code: string;
+        code: string
 
-        // Base constructor
         constructor(code: string) {
+            super();
+
             this.code = code;
         }
 
-        // Apply ponctually the effect on a given ship
-        //  Return true if the effect could be applied
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
-            return false;
+        /**
+         * Get the list of diffs needed to activate this effect on a ship
+         */
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            return [];
+        }
+
+        /**
+         * Get the list of diffs needed to remove this effect on a ship
+         */
+        getOffDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            return [];
         }
 
         // Return true if the effect is beneficial to the ship, false if it's a drawback

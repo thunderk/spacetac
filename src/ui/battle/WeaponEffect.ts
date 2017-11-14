@@ -45,8 +45,8 @@ module TK.SpaceTac.UI {
             this.target = target;
             this.weapon = weapon;
 
-            this.source = this.getCoords(Target.newFromShip(this.ship));
-            this.destination = this.getCoords(this.target);
+            this.source = Target.newFromShip(this.ship);
+            this.destination = this.target;
         }
 
         /**
@@ -81,35 +81,16 @@ module TK.SpaceTac.UI {
             let delay = base_delay;
 
             ships.forEach(ship => {
-                let sprite = this.arena.findShipSprite(ship);
-                if (sprite) {
-                    if (sprite.getValue("shield") > 0) {
-                        this.shieldImpactEffect(source, sprite, delay, 800, shield_flares);
-                        duration = Math.max(duration, delay + 800);
-                    } else {
-                        this.hullImpactEffect(source, sprite, delay, 400);
-                        duration = Math.max(duration, delay + 400);
-                    }
+                if (ship.getValue("shield") > 0) {
+                    this.shieldImpactEffect(source, ship.location, delay, 800, shield_flares);
+                    duration = Math.max(duration, delay + 800);
+                } else {
+                    this.hullImpactEffect(source, ship.location, delay, 400);
+                    duration = Math.max(duration, delay + 400);
                 }
             });
 
             return duration;
-        }
-
-        /**
-         * Get the location of a target (as of current view, not as actual game state)
-         */
-        getCoords(target: Target): IArenaLocation {
-            if (target.ship) {
-                let sprite = this.arena.findShipSprite(target.ship);
-                if (sprite) {
-                    return sprite;
-                } else {
-                    return target.ship.location;
-                }
-            } else {
-                return target;
-            }
         }
 
         /**
@@ -250,8 +231,8 @@ module TK.SpaceTac.UI {
         gunEffect(): number {
             this.ui.audio.playOnce("battle-weapon-bullets");
 
-            let sprite = this.target.ship ? this.arena.findShipSprite(this.target.ship) : null;
-            let has_shield = sprite && sprite.getValue("shield") > 0;
+            let target_ship = this.target.getShip(this.view.battle);
+            let has_shield = target_ship && (target_ship.getValue("shield") > 0);
 
             let angle = arenaAngle(this.source, this.target);
             let distance = arenaDistance(this.source, this.target);

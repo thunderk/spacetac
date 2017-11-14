@@ -9,6 +9,61 @@ module TK.SpaceTac.Specs {
         }
     }
 
+    function strip<T>(obj: T, attr: keyof T): any {
+        let result: any = {};
+        copyfields(obj, result);
+        delete result[attr];
+        return result;
+    }
+
+    function strip_id(effect: RObject): any {
+        if (effect instanceof StickyEffect) {
+            let result = strip(effect, "id");
+            result.base = strip_id(result.base);
+            return result;
+        } else {
+            return strip(effect, "id");
+        }
+    }
+
+    export function compare_effects(check: TestContext, effects1: BaseEffect[], effects2: BaseEffect[]): void {
+        check.equals(effects1.map(strip_id), effects2.map(strip_id), "effects");
+    }
+
+    export function compare_action(check: TestContext, action1: BaseAction | null, action2: BaseAction | null): void {
+        if (action1 === null || action2 === null) {
+            check.equals(action1, action2, "action");
+        } else {
+            check.equals(strip_id(action1), strip_id(action2), "action");
+        }
+    }
+
+    export function compare_trigger_action(check: TestContext, action1: BaseAction | null, action2: TriggerAction | null): void {
+        if (action1 === null || action2 === null || !(action1 instanceof TriggerAction)) {
+            check.equals(action1, action2, "action");
+        } else {
+            check.equals(strip_id(strip(action1, "effects")), strip_id(strip(action2, "effects")), "action");
+            compare_effects(check, action1.effects, action2.effects);
+        }
+    }
+
+    export function compare_toggle_action(check: TestContext, action1: BaseAction | null, action2: ToggleAction | null): void {
+        if (action1 === null || action2 === null || !(action1 instanceof ToggleAction)) {
+            check.equals(action1, action2, "action");
+        } else {
+            check.equals(strip_id(strip(action1, "effects")), strip_id(strip(action2, "effects")), "action");
+            compare_effects(check, action1.effects, action2.effects);
+        }
+    }
+    export function compare_drone_action(check: TestContext, action1: BaseAction | null, action2: DeployDroneAction | null): void {
+        if (action1 === null || action2 === null || !(action1 instanceof DeployDroneAction)) {
+            check.equals(action1, action2, "action");
+        } else {
+            check.equals(strip_id(strip(action1, "effects")), strip_id(strip(action2, "effects")), "action");
+            compare_effects(check, action1.effects, action2.effects);
+        }
+    }
+
     testing("LootTemplate", test => {
         test.case("generates equipment with correct information", check => {
             let template = new LootTemplate(SlotType.Power, "Power Generator", "A great power generator !");
@@ -25,10 +80,10 @@ module TK.SpaceTac.Specs {
             template.addAttributeEffect("power_capacity", istep(10));
             result = template.generate(1, EquipmentQuality.COMMON);
             check.equals(result.quality, EquipmentQuality.COMMON);
-            check.equals(result.effects, [new AttributeEffect("power_capacity", 10)]);
+            compare_effects(check, result.effects, [new AttributeEffect("power_capacity", 10)]);
             result = template.generate(1, EquipmentQuality.PREMIUM);
             check.equals(result.quality, EquipmentQuality.PREMIUM);
-            check.equals(result.effects, [new AttributeEffect("power_capacity", 13)]);
+            compare_effects(check, result.effects, [new AttributeEffect("power_capacity", 13)]);
         });
 
         test.case("applies requirements on skills", check => {
@@ -76,10 +131,10 @@ module TK.SpaceTac.Specs {
             template.addAttributeEffect("shield_capacity", irange(undefined, 50, 10));
 
             let result = template.generate(1);
-            check.equals(result.effects, [new AttributeEffect("shield_capacity", 50)]);
+            compare_effects(check, result.effects, [new AttributeEffect("shield_capacity", 50)]);
 
             result = template.generate(2);
-            check.equals(result.effects, [new AttributeEffect("shield_capacity", 60)]);
+            compare_effects(check, result.effects, [new AttributeEffect("shield_capacity", 60)]);
         });
 
         test.case("adds move actions", check => {
@@ -87,10 +142,10 @@ module TK.SpaceTac.Specs {
             template.addMoveAction(irange(undefined, 100, 10), istep(50, irepeat(10)), irepeat(95));
 
             let result = template.generate(1);
-            check.equals(result.action, new MoveAction(result, 100, 50, 95));
+            compare_action(check, result.action, new MoveAction(result, 100, 50, 95));
 
             result = template.generate(2);
-            check.equals(result.action, new MoveAction(result, 110, 60, 95));
+            compare_action(check, result.action, new MoveAction(result, 110, 60, 95));
         });
 
         test.case("adds fire actions", check => {
@@ -100,10 +155,10 @@ module TK.SpaceTac.Specs {
             ], istep(100), istep(50), istep(10));
 
             let result = template.generate(1);
-            check.equals(result.action, new TriggerAction(result, [new FakeEffect(8)], 1, 100, 50, 10));
+            compare_trigger_action(check, result.action, new TriggerAction(result, [new FakeEffect(8)], 1, 100, 50, 10));
 
             result = template.generate(2);
-            check.equals(result.action, new TriggerAction(result, [new FakeEffect(9)], 2, 101, 51, 11));
+            compare_trigger_action(check, result.action, new TriggerAction(result, [new FakeEffect(9)], 2, 101, 51, 11));
         });
 
         test.case("adds drone actions", check => {
@@ -113,10 +168,10 @@ module TK.SpaceTac.Specs {
             ]);
 
             let result = template.generate(1);
-            check.equals(result.action, new DeployDroneAction(result, 1, 100, 2, 50, [new FakeEffect(8)]));
+            compare_drone_action(check, result.action, new DeployDroneAction(result, 1, 100, 2, 50, [new FakeEffect(8)]));
 
             result = template.generate(2);
-            check.equals(result.action, new DeployDroneAction(result, 2, 101, 3, 51, [new FakeEffect(9)]));
+            compare_drone_action(check, result.action, new DeployDroneAction(result, 2, 101, 3, 51, [new FakeEffect(9)]));
         });
 
         test.case("checks the presence of damaging effects", check => {

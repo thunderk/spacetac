@@ -74,8 +74,10 @@ module TK.SpaceTac.UI {
 
         /**
          * Set the sprite as destroyed
+         * 
+         * Return the animation duration
          */
-        setDestroyed() {
+        setDestroyed(): number {
             this.game.tweens.create(this).to({ alpha: 0.3 }, 300).delay(200).start();
 
             let tween = this.game.tweens.create(this.radius.scale).to({ x: 0, y: 0 }, 500);
@@ -83,6 +85,8 @@ module TK.SpaceTac.UI {
                 this.destroy();
             });
             tween.start();
+
+            return 500;
         }
 
         /**

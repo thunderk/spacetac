@@ -18,7 +18,7 @@ module TK.SpaceTac {
             this.maxcount = maxcount;
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             let equipments = ship.listEquipment().filter(equ => equ.cooldown.heat > 0);
 
             if (this.maxcount && equipments.length > this.maxcount) {
@@ -26,9 +26,7 @@ module TK.SpaceTac {
                 equipments = random.sample(equipments, this.maxcount);
             }
 
-            equipments.forEach(equ => equ.cooldown.cool(this.cooling || equ.cooldown.heat));
-
-            return true;
+            return equipments.map(equ => new ShipCooldownDiff(ship, equ, this.cooling || equ.cooldown.heat));
         }
 
         isBeneficial(): boolean {

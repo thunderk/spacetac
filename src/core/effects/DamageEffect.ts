@@ -45,16 +45,16 @@ module TK.SpaceTac {
             damage = Math.round(damage * this.getFactor(ship));
 
             // Apply on shields
-            if (damage >= ship.values.shield.get()) {
-                shield = ship.values.shield.get();
+            if (damage >= ship.getValue("shield")) {
+                shield = ship.getValue("shield");
             } else {
                 shield = damage;
             }
             damage -= shield;
 
             // Apply on hull
-            if (damage >= ship.values.hull.get()) {
-                hull = ship.values.hull.get();
+            if (damage >= ship.getValue("hull")) {
+                hull = ship.getValue("hull");
             } else {
                 hull = damage;
             }
@@ -62,19 +62,24 @@ module TK.SpaceTac {
             return [shield, hull];
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             let [shield, hull] = this.getEffectiveDamage(ship);
 
-            ship.addDamage(hull, shield);
+            let result: BaseBattleDiff[] = [];
 
-            if (shield > 0) {
-                ship.listEquipment(SlotType.Shield).forEach(equipment => equipment.addWear(Math.ceil(shield * 0.01)));
-            }
-            if (hull > 0) {
-                ship.listEquipment(SlotType.Hull).forEach(equipment => equipment.addWear(Math.ceil(hull * 0.01)));
+            if (shield || hull) {
+                result.push(new ShipDamageDiff(ship, hull, shield));
             }
 
-            return true;
+            if (shield) {
+                result.push(new ShipValueDiff(ship, "shield", -shield));
+            }
+
+            if (hull) {
+                result.push(new ShipValueDiff(ship, "hull", -hull));
+            }
+
+            return result;
         }
 
         getDescription(): string {

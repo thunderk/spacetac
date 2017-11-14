@@ -13,15 +13,19 @@ module TK.SpaceTac {
             this.value = value;
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             if (ship != source) {
                 let angle = arenaAngle(source.location, ship.location);
                 let destination = new ArenaLocation(ship.arena_x + Math.cos(angle) * this.value, ship.arena_y + Math.sin(angle) * this.value);
                 let exclusions = ExclusionAreas.fromShip(ship);
                 destination = exclusions.stopBefore(destination, ship.location);
-                ship.moveTo(destination.x, destination.y);
+                // TODO Apply area effect adding/removal
+                return [
+                    new ShipMoveDiff(ship, ship.location, new ArenaLocationAngle(destination.x, destination.y, ship.arena_angle))
+                ];
+            } else {
+                return [];
             }
-            return true;
         }
 
         getDescription(): string {

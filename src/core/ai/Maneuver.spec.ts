@@ -1,5 +1,12 @@
 module TK.SpaceTac.Specs {
     testing("Maneuver", test => {
+        function compare_maneuver_effects(check: TestContext, meff1: [Ship, BaseEffect][], meff2: [Ship, BaseEffect][]): void {
+            let [ships1, effects1] = unzip(meff1);
+            let [ships2, effects2] = unzip(meff2);
+            check.equals(ships1, ships2, "impacted ships");
+            compare_effects(check, effects1, effects2);
+        }
+
         test.case("guesses weapon effects", check => {
             let battle = new Battle();
             let ship1 = battle.fleets[0].addShip();
@@ -13,7 +20,7 @@ module TK.SpaceTac.Specs {
             ship3.setArenaPosition(0, 15);
             TestTools.setShipHP(ship3, 30, 30);
             let maneuver = new Maneuver(ship1, nn(weapon.action), Target.newFromLocation(0, 0));
-            check.equals(maneuver.effects, [
+            compare_maneuver_effects(check, maneuver.effects, [
                 [ship1, new DamageEffect(50)],
                 [ship2, new DamageEffect(50)]
             ]);
@@ -33,7 +40,7 @@ module TK.SpaceTac.Specs {
             ship3.setArenaPosition(0, 15);
             TestTools.setShipHP(ship3, 30, 30);
             let maneuver = new Maneuver(ship1, weapon.action, Target.newFromLocation(0, 0));
-            check.equals(maneuver.effects, [
+            compare_maneuver_effects(check, maneuver.effects, [
                 [ship1, new ValueEffect("shield", 10)],
                 [ship2, new ValueEffect("shield", 10)]
             ]);
@@ -58,7 +65,9 @@ module TK.SpaceTac.Specs {
 
             maneuver = new Maneuver(ship, move, Target.newFromLocation(100, 30));
             check.containing(maneuver.getFinalLocation(), { x: 100, y: 30 });
-            check.equals(maneuver.effects, [[ship, new AttributeEffect("maneuvrability", 1)]]);
+            compare_maneuver_effects(check, maneuver.effects, [
+                [ship, new AttributeEffect("maneuvrability", 1)]
+            ]);
         });
     });
 }

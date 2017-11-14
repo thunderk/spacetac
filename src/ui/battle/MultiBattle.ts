@@ -36,7 +36,7 @@ module TK.SpaceTac.UI {
             await this.exchange.start();
 
             this.serializer = new Serializer(TK.SpaceTac);
-            this.processed = this.battle.log.events.length;
+            this.processed = this.battle.log.count();
             this.timer = view.timer;
 
             // This is voluntarily not waited on, as it is a background task
@@ -49,48 +49,44 @@ module TK.SpaceTac.UI {
         async backgroundSync() {
             while (true) {
                 if (this.exchange.writing) {
-                    await this.sendActions();
+                    await this.sendDiffs();
                 } else {
-                    await this.receiveAction();
+                    await this.receiveDiff();
                 }
             }
         }
 
         /**
-         * Send all new actions from the battle log
+         * Send one new diff from the battle log
          */
-        async sendActions() {
-            let events = this.battle.log.events;
-
-            if (this.processed >= events.length) {
+        async sendDiffs() {
+            if (this.processed >= this.battle.log.count()) {
                 await this.timer.sleep(500);
             } else {
-                while (this.processed < events.length) {
-                    let event = events[this.processed];
-                    this.processed++;
+                let event = this.battle.log.get(this.processed);
+                this.processed++;
 
-                    if (event instanceof ActionAppliedEvent) {
-                        let data = this.serializer.serialize(event);
-                        // TODO "over" should be true if the current ship should be played by remote player
-                        await this.exchange.writeMessage(data, false);
-                    }
+                if (event instanceof ShipActionUsedDiff) {
+                    let data = this.serializer.serialize(event);
+                    // TODO "over" should be true if the current ship should be played by remote player
+                    await this.exchange.writeMessage(data, false);
                 }
             }
         }
 
         /**
-         * Read and apply one action from the peer
+         * Read and apply one diff from the peer
          */
-        async receiveAction() {
+        async receiveDiff() {
             let message = await this.exchange.readMessage();
             let received = this.serializer.unserialize(message);
-            if (received instanceof ActionAppliedEvent) {
-                console.log("Received action from exchange", received);
-                // TODO Find the matching action, ship and target, and apply
+            if (received instanceof BaseBattleDiff) {
+                console.log("Received diff from exchange", received);
+                // TODO Apply the diff
             } else {
-                console.error("Exchange received something that is not an action event", received);
+                console.error("Exchange received something that is not a battle diff", received);
             }
-            this.processed = this.battle.log.events.length;
+            this.processed = this.battle.log.count();
         }
     }
 }

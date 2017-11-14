@@ -41,12 +41,9 @@ Battle
 * Fix arena's ship hovering happening even when the character sheet is open on top
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
-* Add quick animation of playing ship indicator, on ship change
 * Toggle bar/text display in power section of action bar
 * Display effects description instead of attribute changes
-* End the battle as soon as victory or defeat condition is detected (do not wait for the turn to end)
 * Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat
-* Any displayed info should be based on a ship copy stored in ArenaShip, and in sync with current log index (not the game state ship)
 * Add engine trail effect, and sound
 * Allow to skip animations, and allow no animation mode
 * Find incentives to move from starting position (permanent drones or anomalies?)
@@ -64,6 +61,7 @@ Battle
 * Fix delay of shield/hull impact effects (should depend on weapon animation, and ship location)
 * Indicate visually the power gain of "end turn"
 * Add a turn count marker in the ship list
+* BattleChecks should be done proactively when all diffs have been simulated by an action, in addition to reactively after applying
 
 Ships models and equipments
 ---------------------------
@@ -79,11 +77,12 @@ Ships models and equipments
 * RepelEffect should apply on ships in a good order (distance decreasing)
 * Add hull points to drones and make them take area damage
 * Quality modifiers should be based on an "quality diff" to reach
+* Drones effects should be classified: permanent effects apply permanently, ponctual effects may be applied by an owner's action (if in range)
 
 Artificial Intelligence
 -----------------------
 
-* Work on a simple representation of battle state, simulating effects on it, evaluating it, and only reevaluating parts that changed
+* Evaluate diffs instead of effects
 * Use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
 * Abandon fight if the AI judges there is no hope of victory
 * Add combination of random small move and actual maneuver, as producer
@@ -125,7 +124,6 @@ Postponed
 * Multiplayer/co-op
 * Formation or deployment phase
 * Add ship personality (with icons to identify?), with reaction dialogs
-* New battle internal flow: any game state change should be done through revertable events
 * Hide enemy information (shield, hull, weapons), until they are in play, or until a "spy" effect is used
 * Invocation/reinforcements (need to up the 10 ships limit)
 * Dynamic music composition

@@ -1,33 +1,18 @@
 module TK.SpaceTac.UI {
     /**
-     * Processor of events coming from the battle log
+     * Processor of diffs coming from the battle log
      * 
-     * This will bind to the battle log to receive new events, and update 
-     * the battle view accordingly.
-     * 
-     * It is also possible to go back/forward in time.
+     * This will bind to the actual battle log, update the "displayed" battle state accordingly, and refresh the view.
      */
     export class LogProcessor {
         // Link to the battle view
         private view: BattleView
 
-        // Link to the battle
-        private battle: Battle
+        // Log client (to receive actual battle diffs)
+        private log: BattleLogClient
 
-        // Link to the battle log
-        private log: BattleLog
-
-        // Forward events to other subscribers
-        private forwarding: ((event: BaseBattleEvent) => number)[] = []
-
-        // Current position in the battle log
-        private cursor = -1
-
-        // Indicator that the log is destroyed
-        private destroyed = false
-
-        // Indicator that the log is being played continuously
-        private playing = false
+        // Forward diffs to other subscribers
+        private forwarding: ((diff: BaseBattleDiff) => number)[] = []
 
         // Indicator to debug the processed logs
         private debug = false
@@ -35,25 +20,21 @@ module TK.SpaceTac.UI {
         // Time at which the last action was applied
         private last_action: number
 
-        // Playing ship (at current log position)
-        private current_ship = new Ship()
-
         constructor(view: BattleView) {
             this.view = view;
-            this.battle = view.battle;
-            this.log = view.battle.log;
+            this.log = new BattleLogClient(view.battle, view.actual_battle.log);
 
             view.inputs.bindCheat("PageUp", "Step backward", () => {
-                this.stepBackward();
+                this.log.backward();
             });
             view.inputs.bindCheat("PageDown", "Step forward", () => {
-                this.stepForward();
+                this.log.forward();
             });
             view.inputs.bindCheat("Home", "Jump to beginning", () => {
-                this.jumpToStart();
+                this.log.jumpToStart();
             });
             view.inputs.bindCheat("End", "Jump to end", () => {
-                this.jumpToEnd();
+                this.log.jumpToEnd();
             });
         }
 
@@ -61,14 +42,27 @@ module TK.SpaceTac.UI {
          * Start log processing
          */
         start() {
-            this.cursor = this.log.events.length - 1;
-            this.current_ship = new Ship();
-            this.battle.getBootstrapEvents().forEach(event => this.processBattleEvent(event));
-
-            this.playing = true;
             if (!this.view.gameui.headless) {
-                // This will be asynchronous background work, until "destroy" is called
-                this.playContinuous();
+                this.log.play(async diff => {
+                    await this.processBattleDiff(diff);
+                    this.transferControl();
+                });
+                this.transferControl();
+            }
+        }
+
+        /**
+         * Process all pending diffs, synchronously
+         */
+        processPending() {
+            if (this.log.isPlaying()) {
+                throw new Error("Cannot process diffs synchronously while playing the log");
+            } else {
+                let diff: Diff<Battle> | null;
+                while (diff = this.log.forward()) {
+                    this.processBattleDiff(diff, false);
+                }
+                this.transferControl();
             }
         }
 
@@ -78,99 +72,18 @@ module TK.SpaceTac.UI {
          * This should be done to ensure it will stop processing and free resources
          */
         destroy() {
-            this.destroyed = true;
-        }
-
-        /**
-         * Play the log continuously
-         */
-        async playContinuous() {
-            let delay = 0;
-
-            while (!this.destroyed) {
-                if (this.playing && !this.view.game.paused) {
-                    await this.stepForward();
-                    await this.transferControl();
-                }
-
-                if (this.atEnd()) {
-                    await this.view.timer.sleep(50);
-                }
+            if (this.log.isPlaying()) {
+                this.log.stop(true);
             }
-        }
-
-        /**
-         * Make a step backward in time
-         */
-        stepBackward(): Promise<void> {
-            if (!this.atStart()) {
-                this.cursor -= 1;
-                this.playing = false;
-
-                return this.processBattleEvent(this.log.events[this.cursor + 1].getReverse());
-            } else {
-                return Promise.resolve();
-            }
-        }
-
-        /**
-         * Make a step forward in time
-         */
-        stepForward(): Promise<void> {
-            if (!this.atEnd()) {
-                this.cursor += 1;
-                if (this.atEnd()) {
-                    this.playing = true;
-                }
-
-                return this.processBattleEvent(this.log.events[this.cursor]);
-            } else {
-                return Promise.resolve();
-            }
-        }
-
-        /**
-         * Jump to the start of the log
-         * 
-         * This will rewind all applied event
-         */
-        jumpToStart() {
-            while (!this.atStart()) {
-                this.stepBackward();
-            }
-        }
-
-        /**
-         * Jump to the end of the log
-         * 
-         * This will apply all remaining event
-         */
-        jumpToEnd() {
-            while (!this.atEnd()) {
-                this.stepForward();
-            }
-        }
-
-        /**
-         * Check if we are currently at the start of the log
-         */
-        atStart(): boolean {
-            return this.cursor < 0;
-        }
-
-        /**
-         * Check if we are currently at the end of the log
-         */
-        atEnd(): boolean {
-            return this.cursor >= this.log.events.length - 1;
         }
 
         /**
          * Check if we need a player or AI to interact at this point
          */
         getPlayerNeeded(): Player | null {
-            if (this.playing && this.atEnd()) {
-                return this.battle.playing_ship ? this.battle.playing_ship.getPlayer() : null;
+            if (this.log.isPlaying() && this.log.atEnd()) {
+                let playing_ship = this.view.actual_battle.playing_ship;
+                return playing_ship ? playing_ship.getPlayer() : null;
             } else {
                 return null;
             }
@@ -179,21 +92,21 @@ module TK.SpaceTac.UI {
         /**
          * Register a sub-subscriber.
          * 
-         * The difference with registering directly to the BattleLog is that events may be delayed
+         * The difference with registering directly to the BattleLog is that diffs may add delay
          * for animations.
          * 
          * The callback may return the duration it needs to display the change.
          */
-        register(callback: (event: BaseBattleEvent) => number) {
+        register(callback: (diff: BaseBattleDiff) => number) {
             this.forwarding.push(callback);
         }
 
         /**
-         * Register a sub-subscriber, to receive events for a specific ship
+         * Register a sub-subscriber, to receive diffs for a specific ship
          */
-        registerForShip(ship: Ship, callback: (event: BaseLogShipEvent) => number) {
+        registerForShip(ship: Ship, callback: (diff: BaseBattleShipDiff) => number) {
             this.register(event => {
-                if (event instanceof BaseLogShipEvent && event.ship === ship) {
+                if (event instanceof BaseBattleShipDiff && event.ship_id === ship.id) {
                     return callback(event);
                 } else {
                     return 0;
@@ -202,50 +115,82 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Process a single event
+         * Register to playing ship changes
          */
-        async processBattleEvent(event: BaseBattleEvent): Promise<void> {
+        watchForShipChange(callback: (ship: Ship) => number, initial = true) {
+            this.register(diff => {
+                if (diff instanceof ShipChangeDiff) {
+                    let ship = this.view.battle.playing_ship;
+                    if (ship) {
+                        return callback(ship);
+                    }
+                }
+                return 0;
+            });
+
+            if (initial) {
+                let ship = this.view.battle.playing_ship;
+                if (ship) {
+                    callback(ship);
+                }
+            }
+        }
+
+        /**
+         * Process a single battle diff
+         */
+        async processBattleDiff(diff: BaseBattleDiff, timed = true): Promise<void> {
             if (this.debug) {
-                console.log("Battle event", event);
+                console.log("Battle diff", diff);
             }
 
-            let durations = this.forwarding.map(subscriber => subscriber(event));
+            let durations = this.forwarding.map(subscriber => subscriber(diff));
             let t = (new Date()).getTime()
 
-            if (event instanceof ActionAppliedEvent) {
-                if (event.ship.getPlayer() != this.view.player) {
-                    // AI is playing, do not make it play too fast
-                    let since_last = t - this.last_action;
-                    if (since_last < 2000) {
-                        durations.push(2000 - since_last);
+            if (diff instanceof ShipActionUsedDiff) {
+                let ship = this.view.actual_battle.getShip(diff.ship_id);
+                if (ship) {
+                    if (!ship.getPlayer().is(this.view.player)) {
+                        // AI is playing, do not make it play too fast
+                        let since_last = t - this.last_action;
+                        if (since_last < 2000) {
+                            durations.push(2000 - since_last);
+                        }
                     }
                 }
                 this.last_action = t;
-            } else if (event instanceof ShipChangeEvent) {
-                durations.push(this.processShipChangeEvent(event));
-            } else if (event instanceof DeathEvent) {
-                durations.push(this.processDeathEvent(event));
-            } else if (event instanceof FireEvent) {
-                durations.push(this.processFireEvent(event));
-            } else if (event instanceof DamageEvent) {
-                durations.push(this.processDamageEvent(event));
-            } else if (event instanceof EndBattleEvent) {
-                durations.push(this.processEndBattleEvent(event));
-            } else if (event instanceof DroneDeployedEvent) {
-                durations.push(this.processDroneDeployedEvent(event));
-            } else if (event instanceof DroneDestroyedEvent) {
-                durations.push(this.processDroneDestroyedEvent(event));
-            } else if (event instanceof DroneAppliedEvent) {
-                durations.push(this.processDroneAppliedEvent(event));
+            } else if (diff instanceof ProjectileFiredDiff) {
+                let ship = this.view.battle.getShip(diff.ship_id);
+                if (ship) {
+                    let equipment = ship.getEquipment(diff.equipment);
+                    if (equipment && equipment.slot_type == SlotType.Weapon) {
+                        let effect = new WeaponEffect(this.view.arena, ship, diff.target, equipment);
+                        durations.push(effect.start());
+                    }
+                }
+            } else if (diff instanceof ShipChangeDiff) {
+                durations.push(this.processShipChangeEvent(diff));
+            } else if (diff instanceof ShipDeathDiff) {
+                durations.push(this.processDeathEvent(diff));
+            } else if (diff instanceof ShipDamageDiff) {
+                durations.push(this.processDamageEvent(diff));
+            } else if (diff instanceof EndBattleDiff) {
+                durations.push(this.processEndBattleEvent(diff));
+            } else if (diff instanceof DroneDeployedDiff) {
+                durations.push(this.processDroneDeployedEvent(diff));
+            } else if (diff instanceof DroneDestroyedDiff) {
+                durations.push(this.processDroneDestroyedEvent(diff));
+            } else if (diff instanceof DroneAppliedDiff) {
+                durations.push(this.processDroneAppliedEvent(diff));
             }
 
             let delay = max([0].concat(durations));
-            if (delay) {
+            if (delay && timed) {
                 await this.view.timer.sleep(delay);
             }
 
-            if (this.playing) {
-                let reaction = this.view.session.reactions.check(this.view.player, this.battle, this.current_ship, event);
+            if (this.log.isPlaying()) {
+                let reaction = this.view.session.reactions.check(this.view.player, this.view.battle, this.view.battle.playing_ship, diff);
                 if (reaction) {
                     await this.processReaction(reaction);
                 }
@@ -255,14 +200,10 @@ module TK.SpaceTac.UI {
         /**
          * Transfer control to the needed player (or not)
          */
-        private async transferControl(): Promise<void> {
+        private transferControl() {
             let player = this.getPlayerNeeded();
             if (player) {
-                if (this.battle.playing_ship && !this.battle.playing_ship.alive) {
-                    this.view.setInteractionEnabled(false);
-                    this.battle.advanceToNextShip();
-                    await this.view.timer.sleep(200);
-                } else if (player === this.view.player) {
+                if (player.is(this.view.player)) {
                     this.view.setInteractionEnabled(true);
                 } else {
                     this.view.playAI();
@@ -285,19 +226,17 @@ module TK.SpaceTac.UI {
         }
 
         // Playing ship changed
-        private processShipChangeEvent(event: ShipChangeEvent): number {
-            this.current_ship = event.new_ship;
-            this.view.arena.setShipPlaying(event.new_ship);
-            this.view.ship_list.refresh(!event.initial);
-            if (event.ship !== event.new_ship) {
+        private processShipChangeEvent(event: ShipChangeDiff): number {
+            this.view.ship_list.refresh();
+            if (event.ship_id != event.new_ship) {
                 this.view.audio.playOnce("battle-ship-change");
             }
             return 0;
         }
 
         // Damage to ship
-        private processDamageEvent(event: DamageEvent): number {
-            var item = this.view.ship_list.findItem(event.ship);
+        private processDamageEvent(event: ShipDamageDiff): number {
+            var item = this.view.ship_list.findItem(event.ship_id);
             if (item) {
                 item.setDamageHit();
             }
@@ -305,39 +244,31 @@ module TK.SpaceTac.UI {
         }
 
         // A ship died
-        private processDeathEvent(event: DeathEvent): number {
-            let ship = this.battle.getShip(event.ship_id);
+        private processDeathEvent(event: ShipDeathDiff): number {
+            let ship = this.view.battle.getShip(event.ship_id);
 
             if (ship) {
                 if (this.view.ship_hovered === ship) {
                     this.view.setShipHovered(null);
                 }
                 this.view.arena.markAsDead(ship);
-                this.view.ship_list.refresh(!event.initial);
+                this.view.ship_list.refresh();
 
-                return event.initial ? 0 : 3000;
+                return 3000;
             } else {
                 return 0;
             }
         }
 
-        // Weapon used
-        private processFireEvent(event: FireEvent): number {
-            var effect = new WeaponEffect(this.view.arena, event.ship, event.target, event.weapon);
-            let duration = effect.start();
-
-            return duration;
-        }
-
         // Battle ended (victory or defeat)
-        private processEndBattleEvent(event: EndBattleEvent): number {
+        private processEndBattleEvent(event: EndBattleDiff): number {
             this.view.endBattle();
             return 0;
         }
 
         // New drone deployed
-        private processDroneDeployedEvent(event: DroneDeployedEvent): number {
-            let duration = this.view.arena.addDrone(event.drone, !event.initial);
+        private processDroneDeployedEvent(event: DroneDeployedDiff): number {
+            let duration = this.view.arena.addDrone(event.drone);
 
             if (duration) {
                 this.view.gameui.audio.playOnce("battle-drone-deploy");
@@ -347,18 +278,18 @@ module TK.SpaceTac.UI {
         }
 
         // Drone destroyed
-        private processDroneDestroyedEvent(event: DroneDestroyedEvent): number {
-            this.view.arena.removeDrone(event.drone);
-            if (!event.initial) {
+        private processDroneDestroyedEvent(event: DroneDestroyedDiff): number {
+            let duration = this.view.arena.removeDrone(event.drone);
+
+            if (duration) {
                 this.view.gameui.audio.playOnce("battle-drone-destroy");
-                return 1000;
-            } else {
-                return 0;
             }
+
+            return duration;
         }
 
         // Drone applied
-        private processDroneAppliedEvent(event: DroneAppliedEvent): number {
+        private processDroneAppliedEvent(event: DroneAppliedDiff): number {
             let drone = this.view.arena.findDrone(event.drone);
             if (drone) {
                 let duration = drone.setApplied();

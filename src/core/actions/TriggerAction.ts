@@ -3,6 +3,8 @@
 module TK.SpaceTac {
     /**
      * Action to trigger an equipment (for example a weapon), with an optional target
+     * 
+     * The target will be resolved as a list of ships, on which all the action effects will be applied
      */
     export class TriggerAction extends BaseAction {
         // Power consumption
@@ -91,7 +93,7 @@ module TK.SpaceTac {
                     }
                 });
             } else {
-                return ships.filter(ship => target.ship === ship);
+                return ships.filter(ship => ship.is(target.ship_id));
             }
         }
 
@@ -105,7 +107,7 @@ module TK.SpaceTac {
         }
 
         checkShipTarget(ship: Ship, target: Target): Target | null {
-            if (this.range > 0 && ship == target.ship) {
+            if (this.range > 0 && ship.is(target.ship_id)) {
                 // No self fire
                 return null;
             } else {
@@ -132,18 +134,32 @@ module TK.SpaceTac {
             return result;
         }
 
-        protected customApply(ship: Ship, target: Target) {
-            if (arenaDistance(ship.location, target) > 0.000001) {
-                // Face the target
-                ship.rotate(arenaAngle(ship.location, target), first(ship.listEquipment(SlotType.Engine), () => true));
-            }
+        protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+            let result: BaseBattleDiff[] = [];
 
-            // Fire event
-            ship.addBattleEvent(new FireEvent(ship, this.equipment, target));
+            if (arenaDistance(ship.location, target) > 1e-6) {
+                // Face the target
+                let angle = arenaAngle(ship.location, target);
+                if (Math.abs(angularDistance(angle, ship.arena_angle)) > 1e-6) {
+                    let destination = new ArenaLocationAngle(ship.arena_x, ship.arena_y, angle);
+                    let engine = first(ship.listEquipment(SlotType.Engine), () => true);
+                    result.push(new ShipMoveDiff(ship, ship.location, destination, engine));
+                }
+
+                // Fire a projectile
+                if (this.equipment && this.equipment.slot_type == SlotType.Weapon) {
+                    result.push(new ProjectileFiredDiff(ship, this.equipment, target));
+                }
+            }
 
             // Apply effects
             let effects = this.getEffects(ship, target);
-            effects.forEach(([ship_target, effect]) => effect.applyOnShip(ship_target, ship));
+            effects.forEach(([ship_target, effect]) => {
+                let diffs = effect.getOnDiffs(ship_target, ship);
+                result = result.concat(diffs);
+            });
+
+            return result;
         }
 
         getEffectsDescription(): string {

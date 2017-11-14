@@ -18,22 +18,20 @@ module TK.SpaceTac {
             this.amount = amount;
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             if (source instanceof Ship) {
                 if (this.amount < 0) {
-                    return new ValueTransferEffect(this.valuetype, -this.amount).applyOnShip(source, ship);
+                    return new ValueTransferEffect(this.valuetype, -this.amount).getOnDiffs(source, ship);
                 } else {
                     let amount = Math.min(source.getValue(this.valuetype), this.amount);
                     if (amount) {
-                        source.setValue(this.valuetype, -amount, true);
-                        ship.setValue(this.valuetype, amount, true);
-                        return true;
+                        return source.getValueDiffs(this.valuetype, -amount, true).concat(ship.getValueDiffs(this.valuetype, amount, true));
                     } else {
-                        return false;
+                        return [];
                     }
                 }
             } else {
-                return false;
+                return [];
             }
         }
 
@@ -46,7 +44,7 @@ module TK.SpaceTac {
         }
 
         getDescription(): string {
-            let attrname = SHIP_VALUES[this.valuetype].name;
+            let attrname = SHIP_VALUES_NAMES[this.valuetype];
             let verb = (this.amount < 0 ? "steal" : "give");
             return `${verb} ${Math.abs(this.amount)} ${attrname}`;
         }

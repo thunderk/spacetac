@@ -67,6 +67,11 @@ module TK.SpaceTac.UI {
             this.addShipSprites();
 
             this.container.onDestroy.add(() => this.destroy());
+
+            view.log_processor.watchForShipChange(ship => {
+                this.setShipPlaying(ship);
+                return 0;
+            });
         }
 
         /**
@@ -165,14 +170,8 @@ module TK.SpaceTac.UI {
         }
 
         // Find the sprite for a ship
-        findShipSprite(ship: Ship): ArenaShip | null {
-            var result: ArenaShip | null = null;
-            this.ship_sprites.forEach((sprite: ArenaShip) => {
-                if (sprite.ship === ship) {
-                    result = sprite;
-                }
-            });
-            return result;
+        findShipSprite(ship: Ship | RObjectId | null): ArenaShip | null {
+            return first(this.ship_sprites, sprite => sprite.ship.is(ship));
         }
 
         // Set the hovered state on a ship sprite
@@ -213,8 +212,8 @@ module TK.SpaceTac.UI {
         /**
          * Find an ArenaDrone displaying a Drone.
          */
-        findDrone(drone: Drone): ArenaDrone | null {
-            return first(this.drone_sprites, sprite => sprite.drone == drone);
+        findDrone(drone: Drone | RObjectId | null): ArenaDrone | null {
+            return first(this.drone_sprites, sprite => sprite.drone.is(drone));
         }
 
         /**
@@ -225,13 +224,14 @@ module TK.SpaceTac.UI {
         addDrone(drone: Drone, animate = true): number {
             if (!this.findDrone(drone)) {
                 let sprite = new ArenaDrone(this.view, drone);
-                let angle = Math.atan2(drone.y - drone.owner.arena_y, drone.x - drone.owner.arena_x);
+                let owner = this.view.battle.getShip(drone.owner) || new Ship();
+                let angle = Math.atan2(drone.y - owner.arena_y, drone.x - owner.arena_x);
                 this.layer_drones.add(sprite);
                 this.drone_sprites.push(sprite);
 
                 if (animate) {
-                    sprite.position.set(drone.owner.arena_x, drone.owner.arena_y);
-                    sprite.sprite.rotation = drone.owner.arena_angle;
+                    sprite.position.set(owner.arena_x, owner.arena_y);
+                    sprite.sprite.rotation = owner.arena_angle;
                     let move_duration = Animations.moveInSpace(sprite, drone.x, drone.y, angle, sprite.sprite);
                     this.view.tweens.create(sprite.radius).from({ alpha: 0 }, 500, Phaser.Easing.Cubic.In, true, move_duration);
 
@@ -250,15 +250,17 @@ module TK.SpaceTac.UI {
 
         /**
          * Remove a destroyed drone
+         * 
+         * Return the duration of deploy animation
          */
-        removeDrone(drone: Drone): void {
+        removeDrone(drone: Drone): number {
             let sprite = this.findDrone(drone);
             if (sprite) {
                 remove(this.drone_sprites, sprite);
-                sprite.setDestroyed();
-                this.layer_garbage.add(sprite);
+                return sprite.setDestroyed();
             } else {
                 console.error("Drone not found in arena for removal", drone);
+                return 0;
             }
         }
 

@@ -71,7 +71,7 @@ module TK.SpaceTac.UI {
          * Add a ship card
          */
         addShip(ship: Ship): ShipListItem {
-            var owned = ship.getPlayer() === this.player;
+            var owned = ship.isPlayedBy(this.player);
             var result = new ShipListItem(this, 200, this.container.height / 2, ship, owned, this.ship_buttons);
             this.items.push(result);
             this.container.addChild(result);
@@ -81,8 +81,8 @@ module TK.SpaceTac.UI {
         /**
          * Find the item (card) that displays a given ship
          */
-        findItem(ship: Ship): ShipListItem | null {
-            return first(this.items, item => item.ship == ship);
+        findItem(ship: Ship | RObjectId | null): ShipListItem | null {
+            return first(this.items, item => item.ship.is(ship));
         }
 
         /**

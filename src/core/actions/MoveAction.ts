@@ -1,5 +1,7 @@
 module TK.SpaceTac {
-    // Action to move to a given location
+    /**
+     * Action to move the ship to a specific location
+     */
     export class MoveAction extends BaseAction {
         // Distance allowed for each power point (raw, without applying maneuvrability)
         distance_per_power: number
@@ -37,7 +39,7 @@ module TK.SpaceTac {
 
             // Check AP usage
             if (remaining_ap === null) {
-                remaining_ap = ship.values.power.get();
+                remaining_ap = ship.getValue("power");
             }
             if (remaining_ap > 0.0001) {
                 return null;
@@ -119,8 +121,10 @@ module TK.SpaceTac {
             return target.getDistanceTo(ship.location) > 0 ? target : null;
         }
 
-        protected customApply(ship: Ship, target: Target) {
-            ship.moveTo(target.x, target.y, this.equipment);
+        protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+            let angle = (arenaDistance(target, ship.location) < 0.00001) ? ship.arena_angle : arenaAngle(ship.location, target);
+            let destination = new ArenaLocationAngle(target.x, target.y, angle);
+            return [new ShipMoveDiff(ship, ship.location, destination, this.equipment)];
         }
 
         getEffectsDescription(): string {

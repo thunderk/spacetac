@@ -1,21 +1,22 @@
 module TK.SpaceTac.Specs {
     testing("ValueTransferEffect", test => {
         test.case("takes or gives value", check => {
-            let ship1 = new Ship();
+            let battle = new Battle();
+            let ship1 = battle.fleets[0].addShip();
             TestTools.setShipHP(ship1, 100, 50);
             ship1.setValue("hull", 10);
-            let ship2 = new Ship();
+            let ship2 = battle.fleets[0].addShip();
             TestTools.setShipHP(ship2, 100, 50);
 
             let effect = new ValueTransferEffect("hull", -30);
-            effect.applyOnShip(ship2, ship1);
+            battle.applyDiffs(effect.getOnDiffs(ship2, ship1));
             check.equals(ship1.getValue("hull"), 40);
             check.equals(ship2.getValue("hull"), 70);
 
             effect = new ValueTransferEffect("hull", 1000);
-            effect.applyOnShip(ship2, ship1);
+            battle.applyDiffs(effect.getOnDiffs(ship2, ship1));
             check.equals(ship1.getValue("hull"), 0);
-            check.equals(ship2.getValue("hull"), 100);
+            check.equals(ship2.getValue("hull"), 110);  // over limit but will be fixed later
         })
 
         test.case("builds a description", check => {

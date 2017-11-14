@@ -17,8 +17,6 @@ module TK.SpaceTac.UI {
 
         // Current ship, whose actions are displayed
         ship: Ship | null
-        ship_power_capacity: number
-        ship_power_value: number
 
         // Interactivity
         interactive = true;
@@ -63,15 +61,15 @@ module TK.SpaceTac.UI {
 
             // Log processing
             battleview.log_processor.register(event => {
-                if (event instanceof ShipChangeEvent) {
-                    this.setShip(event.new_ship);
-                } else if (event instanceof ValueChangeEvent) {
-                    if (event.ship == this.ship) {
-                        if (event.value.name == SHIP_ATTRIBUTES.power_capacity.name) {
-                            this.ship_power_capacity = event.value.get();
+                if (event instanceof ShipValueDiff) {
+                    if (this.ship && this.ship.is(event.ship_id)) {
+                        if (event.code == "power") {
                             this.updatePower();
-                        } else if (event.value.name == SHIP_VALUES.power.name) {
-                            this.ship_power_value = event.value.get();
+                        }
+                    }
+                } else if (event instanceof ShipAttributeDiff) {
+                    if (this.ship && this.ship.is(event.ship_id)) {
+                        if (event.code == "power_capacity") {
                             this.updatePower();
                         }
                     }
@@ -79,6 +77,10 @@ module TK.SpaceTac.UI {
                 return 0;
             });
 
+            battleview.log_processor.watchForShipChange(ship => {
+                this.setShip(ship);
+                return 0;
+            });
             this.setInteractive(false);
         }
 
@@ -138,8 +140,10 @@ module TK.SpaceTac.UI {
          * Update the power indicator
          */
         updatePower(move_power = 0, fire_power = 0): void {
+            let power_capacity = this.ship ? this.ship.getAttribute("power_capacity") : 0;
+            let power_value = this.ship ? this.ship.getValue("power") : 0;
+
             let current_power = this.power_icons.children.length;
-            let power_capacity = this.ship_power_capacity;
 
             if (current_power > power_capacity) {
                 destroyChildren(this.power_icons, power_capacity, current_power);
@@ -152,7 +156,6 @@ module TK.SpaceTac.UI {
                 });
             }
 
-            let power_value = this.ship_power_value;
             let remaining_power = power_value - move_power - fire_power;
             this.power_icons.children.forEach((obj, idx) => {
                 let img = <Phaser.Image>obj;
@@ -195,22 +198,18 @@ module TK.SpaceTac.UI {
         /**
          * Set the bar to display a given ship
          */
-        setShip(ship: Ship): void {
+        setShip(ship: Ship | null): void {
             this.clearAll();
 
-            if (ship.getPlayer() === this.battleview.player && ship.alive) {
+            if (ship && ship.getPlayer().is(this.battleview.player) && ship.alive) {
                 var actions = ship.getAvailableActions();
                 actions.forEach((action: BaseAction) => {
                     this.addAction(ship, action);
                 });
 
                 this.ship = ship;
-                this.ship_power_capacity = ship.getAttribute("power_capacity");
-                this.ship_power_value = ship.getValue("power");
             } else {
                 this.ship = null;
-                this.ship_power_capacity = 0;
-                this.ship_power_value = 0;
             }
 
             this.updatePower();

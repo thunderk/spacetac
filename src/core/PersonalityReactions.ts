@@ -3,7 +3,7 @@ module TK.SpaceTac {
     export type PersonalityReaction = PersonalityReactionConversation
 
     // Condition to check if a reaction may happen, returning involved ships (order is important)
-    export type ReactionCondition = (player: Player, battle: Battle | null, ship: Ship | null, event: BaseBattleEvent | null) => Ship[]
+    export type ReactionCondition = (player: Player, battle: Battle | null, ship: Ship | null, event: BaseBattleDiff | null) => Ship[]
 
     // Reaction profile, giving a probability for types of personality, and an associated reaction constructor
     export type ReactionProfile = [(traits: IPersonalityTraits) => number, (ships: Ship[]) => PersonalityReaction]
@@ -31,7 +31,7 @@ module TK.SpaceTac {
          * 
          * This will return a reaction to display, and add it to the done list
          */
-        check(player: Player, battle: Battle | null = null, ship: Ship | null = null, event: BaseBattleEvent | null = null, pool: ReactionPool = BUILTIN_REACTION_POOL): PersonalityReaction | null {
+        check(player: Player, battle: Battle | null = null, ship: Ship | null = null, event: BaseBattleDiff | null = null, pool: ReactionPool = BUILTIN_REACTION_POOL): PersonalityReaction | null {
             let codes = difference(keys(pool), this.done);
 
             let candidates = nna(codes.map((code: string): [string, Ship[], ReactionProfile[]] | null => {
@@ -88,10 +88,14 @@ module TK.SpaceTac {
         ]]
     }
 
-    function cond_friendly_fire(player: Player, battle: Battle | null, ship: Ship | null, event: BaseBattleEvent | null): Ship[] {
+    /**
+     * Check for a friendly fire condition (one of player's ships fired on another)
+     */
+    function cond_friendly_fire(player: Player, battle: Battle | null, ship: Ship | null, event: BaseBattleDiff | null): Ship[] {
         if (battle && ship && event) {
-            if (event instanceof DamageEvent && event.ship != ship && event.ship.getPlayer() == player && ship.getPlayer() == player) {
-                return [event.ship, ship];
+            if (event instanceof ShipDamageDiff && player.is(ship.getPlayer()) && !ship.is(event.ship_id)) {
+                let hurt = battle.getShip(event.ship_id);
+                return (hurt && hurt.getPlayer().is(player)) ? [hurt, ship] : [];
             } else {
                 return [];
             }

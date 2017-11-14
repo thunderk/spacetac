@@ -90,17 +90,9 @@ module TK.SpaceTac {
         //  *fleet* is the player fleet, entering the location
         //  Returns the engaged battle, null if no encounter happens
         enterLocation(fleet: Fleet): Battle | null {
-            var encounter = this.tryGenerateEncounter();
+            let encounter = this.tryGenerateEncounter();
             if (encounter) {
-                var battle = new Battle(fleet, encounter);
-                battle.log.subscribe(event => {
-                    if (event instanceof EndBattleEvent) {
-                        if (!event.outcome.draw && event.outcome.winner !== encounter) {
-                            // The encounter fleet lost, remove it
-                            this.encounter = null;
-                        }
-                    }
-                });
+                let battle = new Battle(fleet, encounter);
                 battle.start();
                 return battle;
             } else {
@@ -143,6 +135,15 @@ module TK.SpaceTac {
             }
             let [level, enemies] = this.encounter_random.choice(variations);
             this.encounter = fleet_generator.generate(level, new Player(this.star.universe, "Enemy"), enemies, true);
+        }
+
+        /**
+         * Resolves the encounter from a battle outcome
+         */
+        resolveEncounter(outcome: BattleOutcome) {
+            if (this.encounter && outcome.winner && outcome.winner != this.encounter) {
+                this.clearEncounter();
+            }
         }
     }
 }

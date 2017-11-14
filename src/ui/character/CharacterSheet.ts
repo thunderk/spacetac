@@ -141,7 +141,7 @@ module TK.SpaceTac.UI {
 
             let button = builder.button("character-attribute", x, y, undefined, () => this.ship.getAttributeDescription(attribute));
 
-            let attrname = capitalize(SHIP_ATTRIBUTES[attribute].name);
+            let attrname = capitalize(SHIP_VALUES_NAMES[attribute]);
             builder.in(button).text(attrname, 120, 22, { size: 20, color: "#c9d8ef", stroke_width: 1, stroke_color: "#395665" });
 
             let value = builder.in(button).text("", 264, 24, { size: 18, bold: true });

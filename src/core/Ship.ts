@@ -31,8 +31,8 @@ module TK.SpaceTac {
         // Facing direction in the arena
         arena_angle: number
 
-        // Sticky effects that applies a given number of times
-        sticky_effects: StickyEffect[]
+        // Active effects (sticky or area)
+        active_effects = new RObjectContainer<BaseEffect>()
 
         // List of slots, able to contain equipment
         slots: Slot[]
@@ -63,7 +63,6 @@ module TK.SpaceTac {
             this.fleet = fleet || new Fleet();
             this.name = name;
             this.alive = true;
-            this.sticky_effects = [];
             this.slots = [];
 
             this.arena_x = 0;
@@ -95,7 +94,7 @@ module TK.SpaceTac {
         // Returns true if the ship is able to play
         //  If *check_ap* is true, ap_current=0 will make this function return false
         isAbleToPlay(check_ap: boolean = true): boolean {
-            var ap_checked = !check_ap || this.values.power.get() > 0;
+            var ap_checked = !check_ap || this.getValue("power") > 0;
             return this.alive && ap_checked;
         }
 
@@ -126,6 +125,13 @@ module TK.SpaceTac {
             return this.fleet.player;
         }
 
+        /**
+         * Check if a player is playing this ship
+         */
+        isPlayedBy(player: Player): boolean {
+            return this.getPlayer().is(player);
+        }
+
         // get the current battle this ship is engaged in
         getBattle(): Battle | null {
             return this.fleet.battle;
@@ -151,8 +157,15 @@ module TK.SpaceTac {
                 });
             }
 
-            actions.push(new EndTurnAction());
+            actions.push(EndTurnAction.SINGLETON);
             return actions;
+        }
+
+        /**
+         * Get an available action by its ID
+         */
+        getAction(action_id: RObjectId): BaseAction | null {
+            return first(this.getAvailableActions(), action => action.is(action_id));
         }
 
         /**
@@ -167,14 +180,16 @@ module TK.SpaceTac {
          * Try to upgrade a skill by 1 point or more
          */
         upgradeSkill(skill: keyof ShipSkills, points = 1) {
-            if (this.getAvailableUpgradePoints() >= points) {
-                this.skills[skill].add(points);
+            if (this.getBattle()) {
+                console.error("Cannot upgrade skill during battle");
+            } else if (this.getAvailableUpgradePoints() >= points) {
+                this.skills[skill].addModifier(points);
                 this.updateAttributes();
             }
         }
 
         // Add an event to the battle log, if any
-        addBattleEvent(event: BaseBattleEvent): void {
+        addBattleEvent(event: BaseBattleDiff): void {
             var battle = this.getBattle();
             if (battle && battle.log) {
                 battle.log.add(event);
@@ -185,46 +200,17 @@ module TK.SpaceTac {
          * Get a ship value
          */
         getValue(name: keyof ShipValues): number {
-            if (!this.values.hasOwnProperty(name)) {
-                console.error(`No such ship value: ${name}`);
-                return 0;
-            }
-            return this.values[name].get();
+            return this.values[name];
         }
 
         /**
          * Set a ship value
-         * 
-         * If *offset* is true, the value will be added to current value.
-         * If *log* is true, an attribute event will be added to the battle log
-         * 
-         * Returns true if the value changed.
          */
-        setValue(name: keyof ShipValues, value: number, offset = false, log = true): boolean {
-            let diff = 0;
-            let val = this.values[name];
-
-            if (offset) {
-                diff = val.add(value);
-            } else {
-                diff = val.set(value);
+        setValue(name: keyof ShipValues, value: number, relative = false): void {
+            if (relative) {
+                value += this.values[name];
             }
-
-            if (log && diff != 0 && this.alive) {
-                this.addBattleEvent(new ValueChangeEvent(this, val, diff));
-            }
-
-            return diff != 0;
-        }
-
-        /**
-         * Set a value's maximal capacity
-         */
-        setValueCapacity(name: keyof ShipValues, maximal: number, log = true): void {
-            if (this.getValue(name) > maximal) {
-                this.setValue(name, maximal, false, log);
-            }
-            this.values[name].setMaximal(maximal);
+            this.values[name] = value;
         }
 
         /**
@@ -238,53 +224,14 @@ module TK.SpaceTac {
             return this.attributes[name].get();
         }
 
-        /**
-         * Set a ship attribute
-         * 
-         * If *log* is true, an attribute event will be added to the battle log
-         * 
-         * Returns true if the value changed.
-         */
-        setAttribute(name: keyof ShipAttributes, value: number, log = true): boolean {
-            let attr = this.attributes[name];
-            let diff = attr.set(value);
-
-            // TODO more generic
-            if (name == "power_capacity") {
-                this.setValueCapacity("power", attr.get());
-            } else if (name == "shield_capacity") {
-                this.setValueCapacity("shield", attr.get());
-            } else if (name == "hull_capacity") {
-                this.setValueCapacity("hull", attr.get());
-            }
-
-            if (log && diff != 0 && this.alive) {
-                this.addBattleEvent(new ValueChangeEvent(this, attr, diff));
-            }
-
-            return diff != 0;
-        }
-
         // Initialize the action points counter
         //  This should be called once at the start of a battle
-        //  If no value is provided, the attribute ap_initial will be used
-        initializeActionPoints(value: number | null = null): void {
+        //  If no value is provided, the attribute power_capacity will be used
+        private initializePower(value: number | null = null): void {
             if (value === null) {
-                value = this.attributes.power_capacity.get();
+                value = this.getAttribute("power_capacity");
             }
             this.setValue("power", value);
-        }
-
-        // Recover action points
-        //  This should be called once at the end of a turn
-        //  If no value is provided, the current attribute ap_recovery will be used
-        recoverActionPoints(value: number | null = null): void {
-            if (this.alive) {
-                if (value === null) {
-                    value = this.attributes.power_generation.get();
-                }
-                this.setValue("power", value, true);
-            }
         }
 
         /**
@@ -302,100 +249,15 @@ module TK.SpaceTac {
         }
 
         /**
-         * Method called at the start of battle
+         * Method called at the start of battle, to restore a pristine condition on the ship
          */
-        startBattle() {
+        restoreInitialState() {
             this.alive = true;
-            this.sticky_effects = [];
+            this.active_effects = new RObjectContainer();
             this.updateAttributes();
             this.restoreHealth();
-            this.initializeActionPoints();
+            this.initializePower();
             this.listEquipment().forEach(equipment => equipment.cooldown.reset());
-        }
-
-        /**
-         * Method called at the end of battle
-         */
-        endBattle(turncount: number) {
-            // Restore as pristine
-            this.startBattle();
-
-            // Wear down equipment
-            this.listEquipment().forEach(equipment => {
-                equipment.addWear(turncount);
-            });
-        }
-
-        // Method called at the start of this ship turn
-        startTurn(): void {
-            if (this.playing) {
-                console.error("startTurn called twice", this);
-                return;
-            }
-            this.playing = true;
-
-            if (this.alive) {
-                // Recompute attributes
-                this.updateAttributes();
-
-                // Apply sticky effects
-                this.sticky_effects.forEach(effect => effect.startTurn(this));
-                this.cleanStickyEffects();
-
-                // Reset toggle actions state
-                this.listEquipment().forEach(equipment => {
-                    if (equipment.action instanceof ToggleAction && equipment.action.activated) {
-                        equipment.action.apply(this);
-                    }
-                });
-            }
-        }
-
-        // Method called at the end of this ship turn
-        endTurn(): void {
-            if (!this.playing) {
-                console.error("endTurn called before startTurn", this);
-                return;
-            }
-            this.playing = false;
-
-            if (this.alive) {
-                // Recover action points for next turn
-                this.updateAttributes();
-                this.recoverActionPoints();
-
-                // Apply sticky effects
-                this.sticky_effects.forEach(effect => effect.endTurn(this));
-                this.cleanStickyEffects();
-
-                // Cool down equipment
-                this.listEquipment().forEach(equipment => equipment.cooldown.cool());
-            }
-        }
-
-        /**
-         * Register a sticky effect
-         * 
-         * Pay attention to pass a copy, not the original equipment effect, because it will be modified
-         */
-        addStickyEffect(effect: StickyEffect, log = true): void {
-            if (this.alive) {
-                this.sticky_effects.push(effect);
-                if (log) {
-                    this.setActiveEffectsChanged();
-                }
-            }
-        }
-
-        /**
-         * Clean sticky effects that are no longer active
-         */
-        cleanStickyEffects() {
-            let [active, ended] = binpartition(this.sticky_effects, effect => this.alive && effect.duration > 0);
-            this.sticky_effects = active;
-            if (ended.length) {
-                this.setActiveEffectsChanged();
-            }
         }
 
         /**
@@ -416,86 +278,38 @@ module TK.SpaceTac {
         }
 
         /**
-         * Rotate the ship in place to face a direction
+         * Get the diffs needed to apply changes to a ship value
          */
-        rotate(angle: number, engine: Equipment | null = null, log = true) {
-            if (angle != this.arena_angle) {
-                let start = copy(this.location);
-                this.setArenaFacingAngle(angle);
-
-                if (log) {
-                    this.addBattleEvent(new MoveEvent(this, start, copy(this.location), engine));
-                }
-            }
-        }
-
-        /**
-         * Move the ship to another location
-         * 
-         * This does not check or consume action points, but will update area effects (for this ship and the others).
-         * 
-         * If *engine* is specified, the facing angle will be updated to simulate an engine maneuver.
-         */
-        moveTo(x: number, y: number, engine: Equipment | null = null, log = true): void {
-            let dx = x - this.arena_x;
-            let dy = y - this.arena_y;
-            if (dx != 0 || dy != 0) {
-                let start = copy(this.location);
-
-                let area_effects = imaterialize(this.iToggleActions(true));
-                let old_impacted_ships = area_effects.map(action => action.getImpactedShips(this, Target.newFromShip(this)));
-                let old_area_effects = this.getActiveEffects().area;
-
-                if (engine) {
-                    let angle = Math.atan2(dy, dx);
-                    this.setArenaFacingAngle(angle);
-                }
-
-                this.setArenaPosition(x, y);
-
-                if (log) {
-                    this.addBattleEvent(new MoveEvent(this, start, copy(this.location), engine));
-                }
-
-                let new_impacted_ships = area_effects.map(action => action.getImpactedShips(this, Target.newFromShip(this)));
-                let diff_impacted_ships = flatten(zip(old_impacted_ships, new_impacted_ships).map(([a, b]) => disjunctunion(a, b)));
-                let new_area_effects = this.getActiveEffects().area;
-                if (disjunctunion(old_area_effects, new_area_effects).length > 0) {
-                    diff_impacted_ships.push(this);
-                }
-                unique(diff_impacted_ships).forEach(ship => ship.setActiveEffectsChanged());
-            }
-        }
-
-        /**
-         * Get the events needed to apply changes to ship values or attributes
-         */
-        getValueEvents(name: keyof ShipValues, value: number): BaseBattleEvent[] {
-            let result: BaseBattleEvent[] = [];
-
+        getValueDiffs(name: keyof ShipValues, value: number, relative = false): BaseBattleDiff[] {
+            let result: BaseBattleDiff[] = [];
             let current = this.values[name];
-            if (current.get() != value) {
-                let newval = copy(current);
-                newval.set(value);
-                result.push(new ValueChangeEvent(this, newval, value - current.get()));
+
+            if (relative) {
+                value += current;
+            }
+
+            // TODO apply range limitations
+
+            if (current != value) {
+                result.push(new ShipValueDiff(this, name, value - current));
             }
 
             return result;
         }
 
         /**
-         * Produce events to set the ship in emergency stasis
+         * Produce diffs needed to put the ship in emergency stasis
          */
-        getDeathEvents(battle: Battle): BaseBattleEvent[] {
-            let result: BaseBattleEvent[] = [];
+        getDeathDiffs(battle: Battle): BaseBattleDiff[] {
+            let result: BaseBattleDiff[] = [];
 
             keys(SHIP_VALUES).forEach(value => {
-                result = result.concat(this.getValueEvents(value, 0));
+                result = result.concat(this.getValueDiffs(value, 0));
             });
 
             // TODO Remove sticky effects
 
-            result.push(new DeathEvent(battle, this));
+            result.push(new ShipDeathDiff(battle, this));
 
             return result;
         }
@@ -506,34 +320,10 @@ module TK.SpaceTac {
         setDead(): void {
             let battle = this.getBattle();
             if (battle) {
-                let events = this.getDeathEvents(battle);
-                battle.applyEvents(events);
+                let events = this.getDeathDiffs(battle);
+                battle.applyDiffs(events);
             } else {
                 console.error("Cannot set ship dead outside of battle", this);
-            }
-        }
-
-        /**
-         * Apply damages to hull and/or shield
-         * 
-         * Also apply wear to impacted equipment
-         */
-        addDamage(hull: number, shield: number, log: boolean = true): void {
-            if (shield > 0) {
-                this.setValue("shield", -shield, true, log);
-            }
-
-            if (hull > 0) {
-                this.setValue("hull", -hull, true, log);
-            }
-
-            if (log) {
-                this.addBattleEvent(new DamageEvent(this, hull, shield));
-            }
-
-            if (this.values.hull.get() === 0) {
-                // Ship is dead
-                this.setDead();
             }
         }
 
@@ -686,68 +476,50 @@ module TK.SpaceTac {
             }
         }
 
-        // Update attributes, taking into account attached equipment and active effects
+        /**
+         * Get the list of equipped items
+         */
+        listEquipments(): Equipment[] {
+            return nna(this.slots.map(slot => slot.attached));
+        }
+
+        /**
+         * Get an equipment by its ID
+         */
+        getEquipment(id: RObjectId): Equipment | null {
+            return first(this.listEquipments(), equipment => equipment.id === id);
+        }
+
+        /**
+         * Update attributes, taking into account attached equipment and active effects
+         */
         updateAttributes(): void {
-            let new_attrs = new ShipAttributes();
+            // Reset attributes
+            keys(this.attributes).forEach(attr => this.attributes[attr].reset());
 
-            if (this.alive) {
-                // TODO better typing for iteritems
+            // Apply base skills
+            keys(this.skills).forEach(skill => this.attributes[skill].addModifier(this.skills[skill].get()));
 
-                // Apply base skills
-                iteritems(<any>this.skills, (key: keyof ShipAttributes, skill: ShipAttribute) => {
-                    new_attrs[key].add(skill.get());
-                });
-
-                // Sum all attribute effects
-                this.collectEffects("attr").forEach((effect: AttributeEffect) => {
-                    new_attrs[effect.attrcode].add(effect.value);
-                });
-
-                // Apply limit attributes
-                this.collectEffects("attrlimit").forEach((effect: AttributeLimitEffect) => {
-                    new_attrs[effect.attrcode].setMaximal(effect.value);
-                });
-            }
-
-            // Set final attributes
-            iteritems(<any>new_attrs, (key, value) => {
-                this.setAttribute(<keyof ShipAttributes>key, (<ShipAttribute>value).get());
+            // Apply attribute effects
+            iforeach(this.ieffects(), effect => {
+                if (effect instanceof AttributeEffect) {
+                    this.attributes[effect.attrcode].addModifier(effect.value);
+                } else if (effect instanceof AttributeMultiplyEffect) {
+                    this.attributes[effect.attrcode].addModifier(undefined, effect.value);
+                } else if (effect instanceof AttributeLimitEffect) {
+                    this.attributes[effect.attrcode].addModifier(undefined, undefined, effect.value);
+                }
             });
         }
 
-        // Fully restore hull and shield
+        /**
+         * Fully restore hull and shield, at their maximal capacity
+         */
         restoreHealth(): void {
             if (this.alive) {
-                this.values.hull.set(this.attributes.hull_capacity.get());
-                this.values.shield.set(this.attributes.shield_capacity.get());
+                this.setValue("hull", this.getAttribute("hull_capacity"));
+                this.setValue("shield", this.getAttribute("shield_capacity"));
             }
-        }
-
-        /**
-         * Get the list of all effects applied on this ship
-         * 
-         * This includes:
-         *  - Permanent equipment effects
-         *  - Sticky effects
-         *  - Area effects at current location
-         */
-        getActiveEffects(): ActiveEffectsEvent {
-            let result = new ActiveEffectsEvent(this);
-            if (this.alive) {
-                result.equipment = flatten(this.slots.map(slot => slot.attached ? slot.attached.effects : []));
-                result.sticky = this.sticky_effects;
-                let battle = this.getBattle();
-                result.area = battle ? imaterialize(battle.iAreaEffects(this.arena_x, this.arena_y)) : [];
-            }
-            return result;
-        }
-
-        /**
-         * Indicate a change in active effects to the log
-         */
-        setActiveEffectsChanged(): void {
-            this.addBattleEvent(this.getActiveEffects());
-            this.updateAttributes();
         }
 
         /**
@@ -758,7 +530,7 @@ module TK.SpaceTac {
             let area_effects = battle ? battle.iAreaEffects(this.arena_x, this.arena_y) : IEMPTY;
             return ichain(
                 ichainit(imap(iarray(this.slots), slot => slot.attached ? iarray(slot.attached.effects) : IEMPTY)),
-                imap(iarray(this.sticky_effects), effect => effect.base),
+                imap(this.active_effects.iterator(), effect => (effect instanceof StickyEffect) ? effect.base : effect),
                 area_effects
             );
         }
@@ -786,16 +558,11 @@ module TK.SpaceTac {
             }));
         }
 
-        // Collect all effects to apply for updateAttributes
-        private collectEffects(code: string): BaseEffect[] {
-            return imaterialize(ifilter(this.ieffects(), effect => effect.code == code));
-        }
-
         /**
          * Get a textual description of an attribute, and the origin of its value
          */
         getAttributeDescription(attribute: keyof ShipAttributes): string {
-            let result = this.attributes[attribute].description;
+            let result = SHIP_VALUES_DESCRIPTIONS[attribute];
 
             let diffs: string[] = [];
             let limits: string[] = [];
@@ -822,7 +589,9 @@ module TK.SpaceTac {
                 }
             });
 
-            this.sticky_effects.forEach(effect => addEffect("???", effect.base));
+            this.active_effects.list().forEach(effect => {
+                addEffect("???", (effect instanceof StickyEffect) ? effect.base : effect)
+            });
 
             let sources = diffs.concat(limits).join("\n");
             return sources ? (result + "\n\n" + sources) : result;

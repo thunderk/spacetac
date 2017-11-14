@@ -63,7 +63,7 @@ module TK.SpaceTac {
             }
 
             // End the ship turn
-            this.applyAction(new EndTurnAction(), Target.newFromShip(ship));
+            this.applyAction(EndTurnAction.SINGLETON, Target.newFromShip(ship));
         }
 
         /**
@@ -72,7 +72,12 @@ module TK.SpaceTac {
          * This should be the only real interaction point with battle state
          */
         private applyAction(action: BaseAction, target: Target): boolean {
-            return action.apply(this.ship, target);
+            let battle = this.ship.getBattle();
+            if (battle) {
+                return battle.applyOneAction(action, target);
+            } else {
+                return false;
+            }
         }
 
         /**

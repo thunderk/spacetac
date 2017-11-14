@@ -42,17 +42,21 @@ module TK.SpaceTac {
                 this.stats = {};
             }
 
-            log.events.forEach(event => {
-                if (event instanceof ActionAppliedEvent) {
-                    this.addStat("Power used", event.power, event.ship.fleet === attacker);
-                } else if (event instanceof DamageEvent) {
-                    this.addStat("Damage dealt", event.hull + event.shield, event.ship.fleet !== attacker);
-                } else if (event instanceof MoveEvent) {
-                    this.addStat("Move distance (km)", event.getDistance(), event.ship.fleet === attacker);
-                } else if (event instanceof DroneDeployedEvent) {
-                    this.addStat("Drones deployed", 1, event.ship.fleet === attacker);
+            let n = log.count();
+            for (let i = 0; i < n; i++) {
+                let diff = log.get(i);
+                if (diff instanceof BaseBattleShipDiff) {
+                    let diff_ship = diff.ship_id;
+                    let attacker_ship = any(attacker.ships, ship => ship.is(diff_ship));
+                    if (diff instanceof ShipDamageDiff) {
+                        this.addStat("Damage dealt", diff.hull + diff.shield, !attacker_ship);
+                    } else if (diff instanceof ShipMoveDiff) {
+                        this.addStat("Move distance (km)", diff.getDistance(), attacker_ship);
+                    } else if (diff instanceof DroneDeployedDiff) {
+                        this.addStat("Drones deployed", 1, attacker_ship);
+                    }
                 }
-            });
+            }
         }
 
         /**

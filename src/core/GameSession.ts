@@ -120,19 +120,22 @@ module TK.SpaceTac {
         setBattleEnded() {
             let battle = this.getBattle();
 
-            if (battle && battle.ended) {
+            if (battle && battle.ended && battle.outcome) {
                 // Generate experience
                 battle.outcome.grantExperience(battle.fleets);
 
-                if (battle.outcome.winner == this.player.fleet) {
-                    // In case of victory, generate loot
-                    battle.outcome.createLoot(battle);
+                // Reset ships status
+                iforeach(battle.iships(), ship => ship.restoreInitialState());
 
-                    // In case of victorious encounter, clear the encouter
-                    let location = this.player.fleet.location;
-                    if (location) {
-                        location.clearEncounter();
-                    }
+                // In case of victory for current player, generate loot
+                if (battle.outcome.winner == this.player.fleet) {
+                    battle.outcome.createLoot(battle);
+                }
+
+                // If the battle happened in a star location, keep it informed
+                let location = this.player.fleet.location;
+                if (location) {
+                    location.resolveEncounter(battle.outcome);
                 }
             }
         }

@@ -4,20 +4,18 @@ module TK.SpaceTac.Specs {
             let battle = Battle.newQuickRandom();
 
             battle.cheats.win();
-            check.same(battle.ended, true, "ended");
-            check.same(battle.outcome.winner, battle.fleets[0], "winner");
-            check.equals(battle.log.events.filter(event => event instanceof DeathEvent).map(event => event.ship), battle.fleets[1].ships, "all mark dead");
-            check.same(any(battle.fleets[1].ships, ship => !ship.alive), false, "all restored");
+            check.equals(battle.ended, true, "ended");
+            check.same(nn(battle.outcome).winner, battle.fleets[0], "winner");
+            check.equals(any(battle.fleets[1].ships, ship => ship.alive), false, "all enemies dead");
         })
 
         test.case("loses a battle", check => {
             let battle = Battle.newQuickRandom();
 
             battle.cheats.lose();
-            check.same(battle.ended, true, "ended");
-            check.same(battle.outcome.winner, battle.fleets[1], "winner");
-            check.equals(battle.log.events.filter(event => event instanceof DeathEvent).map(event => event.ship), battle.fleets[0].ships, "all mark dead");
-            check.same(any(battle.fleets[0].ships, ship => !ship.alive), false, "all restored");
+            check.equals(battle.ended, true, "ended");
+            check.same(nn(battle.outcome).winner, battle.fleets[1], "winner");
+            check.equals(any(battle.fleets[0].ships, ship => ship.alive), false, "all allies dead");
         })
 
         test.case("adds an equipment", check => {

@@ -120,25 +120,29 @@ module TK.SpaceTac {
             check.equals(ship1.cargo, []);
             check.equals(ship2.cargo, []);
 
-            let result = fleet.addCargo(new Equipment());
+            let equipment1 = new Equipment();
+            let result = fleet.addCargo(equipment1);
             check.equals(result, true);
-            check.equals(ship1.cargo, [new Equipment()]);
+            check.equals(ship1.cargo, [equipment1]);
             check.equals(ship2.cargo, []);
 
-            result = fleet.addCargo(new Equipment());
+            let equipment2 = new Equipment();
+            result = fleet.addCargo(equipment2);
             check.equals(result, true);
-            check.equals(ship1.cargo, [new Equipment()]);
-            check.equals(ship2.cargo, [new Equipment()]);
+            check.equals(ship1.cargo, [equipment1]);
+            check.equals(ship2.cargo, [equipment2]);
 
-            result = fleet.addCargo(new Equipment());
+            let equipment3 = new Equipment();
+            result = fleet.addCargo(equipment3);
             check.equals(result, true);
-            check.equals(ship1.cargo, [new Equipment()]);
-            check.equals(ship2.cargo, [new Equipment(), new Equipment()]);
+            check.equals(ship1.cargo, [equipment1]);
+            check.equals(ship2.cargo, [equipment2, equipment3]);
 
-            result = fleet.addCargo(new Equipment());
+            let equipment4 = new Equipment();
+            result = fleet.addCargo(equipment4);
             check.equals(result, false);
-            check.equals(ship1.cargo, [new Equipment()]);
-            check.equals(ship2.cargo, [new Equipment(), new Equipment()]);
+            check.equals(ship1.cargo, [equipment1]);
+            check.equals(ship2.cargo, [equipment2, equipment3]);
         });
     });
 }

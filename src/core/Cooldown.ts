@@ -60,11 +60,13 @@ module TK.SpaceTac {
         /**
          * Use the equipment, increasing the heat
          */
-        use(): void {
+        use(times = 1): void {
             if (this.overheat) {
-                this.uses += 1;
+                this.uses += times;
                 if (this.uses >= this.overheat) {
                     this.heat = this.cooling;
+                } else {
+                    this.heat = 0;
                 }
             }
         }

@@ -49,7 +49,7 @@ module TK.SpaceTac {
         }
 
         checkShipTarget(ship: Ship, target: Target): Target | null {
-            return (ship == target.ship) ? target : null;
+            return ship.is(target.ship_id) ? target : null;
         }
 
         /**
@@ -64,10 +64,11 @@ module TK.SpaceTac {
             return result;
         }
 
-        protected customApply(ship: Ship, target: Target) {
-            this.activated = !this.activated;
-            ship.addBattleEvent(new ToggleEvent(ship, this, this.activated));
-            this.getImpactedShips(ship, target).forEach(iship => iship.setActiveEffectsChanged());
+        protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+            // TODO Add effects to ships in range
+            return [
+                new ShipActionToggleDiff(ship, this, !this.activated)
+            ]
         }
 
         getEffectsDescription(): string {

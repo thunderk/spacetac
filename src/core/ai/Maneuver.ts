@@ -89,7 +89,7 @@ module TK.SpaceTac {
 
             // Area effects on final location
             let location = this.getFinalLocation();
-            let effects = this.battle.drones.forEach(drone => {
+            let effects = this.battle.drones.list().forEach(drone => {
                 if (Target.newFromLocation(location.x, location.y).isInRange(drone.x, drone.y, drone.radius)) {
                     result = result.concat(drone.effects.map(effect => <[Ship, BaseEffect]>[this.ship, effect]));
                 }

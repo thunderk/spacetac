@@ -35,6 +35,8 @@ module TK.SpaceTac {
                 if (this.ship) {
                     this.ship.updateAttributes();
                 }
+            } else {
+                console.warn("Equipment cannot be attached to slot", equipment, this);
             }
             return equipment;
         }

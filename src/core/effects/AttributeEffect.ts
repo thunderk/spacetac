@@ -8,10 +8,10 @@ module TK.SpaceTac {
      */
     export class AttributeEffect extends BaseEffect {
         // Affected attribute
-        attrcode: keyof ShipAttributes;
+        attrcode: keyof ShipAttributes
 
         // Base value
-        value: number;
+        value: number
 
         constructor(attrcode: keyof ShipAttributes, value = 0) {
             super("attr");
@@ -20,9 +20,16 @@ module TK.SpaceTac {
             this.value = value;
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
-            ship.updateAttributes();
-            return true;
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            return [
+                new ShipAttributeDiff(ship, this.attrcode, { cumulative: this.value }, {}),
+            ];
+        }
+
+        getOffDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            return [
+                new ShipAttributeDiff(ship, this.attrcode, {}, { cumulative: this.value }),
+            ];
         }
 
         isBeneficial(): boolean {
@@ -34,7 +41,7 @@ module TK.SpaceTac {
         }
 
         getDescription(): string {
-            let attrname = SHIP_ATTRIBUTES[this.attrcode].name;
+            let attrname = SHIP_VALUES_NAMES[this.attrcode];
             return `${attrname} ${this.value > 0 ? "+" : "-"}${Math.abs(this.value)}`;
         }
     }

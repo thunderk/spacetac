@@ -1,6 +1,10 @@
+/// <reference path="../common/RObject.ts" />
+
 module TK.SpaceTac {
-    // One player (human or IA)
-    export class Player {
+    /**
+     * One player (human or IA)
+     */
+    export class Player extends RObject {
         // Player's name
         name: string
 
@@ -18,6 +22,8 @@ module TK.SpaceTac {
 
         // Create a player, with an empty fleet
         constructor(universe: Universe = new Universe(), name = "Player") {
+            super();
+
             this.universe = universe;
             this.name = name;
             this.fleet = new Fleet(this);

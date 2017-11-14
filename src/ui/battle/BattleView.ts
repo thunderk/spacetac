@@ -14,7 +14,10 @@ module TK.SpaceTac.UI {
      * Interactive view of a Battle
      */
     export class BattleView extends BaseView implements IShipButton {
-        // Displayed battle
+        // Internal battle state
+        actual_battle: Battle
+
+        // Displayed battle state
         battle: Battle
 
         // Interacting player
@@ -72,7 +75,8 @@ module TK.SpaceTac.UI {
             super.init();
 
             this.player = player;
-            this.battle = battle;
+            this.actual_battle = battle;
+            this.battle = duplicate(battle, <any>TK.SpaceTac);
             this.ship_hovered = null;
             this.background = null;
             this.multi = new MultiBattle();
@@ -113,7 +117,7 @@ module TK.SpaceTac.UI {
             // Add UI elements
             this.action_bar = new ActionBar(this);
             this.action_bar.position.set(0, this.getHeight() - 132);
-            this.ship_list = new ShipList(this, this.battle, this.player, this.toggle_tactical_mode, this, 
+            this.ship_list = new ShipList(this, this.battle, this.player, this.toggle_tactical_mode, this,
                 this.layer_borders, this.getWidth() - 112, 0);
             this.ship_tooltip = new ShipTooltip(this);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
@@ -133,8 +137,8 @@ module TK.SpaceTac.UI {
             this.inputs.bind("Escape", "Cancel action", () => this.action_bar.actionEnded());
             range(10).forEach(i => this.inputs.bind(`Numpad${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
             range(10).forEach(i => this.inputs.bind(`Digit${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
-            this.inputs.bindCheat("w", "Win current battle", () => this.battle.cheats.win());
-            this.inputs.bindCheat("x", "Lose current battle", () => this.battle.cheats.lose());
+            this.inputs.bindCheat("w", "Win current battle", () => this.actual_battle.cheats.win());
+            this.inputs.bindCheat("x", "Lose current battle", () => this.actual_battle.cheats.lose());
             this.inputs.bindCheat("a", "Use AI to play", () => this.playAI());
 
             // "Battle" animation, then start processing the log
@@ -165,11 +169,30 @@ module TK.SpaceTac.UI {
          * If the AI is already playing, do nothing
          */
         playAI(): void {
-            if (this.battle.playAI()) {
+            if (this.actual_battle.playAI()) {
                 if (this.interacting) {
                     this.action_bar.setShip(new Ship());
                 }
                 this.setInteractionEnabled(false);
+            }
+        }
+
+        /**
+         * Apply an action to the actual battle
+         */
+        applyAction(action: BaseAction, target?: Target): boolean {
+            let ship = this.actual_battle.playing_ship;
+            if (ship) {
+                let ship_action = first(ship.getAvailableActions(), ac => ac.is(action));
+                if (ship_action) {
+                    return this.actual_battle.applyOneAction(action, target);
+                } else {
+                    console.error("Action not found in available list", action, ship.getAvailableActions());
+                    return false;
+                }
+            } else {
+                console.error("Action not applied - ship not playing");
+                return false;
             }
         }
 
@@ -205,7 +228,7 @@ module TK.SpaceTac.UI {
          */
         validationPressed(): void {
             if (this.targetting.active) {
-                this.targetting.validate();
+                this.targetting.validate((action, target) => this.applyAction(action, target));
             } else {
                 this.action_bar.keyActionPressed(-1);
             }
@@ -249,8 +272,8 @@ module TK.SpaceTac.UI {
          */
         cursorClicked(): void {
             if (this.targetting.active) {
-                this.targetting.validate();
-            } else if (this.ship_hovered && this.ship_hovered.getPlayer() == this.player && this.interacting) {
+                this.validationPressed();
+            } else if (this.ship_hovered && this.ship_hovered.getPlayer().is(this.player) && this.interacting) {
                 this.character_sheet.show(this.ship_hovered);
                 this.setShipHovered(null);
             }
@@ -311,7 +334,7 @@ module TK.SpaceTac.UI {
          * End the battle and show the outcome dialog
          */
         endBattle() {
-            if (this.battle.ended) {
+            if (this.battle.outcome) {
                 this.setInteractionEnabled(false);
 
                 this.gameui.session.setBattleEnded();

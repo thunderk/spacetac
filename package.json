@@ -21,24 +21,24 @@
   "author": "Michael Lemaire",
   "license": "MIT",
   "devDependencies": {
-    "@types/jasmine": "^2.6.0",
-    "babel-polyfill": "^6.26.0",
-    "codecov": "^2.3.0",
+    "@types/jasmine": "2.6.2",
+    "babel-polyfill": "6.26.0",
+    "codecov": "2.3.0",
     "gamefroot-texture-packer": "Gamefroot/Gamefroot-Texture-Packer.git#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
-    "jasmine": "^2.8.0",
-    "karma": "^1.7.0",
-    "karma-coverage": "^1.1.1",
-    "karma-jasmine": "^1.1.0",
-    "karma-phantomjs-launcher": "^1.0.4",
-    "karma-spec-reporter": "^0.0.31",
-    "live-server": "^1.2.0",
-    "remap-istanbul": "^0.9.5",
-    "typescript": "^2.5.3"
+    "jasmine": "2.5.2",
+    "karma": "1.7.1",
+    "karma-coverage": "1.1.1",
+    "karma-jasmine": "1.1.0",
+    "karma-phantomjs-launcher": "1.0.4",
+    "karma-spec-reporter": "0.0.31",
+    "live-server": "1.2.0",
+    "remap-istanbul": "0.9.5",
+    "typescript": "2.5.3"
   },
   "dependencies": {
-    "jasmine-core": "^2.8.0",
-    "parse": "^1.9.2",
-    "phaser": "^2.6.2",
-    "phaser-plugin-scene-graph": "^1.0.4"
+    "jasmine-core": "2.5.2",
+    "parse": "1.9.2",
+    "phaser": "2.6.2",
+    "phaser-plugin-scene-graph": "1.0.4"
   }
 }

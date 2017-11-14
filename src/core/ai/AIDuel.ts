@@ -92,7 +92,7 @@ module TK.SpaceTac {
             }
 
             // Update results, and go on to next battle
-            if (!battle.outcome.draw && battle.outcome.winner) {
+            if (battle.outcome && !battle.outcome.draw && battle.outcome.winner) {
                 this.update(battle.fleets.indexOf(battle.outcome.winner));
             } else {
                 this.update(-1);

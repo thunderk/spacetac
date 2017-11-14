@@ -11,9 +11,9 @@ module TK.SpaceTac {
             super("fake");
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             this.applied.push(ship);
-            return true;
+            return [];
         }
 
         getApplyCalls() {
@@ -30,6 +30,10 @@ module TK.SpaceTac {
         drone.radius = radius;
         let effect = new FakeEffect();
         drone.effects.push(effect);
+        let battle = owner.getBattle();
+        if (battle) {
+            battle.addDrone(drone);
+        }
         return [drone, effect];
     }
 
@@ -49,7 +53,7 @@ module TK.SpaceTac {
 
             check.equals(effect.getApplyCalls(), []);
 
-            drone.activate();
+            drone.activate(battle);
             check.equals(effect.getApplyCalls(), [ship1, ship2]);
         });
 
@@ -61,33 +65,55 @@ module TK.SpaceTac {
 
             let removeDrone = check.patch(battle, "removeDrone", null);
 
-            drone.activate();
+            drone.activate(battle);
+            check.equals(drone.duration, 2);
             check.called(removeDrone, 0);
 
-            drone.activate();
+            drone.activate(battle);
+            check.equals(drone.duration, 1);
             check.called(removeDrone, 0);
 
-            drone.activate();
-            check.called(removeDrone, [
-                [drone, true]
-            ]);
+            drone.activate(battle);
+            check.equals(drone.duration, 0);
+            check.called(removeDrone, [[drone]]);
         });
 
-        test.case("logs each activation", check => {
+        test.case("builds diffs on activation", check => {
             let battle = new Battle();
             let ship = new Ship();
             ship.fleet.setBattle(battle);
             let other = new Ship();
-
             let drone = new Drone(ship);
-            drone.apply([ship, other]);
-            drone.apply([]);
-            drone.apply([other]);
 
-            check.equals(battle.log.events, [
-                new DroneAppliedEvent(drone, [ship, other]),
-                new DroneAppliedEvent(drone, [other])
-            ]);
+            drone.duration = 2;
+            check.in("duration=2", check => {
+                check.equals(drone.getDiffs(battle, [ship, other]), [
+                    new DroneAppliedDiff(drone, [ship, other]),
+                ], "two ships in range");
+                check.equals(drone.getDiffs(battle, []), [
+                ], "no ship in range");
+            });
+
+            drone.duration = 1;
+            check.in("duration=1", check => {
+                check.equals(drone.getDiffs(battle, [ship, other]), [
+                    new DroneAppliedDiff(drone, [ship, other]),
+                    new DroneDestroyedDiff(drone),
+                ], "two ships in range");
+                check.equals(drone.getDiffs(battle, []), [
+                    new DroneDestroyedDiff(drone),
+                ], "no ship in range");
+            });
+
+            drone.duration = 0;
+            check.in("duration=0", check => {
+                check.equals(drone.getDiffs(battle, [ship, other]), [
+                    new DroneDestroyedDiff(drone),
+                ], "two ships in range");
+                check.equals(drone.getDiffs(battle, []), [
+                    new DroneDestroyedDiff(drone),
+                ], "no ship in range");
+            });
         });
 
         test.case("builds a textual description", check => {

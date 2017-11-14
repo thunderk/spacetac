@@ -145,7 +145,7 @@ module TK.SpaceTac.UI {
          * This will effectively apply the action
          */
         processSelection(target: Target): void {
-            if (this.action.apply(this.ship, target)) {
+            if (this.view.applyAction(this.action, target)) {
                 this.bar.actionEnded();
             }
         }

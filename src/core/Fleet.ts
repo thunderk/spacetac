@@ -55,7 +55,7 @@ module TK.SpaceTac {
         /**
          * Add a ship this fleet
          */
-        addShip(ship = new Ship()): Ship {
+        addShip(ship = new Ship(null, `${this.player.name} ${this.ships.length + 1}`)): Ship {
             if (ship.fleet && ship.fleet != this) {
                 remove(ship.fleet.ships, ship);
             }

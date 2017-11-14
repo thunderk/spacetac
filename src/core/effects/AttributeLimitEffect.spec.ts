@@ -1,32 +1,29 @@
 module TK.SpaceTac {
     testing("AttributeLimitEffect", test => {
-        test.case("limits an attribute", check => {
+        test.case("applies cumulatively on attribute", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
-            check.equals(ship.getAttribute("shield_capacity"), 0);
-            check.equals(ship.getValue("shield"), 0);
+            ship.attributes.precision.addModifier(12);
+            check.equals(ship.getAttribute("precision"), 12, "initial");
 
-            TestTools.setShipHP(ship, 100, 50);
-            ship.setValue("shield", 40);
-            check.equals(ship.getAttribute("shield_capacity"), 50);
-            check.equals(ship.getValue("shield"), 40);
+            let effect1 = new AttributeLimitEffect("precision", 5);
+            battle.applyDiffs(effect1.getOnDiffs(ship, ship));
+            check.equals(ship.getAttribute("precision"), 5, "applied 1");
 
-            battle.log.clear();
-            let effect = new StickyEffect(new AttributeLimitEffect("shield_capacity", 30));
-            ship.addStickyEffect(effect);
+            let effect2 = new AttributeLimitEffect("precision", 3);
+            battle.applyDiffs(effect2.getOnDiffs(ship, ship));
+            check.equals(ship.getAttribute("precision"), 3, "applied 2");
 
-            check.equals(ship.getAttribute("shield_capacity"), 30);
-            check.equals(ship.getValue("shield"), 30);
-            check.equals(battle.log.events, [
-                new ActiveEffectsEvent(ship, [new AttributeEffect("hull_capacity", 100), new AttributeEffect("shield_capacity", 50)], [effect]),
-                new ValueChangeEvent(ship, new ShipValue("shield", 30, 50), -10),
-                new ValueChangeEvent(ship, new ShipAttribute("shield capacity", 30), -20),
-            ]);
+            battle.applyDiffs(effect1.getOffDiffs(ship, ship));
+            check.equals(ship.getAttribute("precision"), 3, "reverted 1");
 
-            ship.cleanStickyEffects();
+            battle.applyDiffs(effect2.getOffDiffs(ship, ship));
+            check.equals(ship.getAttribute("precision"), 12, "reverted 2");
+        });
 
-            check.equals(ship.getAttribute("shield_capacity"), 50);
-            check.equals(ship.getValue("shield"), 30);
+        test.case("has a description", check => {
+            let effect = new AttributeLimitEffect("power_capacity", 4);
+            check.equals(effect.getDescription(), "limit power capacity to 4");
         });
     });
 }

@@ -80,7 +80,7 @@ module TK.SpaceTac {
                 let [name, value] = modifier;
                 (<any>result)[name] = resolveForLevel(value, level);
             });
-            return new StickyEffect(result, resolveForLevel(this.duration, level), true);
+            return new StickyEffect(result, resolveForLevel(this.duration, level));
         }
     }
 
@@ -145,7 +145,7 @@ module TK.SpaceTac {
             let level = 1;
             let equipment: Equipment | null = null;
             let attributes = new ShipAttributes();
-            keys(skills).forEach(skill => attributes[skill].set(skills[skill].get()));
+            keys(skills).forEach(skill => attributes[skill].addModifier(skills[skill].get()));
             do {
                 let nequipment = this.generate(level, quality, random);
                 if (nequipment.canBeEquipped(attributes)) {

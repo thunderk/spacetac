@@ -48,11 +48,7 @@ module TK.SpaceTac.UI.Specs {
             battleview.timer = new Timer();
 
             let ship = nn(battleview.battle.playing_ship);
-            let sprite = nn(battleview.arena.findShipSprite(ship));
             ship.setArenaPosition(50, 30);
-            sprite.position.set(50, 30);
-            sprite.hull_bar.setValue(10, 10);
-            sprite.shield_bar.setValue(0, 10);
 
             let weapon = new Equipment();
             weapon.action = new TriggerAction(weapon, [new DamageEffect()], 1, 500);
@@ -65,16 +61,17 @@ module TK.SpaceTac.UI.Specs {
             let mock_shield_impact = check.patch(effect, "shieldImpactEffect", null);
             let mock_hull_impact = check.patch(effect, "hullImpactEffect", null);
 
+            ship.setValue("shield", 0);
             effect.start();
             check.called(mock_shield_impact, 0);
             check.called(mock_hull_impact, [
-                [dest.location, battleview.arena.findShipSprite(ship), 40, 400]
+                [Target.newFromShip(dest), ship.location, 40, 400]
             ]);
 
-            sprite.shield_bar.setValue(10, 10);
+            ship.setValue("shield", 10);
             effect.start();
             check.called(mock_shield_impact, [
-                [dest.location, battleview.arena.findShipSprite(ship), 40, 800, false]
+                [Target.newFromShip(dest), ship.location, 40, 800, false]
             ]);
             check.called(mock_hull_impact, 0);
         });

@@ -6,7 +6,7 @@ module TK.SpaceTac.Specs {
             target = Target.newFromLocation(2, 3);
             check.equals(target.x, 2);
             check.equals(target.y, 3);
-            check.equals(target.ship, null);
+            check.equals(target.ship_id, null);
 
             var ship = new Ship();
             ship.arena_x = 4;
@@ -14,7 +14,7 @@ module TK.SpaceTac.Specs {
             target = Target.newFromShip(ship);
             check.equals(target.x, 4);
             check.equals(target.y, -2.1);
-            check.same(target.ship, ship);
+            check.equals(target.ship_id, ship.id);
         });
 
         test.case("gets distance to another target", check => {

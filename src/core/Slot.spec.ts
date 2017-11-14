@@ -1,6 +1,8 @@
 module TK.SpaceTac.Specs {
     testing("Slot", test => {
         test.case("checks equipment type", check => {
+            check.patch(console, "warn", null);
+
             var ship = new Ship();
             var slot = ship.addSlot(SlotType.Engine);
 
@@ -18,6 +20,8 @@ module TK.SpaceTac.Specs {
         });
 
         test.case("checks equipment capabilities", check => {
+            check.patch(console, "warn", null);
+
             var ship = new Ship();
             var slot = ship.addSlot(SlotType.Shield);
 
@@ -29,7 +33,7 @@ module TK.SpaceTac.Specs {
             slot.attach(equipment);
             check.equals(slot.attached, null);
 
-            ship.attributes.skill_gravity.set(6);
+            TestTools.setAttribute(ship, "skill_gravity", 6);
 
             slot.attach(equipment);
             check.same(slot.attached, equipment);

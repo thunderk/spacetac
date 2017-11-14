@@ -351,7 +351,7 @@ module TK.SpaceTac.UI {
          * 
          * This will make the needed approach and apply the action.
          */
-        validate(): void {
+        validate(applier: (action: BaseAction, target?: Target) => boolean): void {
             if (this.active) {
                 this.simulate();
 
@@ -359,7 +359,7 @@ module TK.SpaceTac.UI {
                     let ship = this.ship;
                     this.simulation.parts.forEach(part => {
                         if (part.possible) {
-                            part.action.apply(ship, part.target);
+                            applier(part.action, part.target);
                         }
                     });
                     this.actionbar.actionEnded();

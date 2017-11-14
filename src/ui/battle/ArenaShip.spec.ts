@@ -10,35 +10,36 @@ module TK.SpaceTac.UI.Specs {
 
             check.equals(sprite.effects_messages.children.length, 0);
 
-            sprite.displayValueChanged(new ValueChangeEvent(ship, ship.attributes.power_generation, -4));
+            sprite.displayAttributeChanged(new ShipAttributeDiff(ship, "power_generation", { cumulative: -4 }, {}));
 
             check.equals(sprite.effects_messages.children.length, 1);
             let t1 = <Phaser.Text>sprite.effects_messages.getChildAt(0);
             check.equals(t1.text, "power generation -4");
-
-            sprite.displayValueChanged(new ValueChangeEvent(ship, ship.values.shield, 12));
-
-            check.equals(sprite.effects_messages.children.length, 2);
-            let t2 = <Phaser.Text>sprite.effects_messages.getChildAt(1);
-            check.equals(t2.text, "shield +12");
         });
 
         test.case("adds sticky effects display", check => {
-            let ship = nn(testgame.view.battle.playing_ship);
+            let battle = testgame.view.actual_battle;
+            let ship = nn(battle.playing_ship);
             let sprite = nn(testgame.view.arena.findShipSprite(ship));
 
             check.equals(sprite.active_effects_display.children.length, 0);
 
-            ship.addStickyEffect(new StickyEffect(new BaseEffect("test")));
-            testgame.view.log_processor.jumpToEnd();
+            let effect1 = new StickyEffect(new BaseEffect("test"));
+            battle.applyDiffs([new ShipEffectAddedDiff(ship, effect1)]);
+            testgame.view.log_processor.processPending();
             check.equals(sprite.active_effects_display.children.length, 1);
 
-            ship.addStickyEffect(new StickyEffect(new BaseEffect("test")));
-            testgame.view.log_processor.jumpToEnd();
+            let effect2 = new StickyEffect(new BaseEffect("test"));
+            battle.applyDiffs([new ShipEffectAddedDiff(ship, effect2)]);
+            testgame.view.log_processor.processPending();
             check.equals(sprite.active_effects_display.children.length, 2);
 
-            ship.cleanStickyEffects();
-            testgame.view.log_processor.jumpToEnd();
+            battle.applyDiffs([new ShipEffectRemovedDiff(ship, effect1)]);
+            testgame.view.log_processor.processPending();
+            check.equals(sprite.active_effects_display.children.length, 1);
+
+            battle.applyDiffs([new ShipEffectRemovedDiff(ship, effect2)]);
+            testgame.view.log_processor.processPending();
             check.equals(sprite.active_effects_display.children.length, 0);
         });
     });

@@ -33,22 +33,22 @@ module TK.SpaceTac {
     //  This could be a location in space, or a ship
     export class Target {
         // Coordinates of the target
-        x: number;
-        y: number;
+        x: number
+        y: number
 
         // If the target is a ship, this attribute will be set
-        ship: Ship | null;
+        ship_id: RObjectId | null
 
         // Standard constructor
         constructor(x: number, y: number, ship: Ship | null = null) {
             this.x = x;
             this.y = y;
-            this.ship = ship;
+            this.ship_id = ship ? ship.id : null;
         }
 
         jasmineToString() {
-            if (this.ship) {
-                return `(${this.x},${this.y}) ${this.ship.jasmineToString()}`;
+            if (this.ship_id) {
+                return `(${this.x},${this.y}) ship_id=${this.ship_id}}`;
             } else {
                 return `(${this.x},${this.y})`;
             }
@@ -76,6 +76,24 @@ module TK.SpaceTac {
             var dx = other.x - this.x;
             var dy = other.y - this.y;
             return Math.atan2(dy, dx);
+        }
+
+        /**
+         * Returns true if the target is a ship
+         */
+        isShip(): boolean {
+            return this.ship_id !== null;
+        }
+
+        /**
+         * Get the targetted ship in a battle
+         */
+        getShip(battle: Battle): Ship | null {
+            if (this.isShip()) {
+                return battle.getShip(this.ship_id);
+            } else {
+                return null;
+            }
         }
 
         // Check if a target is in range from a specific point

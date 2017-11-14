@@ -1,4 +1,4 @@
-module TK.SpaceTac {
+module TK.SpaceTac.Specs {
     testing("ToggleAction", test => {
         test.case("returns correct targetting mode", check => {
             let action = new ToggleAction(new Equipment(), 1, 0, []);

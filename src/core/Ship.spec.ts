@@ -14,84 +14,20 @@ module TK.SpaceTac.Specs {
             check.equals(ship.getFullName(true), "Emperor's Level 3 Titan");
         });
 
-        test.case("moves and computes facing angle", check => {
+        test.case("moves in the arena", check => {
             let ship = new Ship(null, "Test");
             let engine = TestTools.addEngine(ship, 50);
-            ship.setArenaFacingAngle(0);
-            ship.setArenaPosition(50, 50);
 
-            check.equals(ship.arena_x, 50);
+            check.equals(ship.arena_x, 0);
+            check.equals(ship.arena_y, 0);
+            check.equals(ship.arena_angle, 0);
+
+            ship.setArenaFacingAngle(1.2);
+            ship.setArenaPosition(12, 50);
+
+            check.equals(ship.arena_x, 12);
             check.equals(ship.arena_y, 50);
-            check.equals(ship.arena_angle, 0);
-
-            ship.moveTo(51, 50, engine);
-            check.equals(ship.arena_x, 51);
-            check.equals(ship.arena_y, 50);
-            check.equals(ship.arena_angle, 0);
-
-            ship.moveTo(50, 50, engine);
-            check.nears(ship.arena_angle, 3.14159265, 5);
-
-            ship.moveTo(51, 51, engine);
-            check.nears(ship.arena_angle, 0.785398, 5);
-
-            ship.moveTo(51, 52, engine);
-            check.nears(ship.arena_angle, 1.5707963, 5);
-
-            ship.moveTo(52, 52, engine);
-            check.equals(ship.arena_x, 52);
-            check.equals(ship.arena_y, 52);
-            check.equals(ship.arena_angle, 0);
-
-            ship.moveTo(52, 50, engine);
-            check.nears(ship.arena_angle, -1.5707963, 5);
-
-            ship.moveTo(50, 50, engine);
-            check.nears(ship.arena_angle, 3.14159265, 5);
-
-            let battle = new Battle();
-            battle.fleets[0].addShip(ship);
-            check.equals(battle.log.events, []);
-
-            ship.moveTo(70, 50, engine);
-            check.equals(battle.log.events, [new MoveEvent(ship, new ArenaLocationAngle(50, 50, Math.PI), new ArenaLocationAngle(70, 50, 0), engine)]);
-
-            battle.log.clear();
-            ship.rotate(2.1);
-            check.equals(battle.log.events, [
-                new MoveEvent(ship, new ArenaLocationAngle(70, 50, 0), new ArenaLocationAngle(70, 50, 2.1))
-            ]);
-
-            battle.log.clear();
-            ship.moveTo(0, 0, null);
-            check.equals(battle.log.events, [
-                new MoveEvent(ship, new ArenaLocationAngle(70, 50, 2.1), new ArenaLocationAngle(0, 0, 2.1))
-            ]);
-        });
-
-        test.case("applies equipment cooldown", check => {
-            let ship = new Ship();
-            let equipment = new Equipment(SlotType.Weapon);
-            equipment.cooldown.configure(1, 2);
-            ship.addSlot(SlotType.Weapon).attach(equipment);
-
-            check.same(equipment.cooldown.canUse(), true, "1");
-            equipment.cooldown.use();
-            check.same(equipment.cooldown.canUse(), false, "2");
-
-            ship.startBattle();
-            check.same(equipment.cooldown.canUse(), true, "3");
-
-            ship.startTurn();
-            equipment.cooldown.use();
-            check.same(equipment.cooldown.canUse(), false, "4");
-            ship.endTurn();
-            check.same(equipment.cooldown.canUse(), false, "5");
-
-            ship.startTurn();
-            check.same(equipment.cooldown.canUse(), false, "6");
-            ship.endTurn();
-            check.same(equipment.cooldown.canUse(), true, "7");
+            check.nears(ship.arena_angle, 1.2);
         });
 
         test.case("lists available actions from attached equipment", check => {
@@ -149,207 +85,32 @@ module TK.SpaceTac.Specs {
         test.case("repairs hull and recharges shield", check => {
             var ship = new Ship(null, "Test");
 
-            ship.setAttribute("hull_capacity", 120);
-            ship.setAttribute("shield_capacity", 150);
+            TestTools.setAttribute(ship, "hull_capacity", 120);
+            TestTools.setAttribute(ship, "shield_capacity", 150);
 
-            check.equals(ship.values.hull.get(), 0);
-            check.equals(ship.values.shield.get(), 0);
+            check.equals(ship.getValue("hull"), 0);
+            check.equals(ship.getValue("shield"), 0);
 
             ship.restoreHealth();
 
-            check.equals(ship.values.hull.get(), 120);
-            check.equals(ship.values.shield.get(), 150);
-        });
-
-        test.case("applies and logs hull and shield damage", check => {
-            var fleet = new Fleet();
-            var battle = new Battle(fleet);
-            var ship = new Ship(fleet);
-
-            TestTools.setShipHP(ship, 150, 400);
-            ship.restoreHealth();
-            battle.log.clear();
-
-            ship.addDamage(10, 20);
-            check.equals(ship.values.hull.get(), 140);
-            check.equals(ship.values.shield.get(), 380);
-            check.equals(battle.log.events.length, 3);
-            check.equals(battle.log.events[0], new ValueChangeEvent(ship, ship.values.shield, -20));
-            check.equals(battle.log.events[1], new ValueChangeEvent(ship, ship.values.hull, -10));
-            check.equals(battle.log.events[2], new DamageEvent(ship, 10, 20));
-
-            battle.log.clear();
-
-            ship.addDamage(15, 25, false);
-            check.equals(ship.values.hull.get(), 125);
-            check.equals(ship.values.shield.get(), 355);
-            check.equals(battle.log.events.length, 0);
-
-            ship.addDamage(125, 355, false);
-            check.equals(ship.values.hull.get(), 0);
-            check.equals(ship.values.shield.get(), 0);
-            check.equals(ship.alive, false);
-        });
-
-        test.case("sets and logs sticky effects", check => {
-            var ship = new Ship();
-            var battle = new Battle(ship.fleet);
-
-            ship.addStickyEffect(new StickyEffect(new BaseEffect("test"), 2, false, true));
-
-            check.equals(ship.sticky_effects, [new StickyEffect(new BaseEffect("test"), 2, false, true)]);
-            check.equals(battle.log.events, [
-                new ActiveEffectsEvent(ship, [], [new StickyEffect(new BaseEffect("test"), 2, false, true)])
-            ]);
-
-            ship.startTurn();
-            battle.log.clear();
-            ship.endTurn();
-
-            check.equals(ship.sticky_effects, [new StickyEffect(new BaseEffect("test"), 1, false, true)]);
-            check.equals(battle.log.events, [
-                new ActiveEffectsEvent(ship, [], [new StickyEffect(new BaseEffect("test"), 1, false, true)])
-            ]);
-
-            ship.startTurn();
-            battle.log.clear();
-            ship.endTurn();
-
-            check.equals(ship.sticky_effects, []);
-            check.equals(battle.log.events, [
-                new ActiveEffectsEvent(ship, [], [new StickyEffect(new BaseEffect("test"), 0, false, true)]),
-                new ActiveEffectsEvent(ship, [], [])
-            ]);
-
-            ship.startTurn();
-            battle.log.clear();
-            ship.endTurn();
-
-            check.equals(ship.sticky_effects, []);
-            check.equals(battle.log.events, []);
-        });
-
-        test.case("resets toggle actions at the start of turn", check => {
-            let ship = new Ship();
-            let equ = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            let action = equ.action = new ToggleAction(equ, 0, 10, [new AttributeEffect("power_capacity", 1)]);
-            check.equals(action.activated, false);
-
-            let battle = new Battle(ship.fleet);
-            TestTools.setShipPlaying(battle, ship);
-
-            ship.startTurn();
-            check.equals(action.activated, false);
-
-            let result = action.apply(ship);
-            check.same(result, true, "Could not be applied");
-            check.equals(action.activated, true);
-
-            ship.endTurn();
-            check.equals(action.activated, true);
-
-            ship.startTurn();
-            check.equals(action.activated, false);
-
-            check.equals(battle.log.events, [
-                new ActionAppliedEvent(ship, action, Target.newFromShip(ship), 0),
-                new ToggleEvent(ship, action, true),
-                new ActiveEffectsEvent(ship, [], [], [new AttributeEffect("power_capacity", 1)]),
-                new ValueChangeEvent(ship, new ShipAttribute("power capacity", 1), 1),
-                new ActionAppliedEvent(ship, action, Target.newFromShip(ship), 0),
-                new ToggleEvent(ship, action, false),
-                new ActiveEffectsEvent(ship, [], [], []),
-                new ValueChangeEvent(ship, new ShipAttribute("power capacity", 0), -1),
-            ]);
-        });
-
-        test.case("updates area effects when the ship moves", check => {
-            let battle = new Battle();
-            let ship1 = battle.fleets[0].addShip();
-            let ship2 = battle.fleets[0].addShip();
-            ship2.setArenaPosition(10, 0);
-            let ship3 = battle.fleets[0].addShip();
-            ship3.setArenaPosition(20, 0);
-
-            let shield = ship1.addSlot(SlotType.Shield).attach(new Equipment(SlotType.Shield));
-            shield.action = new ToggleAction(shield, 0, 15, [new AttributeEffect("shield_capacity", 5)]);
-            TestTools.setShipPlaying(battle, ship1);
-            shield.action.apply(ship1);
-
-            check.equals(ship1.getAttribute("shield_capacity"), 5);
-            check.equals(ship2.getAttribute("shield_capacity"), 5);
-            check.equals(ship3.getAttribute("shield_capacity"), 0);
-
-            ship1.moveTo(15, 0);
-
-            check.equals(ship1.getAttribute("shield_capacity"), 5);
-            check.equals(ship2.getAttribute("shield_capacity"), 5);
-            check.equals(ship3.getAttribute("shield_capacity"), 5);
-
-            ship1.moveTo(30, 0);
-
-            check.equals(ship1.getAttribute("shield_capacity"), 5);
-            check.equals(ship2.getAttribute("shield_capacity"), 0);
-            check.equals(ship3.getAttribute("shield_capacity"), 5);
-
-            ship1.moveTo(50, 0);
-
-            check.equals(ship1.getAttribute("shield_capacity"), 5);
-            check.equals(ship2.getAttribute("shield_capacity"), 0);
-            check.equals(ship3.getAttribute("shield_capacity"), 0);
-
-            ship2.moveTo(40, 0);
-
-            check.equals(ship1.getAttribute("shield_capacity"), 5);
-            check.equals(ship2.getAttribute("shield_capacity"), 5);
-            check.equals(ship3.getAttribute("shield_capacity"), 0);
-        });
-
-        test.case("sets and logs death state", check => {
-            var fleet = new Fleet();
-            var battle = new Battle(fleet);
-            var ship = new Ship(fleet);
-
-            check.equals(ship.alive, true);
-
-            ship.values.hull.set(10);
-            battle.log.clear();
-            ship.addDamage(5, 0);
-
-            check.equals(ship.alive, true);
-            check.equals(battle.log.events.length, 2);
-            check.equals(battle.log.events[0].code, "value");
-            check.equals(battle.log.events[1].code, "damage");
-
-            battle.log.clear();
-            ship.addDamage(5, 0);
-
-            check.equals(ship.alive, false);
-            check.equals(battle.log.events.length, 3);
-            check.equals(battle.log.events[0].code, "value");
-            check.equals(battle.log.events[1].code, "damage");
-            check.equals(battle.log.events[2].code, "death");
+            check.equals(ship.getValue("hull"), 120);
+            check.equals(ship.getValue("shield"), 150);
         });
 
         test.case("checks if a ship is able to play", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
+            ship.setValue("hull", 10);
 
             check.equals(ship.isAbleToPlay(), false);
             check.equals(ship.isAbleToPlay(false), true);
 
-            ship.values.power.set(5);
+            ship.setValue("power", 5);
 
             check.equals(ship.isAbleToPlay(), true);
             check.equals(ship.isAbleToPlay(false), true);
 
-            ship.values.hull.set(10);
-            ship.addDamage(8, 0);
-
-            check.equals(ship.isAbleToPlay(), true);
-            check.equals(ship.isAbleToPlay(false), true);
-
-            ship.addDamage(8, 0);
+            ship.setDead();
 
             check.equals(ship.isAbleToPlay(), false);
             check.equals(ship.isAbleToPlay(false), false);
@@ -385,27 +146,6 @@ module TK.SpaceTac.Specs {
             picked = ship.getRandomEquipment(random);
             check.notequals(picked, null);
             check.same(picked, ship.slots[2].attached);
-        });
-
-        test.case("recover action points at end of turn", check => {
-            var ship = new Ship();
-
-            let power_generator = new Equipment(SlotType.Power);
-            power_generator.effects = [
-                new AttributeEffect("power_capacity", 8),
-                new AttributeEffect("power_generation", 3),
-            ]
-            ship.addSlot(SlotType.Power).attach(power_generator);
-
-            check.equals(ship.values.power.get(), 0);
-            ship.initializeActionPoints();
-            check.equals(ship.values.power.get(), 8);
-            ship.values.power.set(3);
-            check.equals(ship.values.power.get(), 3);
-            ship.recoverActionPoints();
-            check.equals(ship.values.power.get(), 6);
-            ship.recoverActionPoints();
-            check.equals(ship.values.power.get(), 8);
         });
 
         test.case("checks if a ship is inside a given circle", check => {
@@ -565,24 +305,29 @@ module TK.SpaceTac.Specs {
             let ship = new Ship();
             TestTools.setShipHP(ship, 10, 20);
             TestTools.setShipAP(ship, 5, 0);
-            ship.addDamage(5, 5);
-            ship.addStickyEffect(new StickyEffect(new DamageEffect(10), 8));
-            ship.addStickyEffect(new StickyEffect(new AttributeLimitEffect("power_capacity", 3), 12));
+            ship.setValue("hull", 5);
+            ship.setValue("shield", 15);
+            ship.setValue("power", 2);
+            ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("power_capacity", 3), 12));
             ship.updateAttributes();
 
-            check.equals(ship.getValue("hull"), 5);
-            check.equals(ship.getValue("shield"), 15);
-            check.equals(ship.getValue("power"), 3);
-            check.equals(ship.sticky_effects.length, 2);
-            check.equals(ship.getAttribute("power_capacity"), 3);
+            check.in("before", check => {
+                check.equals(ship.getValue("hull"), 5, "hull");
+                check.equals(ship.getValue("shield"), 15, "shield");
+                check.equals(ship.getValue("power"), 2, "power");
+                check.equals(ship.active_effects.count(), 1, "effects count");
+                check.equals(ship.getAttribute("power_capacity"), 3, "power capacity");
+            });
 
-            ship.endBattle(1);
+            ship.restoreInitialState();
 
-            check.equals(ship.getValue("hull"), 10);
-            check.equals(ship.getValue("shield"), 20);
-            check.equals(ship.getValue("power"), 5);
-            check.equals(ship.sticky_effects.length, 0);
-            check.equals(ship.getAttribute("power_capacity"), 5);
+            check.in("after", check => {
+                check.equals(ship.getValue("hull"), 10, "hull");
+                check.equals(ship.getValue("shield"), 20, "shield");
+                check.equals(ship.getValue("power"), 5, "power");
+                check.equals(ship.active_effects.count(), 0, "effects count");
+                check.equals(ship.getAttribute("power_capacity"), 5, "power capacity");
+            });
         });
 
         test.case("lists active effects", check => {
@@ -592,16 +337,13 @@ module TK.SpaceTac.Specs {
             let equipment = ship.addSlot(SlotType.Engine).attach(new Equipment(SlotType.Engine));
             check.equals(imaterialize(ship.ieffects()), []);
 
-            equipment.effects.push(new AttributeEffect("precision", 4));
-            check.equals(imaterialize(ship.ieffects()), [
-                new AttributeEffect("precision", 4)
-            ]);
+            let effect1 = new AttributeEffect("precision", 4);
+            equipment.effects.push(effect1);
+            check.equals(imaterialize(ship.ieffects()), [effect1]);
 
-            ship.addStickyEffect(new StickyEffect(new AttributeLimitEffect("precision", 2), 4));
-            check.equals(imaterialize(ship.ieffects()), [
-                new AttributeEffect("precision", 4),
-                new AttributeLimitEffect("precision", 2)
-            ]);
+            let effect2 = new AttributeLimitEffect("precision", 2);
+            ship.active_effects.add(new StickyEffect(effect2, 4));
+            check.equals(imaterialize(ship.ieffects()), [effect1, effect2]);
         });
 
         test.case("gets a textual description of an attribute", check => {
@@ -620,7 +362,7 @@ module TK.SpaceTac.Specs {
             ship.upgradeSkill("skill_photons");
             check.equals(ship.getAttributeDescription("skill_photons"), "Forces of light, and electromagnetic radiation\n\nLevelled up: +2\nPhotonic engine Mk1: +4");
 
-            ship.addStickyEffect(new StickyEffect(new AttributeLimitEffect("skill_photons", 3)));
+            ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("skill_photons", 3)));
             check.equals(ship.getAttributeDescription("skill_photons"), "Forces of light, and electromagnetic radiation\n\nLevelled up: +2\nPhotonic engine Mk1: +4\n???: limit to 3");
         });
     });

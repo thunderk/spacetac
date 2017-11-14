@@ -3,16 +3,16 @@ module TK.SpaceTac {
         test.case("adds an amount to a ship value", check => {
             let effect = new ValueEffect("shield", 20);
 
-            let ship = new Ship();
-            ship.values.shield.setMaximal(80);
+            let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
             ship.setValue("shield", 55);
-            check.equals(ship.values.shield.get(), 55);
+            check.equals(ship.getValue("shield"), 55);
 
-            effect.applyOnShip(ship, ship);
-            check.equals(ship.values.shield.get(), 75);
+            battle.applyDiffs(effect.getOnDiffs(ship, ship));
+            check.equals(ship.getValue("shield"), 75);
 
-            effect.applyOnShip(ship, ship);
-            check.equals(ship.values.shield.get(), 80);
+            battle.applyDiffs(effect.getOnDiffs(ship, ship));
+            check.equals(ship.getValue("shield"), 95);
         });
 
         test.case("has a description", check => {

@@ -20,9 +20,20 @@ module TK.SpaceTac {
             this.value = value;
         }
 
-        applyOnShip(ship: Ship, source: Ship | Drone): boolean {
-            ship.updateAttributes();
-            return true;
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            return [
+                new ShipAttributeDiff(ship, this.attrcode, { limit: this.value }, {}),
+            ];
+        }
+
+        getOffDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            return [
+                new ShipAttributeDiff(ship, this.attrcode, {}, { limit: this.value }),
+            ];
+        }
+
+        isBeneficial(): boolean {
+            return false;
         }
 
         getFullCode(): string {
@@ -30,7 +41,7 @@ module TK.SpaceTac {
         }
 
         getDescription(): string {
-            let attrname = SHIP_ATTRIBUTES[this.attrcode].name;
+            let attrname = SHIP_VALUES_NAMES[this.attrcode];
             return `limit ${attrname} to ${this.value}`;
         }
     }

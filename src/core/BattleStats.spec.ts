@@ -25,15 +25,15 @@ module TK.SpaceTac.Specs {
             stats.processLog(battle.log, battle.fleets[0]);
             check.equals(stats.stats, {});
 
-            battle.log.add(new DamageEvent(attacker, 10, 12));
+            battle.log.add(new ShipDamageDiff(attacker, 10, 12));
             stats.processLog(battle.log, battle.fleets[0], true);
             check.equals(stats.stats, { "Damage dealt": [0, 22] });
 
-            battle.log.add(new DamageEvent(defender, 40, 0));
+            battle.log.add(new ShipDamageDiff(defender, 40, 0));
             stats.processLog(battle.log, battle.fleets[0], true);
             check.equals(stats.stats, { "Damage dealt": [40, 22] });
 
-            battle.log.add(new DamageEvent(attacker, 5, 4));
+            battle.log.add(new ShipDamageDiff(attacker, 5, 4));
             stats.processLog(battle.log, battle.fleets[0], true);
             check.equals(stats.stats, { "Damage dealt": [40, 31] });
         })
@@ -46,11 +46,11 @@ module TK.SpaceTac.Specs {
             stats.processLog(battle.log, battle.fleets[0]);
             check.equals(stats.stats, {});
 
-            battle.log.add(new MoveEvent(attacker, new ArenaLocationAngle(0, 0), new ArenaLocationAngle(10, 0)));
+            battle.log.add(new ShipMoveDiff(attacker, new ArenaLocationAngle(0, 0), new ArenaLocationAngle(10, 0)));
             stats.processLog(battle.log, battle.fleets[0], true);
             check.equals(stats.stats, { "Move distance (km)": [10, 0] });
 
-            battle.log.add(new MoveEvent(defender, new ArenaLocationAngle(10, 5), new ArenaLocationAngle(10, 63)));
+            battle.log.add(new ShipMoveDiff(defender, new ArenaLocationAngle(10, 5), new ArenaLocationAngle(10, 63)));
             stats.processLog(battle.log, battle.fleets[0], true);
             check.equals(stats.stats, { "Move distance (km)": [10, 58] });
         })
@@ -63,30 +63,13 @@ module TK.SpaceTac.Specs {
             stats.processLog(battle.log, battle.fleets[0]);
             check.equals(stats.stats, {});
 
-            battle.log.add(new DroneDeployedEvent(new Drone(attacker)));
+            battle.log.add(new DroneDeployedDiff(new Drone(attacker)));
             stats.processLog(battle.log, battle.fleets[0], true);
             check.equals(stats.stats, { "Drones deployed": [1, 0] });
 
-            battle.log.add(new DroneDeployedEvent(new Drone(defender)));
+            battle.log.add(new DroneDeployedDiff(new Drone(defender)));
             stats.processLog(battle.log, battle.fleets[0], true);
             check.equals(stats.stats, { "Drones deployed": [1, 1] });
-        })
-
-        test.case("collects power usage", check => {
-            let stats = new BattleStats();
-            let battle = new Battle();
-            let attacker = battle.fleets[0].addShip();
-            let defender = battle.fleets[1].addShip();
-            stats.processLog(battle.log, battle.fleets[0]);
-            check.equals(stats.stats, {});
-
-            battle.log.add(new ActionAppliedEvent(attacker, new BaseAction("nop", "nop"), null, 4));
-            stats.processLog(battle.log, battle.fleets[0], true);
-            check.equals(stats.stats, { "Power used": [4, 0] });
-
-            battle.log.add(new ActionAppliedEvent(defender, new BaseAction("nop", "nop"), null, 2));
-            stats.processLog(battle.log, battle.fleets[0], true);
-            check.equals(stats.stats, { "Power used": [4, 2] });
         })
 
         test.case("evaluates equipment depreciation", check => {

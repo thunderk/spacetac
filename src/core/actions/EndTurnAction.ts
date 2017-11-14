@@ -1,29 +1,50 @@
+/// <reference path="BaseAction.ts" />
+
 module TK.SpaceTac {
-    // Action to end the ship's turn
+    /**
+     * Action to end the ship's turn
+     * 
+     * This action is not provided by an equipment and is always available
+     */
     export class EndTurnAction extends BaseAction {
+        // Singleton that may be used for all ships
+        static SINGLETON = new EndTurnAction();
+
         constructor() {
             super("endturn", "End ship's turn");
         }
 
-        protected customApply(ship: Ship, target: Target) {
-            if (target.ship == ship) {
-                ship.endTurn();
+        protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+            if (ship.is(battle.playing_ship)) {
+                let result: BaseBattleDiff[] = [];
+                let new_ship = battle.getNextShip();
 
-                let battle = ship.getBattle();
-                if (battle) {
-                    battle.advanceToNextShip();
-                }
+                // Generate power
+                result = result.concat(ship.getValueDiffs("power", ship.getAttribute("power_generation"), true));
+
+                // TODO previous: apply sticky effects
+                // TODO previous: cool down equipment
+
+                // TODO new: apply sticky effects
+                // TODO new: reset toggle actions
+
+                let cycle_diff = (battle.play_order.indexOf(new_ship) == 0) ? 1 : 0;
+                result.push(new ShipChangeDiff(ship, new_ship, cycle_diff));
+
+                return result;
+            } else {
+                return [];
             }
         }
 
         protected checkShipTarget(ship: Ship, target: Target): Target | null {
-            return target.ship == ship ? target : null;
+            return ship.is(target.ship_id) ? target : null;
         }
 
         getTargettingMode(ship: Ship): ActionTargettingMode {
             return ship.getValue("power") ? ActionTargettingMode.SELF_CONFIRM : ActionTargettingMode.SELF;
         }
-            
+
         getEffectsDescription(): string {
             return "End the current ship's turn.\nWill also generate power and cool down equipments.";
         }

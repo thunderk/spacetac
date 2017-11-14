@@ -34,17 +34,19 @@ module TK.SpaceTac.UI.Specs {
         test.case("updates power points display", check => {
             let bar = testgame.view.action_bar;
 
-            function checkpoints(available = 0, using = 0, used = 0) {
-                check.same(bar.power_icons.children.length, available + using + used);
-                bar.power_icons.children.forEach((child, idx) => {
-                    let img = <Phaser.Image>child;
-                    if (idx < available) {
-                        check.equals(img.name, "battle-actionbar-power-available");
-                    } else if (idx < available + using) {
-                        check.equals(img.name, "battle-actionbar-power-move");
-                    } else {
-                        check.equals(img.name, "battle-actionbar-power-used");
-                    }
+            function checkpoints(desc: string, available = 0, using = 0, used = 0) {
+                check.in(desc, check => {
+                    check.same(bar.power_icons.children.length, available + using + used, "icon count");
+                    bar.power_icons.children.forEach((child, idx) => {
+                        let img = <Phaser.Image>child;
+                        if (idx < available) {
+                            check.equals(img.name, "battle-actionbar-power-available", `icon ${idx}`);
+                        } else if (idx < available + using) {
+                            check.equals(img.name, "battle-actionbar-power-move", `icon ${idx}`);
+                        } else {
+                            check.equals(img.name, "battle-actionbar-power-used", `icon ${idx}`);
+                        }
+                    });
                 });
             }
 
@@ -52,26 +54,28 @@ module TK.SpaceTac.UI.Specs {
             let ship = new Ship();
             TestTools.setShipAP(ship, 8);
             bar.setShip(ship);
-            checkpoints();
+            checkpoints("not owned ship");
 
             // owned ship
-            ship.fleet = testgame.view.player.fleet;
+            testgame.view.player.fleet.addShip(ship);
+            testgame.view.battle.ships.add(duplicate(ship, TK.SpaceTac));
+            testgame.view.actual_battle.ships.add(ship);
             bar.setShip(ship);
-            checkpoints(8);
+            checkpoints("owned ship", 8);
 
             // used points
-            ship.setValue("power", 6);
-            testgame.view.log_processor.jumpToEnd();
-            checkpoints(6, 0, 2);
+            testgame.view.actual_battle.applyDiffs(ship.getValueDiffs("power", 6));
+            testgame.view.log_processor.processPending();
+            checkpoints("2 points used", 6, 0, 2);
 
             // using points
             bar.updatePower(5);
-            checkpoints(1, 5, 2);
+            checkpoints("5 points in targetting", 1, 5, 2);
 
             // decrease
-            ship.setAttribute("power_capacity", 3);
-            testgame.view.log_processor.jumpToEnd();
-            checkpoints(3);
+            testgame.view.actual_battle.applyDiffs([new ShipAttributeDiff(ship, "power_capacity", { limit: 3 }, {})]);
+            testgame.view.log_processor.processPending();
+            checkpoints("limit to 3", 3);
         });
     });
 }

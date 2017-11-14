@@ -2,10 +2,12 @@ module TK.SpaceTac.Specs {
     testing("MainStory", test => {
         function checkPart(story: Mission, index: number, title: RegExp, completed = false) {
             let result = story.checkStatus();
-            test.check.same(story.parts.indexOf(story.current_part), index);
-            test.check.regex(title, story.current_part.title);
-            test.check.same(story.completed, completed);
-            test.check.same(result, !completed);
+            test.check.in(`part ${index}`, check => {
+                check.same(story.parts.indexOf(story.current_part), index);
+                check.regex(title, story.current_part.title);
+                check.same(story.completed, completed);
+                check.same(result, !completed);
+            });
         }
 
         function goTo(fleet: Fleet, location: StarLocation, win_encounter = true) {
@@ -14,6 +16,7 @@ module TK.SpaceTac.Specs {
                 fleet.battle.endBattle(win_encounter ? fleet : fleet.battle.fleets[1]);
                 if (win_encounter) {
                     fleet.player.exitBattle();
+                    location.clearEncounter();
                 } else {
                     fleet.player.revertBattle();
                 }
@@ -49,6 +52,7 @@ module TK.SpaceTac.Specs {
             checkPart(story, 5, /^Fight the arrived fleet$/);
             check.notequals(session.getBattle(), null);
             nn(session.getBattle()).endBattle(fleet);
+            session.setBattleEnded();
 
             check.same(story.checkStatus(), false, "story not complete");
         })

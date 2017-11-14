@@ -1,41 +1,55 @@
 module TK.SpaceTac {
-    const SHIP_VALUES_DESCRIPTIONS: { [name: string]: string } = {
-        "materials skill": "Usage of physical materials such as bullets, shells...",
-        "photons skill": "Forces of light, and electromagnetic radiation",
-        "antimatter skill": "Manipulation of matter and antimatter particles",
-        "quantum skill": "Application of quantum uncertainty principle",
-        "gravity skill": "Interaction with gravitational forces",
-        "time skill": "Control of relativity's time properties",
-        "hull capacity": "Maximal Hull value before the ship risks collapsing",
-        "shield capacity": "Maximal Shield value to protect the hull from damage",
-        "power capacity": "Maximal Power value to use equipment",
-        "power generation": "Power generated at the end of the ship's turn",
+    type ShipValuesMapping = {
+        [P in (keyof ShipValues | keyof ShipAttributes)]: string
+    }
+
+    export const SHIP_VALUES_DESCRIPTIONS: ShipValuesMapping = {
+        "hull": "Physical structure of the ship",
+        "shield": "Shield around the ship that may absorb damage",
+        "power": "Power available to supply the equipments",
+        "skill_materials": "Usage of physical materials such as bullets, shells...",
+        "skill_photons": "Forces of light, and electromagnetic radiation",
+        "skill_antimatter": "Manipulation of matter and antimatter particles",
+        "skill_quantum": "Application of quantum uncertainty principle",
+        "skill_gravity": "Interaction with gravitational forces",
+        "skill_time": "Control of relativity's time properties",
+        "hull_capacity": "Maximal Hull value before the ship risks collapsing",
+        "shield_capacity": "Maximal Shield value to protect the hull from damage",
+        "power_capacity": "Maximal Power value to use equipment",
+        "power_generation": "Power generated at the end of the ship's turn",
         "maneuvrability": "Ability to move first and fast",
         "precision": "Ability to target far and good",
     }
 
+    export const SHIP_VALUES_NAMES: ShipValuesMapping = {
+        "hull": "hull",
+        "shield": "shield",
+        "power": "power",
+        "skill_materials": "materials skill",
+        "skill_photons": "photons skill",
+        "skill_antimatter": "antimatter skill",
+        "skill_quantum": "quantum skill",
+        "skill_gravity": "gravity skill",
+        "skill_time": "time skill",
+        "hull_capacity": "hull capacity",
+        "shield_capacity": "shield capacity",
+        "power_capacity": "power capacity",
+        "power_generation": "power generation",
+        "maneuvrability": "maneuvrability",
+        "precision": "precision",
+    }
+
     /**
-     * A ship value is a number that may vary and be constrained in a given range.
+     * A ship attribute is a number resulting of a list of modifiers.
      */
-    export class ShipValue {
-        // Name of the value
-        name: string
-
+    export class ShipAttribute {
         // Current value
-        private current: number
+        private current = 0
 
-        // Upper bound
-        private maximal: number | null
-
-        constructor(code: string, current = 0, maximal: number | null = null) {
-            this.name = code;
-            this.current = current;
-            this.maximal = maximal;
-        }
-
-        get description(): string {
-            return SHIP_VALUES_DESCRIPTIONS[this.name];
-        }
+        // Modifiers
+        private cumulatives: number[] = []
+        private multipliers: number[] = []
+        private limits: number[] = []
 
         /**
          * Get the current value
@@ -45,68 +59,60 @@ module TK.SpaceTac {
         }
 
         /**
-         * Get the maximal value
+         * Reset all modifiers
          */
-        getMaximal(): number | null {
-            return this.maximal;
+        reset(): void {
+            this.cumulatives = [];
+            this.multipliers = [];
+            this.limits = [];
+            this.update();
         }
 
         /**
-         * Set the upper bound the value must not cross
+         * Add a modifier
          */
-        setMaximal(value: number): void {
-            this.maximal = value;
-            this.fix();
+        addModifier(cumulative?: number, multiplier?: number, limit?: number): void {
+            if (typeof cumulative != "undefined") {
+                this.cumulatives.push(cumulative);
+            }
+            if (typeof multiplier != "undefined") {
+                this.multipliers.push(multiplier);
+            }
+            if (typeof limit != "undefined") {
+                this.limits.push(limit);
+            }
+            this.update();
         }
 
         /**
-         * Set an absolute value
-         * 
-         * Returns the variation in value
+         * Remove a modifier
          */
-        set(value: number): number {
-            var old_value = this.current;
+        removeModifier(cumulative?: number, multiplier?: number, limit?: number): void {
+            if (typeof cumulative != "undefined") {
+                remove(this.cumulatives, cumulative);
+            }
+            if (typeof multiplier != "undefined") {
+                remove(this.multipliers, multiplier);
+            }
+            if (typeof limit != "undefined") {
+                remove(this.limits, limit);
+            }
+            this.update();
+        }
+
+        /**
+         * Update the current value
+         */
+        private update(): void {
+            let value = sum(this.cumulatives);
+            if (this.multipliers.length) {
+                value = Math.round(value * (1 + sum(this.multipliers) / 100));
+            }
+            if (this.limits.length) {
+                value = Math.min(value, min(this.limits));
+            }
             this.current = value;
-            this.fix();
-            return this.current - old_value;
         }
-
-        /** 
-         * Add an offset to current value
-         * 
-         * Returns true if the value changed
-         */
-        add(value: number): number {
-            var old_value = this.current;
-            this.current += value;
-            this.fix();
-            return this.current - old_value;
-        }
-
-        /**
-         * Fix the value to be positive and lower than maximal
-         */
-        private fix(): void {
-            if (this.maximal !== null && this.current > this.maximal) {
-                this.current = this.maximal;
-            }
-            if (this.current < 0) {
-                this.current = 0;
-            }
-        }
-    }
-
-    /**
-     * A ship attribute is a value computed by a sum of contributions from equipments and sticky effects.
-     * 
-     * A value may be limited by other effects.
-     */
-    export class ShipAttribute extends ShipValue {
-        // Raw contributions value (without limits)
-        private raw = 0
-
-        // Temporary limits
-        private limits: number[] = []
     }
 
     /**
@@ -114,12 +120,12 @@ module TK.SpaceTac {
      */
     export class ShipSkills {
         // Skills
-        skill_materials = new ShipAttribute("materials skill")
-        skill_photons = new ShipAttribute("photons skill")
-        skill_antimatter = new ShipAttribute("antimatter skill")
-        skill_quantum = new ShipAttribute("quantum skill")
-        skill_gravity = new ShipAttribute("gravity skill")
-        skill_time = new ShipAttribute("time skill")
+        skill_materials = new ShipAttribute()
+        skill_photons = new ShipAttribute()
+        skill_antimatter = new ShipAttribute()
+        skill_quantum = new ShipAttribute()
+        skill_gravity = new ShipAttribute()
+        skill_time = new ShipAttribute()
     }
 
     /**
@@ -127,32 +133,42 @@ module TK.SpaceTac {
      */
     export class ShipAttributes extends ShipSkills {
         // Maximal hull value
-        hull_capacity = new ShipAttribute("hull capacity")
+        hull_capacity = new ShipAttribute()
         // Maximal shield value
-        shield_capacity = new ShipAttribute("shield capacity")
+        shield_capacity = new ShipAttribute()
         // Maximal power value
-        power_capacity = new ShipAttribute("power capacity")
+        power_capacity = new ShipAttribute()
         // Power value recovered each turn
-        power_generation = new ShipAttribute("power generation")
+        power_generation = new ShipAttribute()
         // Ability to move first and fast
-        maneuvrability = new ShipAttribute("maneuvrability")
+        maneuvrability = new ShipAttribute()
         // Ability to fire far and good
-        precision = new ShipAttribute("precision")
+        precision = new ShipAttribute()
     }
 
     /**
-     * Set of ShipValue for a ship
+     * Set of simple values for a ship
      */
     export class ShipValues {
-        hull = new ShipValue("hull")
-        shield = new ShipValue("shield")
-        power = new ShipValue("power")
+        hull = 0
+        shield = 0
+        power = 0
     }
 
     /**
-     * Static attributes and values object for name queries
+     * Static attributes and values object for property queries
      */
     export const SHIP_SKILLS = new ShipSkills();
     export const SHIP_ATTRIBUTES = new ShipAttributes();
     export const SHIP_VALUES = new ShipValues();
+
+    /**
+     * Type guards
+     */
+    export function isShipValue(key: string): key is keyof ShipValues {
+        return SHIP_VALUES.hasOwnProperty(key);
+    }
+    export function isShipAttribute(key: string): key is keyof ShipAttributes {
+        return SHIP_ATTRIBUTES.hasOwnProperty(key);
+    }
 }

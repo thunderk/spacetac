@@ -5,15 +5,15 @@ module TK.SpaceTac {
             var fleet2 = new Fleet();
 
             var ship1 = new Ship(fleet1, "F1S1");
-            ship1.setAttribute("maneuvrability", 2);
+            TestTools.setAttribute(ship1, "maneuvrability", 2);
             var ship2 = new Ship(fleet1, "F1S2");
-            ship2.setAttribute("maneuvrability", 4);
+            TestTools.setAttribute(ship2, "maneuvrability", 4);
             var ship3 = new Ship(fleet1, "F1S3");
-            ship3.setAttribute("maneuvrability", 1);
+            TestTools.setAttribute(ship3, "maneuvrability", 1);
             var ship4 = new Ship(fleet2, "F2S1");
-            ship4.setAttribute("maneuvrability", 8);
+            TestTools.setAttribute(ship4, "maneuvrability", 8);
             var ship5 = new Ship(fleet2, "F2S2");
-            ship5.setAttribute("maneuvrability", 2);
+            TestTools.setAttribute(ship5, "maneuvrability", 2);
 
             var battle = new Battle(fleet1, fleet2);
             check.equals(battle.play_order.length, 0);
@@ -68,6 +68,7 @@ module TK.SpaceTac {
             var ship3 = new Ship(fleet2, "ship3");
 
             var battle = new Battle(fleet1, fleet2);
+            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
 
             // Check empty play_order case
             check.equals(battle.playing_ship, null);
@@ -75,7 +76,7 @@ module TK.SpaceTac {
             check.equals(battle.playing_ship, null);
 
             // Force play order
-            iforeach(battle.iships(), ship => ship.setAttribute("maneuvrability", 1));
+            iforeach(battle.iships(), ship => TestTools.setAttribute(ship, "maneuvrability", 1));
             var gen = new SkewedRandomGenerator([0.1, 0.2, 0.0]);
             battle.throwInitiative(gen);
             check.equals(battle.playing_ship, null);
@@ -103,69 +104,32 @@ module TK.SpaceTac {
             check.same(battle.playing_ship, ship2);
         });
 
-        test.case("calls startTurn on ships", check => {
-            var fleet1 = new Fleet();
-            var fleet2 = new Fleet();
-
-            var ship1 = new Ship(fleet1, "F1S1");
-            var ship2 = new Ship(fleet1, "F1S2");
-            var ship3 = new Ship(fleet2, "F2S1");
-
-            var battle = new Battle(fleet1, fleet2);
-
-            let mock1 = check.patch(ship1, "startTurn");
-            let mock2 = check.patch(ship2, "startTurn");
-            let mock3 = check.patch(ship3, "startTurn");
-
-            // Force play order
-            var gen = new SkewedRandomGenerator([0.3, 0.2, 0.1]);
-            battle.throwInitiative(gen);
-
-            battle.advanceToNextShip();
-            check.called(mock1, 1);
-            check.called(mock2, 0);
-            check.called(mock3, 0);
-
-            battle.advanceToNextShip();
-            check.called(mock1, 0);
-            check.called(mock2, 1);
-            check.called(mock3, 0);
-
-            battle.advanceToNextShip();
-            check.called(mock1, 0);
-            check.called(mock2, 0);
-            check.called(mock3, 1);
-
-            battle.advanceToNextShip();
-            check.called(mock1, 1);
-            check.called(mock2, 0);
-            check.called(mock3, 0);
-        });
-
         test.case("detects victory condition and logs a final EndBattleEvent", check => {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 
             var ship1 = new Ship(fleet1, "F1S1");
             var ship2 = new Ship(fleet1, "F1S2");
-            new Ship(fleet2, "F2S1");
+            let ship3 = new Ship(fleet2, "F2S1");
 
             var battle = new Battle(fleet1, fleet2);
-
+            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
             battle.start();
+            battle.play_order = [ship3, ship2, ship1];
             check.equals(battle.ended, false);
 
             ship1.setDead();
             ship2.setDead();
-
-            battle.log.clear();
             battle.advanceToNextShip();
 
             check.equals(battle.ended, true);
-            check.equals(battle.log.events.length, 1);
-            check.equals(battle.log.events[0].code, "endbattle");
-            check.notequals((<EndBattleEvent>battle.log.events[0]).outcome.winner, null);
-            check.same((<EndBattleEvent>battle.log.events[0]).outcome.winner, fleet2);
+            let diff = battle.log.get(battle.log.count() - 1);
+            if (diff instanceof EndBattleDiff) {
+                check.notequals(diff.outcome.winner, null);
+                check.same(diff.outcome.winner, fleet2);
+            } else {
+                check.fail("Not an EndBattleDiff");
+            }
         });
 
         test.case("wear down equipment at the end of battle", check => {
@@ -180,6 +144,7 @@ module TK.SpaceTac {
             let eng2a = TestTools.addEngine(ship2a, 50);
 
             let battle = new Battle(fleet1, fleet2);
+            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
             battle.start();
 
             check.equals(equ1a.wear, 0);
@@ -220,12 +185,17 @@ module TK.SpaceTac {
             ship3.setDead();
 
             battle.log.clear();
-            battle.advanceToNextShip();
+            check.equals(battle.ended, false);
+            battle.performChecks();
 
             check.equals(battle.ended, true);
-            check.equals(battle.log.events.length, 1);
-            check.equals(battle.log.events[0].code, "endbattle");
-            check.equals((<EndBattleEvent>battle.log.events[0]).outcome.winner, null);
+            check.equals(battle.log.count(), 1);
+            let diff = battle.log.get(0);
+            if (diff instanceof EndBattleDiff) {
+                check.equals(diff.outcome.winner, null);
+            } else {
+                check.fail("Not an EndBattleDiff");
+            }
         });
 
         test.case("collects ships present in a circle", check => {
@@ -250,35 +220,20 @@ module TK.SpaceTac {
             let battle = new Battle();
             let ship = new Ship();
             let drone = new Drone(ship);
-
-            check.equals(battle.drones, []);
-            check.equals(battle.log.events, []);
+            check.equals(battle.drones.count(), 0);
 
             battle.addDrone(drone);
-
-            check.equals(battle.drones, [drone]);
-            check.equals(battle.log.events, [new DroneDeployedEvent(drone)]);
+            check.equals(battle.drones.count(), 1);
+            check.same(battle.drones.get(drone.id), drone);
 
             battle.addDrone(drone);
-
-            check.equals(battle.drones, [drone]);
-            check.equals(battle.log.events, [new DroneDeployedEvent(drone)]);
+            check.equals(battle.drones.count(), 1);
 
             battle.removeDrone(drone);
-
-            check.equals(battle.drones, []);
-            check.equals(battle.log.events, [new DroneDeployedEvent(drone), new DroneDestroyedEvent(drone)]);
+            check.equals(battle.drones.count(), 0);
 
             battle.removeDrone(drone);
-
-            check.equals(battle.drones, []);
-            check.equals(battle.log.events, [new DroneDeployedEvent(drone), new DroneDestroyedEvent(drone)]);
-
-            // check initial log fill
-            battle.drones = [drone];
-            let expected = new DroneDeployedEvent(drone);
-            expected.initial = true;
-            check.equals(battle.getBootstrapEvents(), [expected]);
+            check.equals(battle.drones.count(), 0);
         });
 
         test.case("checks if a player is able to play", check => {
@@ -298,34 +253,41 @@ module TK.SpaceTac {
         });
 
         test.case("gets the number of turns before a specific ship plays", check => {
-            let battle = new Battle();
-            check.patch(battle, "checkEndBattle", () => false);
-            battle.play_order = [new Ship(), new Ship(), new Ship()];
-            battle.advanceToNextShip();
+            let battle = TestTools.createBattle(2, 1);
 
-            check.same(battle.playing_ship, battle.play_order[0]);
-            check.equals(battle.getPlayOrder(battle.play_order[0]), 0);
-            check.equals(battle.getPlayOrder(battle.play_order[1]), 1);
-            check.equals(battle.getPlayOrder(battle.play_order[2]), 2);
-
-            battle.advanceToNextShip();
-
-            check.same(battle.playing_ship, battle.play_order[1]);
-            check.equals(battle.getPlayOrder(battle.play_order[0]), 2);
-            check.equals(battle.getPlayOrder(battle.play_order[1]), 0);
-            check.equals(battle.getPlayOrder(battle.play_order[2]), 1);
+            check.in("initial", check => {
+                check.same(battle.playing_ship, battle.play_order[0], "first ship playing");
+                check.equals(battle.getPlayOrder(battle.play_order[0]), 0);
+                check.equals(battle.getPlayOrder(battle.play_order[1]), 1);
+                check.equals(battle.getPlayOrder(battle.play_order[2]), 2);
+            });
 
             battle.advanceToNextShip();
 
-            check.equals(battle.getPlayOrder(battle.play_order[0]), 1);
-            check.equals(battle.getPlayOrder(battle.play_order[1]), 2);
-            check.equals(battle.getPlayOrder(battle.play_order[2]), 0);
+            check.in("1 step", check => {
+                check.same(battle.playing_ship, battle.play_order[1], "second ship playing");
+                check.equals(battle.getPlayOrder(battle.play_order[0]), 2);
+                check.equals(battle.getPlayOrder(battle.play_order[1]), 0);
+                check.equals(battle.getPlayOrder(battle.play_order[2]), 1);
+            });
 
             battle.advanceToNextShip();
 
-            check.equals(battle.getPlayOrder(battle.play_order[0]), 0);
-            check.equals(battle.getPlayOrder(battle.play_order[1]), 1);
-            check.equals(battle.getPlayOrder(battle.play_order[2]), 2);
+            check.in("2 steps", check => {
+                check.same(battle.playing_ship, battle.play_order[2], "third ship playing");
+                check.equals(battle.getPlayOrder(battle.play_order[0]), 1);
+                check.equals(battle.getPlayOrder(battle.play_order[1]), 2);
+                check.equals(battle.getPlayOrder(battle.play_order[2]), 0);
+            });
+
+            battle.advanceToNextShip();
+
+            check.in("3 steps", check => {
+                check.same(battle.playing_ship, battle.play_order[0], "first ship playing");
+                check.equals(battle.getPlayOrder(battle.play_order[0]), 0);
+                check.equals(battle.getPlayOrder(battle.play_order[1]), 1);
+                check.equals(battle.getPlayOrder(battle.play_order[2]), 2);
+            });
         });
 
         test.case("lists area effects", check => {
@@ -347,9 +309,7 @@ module TK.SpaceTac {
             drone2.effects = [new DamageEffect(14)];
             battle.addDrone(drone2);
 
-            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [
-                new DamageEffect(12)
-            ]);
+            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [drone1.effects[0]]);
 
             let eq1 = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
             eq1.action = new ToggleAction(eq1, 0, 500, [new AttributeEffect("maneuvrability", 1)]);
@@ -362,7 +322,8 @@ module TK.SpaceTac {
             (<ToggleAction>eq3.action).activated = true;
 
             check.equals(imaterialize(battle.iAreaEffects(100, 50)), [
-                new DamageEffect(12), new AttributeEffect("maneuvrability", 1)
+                drone1.effects[0],
+                (<ToggleAction>eq1.action).effects[0],
             ]);
         });
 
@@ -379,5 +340,43 @@ module TK.SpaceTac {
             battle.ai_playing = false;
             check.equals(loaded, battle);
         });
+
+        test.case("can revert the last action", check => {
+            let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
+            ship.setValue("hull", 13);
+            battle.log.clear();
+            battle.log.add(new ShipValueDiff(ship, "hull", 4));
+            battle.log.add(new ShipActionUsedDiff(ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)));
+            battle.log.add(new ShipValueDiff(ship, "hull", 7));
+            battle.log.add(new ShipActionUsedDiff(ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)));
+            battle.log.add(new ShipValueDiff(ship, "hull", 2));
+
+            check.in("initial state", check => {
+                check.equals(ship.getValue("hull"), 13, "hull=13");
+                check.equals(battle.log.count(), 5, "log count=5");
+            });
+
+            battle.revertOneAction();
+
+            check.in("revert 1 action", check => {
+                check.equals(ship.getValue("hull"), 11, "hull=11");
+                check.equals(battle.log.count(), 3, "log count=3");
+            });
+
+            battle.revertOneAction();
+
+            check.in("revert 2 actions", check => {
+                check.equals(ship.getValue("hull"), 4, "hull=4");
+                check.equals(battle.log.count(), 1, "log count=1");
+            });
+
+            battle.revertOneAction();
+
+            check.in("revert 3 actions", check => {
+                check.equals(ship.getValue("hull"), 0, "hull=0");
+                check.equals(battle.log.count(), 0, "log count=0");
+            });
+        })
     });
 }

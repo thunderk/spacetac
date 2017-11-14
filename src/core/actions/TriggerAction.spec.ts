@@ -1,4 +1,4 @@
-module TK.SpaceTac {
+module TK.SpaceTac.Specs {
     testing("TriggerAction", test => {
         test.case("constructs correctly", check => {
             let equipment = new Equipment(SlotType.Weapon, "testweapon");
@@ -14,8 +14,10 @@ module TK.SpaceTac {
             let ship = new Ship(fleet, "ship");
             let equipment = new Equipment(SlotType.Weapon, "testweapon");
             let effect = new BaseEffect("testeffect");
-            let mock_apply = check.patch(effect, "applyOnShip", null);
+            let mock_apply = check.patch(effect, "getOnDiffs");
             let action = new TriggerAction(equipment, [effect], 5, 100, 10);
+            equipment.action = action;
+            ship.addSlot(SlotType.Weapon).attach(equipment);
 
             TestTools.setShipAP(ship, 10);
 
@@ -32,7 +34,7 @@ module TK.SpaceTac {
             TestTools.setShipPlaying(battle, ship);
             fleet.setBattle(battle);
 
-            action.apply(ship, Target.newFromLocation(50, 50));
+            action.apply(battle, ship, Target.newFromLocation(50, 50));
             check.called(mock_apply, [
                 [ship2, ship]
             ]);
@@ -103,17 +105,18 @@ module TK.SpaceTac {
         })
 
         test.case("rotates toward the target", check => {
-            let ship = new Ship();
+            let battle = TestTools.createBattle();
+            let ship = battle.play_order[0];
             let weapon = TestTools.addWeapon(ship, 1, 0, 100, 30);
             let action = nn(weapon.action);
             check.patch(action, "checkTarget", (ship: Ship, target: Target) => target);
             check.equals(ship.arena_angle, 0);
 
-            let result = action.apply(ship, Target.newFromLocation(10, 20));
+            let result = action.apply(battle, ship, Target.newFromLocation(10, 20));
             check.equals(result, true);
             check.nears(ship.arena_angle, 1.107, 3);
 
-            result = action.apply(ship, Target.newFromShip(ship));
+            result = action.apply(battle, ship, Target.newFromShip(ship));
             check.equals(result, true);
             check.nears(ship.arena_angle, 1.107, 3);
         })

@@ -3,7 +3,7 @@ module TK.SpaceTac.Specs {
         test.case("shows a textual description", check => {
             check.equals(new RepelEffect(34).getDescription(), "repel ships 34km away");
         })
-            
+
         test.case("repel other ships from a central point", check => {
             let battle = new Battle();
             let ship1a = battle.fleets[0].addShip();
@@ -14,9 +14,9 @@ module TK.SpaceTac.Specs {
             ship2a.setArenaPosition(100, 280);
 
             let effect = new RepelEffect(12);
-            effect.applyOnShip(ship1a, ship1a);
-            effect.applyOnShip(ship1b, ship1a);
-            effect.applyOnShip(ship2a, ship1a);
+            battle.applyDiffs(effect.getOnDiffs(ship1a, ship1a));
+            battle.applyDiffs(effect.getOnDiffs(ship1b, ship1a));
+            battle.applyDiffs(effect.getOnDiffs(ship2a, ship1a));
 
             check.equals(ship1a.location, new ArenaLocationAngle(100, 100));
             check.equals(ship1b.location, new ArenaLocationAngle(262, 100));
@@ -33,7 +33,7 @@ module TK.SpaceTac.Specs {
             ship2b.setArenaPosition(100, 350);
 
             let effect = new RepelEffect(85);
-            effect.applyOnShip(ship2a, ship1a);
+            battle.applyDiffs(effect.getOnDiffs(ship2a, ship1a));
             check.equals(ship2a.location, new ArenaLocationAngle(100, 250));
         })
     })

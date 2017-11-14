@@ -9,36 +9,28 @@ module TK.SpaceTac.Specs {
             let shield = ship.listEquipment(SlotType.Shield)[0];
             ship.restoreHealth();
 
-            check.equals(ship.getValue("hull"), 150);
-            check.equals(ship.getValue("shield"), 400);
-            check.equals(hull.wear, 0);
-            check.equals(shield.wear, 0);
+            function checkValues(desc: string, hull_value: number, shield_value: number, hull_wear: number, shield_wear: number) {
+                check.in(desc, check => {
+                    check.equals(ship.getValue("hull"), hull_value, "hull value");
+                    check.equals(ship.getValue("shield"), shield_value, "shield value");
+                    check.equals(hull.wear, hull_wear, "hull wear");
+                    check.equals(shield.wear, shield_wear, "shield wear");
+                });
+            }
 
-            new DamageEffect(50).applyOnShip(ship, ship);
-            check.equals(ship.getValue("hull"), 150);
-            check.equals(ship.getValue("shield"), 350);
-            check.equals(hull.wear, 0);
-            check.equals(shield.wear, 1);
+            checkValues("initial", 150, 400, 0, 0);
 
-            new DamageEffect(250).applyOnShip(ship, ship);
-            check.equals(ship.getValue("hull"), 150);
-            check.equals(ship.getValue("shield"), 100);
-            check.equals(hull.wear, 0);
-            check.equals(shield.wear, 4);
+            battle.applyDiffs(new DamageEffect(50).getOnDiffs(ship, ship));
+            checkValues("after 50 damage", 150, 350, 0, 5);
 
-            new DamageEffect(201).applyOnShip(ship, ship);
-            check.equals(ship.getValue("hull"), 49);
-            check.equals(ship.getValue("shield"), 0);
-            check.equals(hull.wear, 2);
-            check.equals(shield.wear, 5);
-            check.equals(ship.alive, true);
+            battle.applyDiffs(new DamageEffect(250).getOnDiffs(ship, ship));
+            checkValues("after 250 damage", 150, 100, 0, 30);
 
-            new DamageEffect(8000).applyOnShip(ship, ship);
-            check.equals(ship.getValue("hull"), 0);
-            check.equals(ship.getValue("shield"), 0);
-            check.equals(hull.wear, 3);
-            check.equals(shield.wear, 5);
-            check.equals(ship.alive, false);
+            battle.applyDiffs(new DamageEffect(201).getOnDiffs(ship, ship));
+            checkValues("after 201 damage", 49, 0, 11, 40);
+
+            battle.applyDiffs(new DamageEffect(8000).getOnDiffs(ship, ship));
+            checkValues("after 8000 damage", 0, 0, 16, 40);
         });
 
         test.case("gets a textual description", check => {
