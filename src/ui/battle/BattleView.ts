@@ -153,7 +153,7 @@ module TK.SpaceTac.UI {
             // If we are on a remote session, start the exchange
             if (!this.session.primary && this.gameui.session_token) {
                 // TODO handle errors or timeout
-                this.multi.setup(this, this.battle, this.gameui.session_token, false);
+                this.multi.setup(this, this.actual_battle, this.gameui.session_token, false);
             }
         }
 

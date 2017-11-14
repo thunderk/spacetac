@@ -63,7 +63,7 @@ module TK.SpaceTac.UI {
                 this.displayMultiplayerToken(token);
 
                 if (this.view instanceof BattleView) {
-                    await this.view.multi.setup(this.view, this.view.battle, token, true);
+                    await this.view.multi.setup(this.view, this.view.actual_battle, token, true);
                 } else {
                     // TODO
                     this.displayConnectionError();
