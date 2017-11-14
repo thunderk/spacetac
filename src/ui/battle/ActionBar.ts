@@ -61,18 +61,29 @@ module TK.SpaceTac.UI {
 
             // Log processing
             battleview.log_processor.register(event => {
+                if (!(event instanceof BaseBattleShipDiff) || !this.ship || !this.ship.is(event.ship_id)) {
+                    return 0;
+                }
+
                 if (event instanceof ShipValueDiff) {
-                    if (this.ship && this.ship.is(event.ship_id)) {
-                        if (event.code == "power") {
-                            this.updatePower();
-                        }
+                    if (event.code == "power") {
+                        this.updatePower();
+                        this.action_icons.forEach(action => action.refresh());
                     }
                 } else if (event instanceof ShipAttributeDiff) {
-                    if (this.ship && this.ship.is(event.ship_id)) {
-                        if (event.code == "power_capacity") {
-                            this.updatePower();
-                        }
+                    if (event.code == "power_capacity") {
+                        this.updatePower();
                     }
+                } else if (event instanceof ShipActionUsedDiff) {
+                    this.action_icons.forEach(action => action.refresh());
+                } else if (event instanceof ShipActionToggleDiff) {
+                    let action_icon = first(this.action_icons, icon => icon.action.is(event.action));
+                    if (action_icon) {
+                        action_icon.refresh();
+                    }
+                } else if (event instanceof ShipCooldownDiff) {
+                    let icons = this.action_icons.filter(icon => icon.action.equipment && icon.action.equipment.is(event.equipment));
+                    icons.forEach(icon => icon.refresh());
                 }
                 return 0;
             });
