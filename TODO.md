@@ -66,6 +66,7 @@ Battle
 Ships models and equipments
 ---------------------------
 
+* Toggle actions should stay activated and restitute power when turned off
 * Add permanent effects and actions to ship models
 * Add critical hit/miss
 * Add damage over time effect (tricky to make intuitive)

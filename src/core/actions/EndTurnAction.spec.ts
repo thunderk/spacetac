@@ -34,8 +34,6 @@ module TK.SpaceTac.Specs {
         });
 
         test.case("generates power for previous ship", check => {
-            check.patch(console, "warn", null);
-
             let battle = TestTools.createBattle(1, 0);
             let ship = battle.play_order[0];
             TestTools.setShipAP(ship, 10, 3);
@@ -57,6 +55,47 @@ module TK.SpaceTac.Specs {
                     },
                     check => {
                         check.equals(ship.getValue("power"), 10, "power=10");
+                    }
+                ]);
+        });
+
+        test.case("cools down equipment for previous ship", check => {
+            let battle = TestTools.createBattle(1, 0);
+            let ship = battle.play_order[0];
+
+            let equ1 = TestTools.addWeapon(ship);
+            equ1.cooldown.configure(1, 3);
+            equ1.cooldown.use();
+            let equ2 = TestTools.addWeapon(ship);
+            equ2.cooldown.configure(1, 2);
+            equ2.cooldown.use();
+            let equ3 = TestTools.addWeapon(ship);
+            equ3.cooldown.use();
+
+            TestTools.actionChain(check, battle, [
+                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+            ], [
+                    check => {
+                        check.equals(equ1.cooldown.heat, 3, "equ1 heat");
+                        check.equals(equ2.cooldown.heat, 2, "equ2 heat");
+                        check.equals(equ3.cooldown.heat, 0, "equ3 heat");
+                    },
+                    check => {
+                        check.equals(equ1.cooldown.heat, 2, "equ1 heat");
+                        check.equals(equ2.cooldown.heat, 1, "equ2 heat");
+                        check.equals(equ3.cooldown.heat, 0, "equ3 heat");
+                    },
+                    check => {
+                        check.equals(equ1.cooldown.heat, 1, "equ1 heat");
+                        check.equals(equ2.cooldown.heat, 0, "equ2 heat");
+                        check.equals(equ3.cooldown.heat, 0, "equ3 heat");
+                    },
+                    check => {
+                        check.equals(equ1.cooldown.heat, 0, "equ1 heat");
+                        check.equals(equ2.cooldown.heat, 0, "equ2 heat");
+                        check.equals(equ3.cooldown.heat, 0, "equ3 heat");
                     }
                 ]);
         });

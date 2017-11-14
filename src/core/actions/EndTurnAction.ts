@@ -22,11 +22,12 @@ module TK.SpaceTac {
                 // Generate power
                 result = result.concat(ship.getValueDiffs("power", ship.getAttribute("power_generation"), true));
 
-                // TODO previous: apply sticky effects
-                // TODO previous: cool down equipment
+                // Cool down equipment
+                ship.listEquipment().filter(equ => equ.cooldown.heat > 0).forEach(equ => {
+                    result.push(new ShipCooldownDiff(ship, equ, 1));
+                });
 
-                // TODO new: apply sticky effects
-                // TODO new: reset toggle actions
+                // TODO sticky effects
 
                 let cycle_diff = (battle.play_order.indexOf(new_ship) == 0) ? 1 : 0;
                 result.push(new ShipChangeDiff(ship, new_ship, cycle_diff));
