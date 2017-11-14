@@ -169,6 +169,10 @@ module TK.SpaceTac.UI {
          * If the AI is already playing, do nothing
          */
         playAI(): void {
+            if (this.session.spectator) {
+                return;
+            }
+
             if (this.actual_battle.playAI()) {
                 if (this.interacting) {
                     this.action_bar.setShip(new Ship());
@@ -181,6 +185,10 @@ module TK.SpaceTac.UI {
          * Apply an action to the actual battle
          */
         applyAction(action: BaseAction, target?: Target): boolean {
+            if (this.session.spectator) {
+                return false;
+            }
+
             let ship = this.actual_battle.playing_ship;
             if (ship) {
                 let ship_action = first(ship.getAvailableActions(), ac => ac.is(action));

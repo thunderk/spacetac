@@ -44,9 +44,14 @@ module TK.SpaceTac.UI {
         start() {
             if (!this.view.gameui.headless) {
                 this.log.play(async diff => {
+                    while (this.view.game.paused) {
+                        await this.view.timer.sleep(500);
+                    }
+
                     await this.processBattleDiff(diff);
                     this.transferControl();
                 });
+
                 this.transferControl();
             }
         }

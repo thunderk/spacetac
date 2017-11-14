@@ -224,7 +224,6 @@ module TK.SpaceTac.UI {
             }
 
             this.updatePower();
-            this.setInteractive(this.ship != null);
         }
 
         // Called by an action icon when the action is selected
