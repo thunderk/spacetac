@@ -115,6 +115,7 @@ module TK.SpaceTac.UI {
             this.add(this.effects_messages);
             this.effects_messages_toggle = this.battleview.animations.newVisibilityToggle(this.effects_messages, 500, false);
 
+            this.updatePlayOrder();
             this.updateActiveEffects();
             this.updateEffectsRadius();
 
@@ -140,11 +141,7 @@ module TK.SpaceTac.UI {
          */
         private processLogEvent(event: BaseBattleDiff): number {
             if (event instanceof ShipChangeDiff) {
-                if (this.ship.is(event.new_ship)) {
-                    this.play_order.text = "-";
-                } else {
-                    this.play_order.text = this.battleview.battle.getPlayOrder(this.ship).toString();
-                }
+                this.updatePlayOrder();
             }
             return 0;
         }
@@ -294,6 +291,18 @@ module TK.SpaceTac.UI {
             if (diff) {
                 let name = SHIP_VALUES_NAMES[event.code];
                 this.displayEffect(`${name} ${diff < 0 ? "-" : "+"}${Math.abs(diff)}`, diff >= 0);
+            }
+        }
+
+        /**
+         * Update the play order indicator
+         */
+        updatePlayOrder(): void {
+            let play_order = this.battleview.battle.getPlayOrder(this.ship);
+            if (play_order == 0) {
+                this.play_order.text = "-";
+            } else {
+                this.play_order.text = play_order.toString();
             }
         }
 
