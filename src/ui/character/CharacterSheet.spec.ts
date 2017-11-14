@@ -117,6 +117,29 @@ module TK.SpaceTac.UI.Specs {
                 draddrop(sprite, <CharacterSlot>sheet.ship_slots.children[0]);
                 check.equals(equ3.attached_to, null);
             });
+
+            test.case("controls global interactivity state", check => {
+                let sheet = new CharacterSheet(testgame.view);
+                check.equals(sheet.isInteractive(), false, "no ship");
+
+                let ship = new Ship();
+                ship.critical = true;
+                sheet.show(ship);
+                check.equals(sheet.isInteractive(), false, "critical ship");
+                
+                ship.critical = false;
+                sheet.show(ship);
+                check.equals(sheet.isInteractive(), true, "normal ship");
+
+                sheet.show(ship, undefined, undefined, false);
+                check.equals(sheet.isInteractive(), false, "interactivity disabled");
+
+                sheet.show(ship);
+                check.equals(sheet.isInteractive(), false, "interactivity stays disabled");
+
+                sheet.show(ship, undefined, undefined, true);
+                check.equals(sheet.isInteractive(), true, "interactivity reenabled");
+            });                
         });
 
         test.case("fits slots in area", check => {

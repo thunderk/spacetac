@@ -62,7 +62,9 @@ module TK.SpaceTac.UI {
 
             this.anchor.set(0.5, 0.5);
 
-            this.setupDragDrop();
+            if (sheet.isInteractive()) {
+                this.setupDragDrop();
+            }
             this.snapToContainer();
 
             sheet.view.tooltip.bind(this, filler => this.fillTooltip(filler));

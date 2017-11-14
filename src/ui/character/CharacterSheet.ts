@@ -8,6 +8,9 @@ module TK.SpaceTac.UI {
      * Character sheet, displaying ship characteristics
      */
     export class CharacterSheet extends Phaser.Image {
+        // Globally interactive sheet (equipment can be moved, points upgraded)
+        interactive = true
+
         // Parent view
         view: BaseView
 
@@ -134,6 +137,13 @@ module TK.SpaceTac.UI {
         }
 
         /**
+         * Check if the sheet should be interactive
+         */
+        isInteractive(): boolean {
+            return bool(this.ship) && !this.ship.critical && this.interactive;
+        }
+
+        /**
          * Add an attribute display
          */
         private addAttribute(attribute: keyof ShipAttributes, x: number, y: number) {
@@ -188,8 +198,11 @@ module TK.SpaceTac.UI {
         /**
          * Show the sheet for a given ship
          */
-        show(ship: Ship, animate = true, sound = true) {
+        show(ship: Ship, animate = true, sound = true, interactive?: boolean) {
             this.ship = ship;
+            if (typeof interactive != "undefined") {
+                this.interactive = interactive;
+            }
 
             this.layer_equipments.removeAll(true);
             this.setActionMessage();
@@ -200,7 +213,7 @@ module TK.SpaceTac.UI {
             this.ship_level.setText(ship.level.get().toString());
             this.ship_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
             this.ship_upgrade_points.setText(upgrade_points.toString());
-            this.layer_upgrades.visible = !ship.critical && upgrade_points > 0;
+            this.layer_upgrades.visible = this.isInteractive() && upgrade_points > 0;
 
             iteritems(<any>ship.attributes, (key, value: ShipAttribute) => {
                 let text = this.attributes[key];
@@ -214,7 +227,7 @@ module TK.SpaceTac.UI {
             ship.slots.forEach((slot, idx) => {
                 let slot_display = new CharacterSlot(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y, slot.type);
                 slot_display.scale.set(slotsinfo.scaling, slotsinfo.scaling);
-                slot_display.alpha = ship.critical ? 0.5 : 1;
+                slot_display.alpha = this.isInteractive() ? 1 : 0.5;
                 this.ship_slots.add(slot_display);
 
                 if (slot.attached) {
@@ -228,7 +241,7 @@ module TK.SpaceTac.UI {
             range(ship.cargo_space).forEach(idx => {
                 let cargo_slot = new CharacterCargo(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y);
                 cargo_slot.scale.set(slotsinfo.scaling, slotsinfo.scaling);
-                cargo_slot.alpha = ship.critical ? 0.5 : 1;
+                cargo_slot.alpha = this.isInteractive() ? 1 : 0.5;
                 this.ship_cargo.add(cargo_slot);
 
                 if (idx < this.ship.cargo.length) {

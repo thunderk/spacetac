@@ -142,7 +142,9 @@ module TK.SpaceTac.UI {
             this.inputs.bindCheat("a", "Use AI to play", () => this.playAI());
 
             // "Battle" animation, then start processing the log
-            if (this.splash) {
+            if (this.battle.ended) {
+                this.endBattle();
+            } else if (this.splash) {
                 this.showSplash().then(() => {
                     this.log_processor.start();
                 });
@@ -282,7 +284,7 @@ module TK.SpaceTac.UI {
             if (this.targetting.active) {
                 this.validationPressed();
             } else if (this.ship_hovered && this.ship_hovered.getPlayer().is(this.player) && this.interacting) {
-                this.character_sheet.show(this.ship_hovered);
+                this.character_sheet.show(this.ship_hovered, undefined, undefined, false);
                 this.setShipHovered(null);
             }
         }
@@ -342,14 +344,15 @@ module TK.SpaceTac.UI {
          * End the battle and show the outcome dialog
          */
         endBattle() {
-            if (this.battle.outcome) {
+            let battle = this.actual_battle;
+            if (battle.outcome) {
                 this.setInteractionEnabled(false);
 
                 this.gameui.session.setBattleEnded();
 
-                this.battle.stats.processLog(this.battle.log, this.player.fleet);
+                battle.stats.processLog(battle.log, this.player.fleet);
 
-                new OutcomeDialog(this, this.player, this.battle.outcome, this.battle.stats);
+                new OutcomeDialog(this, this.player, battle.outcome, battle.stats);
             } else {
                 console.error("Battle not ended !");
             }

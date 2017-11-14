@@ -23,7 +23,6 @@ Map/story
 Character sheet
 ---------------
 
-* Disable interaction during battle (except for loot screen)
 * Improve eye-catching for shop and loot section
 * Highlight allowed destinations during drag-and-drop
 * Effective skill is sometimes not updated when upgrading base skill

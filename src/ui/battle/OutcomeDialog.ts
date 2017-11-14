@@ -60,7 +60,7 @@ module TK.SpaceTac.UI {
                             sheet.destroy(true);
                             this.refreshContent();
                         });
-                        sheet.show(this.player.fleet.ships[0], false);
+                        sheet.show(this.player.fleet.ships[0], false, undefined, true);
                         sheet.setLoot(outcome.loot);
                         this.view.add.existing(sheet);
                     });
