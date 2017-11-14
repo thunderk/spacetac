@@ -8,7 +8,7 @@ module TK.SpaceTac.UI.Specs {
             ship.fleet.player.name = "Phil";
             ship.name = "Fury";
             ship.model = new ShipModel("fake", "Fury");
-            ship.listEquipment(SlotType.Weapon).forEach(equ => equ.detach());
+            ship.listEquipment().forEach(equ => equ.detach());
             TestTools.setShipHP(ship, 58, 140);
             TestTools.setShipAP(ship, 12);
             TestTools.addWeapon(ship, 50);
