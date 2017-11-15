@@ -31,7 +31,6 @@ module TK.SpaceTac.UI {
         layer_arena: Phaser.Group
         layer_borders: Phaser.Group
         layer_overlay: Phaser.Group
-        layer_dialogs: Phaser.Group
         layer_sheets: Phaser.Group
 
         // Battleground container
@@ -102,7 +101,6 @@ module TK.SpaceTac.UI {
             this.layer_arena = this.getLayer("arena");
             this.layer_borders = this.getLayer("borders");
             this.layer_overlay = this.getLayer("overlay");
-            this.layer_dialogs = this.getLayer("dialogs");
             this.layer_sheets = this.getLayer("character_sheet");
 
             // Background

@@ -37,7 +37,11 @@ Character sheet
 Battle
 ------
 
-* Fix arena's ship hovering happening even when the character sheet is open on top
+* Fix area effects not applying (Damage Protector)
+* Fix sticky effects not fading (Power Depleter)
+* Fix toggle actions not deactivating (Damage Protector)
+* Fix drone effects not applying, and drone never disappearing (Repair Drone)
+* Fix arena's ship hovering happening even when the character sheet (or a dialog) is open on top
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
 * Toggle bar/text display in power section of action bar
@@ -56,16 +60,16 @@ Battle
 * Add targetting shortcuts for "previous target", "next enemy" and "next ally"
 * Area targetting should include the hotkeyed ship at best (apply exclusion and power limit), not necessarily center on it
 * Fix "toggle action" targetting with simulated move not activating the action after the move
-* Add shorcut to perform only the "move" part of a move+fire simulation
+* Add shortcut to perform only the "move" part of a move+fire simulation
 * Fix delay of shield/hull impact effects (should depend on weapon animation, and ship location)
 * Indicate visually the power gain of "end turn"
 * Add a turn count marker in the ship list
+* Resolve the confusion of action icon's power indicator with its keyboard shortcut
 * BattleChecks should be done proactively when all diffs have been simulated by an action, in addition to reactively after applying
 
 Ships models and equipments
 ---------------------------
 
-* Toggle actions should stay activated and restitute power when turned off
 * Add permanent effects and actions to ship models
 * Add critical hit/miss
 * Add damage over time effect (tricky to make intuitive)
@@ -76,7 +80,7 @@ Ships models and equipments
 * Add mines equivalent (drones that apply only at the end)
 * RepelEffect should apply on ships in a good order (distance decreasing)
 * Add hull points to drones and make them take area damage
-* Quality modifiers should be based on an "quality diff" to reach
+* Quality modifiers should be based on an "quality difference" to reach
 * Drones effects should be classified: permanent effects apply permanently, ponctual effects may be applied by an owner's action (if in range)
 
 Artificial Intelligence
@@ -98,6 +102,7 @@ Common UI
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
+* Fix dialogs sometimes not having their input overlay under (reproductible when loading a game with battle outcome dialog)
 
 Technical
 ---------
