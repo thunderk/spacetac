@@ -52,7 +52,6 @@ Battle
 * Add a "loot all" button (on the character sheet or outcome dialog?)
 * Mark targetting in error when target is refused by the action (there is already an arrow for this)
 * Repair drone has its activation effect sometimes displayed as permanent effect on ships in the radius
-* Merge identical sticky effects
 * Allow to undo last moves
 * Add a battle log display
 * Allow to move targetting indicator with arrow keys
