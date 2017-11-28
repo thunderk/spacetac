@@ -14,8 +14,9 @@ module TK.SpaceTac.UI {
         // Forward diffs to other subscribers
         private forwarding: ((diff: BaseBattleDiff) => number)[] = []
 
-        // Indicator to debug the processed logs
+        // Debug indicators
         private debug = false
+        private ai_disabled = false
 
         // Time at which the last action was applied
         private last_action: number
@@ -210,8 +211,10 @@ module TK.SpaceTac.UI {
             if (player) {
                 if (player.is(this.view.player)) {
                     this.view.setInteractionEnabled(true);
-                } else {
+                } else if (!this.ai_disabled) {
                     this.view.playAI();
+                } else {
+                    this.view.applyAction(EndTurnAction.SINGLETON);
                 }
             } else {
                 this.view.setInteractionEnabled(false);

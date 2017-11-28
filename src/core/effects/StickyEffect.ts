@@ -24,10 +24,20 @@ module TK.SpaceTac {
         getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             // TODO if already there, remove the previous one to replace it
             let result: BaseBattleDiff[] = [
-                new ShipEffectAddedDiff(ship, new StickyEffect(this.base, this.duration)),
+                new ShipEffectAddedDiff(ship, this),
             ]
 
             result = result.concat(this.base.getOnDiffs(ship, source));
+
+            return result;
+        }
+
+        getOffDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+            let result: BaseBattleDiff[] = [
+                new ShipEffectRemovedDiff(ship, this),
+            ]
+
+            result = result.concat(this.base.getOffDiffs(ship, source));
 
             return result;
         }

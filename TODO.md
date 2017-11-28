@@ -38,7 +38,6 @@ Battle
 ------
 
 * Fix area effects not applying (Damage Protector)
-* Fix sticky effects not fading (Power Depleter)
 * Fix toggle actions not deactivating (Damage Protector)
 * Fix drone effects not applying, and drone never disappearing (Repair Drone)
 * Fix arena's ship hovering happening even when the character sheet (or a dialog) is open on top

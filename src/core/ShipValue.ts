@@ -59,6 +59,17 @@ module TK.SpaceTac {
         }
 
         /**
+         * Get the maximal value enforced by limit modifiers, Infinity for unlimited
+         */
+        getMaximal(): number {
+            if (this.limits.length > 0) {
+                return min(this.limits);
+            } else {
+                return Infinity;
+            }
+        }
+
+        /**
          * Reset all modifiers
          */
         reset(): void {

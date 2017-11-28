@@ -12,7 +12,7 @@ module TK.SpaceTac.Specs {
             check.equals(action.checkCannotBeApplied(battle.play_order[1]), "ship not playing");
         });
 
-        test.case("ends turn when applied", check => {
+        test.case("changes active ship", check => {
             let battle = TestTools.createBattle(2, 0);
 
             TestTools.actionChain(check, battle, [
@@ -96,6 +96,47 @@ module TK.SpaceTac.Specs {
                         check.equals(equ1.cooldown.heat, 0, "equ1 heat");
                         check.equals(equ2.cooldown.heat, 0, "equ2 heat");
                         check.equals(equ3.cooldown.heat, 0, "equ3 heat");
+                    }
+                ]);
+        });
+
+        test.case("fades sticky effects for previous ship", check => {
+            let battle = TestTools.createBattle(1, 0);
+            let ship = battle.play_order[0];
+
+            let effect1 = new BaseEffect("e1");
+            let effect2 = new StickyEffect(new AttributeLimitEffect("precision", 7), 2);
+
+            ship.active_effects.add(effect1);
+            ship.active_effects.add(effect2);
+            effect2.base.getOnDiffs(ship, ship).forEach(effect => effect.apply(battle));
+
+            TestTools.actionChain(check, battle, [
+                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+            ], [
+                    check => {
+                        check.equals(ship.active_effects.count(), 2, "effect count");
+                        check.contains(ship.active_effects.ids(), effect2.id, "sticky effect active");
+                        check.equals((<StickyEffect>nn(ship.active_effects.get(effect2.id))).duration, 2, "duration sticky effect");
+                        check.equals(ship.attributes.precision.getMaximal(), 7, "max precision");
+                    },
+                    check => {
+                        check.equals(ship.active_effects.count(), 2, "effect count");
+                        check.contains(ship.active_effects.ids(), effect2.id, "sticky effect active");
+                        check.equals((<StickyEffect>nn(ship.active_effects.get(effect2.id))).duration, 1, "duration sticky effect");
+                        check.equals(ship.attributes.precision.getMaximal(), 7, "max precision");
+                    },
+                    check => {
+                        check.equals(ship.active_effects.count(), 1, "effect count");
+                        check.notcontains(ship.active_effects.ids(), effect2.id, "sticky effect removed");
+                        check.equals(ship.attributes.precision.getMaximal(), Infinity, "max precision");
+                    },
+                    check => {
+                        check.equals(ship.active_effects.count(), 1, "effect count");
+                        check.notcontains(ship.active_effects.ids(), effect2.id, "sticky effect removed");
+                        check.equals(ship.attributes.precision.getMaximal(), Infinity, "max precision");
                     }
                 ]);
         });

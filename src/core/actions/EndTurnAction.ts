@@ -27,8 +27,18 @@ module TK.SpaceTac {
                     result.push(new ShipCooldownDiff(ship, equ, 1));
                 });
 
-                // TODO sticky effects
+                // Fade sticky effects
+                iforeach(ship.active_effects.iterator(), effect => {
+                    if (effect instanceof StickyEffect) {
+                        if (effect.duration > 1) {
+                            result.push(new ShipEffectChangedDiff(ship, effect, -1));
+                        } else {
+                            result = result.concat(effect.getOffDiffs(ship, ship));
+                        }
+                    }
+                });
 
+                // Change the active ship
                 let cycle_diff = (battle.play_order.indexOf(new_ship) == 0) ? 1 : 0;
                 result.push(new ShipChangeDiff(ship, new_ship, cycle_diff));
 

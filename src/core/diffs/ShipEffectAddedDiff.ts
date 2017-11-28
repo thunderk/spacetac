@@ -11,11 +11,11 @@ module TK.SpaceTac {
         constructor(ship: Ship | RObjectId, effect: BaseEffect) {
             super(ship);
 
-            this.effect = effect;
+            this.effect = duplicate(effect, TK.SpaceTac);
         }
 
         protected applyOnShip(ship: Ship, battle: Battle): void {
-            ship.active_effects.add(this.effect);
+            ship.active_effects.add(duplicate(this.effect, TK.SpaceTac));
         }
 
         protected getReverse(): BaseBattleDiff {
@@ -33,7 +33,7 @@ module TK.SpaceTac {
         constructor(ship: Ship | RObjectId, effect: BaseEffect) {
             super(ship);
 
-            this.effect = effect;
+            this.effect = duplicate(effect, TK.SpaceTac);
         }
 
         protected applyOnShip(ship: Ship, battle: Battle): void {
