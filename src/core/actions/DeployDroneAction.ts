@@ -54,11 +54,11 @@ module TK.SpaceTac {
             return target;
         }
 
-        protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+        getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
             let result = super.getSpecificDiffs(ship, battle, target);
 
             if (this.activated) {
-                let drone = first(battle.drones.list(), drone => drone.parent == this);
+                let drone = first(battle.drones.list(), idrone => this.is(idrone.parent));
                 if (drone) {
                     result.push(new DroneRecalledDiff(drone));
                 } else {

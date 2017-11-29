@@ -303,12 +303,25 @@ module TK.SpaceTac {
         getDeathDiffs(battle: Battle): BaseBattleDiff[] {
             let result: BaseBattleDiff[] = [];
 
+            // Remove active effects
+            this.active_effects.list().forEach(effect => {
+                if (!(effect instanceof StickyEffect)) {
+                    result.push(new ShipEffectRemovedDiff(this, effect));
+                }
+                result = result.concat(effect.getOffDiffs(this));
+            });
+
+            // Deactivate toggle actions
+            iforeach(this.iToggleActions(true), action => {
+                result = result.concat(action.getSpecificDiffs(this, battle, Target.newFromShip(this)));
+            });
+
+            // Put all values to 0
             keys(SHIP_VALUES).forEach(value => {
                 result = result.concat(this.getValueDiffs(value, 0));
             });
 
-            // TODO Remove sticky effects
-
+            // Mark as dead
             result.push(new ShipDeathDiff(battle, this));
 
             return result;

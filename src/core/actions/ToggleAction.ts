@@ -58,7 +58,7 @@ module TK.SpaceTac {
             return ship.is(target.ship_id) ? target : null;
         }
 
-        protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+        getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
             let result: BaseBattleDiff[] = [
                 new ShipActionToggleDiff(ship, this, !this.activated)
             ];

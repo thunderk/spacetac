@@ -112,12 +112,24 @@ module TK.SpaceTac {
             let result: BaseBattleDiff[] = [];
 
             iforeach(this.battle.iships(true), ship => {
-                if (ship.getValue("hull") == 0) {
-                    result.push(new ShipDeathDiff(this.battle, ship));
+                if (ship.getValue("hull") <= 0) {
+                    result = result.concat(ship.getDeathDiffs(this.battle));
                 }
             });
 
             return result;
+        }
+
+        /**
+         * Check that the playing ship is not playing
+         */
+        checkDeadShipPlaying(): BaseBattleDiff[] {
+            if (this.battle.playing_ship && !this.battle.playing_ship.alive) {
+                let ship = this.battle.playing_ship;
+                return EndTurnAction.SINGLETON.getDiffs(ship, this.battle);
+            } else {
+                return [];
+            }
         }
 
         /**

@@ -365,5 +365,33 @@ module TK.SpaceTac.Specs {
             ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("skill_photons", 3)));
             check.equals(ship.getAttributeDescription("skill_photons"), "Forces of light, and electromagnetic radiation\n\nLevelled up: +2\nPhotonic engine Mk1: +4\n???: limit to 3");
         });
+
+        test.case("produces death diffs", check => {
+            let battle = TestTools.createBattle(1);
+            let ship = nn(battle.playing_ship);
+
+            check.equals(ship.getDeathDiffs(battle), [
+                new ShipValueDiff(ship, "hull", -1),
+                new ShipDeathDiff(battle, ship),
+            ]);
+
+            let effect1 = ship.active_effects.add(new AttributeEffect("skill_quantum", 2));
+            let effect2 = ship.active_effects.add(new StickyEffect(new AttributeEffect("skill_materials", 4)));
+            let weapon1 = TestTools.addWeapon(ship);
+            weapon1.action = new ToggleAction(weapon1, 3);
+            let weapon2 = TestTools.addWeapon(ship);
+            let action = weapon2.action = new ToggleAction(weapon2, 3);
+            action.activated = true;
+
+            check.equals(ship.getDeathDiffs(battle), [
+                new ShipEffectRemovedDiff(ship, effect1),
+                new ShipAttributeDiff(ship, "skill_quantum", {}, { cumulative: 2 }),
+                new ShipEffectRemovedDiff(ship, effect2),
+                new ShipAttributeDiff(ship, "skill_materials", {}, { cumulative: 4 }),
+                new ShipActionToggleDiff(ship, action, false),
+                new ShipValueDiff(ship, "hull", -1),
+                new ShipDeathDiff(battle, ship),
+            ]);
+        });
     });
 }
