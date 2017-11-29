@@ -57,10 +57,6 @@ module TK.SpaceTac {
 
             super.boot();
 
-            if (!this.headless) {
-                this.plugins.add((<any>Phaser.Plugin).SceneGraph);
-            }
-
             this.audio = new UI.Audio(this);
             this.options = new UI.GameOptions(this);
         }

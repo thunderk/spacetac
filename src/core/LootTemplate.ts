@@ -205,7 +205,7 @@ module TK.SpaceTac {
         /**
          * Add a trigger action.
          */
-        addTriggerAction(power: LeveledValue, effects: EffectTemplate<BaseEffect>[], range: LeveledValue = irepeat(0), blast: LeveledValue = irepeat(0), angle: LeveledValue = irepeat(0)): void {
+        addTriggerAction(power: LeveledValue, effects: EffectTemplate<any>[], range: LeveledValue = irepeat(0), blast: LeveledValue = irepeat(0), angle: LeveledValue = irepeat(0)): void {
             this.base_modifiers.push((equipment, level) => {
                 let reffects = effects.map(effect => effect.generate(level));
                 equipment.action = new TriggerAction(equipment, reffects, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(blast, level), resolveForLevel(angle, level));
@@ -215,7 +215,7 @@ module TK.SpaceTac {
         /**
          * Add a deploy drone action.
          */
-        addDroneAction(power: LeveledValue, range: LeveledValue, lifetime: LeveledValue, radius: LeveledValue, effects: EffectTemplate<BaseEffect>[]): void {
+        addDroneAction(power: LeveledValue, range: LeveledValue, lifetime: LeveledValue, radius: LeveledValue, effects: EffectTemplate<any>[]): void {
             this.base_modifiers.push((equipment, level) => {
                 let reffects = effects.map(effect => effect.generate(level));
                 equipment.action = new DeployDroneAction(equipment, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(lifetime, level), resolveForLevel(radius, level), reffects);
@@ -225,7 +225,7 @@ module TK.SpaceTac {
         /**
          * Add a toggle action.
          */
-        addToggleAction(power: LeveledValue, radius: LeveledValue, effects: EffectTemplate<BaseEffect>[]): void {
+        addToggleAction(power: LeveledValue, radius: LeveledValue, effects: EffectTemplate<any>[]): void {
             this.base_modifiers.push((equipment, level) => {
                 let reffects = effects.map(effect => effect.generate(level));
                 equipment.action = new ToggleAction(equipment, resolveForLevel(power, level), resolveForLevel(radius, level), reffects);

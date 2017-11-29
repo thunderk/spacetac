@@ -338,8 +338,10 @@ module TK.SpaceTac.UI {
          * Update the price tags on each equipment, for a specific shop
          */
         updatePrices(shop: Shop) {
-            this.layer_equipments.children.forEach((equipement: CharacterEquipment) => {
-                equipement.setPrice(shop.getPrice(equipement.item));
+            this.layer_equipments.children.forEach(equipement => {
+                if (equipement instanceof CharacterEquipment) {
+                    equipement.setPrice(shop.getPrice(equipement.item));
+                }
             });
         }
 

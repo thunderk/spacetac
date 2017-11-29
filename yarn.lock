@@ -147,6 +147,10 @@ async-each@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/async-each/-/async-each-1.0.1.tgz#19d386a1d9edc6e7c1c85d388aedbcc56d33602d"
 
+async-limiter@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/async-limiter/-/async-limiter-1.0.0.tgz#78faed8c3d074ab81f22b4e985d79e8738f720f8"
+
 async@1.x, async@^1.4.0:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/async/-/async-1.5.2.tgz#ec6a61ae56480c0c3cb241c95618e20892f9672a"
@@ -371,9 +375,9 @@ code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
 
-codecov@2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/codecov/-/codecov-2.3.0.tgz#ad25a2c6e0442d13740d9d4ddbb9a3e2714330f4"
+codecov@3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/codecov/-/codecov-3.0.0.tgz#c273b8c4f12945723e8dc9d25803d89343e5f28e"
   dependencies:
     argv "0.0.2"
     request "2.81.0"
@@ -1840,12 +1844,12 @@ parse-json@^2.2.0:
   dependencies:
     error-ex "^1.2.0"
 
-parse@1.9.2:
-  version "1.9.2"
-  resolved "https://registry.yarnpkg.com/parse/-/parse-1.9.2.tgz#e41d7cb6efd464eea30c34ec0651548f66c5b8e4"
+parse@1.10.2:
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/parse/-/parse-1.10.2.tgz#7e0f662a63c72561bab50831bee4ac0500c5e85d"
   dependencies:
     babel-runtime "^6.11.6"
-    ws "^1.0.1"
+    ws "^3.3.1"
     xmlhttprequest "^1.7.0"
 
 parsejson@0.0.3:
@@ -1916,13 +1920,7 @@ phantomjs-prebuilt@^2.1.7:
     request-progress "~2.0.1"
     which "~1.2.10"
 
-phaser-plugin-scene-graph@1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/phaser-plugin-scene-graph/-/phaser-plugin-scene-graph-1.0.4.tgz#1125e6f864329b5fcdcac0e929c62fedddf798e7"
-  dependencies:
-    phaser "^2.6.2"
-
-phaser@2.6.2, phaser@^2.6.2:
+phaser@2.6.2:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/phaser/-/phaser-2.6.2.tgz#eb39121725a2149c49f46b5d144318c22bc09249"
 
@@ -2519,9 +2517,9 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
 
-typescript@2.5.3:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.5.3.tgz#df3dcdc38f3beb800d4bc322646b04a3f6ca7f0d"
+typescript@2.6.2:
+  version "2.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-2.6.2.tgz#3c5b6fd7f6de0914269027f03c0946758f7673a4"
 
 uglify-js@^2.6:
   version "2.8.29"
@@ -2543,6 +2541,10 @@ uid-number@^0.0.6:
 ultron@1.0.x:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.0.2.tgz#ace116ab557cd197386a4e88f4685378c8b2e4fa"
+
+ultron@~1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ultron/-/ultron-1.1.1.tgz#9fe1536a10a664a65266a1e3ccf85fd36302bc9c"
 
 unix-crypt-td-js@^1.0.0:
   version "1.0.0"
@@ -2666,12 +2668,13 @@ ws@1.1.2:
     options ">=0.0.5"
     ultron "1.0.x"
 
-ws@^1.0.1:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-1.1.4.tgz#57f40d036832e5f5055662a397c4de76ed66bf61"
+ws@^3.3.1:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-3.3.2.tgz#96c1d08b3fefda1d5c1e33700d3bfaa9be2d5608"
   dependencies:
-    options ">=0.0.5"
-    ultron "1.0.x"
+    async-limiter "~1.0.0"
+    safe-buffer "~5.1.0"
+    ultron "~1.1.0"
 
 wtf-8@1.0.0:
   version "1.0.0"

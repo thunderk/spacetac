@@ -80,8 +80,8 @@ module TK.SpaceTac {
          */
         getFullDescription(): string {
             let requirements: string[] = [];
-            iteritems(this.requirements, (skill: keyof ShipAttributes, value) => {
-                if (value > 0) {
+            iteritems(this.requirements, (skill, value) => {
+                if (isShipAttribute(skill) && value > 0) {
                     requirements.push(`• ${SHIP_VALUES_NAMES[skill]} ${value}`);
                 }
             });
@@ -131,8 +131,8 @@ module TK.SpaceTac {
                 return false;
             } else {
                 var able = true;
-                iteritems(this.requirements, (attr: keyof ShipAttributes, minvalue) => {
-                    if (skills[attr].get() < minvalue) {
+                iteritems(this.requirements, (attr, minvalue) => {
+                    if (isShipAttribute(attr) && skills[attr].get() < minvalue) {
                         able = false;
                     }
                 });
