@@ -74,13 +74,8 @@ module TK.SpaceTac.UI {
                     if (event.code == "power_capacity") {
                         this.updatePower();
                     }
-                } else if (event instanceof ShipActionUsedDiff) {
+                } else if (event instanceof ShipActionUsedDiff || event instanceof ShipActionToggleDiff) {
                     this.action_icons.forEach(action => action.refresh());
-                } else if (event instanceof ShipActionToggleDiff) {
-                    let action_icon = first(this.action_icons, icon => icon.action.is(event.action));
-                    if (action_icon) {
-                        action_icon.refresh();
-                    }
                 } else if (event instanceof ShipCooldownDiff) {
                     let icons = this.action_icons.filter(icon => icon.action.equipment && icon.action.equipment.is(event.equipment));
                     icons.forEach(icon => icon.refresh());

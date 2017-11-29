@@ -206,11 +206,12 @@ module TK.SpaceTac.UI {
             }
 
             // left
+            let power = this.action.getActionPointsUsage(this.ship, null);
+            this.img_power.visible = bool(power);
+            this.text_power.text = `${Math.abs(power)}`;
+            this.text_power.fill = (power > 0) ? "#ffdd4b" : "#dbe748";
+            this.text_power.alpha = disabled ? 0.2 : 1;
             if (disabled != this.disabled || selected != this.selected || toggled != this.toggled) {
-                let power = this.action.getActionPointsUsage(this.ship, null);
-                this.img_power.visible = toggled || (power > 0);
-                this.text_power.text = `${power}`;
-                this.text_power.alpha = disabled ? 0.2 : 1;
                 if (disabled) {
                     this.view.changeImage(this.img_power, "battle-actionbar-consumption-disabled");
                 } else if (toggled) {

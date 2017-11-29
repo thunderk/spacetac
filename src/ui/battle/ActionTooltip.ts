@@ -21,13 +21,15 @@ module TK.SpaceTac.UI {
                 } else {
                     cost = `Cost: 1 power per ${action.getDistanceByActionPoint(ship)}km`;
                 }
-            } else if (action.equipment) {
+            } else {
                 let power_usage = action.getActionPointsUsage(ship, null);
                 if (power_usage) {
                     if (ship.getValue("power") < power_usage) {
                         cost = "Not enough power";
-                    } else {
+                    } else if (power_usage > 0) {
                         cost = `Cost: ${power_usage} power`;
+                    } else {
+                        cost = `Recover: ${-power_usage} power`;
                     }
                 }
             }

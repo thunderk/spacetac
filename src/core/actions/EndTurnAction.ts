@@ -18,15 +18,16 @@ module TK.SpaceTac {
             return "End ship's turn";
         }
 
+        getActionPointsUsage(ship: Ship, target: Target | null): number {
+            let toggled_cost = isum(imap(ship.iToggleActions(true), action => action.power));
+            let power_diff = ship.getAttribute("power_generation") - toggled_cost;
+            return -power_diff;
+        }
+
         protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
             if (ship.is(battle.playing_ship)) {
                 let result: BaseBattleDiff[] = [];
                 let new_ship = battle.getNextShip();
-
-                // Generate power
-                let toggled_cost = isum(imap(ship.iToggleActions(true), action => action.power));
-                let power_diff = ship.getAttribute("power_generation") - toggled_cost;
-                result = result.concat(ship.getValueDiffs("power", power_diff, true));
 
                 // Cool down equipment
                 ship.listEquipment().filter(equ => equ.cooldown.heat > 0).forEach(equ => {

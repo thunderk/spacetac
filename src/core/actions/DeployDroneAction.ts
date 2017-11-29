@@ -32,6 +32,15 @@ module TK.SpaceTac {
             return this.activated ? ActionTargettingMode.SELF : ActionTargettingMode.SPACE;
         }
 
+        getDefaultTarget(ship: Ship): Target {
+            let harmful = any(this.effects, effect => !effect.isBeneficial());
+            let distance = this.drone_radius * (harmful ? 1.1 : 0.9);
+            return Target.newFromLocation(
+                ship.arena_x + Math.cos(ship.arena_angle) * distance,
+                ship.arena_y + Math.sin(ship.arena_angle) * distance
+            );
+        }
+
         getRangeRadius(ship: Ship): number {
             return this.activated ? 0 : this.deploy_distance;
         }
