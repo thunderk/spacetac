@@ -140,7 +140,7 @@ module TK.SpaceTac.UI.Specs {
 
             targetting.setAction(action, ActionTargettingMode.SURROUNDINGS);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
-            check.equals(targetting.target, Target.newFromLocation(8000, 60), "surroundings 1");
+            check.equals(targetting.target, new Target(8000, 60, playing_ship), "surroundings 1");
             targetting.setTargetFromLocation({ x: playing_ship.arena_x + 10, y: playing_ship.arena_y - 20 });
             check.equals(targetting.target, Target.newFromShip(playing_ship), "surroundings 2");
 

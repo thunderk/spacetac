@@ -3,9 +3,11 @@
 module TK.SpaceTac {
     /**
      * Action to toggle some effects on the ship or around it, until next turn start
+     * 
+     * Toggle actions consume power when activated, and restore it when deactivated
      */
     export class ToggleAction extends BaseAction {
-        // Power consumption (activation only)
+        // Power consumption (for activation)
         power: number
 
         // Effect radius
@@ -37,7 +39,7 @@ module TK.SpaceTac {
         }
 
         getActionPointsUsage(ship: Ship, target: Target | null): number {
-            return this.activated ? 0 : this.power;
+            return this.activated ? -this.power : this.power;
         }
 
         getRangeRadius(ship: Ship): number {
@@ -52,23 +54,25 @@ module TK.SpaceTac {
             return ship.is(target.ship_id) ? target : null;
         }
 
-        /**
-         * Collect the effects applied by this action
-         */
-        getEffects(ship: Ship, target: Target, source = ship.location): [Ship, BaseEffect][] {
-            let result: [Ship, BaseEffect][] = [];
-            let ships = this.getImpactedShips(ship, target, source);
-            ships.forEach(ship => {
-                this.effects.forEach(effect => result.push([ship, effect]));
-            });
-            return result;
-        }
-
         protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
-            // TODO Add effects to ships in range
-            return [
+            let result: BaseBattleDiff[] = [
                 new ShipActionToggleDiff(ship, this, !this.activated)
-            ]
+            ];
+
+            let ships = this.getImpactedShips(ship, target, ship.location);
+            ships.forEach(iship => {
+                this.effects.forEach(effect => {
+                    if (this.activated) {
+                        result.push(new ShipEffectRemovedDiff(iship, effect));
+                        result = result.concat(effect.getOffDiffs(iship, ship));
+                    } else {
+                        result.push(new ShipEffectAddedDiff(iship, effect));
+                        result = result.concat(effect.getOnDiffs(iship, ship));
+                    }
+                });
+            });
+
+            return result;
         }
 
         getEffectsDescription(): string {

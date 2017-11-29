@@ -37,8 +37,6 @@ Character sheet
 Battle
 ------
 
-* Fix area effects not applying (Damage Protector)
-* Fix toggle actions not deactivating (Damage Protector)
 * Fix drone effects not applying, and drone never disappearing (Repair Drone)
 * Fix arena's ship hovering happening even when the character sheet (or a dialog) is open on top
 * Add a voluntary retreat option
@@ -57,7 +55,6 @@ Battle
 * Allow to move targetting indicator with arrow keys
 * Add targetting shortcuts for "previous target", "next enemy" and "next ally"
 * Area targetting should include the hotkeyed ship at best (apply exclusion and power limit), not necessarily center on it
-* Fix "toggle action" targetting with simulated move not activating the action after the move
 * Add shortcut to perform only the "move" part of a move+fire simulation
 * Fix delay of shield/hull impact effects (should depend on weapon animation, and ship location)
 * Indicate visually the power gain of "end turn"

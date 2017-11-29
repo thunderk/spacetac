@@ -20,7 +20,9 @@ module TK.SpaceTac {
                 let new_ship = battle.getNextShip();
 
                 // Generate power
-                result = result.concat(ship.getValueDiffs("power", ship.getAttribute("power_generation"), true));
+                let toggled_cost = isum(imap(ship.iToggleActions(true), action => action.power));
+                let power_diff = ship.getAttribute("power_generation") - toggled_cost;
+                result = result.concat(ship.getValueDiffs("power", power_diff, true));
 
                 // Cool down equipment
                 ship.listEquipment().filter(equ => equ.cooldown.heat > 0).forEach(equ => {

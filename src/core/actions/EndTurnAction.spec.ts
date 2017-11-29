@@ -37,25 +37,47 @@ module TK.SpaceTac.Specs {
             let battle = TestTools.createBattle(1, 0);
             let ship = battle.play_order[0];
             TestTools.setShipAP(ship, 10, 3);
+            let weapon = TestTools.addWeapon(ship);
+            weapon.action = new ToggleAction(weapon, 2);
             ship.setValue("power", 6);
 
             TestTools.actionChain(check, battle, [
+                [ship, weapon.action, Target.newFromShip(ship)],
+                [ship, weapon.action, Target.newFromShip(ship)],
+                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+                [ship, weapon.action, Target.newFromShip(ship)],
                 [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
                 [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+                [ship, weapon.action, Target.newFromShip(ship)],
                 [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
             ], [
                     check => {
-                        check.equals(ship.getValue("power"), 6, "power=6");
+                        check.equals(ship.getValue("power"), 6, "power value");
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 9, "power=9");
+                        check.equals(ship.getValue("power"), 4, "power value");
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 10, "power=10");
+                        check.equals(ship.getValue("power"), 6, "power value");
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 10, "power=10");
-                    }
+                        check.equals(ship.getValue("power"), 9, "power value");
+                    },
+                    check => {
+                        check.equals(ship.getValue("power"), 7, "power value");
+                    },
+                    check => {
+                        check.equals(ship.getValue("power"), 8, "power value");
+                    },
+                    check => {
+                        check.equals(ship.getValue("power"), 9, "power value");
+                    },
+                    check => {
+                        check.equals(ship.getValue("power"), 10, "power value");
+                    },
+                    check => {
+                        check.equals(ship.getValue("power"), 10, "power value");
+                    },
                 ]);
         });
 

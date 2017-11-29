@@ -40,7 +40,9 @@ module TK.SpaceTac {
          * This may not contain ALL the diffs needed, and should be called again while it returns diffs.
          */
         checkAll(): BaseBattleDiff[] {
-            let diffs = this.checkVictory();
+            let diffs: BaseBattleDiff[];
+
+            diffs = this.checkAreaEffects();
             if (diffs.length) {
                 return diffs;
             }
@@ -51,6 +53,11 @@ module TK.SpaceTac {
             }
 
             diffs = this.checkDeadShips();
+            if (diffs.length) {
+                return diffs;
+            }
+
+            diffs = this.checkVictory();
             if (diffs.length) {
                 return diffs;
             }
@@ -108,6 +115,35 @@ module TK.SpaceTac {
                 if (ship.getValue("hull") == 0) {
                     result.push(new ShipDeathDiff(this.battle, ship));
                 }
+            });
+
+            return result;
+        }
+
+        /**
+         * Check area effects (remove obsolete ones, and add missing ones)
+         */
+        checkAreaEffects(): BaseBattleDiff[] {
+            let result: BaseBattleDiff[] = [];
+
+            iforeach(this.battle.iships(true), ship => {
+                let expected = new RObjectContainer(imaterialize(this.battle.iAreaEffects(ship.arena_x, ship.arena_y)));
+
+                // Remove obsolete effects
+                ship.active_effects.list().forEach(effect => {
+                    if (!(effect instanceof StickyEffect) && !expected.get(effect.id)) {
+                        result.push(new ShipEffectRemovedDiff(ship, effect));
+                        result = result.concat(effect.getOffDiffs(ship, ship));
+                    }
+                });
+
+                // Add missing effects
+                expected.list().forEach(effect => {
+                    if (!ship.active_effects.get(effect.id)) {
+                        result.push(new ShipEffectAddedDiff(ship, effect));
+                        result = result.concat(effect.getOnDiffs(ship, ship));
+                    }
+                });
             });
 
             return result;

@@ -325,7 +325,7 @@ module TK.SpaceTac.UI {
                     if (arenaDistance(this.ship.location, location) < 50) {
                         this.setTarget(Target.newFromShip(this.ship));
                     } else {
-                        this.setTarget(Target.newFromLocation(location.x, location.y));
+                        this.setTarget(new Target(location.x, location.y, this.ship));
                     }
                 } else {
                     this.setTarget(Target.newFromShip(this.ship));

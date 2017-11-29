@@ -44,5 +44,27 @@ module TK.SpaceTac.Specs {
                 new ShipDeathDiff(battle, ship3),
             ], "2 ships to mark as dead");
         })
+
+        test.case("fixes area effects", check => {
+            let battle = new Battle();
+            let ship1 = battle.fleets[0].addShip();
+            let ship2 = battle.fleets[1].addShip();
+            let checks = new BattleChecks(battle);
+
+            check.in("initial state", check => {
+                check.equals(checks.checkAreaEffects(), [], "effects diff");
+            });
+
+            let effect1 = ship1.active_effects.add(new StickyEffect(new BaseEffect("e1")));
+            let effect2 = ship1.active_effects.add(new BaseEffect("e2"));
+            let effect3 = ship1.active_effects.add(new BaseEffect("e3"));
+            check.patch(battle, "iAreaEffects", () => isingle(effect3));
+            check.in("sticky+obsolete+missing", check => {
+                check.equals(checks.checkAreaEffects(), [
+                    new ShipEffectRemovedDiff(ship1, effect2),
+                    new ShipEffectAddedDiff(ship2, effect3)
+                ], "effects diff");
+            });
+        })
     })
 }

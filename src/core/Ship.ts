@@ -524,14 +524,13 @@ module TK.SpaceTac {
 
         /**
          * Iterator over all effects active for this ship.
+         * 
+         * This combines the permanent effects from equipment, with sticky and area effects.
          */
         ieffects(): Iterator<BaseEffect> {
-            let battle = this.getBattle();
-            let area_effects = battle ? battle.iAreaEffects(this.arena_x, this.arena_y) : IEMPTY;
             return ichain(
                 ichainit(imap(iarray(this.slots), slot => slot.attached ? iarray(slot.attached.effects) : IEMPTY)),
-                imap(this.active_effects.iterator(), effect => (effect instanceof StickyEffect) ? effect.base : effect),
-                area_effects
+                imap(this.active_effects.iterator(), effect => (effect instanceof StickyEffect) ? effect.base : effect)
             );
         }
 
