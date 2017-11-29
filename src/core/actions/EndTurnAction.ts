@@ -11,7 +11,11 @@ module TK.SpaceTac {
         static SINGLETON = new EndTurnAction();
 
         constructor() {
-            super("endturn", "End ship's turn");
+            super("endturn");
+        }
+
+        getVerb(): string {
+            return "End ship's turn";
         }
 
         protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
@@ -29,20 +33,19 @@ module TK.SpaceTac {
                     result.push(new ShipCooldownDiff(ship, equ, 1));
                 });
 
-                // Fade sticky effects
+                // "On turn end" effects
                 iforeach(ship.active_effects.iterator(), effect => {
-                    if (effect instanceof StickyEffect) {
-                        if (effect.duration > 1) {
-                            result.push(new ShipEffectChangedDiff(ship, effect, -1));
-                        } else {
-                            result = result.concat(effect.getOffDiffs(ship, ship));
-                        }
-                    }
+                    result = result.concat(effect.getTurnEndDiffs(ship));
                 });
 
                 // Change the active ship
                 let cycle_diff = (battle.play_order.indexOf(new_ship) == 0) ? 1 : 0;
                 result.push(new ShipChangeDiff(ship, new_ship, cycle_diff));
+
+                // "On turn start" effects
+                iforeach(new_ship.active_effects.iterator(), effect => {
+                    result = result.concat(effect.getTurnStartDiffs(ship));
+                });
 
                 return result;
             } else {

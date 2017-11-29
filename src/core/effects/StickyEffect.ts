@@ -26,7 +26,7 @@ module TK.SpaceTac {
 
             let previous = ship.active_effects.get(this.id);
             if (previous) {
-                result = result.concat(previous.getOffDiffs(ship, source));
+                result = result.concat(previous.getOffDiffs(ship));
             }
 
             result.push(new ShipEffectAddedDiff(ship, this));
@@ -35,15 +35,36 @@ module TK.SpaceTac {
             return result;
         }
 
-        getOffDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+        getOffDiffs(ship: Ship): BaseBattleDiff[] {
             let result: BaseBattleDiff[] = [];
 
             if (ship.active_effects.get(this.id)) {
                 result.push(new ShipEffectRemovedDiff(ship, this));
-                result = result.concat(this.base.getOffDiffs(ship, source));
+                result = result.concat(this.base.getOffDiffs(ship));
             }
 
             return result;
+        }
+
+        getTurnStartDiffs(ship: Ship): BaseBattleDiff[] {
+            if (ship.active_effects.get(this.id)) {
+                return this.base.getTurnStartDiffs(ship);
+            } else {
+                return [];
+            }
+        }
+
+        getTurnEndDiffs(ship: Ship): BaseBattleDiff[] {
+            if (ship.active_effects.get(this.id)) {
+                if (this.duration > 1) {
+                    let result: BaseBattleDiff[] = [new ShipEffectChangedDiff(ship, this, -1)];
+                    return result.concat(this.base.getTurnEndDiffs(ship));
+                } else {
+                    return this.getOffDiffs(ship);
+                }
+            } else {
+                return [];
+            }
         }
 
         isBeneficial(): boolean {

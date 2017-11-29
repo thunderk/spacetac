@@ -25,14 +25,18 @@ module TK.SpaceTac {
         // Equipment cannot be null
         equipment: Equipment
 
-        constructor(equipment: Equipment, effects: BaseEffect[] = [], power = 1, range = 0, blast = 0, angle = 0, name = range ? "Fire" : "Trigger") {
-            super("fire-" + equipment.code, name, equipment);
+        constructor(equipment: Equipment, effects: BaseEffect[] = [], power = 1, range = 0, blast = 0, angle = 0, code = `fire-${equipment.code}`) {
+            super(code, equipment);
 
             this.power = power;
             this.range = range;
             this.effects = effects;
             this.blast = blast;
             this.angle = angle;
+        }
+
+        getVerb(): string {
+            return this.range ? "Fire" : "Trigger";
         }
 
         getDefaultTarget(ship: Ship): Target {
@@ -175,7 +179,7 @@ module TK.SpaceTac {
                 info.push(`max range ${this.range}km`);
             }
 
-            let desc = `${this.name} (${info.join(", ")})`;
+            let desc = `${this.getVerb()} (${info.join(", ")})`;
             let effects = this.effects.map(effect => {
                 let suffix: string;
                 if (this.blast) {

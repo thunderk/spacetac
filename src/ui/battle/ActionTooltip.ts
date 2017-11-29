@@ -12,7 +12,7 @@ module TK.SpaceTac.UI {
             let icon = builder.image([`equipment-${action.equipment ? action.equipment.code : "---"}`, `action-${action.code}`]);
             icon.scale.set(0.5);
 
-            builder.text(action.equipment ? action.equipment.name : action.name, 150, 0, { size: 24 });
+            builder.text(action.equipment ? action.equipment.name : action.getVerb(), 150, 0, { size: 24 });
 
             let cost = "";
             if (action instanceof MoveAction) {

@@ -184,10 +184,8 @@ module TK.SpaceTac.UI {
                 durations.push(this.processEndBattleEvent(diff));
             } else if (diff instanceof DroneDeployedDiff) {
                 durations.push(this.processDroneDeployedEvent(diff));
-            } else if (diff instanceof DroneDestroyedDiff) {
-                durations.push(this.processDroneDestroyedEvent(diff));
-            } else if (diff instanceof DroneAppliedDiff) {
-                durations.push(this.processDroneAppliedEvent(diff));
+            } else if (diff instanceof DroneRecalledDiff) {
+                durations.push(this.processDroneRecalledEvent(diff));
             }
 
             let delay = max([0].concat(durations));
@@ -286,7 +284,7 @@ module TK.SpaceTac.UI {
         }
 
         // Drone destroyed
-        private processDroneDestroyedEvent(event: DroneDestroyedDiff): number {
+        private processDroneRecalledEvent(event: DroneRecalledDiff): number {
             let duration = this.view.arena.removeDrone(event.drone);
 
             if (duration) {
@@ -297,7 +295,7 @@ module TK.SpaceTac.UI {
         }
 
         // Drone applied
-        private processDroneAppliedEvent(event: DroneAppliedDiff): number {
+        /*private processDroneAppliedEvent(event: DroneAppliedDiff): number {
             let drone = this.view.arena.findDrone(event.drone);
             if (drone) {
                 let duration = drone.setApplied();
@@ -310,6 +308,6 @@ module TK.SpaceTac.UI {
             } else {
                 return 0;
             }
-        }
+        }*/
     }
 }

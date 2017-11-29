@@ -81,8 +81,8 @@ module TK.SpaceTac {
             if (this.action instanceof TriggerAction) {
                 result = result.concat(this.action.getEffects(this.ship, this.target));
             } else if (this.action instanceof DeployDroneAction) {
-                let ships = this.battle.collectShipsInCircle(this.target, this.action.effect_radius, true);
-                this.action.effects.forEach(effect => {
+                let ships = this.battle.collectShipsInCircle(this.target, this.action.drone_radius, true);
+                this.action.drone_effects.forEach(effect => {
                     result = result.concat(ships.map(ship => <[Ship, BaseEffect]>[ship, effect]));
                 });
             }

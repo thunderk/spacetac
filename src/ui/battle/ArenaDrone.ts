@@ -18,9 +18,6 @@ module TK.SpaceTac.UI {
         // Activation effect
         activation: Phaser.Graphics
 
-        // Duration info
-        duration: Phaser.Text
-
         constructor(battleview: BattleView, drone: Drone) {
             super(battleview.game);
 
@@ -47,11 +44,6 @@ module TK.SpaceTac.UI {
             this.sprite.anchor.set(0.5, 0.5);
             this.sprite.scale.set(0.1, 0.1);
             this.add(this.sprite);
-
-            this.duration = new Phaser.Text(this.game, 0, 40, "", { font: "bold 16pt SpaceTac", fill: "#ffdd4b" });
-            this.duration.anchor.set(0.5, 0.5);
-            this.duration.visible = false;
-            this.add(this.duration);
 
             this.view.tooltip.bindDynamicText(this.sprite, () => {
                 return this.drone.getDescription();
@@ -93,11 +85,7 @@ module TK.SpaceTac.UI {
          * Set the tactical mode display
          */
         setTacticalMode(active: boolean) {
-            if (active) {
-                this.duration.text = `${this.drone.duration}`;
-            }
             this.sprite.scale.set(active ? 0.2 : 0.1);
-            this.view.animations.setVisible(this.duration, active, 200);
         }
     }
 }

@@ -5,7 +5,7 @@ module TK.SpaceTac.Specs {
             let action = new DeployDroneAction(equipment);
 
             check.equals(action.code, "deploy-testdrone");
-            check.equals(action.name, "Deploy");
+            check.equals(action.getVerb(), "Deploy");
             check.same(action.equipment, equipment);
         });
 
@@ -29,7 +29,7 @@ module TK.SpaceTac.Specs {
             TestTools.setShipAP(ship, 3);
 
             let equipment = new Equipment(SlotType.Weapon, "testdrone");
-            let action = new DeployDroneAction(equipment, 2, 8, 2, 4, [new DamageEffect(50)]);
+            let action = new DeployDroneAction(equipment, 2, 8, 4, [new DamageEffect(50)]);
             equipment.action = action;
             ship.addSlot(SlotType.Weapon).attach(equipment);
 
@@ -46,7 +46,6 @@ module TK.SpaceTac.Specs {
 
                         let drone = battle.drones.list()[0];
                         check.equals(drone.code, "testdrone");
-                        check.equals(drone.duration, 2);
                         check.same(drone.owner, ship.id);
                         check.equals(drone.x, 5);
                         check.equals(drone.y, 0);

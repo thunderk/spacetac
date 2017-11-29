@@ -22,12 +22,16 @@ module TK.SpaceTac {
         // Current activation status
         activated = false
 
-        constructor(equipment: Equipment, power = 1, radius = 0, effects: BaseEffect[] = [], name = "(De)activate") {
-            super("toggle-" + equipment.code, name, equipment);
+        constructor(equipment: Equipment, power = 1, radius = 0, effects: BaseEffect[] = [], code = `toggle-${equipment.code}`) {
+            super(code, equipment);
 
             this.power = power;
             this.radius = radius;
             this.effects = effects;
+        }
+
+        getVerb(): string {
+            return this.activated ? "Deactivate" : "Activate";
         }
 
         getTargettingMode(ship: Ship): ActionTargettingMode {
@@ -64,7 +68,7 @@ module TK.SpaceTac {
                 this.effects.forEach(effect => {
                     if (this.activated) {
                         result.push(new ShipEffectRemovedDiff(iship, effect));
-                        result = result.concat(effect.getOffDiffs(iship, ship));
+                        result = result.concat(effect.getOffDiffs(iship));
                     } else {
                         result.push(new ShipEffectAddedDiff(iship, effect));
                         result = result.concat(effect.getOnDiffs(iship, ship));

@@ -11,12 +11,12 @@ module TK.SpaceTac.UI.Specs {
 
             let action1 = new MoveAction(new Equipment());
             nn(action1.equipment).name = "Engine";
-            action1.name = "Move";
+            check.patch(action1, "getVerb", () => "Move");
             let action2 = new TriggerAction(new Equipment(), [new DamageEffect(12)], 2, 50, 0);
             nn(action2.equipment).name = "Weapon";
-            action2.name = "Fire";
+            check.patch(action2, "getVerb", () => "Fire");
             let action3 = new EndTurnAction();
-            action3.name = "End turn";
+            check.patch(action3, "getVerb", () => "End turn");
 
             ActionTooltip.fill(tooltip.getFiller(), ship, action1, 0);
             checkText(check, (<any>tooltip).container.content.children[1], "Engine");

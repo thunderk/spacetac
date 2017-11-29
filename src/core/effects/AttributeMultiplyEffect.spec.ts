@@ -14,10 +14,10 @@ module TK.SpaceTac {
             battle.applyDiffs(effect2.getOnDiffs(ship, ship));
             check.equals(ship.getAttribute("hull_capacity"), 120, "applied 2");
 
-            battle.applyDiffs(effect1.getOffDiffs(ship, ship));
+            battle.applyDiffs(effect1.getOffDiffs(ship));
             check.equals(ship.getAttribute("hull_capacity"), 90, "reverted 1");
 
-            battle.applyDiffs(effect2.getOffDiffs(ship, ship));
+            battle.applyDiffs(effect2.getOffDiffs(ship));
             check.equals(ship.getAttribute("hull_capacity"), 100, "reverted 2");
         });
 

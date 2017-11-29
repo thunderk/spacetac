@@ -7,7 +7,7 @@ module TK.SpaceTac.UI.Specs {
         test.case("displays power usage", check => {
             let bar = testgame.view.action_bar;
             let ship = new Ship();
-            let action = new BaseAction("something", "Do something");
+            let action = new BaseAction("something");
             let icon = new ActionIcon(bar, ship, action, 0);
             check.same(icon.img_power.visible, false, "initial state");
 
@@ -124,7 +124,7 @@ module TK.SpaceTac.UI.Specs {
             icon.refresh(action);
             check.same(icon.img_targetting.visible, true, "selected");
 
-            icon.refresh(new BaseAction("other", "Other action"));
+            icon.refresh(new BaseAction("other"));
             check.same(icon.img_targetting.visible, false, "other");
         })
     });

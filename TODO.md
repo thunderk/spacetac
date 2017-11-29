@@ -37,7 +37,6 @@ Character sheet
 Battle
 ------
 
-* Fix drone effects not applying, and drone never disappearing (Repair Drone)
 * Fix arena's ship hovering happening even when the character sheet (or a dialog) is open on top
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
@@ -49,7 +48,6 @@ Battle
 * Find incentives to move from starting position (permanent drones or anomalies?)
 * Add a "loot all" button (on the character sheet or outcome dialog?)
 * Mark targetting in error when target is refused by the action (there is already an arrow for this)
-* Repair drone has its activation effect sometimes displayed as permanent effect on ships in the radius
 * Allow to undo last moves
 * Add a battle log display
 * Allow to move targetting indicator with arrow keys
@@ -76,7 +74,6 @@ Ships models and equipments
 * RepelEffect should apply on ships in a good order (distance decreasing)
 * Add hull points to drones and make them take area damage
 * Quality modifiers should be based on an "quality difference" to reach
-* Drones effects should be classified: permanent effects apply permanently, ponctual effects may be applied by an owner's action (if in range)
 
 Artificial Intelligence
 -----------------------

@@ -89,7 +89,7 @@ module TK.SpaceTac.Specs {
             let action = nn(weapon.action);
             let engine = TestTools.addEngine(ship, 25);
 
-            let maneuver = new Maneuver(ship, new BaseAction("fake", "Nothing"), new Target(0, 0), 0);
+            let maneuver = new Maneuver(ship, new BaseAction("fake"), new Target(0, 0), 0);
             check.same(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver), -1);
 
             maneuver = new Maneuver(ship, action, Target.newFromLocation(100, 0), 0);

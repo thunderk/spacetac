@@ -154,7 +154,7 @@ module TK.SpaceTac.UI {
                 }
             } else if (action instanceof DeployDroneAction) {
                 color = 0xe9f2f9;
-                radius = action.effect_radius;
+                radius = action.drone_radius;
             } else if (action instanceof ToggleAction) {
                 color = 0xd3e448;
                 radius = action.radius;

@@ -13,10 +13,10 @@ module TK.SpaceTac {
             battle.applyDiffs(effect2.getOnDiffs(ship, ship));
             check.equals(ship.getAttribute("maneuvrability"), 30, "applied 2");
 
-            battle.applyDiffs(effect1.getOffDiffs(ship, ship));
+            battle.applyDiffs(effect1.getOffDiffs(ship));
             check.equals(ship.getAttribute("maneuvrability"), 10, "reverted 1");
 
-            battle.applyDiffs(effect2.getOffDiffs(ship, ship));
+            battle.applyDiffs(effect2.getOffDiffs(ship));
             check.equals(ship.getAttribute("maneuvrability"), 0, "reverted 2");
         });
 

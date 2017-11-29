@@ -28,7 +28,7 @@ module TK.SpaceTac.Equipments {
             this.addAttributeEffect("hull_capacity", leveled(60));
             this.addAttributeEffect("precision", leveled(2));
             this.addTriggerAction(leveled(1, 0.1), [
-                new EffectTemplate(new ValueEffect("hull"), { value: leveled(60) })
+                new EffectTemplate(new ValueEffect("hull"), { value_on: leveled(60) })
             ])
             this.setCooldown(irepeat(1), irepeat(4));
         }

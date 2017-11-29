@@ -104,7 +104,7 @@ module TK.SpaceTac.UI {
                 this.loadSound("battle/weapon-missile-explosion.wav");
                 this.loadSound("battle/drone-deploy.wav");
                 this.loadSound("battle/drone-destroy.wav");
-                this.loadSound("battle/drone-activate.wav");
+                // this.loadSound("battle/drone-activate.wav");
 
                 this.loadSound("music/mechanolith.mp3");
             }

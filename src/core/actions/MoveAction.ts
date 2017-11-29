@@ -16,11 +16,15 @@ module TK.SpaceTac {
         maneuvrability_factor: number
 
         constructor(equipment: Equipment, distance_per_power = 0, safety_distance = 120, maneuvrability_factor = 0) {
-            super("move", "Move", equipment);
+            super("move", equipment);
 
             this.distance_per_power = distance_per_power;
             this.safety_distance = safety_distance;
             this.maneuvrability_factor = maneuvrability_factor;
+        }
+
+        getVerb(): string {
+            return "Move";
         }
 
         getTargettingMode(ship: Ship): ActionTargettingMode {

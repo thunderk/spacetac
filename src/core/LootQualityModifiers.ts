@@ -40,7 +40,12 @@ module TK.SpaceTac {
             }
 
             function effectFactor(effect: BaseEffect) {
-                if (effect instanceof ValueEffect || effect instanceof AttributeEffect) {
+                if (effect instanceof ValueEffect) {
+                    simpleFactor(effect, 'value_on');
+                    simpleFactor(effect, 'value_off');
+                    simpleFactor(effect, 'value_start');
+                    simpleFactor(effect, 'value_end');
+                } else if (effect instanceof AttributeEffect || effect instanceof AttributeMultiplyEffect) {
                     simpleFactor(effect, 'value');
                 } else if (effect instanceof AttributeLimitEffect) {
                     simpleFactor(effect, 'value', true);
@@ -79,8 +84,8 @@ module TK.SpaceTac {
 
             if (equipment.action instanceof DeployDroneAction) {
                 simpleFactor(equipment.action, 'deploy_distance');
-                simpleFactor(equipment.action, 'effect_radius');
-                equipment.action.effects.forEach(effectFactor);
+                simpleFactor(equipment.action, 'drone_radius');
+                equipment.action.drone_effects.forEach(effectFactor);
             }
 
             if (equipment.action instanceof MoveAction) {

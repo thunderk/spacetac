@@ -28,7 +28,21 @@ module TK.SpaceTac {
         /**
          * Get the list of diffs needed to remove this effect on a ship
          */
-        getOffDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+        getOffDiffs(ship: Ship): BaseBattleDiff[] {
+            return [];
+        }
+
+        /**
+         * Get the list of diffs to apply when this effect is active on a ship beginning its turn
+         */
+        getTurnStartDiffs(ship: Ship): BaseBattleDiff[] {
+            return [];
+        }
+
+        /**
+         * Get the list of diffs to apply when this effect is active on a ship ending its turn
+         */
+        getTurnEndDiffs(ship: Ship): BaseBattleDiff[] {
             return [];
         }
 

@@ -133,7 +133,7 @@ module TK.SpaceTac {
                 ship.active_effects.list().forEach(effect => {
                     if (!(effect instanceof StickyEffect) && !expected.get(effect.id)) {
                         result.push(new ShipEffectRemovedDiff(ship, effect));
-                        result = result.concat(effect.getOffDiffs(ship, ship));
+                        result = result.concat(effect.getOffDiffs(ship));
                     }
                 });
 
@@ -141,7 +141,7 @@ module TK.SpaceTac {
                 expected.list().forEach(effect => {
                     if (!ship.active_effects.get(effect.id)) {
                         result.push(new ShipEffectAddedDiff(ship, effect));
-                        result = result.concat(effect.getOnDiffs(ship, ship));
+                        result = result.concat(effect.getOnDiffs(ship, ship));  // TODO correct source
                     }
                 });
             });

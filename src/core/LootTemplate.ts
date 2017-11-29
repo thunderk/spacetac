@@ -3,6 +3,7 @@ module TK.SpaceTac {
      * A leveled value is an iterator yielding the desired value for each level (first item is for level 1, and so on)
      */
     type LeveledValue = Iterator<number>;
+    type LeveledModifiers<T extends BaseEffect> = {[P in keyof T]?: LeveledValue }
 
     /**
      * Modifiers of generated equipment
@@ -35,12 +36,12 @@ module TK.SpaceTac {
         // Effect value modifiers
         modifiers: [keyof T, LeveledValue][];
 
-        constructor(effect: T, modifiers: { [attr: string]: LeveledValue }) {
+        constructor(effect: T, modifiers: LeveledModifiers<T>) {
             this.effect = effect;
             this.modifiers = [];
 
             iteritems(modifiers, (key, value) => {
-                if (effect.hasOwnProperty(key)) {
+                if (effect.hasOwnProperty(key) && value) {
                     this.addModifier(<keyof T>key, value);
                 }
             });
@@ -56,7 +57,7 @@ module TK.SpaceTac {
             let result = copy(this.effect);
             this.modifiers.forEach(modifier => {
                 let [name, value] = modifier;
-                (<any>result)[name] = resolveForLevel(value, level);
+                result[name] = resolveForLevel(value, level);
             });
             return result;
         }
@@ -215,10 +216,10 @@ module TK.SpaceTac {
         /**
          * Add a deploy drone action.
          */
-        addDroneAction(power: LeveledValue, range: LeveledValue, lifetime: LeveledValue, radius: LeveledValue, effects: EffectTemplate<any>[]): void {
+        addDroneAction(power: LeveledValue, range: LeveledValue, radius: LeveledValue, effects: EffectTemplate<any>[]): void {
             this.base_modifiers.push((equipment, level) => {
                 let reffects = effects.map(effect => effect.generate(level));
-                equipment.action = new DeployDroneAction(equipment, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(lifetime, level), resolveForLevel(radius, level), reffects);
+                equipment.action = new DeployDroneAction(equipment, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(radius, level), reffects);
             });
         }
 

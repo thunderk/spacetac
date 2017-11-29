@@ -26,19 +26,22 @@ module TK.SpaceTac {
         // Identifier code for the type of action
         code: string
 
-        // Human-readable name
-        name: string
-
         // Equipment that triggers this action
         equipment: Equipment | null
 
         // Create the action
-        constructor(code = "nothing", name = "Idle", equipment: Equipment | null = null) {
+        constructor(code = "nothing", equipment: Equipment | null = null) {
             super();
 
             this.code = code;
-            this.name = name;
             this.equipment = equipment;
+        }
+
+        /**
+         * Get the verb for this action
+         */
+        getVerb(): string {
+            return "Idle";
         }
 
         /**

@@ -5,7 +5,7 @@ module TK.SpaceTac.Specs {
             let action = new TriggerAction(equipment, [], 4, 30, 10);
 
             check.equals(action.code, "fire-testweapon");
-            check.equals(action.name, "Fire");
+            check.equals(action.getVerb(), "Fire");
             check.same(action.equipment, equipment);
         })
 

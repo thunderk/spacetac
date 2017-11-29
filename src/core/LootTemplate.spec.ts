@@ -55,12 +55,13 @@ module TK.SpaceTac.Specs {
             compare_effects(check, action1.effects, action2.effects);
         }
     }
+
     export function compare_drone_action(check: TestContext, action1: BaseAction | null, action2: DeployDroneAction | null): void {
         if (action1 === null || action2 === null || !(action1 instanceof DeployDroneAction)) {
             check.equals(action1, action2, "action");
         } else {
-            check.equals(strip_id(strip(action1, "effects")), strip_id(strip(action2, "effects")), "action");
-            compare_effects(check, action1.effects, action2.effects);
+            check.equals(strip_id(strip(action1, "drone_effects")), strip_id(strip(action2, "drone_effects")), "action");
+            compare_effects(check, action1.drone_effects, action2.drone_effects);
         }
     }
 
@@ -163,15 +164,15 @@ module TK.SpaceTac.Specs {
 
         test.case("adds drone actions", check => {
             let template = new LootTemplate(SlotType.Weapon, "Weapon");
-            template.addDroneAction(istep(1), istep(100), istep(2), istep(50), [
+            template.addDroneAction(istep(1), istep(100), istep(50), [
                 new EffectTemplate(new FakeEffect(3), { "fakevalue": istep(8) })
             ]);
 
             let result = template.generate(1);
-            compare_drone_action(check, result.action, new DeployDroneAction(result, 1, 100, 2, 50, [new FakeEffect(8)]));
+            compare_drone_action(check, result.action, new DeployDroneAction(result, 1, 100, 50, [new FakeEffect(8)]));
 
             result = template.generate(2);
-            compare_drone_action(check, result.action, new DeployDroneAction(result, 2, 101, 3, 51, [new FakeEffect(9)]));
+            compare_drone_action(check, result.action, new DeployDroneAction(result, 2, 101, 51, [new FakeEffect(9)]));
         });
 
         test.case("checks the presence of damaging effects", check => {

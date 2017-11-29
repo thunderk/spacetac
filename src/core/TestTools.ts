@@ -50,7 +50,7 @@ module TK.SpaceTac {
          */
         static addWeapon(ship: Ship, damage = 100, power_usage = 1, max_distance = 100, blast = 0, angle = 0): Equipment {
             var equipment = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            equipment.action = new TriggerAction(equipment, [new DamageEffect(damage)], power_usage, max_distance, blast, angle, "Test Weapon");
+            equipment.action = new TriggerAction(equipment, [new DamageEffect(damage)], power_usage, max_distance, blast, angle);
             return equipment;
         }
 

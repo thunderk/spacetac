@@ -8,41 +8,32 @@ module TK.SpaceTac {
         // Drone object
         drone: Drone
 
-        // Initial duration (number of activations)
-        duration: number
-
-        constructor(drone: Drone, duration = drone.duration) {
+        constructor(drone: Drone) {
             super(drone.owner);
 
             this.drone = drone;
-            this.duration = duration;
         }
 
         protected applyOnShip(ship: Ship, battle: Battle): void {
-            this.drone.duration = this.duration;
             battle.addDrone(this.drone);
         }
 
         protected getReverse(): BaseBattleDiff {
-            return new DroneDestroyedDiff(this.drone, this.duration);
+            return new DroneRecalledDiff(this.drone);
         }
     }
 
     /**
-     * A drone is destroyed
+     * A drone is recalled
      */
-    export class DroneDestroyedDiff extends BaseBattleShipDiff {
+    export class DroneRecalledDiff extends BaseBattleShipDiff {
         // Drone object
         drone: Drone
 
-        // Remaining duration
-        duration: number
-
-        constructor(drone: Drone, duration = drone.duration) {
+        constructor(drone: Drone) {
             super(drone.owner);
 
             this.drone = drone;
-            this.duration = duration;
         }
 
         protected applyOnShip(ship: Ship, battle: Battle): void {
@@ -50,7 +41,7 @@ module TK.SpaceTac {
         }
 
         protected getReverse(): BaseBattleDiff {
-            return new DroneDeployedDiff(this.drone, this.duration);
+            return new DroneDeployedDiff(this.drone);
         }
     }
 }

@@ -37,9 +37,9 @@ module TK.SpaceTac {
                     dshield -= ds;
                 } else if (effect instanceof ValueEffect) {
                     if (effect.valuetype == "hull") {
-                        dhull = clamp(hull + effect.value, 0, chull) - hull;
+                        dhull = clamp(hull + effect.value_on, 0, chull) - hull;
                     } else if (effect.valuetype == "shield") {
-                        dshield += clamp(shield + effect.value, 0, cshield) - shield;
+                        dshield += clamp(shield + effect.value_on, 0, cshield) - shield;
                     }
                 }
             }

@@ -2,7 +2,7 @@ module TK.SpaceTac.Specs {
     testing("BaseAction", test => {
         test.case("check if equipment can be used with remaining AP", check => {
             var equipment = new Equipment(SlotType.Hull);
-            var action = new BaseAction("test", "Test", equipment);
+            var action = new BaseAction("test", equipment);
             check.patch(action, "getActionPointsUsage", () => 3);
             var ship = new Ship();
             ship.addSlot(SlotType.Hull).attach(equipment);
@@ -27,7 +27,7 @@ module TK.SpaceTac.Specs {
 
         test.case("check if equipment can be used with overheat", check => {
             let equipment = new Equipment();
-            let action = new BaseAction("test", "Test", equipment);
+            let action = new BaseAction("test", equipment);
             let ship = new Ship();
 
             check.equals(action.checkCannotBeApplied(ship), null);
@@ -71,7 +71,7 @@ module TK.SpaceTac.Specs {
             TestTools.setShipAP(ship, 10);
             let power = ship.listEquipment(SlotType.Power)[0];
             let equipment = new Equipment(SlotType.Weapon);
-            let action = new BaseAction("test", "Test", equipment);
+            let action = new BaseAction("test", equipment);
             equipment.action = action;
             ship.addSlot(SlotType.Weapon).attach(equipment);
 
