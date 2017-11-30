@@ -61,7 +61,7 @@ module TK.SpaceTac.UI {
         // Move to a given location on screen
         moveTo(x: number, y: number, duration: number) {
             if (duration && (this.x != x || this.y != y)) {
-                this.view.animations.addAnimation(this, {x: x, y: y}, duration, Phaser.Easing.Linear.None);
+                this.view.animations.addAnimation(this, { x: x, y: y }, duration);
             } else {
                 this.x = x;
                 this.y = y;

@@ -142,9 +142,9 @@ module TK.SpaceTac.UI {
         /**
          * Add an asynchronous animation to an object.
          */
-        addAnimation(obj: any, properties: any, duration: number, ease: Function, delay = 0): Promise<void> {
+        addAnimation(obj: any, properties: any, duration: number, ease: Function = Phaser.Easing.Linear.None, delay = 0): Promise<void> {
             return new Promise((resolve, reject) => {
-                let tween = this.tweens.create(obj);
+                let tween = this.createTween(obj);
                 tween.to(properties, duration, ease, false, delay);
                 tween.onComplete.addOnce(() => {
                     this.tweens.remove(tween);
@@ -152,6 +152,19 @@ module TK.SpaceTac.UI {
                 });
                 tween.start();
             });
+        }
+
+        /**
+         * Catch the player eye with a blink effect
+         */
+        async blink(obj: any, alpha_on = 1, alpha_off = 0.3, times = 3): Promise<void> {
+            if (obj.alpha != alpha_on) {
+                await this.addAnimation(obj, { alpha: alpha_on }, 150);
+            }
+            for (let i = 0; i < times; i++) {
+                await this.addAnimation(obj, { alpha: alpha_off }, 150);
+                await this.addAnimation(obj, { alpha: alpha_on }, 150);
+            }
         }
 
         /**

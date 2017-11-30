@@ -14,7 +14,7 @@ module TK.SpaceTac.UI {
         // Ship sprite
         sprite: Phaser.Image
 
-        // Statis effect
+        // Stasis effect
         stasis: Phaser.Image
 
         // HSP display
@@ -158,16 +158,19 @@ module TK.SpaceTac.UI {
                     this.toggle_hsp.manipulate("value")(1500);
                     this.hull_bar.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity") || 0);
                     this.hull_text.text = `${this.ship.getValue("hull")}`;
+                    this.battleview.animations.blink(this.hull_text);
                 } else if (event.code == "shield") {
                     this.toggle_hsp.manipulate("value")(1500);
                     this.shield_bar.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity") || 0);
                     this.shield_text.text = `${this.ship.getValue("shield")}`;
-                    if (this.shield_bar.getValue() == 0) {
+                    this.battleview.animations.blink(this.shield_text);
+                    /*if (this.shield_bar.getValue() == 0) {
                         this.displayEffect("Shield failure", false);
-                    }
+                    }*/
                 } else if (event.code == "power") {
                     this.toggle_hsp.manipulate("value")(1500);
                     this.power_text.text = `${this.ship.getValue("power")}`;
+                    this.battleview.animations.blink(this.power_text);
                 }
                 return 0;
             } else if (event instanceof ShipAttributeDiff) {
@@ -230,6 +233,9 @@ module TK.SpaceTac.UI {
         setPlaying(playing: boolean) {
             this.frame.alpha = playing ? 1 : 0.35;
             this.frame.visible = this.ship.alive;
+            /*if (playing) {
+                this.battleview.animations.blink(this.frame);
+            }*/
         }
 
         /**
@@ -237,11 +243,14 @@ module TK.SpaceTac.UI {
          */
         setDead(dead = true) {
             if (dead) {
-                this.displayEffect("stasis", false);
+                //this.displayEffect("stasis", false);
+                this.stasis.visible = true;
+                this.stasis.alpha = 0;
+                this.battleview.animations.blink(this.stasis, 0.9, 0.7);
+            } else {
+                this.stasis.visible = false;
             }
             this.setPlaying(false);
-            this.battleview.animations.setVisible(this.stasis, dead, 400);
-            this.alpha = dead ? 0.3 : 1;
         }
 
         /**
