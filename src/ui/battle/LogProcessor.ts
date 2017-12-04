@@ -11,15 +11,15 @@ module TK.SpaceTac.UI {
         // Log client (to receive actual battle diffs)
         private log: BattleLogClient
 
-        // Forward diffs to other subscribers
-        private forwarding: ((diff: BaseBattleDiff) => number)[] = []
+        // Registered subscribers
+        private subscriber: LogProcessorSubscriber[] = []
+
+        // Background delegates promises
+        private background_promises: Promise<void>[] = []
 
         // Debug indicators
         private debug = false
         private ai_disabled = false
-
-        // Time at which the last action was applied
-        private last_action: number
 
         constructor(view: BattleView) {
             this.view = view;
@@ -37,6 +37,15 @@ module TK.SpaceTac.UI {
             view.inputs.bindCheat("End", "Jump to end", () => {
                 this.log.jumpToEnd();
             });
+
+            // Internal subscribers
+            this.register((diff) => this.checkReaction(diff));
+            this.register((diff) => this.checkControl(diff));
+            this.register((diff) => this.checkProjectileFired(diff));
+            this.register((diff) => this.checkShipDeath(diff));
+            this.register((diff) => this.checkBattleEnded(diff));
+            this.register((diff) => this.checkDroneDeployed(diff));
+            this.register((diff) => this.checkDroneRecalled(diff));
         }
 
         /**
@@ -50,7 +59,6 @@ module TK.SpaceTac.UI {
                     }
 
                     await this.processBattleDiff(diff);
-                    this.transferControl();
                 });
 
                 this.transferControl();
@@ -68,7 +76,6 @@ module TK.SpaceTac.UI {
                 while (diff = this.log.forward()) {
                     this.processBattleDiff(diff, false);
                 }
-                this.transferControl();
             }
         }
 
@@ -96,48 +103,70 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Register a sub-subscriber.
-         * 
-         * The difference with registering directly to the BattleLog is that diffs may add delay
-         * for animations.
-         * 
-         * The callback may return the duration it needs to display the change.
+         * Register a diff subscriber
          */
-        register(callback: (diff: BaseBattleDiff) => number) {
-            this.forwarding.push(callback);
+        register(subscriber: LogProcessorSubscriber) {
+            this.subscriber.push(subscriber);
         }
 
         /**
-         * Register a sub-subscriber, to receive diffs for a specific ship
+         * Register a diff for a specific ship
          */
-        registerForShip(ship: Ship, callback: (diff: BaseBattleShipDiff) => number) {
-            this.register(event => {
-                if (event instanceof BaseBattleShipDiff && event.ship_id === ship.id) {
-                    return callback(event);
+        registerForShip(ship: Ship, subscriber: (diff: BaseBattleShipDiff) => LogProcessorDelegate) {
+            this.register(diff => {
+                if (diff instanceof BaseBattleShipDiff && diff.ship_id === ship.id) {
+                    return subscriber(diff);
                 } else {
-                    return 0;
+                    return {};
                 }
             });
         }
 
         /**
          * Register to playing ship changes
+         * 
+         * If *initial* is true, the callback will be fired once at register time
+         * 
+         * If *immediate* is true, the ShipChangeDiff is watched, otherwise the end of the EndTurn action
          */
-        watchForShipChange(callback: (ship: Ship) => number, initial = true) {
+        watchForShipChange(callback: (ship: Ship) => LogProcessorDelegate, initial = true, immediate = false) {
             this.register(diff => {
-                if (diff instanceof ShipChangeDiff) {
+                let changed = false;
+                if (immediate && diff instanceof ShipChangeDiff) {
+                    changed = true;
+                } else if (!immediate && diff instanceof ShipActionEndedDiff) {
+                    let ship = this.view.battle.getShip(diff.ship_id);
+                    if (ship && ship.getAction(diff.action) instanceof EndTurnAction) {
+                        changed = true;
+                    }
+                }
+
+                if (changed) {
                     let ship = this.view.battle.playing_ship;
                     if (ship) {
                         return callback(ship);
+                    } else {
+                        return {};
                     }
+                } else {
+                    return {};
                 }
-                return 0;
             });
 
             if (initial) {
                 let ship = this.view.battle.playing_ship;
                 if (ship) {
-                    callback(ship);
+                    let result = callback(ship);
+                    let timer = new Timer(true);
+                    if (result.foreground) {
+                        let promise = result.foreground(false, timer);
+                        if (result.background) {
+                            let next = result.background;
+                            promise.then(() => next(false, timer));
+                        }
+                    } else if (result.background) {
+                        result.background(false, timer);
+                    }
                 }
             }
         }
@@ -149,56 +178,28 @@ module TK.SpaceTac.UI {
             if (this.debug) {
                 console.log("Battle diff", diff);
             }
+            let timer = timed ? this.view.timer : new Timer(true);
 
-            let durations = this.forwarding.map(subscriber => subscriber(diff));
-            let t = (new Date()).getTime()
+            // TODO add priority to sort the delegates
+            let delegates = this.subscriber.map(subscriber => subscriber(diff));
+            let foregrounds = nna(delegates.map(delegate => delegate.foreground || null));
+            let backgrounds = nna(delegates.map(delegate => delegate.background || null));
 
-            if (diff instanceof ShipActionUsedDiff) {
-                let ship = this.view.actual_battle.getShip(diff.ship_id);
-                if (ship) {
-                    if (!ship.getPlayer().is(this.view.player)) {
-                        // AI is playing, do not make it play too fast
-                        let since_last = t - this.last_action;
-                        if (since_last < 2000) {
-                            durations.push(2000 - since_last);
-                        }
-                    }
+            if (foregrounds.length > 0) {
+                if (this.background_promises.length > 0) {
+                    console.log("wait", this.background_promises);
+                    await Promise.all(this.background_promises);
+                    this.background_promises = [];
                 }
-                this.last_action = t;
-            } else if (diff instanceof ProjectileFiredDiff) {
-                let ship = this.view.battle.getShip(diff.ship_id);
-                if (ship) {
-                    let equipment = ship.getEquipment(diff.equipment);
-                    if (equipment && equipment.slot_type == SlotType.Weapon) {
-                        let effect = new WeaponEffect(this.view.arena, ship, diff.target, equipment);
-                        durations.push(effect.start());
-                    }
-                }
-            } else if (diff instanceof ShipChangeDiff) {
-                durations.push(this.processShipChangeEvent(diff));
-            } else if (diff instanceof ShipDeathDiff) {
-                durations.push(this.processDeathEvent(diff));
-            } else if (diff instanceof ShipDamageDiff) {
-                durations.push(this.processDamageEvent(diff));
-            } else if (diff instanceof EndBattleDiff) {
-                durations.push(this.processEndBattleEvent(diff));
-            } else if (diff instanceof DroneDeployedDiff) {
-                durations.push(this.processDroneDeployedEvent(diff));
-            } else if (diff instanceof DroneRecalledDiff) {
-                durations.push(this.processDroneRecalledEvent(diff));
+
+                let promises = foregrounds.map(foreground => foreground(timed, timer));
+                await Promise.all(promises);
             }
 
-            let delay = max([0].concat(durations));
-            if (delay && timed) {
-                await this.view.timer.sleep(delay);
-            }
-
-            if (this.log.isPlaying()) {
-                let reaction = this.view.session.reactions.check(this.view.player, this.view.battle, this.view.battle.playing_ship, diff);
-                if (reaction) {
-                    await this.processReaction(reaction);
-                }
-            }
+            console.log("start backgrounds");
+            let promises = backgrounds.map(background => background(timed, timed ? this.view.timer : new Timer(true)));
+            this.background_promises = this.background_promises.concat(promises);
+            console.log("added", diff, this.background_promises);
         }
 
         /**
@@ -220,78 +221,143 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Process a personality reaction
+         * Check if a personality reaction should be triggered for a diff
          */
-        private async processReaction(reaction: PersonalityReaction): Promise<void> {
-            if (reaction instanceof PersonalityReactionConversation) {
-                let conversation = UIConversation.newFromPieces(this.view, reaction.messages);
-                await conversation.waitEnd();
-            } else {
-                console.warn("[LogProcessor] Unknown personality reaction type", reaction);
-            }
-        }
-
-        // Playing ship changed
-        private processShipChangeEvent(event: ShipChangeDiff): number {
-            this.view.ship_list.refresh();
-            if (event.ship_id != event.new_ship) {
-                this.view.audio.playOnce("battle-ship-change");
-            }
-            return 0;
-        }
-
-        // Damage to ship
-        private processDamageEvent(event: ShipDamageDiff): number {
-            var item = this.view.ship_list.findItem(event.ship_id);
-            if (item) {
-                item.setDamageHit();
-            }
-            return 0;
-        }
-
-        // A ship died
-        private processDeathEvent(event: ShipDeathDiff): number {
-            let ship = this.view.battle.getShip(event.ship_id);
-
-            if (ship) {
-                if (this.view.ship_hovered === ship) {
-                    this.view.setShipHovered(null);
+        private checkReaction(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (this.log.isPlaying()) {
+                let reaction = this.view.session.reactions.check(this.view.player, this.view.battle, this.view.battle.playing_ship, diff);
+                if (reaction) {
+                    return {
+                        foreground: async () => {
+                            if (reaction instanceof PersonalityReactionConversation) {
+                                let conversation = UIConversation.newFromPieces(this.view, reaction.messages);
+                                await conversation.waitEnd();
+                            } else {
+                                console.warn("[LogProcessor] Unknown personality reaction type", reaction);
+                            }
+                        }
+                    };
                 }
-                this.view.arena.markAsDead(ship);
-                this.view.ship_list.refresh();
+            }
 
-                return 3000;
+            return {};
+        }
+
+        /**
+         * Check if control should be transferred to the player, or an AI, after a diff
+         */
+        private checkControl(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (diff instanceof ShipActionEndedDiff) {
+                return {
+                    foreground: async () => this.transferControl()
+                }
             } else {
-                return 0;
+                return {};
             }
         }
 
-        // Battle ended (victory or defeat)
-        private processEndBattleEvent(event: EndBattleDiff): number {
-            this.view.endBattle();
-            return 0;
-        }
-
-        // New drone deployed
-        private processDroneDeployedEvent(event: DroneDeployedDiff): number {
-            let duration = this.view.arena.addDrone(event.drone);
-
-            if (duration) {
-                this.view.gameui.audio.playOnce("battle-drone-deploy");
+        /**
+         * Check if a projectile is fired
+         */
+        private checkProjectileFired(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (diff instanceof ProjectileFiredDiff) {
+                let ship = this.view.battle.getShip(diff.ship_id);
+                if (ship) {
+                    let equipment = ship.getEquipment(diff.equipment);
+                    if (equipment && equipment.slot_type == SlotType.Weapon) {
+                        let effect = new WeaponEffect(this.view.arena, ship, diff.target, equipment);
+                        return {
+                            foreground: async (animate, timer) => {
+                                if (animate) {
+                                    await this.view.timer.sleep(effect.start())
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
-            return duration;
+            return {};
         }
 
-        // Drone destroyed
-        private processDroneRecalledEvent(event: DroneRecalledDiff): number {
-            let duration = this.view.arena.removeDrone(event.drone);
+        /**
+         * Check if a ship died
+         */
+        private checkShipDeath(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (diff instanceof ShipDeathDiff) {
+                let ship = this.view.battle.getShip(diff.ship_id);
 
-            if (duration) {
-                this.view.gameui.audio.playOnce("battle-drone-destroy");
+                if (ship) {
+                    let dead_ship = ship;
+                    return {
+                        foreground: async (animate) => {
+                            if (dead_ship.is(this.view.ship_hovered)) {
+                                this.view.setShipHovered(null);
+                            }
+                            this.view.arena.markAsDead(dead_ship);
+                            this.view.ship_list.refresh();
+                            if (animate) {
+                                await this.view.timer.sleep(2000);
+                            }
+                        }
+                    }
+                }
             }
 
-            return duration;
+            return {};
+        }
+
+        /**
+         * Check if the battle ended
+         */
+        private checkBattleEnded(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (diff instanceof EndBattleDiff) {
+                return {
+                    foreground: async () => this.view.endBattle()
+                }
+            }
+
+            return {};
+        }
+
+        /**
+         * Check if a new drone as been deployed
+         */
+        private checkDroneDeployed(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (diff instanceof DroneDeployedDiff) {
+                return {
+                    foreground: async (animate) => {
+                        let duration = this.view.arena.addDrone(diff.drone, animate);
+                        if (duration) {
+                            this.view.gameui.audio.playOnce("battle-drone-deploy");
+                            if (animate) {
+                                await this.view.timer.sleep(duration);
+                            }
+                        }
+                    }
+                }
+            } else {
+                return {};
+            }
+        }
+
+        /**
+         * Check if a drone as been recalled
+         */
+        private checkDroneRecalled(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (diff instanceof DroneRecalledDiff) {
+                return {
+                    foreground: async () => {
+                        let duration = this.view.arena.removeDrone(diff.drone);
+                        if (duration) {
+                            this.view.gameui.audio.playOnce("battle-drone-destroy");
+                            await this.view.timer.sleep(duration);
+                        }
+                    }
+                }
+            } else {
+                return {};
+            }
         }
 
         // Drone applied
@@ -310,4 +376,20 @@ module TK.SpaceTac.UI {
             }
         }*/
     }
+
+    /**
+     * Effective work done by a subscriber
+     * 
+     * *foreground* is started when no other delegate (background or foreground) is working
+     * *background* is started when no other foreground delegate is working or pending
+     */
+    export type LogProcessorDelegate = {
+        foreground?: (animate: boolean, timer: Timer) => Promise<void>,
+        background?: (animate: boolean, timer: Timer) => Promise<void>,
+    }
+
+    /**
+     * Subscriber to receive diffs from the battle log
+     */
+    type LogProcessorSubscriber = (diff: BaseBattleDiff) => LogProcessorDelegate
 }

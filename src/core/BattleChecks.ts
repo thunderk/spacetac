@@ -40,7 +40,11 @@ module TK.SpaceTac {
          * This may not contain ALL the diffs needed, and should be called again while it returns diffs.
          */
         checkAll(): BaseBattleDiff[] {
-            let diffs: BaseBattleDiff[];
+            let diffs: BaseBattleDiff[] = [];
+
+            if (this.battle.ended) {
+                return diffs;
+            }
 
             diffs = this.checkAreaEffects();
             if (diffs.length) {

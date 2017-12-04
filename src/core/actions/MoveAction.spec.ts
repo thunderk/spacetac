@@ -38,6 +38,7 @@ module TK.SpaceTac.Specs {
         test.case("applies and reverts", check => {
             let battle = TestTools.createBattle();
             let ship = battle.play_order[0];
+            ship.setArenaPosition(500, 600)
             TestTools.setShipAP(ship, 20);
             ship.setValue("power", 5);
 
@@ -47,16 +48,16 @@ module TK.SpaceTac.Specs {
             ship.addSlot(SlotType.Engine).attach(engine);
 
             TestTools.actionChain(check, battle, [
-                [ship, action, Target.newFromLocation(10, 5)],
+                [ship, action, Target.newFromLocation(510, 605)],
             ], [
                     check => {
-                        check.equals(ship.arena_x, 0, "ship X");
-                        check.equals(ship.arena_y, 0, "ship Y");
+                        check.equals(ship.arena_x, 500, "ship X");
+                        check.equals(ship.arena_y, 600, "ship Y");
                         check.equals(ship.getValue("power"), 5, "power");
                     },
                     check => {
-                        check.nears(ship.arena_x, 4.382693, 5, "ship X");
-                        check.nears(ship.arena_y, 2.191346, 5, "ship Y");
+                        check.nears(ship.arena_x, 504.382693, 5, "ship X");
+                        check.nears(ship.arena_y, 602.191346, 5, "ship Y");
                         check.equals(ship.getValue("power"), 0, "power");
                     }
                 ]);

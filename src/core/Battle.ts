@@ -357,8 +357,14 @@ module TK.SpaceTac {
         applyOneAction(action: BaseAction, target?: Target): boolean {
             let ship = this.playing_ship;
             if (ship) {
+                if (!target) {
+                    target = action.getDefaultTarget(ship);
+                }
                 if (action.apply(this, ship, target)) {
                     this.performChecks();
+                    if (!this.ended) {
+                        this.applyDiffs([new ShipActionEndedDiff(ship, action, target)]);
+                    }
                     return true;
                 } else {
                     return false;

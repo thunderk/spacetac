@@ -3,7 +3,7 @@ module TK.SpaceTac {
     export class TestTools {
 
         // Create a battle between two fleets, with a fixed play order (owned ships, then enemy ships)
-        static createBattle(own_ships = 1, enemy_ships = 0): Battle {
+        static createBattle(own_ships = 1, enemy_ships = 1): Battle {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();
 

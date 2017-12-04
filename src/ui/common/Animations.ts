@@ -151,6 +151,9 @@ module TK.SpaceTac.UI {
                     resolve();
                 });
                 tween.start();
+
+                // By security, if the tween is destroyed before completion, we resolve the promise using the timer
+                Timer.global.schedule(delay + duration, resolve);
             });
         }
 

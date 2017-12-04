@@ -128,8 +128,8 @@ module TK.SpaceTac.UI {
             }
 
             // Log processing
-            this.battleview.log_processor.register(event => this.processLogEvent(event));
-            this.battleview.log_processor.registerForShip(ship, event => this.processShipLogEvent(event));
+            this.battleview.log_processor.register(diff => this.processBattleDiff(diff));
+            this.battleview.log_processor.registerForShip(ship, diff => this.processShipDiff(diff));
         }
 
         jasmineToString(): string {
@@ -137,72 +137,136 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Process a battle log event
+         * Process a battle diff
          */
-        private processLogEvent(event: BaseBattleDiff): number {
-            if (event instanceof ShipChangeDiff) {
+        private processBattleDiff(diff: BaseBattleDiff) {
+            if (diff instanceof ShipChangeDiff) {
                 this.updatePlayOrder();
             }
-            return 0;
+            return {};
         }
 
         /**
-         * Process a log event for this ship
+         * Process a ship diff
          */
-        private processShipLogEvent(event: BaseBattleShipDiff): number {
-            if (event instanceof ShipEffectAddedDiff || event instanceof ShipEffectRemovedDiff) {
-                this.updateActiveEffects();
-                return 0;
-            } else if (event instanceof ShipValueDiff) {
-                if (event.code == "hull") {
-                    this.toggle_hsp.manipulate("value")(1500);
-                    this.hull_bar.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity") || 0);
-                    this.hull_text.text = `${this.ship.getValue("hull")}`;
-                    this.battleview.animations.blink(this.hull_text);
-                } else if (event.code == "shield") {
-                    this.toggle_hsp.manipulate("value")(1500);
-                    this.shield_bar.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity") || 0);
-                    this.shield_text.text = `${this.ship.getValue("shield")}`;
-                    this.battleview.animations.blink(this.shield_text);
-                    /*if (this.shield_bar.getValue() == 0) {
-                        this.displayEffect("Shield failure", false);
-                    }*/
-                } else if (event.code == "power") {
-                    this.toggle_hsp.manipulate("value")(1500);
-                    this.power_text.text = `${this.ship.getValue("power")}`;
-                    this.battleview.animations.blink(this.power_text);
+        private processShipDiff(diff: BaseBattleShipDiff): LogProcessorDelegate {
+            if (diff instanceof ShipEffectAddedDiff || diff instanceof ShipEffectRemovedDiff) {
+                return {
+                    background: async () => this.updateActiveEffects()
                 }
-                return 0;
-            } else if (event instanceof ShipAttributeDiff) {
-                this.displayAttributeChanged(event);
-                return 0;
-            } else if (event instanceof ShipDamageDiff) {
-                this.displayEffect(`${event.hull + event.shield} damage`, false);
-                return 0;
-            } else if (event instanceof ShipActionToggleDiff) {
-                let action = this.ship.getAction(event.action);
-                if (action && action.equipment) {
-                    let equname = action.equipment.name;
-                    if (event.activated) {
-                        this.displayEffect(`${equname} ON`, true);
-                    } else {
-                        this.displayEffect(`${equname} OFF`, false);
+            } else if (diff instanceof ShipValueDiff) {
+                return {
+                    background: async (animate, timer) => {
+                        if (animate) {
+                            this.toggle_hsp.manipulate("value")(true);
+                        }
+
+                        if (diff.code == "hull") {
+                            this.hull_bar.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity") || 0);
+                            this.hull_text.text = `${this.ship.getValue("hull")}`;
+                            if (animate) {
+                                await this.battleview.animations.blink(this.hull_text);
+                            }
+                        } else if (diff.code == "shield") {
+                            this.shield_bar.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity") || 0);
+                            this.shield_text.text = `${this.ship.getValue("shield")}`;
+                            if (animate) {
+                                await this.battleview.animations.blink(this.shield_text);
+                            }
+                            /*if (this.shield_bar.getValue() == 0) {
+                                this.displayEffect("Shield failure", false);
+                            }*/
+                        } else if (diff.code == "power") {
+                            this.power_text.text = `${this.ship.getValue("power")}`;
+                            if (animate) {
+                                await this.battleview.animations.blink(this.power_text);
+                            }
+                        }
+
+                        if (animate) {
+                            await timer.sleep(500);
+                            this.toggle_hsp.manipulate("value")(false);
+                        }
                     }
-                    this.updateEffectsRadius();
                 }
-                return 300;
-            } else if (event instanceof ShipActionUsedDiff) {
-                let action = this.ship.getAction(event.action);
-                if (action && !(action instanceof ToggleAction) && action.equipment) {
-                    this.displayEffect(action.equipment.name, true);
+            } else if (diff instanceof ShipAttributeDiff) {
+                return {
+                    background: async (animate, timer) => {
+                        if (animate) {
+                            this.displayAttributeChanged(diff)
+                            await timer.sleep(1000);
+                        }
+                    }
                 }
-                return 300;
-            } else if (event instanceof ShipMoveDiff) {
-                this.moveTo(event.start.x, event.start.y, event.start.angle, false);
-                let duration = this.moveTo(event.end.x, event.end.y, event.end.angle, true, !!event.engine);
-                return duration;
+            } else if (diff instanceof ShipDamageDiff) {
+                return {
+                    background: async (animate, timer) => {
+                        if (animate) {
+                            await this.displayEffect(`${diff.hull + diff.shield} damage`, false);
+                            await timer.sleep(1000);
+                        }
+                    }
+                }
+            } else if (diff instanceof ShipActionToggleDiff) {
+                return {
+                    foreground: async (animate, timer) => {
+                        let action = this.ship.getAction(diff.action);
+                        if (action && action.equipment) {
+                            let equname = action.equipment.name;
+
+                            if (animate) {
+                                if (diff.activated) {
+                                    await this.displayEffect(`${equname} ON`, true);
+                                } else {
+                                    await this.displayEffect(`${equname} OFF`, false);
+                                }
+                            }
+
+                            this.updateEffectsRadius();
+                            await timer.sleep(500);
+                        }
+                    }
+                }
+            } else if (diff instanceof ShipActionUsedDiff) {
+                let action = this.ship.getAction(diff.action);
+                if (action) {
+                    if (!(action instanceof ToggleAction) && action.equipment) {
+                        let equipment = action.equipment;
+                        return {
+                            foreground: async (animate, timer) => {
+                                if (animate) {
+                                    await this.displayEffect(equipment.name, true);
+                                    await timer.sleep(300);
+                                }
+                            }
+                        }
+                    } else if (action instanceof EndTurnAction) {
+                        return {
+                            foreground: async (animate, timer) => {
+                                if (animate) {
+                                    await this.displayEffect("End turn", true);
+                                    await timer.sleep(500);
+                                }
+                            }
+                        }
+                    } else {
+                        return {};
+                    }
+                } else {
+                    return {};
+                }
+            } else if (diff instanceof ShipMoveDiff) {
+                return {
+                    background: async (animate: boolean, timer: Timer) => {
+                        this.moveTo(diff.start.x, diff.start.y, diff.start.angle, false);
+                        let duration = this.moveTo(diff.end.x, diff.end.y, diff.end.angle, animate, !!diff.engine);
+                        if (duration && animate) {
+                            await timer.sleep(duration);
+                        }
+                    }
+                };
             } else {
-                return 0;
+                return {};
             }
         }
 
@@ -230,12 +294,14 @@ module TK.SpaceTac.UI {
          * 
          * This will alter the HUD frame to show this state
          */
-        setPlaying(playing: boolean) {
+        async setPlaying(playing: boolean, animate = true): Promise<void> {
             this.frame.alpha = playing ? 1 : 0.35;
             this.frame.visible = this.ship.alive;
-            /*if (playing) {
-                this.battleview.animations.blink(this.frame);
-            }*/
+
+            if (playing && animate) {
+                this.battleview.audio.playOnce("battle-ship-change");
+                await this.battleview.animations.blink(this.frame);
+            }
         }
 
         /**
@@ -274,7 +340,7 @@ module TK.SpaceTac.UI {
         /**
          * Briefly show an effect on this ship
          */
-        displayEffect(message: string, beneficial: boolean) {
+        async displayEffect(message: string, beneficial: boolean) {
             if (!this.effects_messages.visible) {
                 this.effects_messages.removeAll(true);
             }
@@ -289,6 +355,7 @@ module TK.SpaceTac.UI {
             );
 
             this.effects_messages_toggle.manipulate("added")(1000);
+            await this.battleview.timer.sleep(1000);
         }
 
         /**

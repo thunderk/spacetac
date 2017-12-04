@@ -34,49 +34,73 @@ module TK.SpaceTac.Specs {
         });
 
         test.case("generates power for previous ship", check => {
-            let battle = TestTools.createBattle(1, 0);
-            let ship = battle.play_order[0];
-            TestTools.setShipAP(ship, 10, 3);
-            let weapon = TestTools.addWeapon(ship);
+            let battle = TestTools.createBattle(1, 1);
+            let [ship1, ship2] = battle.play_order;
+            TestTools.setShipAP(ship1, 10, 3);
+            let weapon = TestTools.addWeapon(ship1);
             weapon.action = new ToggleAction(weapon, 2);
-            ship.setValue("power", 6);
+            ship1.setValue("power", 6);
 
             TestTools.actionChain(check, battle, [
-                [ship, weapon.action, Target.newFromShip(ship)],
-                [ship, weapon.action, Target.newFromShip(ship)],
-                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
-                [ship, weapon.action, Target.newFromShip(ship)],
-                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
-                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
-                [ship, weapon.action, Target.newFromShip(ship)],
-                [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
+                [ship1, weapon.action, Target.newFromShip(ship1)],
+                [ship1, weapon.action, Target.newFromShip(ship1)],
+                [ship1, EndTurnAction.SINGLETON, Target.newFromShip(ship1)],
+                [ship2, EndTurnAction.SINGLETON, Target.newFromShip(ship2)],
+                [ship1, weapon.action, Target.newFromShip(ship1)],
+                [ship1, EndTurnAction.SINGLETON, Target.newFromShip(ship1)],
+                [ship2, EndTurnAction.SINGLETON, Target.newFromShip(ship2)],
+                [ship1, EndTurnAction.SINGLETON, Target.newFromShip(ship1)],
+                [ship2, EndTurnAction.SINGLETON, Target.newFromShip(ship2)],
+                [ship1, weapon.action, Target.newFromShip(ship1)],
+                [ship1, EndTurnAction.SINGLETON, Target.newFromShip(ship1)],
             ], [
                     check => {
-                        check.equals(ship.getValue("power"), 6, "power value");
+                        check.equals(ship1.getValue("power"), 6, "power value");
+                        check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 4, "power value");
+                        check.equals(ship1.getValue("power"), 4, "power value");
+                        check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 6, "power value");
+                        check.equals(ship1.getValue("power"), 6, "power value");
+                        check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 9, "power value");
+                        check.equals(ship1.getValue("power"), 9, "power value");
+                        check.same(battle.playing_ship, ship2);
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 7, "power value");
+                        check.equals(ship1.getValue("power"), 9, "power value");
+                        check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 8, "power value");
+                        check.equals(ship1.getValue("power"), 7, "power value");
+                        check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 9, "power value");
+                        check.equals(ship1.getValue("power"), 8, "power value");
+                        check.same(battle.playing_ship, ship2);
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 10, "power value");
+                        check.equals(ship1.getValue("power"), 8, "power value");
+                        check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship.getValue("power"), 10, "power value");
+                        check.equals(ship1.getValue("power"), 9, "power value");
+                        check.same(battle.playing_ship, ship2);
+                    },
+                    check => {
+                        check.equals(ship1.getValue("power"), 9, "power value");
+                        check.same(battle.playing_ship, ship1);
+                    },
+                    check => {
+                        check.equals(ship1.getValue("power"), 10, "power value");
+                        check.same(battle.playing_ship, ship1);
+                    },
+                    check => {
+                        check.equals(ship1.getValue("power"), 10, "power value");
+                        check.same(battle.playing_ship, ship2);
                     },
                 ]);
         });

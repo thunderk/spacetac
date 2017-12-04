@@ -60,32 +60,44 @@ module TK.SpaceTac.UI {
             battleview.tooltip.bindStaticText(button, "Game options");
 
             // Log processing
-            battleview.log_processor.register(event => {
-                if (!(event instanceof BaseBattleShipDiff) || !this.ship || !this.ship.is(event.ship_id)) {
-                    return 0;
+            battleview.log_processor.register(diff => {
+                if (!(diff instanceof BaseBattleShipDiff) || !this.ship || !this.ship.is(diff.ship_id)) {
+                    return {};
                 }
 
-                if (event instanceof ShipValueDiff) {
-                    if (event.code == "power") {
-                        this.updatePower();
-                        this.action_icons.forEach(action => action.refresh());
+                if (diff instanceof ShipValueDiff && diff.code == "power") {
+                    return {
+                        background: async () => {
+                            this.updatePower();
+                            this.action_icons.forEach(action => action.refresh());
+                        }
                     }
-                } else if (event instanceof ShipAttributeDiff) {
-                    if (event.code == "power_capacity") {
-                        this.updatePower();
+                } else if (diff instanceof ShipAttributeDiff && diff.code == "power_capacity") {
+                    return {
+                        background: async () => this.updatePower()
                     }
-                } else if (event instanceof ShipActionUsedDiff || event instanceof ShipActionToggleDiff) {
-                    this.action_icons.forEach(action => action.refresh());
-                } else if (event instanceof ShipCooldownDiff) {
-                    let icons = this.action_icons.filter(icon => icon.action.equipment && icon.action.equipment.is(event.equipment));
-                    icons.forEach(icon => icon.refresh());
+                } else if (diff instanceof ShipActionUsedDiff || diff instanceof ShipActionToggleDiff) {
+                    return {
+                        background: async () => this.action_icons.forEach(action => action.refresh())
+                    }
+                } else if (diff instanceof ShipCooldownDiff) {
+                    return {
+                        background: async () => {
+                            let icons = this.action_icons.filter(icon => icon.action.equipment && icon.action.equipment.is(diff.equipment));
+                            icons.forEach(icon => icon.refresh());
+                        }
+                    }
+                } else {
+                    return {}
                 }
-                return 0;
             });
 
             battleview.log_processor.watchForShipChange(ship => {
-                this.setShip(ship);
-                return 0;
+                return {
+                    background: async () => {
+                        this.setShip(ship);
+                    }
+                }
             });
             this.setInteractive(false);
         }

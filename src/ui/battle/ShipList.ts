@@ -68,6 +68,34 @@ module TK.SpaceTac.UI {
         }
 
         /**
+         * Bind to a log processor, to watch for events
+         */
+        bindToLog(log: LogProcessor): void {
+            log.watchForShipChange(ship => {
+                return {
+                    foreground: async (animate) => {
+                        this.refresh(animate)
+                    }
+                }
+            });
+
+            log.register(diff => {
+                if (diff instanceof ShipDamageDiff) {
+                    return {
+                        background: async () => {
+                            let item = this.findItem(diff.ship_id);
+                            if (item) {
+                                item.setDamageHit();
+                            }
+                        }
+                    }
+                } else {
+                    return {};
+                }
+            })
+        }
+
+        /**
          * Add a ship card
          */
         addShip(ship: Ship): ShipListItem {

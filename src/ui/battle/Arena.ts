@@ -69,8 +69,11 @@ module TK.SpaceTac.UI {
             this.container.onDestroy.add(() => this.destroy());
 
             view.log_processor.watchForShipChange(ship => {
-                this.setShipPlaying(ship);
-                return 0;
+                return {
+                    foreground: async () => {
+                        await this.setShipPlaying(ship)
+                    }
+                }
             });
         }
 
@@ -192,19 +195,22 @@ module TK.SpaceTac.UI {
             }
         }
 
-        // Set the playing state on a ship sprite
-        setShipPlaying(ship: Ship | null): void {
+        /**
+         * Set the playing state on a ship sprite
+         */
+        async setShipPlaying(ship: Ship | null, animate = true): Promise<void> {
             if (this.playing) {
                 this.playing.setPlaying(false);
                 this.playing = null;
             }
 
             if (ship) {
-                var arena_ship = this.findShipSprite(ship);
+                let arena_ship = this.findShipSprite(ship);
                 if (arena_ship) {
                     this.layer_ships.bringToTop(arena_ship);
-                    arena_ship.setPlaying(true);
+                    await arena_ship.setPlaying(true, animate);
                 }
+
                 this.playing = arena_ship;
             }
         }

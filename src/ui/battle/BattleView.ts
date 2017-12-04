@@ -117,6 +117,7 @@ module TK.SpaceTac.UI {
             this.action_bar.position.set(0, this.getHeight() - 132);
             this.ship_list = new ShipList(this, this.battle, this.player, this.toggle_tactical_mode, this,
                 this.layer_borders, this.getWidth() - 112, 0);
+            this.ship_list.bindToLog(this.log_processor);
             this.ship_tooltip = new ShipTooltip(this);
             this.character_sheet = new CharacterSheet(this, -this.getWidth());
             this.layer_sheets.add(this.character_sheet);
@@ -193,7 +194,11 @@ module TK.SpaceTac.UI {
             if (ship) {
                 let ship_action = first(ship.getAvailableActions(), ac => ac.is(action));
                 if (ship_action) {
-                    return this.actual_battle.applyOneAction(action, target);
+                    let result = this.actual_battle.applyOneAction(action, target);
+                    if (result) {
+                        this.setInteractionEnabled(false);
+                    }
+                    return result;
                 } else {
                     console.error("Action not found in available list", action, ship.getAvailableActions());
                     return false;
