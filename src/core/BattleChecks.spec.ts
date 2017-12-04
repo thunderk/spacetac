@@ -28,21 +28,24 @@ module TK.SpaceTac.Specs {
             ], "fixed values");
         })
 
-        test.case("marks ships as dead", check => {
-            let battle = new Battle();
-            let ship1 = battle.fleets[0].addShip();
-            let ship2 = battle.fleets[1].addShip();
-            let ship3 = battle.fleets[1].addShip();
-            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
+        test.case("marks ships as dead, except the playing one", check => {
+            let battle = TestTools.createBattle(1, 2);
+            let [ship1, ship2, ship3] = battle.play_order;
             let checks = new BattleChecks(battle);
             check.equals(checks.checkDeadShips(), [], "no ship to mark as dead");
 
-            ship1.setValue("hull", 0);
-            ship3.setValue("hull", 0);
-            check.equals(checks.checkDeadShips(), [
-                new ShipDeathDiff(battle, ship1),
-                new ShipDeathDiff(battle, ship3),
-            ], "2 ships to mark as dead");
+            battle.ships.list().forEach(ship => ship.setValue("hull", 0));
+
+            let result = checks.checkDeadShips();
+            check.equals(result, [new ShipDeathDiff(battle, ship2)], "ship2 marked as dead");
+            battle.applyDiffs(result);
+
+            result = checks.checkDeadShips();
+            check.equals(result, [new ShipDeathDiff(battle, ship3)], "ship3 marked as dead");
+            battle.applyDiffs(result);
+
+            result = checks.checkDeadShips();
+            check.equals(result, [], "ship1 left playing");
         })
 
         test.case("fixes area effects", check => {

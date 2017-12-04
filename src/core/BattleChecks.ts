@@ -110,27 +110,14 @@ module TK.SpaceTac {
         }
 
         /**
-         * Check that ship with no more hull are dead
+         * Check that not-playing ships with no more hull are dead
          */
         checkDeadShips(): BaseBattleDiff[] {
-            let result: BaseBattleDiff[] = [];
+            // We do one ship at a time, because the state of one ship may depend on another
+            let dying = ifirst(this.battle.iships(true), ship => !ship.playing && ship.getValue("hull") <= 0);
 
-            iforeach(this.battle.iships(true), ship => {
-                if (ship.getValue("hull") <= 0) {
-                    result = result.concat(ship.getDeathDiffs(this.battle));
-                }
-            });
-
-            return result;
-        }
-
-        /**
-         * Check that the playing ship is not playing
-         */
-        checkDeadShipPlaying(): BaseBattleDiff[] {
-            if (this.battle.playing_ship && !this.battle.playing_ship.alive) {
-                let ship = this.battle.playing_ship;
-                return EndTurnAction.SINGLETON.getDiffs(ship, this.battle);
+            if (dying) {
+                return dying.getDeathDiffs(this.battle);
             } else {
                 return [];
             }

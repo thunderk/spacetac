@@ -28,7 +28,7 @@ module TK.SpaceTac {
             return -power_diff;
         }
 
-        protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+        getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
             if (ship.is(battle.playing_ship)) {
                 let result: BaseBattleDiff[] = [];
                 let new_ship = battle.getNextShip();

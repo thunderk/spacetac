@@ -104,6 +104,28 @@ module TK.SpaceTac {
             check.same(battle.playing_ship, ship2);
         });
 
+        test.case("handles the suicide case (playing ship dies because of its action)", check => {
+            let battle = TestTools.createBattle(3, 1);
+            let [ship1, ship2, ship3, ship4] = battle.play_order;
+            ship1.setArenaPosition(0, 0);
+            ship2.setArenaPosition(0, 0);
+            ship3.setArenaPosition(1000, 1000);
+            ship4.setArenaPosition(1000, 1000);
+            let weapon = TestTools.addWeapon(ship1, 8000, 0, 50, 100);
+
+            check.in("initially", check => {
+                check.same(battle.playing_ship, ship1, "playing ship");
+                check.equals(battle.ships.list().filter(ship => ship.alive), [ship1, ship2, ship3, ship4], "alive ships");
+            });
+
+            let result = battle.applyOneAction(nn(weapon.action), Target.newFromLocation(0, 0));
+            check.equals(result, true, "action applied successfully");
+            check.in("after weapon", check => {
+                check.same(battle.playing_ship, ship3, "playing ship");
+                check.equals(battle.ships.list().filter(ship => ship.alive), [ship3, ship4], "alive ships");
+            });
+        });
+
         test.case("detects victory condition and logs a final EndBattleEvent", check => {
             var fleet1 = new Fleet();
             var fleet2 = new Fleet();

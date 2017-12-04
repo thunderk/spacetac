@@ -37,7 +37,6 @@ Character sheet
 Battle
 ------
 
-* Fix the suicide case when the playing ship dies (it is removed from play_order but no ShipChangeDiff is emitted)
 * Fix arena's ship hovering happening even when the character sheet (or a dialog) is open on top
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions

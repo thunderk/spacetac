@@ -362,9 +362,16 @@ module TK.SpaceTac {
                 }
                 if (action.apply(this, ship, target)) {
                     this.performChecks();
+
                     if (!this.ended) {
                         this.applyDiffs([new ShipActionEndedDiff(ship, action, target)]);
+
+                        if (ship.playing && ship.getValue("hull") <= 0) {
+                            // Playing ship died during its action, force a turn end
+                            this.applyOneAction(EndTurnAction.SINGLETON);
+                        }
                     }
+
                     return true;
                 } else {
                     return false;
