@@ -87,6 +87,12 @@ module TK.SpaceTac.UI {
                             icons.forEach(icon => icon.refresh());
                         }
                     }
+                } else if (diff instanceof ShipChangeDiff) {
+                    return {
+                        background: async () => {
+                            this.setShip(null);
+                        }
+                    }
                 } else {
                     return {}
                 }
