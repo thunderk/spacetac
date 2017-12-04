@@ -78,15 +78,23 @@ module TK.SpaceTac.UI {
          * 
          * This new builder will inherit the style settings, and will create components in the specified parent
          */
-        in(container: UIContainer | string): UIBuilder {
-            return new UIBuilder(this.view, container, this.text_style);
+        in(container: UIContainer | string, body?: (builder: UIBuilder) => void): UIBuilder {
+            let result = new UIBuilder(this.view, container, this.text_style);
+            if (body) {
+                body(result);
+            }
+            return result;
         }
 
         /**
          * Create a new UIBuilder with style changes
          */
-        styled(changes: UITextStyleI): UIBuilder {
-            return new UIBuilder(this.view, this.parent, merge(this.text_style, changes));
+        styled(changes: UITextStyleI, body?: (builder: UIBuilder) => void): UIBuilder {
+            let result = new UIBuilder(this.view, this.parent, merge(this.text_style, changes));
+            if (body) {
+                body(result);
+            }
+            return result;
         }
 
         /**

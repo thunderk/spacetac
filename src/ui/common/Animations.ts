@@ -45,7 +45,7 @@ module TK.SpaceTac.UI {
          * If a previous tween is running for this object, it will be stopped, and a new one will be created.
          */
         private createTween(obj: any): Phaser.Tween {
-            this.tweens.removeFrom(obj);
+            this.tweens.removeFrom(obj, false);
             let result = this.tweens.create(obj);
             return result;
         }

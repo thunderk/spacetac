@@ -5,17 +5,21 @@ module TK.SpaceTac.UI {
      * Main menu (first interactive screen)
      */
     export class MainMenu extends BaseView {
-        layer_stars: Phaser.Group;
-        layer_title: Phaser.Group;
-        button_new_game: Phaser.Button;
-        button_quick_battle: Phaser.Button;
-        button_load_game: Phaser.Button;
-        dialog_load_game: LoadDialog;
+        layer_stars: Phaser.Group
+        layer_presents: Phaser.Group
+        layer_title: Phaser.Group
+        button_new_game: Phaser.Button
+        button_quick_battle: Phaser.Button
+        button_load_game: Phaser.Button
+        dialog_load_game: LoadDialog
 
         create() {
             super.create();
 
+            let builder = new UIBuilder(this);
+
             this.layer_stars = this.getLayer("stars");
+            this.layer_presents = this.getLayer("presents");
             this.layer_title = this.getLayer("title");
 
             // Stars
@@ -29,6 +33,14 @@ module TK.SpaceTac.UI {
                 star.scale.set(0.8 * fade, 0.8 * fade);
                 this.tweens.create(star).to({ x: -30 }, 30000 * x / fade).to({ x: 1950 }, 0.00001).to({ x: 1920 * x }, 30000 * (1 - x) / fade).loop().start();
             }
+
+            // Presents...
+            builder.in(this.layer_presents, builder => {
+                builder.styled({ center: true }, builder => {
+                    builder.text("Michael Lemaire", this.getMidWidth(), this.getHeight() * 0.4, { size: 32 });
+                    builder.text("presents", this.getMidWidth(), this.getHeight() * 0.6, { size: 24 });
+                });
+            });
 
             // Menu buttons
             this.button_new_game = this.addButton(322, 674, "New Game", "Start a new campaign in a generated universe", () => this.onNewGame());
@@ -51,15 +63,20 @@ module TK.SpaceTac.UI {
             this.dialog_load_game.moveToLayer(this.layer_title);
             this.dialog_load_game.setVisible(false);
 
-            // Fading in
-            this.tweens.create(this.layer_stars).from({ alpha: 0 }, 5000).start();
+            // Animations
+            this.layer_stars.visible = false;
+            this.layer_presents.visible = false;
             this.layer_title.visible = false;
+            this.animations.show(this.layer_presents, 500);
+            this.animations.show(this.layer_stars, 5000);
             let fading = this.timer.schedule(5000, () => {
                 this.animations.show(this.layer_title, 1000);
+                this.animations.hide(this.layer_presents, 300);
             })
             this.input.onTap.addOnce(() => {
                 this.timer.cancel(fading);
                 this.animations.show(this.layer_title, 0);
+                this.animations.hide(this.layer_presents, 0);
             });
 
             this.gameui.audio.startMusic("supernatural");
