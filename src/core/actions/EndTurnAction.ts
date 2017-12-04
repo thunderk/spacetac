@@ -21,6 +21,10 @@ module TK.SpaceTac {
         getActionPointsUsage(ship: Ship, target: Target | null): number {
             let toggled_cost = isum(imap(ship.iToggleActions(true), action => action.power));
             let power_diff = ship.getAttribute("power_generation") - toggled_cost;
+            let power_excess = ship.getValue("power") + power_diff - ship.getAttribute("power_capacity");
+            if (power_excess > 0) {
+                power_diff -= power_excess;
+            }
             return -power_diff;
         }
 

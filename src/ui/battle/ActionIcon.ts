@@ -68,7 +68,7 @@ module TK.SpaceTac.UI {
             this.img_power.anchor.set(0.5);
             this.img_power.visible = false;
             this.container.addChild(this.img_power);
-            this.text_power = new Phaser.Text(bar.game, 0, 0, "", { align: "left", font: "16pt SpaceTac", fill: "#ffdd4b" });
+            this.text_power = new Phaser.Text(bar.game, 0, 4, "", { align: "left", font: "16pt SpaceTac", fill: "#ffdd4b" });
             this.text_power.setShadow(1, 1, "#000000");
             this.text_power.anchor.set(0.5);
             this.img_power.addChild(this.text_power);
@@ -206,10 +206,10 @@ module TK.SpaceTac.UI {
             }
 
             // left
-            let power = this.action.getActionPointsUsage(this.ship, null);
-            this.img_power.visible = bool(power);
-            this.text_power.text = `${Math.abs(power)}`;
-            this.text_power.fill = (power > 0) ? "#ffdd4b" : "#dbe748";
+            let cost = this.action.getActionPointsUsage(this.ship, null);
+            this.img_power.visible = bool(cost);
+            this.text_power.text = `${Math.abs(cost)}\n${cost < 0 ? "+" : "-"}`;
+            this.text_power.fill = (cost > 0) ? "#ffdd4b" : "#dbe748";
             this.text_power.alpha = disabled ? 0.2 : 1;
             if (disabled != this.disabled || selected != this.selected || toggled != this.toggled) {
                 if (disabled) {

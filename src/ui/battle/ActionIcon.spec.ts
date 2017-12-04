@@ -14,10 +14,19 @@ module TK.SpaceTac.UI.Specs {
             icon.refresh();
             check.same(icon.img_power.visible, false, "no change");
 
-            check.patch(action, "getActionPointsUsage", () => 3);
+            let cost = 3;
+            check.patch(action, "getActionPointsUsage", () => cost);
             icon.refresh();
-            check.equals(icon.img_power.visible, true);
-            check.equals(icon.text_power.text, "3");
+            check.in("power cost = 3", check => {
+                check.equals(icon.img_power.visible, true);
+                check.equals(icon.text_power.text, "3\n-");
+            });
+            cost = -2;
+            icon.refresh();
+            check.in("power cost = -2", check => {
+                check.equals(icon.img_power.visible, true);
+                check.equals(icon.text_power.text, "2\n+");
+            });
         })
 
         test.case("displays disabled and fading states", check => {
