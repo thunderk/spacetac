@@ -187,7 +187,6 @@ module TK.SpaceTac.UI {
 
             if (foregrounds.length > 0) {
                 if (this.background_promises.length > 0) {
-                    console.log("wait", this.background_promises);
                     await Promise.all(this.background_promises);
                     this.background_promises = [];
                 }
@@ -196,10 +195,8 @@ module TK.SpaceTac.UI {
                 await Promise.all(promises);
             }
 
-            console.log("start backgrounds");
             let promises = backgrounds.map(background => background(timed, timed ? this.view.timer : new Timer(true)));
             this.background_promises = this.background_promises.concat(promises);
-            console.log("added", diff, this.background_promises);
         }
 
         /**
