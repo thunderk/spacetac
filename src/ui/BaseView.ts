@@ -66,6 +66,7 @@ module TK.SpaceTac.UI {
             this.tooltip_layer = this.add.group(undefined, "Tooltip layer");
             this.tooltip = new Tooltip(this);
             this.messages = new Messages(this);
+            this.dialogs_opened = [];
 
             // Browser console variable (for debugging purpose)
             if (typeof window != "undefined") {

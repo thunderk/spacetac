@@ -92,7 +92,6 @@ Common UI
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
-* Fix dialogs sometimes not having their input overlay under (reproductible when loading a game with battle outcome dialog)
 
 Technical
 ---------
