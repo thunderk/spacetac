@@ -13,7 +13,6 @@ Map/story
 ---------
 
 * Add sound effects and more visual effects (jumps...)
-* Fix quickly zooming in twice preventing to display some UI parts
 * Add factions and reputation
 * Allow to cancel secondary missions
 * Forbid to end up with more than 5 ships in the fleet because of escorts

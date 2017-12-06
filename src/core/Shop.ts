@@ -31,6 +31,11 @@ module TK.SpaceTac {
             this.onchange = onchange || (stock => stock);
         }
 
+        postUnserialize() {
+            // functions are not serializable
+            this.onchange = (stock => stock);
+        }
+
         /**
          * Get available stock to display (sorted by level then price by default)
          */
