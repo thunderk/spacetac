@@ -56,7 +56,6 @@ Battle
 * Add shortcut to perform only the "move" part of a move+fire simulation
 * Fix delay of shield/hull impact effects (should depend on weapon animation, and ship location)
 * Add a turn count marker in the ship list
-* Resolve the confusion of action icon's power indicator with its keyboard shortcut
 * BattleChecks should be done proactively when all diffs have been simulated by an action, in addition to reactively after applying
 
 Ships models and equipments
