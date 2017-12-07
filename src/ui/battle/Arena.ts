@@ -105,7 +105,11 @@ module TK.SpaceTac.UI {
 
             // Watch mouse move to capture hovering over background
             this.input_callback = this.view.input.addMoveCallback((pointer: Phaser.Pointer) => {
-                var point = new Phaser.Point();
+                if (this.view.dialogs_opened.length > 0 || this.view.character_sheet.isOpened()) {
+                    return;
+                }
+
+                let point = new Phaser.Point();
                 if (view.input.hitTest(background, pointer, point)) {
                     let location = new ArenaLocation(point.x * background.scale.x, point.y * background.scale.y);
                     let ship = this.getShip(location);

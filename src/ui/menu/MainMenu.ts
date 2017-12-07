@@ -5,6 +5,7 @@ module TK.SpaceTac.UI {
      * Main menu (first interactive screen)
      */
     export class MainMenu extends BaseView {
+        static returned = false
         layer_stars: Phaser.Group
         layer_presents: Phaser.Group
         layer_title: Phaser.Group
@@ -72,12 +73,18 @@ module TK.SpaceTac.UI {
             let fading = this.timer.schedule(5000, () => {
                 this.animations.show(this.layer_title, 1000);
                 this.animations.hide(this.layer_presents, 300);
-            })
-            this.input.onTap.addOnce(() => {
+            });
+            let pass = () => {
                 this.timer.cancel(fading);
                 this.animations.show(this.layer_title, 0);
                 this.animations.hide(this.layer_presents, 0);
-            });
+            };
+            if (MainMenu.returned) {
+                pass();
+            } else {
+                this.input.onTap.addOnce(pass);
+                MainMenu.returned = true;
+            }
 
             this.gameui.audio.startMusic("supernatural");
         }

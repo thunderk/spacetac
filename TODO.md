@@ -36,7 +36,6 @@ Character sheet
 Battle
 ------
 
-* Fix arena's ship hovering happening even when the character sheet (or a dialog) is open on top
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
 * Toggle bar/text display in power section of action bar

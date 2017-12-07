@@ -196,6 +196,13 @@ module TK.SpaceTac.UI {
         }
 
         /**
+         * Check if the sheet is shown
+         */
+        isOpened(): boolean {
+            return this.x != this.xhidden;
+        }
+
+        /**
          * Show the sheet for a given ship
          */
         show(ship: Ship, animate = true, sound = true, interactive?: boolean) {
