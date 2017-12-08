@@ -28,7 +28,7 @@ module TK.SpaceTac.UI.Specs {
             ActionTooltip.fill(tooltip.getFiller(), ship, action2, 1);
             checkText(check, (<any>tooltip).container.content.children[1], "Weapon");
             checkText(check, (<any>tooltip).container.content.children[2], "Cost: 2 power");
-            checkText(check, (<any>tooltip).container.content.children[3], "Fire (power usage 2, max range 50km):\n• do 12 damage on target");
+            checkText(check, (<any>tooltip).container.content.children[3], "Fire (power 2, range 50km):\n• do 12 damage on target");
             checkText(check, (<any>tooltip).container.content.children[4], "[ 2 ]");
 
             tooltip.hide();

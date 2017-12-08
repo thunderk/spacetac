@@ -13,11 +13,15 @@ module TK.SpaceTac {
         // Damage to shield
         shield: number
 
-        constructor(ship: Ship, hull: number, shield: number) {
+        // Theoretical damage value
+        theoretical: number
+
+        constructor(ship: Ship, hull: number, shield: number, theoretical = hull + shield) {
             super(ship);
 
             this.hull = hull;
             this.shield = shield;
+            this.theoretical = theoretical;
         }
 
         protected applyOnShip(ship: Ship, battle: Battle): void {

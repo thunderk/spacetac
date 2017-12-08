@@ -7,11 +7,11 @@ module TK.SpaceTac {
             check.equals(ship.getAttribute("hull_capacity"), 100, "initial");
 
             let effect1 = new AttributeMultiplyEffect("hull_capacity", 30);
-            battle.applyDiffs(effect1.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect1.getOnDiffs(ship, ship, 1));
             check.equals(ship.getAttribute("hull_capacity"), 130, "applied 1");
 
             let effect2 = new AttributeMultiplyEffect("hull_capacity", -10);
-            battle.applyDiffs(effect2.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect2.getOnDiffs(ship, ship, 1));
             check.equals(ship.getAttribute("hull_capacity"), 120, "applied 2");
 
             battle.applyDiffs(effect1.getOffDiffs(ship));

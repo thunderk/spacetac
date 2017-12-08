@@ -21,7 +21,7 @@ module TK.SpaceTac {
             this.duration = duration;
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
             let result: BaseBattleDiff[] = [];
 
             let previous = ship.active_effects.get(this.id);

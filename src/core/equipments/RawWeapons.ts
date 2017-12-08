@@ -9,7 +9,7 @@ module TK.SpaceTac.Equipments {
             this.setCooldown(irepeat(2), irepeat(2));
             this.addTriggerAction(irepeat(3), [
                 new EffectTemplate(new DamageEffect(), { base: leveled(30), span: leveled(20) })
-            ], leveled(400, 12));
+            ], leveled(400, 12), undefined, undefined, irepeat(60), irepeat(20), irepeat(15));
         }
     }
 
@@ -21,7 +21,7 @@ module TK.SpaceTac.Equipments {
             this.setCooldown(irepeat(1), irepeat(0));
             this.addTriggerAction(irepeat(4), [
                 new EffectTemplate(new DamageEffect(), { base: leveled(26, 2), span: leveled(4, 1) })
-            ], leveled(500, 20), leveled(150, 5));
+            ], leveled(500, 20), leveled(150, 5), undefined, irepeat(30), irepeat(40), irepeat(10));
         }
     }
 
@@ -34,7 +34,7 @@ module TK.SpaceTac.Equipments {
             this.setCooldown(irepeat(1), irepeat(1));
             this.addTriggerAction(irepeat(5), [
                 new EffectTemplate(new DamageEffect(), { base: leveled(20), span: leveled(25) })
-            ], leveled(300, 10), irepeat(0), leveled(40, 2));
+            ], leveled(300, 10), irepeat(0), leveled(40, 2), irepeat(45), irepeat(60), irepeat(20));
         }
     }
 }

@@ -1,10 +1,9 @@
 module TK.SpaceTac.Specs {
     testing("Maneuver", test => {
-        function compare_maneuver_effects(check: TestContext, meff1: [Ship, BaseEffect][], meff2: [Ship, BaseEffect][]): void {
-            let [ships1, effects1] = unzip(meff1);
-            let [ships2, effects2] = unzip(meff2);
-            check.equals(ships1, ships2, "impacted ships");
-            compare_effects(check, effects1, effects2);
+        function compare_maneuver_effects(check: TestContext, meff1: ManeuverEffect[], meff2: ManeuverEffect[]): void {
+            check.equals(meff1.map(ef => ef.ship), meff2.map(ef => ef.ship), "impacted ships");
+            compare_effects(check, meff1.map(ef => ef.effect), meff2.map(ef => ef.effect));
+            check.equals(meff1.map(ef => ef.success), meff2.map(ef => ef.success), "success factor");
         }
 
         test.case("guesses weapon effects", check => {
@@ -21,8 +20,8 @@ module TK.SpaceTac.Specs {
             TestTools.setShipHP(ship3, 30, 30);
             let maneuver = new Maneuver(ship1, nn(weapon.action), Target.newFromLocation(0, 0));
             compare_maneuver_effects(check, maneuver.effects, [
-                [ship1, new DamageEffect(50)],
-                [ship2, new DamageEffect(50)]
+                { ship: ship1, effect: new DamageEffect(50), success: 1 },
+                { ship: ship2, effect: new DamageEffect(50), success: 1 },
             ]);
         });
 
@@ -41,8 +40,8 @@ module TK.SpaceTac.Specs {
             TestTools.setShipHP(ship3, 30, 30);
             let maneuver = new Maneuver(ship1, weapon.action, Target.newFromLocation(0, 0));
             compare_maneuver_effects(check, maneuver.effects, [
-                [ship1, new ValueEffect("shield", 10)],
-                [ship2, new ValueEffect("shield", 10)]
+                { ship: ship1, effect: new ValueEffect("shield", 10), success: 1 },
+                { ship: ship2, effect: new ValueEffect("shield", 10), success: 1 },
             ]);
         });
 
@@ -66,7 +65,7 @@ module TK.SpaceTac.Specs {
             maneuver = new Maneuver(ship, move, Target.newFromLocation(100, 30));
             check.containing(maneuver.getFinalLocation(), { x: 100, y: 30 });
             compare_maneuver_effects(check, maneuver.effects, [
-                [ship, new AttributeEffect("maneuvrability", 1)]
+                { ship: ship, effect: new AttributeEffect("maneuvrability", 1), success: 1 },
             ]);
         });
     });

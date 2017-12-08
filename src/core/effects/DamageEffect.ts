@@ -8,10 +8,10 @@ module TK.SpaceTac {
      */
     export class DamageEffect extends BaseEffect {
         // Base damage points
-        base: number;
+        base: number
 
         // Range of randomness (effective damage will be between *value* and *value+range*)
-        span: number;
+        span: number
 
         constructor(value = 0, span = 0) {
             super("damage");
@@ -36,47 +36,36 @@ module TK.SpaceTac {
         /**
          * Get the effective damage done to both shield and hull (in this order)
          */
-        getEffectiveDamage(ship: Ship): [number, number] {
-            var damage = (this.span > 0) ? RandomGenerator.global.randInt(this.base, this.base + this.span) : this.base;
-            var hull: number;
-            var shield: number;
-
+        getEffectiveDamage(ship: Ship, success: number): ShipDamageDiff {
             // Apply modifiers
-            damage = Math.round(damage * this.getFactor(ship));
+            let theoritical = Math.round((this.base + this.span * success) * this.getFactor(ship));
+            let damage = theoritical;
 
             // Apply on shields
-            if (damage >= ship.getValue("shield")) {
-                shield = ship.getValue("shield");
-            } else {
-                shield = damage;
-            }
+            let shield = (damage >= ship.getValue("shield")) ? ship.getValue("shield") : damage;
             damage -= shield;
 
             // Apply on hull
-            if (damage >= ship.getValue("hull")) {
-                hull = ship.getValue("hull");
-            } else {
-                hull = damage;
-            }
+            let hull = (damage >= ship.getValue("hull")) ? ship.getValue("hull") : damage;
 
-            return [shield, hull];
+            return new ShipDamageDiff(ship, hull, shield, theoritical);
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
-            let [shield, hull] = this.getEffectiveDamage(ship);
-
+        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
             let result: BaseBattleDiff[] = [];
 
-            if (shield || hull) {
-                result.push(new ShipDamageDiff(ship, hull, shield));
+            let damage = this.getEffectiveDamage(ship, success);
+
+            if (damage.shield || damage.hull) {
+                result.push(damage);
             }
 
-            if (shield) {
-                result.push(new ShipValueDiff(ship, "shield", -shield));
+            if (damage.shield) {
+                result.push(new ShipValueDiff(ship, "shield", -damage.shield));
             }
 
-            if (hull) {
-                result.push(new ShipValueDiff(ship, "hull", -hull));
+            if (damage.hull) {
+                result.push(new ShipValueDiff(ship, "hull", -damage.hull));
             }
 
             return result;

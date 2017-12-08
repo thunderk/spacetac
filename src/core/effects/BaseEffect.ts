@@ -1,8 +1,6 @@
 /// <reference path="../diffs/BaseBattleDiff.ts" />
 
 module TK.SpaceTac {
-    export type EffectAmount = number | { base: number, span: number };
-
     /**
      * Base class for effects of actions that can be applied on ships
      * 
@@ -21,7 +19,7 @@ module TK.SpaceTac {
         /**
          * Get the list of diffs needed to activate this effect on a ship
          */
-        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone, success = 1): BaseBattleDiff[] {
             return [];
         }
 
@@ -59,19 +57,6 @@ module TK.SpaceTac {
         // Return a human readable description
         getDescription(): string {
             return "unknown effect";
-        }
-
-        /**
-         * Resolve an effect amount
-         */
-        resolveAmount(val: EffectAmount, random = RandomGenerator.global): number {
-            if (typeof val == "number") {
-                return val;
-            } else if (val.span) {
-                return random.randInt(val.base, val.base + val.span);
-            } else {
-                return val.base;
-            }
         }
     }
 }

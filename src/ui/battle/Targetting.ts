@@ -55,11 +55,11 @@ module TK.SpaceTac.UI {
             this.impact_area = new Phaser.Graphics(view.game);
             this.impact_area.visible = false;
 
-            this.container.add(this.impact_indicators);
             this.container.add(this.impact_area);
             this.container.add(this.drawn_info);
             this.container.add(this.move_ghost);
             this.container.add(this.fire_arrow);
+            this.container.add(this.impact_indicators);
         }
 
         /**
@@ -117,7 +117,7 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Update impact indicators (highlighting impacted ships)
+         * Update impact indicators (highlighting impacted ships, with success factor)
          */
         updateImpactIndicators(impacts: Phaser.Group, ship: Ship, action: BaseAction, target: Target, source: IArenaLocation = ship.location): void {
             let ships = action.getImpactedShips(ship, target, source);
@@ -125,9 +125,18 @@ module TK.SpaceTac.UI {
                 // TODO differential
                 impacts.removeAll(true);
                 ships.forEach(iship => {
-                    let indicator = this.view.newImage("battle-hud-ship-impacted", iship.arena_x, iship.arena_y);
-                    indicator.anchor.set(0.5);
-                    impacts.add(indicator);
+                    let builder = new UIBuilder(this.view, impacts);
+
+                    let indicator = builder.image("battle-hud-ship-impacted", iship.arena_x, iship.arena_y);
+                    indicator.anchor.set(0.5, 0.5);
+
+                    if (action instanceof TriggerAction) {
+                        let success = action.getSuccessFactor(ship, iship);
+                        builder.in(indicator, builder => {
+                            builder.text(`${Math.round(success * 100)}%`, 0, -32,
+                                { center: true, color: "#c69b70", size: 14, shadow: true });
+                        });
+                    }
                 });
                 impacts.visible = true;
             } else {

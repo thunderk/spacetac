@@ -18,7 +18,7 @@ module TK.SpaceTac {
             this.maxcount = maxcount;
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
             let equipments = ship.listEquipment().filter(equ => equ.cooldown.heat > 0);
 
             if (this.maxcount && equipments.length > this.maxcount) {

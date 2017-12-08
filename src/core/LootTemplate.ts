@@ -206,10 +206,10 @@ module TK.SpaceTac {
         /**
          * Add a trigger action.
          */
-        addTriggerAction(power: LeveledValue, effects: EffectTemplate<any>[], range: LeveledValue = irepeat(0), blast: LeveledValue = irepeat(0), angle: LeveledValue = irepeat(0)): void {
+        addTriggerAction(power: LeveledValue, effects: EffectTemplate<any>[], range: LeveledValue = irepeat(0), blast: LeveledValue = irepeat(0), angle: LeveledValue = irepeat(0), aim: LeveledValue = irepeat(0), evasion: LeveledValue = irepeat(0), luck: LeveledValue = irepeat(0)): void {
             this.base_modifiers.push((equipment, level) => {
                 let reffects = effects.map(effect => effect.generate(level));
-                equipment.action = new TriggerAction(equipment, reffects, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(blast, level), resolveForLevel(angle, level));
+                equipment.action = new TriggerAction(equipment, reffects, resolveForLevel(power, level), resolveForLevel(range, level), resolveForLevel(blast, level), resolveForLevel(angle, level), resolveForLevel(aim, level), resolveForLevel(evasion, level), resolveForLevel(luck, level));
             });
         }
 

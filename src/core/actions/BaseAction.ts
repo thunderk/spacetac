@@ -120,7 +120,9 @@ module TK.SpaceTac {
             return 0;
         }
 
-        // Get the range of this action
+        /**
+         * Get the range of this action, for targetting purpose
+         */
         getRangeRadius(ship: Ship): number {
             return 0;
         }

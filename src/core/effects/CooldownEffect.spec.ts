@@ -8,24 +8,24 @@ module TK.SpaceTac {
             check.equals(weapons.map(weapon => weapon.cooldown.heat), [0, 0, 0]);
 
             let effect = new CooldownEffect(0, 0);
-            battle.applyDiffs(effect.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect.getOnDiffs(ship, ship, 1));
             check.equals(weapons.map(weapon => weapon.cooldown.heat), [0, 0, 0]);
 
             weapons.forEach(weapon => weapon.cooldown.use());
             check.equals(weapons.map(weapon => weapon.cooldown.heat), [3, 3, 3]);
 
-            battle.applyDiffs(effect.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect.getOnDiffs(ship, ship, 1));
             check.equals(weapons.map(weapon => weapon.cooldown.heat), [0, 0, 0]);
 
             weapons.forEach(weapon => weapon.cooldown.use());
             check.equals(weapons.map(weapon => weapon.cooldown.heat), [3, 3, 3]);
 
             effect = new CooldownEffect(1, 0);
-            battle.applyDiffs(effect.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect.getOnDiffs(ship, ship, 1));
             check.equals(weapons.map(weapon => weapon.cooldown.heat), [2, 2, 2]);
 
             effect = new CooldownEffect(1, 2);
-            battle.applyDiffs(effect.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect.getOnDiffs(ship, ship, 1));
             check.equals(weapons.map(weapon => weapon.cooldown.heat).sort(), [1, 1, 2]);
         })
 

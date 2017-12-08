@@ -9,12 +9,12 @@ module TK.SpaceTac.Specs {
             TestTools.setShipHP(ship2, 100, 50);
 
             let effect = new ValueTransferEffect("hull", -30);
-            battle.applyDiffs(effect.getOnDiffs(ship2, ship1));
+            battle.applyDiffs(effect.getOnDiffs(ship2, ship1, 1));
             check.equals(ship1.getValue("hull"), 40);
             check.equals(ship2.getValue("hull"), 70);
 
             effect = new ValueTransferEffect("hull", 1000);
-            battle.applyDiffs(effect.getOnDiffs(ship2, ship1));
+            battle.applyDiffs(effect.getOnDiffs(ship2, ship1, 1));
             check.equals(ship1.getValue("hull"), 0);
             check.equals(ship2.getValue("hull"), 110);  // over limit but will be fixed later
         })

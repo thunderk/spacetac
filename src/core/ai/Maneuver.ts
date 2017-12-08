@@ -1,4 +1,11 @@
 module TK.SpaceTac {
+    // Single effect of a maneuver
+    export type ManeuverEffect = {
+        ship: Ship
+        effect: BaseEffect
+        success: number
+    }
+
     /**
      * Ship maneuver for an artifical intelligence
      * 
@@ -21,7 +28,7 @@ module TK.SpaceTac {
         simulation: MoveFireResult
 
         // List of guessed effects of this maneuver
-        effects: [Ship, BaseEffect][]
+        effects: ManeuverEffect[]
 
         constructor(ship: Ship, action: BaseAction, target: Target, move_margin = 1) {
             this.ship = ship;
@@ -74,16 +81,18 @@ module TK.SpaceTac {
         /**
          * Guess what will be the effects applied on any ship by this maneuver
          */
-        guessEffects(): [Ship, BaseEffect][] {
-            let result: [Ship, BaseEffect][] = [];
+        guessEffects(): ManeuverEffect[] {
+            let result: ManeuverEffect[] = [];
 
             // Effects of weapon
             if (this.action instanceof TriggerAction) {
-                result = result.concat(this.action.getEffects(this.ship, this.target));
+                this.action.getEffects(this.ship, this.target).forEach(([ship, effect, success]) => {
+                    result.push({ ship: ship, effect: effect, success: success });
+                })
             } else if (this.action instanceof DeployDroneAction) {
                 let ships = this.battle.collectShipsInCircle(this.target, this.action.drone_radius, true);
                 this.action.drone_effects.forEach(effect => {
-                    result = result.concat(ships.map(ship => <[Ship, BaseEffect]>[ship, effect]));
+                    result = result.concat(ships.map(ship => ({ ship: ship, effect: effect, success: 1 })));
                 });
             }
 
@@ -91,7 +100,9 @@ module TK.SpaceTac {
             let location = this.getFinalLocation();
             let effects = this.battle.drones.list().forEach(drone => {
                 if (Target.newFromLocation(location.x, location.y).isInRange(drone.x, drone.y, drone.radius)) {
-                    result = result.concat(drone.effects.map(effect => <[Ship, BaseEffect]>[this.ship, effect]));
+                    result = result.concat(drone.effects.map(effect => (
+                        { ship: this.ship, effect: effect, success: 1 }
+                    )));
                 }
             });
 

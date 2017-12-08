@@ -20,16 +20,16 @@ module TK.SpaceTac.Specs {
 
             checkValues("initial", 150, 400, 0, 0);
 
-            battle.applyDiffs(new DamageEffect(50).getOnDiffs(ship, ship));
+            battle.applyDiffs(new DamageEffect(50).getOnDiffs(ship, ship, 1));
             checkValues("after 50 damage", 150, 350, 0, 5);
 
-            battle.applyDiffs(new DamageEffect(250).getOnDiffs(ship, ship));
+            battle.applyDiffs(new DamageEffect(250).getOnDiffs(ship, ship, 1));
             checkValues("after 250 damage", 150, 100, 0, 30);
 
-            battle.applyDiffs(new DamageEffect(201).getOnDiffs(ship, ship));
+            battle.applyDiffs(new DamageEffect(201).getOnDiffs(ship, ship, 1));
             checkValues("after 201 damage", 49, 0, 11, 40);
 
-            battle.applyDiffs(new DamageEffect(8000).getOnDiffs(ship, ship));
+            battle.applyDiffs(new DamageEffect(8000).getOnDiffs(ship, ship, 1));
             checkValues("after 8000 damage", 0, 0, 16, 40);
         });
 
@@ -43,7 +43,7 @@ module TK.SpaceTac.Specs {
             TestTools.setShipHP(ship, 1000, 1000);
             let damage = new DamageEffect(200);
 
-            check.equals(damage.getEffectiveDamage(ship), [200, 0]);
+            check.equals(damage.getEffectiveDamage(ship, 1), new ShipDamageDiff(ship, 0, 200));
 
             check.patch(ship, "ieffects", iterator([
                 isingle(new DamageModifierEffect(-15)),
@@ -54,14 +54,14 @@ module TK.SpaceTac.Specs {
                 isingle(new DamageModifierEffect(3))
             ]));
 
-            check.equals(damage.getEffectiveDamage(ship), [170, 0]);
-            check.equals(damage.getEffectiveDamage(ship), [240, 0]);
-            check.equals(damage.getEffectiveDamage(ship), [0, 0]);
-            check.equals(damage.getEffectiveDamage(ship), [400, 0]);
-            check.equals(damage.getEffectiveDamage(ship), [190, 0]);
+            check.equals(damage.getEffectiveDamage(ship, 1), new ShipDamageDiff(ship, 0, 170));
+            check.equals(damage.getEffectiveDamage(ship, 1), new ShipDamageDiff(ship, 0, 240));
+            check.equals(damage.getEffectiveDamage(ship, 1), new ShipDamageDiff(ship, 0, 0));
+            check.equals(damage.getEffectiveDamage(ship, 1), new ShipDamageDiff(ship, 0, 400));
+            check.equals(damage.getEffectiveDamage(ship, 1), new ShipDamageDiff(ship, 0, 190));
 
             damage = new DamageEffect(40);
-            check.equals(damage.getEffectiveDamage(ship), [41, 0]);
+            check.equals(damage.getEffectiveDamage(ship, 1), new ShipDamageDiff(ship, 0, 41));
         });
     });
 }

@@ -7,11 +7,11 @@ module TK.SpaceTac {
             check.equals(ship.getAttribute("precision"), 12, "initial");
 
             let effect1 = new AttributeLimitEffect("precision", 5);
-            battle.applyDiffs(effect1.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect1.getOnDiffs(ship, ship, 1));
             check.equals(ship.getAttribute("precision"), 5, "applied 1");
 
             let effect2 = new AttributeLimitEffect("precision", 3);
-            battle.applyDiffs(effect2.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect2.getOnDiffs(ship, ship, 1));
             check.equals(ship.getAttribute("precision"), 3, "applied 2");
 
             battle.applyDiffs(effect1.getOffDiffs(ship));

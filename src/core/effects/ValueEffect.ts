@@ -36,7 +36,7 @@ module TK.SpaceTac {
             this.value_end = value_end;
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
             if (this.value_on) {
                 return ship.getValueDiffs(this.valuetype, this.value_on, true);
             } else {

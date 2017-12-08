@@ -68,7 +68,8 @@ module TK.SpaceTac.UI {
             // Add stasis effect
             this.stasis = this.battleview.newImage("battle-hud-ship-stasis");
             this.stasis.anchor.set(0.5, 0.5);
-            this.stasis.visible = false;
+            this.stasis.alpha = 0.9;
+            this.stasis.visible = !ship.alive;
             this.add(this.stasis);
 
             // HSP display
@@ -202,7 +203,7 @@ module TK.SpaceTac.UI {
                 return {
                     background: async (animate, timer) => {
                         if (animate) {
-                            await this.displayEffect(`${diff.hull + diff.shield} damage`, false);
+                            await this.displayEffect(`${diff.theoretical} damage`, false);
                             await timer.sleep(1000);
                         }
                     }

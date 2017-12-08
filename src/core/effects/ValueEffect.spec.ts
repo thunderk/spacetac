@@ -8,10 +8,10 @@ module TK.SpaceTac {
             ship.setValue("shield", 55);
             check.equals(ship.getValue("shield"), 55);
 
-            battle.applyDiffs(effect.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect.getOnDiffs(ship, ship, 1));
             check.equals(ship.getValue("shield"), 75);
 
-            battle.applyDiffs(effect.getOnDiffs(ship, ship));
+            battle.applyDiffs(effect.getOnDiffs(ship, ship, 1));
             check.equals(ship.getValue("shield"), 95);
         });
 

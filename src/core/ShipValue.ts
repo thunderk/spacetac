@@ -17,8 +17,8 @@ module TK.SpaceTac {
         "shield_capacity": "Maximal Shield value to protect the hull from damage",
         "power_capacity": "Maximal Power value to use equipment",
         "power_generation": "Power generated at the end of the ship's turn",
-        "maneuvrability": "Ability to move first and fast",
-        "precision": "Ability to target far and good",
+        "maneuvrability": "Ability to move first, fast and to evade weapons",
+        "precision": "Ability to target far and aim good",
     }
 
     export const SHIP_VALUES_NAMES: ShipValuesMapping = {

@@ -29,17 +29,17 @@ module TK.SpaceTac {
         let dhull = 0;
         let dshield = 0;
 
-        maneuver.effects.forEach(([iship, effect]) => {
-            if (iship === ship) {
-                if (effect instanceof DamageEffect) {
-                    let [ds, dh] = effect.getEffectiveDamage(ship);
-                    dhull -= dh;
-                    dshield -= ds;
-                } else if (effect instanceof ValueEffect) {
-                    if (effect.valuetype == "hull") {
-                        dhull = clamp(hull + effect.value_on, 0, chull) - hull;
-                    } else if (effect.valuetype == "shield") {
-                        dshield += clamp(shield + effect.value_on, 0, cshield) - shield;
+        maneuver.effects.forEach(result => {
+            if (result.ship === ship) {
+                if (result.effect instanceof DamageEffect) {
+                    let damage = result.effect.getEffectiveDamage(ship, result.success);
+                    dhull -= damage.hull;
+                    dshield -= damage.shield;
+                } else if (result.effect instanceof ValueEffect) {
+                    if (result.effect.valuetype == "hull") {
+                        dhull = clamp(hull + result.effect.value_on, 0, chull) - hull;
+                    } else if (result.effect.valuetype == "shield") {
+                        dshield += clamp(shield + result.effect.value_on, 0, cshield) - shield;
                     }
                 }
             }

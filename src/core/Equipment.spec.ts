@@ -49,14 +49,14 @@ module TK.SpaceTac.Specs {
 
             let action = new TriggerAction(equipment, [new DamageEffect(50)], 1, 200, 0);
             equipment.action = action;
-            check.equals(equipment.getEffectsDescription(), "Fire (power usage 1, max range 200km):\n• do 50 damage on target");
+            check.equals(equipment.getEffectsDescription(), "Fire (power 1, range 200km):\n• do 50 damage on target");
 
             action.blast = 20;
-            check.equals(equipment.getEffectsDescription(), "Fire (power usage 1, max range 200km):\n• do 50 damage in 20km radius");
+            check.equals(equipment.getEffectsDescription(), "Fire (power 1, range 200km):\n• do 50 damage in 20km radius");
 
             action.blast = 0;
             action.effects.push(new StickyEffect(new AttributeLimitEffect("shield_capacity", 200), 3));
-            check.equals(equipment.getEffectsDescription(), "Fire (power usage 1, max range 200km):\n• do 50 damage on target\n• limit shield capacity to 200 for 3 turns on target");
+            check.equals(equipment.getEffectsDescription(), "Fire (power 1, range 200km):\n• do 50 damage on target\n• limit shield capacity to 200 for 3 turns on target");
         });
 
         test.case("gets a minimal level, based on skills requirements", check => {

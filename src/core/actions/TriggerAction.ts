@@ -19,13 +19,22 @@ module TK.SpaceTac {
         // Angle of the area between the source and the target that will be impacted
         angle: number
 
+        // Influence of "precision" of firing ship (0..100)
+        aim: number
+
+        // Influence of "maneuvrability" of impacted ship (0..100)
+        evasion: number
+
+        // Influence of luck
+        luck: number
+
         // Effects applied on target
         effects: BaseEffect[]
 
         // Equipment cannot be null
         equipment: Equipment
 
-        constructor(equipment: Equipment, effects: BaseEffect[] = [], power = 1, range = 0, blast = 0, angle = 0, code = `fire-${equipment.code}`) {
+        constructor(equipment: Equipment, effects: BaseEffect[] = [], power = 1, range = 0, blast = 0, angle = 0, aim = 0, evasion = 0, luck = 0, code = `fire-${equipment.code}`) {
             super(code, equipment);
 
             this.power = power;
@@ -33,6 +42,9 @@ module TK.SpaceTac {
             this.effects = effects;
             this.blast = blast;
             this.angle = angle;
+            this.aim = aim;
+            this.evasion = evasion;
+            this.luck = luck;
         }
 
         getVerb(): string {
@@ -82,6 +94,42 @@ module TK.SpaceTac {
             return this.range;
         }
 
+        /**
+         * Get the success factor [0-1] for this action applied from a ship to another
+         * 
+         * This is a predictible formula, not including random elements.
+         */
+        getSuccessFactor(from: Ship, to: Ship): number {
+            let aim = this.aim * 0.01;
+            let evasion = this.evasion * 0.01;
+            let f1 = (x: number) => (x < 0 ? -1 : 1) * (1 - 1 / (x * x + 1));
+            let prec = from.getAttribute("precision");
+            let man = to.getAttribute("maneuvrability");
+            let delta = Math.min(aim, evasion) * f1(0.2 * (prec - man));
+            return clamp(1 - aim * (1 - f1(prec)) - evasion * f1(man) + delta, 0, 1);
+        }
+
+        /**
+         * Get the effective success of the action [0-1].
+         * 
+         * Result has more chance to be near the success factor, but may be in the whole [0-1] range.
+         */
+        getEffectiveSuccess(from: Ship, to: Ship, random = RandomGenerator.global): number {
+            let p = this.getSuccessFactor(from, to);
+            let s = this.luck * 0.01;
+            if (s) {
+                let c = (2 / (2 - s)) - 1;
+                let x = random.random();
+                if (x <= p) {
+                    return Math.pow(x, c) / Math.pow(p, c - 1);
+                } else {
+                    return 1 - Math.pow(1 - x, c) / Math.pow(1 - p, c - 1);
+                }
+            } else {
+                return p;
+            }
+        }
+
         filterImpactedShips(source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
             if (this.blast) {
                 return ships.filter(ship => arenaDistance(ship.location, target) <= this.blast);
@@ -128,12 +176,15 @@ module TK.SpaceTac {
 
         /**
          * Collect the effects applied by this action
+         * 
+         * If *luck* is specified, an effective success factor is used, instead of an estimated one
          */
-        getEffects(ship: Ship, target: Target, source = ship.location): [Ship, BaseEffect][] {
-            let result: [Ship, BaseEffect][] = [];
+        getEffects(ship: Ship, target: Target, source = ship.location, luck?: RandomGenerator): [Ship, BaseEffect, number][] {
+            let result: [Ship, BaseEffect, number][] = [];
             let ships = this.getImpactedShips(ship, target, source);
-            ships.forEach(ship => {
-                this.effects.forEach(effect => result.push([ship, effect]));
+            ships.forEach(iship => {
+                let success = luck ? this.getEffectiveSuccess(ship, iship, luck) : this.getSuccessFactor(ship, iship);
+                this.effects.forEach(effect => result.push([iship, effect, success]));
             });
             return result;
         }
@@ -157,9 +208,9 @@ module TK.SpaceTac {
             }
 
             // Apply effects
-            let effects = this.getEffects(ship, target);
-            effects.forEach(([ship_target, effect]) => {
-                let diffs = effect.getOnDiffs(ship_target, ship);
+            let effects = this.getEffects(ship, target, undefined, RandomGenerator.global);
+            effects.forEach(([ship_target, effect, success]) => {
+                let diffs = effect.getOnDiffs(ship_target, ship, success);
                 result = result.concat(diffs);
             });
 
@@ -173,13 +224,22 @@ module TK.SpaceTac {
 
             let info: string[] = [];
             if (this.power) {
-                info.push(`power usage ${this.power}`);
+                info.push(`power ${this.power}`);
             }
             if (this.range) {
-                info.push(`max range ${this.range}km`);
+                info.push(`range ${this.range}km`);
+            }
+            if (this.aim) {
+                info.push(`aim +${this.aim}%`);
+            }
+            if (this.evasion) {
+                info.push(`evasion -${this.evasion}%`);
+            }
+            if (this.luck) {
+                info.push(`luck ±${this.luck}%`);
             }
 
-            let desc = `${this.getVerb()} (${info.join(", ")})`;
+            let desc = (info.length) ? `${this.getVerb()} (${info.join(", ")})` : this.getVerb();
             let effects = this.effects.map(effect => {
                 let suffix: string;
                 if (this.blast) {

@@ -18,10 +18,10 @@ module TK.SpaceTac {
             this.amount = amount;
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
             if (source instanceof Ship) {
                 if (this.amount < 0) {
-                    return new ValueTransferEffect(this.valuetype, -this.amount).getOnDiffs(source, ship);
+                    return new ValueTransferEffect(this.valuetype, -this.amount).getOnDiffs(source, ship, success);
                 } else {
                     let amount = Math.min(source.getValue(this.valuetype), this.amount);
                     if (amount) {

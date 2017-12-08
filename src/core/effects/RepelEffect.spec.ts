@@ -14,9 +14,9 @@ module TK.SpaceTac.Specs {
             ship2a.setArenaPosition(100, 280);
 
             let effect = new RepelEffect(12);
-            battle.applyDiffs(effect.getOnDiffs(ship1a, ship1a));
-            battle.applyDiffs(effect.getOnDiffs(ship1b, ship1a));
-            battle.applyDiffs(effect.getOnDiffs(ship2a, ship1a));
+            battle.applyDiffs(effect.getOnDiffs(ship1a, ship1a, 1));
+            battle.applyDiffs(effect.getOnDiffs(ship1b, ship1a, 1));
+            battle.applyDiffs(effect.getOnDiffs(ship2a, ship1a, 1));
 
             check.equals(ship1a.location, new ArenaLocationAngle(100, 100));
             check.equals(ship1b.location, new ArenaLocationAngle(262, 100));
@@ -33,7 +33,7 @@ module TK.SpaceTac.Specs {
             ship2b.setArenaPosition(100, 350);
 
             let effect = new RepelEffect(85);
-            battle.applyDiffs(effect.getOnDiffs(ship2a, ship1a));
+            battle.applyDiffs(effect.getOnDiffs(ship2a, ship1a, 1));
             check.equals(ship2a.location, new ArenaLocationAngle(100, 250));
         })
     })
