@@ -200,7 +200,7 @@ module TK.SpaceTac.UI {
         /**
          * Fill a tooltip with equipment data
          */
-        fillTooltip(filler: TooltipFiller): boolean {
+        fillTooltip(filler: TooltipBuilder): boolean {
             let title = this.item.getFullName();
             if (this.item.slot_type !== null) {
                 title += ` (${SlotType[this.item.slot_type]})`;

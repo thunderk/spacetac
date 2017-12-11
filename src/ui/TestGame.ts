@@ -110,6 +110,44 @@ module TK.SpaceTac.UI.Specs {
     }
 
     /**
+     * Crawn through the children of a node
+     */
+    export function crawlChildren(node: UIContainer, recursive: boolean, callback: (child: any) => void): void {
+        node.children.forEach(child => {
+            callback(child);
+            if (recursive && (child instanceof Phaser.Group || child instanceof Phaser.Image)) {
+                crawlChildren(child, true, callback);
+            }
+        });
+    }
+
+    /**
+     * Collect all image codes in a node
+     */
+    export function collectImages(node: UIContainer, recursive = true): (string | null)[] {
+        let result: (string | null)[] = [];
+        crawlChildren(node, recursive, child => {
+            if (child instanceof Phaser.Image) {
+                result.push(child.name || null);
+            }
+        });
+        return result;
+    }
+
+    /**
+     * Collect all texts in a node
+     */
+    export function collectTexts(node: UIContainer, recursive = true): (string | null)[] {
+        let result: (string | null)[] = [];
+        crawlChildren(node, recursive, child => {
+            if (child instanceof Phaser.Text) {
+                result.push(child.text || null);
+            }
+        });
+        return result;
+    }
+
+    /**
      * Check a given text node
      */
     export function checkText(check: TestContext, node: any, content: string): void {

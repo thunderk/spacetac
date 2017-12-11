@@ -160,7 +160,7 @@ module TK.SpaceTac.UI {
         /**
          * Add an image
          */
-        image(name: string | string[], x = 0, y = 0): UIImage {
+        image(name: string | string[], x = 0, y = 0, centered = false): UIImage {
             if (typeof name != "string") {
                 name = this.view.getFirstImage(...name);
             }
@@ -168,6 +168,9 @@ module TK.SpaceTac.UI {
             let info = this.view.getImageInfo(name);
             let result = this.game.add.image(x, y, info.key, info.frame);
             result.name = name;
+            if (centered) {
+                result.anchor.set(0.5)
+            }
             this.add(result);
             return result;
         }

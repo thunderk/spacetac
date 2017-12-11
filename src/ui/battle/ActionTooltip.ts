@@ -6,7 +6,7 @@ module TK.SpaceTac.UI {
         /**
          * Fill the tooltip
          */
-        static fill(filler: TooltipFiller, ship: Ship, action: BaseAction, position: number) {
+        static fill(filler: TooltipBuilder, ship: Ship, action: BaseAction, position: number) {
             let builder = filler.styled({ size: 20 });
 
             let icon = builder.image([`equipment-${action.equipment ? action.equipment.code : "---"}`, `action-${action.code}`]);
@@ -40,17 +40,17 @@ module TK.SpaceTac.UI {
             if (action.equipment && action.equipment.cooldown.overheat) {
                 let cooldown = action.equipment.cooldown;
                 if (cooldown.heat > 0) {
-                    builder.text("Cooling down ...", 150, 80, { color: "#c9604c" });
+                    builder.text("Cooling down ...", 150, 80, { color: "#d8894d" });
                 } else if (cooldown.willOverheat() && cost != "Not enough power") {
                     if (cooldown.cooling > 1) {
                         let turns = cooldown.cooling - 1;
-                        builder.text(`Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, 150, 80, { color: "#c9604c" });
+                        builder.text(`Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, 150, 80, { color: "#d8894d" });
                     } else {
-                        builder.text("Unavailable until next turn if used", 150, 80, { color: "#c9604c" });
+                        builder.text("Unavailable until next turn if used", 150, 80, { color: "#d8894d" });
                     }
                 }
             } else if (action instanceof ToggleAction && action.activated) {
-                builder.text(`Activated`, 150, 80, { color: "#c9604c" });
+                builder.text(`Activated`, 150, 80, { color: "#dbe748" });
             }
 
             let description = action.getEffectsDescription();

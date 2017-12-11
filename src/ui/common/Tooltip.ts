@@ -77,13 +77,14 @@ module TK.SpaceTac.UI {
     /**
      * Functions used to fill a tooltip content
      */
-    export class TooltipFiller extends UIBuilder {
+    export class TooltipBuilder extends UIBuilder {
         private container: TooltipContainer;
 
         constructor(container: TooltipContainer) {
             let style = new UITextStyle();
             style.center = false;
             style.vcenter = false;
+            style.shadow = true;
             super(container.view, container.content, style);
 
             this.container = container;
@@ -118,10 +119,10 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Get a tooltip filler
+         * Get a tooltip builder
          */
-        getFiller(): TooltipFiller {
-            return new TooltipFiller(this.container);
+        getBuilder(): TooltipBuilder {
+            return new TooltipBuilder(this.container);
         }
 
         /**
@@ -129,12 +130,12 @@ module TK.SpaceTac.UI {
          * 
          * When the component is hovered, the function is called to allow filling the tooltip container
          */
-        bind(obj: Phaser.Button, func: (filler: TooltipFiller) => boolean): void {
+        bind(obj: Phaser.Button, func: (filler: TooltipBuilder) => boolean): void {
             this.view.inputs.setHoverClick(obj,
                 // enter
                 () => {
                     this.hide();
-                    if (func(this.getFiller())) {
+                    if (func(this.getBuilder())) {
                         this.container.show(obj.getBounds());
                     }
                 },

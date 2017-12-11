@@ -36,7 +36,6 @@ Character sheet
 Battle
 ------
 
-* Display precision and maneuvrability in ship tooltip
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
 * Toggle bar/text display in power section of action bar

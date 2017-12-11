@@ -18,21 +18,21 @@ module TK.SpaceTac.UI.Specs {
             let action3 = new EndTurnAction();
             check.patch(action3, "getVerb", () => "End turn");
 
-            ActionTooltip.fill(tooltip.getFiller(), ship, action1, 0);
+            ActionTooltip.fill(tooltip.getBuilder(), ship, action1, 0);
             checkText(check, (<any>tooltip).container.content.children[1], "Engine");
             checkText(check, (<any>tooltip).container.content.children[2], "Cost: 1 power per 0km");
             checkText(check, (<any>tooltip).container.content.children[3], "Move: 0km per power point (safety: 120km)");
             checkText(check, (<any>tooltip).container.content.children[4], "[ 1 ]");
 
             tooltip.hide();
-            ActionTooltip.fill(tooltip.getFiller(), ship, action2, 1);
+            ActionTooltip.fill(tooltip.getBuilder(), ship, action2, 1);
             checkText(check, (<any>tooltip).container.content.children[1], "Weapon");
             checkText(check, (<any>tooltip).container.content.children[2], "Cost: 2 power");
             checkText(check, (<any>tooltip).container.content.children[3], "Fire (power 2, range 50km):\n• do 12 damage on target");
             checkText(check, (<any>tooltip).container.content.children[4], "[ 2 ]");
 
             tooltip.hide();
-            ActionTooltip.fill(tooltip.getFiller(), ship, action3, 2);
+            ActionTooltip.fill(tooltip.getBuilder(), ship, action3, 2);
             checkText(check, (<any>tooltip).container.content.children[1], "End turn");
             checkText(check, (<any>tooltip).container.content.children[2], "End the current ship's turn.\nWill also generate power and cool down equipments.");
             checkText(check, (<any>tooltip).container.content.children[3], "[ space ]");
