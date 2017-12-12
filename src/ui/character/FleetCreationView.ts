@@ -15,8 +15,8 @@ module TK.SpaceTac.UI {
             let models = ShipModel.getRandomModels(2);
 
             this.built_fleet = new Fleet();
-            this.built_fleet.addShip(new Ship(null, "First", models[0]));
-            this.built_fleet.addShip(new Ship(null, "Second", models[1]));
+            this.built_fleet.addShip(new Ship(null, MissionGenerator.generateCharacterName(), models[0]));
+            this.built_fleet.addShip(new Ship(null, MissionGenerator.generateCharacterName(), models[1]));
             this.built_fleet.credits = this.built_fleet.ships.length * 1000;
 
             let basic_equipments = () => {

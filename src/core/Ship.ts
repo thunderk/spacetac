@@ -12,8 +12,8 @@ module TK.SpaceTac {
         level = new ShipLevel()
         skills = new ShipSkills()
 
-        // Name of the ship
-        name: string
+        // Name of the ship, null if unimportant
+        name: string | null
 
         // Code of the ShipModel used to create it
         model: ShipModel
@@ -57,7 +57,7 @@ module TK.SpaceTac {
         play_priority = 0;
 
         // Create a new ship inside a fleet
-        constructor(fleet: Fleet | null = null, name = "unnamed", model = new ShipModel("default", "Default", 1, 0, false, 0)) {
+        constructor(fleet: Fleet | null = null, name: string | null = null, model = new ShipModel("default", "Ship", 1, 0, false, 0)) {
             super();
 
             this.fleet = fleet || new Fleet();
@@ -84,11 +84,11 @@ module TK.SpaceTac {
         }
 
         /**
-         * Returns the full name of this ship
+         * Returns the name of this ship
          */
-        getFullName(owner = true): string {
-            let result = `Level ${this.level.get()} ${this.name}`;
-            return owner ? `${this.fleet.player.name}'s ${result}` : result;
+        getName(level = true): string {
+            let name = this.name || this.model.name;
+            return level ? `Level ${this.level.get()} ${name}` : name;
         }
 
         // Returns true if the ship is able to play

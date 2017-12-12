@@ -43,6 +43,8 @@ module TK.SpaceTac.Specs {
 
             checkPart(story, 3, /^Go with .* in .* system$/);
             check.same(fleet.ships.length, fleet_size + 1);
+            check.same(fleet.ships[fleet_size].critical, true);
+            check.greater(fleet.ships[fleet_size].getAttribute("hull_capacity"), 0);
             goTo(fleet, (<MissionPartEscort>story.current_part).destination);
 
             checkPart(story, 4, /^Listen to .*$/);

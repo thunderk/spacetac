@@ -26,7 +26,7 @@ module TK.SpaceTac {
         }
 
         jasmineToString(): string {
-            return `${this.player.name}'s fleet [${this.ships.map(ship => ship.getFullName()).join(",")}]`;
+            return `${this.player.name}'s fleet [${this.ships.map(ship => ship.getName()).join(",")}]`;
         }
 
         /**

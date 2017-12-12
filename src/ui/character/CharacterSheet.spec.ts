@@ -28,14 +28,14 @@ module TK.SpaceTac.UI.Specs {
                 check.equals(sheet.x, 0);
                 check.equals(sheet.portraits.length, 2);
 
-                check.equals(sheet.ship_name.text, "Player's Level 1 Ship 1");
+                check.equals(sheet.ship_name.text, "Ship 1");
                 check.equals(sheet.ship_slots.length, 4);
                 check.equals(sheet.ship_cargo.length, 3);
 
                 let portrait = <Phaser.Button>sheet.portraits.getChildAt(1);
                 portrait.onInputUp.dispatch();
 
-                check.equals(sheet.ship_name.text, "Player's Level 1 Ship 2");
+                check.equals(sheet.ship_name.text, "Ship 2");
                 check.equals(sheet.ship_slots.length, 1);
                 check.equals(sheet.ship_cargo.length, 2);
             });
@@ -126,7 +126,7 @@ module TK.SpaceTac.UI.Specs {
                 ship.critical = true;
                 sheet.show(ship);
                 check.equals(sheet.isInteractive(), false, "critical ship");
-                
+
                 ship.critical = false;
                 sheet.show(ship);
                 check.equals(sheet.isInteractive(), true, "normal ship");
@@ -139,7 +139,7 @@ module TK.SpaceTac.UI.Specs {
 
                 sheet.show(ship, undefined, undefined, true);
                 check.equals(sheet.isInteractive(), true, "interactivity reenabled");
-            });                
+            });
         });
 
         test.case("fits slots in area", check => {

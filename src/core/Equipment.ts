@@ -61,7 +61,7 @@ module TK.SpaceTac {
         }
 
         jasmineToString() {
-            return this.attached_to ? `${this.attached_to.ship.getFullName()} - ${this.name}` : this.name;
+            return this.attached_to ? `${this.attached_to.ship.getName()} - ${this.name}` : this.name;
         }
 
         /**

@@ -27,7 +27,7 @@ module TK.SpaceTac.UI.Specs {
             check.contains(images, "ship-fake-portrait");
             check.contains(images, "equipment-equipment");
             check.equals(texts, [
-                "Phil's Level 1 Fury", "Plays in 2 turns",
+                "Level 1 Fury", "Plays in 2 turns",
                 "7", "3", "9", "max", "12", "57", "max", "58", "100", "max", "140",
                 "Active effects", "• hull capacity +50", "• damage -15% for 3 turns", "• limit precision to 10",
                 "Weapons", "equipment Mk1"

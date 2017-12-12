@@ -1,17 +1,17 @@
 module TK.SpaceTac {
     const POOL_SHIP_NAMES = [
-        "Zert",
-        "Ob'tec",
-        "Paayk",
-        "Fen_amr",
-        "TempZst",
-        "croNt",
-        "Appn",
-        "Vertix",
-        "Opan-vel",
-        "Yz-aol",
-        "Arkant",
-        "PNX",
+        "Zert", "Zark", "Zeem",
+        "Ob'tec", "Ob'vac", "Ob'sig",
+        "Paayk", "Paakt",
+        "Fen_amr", "Fin_am", "Fen_AA",
+        "TempZst", "TriZth",
+        "croNt", "coRzt",
+        "Appn", "Appq",
+        "Vertix", "Vortix",
+        "Opan-vel", "Ipal-ven", "Epan-vek",
+        "Yz-aol", "Yz-aib",
+        "Arkant", "Arkyan",
+        "PNX", "PGV", "PXT", "PRZ",
     ]
 
     /**
@@ -48,12 +48,19 @@ module TK.SpaceTac {
         }
 
         /**
+         * Generate a character name
+         */
+        static generateCharacterName(random = RandomGenerator.global): string {
+            return `${random.choice(POOL_SHIP_NAMES)}-${random.randInt(10, 999)}`;
+        }
+
+        /**
          * Generate a new ship that may be used in a mission
          */
         generateShip(level: number) {
             let generator = new ShipGenerator(this.random);
             let result = generator.generate(level, null, true);
-            result.name = `${this.random.choice(POOL_SHIP_NAMES)}-${this.random.randInt(10, 999)}`;
+            result.name = MissionGenerator.generateCharacterName(this.random);
             return result;
         }
 

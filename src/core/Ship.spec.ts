@@ -2,16 +2,20 @@ module TK.SpaceTac.Specs {
     testing("Ship", test => {
         test.case("creates a full name", check => {
             let ship = new Ship();
-            check.equals(ship.getFullName(false), "Level 1 unnamed");
+            check.equals(ship.getName(false), "Ship");
+            check.equals(ship.getName(true), "Level 1 Ship");
 
-            ship.name = "Titan";
-            check.equals(ship.getFullName(false), "Level 1 Titan");
+            ship.model = new ShipModel("test", "Hauler");
+            check.equals(ship.getName(false), "Hauler");
+            check.equals(ship.getName(true), "Level 1 Hauler");
+
+            ship.name = "Titan-W12";
+            check.equals(ship.getName(false), "Titan-W12");
+            check.equals(ship.getName(true), "Level 1 Titan-W12");
 
             ship.level.forceLevel(3);
-            check.equals(ship.getFullName(false), "Level 3 Titan");
-
-            ship.fleet.player.name = "Emperor";
-            check.equals(ship.getFullName(true), "Emperor's Level 3 Titan");
+            check.equals(ship.getName(false), "Titan-W12");
+            check.equals(ship.getName(true), "Level 3 Titan-W12");
         });
 
         test.case("moves in the arena", check => {

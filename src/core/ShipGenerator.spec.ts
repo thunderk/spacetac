@@ -3,7 +3,7 @@ module TK.SpaceTac.Specs {
         test.case("can use ship model", check => {
             var gen = new ShipGenerator();
             var model = new ShipModel("test", "Test", 1, 2, true, 3);
-            var ship = gen.generate(1, model);
+            var ship = gen.generate(1, model, false);
             check.same(ship.model, model);
             check.equals(ship.cargo_space, 2);
             check.equals(ship.slots.length, 7);

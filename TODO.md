@@ -12,7 +12,6 @@ Menu/settings/saves
 Map/story
 ---------
 
-* Initial contact has no equipment, and dies immediately in the first fight
 * Add sound effects and more visual effects (jumps...)
 * Add factions and reputation
 * Allow to cancel secondary missions

@@ -17,7 +17,7 @@ module TK.SpaceTac {
          * 
          * If *force_damage_equipment, at least one "damaging" weapon will be chosen
          */
-        generate(level: number, model: ShipModel | null = null, upgrade = false, force_damage_equipment = true): Ship {
+        generate(level: number, model: ShipModel | null = null, upgrade = true, force_damage_equipment = true): Ship {
             if (!model) {
                 // Get a random model
                 model = ShipModel.getRandomModel(level, this.random);

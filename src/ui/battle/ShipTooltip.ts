@@ -31,7 +31,7 @@ module TK.SpaceTac.UI {
             });
 
             let enemy = !ship.getPlayer().is(this.battleview.player);
-            builder.text(ship.getFullName(), 168, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
+            builder.text(ship.getName(), 168, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
 
             if (ship.alive) {
                 let turns = this.battleview.battle.getPlayOrder(ship);

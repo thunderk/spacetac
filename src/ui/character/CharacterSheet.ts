@@ -216,7 +216,7 @@ module TK.SpaceTac.UI {
 
             let upgrade_points = ship.getAvailableUpgradePoints();
 
-            this.ship_name.setText(ship.getFullName());
+            this.ship_name.setText(ship.getName(false));
             this.ship_level.setText(ship.level.get().toString());
             this.ship_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
             this.ship_upgrade_points.setText(upgrade_points.toString());

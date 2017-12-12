@@ -136,7 +136,7 @@ module TK.SpaceTac.UI {
         setCurrentShipMessage(ship: Ship, content: string): void {
             let style = new UIConversationStyle();
             style.image = `ship-${ship.model.code}-portrait`;
-            style.image_caption = ship.name;
+            style.image_caption = ship.getName(false);
             style.image_size = 256;
 
             let own = ship.getPlayer() == this.view.gameui.session.player;
