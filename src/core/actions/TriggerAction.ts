@@ -141,7 +141,7 @@ module TK.SpaceTac {
                     if (dist < 0.000001 || dist > this.range) {
                         return false;
                     } else {
-                        return Math.abs(angularDistance(arenaAngle(source, ship.location), angle)) < maxangle;
+                        return Math.abs(angularDifference(arenaAngle(source, ship.location), angle)) < maxangle;
                     }
                 });
             } else {
@@ -195,7 +195,7 @@ module TK.SpaceTac {
             if (arenaDistance(ship.location, target) > 1e-6) {
                 // Face the target
                 let angle = arenaAngle(ship.location, target);
-                if (Math.abs(angularDistance(angle, ship.arena_angle)) > 1e-6) {
+                if (Math.abs(angularDifference(angle, ship.arena_angle)) > 1e-6) {
                     let destination = new ArenaLocationAngle(ship.arena_x, ship.arena_y, angle);
                     let engine = first(ship.listEquipment(SlotType.Engine), () => true);
                     result.push(new ShipMoveDiff(ship, ship.location, destination, engine));

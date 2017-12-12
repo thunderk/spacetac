@@ -59,10 +59,11 @@ module TK.SpaceTac {
     }
 
     /**
-     * Get the "angular distance" between two angles in radians
+     * Get the "angular difference" between two angles in radians, in ]-pi,pi] range.
      */
-    export function angularDistance(angle1: number, angle2: number): number {
-        return (angle2 - angle1) % (Math.PI * 2);
+    export function angularDifference(angle1: number, angle2: number): number {
+        let diff = angle2 - angle1;
+        return diff - Math.PI * 2 * Math.floor((diff + Math.PI) / (Math.PI * 2));
     }
 
     /**
