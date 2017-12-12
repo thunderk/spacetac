@@ -12,6 +12,7 @@ Menu/settings/saves
 Map/story
 ---------
 
+* Initial contact has no equipment, and dies immediately in the first fight
 * Add sound effects and more visual effects (jumps...)
 * Add factions and reputation
 * Allow to cancel secondary missions
@@ -22,13 +23,18 @@ Map/story
 Character sheet
 ---------------
 
+* Add a randomization button in creation view
+* Replace the close icon by a validation icon in creation view
+* Allow to cancel spent skill points (and confirm when closing the sheet)
+* Highlight matched/unmatched skills when dragging an equipment to a slot
+* Highlight attribute changes when dragging an equipment to a slot
+* Propose to auto upgrade skills if enough points are available, when equipping an equipment with unmatched skills
 * Improve eye-catching for shop and loot section
 * Highlight allowed destinations during drag-and-drop
 * Effective skill is sometimes not updated when upgrading base skill
 * Add merged cargo display for the whole fleet
 * Allow to change/buy ship model
 * Add personality indicators (editable in creation view)
-* Allow to cancel spent skill points (and confirm when closing the sheet)
 * Add filters and sort options for cargo and shop
 * Display level and slot type on equipment
 * Fixed tooltips not being visible in loot mode (at the end of battle)
@@ -36,6 +42,9 @@ Character sheet
 Battle
 ------
 
+* Toggle actions are not reset at the end of battle
+* Investigate cooldown not resetting properly the usage count
+* Replace success factor percentage with a bar
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
 * Toggle bar/text display in power section of action bar
@@ -73,6 +82,8 @@ Ships models and equipments
 Artificial Intelligence
 -----------------------
 
+* Produce interesting "angle" areas
+* AI seems unwanting to use the laser
 * Evaluate diffs instead of effects
 * Use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
 * Abandon fight if the AI judges there is no hope of victory
