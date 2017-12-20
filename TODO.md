@@ -41,7 +41,6 @@ Character sheet
 Battle
 ------
 
-* Toggle actions are not reset at the end of battle
 * Investigate cooldown not resetting properly the usage count
 * Replace success factor percentage with a bar
 * Add a voluntary retreat option

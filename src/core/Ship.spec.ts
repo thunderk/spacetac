@@ -314,6 +314,11 @@ module TK.SpaceTac.Specs {
             ship.setValue("power", 2);
             ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("power_capacity", 3), 12));
             ship.updateAttributes();
+            let action1 = new BaseAction();
+            let action2 = new ToggleAction(new Equipment());
+            action2.activated = true;
+            let action3 = new ToggleAction(new Equipment());
+            check.patch(ship, "getAvailableActions", () => [action1, action2, action3]);
 
             check.in("before", check => {
                 check.equals(ship.getValue("hull"), 5, "hull");
@@ -321,6 +326,8 @@ module TK.SpaceTac.Specs {
                 check.equals(ship.getValue("power"), 2, "power");
                 check.equals(ship.active_effects.count(), 1, "effects count");
                 check.equals(ship.getAttribute("power_capacity"), 3, "power capacity");
+                check.equals(action2.activated, true, "action 2 activation");
+                check.equals(action3.activated, false, "action 3 activation");
             });
 
             ship.restoreInitialState();
@@ -331,6 +338,8 @@ module TK.SpaceTac.Specs {
                 check.equals(ship.getValue("power"), 5, "power");
                 check.equals(ship.active_effects.count(), 0, "effects count");
                 check.equals(ship.getAttribute("power_capacity"), 5, "power capacity");
+                check.equals(action2.activated, false, "action 2 activation");
+                check.equals(action3.activated, false, "action 3 activation");
             });
         });
 

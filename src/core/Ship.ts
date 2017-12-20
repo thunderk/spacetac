@@ -258,6 +258,11 @@ module TK.SpaceTac {
             this.restoreHealth();
             this.initializePower();
             this.listEquipment().forEach(equipment => equipment.cooldown.reset());
+            this.getAvailableActions().forEach(action => {
+                if (action instanceof ToggleAction) {
+                    action.activated = false;
+                }
+            });
         }
 
         /**
