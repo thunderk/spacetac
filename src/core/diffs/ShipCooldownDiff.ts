@@ -22,6 +22,9 @@ module TK.SpaceTac {
             let equipment = ship.getEquipment(this.equipment);
             if (equipment) {
                 equipment.cooldown.heat -= this.heat;
+                if (equipment.cooldown.heat == 0) {
+                    equipment.cooldown.uses = 0;
+                }
             } else {
                 console.error("Cannot apply diff, equipment not found", this);
             }
@@ -30,6 +33,9 @@ module TK.SpaceTac {
         revertOnShip(ship: Ship, battle: Battle) {
             let equipment = ship.getEquipment(this.equipment);
             if (equipment) {
+                if (equipment.cooldown.heat == 0) {
+                    equipment.cooldown.uses = equipment.cooldown.overheat;
+                }
                 equipment.cooldown.heat += this.heat;
             } else {
                 console.error("Cannot revert diff, equipment not found", this);

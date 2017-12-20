@@ -41,7 +41,6 @@ Character sheet
 Battle
 ------
 
-* Investigate cooldown not resetting properly the usage count
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
 * Toggle bar/text display in power section of action bar
@@ -65,6 +64,7 @@ Battle
 Ships models and equipments
 ---------------------------
 
+* Smooth the price depreciation in battles, it's too high when first using equipments
 * Add permanent effects and actions to ship models
 * Add critical hit/miss (or indicate lucky/unlucky throws)
 * Add damage over time effect (tricky to make intuitive)

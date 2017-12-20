@@ -1,6 +1,42 @@
 module TK.SpaceTac.Specs {
     testing("BaseAction", test => {
-        test.case("check if equipment can be used with remaining AP", check => {
+        test.case("may be applied and reverted", check => {
+            let battle = TestTools.createBattle();
+            let ship = nn(battle.playing_ship);
+            TestTools.setShipAP(ship, 10, 4);
+            let equipment = TestTools.addWeapon(ship, 0, 3, 100, 50);
+            let action = nn(equipment.action);
+            action.cooldown.configure(2, 1);
+
+            TestTools.actionChain(check, battle, [
+                [ship, action, Target.newFromLocation(0, 0)],
+                [ship, action, Target.newFromLocation(0, 0)],
+                [ship, EndTurnAction.SINGLETON, undefined],
+            ], [
+                    check => {
+                        check.equals(ship.getValue("power"), 10, "power");
+                        check.equals(action.cooldown.uses, 0, "uses");
+                        check.equals(action.cooldown.heat, 0, "heat");
+                    },
+                    check => {
+                        check.equals(ship.getValue("power"), 7, "power");
+                        check.equals(action.cooldown.uses, 1, "uses");
+                        check.equals(action.cooldown.heat, 0, "heat");
+                    },
+                    check => {
+                        check.equals(ship.getValue("power"), 4, "power");
+                        check.equals(action.cooldown.uses, 2, "uses");
+                        check.equals(action.cooldown.heat, 1, "heat");
+                    },
+                    check => {
+                        check.equals(ship.getValue("power"), 8, "power");
+                        check.equals(action.cooldown.uses, 0, "uses");
+                        check.equals(action.cooldown.heat, 0, "heat");
+                    },
+                ]);
+        })
+
+        test.case("checks if equipment can be used with remaining AP", check => {
             var equipment = new Equipment(SlotType.Hull);
             var action = new BaseAction("test", equipment);
             check.patch(action, "getActionPointsUsage", () => 3);
@@ -25,7 +61,7 @@ module TK.SpaceTac.Specs {
             check.equals(action.checkCannotBeApplied(ship), "not enough power");
         })
 
-        test.case("check if equipment can be used with overheat", check => {
+        test.case("checks if equipment can be used with overheat", check => {
             let equipment = new Equipment();
             let action = new BaseAction("test", equipment);
             let ship = new Ship();

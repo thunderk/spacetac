@@ -12,13 +12,16 @@ module TK.SpaceTac.Specs {
                 new ShipCooldownDiff(ship, weapon, 2),
             ], [
                     check => {
-                        check.equals(weapon.cooldown.heat, 3, "in cooldown for 3 turns");
+                        check.equals(weapon.cooldown.heat, 3, "heat");
+                        check.equals(weapon.cooldown.uses, 1, "uses");
                     },
                     check => {
-                        check.equals(weapon.cooldown.heat, 2, "in cooldown for 2 turns");
+                        check.equals(weapon.cooldown.heat, 2, "heat");
+                        check.equals(weapon.cooldown.uses, 1, "uses");
                     },
                     check => {
-                        check.equals(weapon.cooldown.heat, 0, "not in cooldown");
+                        check.equals(weapon.cooldown.heat, 0, "heat");
+                        check.equals(weapon.cooldown.uses, 0, "uses");
                     },
                 ]);
         });
