@@ -148,7 +148,7 @@ module TK.SpaceTac.UI {
         addShipSprites() {
             iforeach(this.view.battle.iships(), ship => {
                 let sprite = new ArenaShip(this, ship);
-                this.layer_ships.add(sprite);
+                (ship.alive ? this.layer_ships : this.layer_garbage).add(sprite);
                 this.ship_sprites.push(sprite);
             });
         }

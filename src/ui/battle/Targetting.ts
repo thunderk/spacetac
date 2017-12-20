@@ -127,14 +127,13 @@ module TK.SpaceTac.UI {
                 ships.forEach(iship => {
                     let builder = new UIBuilder(this.view, impacts);
 
-                    let indicator = builder.image("battle-hud-ship-impacted", iship.arena_x, iship.arena_y);
-                    indicator.anchor.set(0.5, 0.5);
+                    let indicator = builder.image("battle-hud-ship-impacted", iship.arena_x, iship.arena_y, true);
 
                     if (action instanceof TriggerAction) {
                         let success = action.getSuccessFactor(ship, iship);
                         builder.in(indicator, builder => {
-                            builder.text(`${Math.round(success * 100)}%`, 0, -32,
-                                { center: true, color: "#c69b70", size: 14, shadow: true });
+                            builder.image("battle-hud-ship-success-back", -29, -50);
+                            builder.valuebar("battle-hud-ship-success-fill", -28, -49).setValue(success, 1);
                         });
                     }
                 });

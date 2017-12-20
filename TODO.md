@@ -42,7 +42,6 @@ Battle
 ------
 
 * Investigate cooldown not resetting properly the usage count
-* Replace success factor percentage with a bar
 * Add a voluntary retreat option
 * Add scroll buttons when there are too many actions
 * Toggle bar/text display in power section of action bar

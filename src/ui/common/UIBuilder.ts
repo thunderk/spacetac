@@ -169,7 +169,7 @@ module TK.SpaceTac.UI {
             let result = this.game.add.image(x, y, info.key, info.frame);
             result.name = name;
             if (centered) {
-                result.anchor.set(0.5)
+                result.anchor.set(0.5);
             }
             this.add(result);
             return result;
@@ -195,6 +195,15 @@ module TK.SpaceTac.UI {
                 }
             }
             this.add(result);
+            return result;
+        }
+
+        /**
+         * Add a value bar
+         */
+        valuebar(name: string, x = 0, y = 0, orientation = ValueBarOrientation.EAST): ValueBar {
+            let result = new ValueBar(this.view, name, orientation, x, y);
+            this.add(result.node);
             return result;
         }
 
