@@ -66,8 +66,8 @@ module TK.SpaceTac {
                     return false;
                 }
 
-                let success = this.applyManeuver(best_maneuver);
-                if (success && best_maneuver.mayContinue()) {
+                let success = this.feedback(best_maneuver);
+                if (success) {
                     // Try to play another maneuver
                     this.initWork();
                     return true;

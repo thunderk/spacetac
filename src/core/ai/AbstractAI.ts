@@ -1,5 +1,10 @@
 module TK.SpaceTac {
     /**
+     * Feeback that will be called with each proposed maneuver, and should return true if the AI is to continue playing
+     */
+    export type AIFeedback = (maneuver: Maneuver) => boolean;
+
+    /**
      * Base class for all Artificial Intelligence interaction
      */
     export class AbstractAI {
@@ -18,11 +23,16 @@ module TK.SpaceTac {
         // Debug mode
         debug = false
 
+        // Feedback to send maneuvers to
+        feedback: AIFeedback
+
         // Time at which work as started
         private started: number
 
-        constructor(ship: Ship, timer = Timer.global, name?: string) {
+        constructor(ship: Ship, feedback?: AIFeedback, debug = false, timer = Timer.global, name?: string) {
             this.ship = ship;
+            this.feedback = feedback ? feedback : ((maneuver: Maneuver) => maneuver.apply(nn(this.ship.getBattle())));
+            this.debug = debug;
             this.timer = timer;
             this.name = name || classname(this);
         }
@@ -32,9 +42,8 @@ module TK.SpaceTac {
         /**
          * Start playing current ship's turn.
          */
-        async play(debug = false): Promise<void> {
+        async play(): Promise<void> {
             this.started = (new Date()).getTime();
-            this.debug = debug;
 
             if (!this.ship.playing) {
                 console.error(`${this.name} tries to play a ship out of turn`);
@@ -63,38 +72,8 @@ module TK.SpaceTac {
             }
 
             // End the ship turn
-            this.applyAction(EndTurnAction.SINGLETON, Target.newFromShip(ship));
-        }
-
-        /**
-         * Make the AI play an action
-         * 
-         * This should be the only real interaction point with battle state
-         */
-        private applyAction(action: BaseAction, target: Target): boolean {
-            let battle = this.ship.getBattle();
-            if (battle) {
-                return battle.applyOneAction(action, target);
-            } else {
-                return false;
-            }
-        }
-
-        /**
-         * Make the AI play a full maneuver (sequence of actions)
-         */
-        applyManeuver(maneuver: Maneuver): boolean {
-            if (maneuver.simulation.success) {
-                let parts = maneuver.simulation.parts;
-                for (let i = 0; i < parts.length; i++) {
-                    let part = parts[i];
-                    if (part.action instanceof EndTurnAction || !part.possible || !this.applyAction(part.action, part.target)) {
-                        return false;
-                    }
-                }
-                return true;
-            } else {
-                return false;
+            if (this.ship.playing) {
+                this.feedback(new Maneuver(this.ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)));
             }
         }
 

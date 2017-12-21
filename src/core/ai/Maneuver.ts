@@ -108,5 +108,28 @@ module TK.SpaceTac {
 
             return result;
         }
+
+        /**
+         * Standard feedback for this maneuver. It will apply it on the battle state.
+         */
+        apply(battle: Battle): boolean {
+            if (!this.ship.is(battle.playing_ship)) {
+                console.error("Maneuver was not produced for the playing ship", this, battle);
+                return false;
+            } else if (!this.simulation.success) {
+                return false;
+            } else {
+                let parts = this.simulation.parts;
+                for (let i = 0; i < parts.length; i++) {
+                    let part = parts[i];
+                    if (part.action instanceof EndTurnAction || part.possible) {
+                        return battle.applyOneAction(part.action.id, part.target);
+                    } else {
+                        return false;
+                    }
+                }
+                return this.mayContinue();
+            }
+        }
     }
 }

@@ -86,7 +86,6 @@ Artificial Intelligence
 * Abandon fight if the AI judges there is no hope of victory
 * Add combination of random small move and actual maneuver, as producer
 * New duel page with producers/evaluators tweaking
-* Work in a dedicated process (webworker)
 
 Common UI
 ---------
@@ -101,6 +100,7 @@ Common UI
 Technical
 ---------
 
+* Remove references from battle internals (ships, fleets...) to universe (it causes large serialized battles in campaign mode)
 * Pack all images in atlases, and split them by stage
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile

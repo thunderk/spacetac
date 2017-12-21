@@ -26,7 +26,13 @@ module TK.SpaceTac.Specs {
             let ship = battle.fleets[0].addShip();
             TestTools.setShipPlaying(battle, ship);
             ship.playing = true;
-            let ai = new TacticalAI(ship, Timer.synchronous);
+
+            let ai = new TacticalAI(ship, maneuver => {
+                if (maneuver instanceof FixedManeuver) {
+                    applied.push(maneuver.score);
+                }
+                return false;
+            }, false, Timer.synchronous);
 
             check.patch(ai, "getDefaultProducers", () => [
                 producer(1, -8, 4),
@@ -35,7 +41,6 @@ module TK.SpaceTac.Specs {
             check.patch(ai, "getDefaultEvaluators", () => [
                 (maneuver: Maneuver) => (<FixedManeuver>maneuver).score
             ]);
-            check.patch(ai, "applyManeuver", (maneuver: FixedManeuver) => applied.push(maneuver.score));
 
             ai.play();
             check.equals(applied, [7]);

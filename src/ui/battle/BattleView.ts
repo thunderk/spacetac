@@ -194,7 +194,7 @@ module TK.SpaceTac.UI {
             if (ship) {
                 let ship_action = first(ship.getAvailableActions(), ac => ac.is(action));
                 if (ship_action) {
-                    let result = this.actual_battle.applyOneAction(action, target);
+                    let result = this.actual_battle.applyOneAction(action.id, target);
                     if (result) {
                         this.setInteractionEnabled(false);
                     }

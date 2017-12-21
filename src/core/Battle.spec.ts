@@ -118,7 +118,7 @@ module TK.SpaceTac {
                 check.equals(battle.ships.list().filter(ship => ship.alive), [ship1, ship2, ship3, ship4], "alive ships");
             });
 
-            let result = battle.applyOneAction(nn(weapon.action), Target.newFromLocation(0, 0));
+            let result = battle.applyOneAction(nn(weapon.action).id, Target.newFromLocation(0, 0));
             check.equals(result, true, "action applied successfully");
             check.in("after weapon", check => {
                 check.same(battle.playing_ship, ship3, "playing ship");

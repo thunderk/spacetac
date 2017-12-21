@@ -251,15 +251,13 @@ module TK.SpaceTac {
 
         /**
          * Make an AI play the current ship
+         * 
+         * This will run asynchronous work in background, until the playing ship is changed
          */
-        playAI(ai: AbstractAI | null = null, debug = false): boolean {
+        playAI(debug = false): boolean {
             if (this.playing_ship && !this.ai_playing) {
                 this.ai_playing = true;
-                if (!ai) {
-                    // TODO Use an AI adapted to the fleet
-                    ai = new TacticalAI(this.playing_ship, this.timer);
-                }
-                ai.play(debug);
+                AIWorker.process(this, debug);
                 return true;
             } else {
                 return false;
@@ -288,7 +286,7 @@ module TK.SpaceTac {
          */
         advanceToNextShip(): void {
             if (this.playing_ship) {
-                this.applyOneAction(EndTurnAction.SINGLETON);
+                this.applyOneAction(EndTurnAction.SINGLETON.id);
             } else if (this.play_order.length) {
                 this.setPlayingShip(this.play_order[0]);
             }
@@ -354,30 +352,37 @@ module TK.SpaceTac {
          * 
          * At the end of the action, some checks will be applied to ensure the battle state is consistent
          */
-        applyOneAction(action: BaseAction, target?: Target): boolean {
+        applyOneAction(action_id: RObjectId, target?: Target): boolean {
             let ship = this.playing_ship;
             if (ship) {
-                if (!target) {
-                    target = action.getDefaultTarget(ship);
-                }
-                if (action.apply(this, ship, target)) {
-                    this.performChecks();
-
-                    if (!this.ended) {
-                        this.applyDiffs([new ShipActionEndedDiff(ship, action, target)]);
-
-                        if (ship.playing && ship.getValue("hull") <= 0) {
-                            // Playing ship died during its action, force a turn end
-                            this.applyOneAction(EndTurnAction.SINGLETON);
-                        }
+                let action = ship.getAction(action_id);
+                if (action) {
+                    if (!target) {
+                        target = action.getDefaultTarget(ship);
                     }
 
-                    return true;
+                    if (action.apply(this, ship, target)) {
+                        this.performChecks();
+
+                        if (!this.ended) {
+                            this.applyDiffs([new ShipActionEndedDiff(ship, action, target)]);
+
+                            if (ship.playing && ship.getValue("hull") <= 0) {
+                                // Playing ship died during its action, force a turn end
+                                this.applyOneAction(EndTurnAction.SINGLETON.id);
+                            }
+                        }
+
+                        return true;
+                    } else {
+                        return false;
+                    }
                 } else {
+                    console.error("Action not found on ship", action_id, ship);
                     return false;
                 }
             } else {
-                console.error("Cannot apply action - ship not playing", action, this);
+                console.error("Cannot apply action - ship not playing", action_id, this);
                 return false;
             }
         }

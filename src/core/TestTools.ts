@@ -146,7 +146,7 @@ module TK.SpaceTac {
             for (let i = 0; i < actions.length; i++) {
                 let [ship, action, target] = actions[i];
                 battle.setPlayingShip(ship);
-                let result = battle.applyOneAction(action, target);
+                let result = battle.applyOneAction(action.id, target);
                 check.equals(result, true, `action ${i + 1} successfully applied`);
                 checks[i + 1](check.sub(`after action ${i + 1} applied`));
             }
