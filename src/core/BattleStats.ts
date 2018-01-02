@@ -69,19 +69,12 @@ module TK.SpaceTac {
         }
 
         /**
-         * Prepare some stats at the start of battle
+         * Store the fleets' value, for equipment wear display
          */
-        onBattleStart(attacker: Fleet, defender: Fleet): void {
-            this.addStat("Equipment wear (zotys)", this.getFleetValue(attacker), true);
-            this.addStat("Equipment wear (zotys)", this.getFleetValue(defender), false);
-        }
-
-        /**
-         * Finalize some stats at the start of battle
-         */
-        onBattleEnd(attacker: Fleet, defender: Fleet): void {
-            this.addStat("Equipment wear (zotys)", -this.getFleetValue(attacker), true);
-            this.addStat("Equipment wear (zotys)", -this.getFleetValue(defender), false);
+        addFleetsValue(attacker: Fleet, defender: Fleet, positive = true): void {
+            let sgn = positive ? 1 : -1;
+            this.addStat("Equipment wear (zotys)", sgn * this.getFleetValue(attacker), true);
+            this.addStat("Equipment wear (zotys)", sgn * this.getFleetValue(defender), false);
         }
     }
 }

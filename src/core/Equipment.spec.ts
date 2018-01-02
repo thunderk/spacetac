@@ -87,13 +87,16 @@ module TK.SpaceTac.Specs {
             check.equals(equipment.getPrice(), 99);
 
             equipment.addWear(10);
-            check.equals(equipment.getPrice(), 90);
+            check.equals(equipment.getPrice(), 97);
 
             equipment.addWear(89);
-            check.equals(equipment.getPrice(), 50);
+            check.equals(equipment.getPrice(), 83);
 
             equipment.addWear(400);
-            check.equals(equipment.getPrice(), 16);
+            check.equals(equipment.getPrice(), 50);
+
+            equipment.addWear(12500);
+            check.equals(equipment.getPrice(), 3);
         });
 
         test.case("builds a full textual description", check => {

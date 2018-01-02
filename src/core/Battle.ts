@@ -275,7 +275,7 @@ module TK.SpaceTac {
             this.outcome = null;
             this.cycle = 1;
             this.placeShips();
-            this.stats.onBattleStart(this.fleets[0], this.fleets[1]);
+            this.stats.addFleetsValue(this.fleets[0], this.fleets[1]);
             this.throwInitiative();
             iforeach(this.iships(), ship => ship.restoreInitialState());
             this.setPlayingShip(this.play_order[0]);

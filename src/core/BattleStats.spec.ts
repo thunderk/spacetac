@@ -83,13 +83,13 @@ module TK.SpaceTac.Specs {
             let equ2 = TestTools.addEngine(defender, 50);
             equ2.price = 1100;
 
-            stats.onBattleStart(attacker.fleet, defender.fleet);
+            stats.addFleetsValue(attacker.fleet, defender.fleet);
             check.equals(stats.stats, { "Equipment wear (zotys)": [1000, 1100] });
 
             equ1.price = 500;
             equ2.price = 800;
 
-            stats.onBattleEnd(attacker.fleet, defender.fleet);
+            stats.addFleetsValue(attacker.fleet, defender.fleet, false);
             check.equals(stats.stats, { "Equipment wear (zotys)": [500, 300] });
         })
     })

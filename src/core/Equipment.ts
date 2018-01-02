@@ -116,7 +116,7 @@ module TK.SpaceTac {
          * Get the equipment price value.
          */
         getPrice(): number {
-            return Math.floor(this.price * 100 / (100 + this.wear));
+            return Math.floor(this.price * 500 / (500 + this.wear));
         }
 
         /**

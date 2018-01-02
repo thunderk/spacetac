@@ -64,7 +64,6 @@ Battle
 Ships models and equipments
 ---------------------------
 
-* Smooth the price depreciation in battles, it's too high when first using equipments
 * Add permanent effects and actions to ship models
 * Add critical hit/miss (or indicate lucky/unlucky throws)
 * Add damage over time effect (tricky to make intuitive)
@@ -86,6 +85,7 @@ Artificial Intelligence
 * Abandon fight if the AI judges there is no hope of victory
 * Add combination of random small move and actual maneuver, as producer
 * New duel page with producers/evaluators tweaking
+* Prototype of evolving AI
 
 Common UI
 ---------
@@ -121,6 +121,7 @@ Postponed
 * Secondary story arcs
 * Replays
 * Multiplayer/co-op
+* Puzzle mode
 * Formation or deployment phase
 * Add ship personality (with icons to identify?), with reaction dialogs
 * Hide enemy information (shield, hull, weapons), until they are in play, or until a "spy" effect is used
