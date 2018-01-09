@@ -79,12 +79,14 @@ Artificial Intelligence
 -----------------------
 
 * Produce interesting "angle" areas
-* AI seems unwanting to use the laser
-* Evaluate diffs instead of effects
+* Evaluate active effects
+* Account for luck
+* Evaluators result should be more specific (final state evaluation, diff evaluation, confidence...)
 * Use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
 * Abandon fight if the AI judges there is no hope of victory
 * Add combination of random small move and actual maneuver, as producer
 * New duel page with producers/evaluators tweaking
+* Use tree techniques to account for potential future moves
 * Prototype of evolving AI
 
 Common UI

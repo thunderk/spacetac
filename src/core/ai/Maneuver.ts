@@ -1,11 +1,4 @@
 module TK.SpaceTac {
-    // Single effect of a maneuver
-    export type ManeuverEffect = {
-        ship: Ship
-        effect: BaseEffect
-        success: number
-    }
-
     /**
      * Ship maneuver for an artifical intelligence
      * 
@@ -28,7 +21,7 @@ module TK.SpaceTac {
         simulation: MoveFireResult
 
         // List of guessed effects of this maneuver
-        effects: ManeuverEffect[]
+        effects: BaseBattleDiff[]
 
         constructor(ship: Ship, action: BaseAction, target: Target, move_margin = 1) {
             this.ship = ship;
@@ -39,7 +32,9 @@ module TK.SpaceTac {
             let simulator = new MoveFireSimulator(this.ship);
             this.simulation = simulator.simulateAction(this.action, this.target, move_margin);
 
-            this.effects = this.guessEffects();
+            this.effects = flatten(this.simulation.parts.map(part =>
+                part.action.getDiffs(this.ship, this.battle, part.target)
+            ));
         }
 
         jasmineToString() {
@@ -76,37 +71,6 @@ module TK.SpaceTac {
          */
         getPowerUsage(): number {
             return this.simulation.total_move_ap + this.simulation.total_fire_ap;
-        }
-
-        /**
-         * Guess what will be the effects applied on any ship by this maneuver
-         */
-        guessEffects(): ManeuverEffect[] {
-            let result: ManeuverEffect[] = [];
-
-            // Effects of weapon
-            if (this.action instanceof TriggerAction) {
-                this.action.getEffects(this.ship, this.target).forEach(([ship, effect, success]) => {
-                    result.push({ ship: ship, effect: effect, success: success });
-                })
-            } else if (this.action instanceof DeployDroneAction) {
-                let ships = this.battle.collectShipsInCircle(this.target, this.action.drone_radius, true);
-                this.action.drone_effects.forEach(effect => {
-                    result = result.concat(ships.map(ship => ({ ship: ship, effect: effect, success: 1 })));
-                });
-            }
-
-            // Area effects on final location
-            let location = this.getFinalLocation();
-            let effects = this.battle.drones.list().forEach(drone => {
-                if (Target.newFromLocation(location.x, location.y).isInRange(drone.x, drone.y, drone.radius)) {
-                    result = result.concat(drone.effects.map(effect => (
-                        { ship: this.ship, effect: effect, success: 1 }
-                    )));
-                }
-            });
-
-            return result;
         }
 
         /**

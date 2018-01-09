@@ -179,38 +179,23 @@ module TK.SpaceTac {
 
         /**
          * Get the full list of diffs caused by applying this action
+         * 
+         * This does not perform any check, and assumes the action is doable
          */
         getDiffs(ship: Ship, battle: Battle, target = this.getDefaultTarget(ship)): BaseBattleDiff[] {
-            let reject = this.checkCannotBeApplied(ship);
-            if (reject) {
-                console.warn(`Action rejected - ${reject}`, ship, this, target);
-                return [];
-            }
-
-            let checked_target = this.checkTarget(ship, target);
-            if (!checked_target) {
-                console.warn("Action rejected - invalid target", ship, this, target);
-                return [];
-            }
-
-            let cost = this.getActionPointsUsage(ship, checked_target);
-            if (ship.getValue("power") < cost) {
-                console.warn("Action rejected - not enough power", ship, this, checked_target);
-                return [];
-            }
-
             let result: BaseBattleDiff[] = [];
 
             // Action usage
-            result.push(new ShipActionUsedDiff(ship, this, checked_target));
+            result.push(new ShipActionUsedDiff(ship, this, target));
 
             // Power usage
+            let cost = this.getActionPointsUsage(ship, target);
             if (cost) {
                 result = result.concat(ship.getValueDiffs("power", -cost, true));
             }
 
             // Action effects
-            result = result.concat(this.getSpecificDiffs(ship, battle, checked_target));
+            result = result.concat(this.getSpecificDiffs(ship, battle, target));
 
             return result;
         }
@@ -224,19 +209,34 @@ module TK.SpaceTac {
 
         /**
          * Apply the action on a battle state
+         * 
+         * This will first check that the action can be done, then get the battle diffs and apply them.
          */
         apply(battle: Battle, ship: Ship, target = this.getDefaultTarget(ship)): boolean {
-            if (this.checkTarget(ship, target)) {
-                let diffs = this.getDiffs(ship, battle, target);
-                if (diffs.length) {
-                    battle.applyDiffs(diffs);
-                    return true;
-                } else {
-                    console.error("Could not apply action, no diff produced");
-                    return false;
-                }
+            let reject = this.checkCannotBeApplied(ship);
+            if (reject) {
+                console.warn(`Action rejected - ${reject}`, ship, this, target);
+                return false;
+            }
+
+            let checked_target = this.checkTarget(ship, target);
+            if (!checked_target) {
+                console.warn("Action rejected - invalid target", ship, this, target);
+                return false;
+            }
+
+            let cost = this.getActionPointsUsage(ship, checked_target);
+            if (ship.getValue("power") < cost) {
+                console.warn("Action rejected - not enough power", ship, this, checked_target);
+                return false;
+            }
+
+            let diffs = this.getDiffs(ship, battle, checked_target);
+            if (diffs.length) {
+                battle.applyDiffs(diffs);
+                return true;
             } else {
-                console.error("Could not apply action, target rejected");
+                console.error("Could not apply action, no diff produced");
                 return false;
             }
         }
