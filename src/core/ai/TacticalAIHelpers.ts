@@ -66,7 +66,7 @@ module TK.SpaceTac {
          * Produce all "direct hit" weapon shots.
          */
         static produceDirectShots(ship: Ship, battle: Battle): TacticalProducer {
-            let enemies = ifilter(battle.iships(), iship => iship.alive && iship.getPlayer() !== ship.getPlayer());
+            let enemies = battle.ienemies(ship, true);
             let weapons = ifilter(getPlayableActions(ship), action => action instanceof TriggerAction);
             return imap(icombine(enemies, weapons), ([enemy, weapon]) => new Maneuver(ship, weapon, Target.newFromShip(enemy)));
         }
@@ -88,7 +88,7 @@ module TK.SpaceTac {
         static produceInterestingBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             // TODO Work with groups of 3, 4 ...
             let weapons = <Iterator<TriggerAction>>ifilter(getPlayableActions(ship), action => action instanceof TriggerAction && action.blast > 0);
-            let enemies = battle.ienemies(ship.getPlayer(), true);
+            let enemies = battle.ienemies(ship, true);
             // FIXME This produces duplicates (x, y) and (y, x)
             let couples = ifilter(icombine(enemies, enemies), ([e1, e2]) => e1 != e2);
             let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.blast * 2);
@@ -173,7 +173,7 @@ module TK.SpaceTac {
          * Evaluate the effect on health to the enemy, between -1 and 1
          */
         static evaluateEnemyHealth(ship: Ship, battle: Battle, maneuver: Maneuver): number {
-            let enemies = imaterialize(battle.ienemies(ship.getPlayer(), true));
+            let enemies = imaterialize(battle.ienemies(ship, true));
             return -TacticalAIHelpers.evaluateHealthEffect(maneuver, enemies);
         }
 
@@ -181,7 +181,7 @@ module TK.SpaceTac {
          * Evaluate the effect on health to allied ships, between -1 and 1
          */
         static evaluateAllyHealth(ship: Ship, battle: Battle, maneuver: Maneuver): number {
-            let allies = imaterialize(battle.iallies(ship.getPlayer(), true));
+            let allies = imaterialize(battle.iallies(ship, true));
             return TacticalAIHelpers.evaluateHealthEffect(maneuver, allies);
         }
 

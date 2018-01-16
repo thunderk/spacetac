@@ -93,9 +93,9 @@ module TK.SpaceTac {
      */
     function cond_friendly_fire(player: Player, battle: Battle | null, ship: Ship | null, event: BaseBattleDiff | null): Ship[] {
         if (battle && ship && event) {
-            if (event instanceof ShipDamageDiff && player.is(ship.getPlayer()) && !ship.is(event.ship_id)) {
+            if (event instanceof ShipDamageDiff && player.is(ship.fleet.player) && !ship.is(event.ship_id)) {
                 let hurt = battle.getShip(event.ship_id);
-                return (hurt && hurt.getPlayer().is(player)) ? [hurt, ship] : [];
+                return (hurt && player.is(hurt.fleet.player)) ? [hurt, ship] : [];
             } else {
                 return [];
             }

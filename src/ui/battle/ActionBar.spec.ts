@@ -13,7 +13,9 @@ module TK.SpaceTac.UI.Specs {
             check.equals(bar.action_icons.length, 0);
 
             // Ship with no equipment (only endturn action)
-            testgame.view.player = ship.getPlayer();
+            let player = new Player();
+            ship.fleet.setPlayer(player);
+            testgame.view.player = player;
             bar.setShip(ship);
             check.equals(bar.action_icons.length, 1);
             check.equals(bar.action_icons[0].action.code, "endturn");

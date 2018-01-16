@@ -139,7 +139,7 @@ module TK.SpaceTac.UI {
             style.image_caption = ship.getName(false);
             style.image_size = 256;
 
-            let own = ship.getPlayer() == this.view.gameui.session.player;
+            let own = this.view.gameui.session.player.is(ship.fleet.player);
             this.setCurrentMessage(style, content, 900, 300, own ? 0.1 : 0.9, own ? 0.2 : 0.8);
         }
 

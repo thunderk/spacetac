@@ -27,7 +27,7 @@ module TK.SpaceTac {
             this.loot = [];
 
             battle.fleets.forEach(fleet => {
-                if (this.winner && this.winner.player != fleet.player) {
+                if (this.winner && !this.winner.player.is(fleet.player)) {
                     fleet.ships.forEach(ship => {
                         var luck = random.random();
                         if (luck > 0.9) {

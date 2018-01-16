@@ -35,7 +35,7 @@ module TK.SpaceTac.UI {
         refreshContent(): void {
             let parent = this.battleview;
             let outcome = this.outcome;
-            let victory = outcome.winner && (outcome.winner.player == this.player);
+            let victory = outcome.winner && this.player.is(outcome.winner.player);
 
             this.clearContent();
 

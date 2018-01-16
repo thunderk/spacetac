@@ -9,6 +9,9 @@ module TK.SpaceTac {
         // List of links between star systems
         starlinks: StarLink[] = []
 
+        // Collection of all star locations
+        locations = new RObjectContainer<StarLocation>()
+
         // Radius of the universe
         radius = 5
 
@@ -23,6 +26,13 @@ module TK.SpaceTac {
             result.level = level;
             this.stars.push(result);
             return result;
+        }
+
+        /**
+         * Update the locations list
+         */
+        updateLocations(): void {
+            this.locations = new RObjectContainer(flatten(this.stars.map(star => star.locations)));
         }
 
         /**
@@ -54,6 +64,7 @@ module TK.SpaceTac {
             this.stars.forEach((star: Star) => {
                 star.generate(this.random);
             });
+            this.updateLocations();
             this.addShops();
         }
 
@@ -255,6 +266,13 @@ module TK.SpaceTac {
         getStartLocation(): StarLocation {
             let star = minBy(this.stars, star => star.level);
             return star.locations[0];
+        }
+
+        /**
+         * Get a location from its ID
+         */
+        getLocation(id: RObjectId | null): StarLocation | null {
+            return id === null ? null : this.locations.get(id);
         }
     }
 }

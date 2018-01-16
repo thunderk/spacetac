@@ -50,7 +50,7 @@ module TK.SpaceTac.UI {
                     let visited = this.player.hasVisitedLocation(location);
                     let shop = (visited && !location.encounter && location.shop) ? " (dockyard present)" : "";
 
-                    if (location == this.player.fleet.location) {
+                    if (location.is(this.player.fleet.location)) {
                         return `Current fleet location${shop}`;
                     } else {
                         let loctype = StarLocationType[location.type].toLowerCase();

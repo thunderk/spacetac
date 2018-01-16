@@ -4,58 +4,98 @@ module TK.SpaceTac {
      */
     export class Fleet {
         // Fleet owner
-        player: Player;
+        player: Player
+
+        // Fleet name
+        name: string
 
         // List of ships
-        ships: Ship[];
+        ships: Ship[]
 
         // Current fleet location
-        location: StarLocation | null = null;
-        previous_location: StarLocation | null = null;
+        location: RObjectId | null = null
+
+        // Visited locations (ordered by last visited)
+        visited: RObjectId[] = []
 
         // Current battle in which the fleet is engaged (null if not fighting)
-        battle: Battle | null = null;
+        battle: Battle | null = null
 
         // Amount of credits available
-        credits = 0;
+        credits = 0
 
         // Create a fleet, bound to a player
         constructor(player = new Player()) {
             this.player = player;
+            this.name = player ? player.name : "Fleet";
             this.ships = [];
         }
 
         jasmineToString(): string {
-            return `${this.player.name}'s fleet [${this.ships.map(ship => ship.getName()).join(",")}]`;
+            return `${this.name} [${this.ships.map(ship => ship.getName()).join(",")}]`;
         }
 
         /**
-         * Set the current location of the fleet
+         * Set the owner player
+         */
+        setPlayer(player: Player): void {
+            this.player = player;
+        }
+
+        /**
+         * Set a location as visited
+         */
+        setVisited(location: StarLocation): void {
+            remove(this.visited, location.id);
+            this.visited.unshift(location.id);
+        }
+
+        /**
+         * Move the fleet to another location, checking that the move is physically possible
          * 
          * Returns true on success
          */
-        setLocation(location: StarLocation, force = false): boolean {
-            if (!force && this.location && location.star != this.location.star && (this.location.type != StarLocationType.WARP || this.location.jump_dest != location)) {
+        move(to: StarLocation): boolean {
+            if (!this.location) {
                 return false;
             }
 
-            this.previous_location = this.location;
-            this.location = location;
-            this.player.setVisited(this.location);
-
-            // Check encounter
-            var battle = this.location.enterLocation(this.player.fleet);
-            if (battle) {
-                this.player.setBattle(battle);
+            let source = to.universe.locations.get(this.location);
+            if (!source) {
+                return false;
             }
 
+            if (source.star != to.star) {
+                // Need to jump, check conditions
+                if (source.type != StarLocationType.WARP || source.jump_dest != to) {
+                    return false;
+                }
+            }
+
+            this.setLocation(to);
             return true;
+        }
+
+        /**
+         * Set the current location of the fleet, without condition
+         */
+        setLocation(location: StarLocation): void {
+            if (this.location) {
+                let previous = location.universe.locations.get(this.location);
+                if (previous) {
+                    previous.removeFleet(this);
+                }
+            }
+
+            this.location = location.id;
+            this.setVisited(location);
+            location.addFleet(this);
         }
 
         /**
          * Add a ship this fleet
          */
-        addShip(ship = new Ship(null, `${this.player.name} ${this.ships.length + 1}`)): Ship {
+        addShip(ship = new Ship(null, `${this.name} ${this.ships.length + 1}`)): Ship {
             if (ship.fleet && ship.fleet != this) {
                 remove(ship.fleet.ships, ship);
             }

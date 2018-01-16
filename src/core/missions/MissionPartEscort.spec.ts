@@ -16,16 +16,16 @@ module TK.SpaceTac.Specs {
             part.onStarted();
             check.contains(fleet.ships, ship);
 
-            fleet.setLocation(destination, true);
+            fleet.setLocation(destination);
             check.same(part.checkCompleted(), false, "Encounter not clear");
 
             destination.clearEncounter();
             check.same(part.checkCompleted(), true, "Encouter cleared");
 
-            fleet.setLocation(new StarLocation(), true);
+            fleet.setLocation(new StarLocation());
             check.same(part.checkCompleted(), false, "Went to another system");
 
-            fleet.setLocation(destination, true);
+            fleet.setLocation(destination);
             check.same(part.checkCompleted(), true, "Back at destination");
             check.contains(fleet.ships, ship);
 

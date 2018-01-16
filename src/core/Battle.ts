@@ -6,9 +6,6 @@ module TK.SpaceTac {
         // Battle outcome, if the battle has ended
         outcome: BattleOutcome | null = null
 
-        // Battle cheats
-        cheats: BattleCheats
-
         // Statistics
         stats: BattleStats
 
@@ -43,7 +40,7 @@ module TK.SpaceTac {
         // Indicator that an AI is playing
         ai_playing = false
 
-        constructor(fleet1 = new Fleet(new Player(undefined, "Attacker")), fleet2 = new Fleet(new Player(undefined, "Defender")), width = 1808, height = 948) {
+        constructor(fleet1 = new Fleet(new Player("Attacker")), fleet2 = new Fleet(new Player("Defender")), width = 1808, height = 948) {
             this.fleets = [fleet1, fleet2];
             this.ships = new RObjectContainer(fleet1.ships.concat(fleet2.ships));
             this.play_order = [];
@@ -52,7 +49,6 @@ module TK.SpaceTac {
 
             this.log = new BattleLog();
             this.stats = new BattleStats();
-            this.cheats = new BattleCheats(this, fleet1.player);
 
             this.fleets.forEach((fleet: Fleet) => {
                 fleet.setBattle(this);
@@ -123,23 +119,26 @@ module TK.SpaceTac {
         /**
          * Return an iterator over ships allies of (or owned by) a player
          */
-        iallies(player: Player, alive_only = false): Iterator<Ship> {
-            return ifilter(this.iships(alive_only), ship => ship.getPlayer() === player);
+        iallies(ship: Ship, alive_only = false): Iterator<Ship> {
+            return ifilter(this.iships(alive_only), iship => iship.fleet.player.is(ship.fleet.player));
         }
 
         /**
          * Return an iterator over ships enemy of a player
          */
-        ienemies(player: Player, alive_only = false): Iterator<Ship> {
-            return ifilter(this.iships(alive_only), ship => ship.getPlayer() !== player);
+        ienemies(ship: Ship, alive_only = false): Iterator<Ship> {
+            return ifilter(this.iships(alive_only), iship => !iship.fleet.player.is(ship.fleet.player));
         }
 
-        // Check if a player is able to play
-        //  This can be used by the UI to determine if player interaction is allowed
+        /**
+         * Check if a player is able to play
+         * 
+         * This can be used by the UI to determine if player interaction is allowed
+         */
         canPlay(player: Player): boolean {
             if (this.ended) {
                 return false;
-            } else if (this.playing_ship && this.playing_ship.getPlayer() == player) {
+            } else if (this.playing_ship && player.is(this.playing_ship.fleet.player)) {
                 return this.playing_ship.isAbleToPlay(false);
             } else {
                 return false;

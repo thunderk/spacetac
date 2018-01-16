@@ -120,7 +120,9 @@ module TK.SpaceTac {
             this.play_priority = gen.random() * this.attributes.maneuvrability.get();
         }
 
-        // Return the player owning this ship
+        /**
+         * Return the player that plays this ship
+         */
         getPlayer(): Player {
             return this.fleet.player;
         }
@@ -129,7 +131,7 @@ module TK.SpaceTac {
          * Check if a player is playing this ship
          */
         isPlayedBy(player: Player): boolean {
-            return this.getPlayer().is(player);
+            return player.is(this.fleet.player);
         }
 
         // get the current battle this ship is engaged in

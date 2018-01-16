@@ -26,8 +26,9 @@ module TK.SpaceTac.UI {
 
             this.updateShipSprites();
 
-            if (fleet.location) {
-                this.position.set(fleet.location.star.x + fleet.location.x, fleet.location.star.y + fleet.location.y);
+            let location = this.map.universe.getLocation(fleet.location);
+            if (location) {
+                this.position.set(location.star.x + location.x, location.star.y + location.y);
             }
             this.scale.set(SCALING, SCALING);
 
@@ -54,7 +55,7 @@ module TK.SpaceTac.UI {
         }
 
         get location(): StarLocation {
-            return this.fleet.location || new StarLocation();
+            return this.map.universe.getLocation(this.fleet.location) || new StarLocation();
         }
 
         /**
@@ -90,9 +91,10 @@ module TK.SpaceTac.UI {
          * Make the fleet move to another location in the same system
          */
         moveToLocation(location: StarLocation, speed = 1, on_leave: ((duration: number) => any) | null = null, on_finished: Function | null = null) {
-            if (this.fleet.location && location != this.fleet.location) {
-                let dx = location.universe_x - this.fleet.location.universe_x;
-                let dy = location.universe_y - this.fleet.location.universe_y;
+            let fleet_location = this.map.universe.getLocation(this.fleet.location);
+            if (fleet_location && this.fleet.move(location)) {
+                let dx = location.universe_x - fleet_location.universe_x;
+                let dy = location.universe_y - fleet_location.universe_y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 let angle = Math.atan2(dx, dy);
                 this.map.current_location.setFleetMoving(true);
@@ -103,7 +105,6 @@ module TK.SpaceTac.UI {
                     }
                     let tween = this.game.tweens.create(this.position).to({ x: this.x + dx, y: this.y + dy }, duration, Phaser.Easing.Cubic.Out);
                     tween.onComplete.addOnce(() => {
-                        this.fleet.setLocation(location);
                         if (this.fleet.battle) {
                             this.game.state.start("router");
                         } else {

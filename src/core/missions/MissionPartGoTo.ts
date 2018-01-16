@@ -25,12 +25,12 @@ module TK.SpaceTac {
         }
 
         checkCompleted(): boolean {
-            return this.fleet.location === this.destination && this.destination.isClear();
+            return this.destination.is(this.fleet.location) && this.destination.isClear();
         }
 
         forceComplete(): void {
             this.destination.clearEncounter();
-            this.fleet.setLocation(this.destination, true);
+            this.fleet.setLocation(this.destination);
         }
 
         getLocationHint(): Star | StarLocation | null {

@@ -46,7 +46,7 @@ module TK.SpaceTac.UI {
             this.battleview = parent.view;
 
             this.ship = ship;
-            this.enemy = !this.ship.getPlayer().is(this.battleview.player);
+            this.enemy = !this.battleview.player.is(this.ship.fleet.player);
 
             // Add effects radius
             this.effects_radius = new Phaser.Graphics(this.game);
@@ -121,7 +121,7 @@ module TK.SpaceTac.UI {
             this.updateEffectsRadius();
 
             // Set location
-            if (this.battleview.battle.cycle == 1 && this.battleview.battle.play_index == 0 && ship.alive && ship.fleet.player === this.battleview.player) {
+            if (this.battleview.battle.cycle == 1 && this.battleview.battle.play_index == 0 && ship.alive && this.battleview.player.is(ship.fleet.player)) {
                 this.position.set(ship.arena_x - 500 * Math.cos(ship.arena_angle), ship.arena_y - 500 * Math.sin(ship.arena_angle));
                 this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle);
             } else {

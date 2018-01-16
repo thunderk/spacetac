@@ -136,8 +136,8 @@ module TK.SpaceTac.UI {
             this.inputs.bind("Escape", "Cancel action", () => this.action_bar.actionEnded());
             range(10).forEach(i => this.inputs.bind(`Numpad${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
             range(10).forEach(i => this.inputs.bind(`Digit${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
-            this.inputs.bindCheat("w", "Win current battle", () => this.actual_battle.cheats.win());
-            this.inputs.bindCheat("x", "Lose current battle", () => this.actual_battle.cheats.lose());
+            this.inputs.bindCheat("w", "Win current battle", () => nn(this.player.getCheats()).win());
+            this.inputs.bindCheat("x", "Lose current battle", () => nn(this.player.getCheats()).lose());
             this.inputs.bindCheat("a", "Use AI to play", () => this.playAI());
 
             // "Battle" animation, then start processing the log
@@ -286,7 +286,7 @@ module TK.SpaceTac.UI {
         cursorClicked(): void {
             if (this.targetting.active) {
                 this.validationPressed();
-            } else if (this.ship_hovered && this.ship_hovered.getPlayer().is(this.player) && this.interacting) {
+            } else if (this.ship_hovered && this.player.is(this.ship_hovered.fleet.player) && this.interacting) {
                 this.character_sheet.show(this.ship_hovered, undefined, undefined, false);
                 this.setShipHovered(null);
             }
@@ -351,7 +351,7 @@ module TK.SpaceTac.UI {
             if (battle.outcome) {
                 this.setInteractionEnabled(false);
 
-                this.gameui.session.setBattleEnded();
+                this.session.setBattleEnded();
 
                 battle.stats.processLog(battle.log, this.player.fleet);
 
@@ -365,7 +365,7 @@ module TK.SpaceTac.UI {
          * Exit the battle, and go back to map
          */
         exitBattle() {
-            this.player.exitBattle();
+            this.session.exitBattle();
             this.game.state.start('router');
         }
 
@@ -373,7 +373,7 @@ module TK.SpaceTac.UI {
          * Revert the battle, and go back to map
          */
         revertBattle() {
-            this.player.revertBattle();
+            this.session.revertBattle();
             this.game.state.start('router');
         }
     }

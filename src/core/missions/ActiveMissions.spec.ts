@@ -60,7 +60,7 @@ module TK.SpaceTac.Specs {
             let universe = new Universe();
             universe.generate(4);
             let fleet = new Fleet();
-            fleet.setLocation(universe.getStartLocation(), true);
+            fleet.setLocation(universe.getStartLocation());
 
             let missions = new ActiveMissions();
             let hash = missions.getHash();

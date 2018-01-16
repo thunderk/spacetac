@@ -18,7 +18,7 @@ module TK.SpaceTac {
         onStarted(): void {
             this.destination.setupEncounter();
 
-            if (this.fleet.location == this.destination) {
+            if (this.destination.is(this.fleet.location)) {
                 // Already there, re-enter the location to start the fight
                 let battle = this.destination.enterLocation(this.fleet);
                 if (battle) {

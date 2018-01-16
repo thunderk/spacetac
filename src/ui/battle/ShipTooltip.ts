@@ -30,7 +30,7 @@ module TK.SpaceTac.UI {
                 portrait.scale.set(0.5);
             });
 
-            let enemy = !ship.getPlayer().is(this.battleview.player);
+            let enemy = !this.battleview.player.is(ship.fleet.player);
             builder.text(ship.getName(), 168, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
 
             if (ship.alive) {

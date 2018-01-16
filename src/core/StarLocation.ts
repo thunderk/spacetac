@@ -1,3 +1,5 @@
+/// <reference path="../common/RObject.ts" />
+
 module TK.SpaceTac {
     export enum StarLocationType {
         STAR,
@@ -7,34 +9,41 @@ module TK.SpaceTac {
         STATION
     }
 
-    // Point of interest in a star system
-    export class StarLocation {
+    /**
+     * Point of interest in a star system
+     */
+    export class StarLocation extends RObject {
         // Parent star system
-        star: Star;
+        star: Star
 
         // Type of location
-        type: StarLocationType;
+        type: StarLocationType
 
         // Location in the star system
-        x: number;
-        y: number;
+        x: number
+        y: number
 
         // Absolute location in the universe
-        universe_x: number;
-        universe_y: number;
+        universe_x: number
+        universe_y: number
 
         // Destination for jump, if its a WARP location
-        jump_dest: StarLocation | null;
+        jump_dest: StarLocation | null
+
+        // Fleets present at this location (excluding the encounter for now)
+        fleets: Fleet[] = []
 
         // Enemy encounter
-        encounter: Fleet | null = null;
-        encounter_gen = false;
-        encounter_random = RandomGenerator.global;
+        encounter: Fleet | null = null
+        encounter_gen = false
+        encounter_random = RandomGenerator.global
 
         // Shop to buy/sell equipment
-        shop: Shop | null = null;
+        shop: Shop | null = null
 
         constructor(star = new Star(), type: StarLocationType = StarLocationType.PLANET, x: number = 0, y: number = 0) {
+            super();
+
             this.star = star;
             this.type = type;
             this.x = x;
@@ -42,6 +51,13 @@ module TK.SpaceTac {
             this.universe_x = this.star.x + this.x;
             this.universe_y = this.star.y + this.y;
             this.jump_dest = null;
+        }
+
+        /**
+         * Get the universe containing this location
+         */
+        get universe(): Universe {
+            return this.star.universe;
         }
 
         /**
@@ -56,6 +72,22 @@ module TK.SpaceTac {
          */
         removeShop(): void {
             this.shop = null;
+        }
+
+        /**
+         * Add a fleet to the list of fleets present in this system
+         */
+        addFleet(fleet: Fleet): void {
+            if (add(this.fleets, fleet)) {
+                this.enterLocation(fleet);
+            }
+        }
+
+        /**
+         * Remove a fleet from the list of fleets present in this system
+         */
+        removeFleet(fleet: Fleet): void {
+            remove(this.fleets, fleet);
         }
 
         /**
@@ -134,7 +166,7 @@ module TK.SpaceTac {
                 variations = [[this.star.level, 4], [this.star.level - 1, 5], [this.star.level + 1, 3], [this.star.level + 3, 2]];
             }
             let [level, enemies] = this.encounter_random.choice(variations);
-            this.encounter = fleet_generator.generate(level, new Player(this.star.universe, "Enemy"), enemies, true);
+            this.encounter = fleet_generator.generate(level, new Player("Enemy"), enemies, true);
         }
 
         /**

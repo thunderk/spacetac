@@ -51,15 +51,17 @@ module TK.SpaceTac.Specs {
         test.case("checks for friendly fire", check => {
             let condition = BUILTIN_REACTION_POOL['friendly_fire'][0];
             let battle = new Battle();
+            let player = new Player();
+            battle.fleets[0].setPlayer(player);
             let ship1a = battle.fleets[0].addShip();
             let ship1b = battle.fleets[0].addShip();
             let ship2a = battle.fleets[1].addShip();
             let ship2b = battle.fleets[1].addShip();
 
-            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new ShipDamageDiff(ship1a, 50, 10)), [], "self shoot");
-            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new ShipDamageDiff(ship1b, 50, 10)), [ship1b, ship1a]);
-            check.equals(condition(ship1a.getPlayer(), battle, ship1a, new ShipDamageDiff(ship2a, 50, 10)), [], "enemy shoot");
-            check.equals(condition(ship1a.getPlayer(), battle, ship2a, new ShipDamageDiff(ship2a, 50, 10)), [], "other player event");
+            check.equals(condition(player, battle, ship1a, new ShipDamageDiff(ship1a, 50, 10)), [], "self shoot");
+            check.equals(condition(player, battle, ship1a, new ShipDamageDiff(ship1b, 50, 10)), [ship1b, ship1a]);
+            check.equals(condition(player, battle, ship1a, new ShipDamageDiff(ship2a, 50, 10)), [], "enemy shoot");
+            check.equals(condition(player, battle, ship2a, new ShipDamageDiff(ship2a, 50, 10)), [], "other player event");
         })
     })
 }

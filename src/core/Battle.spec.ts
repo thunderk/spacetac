@@ -269,7 +269,7 @@ module TK.SpaceTac {
 
             check.equals(battle.canPlay(player), false);
 
-            ship.fleet.player = player;
+            ship.fleet.setPlayer(player);
 
             check.equals(battle.canPlay(player), true);
         });
@@ -358,9 +358,19 @@ module TK.SpaceTac {
 
             let loaded = serializer.unserialize(data);
 
-            check.equals(loaded.ai_playing, false);
+            check.equals(loaded.ai_playing, false, "ai playing is reset");
             battle.ai_playing = false;
-            check.equals(loaded, battle);
+            check.equals(loaded, battle, "unserialized == initial");
+
+            let session = new GameSession();
+            session.startNewGame();
+            session.start_location.setupEncounter();
+            session.start_location.enterLocation(session.player.fleet);
+            let battle1 = nn(session.getBattle());
+            let data1 = serializer.serialize(battle1);
+
+            let ratio = data.length / data1.length;
+            check.greaterorequal(ratio, 1.2, `quick battle serialized size (${data.length}) should be larger than campaign's (${data1.length})`);
         });
 
         test.case("can revert the last action", check => {

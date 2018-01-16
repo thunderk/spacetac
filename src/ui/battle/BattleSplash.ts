@@ -20,7 +20,7 @@ module TK.SpaceTac.UI {
             this.player1.visible = false;
             this.message.addChild(this.player1);
 
-            let player1_name = view.game.add.text(-240, 22, fleet1.player.name, { font: `bold 22pt SpaceTac`, fill: "#154d13" });
+            let player1_name = view.game.add.text(-240, 22, fleet1.name, { font: `bold 22pt SpaceTac`, fill: "#154d13" });
             player1_name.anchor.set(0.5);
             player1_name.angle = -48;
             this.player1.addChild(player1_name);
@@ -41,7 +41,7 @@ module TK.SpaceTac.UI {
             this.player2.visible = false;
             this.message.addChild(this.player2);
 
-            let player2_name = view.game.add.text(-240, 22, fleet2.player.name, { font: `bold 22pt SpaceTac`, fill: "#651713" });
+            let player2_name = view.game.add.text(-240, 22, fleet2.name, { font: `bold 22pt SpaceTac`, fill: "#651713" });
             player2_name.anchor.set(0.5);
             player2_name.angle = -228;
             this.player2.addChild(player2_name);

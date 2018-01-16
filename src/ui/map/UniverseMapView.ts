@@ -210,7 +210,7 @@ module TK.SpaceTac.UI {
 
             this.starsystems.forEach(system => system.updateInfo(this.zoom, system.starsystem == current_star));
 
-            this.actions.setFromLocation(this.player.fleet.location, this);
+            this.actions.setFromLocation(this.session.getLocation(), this);
 
             this.missions.checkUpdate();
             this.conversation.updateFromMissions(this.player.missions, () => this.checkMissionsUpdate());
@@ -226,7 +226,7 @@ module TK.SpaceTac.UI {
         revealAll(): void {
             this.universe.stars.forEach(star => {
                 star.locations.forEach(location => {
-                    this.player.setVisited(location);
+                    this.player.fleet.setVisited(location);
                 });
             });
             this.refresh();
@@ -276,7 +276,7 @@ module TK.SpaceTac.UI {
          * Set the current zoom level (0, 1 or 2)
          */
         setZoom(level: number, duration = 500) {
-            let current_star = this.player.fleet.location ? this.player.fleet.location.star : null;
+            let current_star = this.session.getLocation().star;
             if (!current_star || level <= 0) {
                 this.setCamera(0, 0, this.universe.radius * 2, duration);
                 this.setLinksAlpha(1, duration);
@@ -300,7 +300,7 @@ module TK.SpaceTac.UI {
          * This will only work if current location is a warp
          */
         doJump(): void {
-            let location = this.player.fleet.location;
+            let location = this.session.getLocation();
             if (this.interactive && location && location.type == StarLocationType.WARP && location.jump_dest) {
                 let dest_location = location.jump_dest;
                 let dest_star = dest_location.star;
@@ -321,7 +321,7 @@ module TK.SpaceTac.UI {
          * This will only work if current location has a dockyard
          */
         openShop(): void {
-            let location = this.player.fleet.location;
+            let location = this.session.getLocation();
             if (this.interactive && location && location.shop) {
                 this.character_sheet.setShop(location.shop);
                 this.character_sheet.show(this.player.fleet.ships[0]);
@@ -334,7 +334,7 @@ module TK.SpaceTac.UI {
          * This will only work if current location has a dockyard
          */
         openMissions(): void {
-            let location = this.player.fleet.location;
+            let location = this.session.getLocation();
             if (this.interactive && location && location.shop) {
                 new MissionsDialog(this, location.shop, this.player, () => this.checkMissionsUpdate());
             }
@@ -344,7 +344,7 @@ module TK.SpaceTac.UI {
          * Move the fleet to another location
          */
         moveToLocation(dest: StarLocation): void {
-            if (this.interactive && dest != this.player.fleet.location) {
+            if (this.interactive && !dest.is(this.player.fleet.location)) {
                 this.setInteractionEnabled(false);
                 this.player_fleet.moveToLocation(dest, 1, null, () => {
                     this.setInteractionEnabled(true);

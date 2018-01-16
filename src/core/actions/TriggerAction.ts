@@ -58,8 +58,7 @@ module TK.SpaceTac {
                 let battle = ship.getBattle();
                 if (battle) {
                     let harmful = any(this.effects, effect => !effect.isBeneficial());
-                    let player = ship.getPlayer();
-                    let ships = imaterialize(harmful ? battle.ienemies(player, true) : ifilter(battle.iallies(player, true), iship => iship != ship));
+                    let ships = imaterialize(harmful ? battle.ienemies(ship, true) : ifilter(battle.iallies(ship, true), iship => !iship.is(ship)));
                     let nearest = minBy(ships, iship => arenaDistance(ship.location, iship.location));
                     return Target.newFromShip(nearest);
                 } else {

@@ -18,7 +18,7 @@ module TK.SpaceTac {
          */
         win(): void {
             iforeach(this.battle.iships(), ship => {
-                if (ship.fleet.player != this.player) {
+                if (!this.player.is(ship.fleet.player)) {
                     ship.setDead();
                 }
             });
@@ -30,11 +30,11 @@ module TK.SpaceTac {
          */
         lose(): void {
             iforeach(this.battle.iships(), ship => {
-                if (ship.fleet.player == this.player) {
+                if (this.player.is(ship.fleet.player)) {
                     ship.setDead();
                 }
             });
-            this.battle.endBattle(first(this.battle.fleets, fleet => fleet.player != this.player));
+            this.battle.endBattle(first(this.battle.fleets, fleet => !this.player.is(fleet.player)));
         }
 
         /**

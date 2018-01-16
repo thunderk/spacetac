@@ -2,8 +2,10 @@ module TK.SpaceTac.Specs {
     testing("BattleCheats", test => {
         test.case("wins a battle", check => {
             let battle = Battle.newQuickRandom();
+            let cheats = new BattleCheats(battle, battle.fleets[0].player);
 
-            battle.cheats.win();
+            cheats.win();
+
             check.equals(battle.ended, true, "ended");
             check.same(nn(battle.outcome).winner, battle.fleets[0], "winner");
             check.equals(any(battle.fleets[1].ships, ship => ship.alive), false, "all enemies dead");
@@ -11,8 +13,10 @@ module TK.SpaceTac.Specs {
 
         test.case("loses a battle", check => {
             let battle = Battle.newQuickRandom();
+            let cheats = new BattleCheats(battle, battle.fleets[0].player);
 
-            battle.cheats.lose();
+            cheats.lose();
+
             check.equals(battle.ended, true, "ended");
             check.same(nn(battle.outcome).winner, battle.fleets[1], "winner");
             check.equals(any(battle.fleets[0].ships, ship => ship.alive), false, "all allies dead");
@@ -23,9 +27,12 @@ module TK.SpaceTac.Specs {
             let ship = new Ship();
             TestTools.setShipPlaying(battle, ship);
             ship.upgradeSkill("skill_materials");
+            let cheats = new BattleCheats(battle, battle.fleets[0].player);
 
             check.equals(ship.listEquipment(), []);
-            battle.cheats.equip("Iron Hull");
+
+            cheats.equip("Iron Hull");
+
             let result = ship.listEquipment();
             check.equals(result.length, 1);
             check.containing(result[0], { name: "Iron Hull", level: 1 });

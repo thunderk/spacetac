@@ -15,7 +15,7 @@ module TK.SpaceTac.Specs {
             part.onStarted();
             check.equals(destination.isClear(), false);
 
-            fleet.setLocation(destination, true);
+            fleet.setLocation(destination);
             check.same(part.checkCompleted(), false, "Encounter not clear");
 
             destination.clearEncounter();
@@ -28,7 +28,7 @@ module TK.SpaceTac.Specs {
 
             let universe = new Universe();
             let fleet = new Fleet();
-            fleet.setLocation(destination, true);
+            fleet.setLocation(destination);
             let part = new MissionPartCleanLocation(new Mission(universe, fleet), destination);
 
             check.equals(fleet.battle, null);

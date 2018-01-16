@@ -5,7 +5,6 @@ module TK.SpaceTac.UI.Specs {
         test.case("fills ship details", check => {
             let tooltip = new ShipTooltip(testgame.view);
             let ship = testgame.view.battle.play_order[2];
-            ship.fleet.player.name = "Phil";
             ship.name = "Fury";
             ship.model = new ShipModel("fake", "Fury");
             ship.listEquipment().forEach(equ => equ.detach());

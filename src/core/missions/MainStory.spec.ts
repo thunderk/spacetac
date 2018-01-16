@@ -10,15 +10,17 @@ module TK.SpaceTac.Specs {
             });
         }
 
-        function goTo(fleet: Fleet, location: StarLocation, win_encounter = true) {
-            fleet.setLocation(location, true);
-            if (fleet.battle) {
-                fleet.battle.endBattle(win_encounter ? fleet : fleet.battle.fleets[1]);
+        function goTo(session: GameSession, location: StarLocation, win_encounter = true) {
+            session.fleet.setLocation(location);
+
+            let battle = session.getBattle();
+            if (battle) {
+                battle.endBattle(win_encounter ? session.fleet : battle.fleets[1]);
                 if (win_encounter) {
-                    fleet.player.exitBattle();
+                    session.exitBattle();
                     location.clearEncounter();
                 } else {
-                    fleet.player.revertBattle();
+                    session.revertBattle();
                 }
             }
         }
@@ -36,7 +38,7 @@ module TK.SpaceTac.Specs {
             (<MissionPartConversation>story.current_part).skip();
 
             checkPart(story, 1, /^Find your contact in .*$/);
-            goTo(fleet, (<MissionPartGoTo>story.current_part).destination);
+            goTo(session, (<MissionPartGoTo>story.current_part).destination);
 
             checkPart(story, 2, /^Speak with your contact/);
             (<MissionPartConversation>story.current_part).skip();
@@ -45,7 +47,7 @@ module TK.SpaceTac.Specs {
             check.same(fleet.ships.length, fleet_size + 1);
             check.same(fleet.ships[fleet_size].critical, true);
             check.greater(fleet.ships[fleet_size].getAttribute("hull_capacity"), 0);
-            goTo(fleet, (<MissionPartEscort>story.current_part).destination);
+            goTo(session, (<MissionPartEscort>story.current_part).destination);
 
             checkPart(story, 4, /^Listen to .*$/);
             (<MissionPartConversation>story.current_part).skip();

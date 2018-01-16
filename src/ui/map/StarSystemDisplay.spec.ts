@@ -4,7 +4,7 @@ module TK.SpaceTac.UI.Specs {
 
         test.case("displays a badge with the current state for a star location", check => {
             let mapview = testgame.view;
-            let location = nn(mapview.player.fleet.location);
+            let location = mapview.player_fleet.location;
 
             let ssdisplay = nn(first(mapview.starsystems, ss => ss.starsystem == location.star));
 
@@ -15,7 +15,7 @@ module TK.SpaceTac.UI.Specs {
             ssdisplay.updateInfo(2, true);
             check.equals(ldisplay[2].name, "map-status-unvisited");
 
-            mapview.player.setVisited(ldisplay[0]);
+            mapview.player.fleet.visited.push(ldisplay[0].id);
             ssdisplay.updateInfo(2, true);
             check.equals(ldisplay[2].name, "map-status-enemy");
 

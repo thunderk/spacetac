@@ -13,7 +13,7 @@ module TK.SpaceTac.UI {
 
             this.shop = shop;
             this.player = player;
-            this.location = player.fleet.location || new StarLocation();
+            this.location = view.session.getLocation();
             this.on_change = on_change || (() => null);
 
             this.refresh();

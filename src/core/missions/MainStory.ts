@@ -14,7 +14,7 @@ module TK.SpaceTac {
             super(universe, fleet, true);
 
             let random = RandomGenerator.global;
-            let start_location = nn(fleet.location);
+            let start_location = nn(universe.getLocation(fleet.location));
             let mission_generator = new MissionGenerator(universe, start_location);
 
             // Arrival
@@ -26,7 +26,7 @@ module TK.SpaceTac {
             // Get in touch with our contact
             let contact_location = randomLocation(random, [start_location.star], [start_location]);
             let contact_character = mission_generator.generateShip(1);
-            contact_character.fleet.setLocation(contact_location, true);
+            contact_character.fleet.setLocation(contact_location);
             this.addPart(new MissionPartGoTo(this, contact_location, `Find your contact in ${contact_location.star.name}`, MissionPartDestinationHint.SYSTEM));
             conversation = this.addPart(new MissionPartConversation(this, [contact_character], "Speak with your contact"));
             conversation.addPiece(contact_character, "Finally, you came!");

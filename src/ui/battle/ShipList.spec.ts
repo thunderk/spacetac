@@ -7,13 +7,15 @@ module TK.SpaceTac.UI.Specs {
         function createList(): ShipList {
             let view = testgame.view;
             let battle = new Battle();
+            let player = new Player();
+            battle.fleets[0].setPlayer(player);
             let tactical_mode = new Toggle();
             let ship_buttons = {
                 cursorOnShip: nop,
                 cursorOffShip: nop,
                 cursorClicked: nop,
             };
-            let list = new ShipList(view, battle, battle.fleets[0].player, tactical_mode, ship_buttons);
+            let list = new ShipList(view, battle, player, tactical_mode, ship_buttons);
             return list;
         }
 
