@@ -31,10 +31,8 @@ module TK.SpaceTac {
             // TODO Store in cache
             var result: ShipModel[] = [];
 
-            result.push(new ShipModel("scout", "Scout"));
             result.push(new ShipModel("breeze", "Breeze"));
             result.push(new ShipModel("creeper", "Creeper"));
-            result.push(new ShipModel("whirlwind", "Whirlwind"));
             result.push(new ShipModel("tomahawk", "Tomahawk"));
             result.push(new ShipModel("avenger", "Avenger"));
             result.push(new ShipModel("commodore", "Commodore"));

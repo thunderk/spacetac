@@ -16,7 +16,7 @@
    viewBox="0 0 1920 1080"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.1 r15371"
+   inkscape:version="0.92.2 (unknown)"
    sodipodi:docname="battle.svg"
    inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/actionbar/power-generated.png"
    inkscape:export-xdpi="96"
@@ -2840,15 +2840,6 @@
          stdDeviation="7.1538857"
          id="feGaussianBlur11151" />
     </filter>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient8959"
-       id="linearGradient13215"
-       gradientUnits="userSpaceOnUse"
-       x1="36.955868"
-       y1="123.97214"
-       x2="111.73327"
-       y2="123.97214" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath9909-36">
@@ -3200,6 +3191,15 @@
        x2="1006.6031"
        y2="471.59311"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8959"
+       id="linearGradient5638"
+       gradientUnits="userSpaceOnUse"
+       x1="36.955868"
+       y1="123.97214"
+       x2="111.73327"
+       y2="123.97214" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -3208,11 +3208,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="11.313709"
-     inkscape:cx="988.11576"
-     inkscape:cy="682.52933"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="1317.1113"
+     inkscape:cy="451.49885"
      inkscape:document-units="px"
-     inkscape:current-layer="layer38"
+     inkscape:current-layer="g7473"
      showgrid="false"
      units="px"
      showguides="true"
@@ -3234,7 +3234,12 @@
      inkscape:snap-bbox-edge-midpoints="true"
      inkscape:measure-start="1539.72,611.294"
      inkscape:measure-end="1539.72,559.321"
-     inkscape:snap-page="true" />
+     inkscape:snap-page="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1037"
+     inkscape:window-x="0"
+     inkscape:window-y="20"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -7113,13 +7118,13 @@
       <rect
          y="475.17401"
          x="444.81439"
-         height="373.82666"
-         width="464.99561"
+         height="412.01041"
+         width="529.34235"
          id="rect5853"
          style="display:inline;opacity:0.90100002;fill:#202225;fill-opacity:1;fill-rule:evenodd;stroke:#404450;stroke-width:1.27644944px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new" />
       <g
          id="g5609"
-         transform="translate(0,18)">
+         transform="translate(0,60)">
         <text
            xml:space="preserve"
            style="font-style:normal;font-weight:normal;font-size:25.00000191px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
@@ -7167,7 +7172,7 @@
       </g>
       <g
          id="g5617"
-         transform="translate(0,18)">
+         transform="translate(0,50)">
         <text
            id="text5913"
            y="769.30066"
@@ -7204,7 +7209,7 @@
       </g>
       <g
          id="g5644"
-         transform="translate(18)">
+         transform="translate(82)">
         <text
            xml:space="preserve"
            style="font-style:normal;font-weight:normal;font-size:25.00000191px;line-height:23.4375px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;enable-background:new"
@@ -7228,7 +7233,8 @@
              id="tspan6136"
              sodipodi:role="line">Plays in 2 turns</tspan></text>
         <g
-           id="g13275">
+           id="g13275"
+           transform="translate(0,22)">
           <path
              sodipodi:nodetypes="ssszsss"
              inkscape:connector-curvature="0"
@@ -7307,7 +7313,7 @@
                    transform="matrix(0.98383539,0,0,2.7772838,1.1926759,-220.33366)"
                    style="filter:url(#filter8947)">
                   <path
-                     style="fill:url(#linearGradient13215);fill-opacity:1;fill-rule:evenodd;stroke:#433927;stroke-width:2.27530265;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+                     style="fill:url(#linearGradient5638);fill-opacity:1;fill-rule:evenodd;stroke:#433927;stroke-width:2.27530265;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
                      d="m 108.84322,123.97214 c -23.583215,10.09935 -47.166431,20.1987 -70.749646,30.29805 0,-20.1987 0,-40.3974 0,-60.5961 23.583215,10.09935 47.166431,20.1987 70.749646,30.29805 z"
                      id="path8668"
                      inkscape:connector-curvature="0" />
@@ -7337,7 +7343,7 @@
         </g>
         <g
            id="g13299"
-           transform="translate(3.125)">
+           transform="translate(3.125,22)">
           <use
              transform="translate(56.354733)"
              height="100%"
@@ -7494,7 +7500,7 @@
         </g>
         <g
            id="g13367"
-           transform="translate(9.375)">
+           transform="translate(9.375,22)">
           <use
              transform="translate(169.06408)"
              height="100%"
@@ -7615,7 +7621,7 @@
         </g>
         <g
            id="g13385"
-           transform="translate(12.499999)">
+           transform="translate(12.499999,22)">
           <use
              transform="translate(225.41881)"
              height="100%"
@@ -7737,7 +7743,7 @@
         </g>
         <g
            id="g13350"
-           transform="translate(6.25)">
+           transform="translate(6.25,22)">
           <use
              transform="translate(112.70934)"
              height="100%"
@@ -7787,11 +7793,11 @@
       <rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/tooltip/ship-portrait.png"
+         inkscape:export-filename="/home/michael/workspace/spacetac/graphics/exported/battle/tooltip/ship-portrait.png"
          y="492.55179"
          x="460.07184"
-         height="133.44534"
-         width="133.44542"
+         height="193.97655"
+         width="193.97672"
          id="rect4260-1"
          style="display:inline;opacity:1;fill:#43535c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6021-5);enable-background:new" />
     </g>

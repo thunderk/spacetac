@@ -28,7 +28,7 @@ module TK.SpaceTac.UI {
             fleet1.ships.forEach((ship, index) => {
                 let ship_card = view.game.add.image(-100 + index * 96, -26, "battle-splash-shipcard", 0);
                 ship_card.anchor.set(0.5);
-                let ship_portrait = view.newImage(`ship-${ship.model.code}-portrait`);
+                let ship_portrait = view.newImage(`ship-${ship.model.code}-portrait`, -2, 2);
                 ship_portrait.scale.set(0.3);
                 ship_portrait.anchor.set(0.5);
                 ship_card.addChild(ship_portrait);
@@ -49,7 +49,7 @@ module TK.SpaceTac.UI {
             fleet2.ships.forEach((ship, index) => {
                 let ship_card = view.game.add.image(-104 + index * 96, -32, "battle-splash-shipcard", 1);
                 ship_card.anchor.set(0.5);
-                let ship_portrait = view.newImage(`ship-${ship.model.code}-portrait`);
+                let ship_portrait = view.newImage(`ship-${ship.model.code}-portrait`, -2, -12);
                 ship_portrait.scale.set(0.3);
                 ship_portrait.anchor.set(0.5);
                 ship_card.angle = 180;

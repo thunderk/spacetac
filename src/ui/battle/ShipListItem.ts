@@ -34,8 +34,10 @@ module TK.SpaceTac.UI {
             this.player_indicator.angle = 90;
             this.addChild(this.player_indicator);
 
-            this.portrait = this.view.newImage(`ship-${ship.model.code}-portrait`, 18, 9);
-            this.portrait.scale.set(0.332, 0.332);
+            this.portrait = this.view.newImage(`ship-${ship.model.code}-sprite`, 62, 52);
+            this.portrait.anchor.set(0.5, 0.5);
+            this.portrait.scale.set(0.8, 0.8);
+            this.portrait.angle = 180;
             this.addChild(this.portrait);
 
             this.damage_indicator = new Phaser.Image(this.game, 18, 9, "battle-shiplist-damage", 0);

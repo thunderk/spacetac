@@ -23,19 +23,19 @@ module TK.SpaceTac.UI {
 
             builder.configure(10, 6, this.battleview.arena.getBoundaries());
 
-            let portrait_bg = builder.image("battle-tooltip-ship-portrait");
+            let portrait_bg = builder.image("battle-tooltip-ship-portrait", -18, -18);
             builder.in(portrait_bg, builder => {
                 let portrait = builder.image(`ship-${ship.model.code}-portrait`, portrait_bg.width / 2, portrait_bg.height / 2);
                 portrait.anchor.set(0.5);
-                portrait.scale.set(0.5);
+                portrait.scale.set(0.75);
             });
 
             let enemy = !this.battleview.player.is(ship.fleet.player);
-            builder.text(ship.getName(), 168, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
+            builder.text(ship.getName(), 230, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
 
             if (ship.alive) {
                 let turns = this.battleview.battle.getPlayOrder(ship);
-                builder.text((turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), 168, 36, { color: "#cccccc", size: 18 });
+                builder.text((turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), 230, 36, { color: "#cccccc", size: 18 });
 
                 ShipTooltip.addValue(builder, 0, "#aa6f33", "character-attribute-precision", ship.getAttribute("precision"));
                 ShipTooltip.addValue(builder, 1, "#c1f06b", "character-attribute-maneuvrability", ship.getAttribute("maneuvrability"));
@@ -43,7 +43,7 @@ module TK.SpaceTac.UI {
                 ShipTooltip.addValue(builder, 3, "#eb4e4a", "character-value-hull", ship.getValue("hull"), ship.getAttribute("hull_capacity"));
                 ShipTooltip.addValue(builder, 4, "#2ad8dc", "character-value-shield", ship.getValue("shield"), ship.getAttribute("shield_capacity"));
 
-                let iy = 170;
+                let iy = 210;
                 let effects = ship.active_effects.list();
                 if (effects.length > 0) {
                     builder.text("Active effects", 0, iy, { color: "#ffffff", size: 18, bold: true });
@@ -76,7 +76,7 @@ module TK.SpaceTac.UI {
         }
 
         private static addValue(builder: UIBuilder, idx: number, color: string, icon: string, val: number, max?: number) {
-            let bg = builder.image("battle-tooltip-ship-value", 190 + idx * 72, 110, true);
+            let bg = builder.image("battle-tooltip-ship-value", 252 + idx * 68, 116, true);
 
             builder.in(bg).styled({ color: color, size: 18, center: true, vcenter: true, bold: true }, builder => {
                 builder.image(icon, 0, -14, true);
