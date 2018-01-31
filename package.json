@@ -22,23 +22,23 @@
   "author": "Michael Lemaire",
   "license": "MIT",
   "devDependencies": {
-    "@types/jasmine": "2.6.2",
+    "@types/jasmine": "^2.8.6",
     "babel-polyfill": "6.26.0",
     "codecov": "3.0.0",
     "gamefroot-texture-packer": "Gamefroot/Gamefroot-Texture-Packer.git#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
-    "jasmine": "2.5.2",
-    "karma": "1.7.1",
+    "jasmine": "^2.9.0",
+    "karma": "^2.0.0",
     "karma-coverage": "1.1.1",
-    "karma-jasmine": "1.1.0",
+    "karma-jasmine": "^1.1.1",
     "karma-phantomjs-launcher": "1.0.4",
-    "karma-spec-reporter": "0.0.31",
+    "karma-spec-reporter": "^0.0.32",
     "live-server": "1.2.0",
-    "remap-istanbul": "0.9.5",
+    "remap-istanbul": "^0.10.1",
     "typescript": "^2.7.1"
   },
   "dependencies": {
-    "jasmine-core": "2.5.2",
-    "parse": "1.10.2",
+    "jasmine-core": "^2.9.1",
+    "parse": "^1.11.0",
     "phaser": "2.6.2"
   }
 }

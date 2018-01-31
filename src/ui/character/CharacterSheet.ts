@@ -147,9 +147,6 @@ module TK.SpaceTac.UI {
          * Add an attribute display
          */
         private addAttribute(attribute: keyof ShipAttributes, x: number, y: number) {
-            if (!this.ship) {
-                return;
-            }
             let ship = this.ship;
 
             let builder = this.builder.in(this.layer_attibutes);
