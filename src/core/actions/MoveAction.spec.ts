@@ -71,9 +71,7 @@ module TK.SpaceTac.Specs {
             ship.setArenaPosition(500, 500);
             enemy.setArenaPosition(1000, 500);
 
-            var action = new MoveAction(new Equipment());
-            action.distance_per_power = 1000;
-            action.safety_distance = 200;
+            var action = new MoveAction(new Equipment(), 1000, 200);
 
             var result = action.checkLocationTarget(ship, Target.newFromLocation(700, 500));
             check.equals(result, Target.newFromLocation(700, 500));
@@ -100,9 +98,7 @@ module TK.SpaceTac.Specs {
             enemy1.setArenaPosition(0, 800);
             enemy2.setArenaPosition(0, 1000);
 
-            var action = new MoveAction(new Equipment());
-            action.distance_per_power = 1000;
-            action.safety_distance = 150;
+            var action = new MoveAction(new Equipment(), 1000, 150);
 
             var result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1100));
             check.equals(result, Target.newFromLocation(0, 650));
@@ -117,9 +113,7 @@ module TK.SpaceTac.Specs {
             enemy1.setArenaPosition(0, 500);
             enemy2.setArenaPosition(0, 800);
 
-            var action = new MoveAction(new Equipment());
-            action.distance_per_power = 1000;
-            action.safety_distance = 600;
+            var action = new MoveAction(new Equipment(), 1000, 600);
 
             let result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1000));
             check.equals(result, null);

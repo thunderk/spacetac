@@ -7,22 +7,22 @@ module TK.SpaceTac.UI {
         debug = false
 
         // Network exchange of messages
-        exchange: Multi.Exchange
+        exchange!: Multi.Exchange
 
         // True if this peer is the primary one (the one that invited the other)
-        primary: boolean
+        primary!: boolean
 
         // Battle being played
-        battle: Battle
+        battle!: Battle
 
         // Count of battle log events that were processed
-        processed: number
+        processed!: number
 
         // Serializer to use for actions
-        serializer: Serializer
+        serializer!: Serializer
 
         // Timer for scheduling
-        timer: Timer
+        timer!: Timer
 
         /**
          * Setup the session other a token

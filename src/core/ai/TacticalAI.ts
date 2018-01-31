@@ -16,8 +16,8 @@ module TK.SpaceTac {
         private producers: TacticalProducer[] = []
         private evaluators: TacticalEvaluator[] = []
 
-        private best: Maneuver | null
-        private best_score: number
+        private best: Maneuver | null = null
+        private best_score = 0
 
         protected initWork(): void {
             this.best = null;

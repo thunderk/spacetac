@@ -7,9 +7,6 @@ module TK.SpaceTac.UI {
         // Reference to the ship game object
         ship: Ship
 
-        // Callbacks to act as buttons
-        ship_buttons: IShipButton
-
         // Player indicator
         player_indicator: Phaser.Image
 

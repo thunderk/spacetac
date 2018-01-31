@@ -25,10 +25,10 @@ module TK.SpaceTac.UI {
         close_button: Phaser.Button
 
         // Currently displayed fleet
-        fleet: Fleet
+        fleet!: Fleet
 
         // Currently displayed ship
-        ship: Ship
+        ship!: Ship
 
         // Ship name
         ship_name: Phaser.Text
@@ -140,16 +140,21 @@ module TK.SpaceTac.UI {
          * Check if the sheet should be interactive
          */
         isInteractive(): boolean {
-            return bool(this.ship) && !this.ship.critical && this.interactive;
+            return this.ship ? (!this.ship.critical && this.interactive) : false;
         }
 
         /**
          * Add an attribute display
          */
         private addAttribute(attribute: keyof ShipAttributes, x: number, y: number) {
+            if (!this.ship) {
+                return;
+            }
+            let ship = this.ship;
+
             let builder = this.builder.in(this.layer_attibutes);
 
-            let button = builder.button("character-attribute", x, y, undefined, () => this.ship.getAttributeDescription(attribute));
+            let button = builder.button("character-attribute", x, y, undefined, () => ship.getAttributeDescription(attribute));
 
             let attrname = capitalize(SHIP_VALUES_NAMES[attribute]);
             builder.in(button).text(attrname, 120, 22, { size: 20, color: "#c9d8ef", stroke_width: 1, stroke_color: "#395665" });
@@ -160,7 +165,7 @@ module TK.SpaceTac.UI {
 
             if (SHIP_SKILLS.hasOwnProperty(attribute)) {
                 this.builder.in(this.layer_upgrades).button("character-skill-upgrade", x + 292, y, () => {
-                    this.ship.upgradeSkill(<keyof ShipSkills>attribute);
+                    ship.upgradeSkill(<keyof ShipSkills>attribute);
                     this.refresh();
                 }, `Spend one point to upgrade ${attrname}`);
             }
@@ -251,8 +256,8 @@ module TK.SpaceTac.UI {
                 cargo_slot.alpha = this.isInteractive() ? 1 : 0.5;
                 this.ship_cargo.add(cargo_slot);
 
-                if (idx < this.ship.cargo.length) {
-                    let equipment = new CharacterEquipment(this, this.ship.cargo[idx], cargo_slot);
+                if (idx < ship.cargo.length) {
+                    let equipment = new CharacterEquipment(this, ship.cargo[idx], cargo_slot);
                     this.layer_equipments.add(equipment);
                 }
             });
@@ -408,7 +413,9 @@ module TK.SpaceTac.UI {
          * Refresh the sheet display
          */
         refresh() {
-            this.show(this.ship, false, false);
+            if (this.ship) {
+                this.show(this.ship, false, false);
+            }
         }
 
         /**

@@ -51,11 +51,15 @@ module TK.SpaceTac.Specs {
             equipment.action = action;
             check.equals(equipment.getEffectsDescription(), "Fire (power 1, range 200km):\n• do 50 damage on target");
 
-            action.blast = 20;
+            action = new TriggerAction(equipment, [new DamageEffect(50)], 1, 200, 20);
+            equipment.action = action;
             check.equals(equipment.getEffectsDescription(), "Fire (power 1, range 200km):\n• do 50 damage in 20km radius");
 
-            action.blast = 0;
-            action.effects.push(new StickyEffect(new AttributeLimitEffect("shield_capacity", 200), 3));
+            action = new TriggerAction(equipment, [
+                new DamageEffect(50),
+                new StickyEffect(new AttributeLimitEffect("shield_capacity", 200), 3)
+            ], 1, 200, 0);
+            equipment.action = action;
             check.equals(equipment.getEffectsDescription(), "Fire (power 1, range 200km):\n• do 50 damage on target\n• limit shield capacity to 200 for 3 turns on target");
         });
 

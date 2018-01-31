@@ -4,7 +4,7 @@ module TK.SpaceTac.UI {
      */
     export class UIConfirmDialog extends UIDialog {
         private result: Promise<boolean>
-        private result_resolver: (confirmed: boolean) => void
+        private result_resolver?: (confirmed: boolean) => void
 
         constructor(view: BaseView, message: string) {
             super(view);
@@ -22,8 +22,10 @@ module TK.SpaceTac.UI {
          * Force the result (simulate clicking the appropriate button)
          */
         async forceResult(confirmed: boolean): Promise<void> {
-            this.result_resolver(confirmed);
-            await this.result;
+            if (this.result_resolver) {
+                this.result_resolver(confirmed);
+                await this.result;
+            }
         }
 
         /**

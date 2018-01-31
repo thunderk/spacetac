@@ -6,7 +6,7 @@ module TK.SpaceTac.UI {
         view: BaseView
         background: Phaser.Graphics
         content: Phaser.Group
-        item: IBounded
+        item?: IBounded
         border = 10
         margin = 6
         viewport: IBounded | null = null
@@ -55,7 +55,7 @@ module TK.SpaceTac.UI {
         }
 
         update() {
-            if (this.visible) {
+            if (this.visible && this.item) {
                 let [width, height] = UITools.drawBackground(this.content, this.background, this.border);
 
                 let [x, y] = this.getBestPosition(this.item, width, height);

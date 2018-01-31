@@ -12,10 +12,10 @@ module TK.SpaceTac {
         session_token: string | null
 
         // Audio manager
-        audio: UI.Audio
+        audio!: UI.Audio
 
         // Game options
-        options: UI.GameOptions
+        options!: UI.GameOptions
 
         // Storage used
         storage: Storage
@@ -28,7 +28,6 @@ module TK.SpaceTac {
 
             this.headless = headless;
 
-            this.audio = new UI.Audio(this);
             this.storage = localStorage;
 
             this.session = new GameSession();

@@ -7,44 +7,28 @@ module TK.SpaceTac {
      * The target will be resolved as a list of ships, on which all the action effects will be applied
      */
     export class TriggerAction extends BaseAction {
-        // Power consumption
-        power: number
-
-        // Maximal range of the weapon (distance to target)
-        range: number
-
-        // Radius around the target that will be impacted
-        blast: number
-
-        // Angle of the area between the source and the target that will be impacted
-        angle: number
-
-        // Influence of "precision" of firing ship (0..100)
-        aim: number
-
-        // Influence of "maneuvrability" of impacted ship (0..100)
-        evasion: number
-
-        // Influence of luck
-        luck: number
-
-        // Effects applied on target
-        effects: BaseEffect[]
-
-        // Equipment cannot be null
-        equipment: Equipment
-
-        constructor(equipment: Equipment, effects: BaseEffect[] = [], power = 1, range = 0, blast = 0, angle = 0, aim = 0, evasion = 0, luck = 0, code = `fire-${equipment.code}`) {
+        constructor(
+            // Mandatory equipment
+            readonly equipment: Equipment,
+            // Effects applied on target
+            readonly effects: BaseEffect[] = [],
+            // Power consumption
+            readonly power = 1,
+            // Maximal range of the weapon (distance to target)
+            readonly range = 0,
+            // Radius around the target that will be impacted
+            readonly blast = 0,
+            // Angle of the area between the source and the target that will be impacted
+            readonly angle = 0,
+            // Influence of "precision" of firing ship (0..100)
+            readonly aim = 0,
+            // Influence of "maneuvrability" of impacted ship (0..100)
+            readonly evasion = 0,
+            // Influence of luck
+            readonly luck = 0,
+            code = `fire-${equipment.code}`
+        ) {
             super(code, equipment);
-
-            this.power = power;
-            this.range = range;
-            this.effects = effects;
-            this.blast = blast;
-            this.angle = angle;
-            this.aim = aim;
-            this.evasion = evasion;
-            this.luck = luck;
         }
 
         getVerb(): string {

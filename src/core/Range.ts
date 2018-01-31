@@ -2,10 +2,10 @@ module TK.SpaceTac {
     // Range of number values
     export class Range {
         // Minimal value
-        min: number;
+        min = 0
 
         // Maximal value
-        max: number;
+        max = 0
 
         // Create a range of values
         constructor(min: number, max: number | null = null) {

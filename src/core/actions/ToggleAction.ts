@@ -7,27 +7,21 @@ module TK.SpaceTac {
      * Toggle actions consume power when activated, and restore it when deactivated
      */
     export class ToggleAction extends BaseAction {
-        // Power consumption (for activation)
-        power: number
-
-        // Effect radius
-        radius: number
-
-        // Effects applied
-        effects: BaseEffect[]
-
-        // Equipment cannot be null
-        equipment: Equipment
-
         // Current activation status
         activated = false
 
-        constructor(equipment: Equipment, power = 1, radius = 0, effects: BaseEffect[] = [], code = `toggle-${equipment.code}`) {
+        constructor(
+            // Mandatory equipment
+            readonly equipment: Equipment,
+            // Power consumption (while active)
+            readonly power = 1,
+            // Effect radius
+            readonly radius = 0,
+            // Effects applied
+            readonly effects: BaseEffect[] = [],
+            code = `toggle-${equipment.code}`
+        ) {
             super(code, equipment);
-
-            this.power = power;
-            this.radius = radius;
-            this.effects = effects;
         }
 
         getVerb(): string {

@@ -15,40 +15,40 @@ module TK.SpaceTac.UI {
         interactive = true
 
         // Layers
-        layer_universe: Phaser.Group
-        layer_overlay: Phaser.Group
+        layer_universe!: Phaser.Group
+        layer_overlay!: Phaser.Group
 
         // Star systems
         starsystems: StarSystemDisplay[] = []
 
         // Links between stars
-        starlinks_group: Phaser.Group
+        starlinks_group!: Phaser.Group
         starlinks: Phaser.Graphics[] = []
 
         // Fleets
-        player_fleet: FleetDisplay
+        player_fleet!: FleetDisplay
 
         // Markers
-        current_location: CurrentLocationMarker
-        mission_markers: MissionLocationMarker
+        current_location!: CurrentLocationMarker
+        mission_markers!: MissionLocationMarker
 
         // Actions for selected location
-        actions: MapLocationMenu
+        actions!: MapLocationMenu
 
         // Active missions
-        missions: ActiveMissionsDisplay
-        conversation: MissionConversationDisplay
+        missions!: ActiveMissionsDisplay
+        conversation!: MissionConversationDisplay
 
         // Character sheet
-        character_sheet: CharacterSheet
+        character_sheet!: CharacterSheet
 
         // Zoom level
         zoom = 0
-        zoom_in: Phaser.Button
-        zoom_out: Phaser.Button
+        zoom_in!: Phaser.Button
+        zoom_out!: Phaser.Button
 
         // Options button
-        button_options: Phaser.Button
+        button_options!: Phaser.Button
 
         /**
          * Init the view, binding it to a universe

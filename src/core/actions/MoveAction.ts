@@ -3,24 +3,17 @@ module TK.SpaceTac {
      * Action to move the ship to a specific location
      */
     export class MoveAction extends BaseAction {
-        // Distance allowed for each power point (raw, without applying maneuvrability)
-        distance_per_power: number
-
-        // Safety distance from other ships
-        safety_distance: number
-
-        // Equipment cannot be null (engine)
-        equipment: Equipment
-
-        // Impact of maneuvrability (in % of distance)
-        maneuvrability_factor: number
-
-        constructor(equipment: Equipment, distance_per_power = 0, safety_distance = 120, maneuvrability_factor = 0) {
+        constructor(
+            // Mandatory equipment
+            readonly equipment: Equipment,
+            // Distance allowed for each power point (raw, without applying maneuvrability)
+            readonly distance_per_power = 0,
+            // Safety distance from other ships
+            readonly safety_distance = 120,
+            // Impact of maneuvrability (in % of distance)
+            readonly maneuvrability_factor = 0
+        ) {
             super("move", equipment);
-
-            this.distance_per_power = distance_per_power;
-            this.safety_distance = safety_distance;
-            this.maneuvrability_factor = maneuvrability_factor;
         }
 
         getVerb(): string {

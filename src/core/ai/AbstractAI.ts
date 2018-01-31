@@ -27,7 +27,7 @@ module TK.SpaceTac {
         feedback: AIFeedback
 
         // Time at which work as started
-        private started: number
+        private started = 0
 
         constructor(ship: Ship, feedback?: AIFeedback, debug = false, timer = Timer.global, name?: string) {
             this.ship = ship;

@@ -6,13 +6,13 @@ module TK.SpaceTac.UI {
      */
     export class MainMenu extends BaseView {
         static returned = false
-        layer_stars: Phaser.Group
-        layer_presents: Phaser.Group
-        layer_title: Phaser.Group
-        button_new_game: Phaser.Button
-        button_quick_battle: Phaser.Button
-        button_load_game: Phaser.Button
-        dialog_load_game: LoadDialog
+        layer_stars!: Phaser.Group
+        layer_presents!: Phaser.Group
+        layer_title!: Phaser.Group
+        button_new_game!: Phaser.Button
+        button_quick_battle!: Phaser.Button
+        button_load_game!: Phaser.Button
+        dialog_load_game!: LoadDialog
 
         create() {
             super.create();

@@ -4,29 +4,29 @@ module TK.SpaceTac.UI {
      */
     export class BaseView extends Phaser.State {
         // Link to the root UI
-        gameui: MainUI
+        gameui!: MainUI
 
         // Message notifications
-        messages: Messages
+        messages!: Messages
 
         // Input and key bindings
-        inputs: InputManager
+        inputs!: InputManager
 
         // Animations
-        animations: Animations
+        animations!: Animations
 
         // Timing
-        timer: Timer
+        timer!: Timer
 
         // Tooltip
-        tooltip_layer: Phaser.Group
-        tooltip: Tooltip
+        tooltip_layer!: Phaser.Group
+        tooltip!: Tooltip
 
         // Layers
-        layers: Phaser.Group
+        layers!: Phaser.Group
 
         // Modal dialogs
-        dialogs_layer: Phaser.Group
+        dialogs_layer!: Phaser.Group
         dialogs_opened: UIDialog[] = []
 
         // Get the size of display

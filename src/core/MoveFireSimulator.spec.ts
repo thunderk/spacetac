@@ -112,7 +112,7 @@ module TK.SpaceTac.Specs {
             battle.fleets[0].addShip(ship);
             let ship1 = battle.fleets[0].addShip();
             let moveaction = <MoveAction>nn(simulator.findBestEngine()).action;
-            moveaction.safety_distance = 30;
+            (<any>moveaction).safety_distance = 30;
             battle.ship_separation = 30;
 
             check.same(simulator.getApproach(moveaction, Target.newFromLocation(350, 200), 100), ApproachSimulationError.NO_MOVE_NEEDED);

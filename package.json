@@ -34,7 +34,7 @@
     "karma-spec-reporter": "0.0.31",
     "live-server": "1.2.0",
     "remap-istanbul": "0.9.5",
-    "typescript": "2.6.2"
+    "typescript": "^2.7.1"
   },
   "dependencies": {
     "jasmine-core": "2.5.2",

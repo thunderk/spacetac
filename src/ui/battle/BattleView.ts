@@ -15,56 +15,56 @@ module TK.SpaceTac.UI {
      */
     export class BattleView extends BaseView implements IShipButton {
         // Internal battle state
-        actual_battle: Battle
+        actual_battle!: Battle
 
         // Displayed battle state
-        battle: Battle
+        battle!: Battle
 
         // Interacting player
-        player: Player
+        player!: Player
 
         // Multiplayer sharing
-        multi: MultiBattle
+        multi!: MultiBattle
 
         // Layers
-        layer_background: Phaser.Group
-        layer_arena: Phaser.Group
-        layer_borders: Phaser.Group
-        layer_overlay: Phaser.Group
-        layer_sheets: Phaser.Group
+        layer_background!: Phaser.Group
+        layer_arena!: Phaser.Group
+        layer_borders!: Phaser.Group
+        layer_overlay!: Phaser.Group
+        layer_sheets!: Phaser.Group
 
         // Battleground container
-        arena: Arena
+        arena!: Arena
 
         // Background image
-        background: Phaser.Image | null
+        background!: Phaser.Image | null
 
         // Targetting mode (null if we're not in this mode)
-        targetting: Targetting
+        targetting!: Targetting
 
         // Ship list
-        ship_list: ShipList
+        ship_list!: ShipList
 
         // Action bar
-        action_bar: ActionBar
+        action_bar!: ActionBar
 
         // Currently hovered ship
-        ship_hovered: Ship | null
+        ship_hovered!: Ship | null
 
         // Ship tooltip
-        ship_tooltip: ShipTooltip
+        ship_tooltip!: ShipTooltip
 
         // Character sheet
-        character_sheet: CharacterSheet
+        character_sheet!: CharacterSheet
 
         // Subscription to the battle log
-        log_processor: LogProcessor
+        log_processor!: LogProcessor
 
         // True if player interaction is allowed
-        interacting: boolean
+        interacting!: boolean
 
         // Tactical mode toggle
-        toggle_tactical_mode: Toggle
+        toggle_tactical_mode!: Toggle
 
         // Toggle for the splash screen display
         splash = true

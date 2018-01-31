@@ -9,11 +9,11 @@ module TK.SpaceTac.UI.Specs {
      * Attributes should only be accessed from inside corresponding "it" blocks (they are initialized by the setup).
      */
     export class TestGame<T extends Phaser.State> {
-        ui: MainUI;
-        view: T;
-        multistorage: Multi.FakeRemoteStorage;
-        state: string;
-        clock: FakeClock;
+        ui!: MainUI;
+        view!: T;
+        multistorage!: Multi.FakeRemoteStorage;
+        state!: string;
+        clock!: FakeClock;
     }
 
     /**

@@ -12,7 +12,7 @@ module TK.SpaceTac.UI {
         ship: Ship | null = null
         action: BaseAction | null = null
         target: Target | null = null
-        mode: ActionTargettingMode
+        mode?: ActionTargettingMode
         simulation = new MoveFireResult()
 
         // Move and fire lines

@@ -15,7 +15,7 @@ module TK.SpaceTac.UI {
         range_hint: RangeHint
 
         // Input capture
-        private mouse_capture: Phaser.Button
+        private mouse_capture?: Phaser.Button
 
         // Input callback to receive mouse move events
         private input_callback: any = null

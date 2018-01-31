@@ -57,7 +57,7 @@ module TK.SpaceTac {
             let result = copy(this.effect);
             this.modifiers.forEach(modifier => {
                 let [name, value] = modifier;
-                result[name] = resolveForLevel(value, level);
+                result[name] = <any>resolveForLevel(value, level);
             });
             return result;
         }

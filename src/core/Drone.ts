@@ -10,9 +10,9 @@ module TK.SpaceTac {
         code: string
 
         // Location in arena
-        x: number
-        y: number
-        radius: number
+        x = 0
+        y = 0
+        radius = 0
 
         // Effects to apply
         effects: BaseEffect[] = []

@@ -5,9 +5,9 @@ module TK.SpaceTac.UI {
     export class MissionLocationMarker {
         private view: BaseView
         private container: Phaser.Group
-        private markers: [StarLocation | Star, string][]
+        private markers: [StarLocation | Star, string][] = []
         private zoomed = true
-        private current_star: Star
+        private current_star?: Star
 
         constructor(view: BaseView, parent: Phaser.Group) {
             this.view = view;

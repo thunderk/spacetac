@@ -25,7 +25,7 @@ module TK.SpaceTac.UI {
         cooldown = 0
 
         // Images
-        img_targetting: Phaser.Image
+        img_targetting!: Phaser.Image
         img_top: Phaser.Image | null = null
         img_bottom: Phaser.Image
         img_power: Phaser.Image
@@ -33,7 +33,7 @@ module TK.SpaceTac.UI {
         img_action: Phaser.Image
 
         // Indicators
-        text_power: Phaser.Text
+        text_power!: Phaser.Text
 
         constructor(bar: ActionBar, ship: Ship, action: BaseAction, position: number) {
             this.bar = bar;

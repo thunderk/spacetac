@@ -5,9 +5,9 @@ module TK.SpaceTac.UI {
      * View to configure the initial characters in the fleet
      */
     export class FleetCreationView extends BaseView {
-        built_fleet: Fleet
-        infinite_shop: Shop
-        character_sheet: CharacterSheet
+        built_fleet!: Fleet
+        infinite_shop!: Shop
+        character_sheet!: CharacterSheet
 
         create() {
             super.create();

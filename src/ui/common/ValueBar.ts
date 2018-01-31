@@ -24,13 +24,13 @@ module TK.SpaceTac.UI {
         private orientation: ValueBarOrientation
 
         // Current value
-        private current: number
+        private current = 0
 
         // Maximal value
-        private maximal: number
+        private maximal = 0
 
         // Proportional value
-        private proportional: number
+        private proportional = 0
 
         // Original size
         private original_width: number
