@@ -302,7 +302,6 @@ module TK.SpaceTac.UI {
                 this.mode = (typeof mode == "undefined") ? action.getTargettingMode(this.ship) : mode;
 
                 this.view.changeImage(this.move_ghost, `ship-${this.ship.model.code}-sprite`);
-                this.move_ghost.scale.set(0.4);
 
                 this.updateImpactArea(this.impact_area, this.action);
 
