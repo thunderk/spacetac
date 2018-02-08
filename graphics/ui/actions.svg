@@ -16,7 +16,7 @@
    version="1.1"
    inkscape:version="0.92.1 r15371"
    sodipodi:docname="actions.svg"
-   inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/equipment/kelvingenerator.png"
+   inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/action/damageprotector.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
    viewBox="0 0 256 256"
@@ -3114,7 +3114,7 @@
      inkscape:groupmode="layer"
      id="layer11"
      inkscape:label="DamageProtector"
-     style="display:none">
+     style="display:inline">
     <circle
        style="fill:url(#radialGradient4955);fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:7.49999952;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.8749999, 1.8749999;stroke-dashoffset:0;stroke-opacity:0.57234042"
        id="path4921"
@@ -3430,7 +3430,7 @@
      inkscape:groupmode="layer"
      id="layer14"
      inkscape:label="KelvinGenerator"
-     style="display:inline">
+     style="display:none">
     <g
        id="g4987"
        transform="matrix(0.77942184,0,0,0.77942184,28.096496,22.946262)">

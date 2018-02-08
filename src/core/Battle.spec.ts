@@ -68,7 +68,7 @@ module TK.SpaceTac {
             var ship3 = new Ship(fleet2, "ship3");
 
             var battle = new Battle(fleet1, fleet2);
-            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
+            battle.ships.list().forEach(ship => TestTools.setShipModel(ship, 10, 0));
 
             // Check empty play_order case
             check.equals(battle.playing_ship, null);
@@ -118,7 +118,7 @@ module TK.SpaceTac {
                 check.equals(battle.ships.list().filter(ship => ship.alive), [ship1, ship2, ship3, ship4], "alive ships");
             });
 
-            let result = battle.applyOneAction(nn(weapon.action).id, Target.newFromLocation(0, 0));
+            let result = battle.applyOneAction(weapon.id, Target.newFromLocation(0, 0));
             check.equals(result, true, "action applied successfully");
             check.in("after weapon", check => {
                 check.same(battle.playing_ship, ship3, "playing ship");
@@ -135,7 +135,7 @@ module TK.SpaceTac {
             let ship3 = new Ship(fleet2, "F2S1");
 
             var battle = new Battle(fleet1, fleet2);
-            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
+            battle.ships.list().forEach(ship => TestTools.setShipModel(ship, 10, 0));
             battle.start();
             battle.play_order = [ship3, ship2, ship1];
             check.equals(battle.ended, false);
@@ -152,41 +152,6 @@ module TK.SpaceTac {
             } else {
                 check.fail("Not an EndBattleDiff");
             }
-        });
-
-        test.case("wear down equipment at the end of battle", check => {
-            let fleet1 = new Fleet();
-            let ship1a = fleet1.addShip();
-            let equ1a = TestTools.addWeapon(ship1a);
-            let ship1b = fleet1.addShip();
-            let equ1b = TestTools.addWeapon(ship1b);
-            let fleet2 = new Fleet();
-            let ship2a = fleet2.addShip();
-            let equ2a = TestTools.addWeapon(ship2a);
-            let eng2a = TestTools.addEngine(ship2a, 50);
-
-            let battle = new Battle(fleet1, fleet2);
-            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
-            battle.start();
-
-            check.equals(equ1a.wear, 0);
-            check.equals(equ1b.wear, 0);
-            check.equals(equ2a.wear, 0);
-            check.equals(eng2a.wear, 0);
-
-            range(8).forEach(() => battle.advanceToNextShip());
-
-            check.equals(equ1a.wear, 0);
-            check.equals(equ1b.wear, 0);
-            check.equals(equ2a.wear, 0);
-            check.equals(eng2a.wear, 0);
-
-            battle.endBattle(null);
-
-            check.equals(equ1a.wear, 3);
-            check.equals(equ1b.wear, 3);
-            check.equals(equ2a.wear, 3);
-            check.equals(eng2a.wear, 3);
         });
 
         test.case("handles a draw in end battle", check => {
@@ -316,7 +281,7 @@ module TK.SpaceTac {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
 
-            check.equals(imaterialize(battle.iAreaEffects(100, 50)), []);
+            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [], "initial");
 
             let drone1 = new Drone(ship);
             drone1.x = 120;
@@ -331,22 +296,22 @@ module TK.SpaceTac {
             drone2.effects = [new DamageEffect(14)];
             battle.addDrone(drone2);
 
-            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [drone1.effects[0]]);
+            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [drone1.effects[0]], "drone effects");
 
-            let eq1 = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            eq1.action = new ToggleAction(eq1, 0, 500, [new AttributeEffect("maneuvrability", 1)]);
-            (<ToggleAction>eq1.action).activated = true;
-            let eq2 = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            eq2.action = new ToggleAction(eq2, 0, 500, [new AttributeEffect("maneuvrability", 2)]);
-            (<ToggleAction>eq2.action).activated = false;
-            let eq3 = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            eq3.action = new ToggleAction(eq3, 0, 100, [new AttributeEffect("maneuvrability", 3)]);
-            (<ToggleAction>eq3.action).activated = true;
+            let eq1 = new ToggleAction("eq1", { power: 0, radius: 500, effects: [new AttributeEffect("maneuvrability", 1)] });
+            ship.actions.addCustom(eq1);
+            ship.actions.toggle(eq1, true);
+            let eq2 = new ToggleAction("eq2", { power: 0, radius: 500, effects: [new AttributeEffect("maneuvrability", 2)] });
+            ship.actions.addCustom(eq2);
+            ship.actions.toggle(eq2, false);
+            let eq3 = new ToggleAction("eq3", { power: 0, radius: 100, effects: [new AttributeEffect("maneuvrability", 3)] });
+            ship.actions.addCustom(eq3);
+            ship.actions.toggle(eq3, true);
 
             check.equals(imaterialize(battle.iAreaEffects(100, 50)), [
                 drone1.effects[0],
-                (<ToggleAction>eq1.action).effects[0],
-            ]);
+                eq1.effects[0],
+            ], "drone and toggle effects");
         });
 
         test.case("is serializable", check => {

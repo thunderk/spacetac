@@ -27,7 +27,7 @@ module TK.SpaceTac.UI.Specs {
             });
 
             let ship = battle.fleets[0].addShip();
-            TestTools.setShipHP(ship, 10, 0);
+            TestTools.setShipModel(ship, 10, 0);
             list.setShipsFromBattle(battle, false);
             check.in("one ship added but not in play order", check => {
                 check.equals(list.items.length, 1, "item count");
@@ -41,7 +41,7 @@ module TK.SpaceTac.UI.Specs {
             });
 
             ship = battle.fleets[1].addShip();
-            TestTools.setShipHP(ship, 10, 0);
+            TestTools.setShipModel(ship, 10, 0);
             battle.throwInitiative();
             list.setShipsFromBattle(battle, false);
             check.in("ship added in the other fleet", check => {
@@ -65,7 +65,7 @@ module TK.SpaceTac.UI.Specs {
             });
 
             ship = battle.fleets[1].addShip();
-            TestTools.setShipHP(ship, 10, 0);
+            TestTools.setShipModel(ship, 10, 0);
             battle.throwInitiative();
             battle.setPlayingShip(battle.play_order[0]);
             list.setShipsFromBattle(battle, false);

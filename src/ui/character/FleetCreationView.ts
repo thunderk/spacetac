@@ -12,22 +12,14 @@ module TK.SpaceTac.UI {
         create() {
             super.create();
 
-            let models = ShipModel.getRandomModels(2);
+            let models = BaseModel.getRandomModels(2);
 
             this.built_fleet = new Fleet();
             this.built_fleet.addShip(new Ship(null, MissionGenerator.generateCharacterName(), models[0]));
             this.built_fleet.addShip(new Ship(null, MissionGenerator.generateCharacterName(), models[1]));
             this.built_fleet.credits = this.built_fleet.ships.length * 1000;
 
-            let basic_equipments = () => {
-                let generator = new LootGenerator();
-                let equipments = generator.templates.map(template => template.generate(1));
-                return sortedBy(equipments, equipment => equipment.slot_type);
-            }
-            this.infinite_shop = new Shop(1, basic_equipments(), 0, basic_equipments);
-
-            this.character_sheet = new CharacterSheet(this, undefined, undefined, () => this.validateFleet());
-            this.character_sheet.setShop(this.infinite_shop, "Available stock (from Master Merchant Guild)");
+            this.character_sheet = new CharacterSheet(this, () => this.validateFleet());
             this.character_sheet.show(this.built_fleet.ships[0], false);
             this.getLayer("characters").add(this.character_sheet);
         }

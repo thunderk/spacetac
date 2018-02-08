@@ -119,7 +119,7 @@ module TK.SpaceTac.UI {
                 this.layer_borders, this.getWidth() - 112, 0);
             this.ship_list.bindToLog(this.log_processor);
             this.ship_tooltip = new ShipTooltip(this);
-            this.character_sheet = new CharacterSheet(this, -this.getWidth());
+            this.character_sheet = new CharacterSheet(this);
             this.layer_sheets.add(this.character_sheet);
 
             // Targetting info
@@ -192,7 +192,7 @@ module TK.SpaceTac.UI {
 
             let ship = this.actual_battle.playing_ship;
             if (ship) {
-                let ship_action = first(ship.getAvailableActions(), ac => ac.is(action));
+                let ship_action = ship.actions.getById(action.id);
                 if (ship_action) {
                     let result = this.actual_battle.applyOneAction(action.id, target);
                     if (result) {
@@ -200,7 +200,7 @@ module TK.SpaceTac.UI {
                     }
                     return result;
                 } else {
-                    console.error("Action not found in available list", action, ship.getAvailableActions());
+                    console.error("Action not found in available list", action, ship.actions);
                     return false;
                 }
             } else {
@@ -327,20 +327,20 @@ module TK.SpaceTac.UI {
 
         // Enter targetting mode
         //  While in this mode, the Targetting object will receive hover and click events, and handle them
-        enterTargettingMode(action: BaseAction, mode: ActionTargettingMode): Targetting | null {
+        enterTargettingMode(ship: Ship, action: BaseAction, mode: ActionTargettingMode): Targetting | null {
             if (!this.interacting) {
                 return null;
             }
 
             this.setShipHovered(null);
 
-            this.targetting.setAction(action, mode);
+            this.targetting.setAction(ship, action, mode);
             return this.targetting;
         }
 
         // Exit targetting mode
         exitTargettingMode(): void {
-            this.targetting.setAction(null);
+            this.targetting.setAction(null, null);
         }
 
         /**

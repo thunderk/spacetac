@@ -8,6 +8,9 @@ module TK.SpaceTac.Specs {
             battle.setPlayingShip(battle.play_order[0]);
 
             let action = new EndTurnAction();
+            check.equals(action.checkCannotBeApplied(battle.play_order[0]), "action not available");
+
+            action = EndTurnAction.SINGLETON;
             check.equals(action.checkCannotBeApplied(battle.play_order[0]), null);
             check.equals(action.checkCannotBeApplied(battle.play_order[1]), "ship not playing");
         });
@@ -36,23 +39,23 @@ module TK.SpaceTac.Specs {
         test.case("generates power for previous ship", check => {
             let battle = TestTools.createBattle(1, 1);
             let [ship1, ship2] = battle.play_order;
-            TestTools.setShipAP(ship1, 10, 3);
-            let weapon = TestTools.addWeapon(ship1);
-            weapon.action = new ToggleAction(weapon, 2);
+            TestTools.setShipModel(ship1, 100, 0, 10);
+            let toggle = new ToggleAction("toggle", { power: 2 });
+            ship1.actions.addCustom(toggle);
             ship1.setValue("power", 6);
 
             TestTools.actionChain(check, battle, [
-                [ship1, weapon.action, Target.newFromShip(ship1)],
-                [ship1, weapon.action, Target.newFromShip(ship1)],
-                [ship1, EndTurnAction.SINGLETON, Target.newFromShip(ship1)],
-                [ship2, EndTurnAction.SINGLETON, Target.newFromShip(ship2)],
-                [ship1, weapon.action, Target.newFromShip(ship1)],
-                [ship1, EndTurnAction.SINGLETON, Target.newFromShip(ship1)],
-                [ship2, EndTurnAction.SINGLETON, Target.newFromShip(ship2)],
-                [ship1, EndTurnAction.SINGLETON, Target.newFromShip(ship1)],
-                [ship2, EndTurnAction.SINGLETON, Target.newFromShip(ship2)],
-                [ship1, weapon.action, Target.newFromShip(ship1)],
-                [ship1, EndTurnAction.SINGLETON, Target.newFromShip(ship1)],
+                [ship1, toggle, undefined],
+                [ship1, toggle, undefined],
+                [ship1, EndTurnAction.SINGLETON, undefined],
+                [ship2, EndTurnAction.SINGLETON, undefined],
+                [ship1, toggle, undefined],
+                [ship1, EndTurnAction.SINGLETON, undefined],
+                [ship2, EndTurnAction.SINGLETON, undefined],
+                [ship1, EndTurnAction.SINGLETON, undefined],
+                [ship2, EndTurnAction.SINGLETON, undefined],
+                [ship1, toggle, undefined],
+                [ship1, EndTurnAction.SINGLETON, undefined],
             ], [
                     check => {
                         check.equals(ship1.getValue("power"), 6, "power value");
@@ -67,15 +70,15 @@ module TK.SpaceTac.Specs {
                         check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship1.getValue("power"), 9, "power value");
+                        check.equals(ship1.getValue("power"), 10, "power value");
                         check.same(battle.playing_ship, ship2);
                     },
                     check => {
-                        check.equals(ship1.getValue("power"), 9, "power value");
+                        check.equals(ship1.getValue("power"), 10, "power value");
                         check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship1.getValue("power"), 7, "power value");
+                        check.equals(ship1.getValue("power"), 8, "power value");
                         check.same(battle.playing_ship, ship1);
                     },
                     check => {
@@ -87,11 +90,11 @@ module TK.SpaceTac.Specs {
                         check.same(battle.playing_ship, ship1);
                     },
                     check => {
-                        check.equals(ship1.getValue("power"), 9, "power value");
+                        check.equals(ship1.getValue("power"), 8, "power value");
                         check.same(battle.playing_ship, ship2);
                     },
                     check => {
-                        check.equals(ship1.getValue("power"), 9, "power value");
+                        check.equals(ship1.getValue("power"), 8, "power value");
                         check.same(battle.playing_ship, ship1);
                     },
                     check => {
@@ -110,13 +113,18 @@ module TK.SpaceTac.Specs {
             let ship = battle.play_order[0];
 
             let equ1 = TestTools.addWeapon(ship);
-            equ1.cooldown.configure(1, 3);
-            equ1.cooldown.use();
+            equ1.configureCooldown(1, 3);
+            let cd1 = ship.actions.getCooldown(equ1);
+            cd1.use();
+
             let equ2 = TestTools.addWeapon(ship);
-            equ2.cooldown.configure(1, 2);
-            equ2.cooldown.use();
+            equ2.configureCooldown(1, 2);
+            let cd2 = ship.actions.getCooldown(equ2);
+            cd2.use();
+
             let equ3 = TestTools.addWeapon(ship);
-            equ3.cooldown.use();
+            let cd3 = ship.actions.getCooldown(equ3);
+            cd3.use();
 
             TestTools.actionChain(check, battle, [
                 [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
@@ -124,24 +132,24 @@ module TK.SpaceTac.Specs {
                 [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],
             ], [
                     check => {
-                        check.equals(equ1.cooldown.heat, 3, "equ1 heat");
-                        check.equals(equ2.cooldown.heat, 2, "equ2 heat");
-                        check.equals(equ3.cooldown.heat, 0, "equ3 heat");
+                        check.equals(cd1.heat, 3, "equ1 heat");
+                        check.equals(cd2.heat, 2, "equ2 heat");
+                        check.equals(cd3.heat, 0, "equ3 heat");
                     },
                     check => {
-                        check.equals(equ1.cooldown.heat, 2, "equ1 heat");
-                        check.equals(equ2.cooldown.heat, 1, "equ2 heat");
-                        check.equals(equ3.cooldown.heat, 0, "equ3 heat");
+                        check.equals(cd1.heat, 2, "equ1 heat");
+                        check.equals(cd2.heat, 1, "equ2 heat");
+                        check.equals(cd3.heat, 0, "equ3 heat");
                     },
                     check => {
-                        check.equals(equ1.cooldown.heat, 1, "equ1 heat");
-                        check.equals(equ2.cooldown.heat, 0, "equ2 heat");
-                        check.equals(equ3.cooldown.heat, 0, "equ3 heat");
+                        check.equals(cd1.heat, 1, "equ1 heat");
+                        check.equals(cd2.heat, 0, "equ2 heat");
+                        check.equals(cd3.heat, 0, "equ3 heat");
                     },
                     check => {
-                        check.equals(equ1.cooldown.heat, 0, "equ1 heat");
-                        check.equals(equ2.cooldown.heat, 0, "equ2 heat");
-                        check.equals(equ3.cooldown.heat, 0, "equ3 heat");
+                        check.equals(cd1.heat, 0, "equ1 heat");
+                        check.equals(cd2.heat, 0, "equ2 heat");
+                        check.equals(cd3.heat, 0, "equ3 heat");
                     }
                 ]);
         });

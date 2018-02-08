@@ -4,23 +4,6 @@ module TK.SpaceTac.UI.Specs {
     testing("FleetCreationView", test => {
         let testgame = setupSingleView(test, () => [new FleetCreationView, []]);
 
-        test.case("has a basic equipment shop with infinite stock", check => {
-            let shop = testgame.view.infinite_shop;
-            let itemcount = shop.getStock().length;
-            check.equals(unique(shop.getStock().map(equ => equ.code)).length, itemcount);
-
-            let fleet = new Fleet();
-            fleet.credits = 100000;
-            let item = shop.getStock()[0];
-            shop.sellToFleet(item, fleet);
-            check.same(fleet.credits, 100000 - item.getPrice());
-            check.same(shop.getStock().length, itemcount);
-
-            shop.buyFromFleet(item, fleet);
-            check.equals(fleet.credits, 100000);
-            check.same(shop.getStock().length, itemcount);
-        })
-
         test.acase("validates the fleet creation", async check => {
             check.same(testgame.ui.session.isFleetCreated(), false, "no fleet created");
             check.same(testgame.ui.session.player.fleet.ships.length, 0, "empty session fleet");

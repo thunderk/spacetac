@@ -84,17 +84,16 @@ AI-piloted ships quickly colonized whole galaxies.
 
 A ship gains experience during battles. When reaching a certain amount of experience points,
 a ship will automatically level up (which is, gain 1 level). Each level up will grant
-upgrade points that may be spent on Attributes.
+upgrade points that may be spent to unlock options.
 
-A ship starts at level 1. There is no upper limit to level value (except 99, for display sake,
-but it may not be reached in a classic campaign).
+A ship starts at level 1, and may reach up to level 10.
 
 ### In-combat values (HSP)
 
 In combat, a ship's vitals are represented by the HSP system (Hull-Shield-Power):
 
 * **Hull** - Amount of damage that a ship can sustain before having to engage emergency stasis
-* **Shield** - Amount of damage that the shield equipments may absorb to protect the Hull
+* **Shield** - Amount of damage that the shields may absorb to protect the Hull
 * **Power** - Available action points (some actions require more power than others)
 
 These values will be changed by various effects (usage of equipments, sustained damage...).
@@ -115,54 +114,12 @@ Attributes represent a ship's ability to use its HSP system and weapons:
 * **Maneuverability** - Ability to move first and fast
 * **Precision** - Ability to target far and good
 
-These attributes are the sum of all currently applied effects (being permanent by an equipped item,
-or a temporary effect caused by a weapon or a drone).
+These attributes are the sum of all currently applied effects (permanent effects from the ship design,
+or temporary effects caused by a weapon or a drone).
 
-For example, a ship that equips a power generator with "power generation +3", but has a sticky effect
-of "power generation -1" from a previous weapon hit, will have an effective power generation of 2.
+## Battle actions
 
-### Skills
-
-Skills represent a ship's ability to use equipments:
-
-* **Materials** - Usage of physical materials such as bullets, shells...
-* **Photons** - Forces of light, and electromagnetic radiation
-* **Antimatter** - Manipulation of matter and antimatter particles
-* **Quantum** - Application of quantum uncertainty principle
-* **Gravity** - Interaction with gravitational forces
-* **Time** - Control of relativity's time properties
-
-Each equipment has minimal skill requirements to be used. For example, a weapon may require "materials >= 2"
-and "photons >= 3" to be equipped. A ship that does not meet these requirements will not be able to use 
-the equipment.
-
-Skills are defined by the player, using points given while leveling up.
-As for attributes, skill values may also be altered by equipments.
-
-If an equipped item has a requirement of "time skill >= 2", that the ship has "time skill" of exactly 2, and 
-that a temporary effect of "time skill -1" is active, the requirement is no longer fulfilled and the equipped 
-item is then temporarily disabled (no more effects and cannot be used), until the "time skill -1" effect is lifted.
-
-## Equipments
-
-### Overheat/Cooldown
-
-Equipments may overheat, and need to cooldown for some time, during which it cannot be used.
-
-If an equipment has "overheat 2 / cooldown 3", using it twice in the same turn will cause it to
-overheat. It then needs three "end of turns" to cool down and be available again. Using this equipment
-only once per turn is safe, and will never overheat it.
-
-If an equipment has multiple actions associated, any of these actions will increase the shared heat.
-
-*Not done yet :* Some equipments may have a "cumulative overheat", meaning that the heat is stored between turns, 
-cooling down 1 point at the end of turn.
-
-*Not done yet :* Some equipments may have a "stacked overheat", which
-is similar to "cumulative overheat", except it does not cool down at
-the end of turn (it will only start cooling down after being overheated).
-
-## Drones
+### Drones
 
 Drones are static objects, deployed by ships, that apply effects in a circular zone around themselves.
 
@@ -173,12 +130,13 @@ Drones are fully autonomous, and once deployed, are not controlled by their owne
 
 They are small and cannot be the direct target of weapons.
 
-*Not done yet :*  They are not affected by area effects,
-except for area damage and area effects specifically designed for drones.
+### Overheat/Cooldown
 
-## Dockyards
+Equipments may overheat, and need to cooldown for some time, during which it cannot be used.
 
-Dockyards are locations where ships can dock to buy or sell equipments, meet other ships and find jobs.
+If an action has "overheat 2 / cooldown 3", using it twice in the same turn will cause it to
+overheat. It then needs three "end of turns" to cool down and be available again. Using this action
+only once per turn is safe, and will never overheat it.
 
 ## Keyboard shortcuts
 

@@ -38,16 +38,11 @@ module TK.SpaceTac.Specs {
 
             mission.reward = 720;
             check.equals(mission.getRewardText(), "720 zotys");
-
-            mission.reward = new Equipment();
-            mission.reward.name = "Super Equipment";
-            check.equals(mission.getRewardText(), "Super Equipment Mk1");
         })
 
         test.case("gives the reward on completion", check => {
             let fleet = new Fleet();
             let ship = fleet.addShip();
-            ship.cargo_space = 5;
             fleet.credits = 150;
 
             let mission = new Mission(new Universe(), fleet);
@@ -58,14 +53,6 @@ module TK.SpaceTac.Specs {
 
             mission.setCompleted();
             check.equals(fleet.credits, 225);
-
-            mission = new Mission(new Universe(), fleet);
-            mission.reward = new Equipment();
-            check.equals(ship.cargo, []);
-            mission.setCompleted();
-            check.equals(mission.completed, true);
-            check.equals(fleet.credits, 225);
-            check.equals(ship.cargo, [mission.reward]);
         })
     })
 }

@@ -10,11 +10,11 @@ module TK.SpaceTac.UI.Specs {
 
             check.equals(sprite.effects_messages.children.length, 0);
 
-            sprite.displayAttributeChanged(new ShipAttributeDiff(ship, "power_generation", { cumulative: -4 }, {}));
+            sprite.displayAttributeChanged(new ShipAttributeDiff(ship, "power_capacity", { cumulative: -4 }, {}));
 
             check.equals(sprite.effects_messages.children.length, 1);
             let t1 = <Phaser.Text>sprite.effects_messages.getChildAt(0);
-            check.equals(t1.text, "power generation -4");
+            check.equals(t1.text, "power capacity -4");
         });
 
         test.case("adds sticky effects display", check => {

@@ -147,7 +147,7 @@ module TK.SpaceTac.UI {
             let factor = (zoom == 2) ? 1 : (zoom == 1 ? 5 : 15);
             this.view.tweens.create(this.label.scale).to({ x: factor, y: factor }, 500, Phaser.Easing.Cubic.InOut).start();
 
-            let position = (zoom == 2) ? { x: -560, y: 440 } : { x: 0, y: (zoom == 1 ? 180 : 100) * factor };
+            let position = (zoom == 2) ? { x: -680, y: 440 } : { x: 0, y: (zoom == 1 ? 180 : 100) * factor };
             this.view.tweens.create(this.label.position).to(position, 500, Phaser.Easing.Cubic.InOut).start();
         }
     }

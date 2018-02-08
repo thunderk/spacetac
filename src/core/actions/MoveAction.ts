@@ -1,23 +1,45 @@
 module TK.SpaceTac {
+    /** 
+     * Configuration of a trigger action
+     */
+    export interface MoveActionConfig {
+        // Distance allowed for each power point (raw, without applying maneuvrability)
+        distance_per_power: number
+        // Safety distance from other ships
+        safety_distance: number
+        // Impact of maneuvrability (in % of distance)
+        maneuvrability_factor: number
+    }
+
     /**
      * Action to move the ship to a specific location
      */
-    export class MoveAction extends BaseAction {
-        constructor(
-            // Mandatory equipment
-            readonly equipment: Equipment,
-            // Distance allowed for each power point (raw, without applying maneuvrability)
-            readonly distance_per_power = 0,
-            // Safety distance from other ships
-            readonly safety_distance = 120,
-            // Impact of maneuvrability (in % of distance)
-            readonly maneuvrability_factor = 0
-        ) {
-            super("move", equipment);
+    export class MoveAction extends BaseAction implements MoveActionConfig {
+        distance_per_power = 0
+        safety_distance = 120
+        maneuvrability_factor = 0
+
+        constructor(name = "Engine", config?: Partial<MoveActionConfig>, code = "move") {
+            super(name, code);
+
+            if (config) {
+                this.configureEngine(config);
+            }
         }
 
-        getVerb(): string {
+        /** 
+         * Configure the engine
+         */
+        configureEngine(config: Partial<MoveActionConfig>): void {
+            copyfields(config, this);
+        }
+
+        getVerb(ship: Ship): string {
             return "Move";
+        }
+
+        getTitle(ship: Ship): string {
+            return `Use ${this.name}`;
         }
 
         getTargettingMode(ship: Ship): ActionTargettingMode {
@@ -121,7 +143,7 @@ module TK.SpaceTac {
         protected getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
             let angle = (arenaDistance(target, ship.location) < 0.00001) ? ship.arena_angle : arenaAngle(ship.location, target);
             let destination = new ArenaLocationAngle(target.x, target.y, angle);
-            return [new ShipMoveDiff(ship, ship.location, destination, this.equipment)];
+            return [new ShipMoveDiff(ship, ship.location, destination, this)];
         }
 
         getEffectsDescription(): string {

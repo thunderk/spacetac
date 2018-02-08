@@ -1,9 +1,4 @@
 module TK.SpaceTac.UI {
-    export type CharacterEquipmentDrop = {
-        message: string
-        callback: (equipment: Equipment) => any
-    }
-
     /**
      * Character sheet, displaying ship characteristics
      */
@@ -18,153 +13,236 @@ module TK.SpaceTac.UI {
         builder: UIBuilder
 
         // X positions
-        xshown: number
-        xhidden: number
+        xshown = 0
+        xhidden = -2000
+
+        // Groups
+        group_portraits: Phaser.Group
+        group_attributes: Phaser.Image
+        group_actions: Phaser.Image
+        group_upgrades: Phaser.Group
 
         // Close button
         close_button: Phaser.Button
 
         // Currently displayed fleet
-        fleet!: Fleet
+        fleet?: Fleet
 
         // Currently displayed ship
-        ship!: Ship
+        ship?: Ship
 
-        // Ship name
-        ship_name: Phaser.Text
+        // Variable data
+        image_portrait: Phaser.Image
+        text_model: Phaser.Text
+        text_description: Phaser.Text
+        text_name: Phaser.Text
+        text_level: Phaser.Text
+        text_upgrade_points: Phaser.Text
+        valuebar_experience: ValueBar
 
-        // Ship level
-        ship_level: Phaser.Text
-        ship_experience: ValueBar
-
-        // Ship skill upgrade
-        ship_upgrade_points: Phaser.Text
-        layer_upgrades: Phaser.Group
-
-        // Ship slots
-        ship_slots: Phaser.Group
-
-        // Ship cargo
-        ship_cargo: Phaser.Group
-
-        // Dynamic texts
-        mode_title: UIText
-        action_message: UIText
-
-        // Loot items
-        loot_slots: Phaser.Group
-        loot_items: Equipment[] = []
-        loot_page = 0
-        loot_next: Phaser.Button
-        loot_prev: Phaser.Button
-
-        // Shop
-        shop: Shop | null = null
-
-        // Fleet portraits
-        members: CharacterFleetMember[] = []
-        portraits: Phaser.Group
-
-        // Layers
-        layer_attibutes: Phaser.Group
-        layer_equipments: Phaser.Group
-
-        // Credits
-        credits: Phaser.Text
-
-        // Attributes and skills
-        attributes: { [key: string]: Phaser.Text } = {}
-
-        constructor(view: BaseView, xhidden = -2000, xshown = 0, onclose?: Function) {
+        constructor(view: BaseView, onclose?: Function) {
             super(view.game, 0, 0, "character-sheet");
 
             this.view = view;
-            this.builder = new UIBuilder(view, this);
+            this.builder = new UIBuilder(view, this).styled({ color: "#e7ebf0", size: 16, shadow: true });
 
-            this.x = xhidden;
-            this.xshown = xshown;
-            this.xhidden = xhidden;
+            this.xhidden = -this.view.getWidth();
+            this.x = this.xhidden;
             this.inputEnabled = true;
 
             if (!onclose) {
                 onclose = () => this.hide();
             }
-            this.close_button = this.builder.button("character-close", 1920, 0, onclose, "Close the character sheet");
+            this.close_button = this.builder.button("character-close-button", 1920, 0, onclose, "Close the character sheet");
             this.close_button.anchor.set(1, 0);
 
-            this.builder.text("Cargo", 1566, 36, { size: 24 });
-            this.builder.text("Level", 420, 1052, { size: 24 });
-            this.builder.text("Available points", 894, 1052, { size: 24 });
+            this.image_portrait = this.builder.image("translucent", 435, 271, true);
 
-            this.ship_name = this.builder.text("", 758, 48, { size: 30 });
-            this.ship_level = this.builder.text("", 554, 1052, { size: 30 });
-            this.ship_upgrade_points = this.builder.text("", 1068, 1052, { size: 30 });
-            this.ship_slots = this.builder.group("slots", 372, 120);
-            this.ship_cargo = this.builder.group("cargo", 1240, 86);
-            this.loot_slots = this.builder.group("loot", 1270, 670);
-            this.loot_slots.visible = false;
-            this.portraits = this.builder.group("portraits", 152, 0);
-            this.credits = this.builder.text("", 136, 38, { size: 30 });
-            this.mode_title = this.builder.text("", 1566, 648, { size: 18 });
-            this.action_message = this.builder.text("", 1566, 1056, { size: 18 });
-            this.loot_next = this.builder.button("common-arrow-right", 1890, 850, () => this.paginate(1), "Show next items");
-            this.loot_next.anchor.set(0.5);
-            this.loot_prev = this.builder.button("common-arrow-left", 1238, 850, () => this.paginate(-1), "Show previous items");
-            this.loot_prev.anchor.set(0.5);
+            this.builder.image("character-entry", 28, 740);
 
-            this.ship_experience = new ValueBar(this.view, "character-experience", ValueBarOrientation.EAST, 516, 1067);
-            this.addChild(this.ship_experience.node);
+            this.group_portraits = this.builder.group("portraits", 90, 755);
 
-            this.layer_attibutes = this.builder.group("attributes");
-            this.layer_upgrades = this.builder.group("upgrades");
-            this.layer_equipments = this.builder.group("equipments");
+            let model_bg = this.builder.image("character-ship-model", 434, 500, true);
+            this.text_model = this.builder.in(model_bg).text("", 0, 0, { size: 28 });
 
-            let x1 = 402;
-            let x2 = 802;
-            let y = 640;
-            this.addAttribute("hull_capacity", x1, y);
-            this.addAttribute("shield_capacity", x1, y + 64);
-            this.addAttribute("power_capacity", x1, y + 128);
-            this.addAttribute("power_generation", x1, y + 192);
-            this.addAttribute("maneuvrability", x1, y + 256);
-            this.addAttribute("precision", x1, y + 320);
-            this.addAttribute("skill_materials", x2, y);
-            this.addAttribute("skill_photons", x2, y + 64);
-            this.addAttribute("skill_antimatter", x2, y + 128);
-            this.addAttribute("skill_quantum", x2, y + 192);
-            this.addAttribute("skill_gravity", x2, y + 256);
-            this.addAttribute("skill_time", x2, y + 320);
+            let description_bg = this.builder.image("character-ship-description", 434, 654, true);
+            this.text_description = this.builder.in(description_bg).text("", 0, 0, { color: "#a0afc3", width: 510 });
+
+            this.group_attributes = this.builder.image("character-ship-column", 30, 30);
+            this.group_actions = this.builder.image("character-ship-column", 698, 30);
+
+            let name_bg = this.builder.image("character-name-display", 434, 940, true);
+            this.text_name = this.builder.in(name_bg).text("", 0, 0, { size: 28 });
+
+            this.builder.button("character-name-button", 656, 890, () => this.renamePersonality(), "Rename personality");
+
+            let points_bg = this.builder.image("character-level-upgrades", 582, 986);
+            this.builder.in(points_bg, builder => {
+                builder.text("Upgrade points", 46, 10, { center: false, vcenter: false });
+                builder.image("character-upgrade-point", 147, 59, true);
+            });
+            this.text_upgrade_points = this.builder.in(points_bg).text("", 106, 60, { size: 28 });
+
+            let level_bg = this.builder.image("character-level-display", 434, 1032, true);
+            this.text_level = this.builder.in(level_bg).text("", 0, 4, { size: 28 });
+            this.valuebar_experience = this.builder.in(level_bg).valuebar("character-level-experience", -level_bg.width * 0.5, -level_bg.height * 0.5);
+
+            this.group_upgrades = this.builder.group("upgrades");
+
+            this.refreshUpgrades();
+            this.refreshAttributes();
+            this.refreshActions();
         }
 
         /**
          * Check if the sheet should be interactive
          */
         isInteractive(): boolean {
-            return this.ship ? (!this.ship.critical && this.interactive) : false;
+            return this.ship ? (this.interactive && !this.ship.critical) : false;
         }
 
         /**
-         * Add an attribute display
+         * Open a dialog to rename the ship's personality
          */
-        private addAttribute(attribute: keyof ShipAttributes, x: number, y: number) {
+        renamePersonality(): void {
+            // TODO
+        }
+
+        /**
+         * Refresh the ship information display
+         */
+        private refreshShipInfo(): void {
+            if (this.ship) {
+                let ship = this.ship;
+                this.builder.change(this.image_portrait, `ship-${ship.model.code}-portrait`);
+                this.text_name.setText(ship.name || "");
+                this.text_model.setText(ship.model.name);
+                this.text_level.setText(`Level ${ship.level.get()}`);
+                this.text_description.setText(ship.model.getDescription());
+                this.text_upgrade_points.setText(`${ship.getAvailableUpgradePoints()}`);
+                this.valuebar_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
+            }
+        }
+
+        /**
+         * Refresh the upgrades display
+         */
+        private refreshUpgrades(): void {
+            let builder = this.builder.in(this.group_upgrades);
+            builder.clear();
+
+            if (!this.ship) {
+                return;
+            }
             let ship = this.ship;
 
-            let builder = this.builder.in(this.layer_attibutes);
+            let initial = builder.image("character-initial", 970, 30);
 
-            let button = builder.button("character-attribute", x, y, undefined, () => ship.getAttributeDescription(attribute));
+            // Base equipment (level 1)
+            builder.styled({ center: false, vcenter: false }).in(initial, builder => {
+                builder.text("Base equipment", 32, 8, { color: "#e2e9d1" });
 
-            let attrname = capitalize(SHIP_VALUES_NAMES[attribute]);
-            builder.in(button).text(attrname, 120, 22, { size: 20, color: "#c9d8ef", stroke_width: 1, stroke_color: "#395665" });
+                builder.in(builder.group("attributes"), builder => {
+                    let effects = cfilter(ship.model.getEffects(1, []), AttributeEffect);
+                    effects.forEach(effect => {
+                        let button = builder.button(`attribute-${effect.attrcode}`, 0, 8, undefined,
+                            `${capitalize(SHIP_VALUES_NAMES[effect.attrcode])} - ${SHIP_VALUES_DESCRIPTIONS[effect.attrcode]}`);
 
-            let value = builder.in(button).text("", 264, 24, { size: 18, bold: true });
+                        builder.in(button, builder => {
+                            builder.text(`${effect.value}`, 56, 8, { size: 22 });
+                        });
+                    });
+                    builder.distribute("x", 236, 870);
+                });
 
-            this.attributes[attribute] = value;
+                builder.in(builder.group("actions"), builder => {
+                    let actions = ship.model.getActions(1, []);
+                    actions.forEach(action => {
+                        let button = builder.button("translucent", 0, 66, undefined, action.getEffectsDescription());
 
-            if (SHIP_SKILLS.hasOwnProperty(attribute)) {
-                this.builder.in(this.layer_upgrades).button("character-skill-upgrade", x + 292, y, () => {
-                    ship.upgradeSkill(<keyof ShipSkills>attribute);
-                    this.refresh();
-                }, `Spend one point to upgrade ${attrname}`);
+                        builder.in(button, builder => {
+                            let icon = builder.image(`action-${action.code}`);
+                            icon.scale.set(0.1875);
+                            if (actions.length < 5) {
+                                builder.text(`${action.name}`, 56, 12, { size: 16 });
+                            }
+                        });
+                    });
+                    builder.distribute("x", 28, 888);
+                });
+            });
+
+            // Level number
+            range(10).forEach(i => {
+                builder.text(`${i + 1}`, 920, i == 0 ? 92 : (110 + i * 100), {
+                    center: true,
+                    vcenter: true,
+                    size: 28,
+                    color: ship.level.get() >= (i + 1) ? "#e7ebf0" : "#808285"
+                });
+            });
+
+            // Level upgrades
+            range(9).forEach(i => {
+                builder.image("character-level-separator", 844, 154 + i * 100);
+
+                let level = i + 2;
+                let upgrades = ship.model.getLevelUpgrades(level);
+                upgrades.forEach((upgrade, j) => {
+                    let onchange = (selected: boolean) => {
+                        this.refreshShipInfo();  // TODO Only upgrade points
+                        this.refreshActions();
+                        this.refreshAttributes();
+                    };
+                    new CharacterUpgrade(ship, upgrade, level).draw(builder, 970 + j * 315, 170 + i * 100,
+                        this.isInteractive() ? onchange : undefined);
+                });
+            });
+        }
+
+        /**
+         * Refresh the attributes display
+         */
+        private refreshAttributes(): void {
+            let builder = this.builder.in(this.group_attributes);
+            builder.clear();
+
+            builder.text("Attributes", 74, 20, { color: "#a0afc3" });
+
+            if (this.ship) {
+                let ship = this.ship;
+                builder.in(builder.group("items"), builder => {
+                    keys(SHIP_ATTRIBUTES).forEach(attribute => {
+                        let button = builder.button(`attribute-${attribute}`, 24, 0, undefined,
+                            ship.getAttributeDescription(attribute));
+
+                        builder.in(button).text(`${ship.getAttribute(attribute)}`, 78, 27, { size: 22 });
+                    });
+                    builder.distribute("y", 40, 688);
+                });
+            }
+        }
+
+        /**
+         * Refresh the actions display
+         */
+        private refreshActions(): void {
+            let builder = this.builder.in(this.group_actions);
+            builder.clear();
+
+            builder.text("Actions", 74, 20, { color: "#a0afc3" });
+
+            if (this.ship) {
+                let ship = this.ship;
+                builder.in(builder.group("items"), builder => {
+                    let actions = ship.actions.listAll().filter(action => !(action instanceof EndTurnAction));
+                    actions.forEach(action => {
+                        let button = builder.button(`action-${action.code}`, 24, 0, undefined,
+                            action.getEffectsDescription());
+                        button.scale.set(0.375);
+                    });
+                    builder.distribute("y", 40, 688);
+                });
             }
         }
 
@@ -172,29 +250,25 @@ module TK.SpaceTac.UI {
          * Update the fleet sidebar
          */
         updateFleet(fleet: Fleet) {
-            if (fleet != this.fleet || fleet.ships.length != this.members.length) {
-                this.portraits.removeAll(true);
-                this.members = [];
+            if (fleet !== this.fleet || fleet.ships.length != this.group_portraits.length) {
+                destroyChildren(this.group_portraits);
                 this.fleet = fleet;
+
+                let builder = this.builder.in(this.group_portraits);
+                fleet.ships.forEach((ship, idx) => {
+                    let button: UIButton
+                    button = new CharacterPortrait(ship).draw(builder, 64 + idx * 140, 64, () => {
+                        if (button) {
+                            builder.select(button);
+                            this.ship = ship;
+                            this.refreshShipInfo();
+                            this.refreshActions();
+                            this.refreshAttributes();
+                            this.refreshUpgrades();
+                        }
+                    });
+                });
             }
-
-            fleet.ships.forEach((ship, idx) => {
-                let portrait = this.members[idx];
-                if (!portrait) {
-                    portrait = new CharacterFleetMember(this, 0, idx * 320, ship);
-                    this.portraits.add(portrait);
-                    this.members.push(portrait);
-                }
-                portrait.setSelected(ship == this.ship);
-            });
-
-            this.credits.setText(fleet.credits.toString());
-
-            this.portraits.scale.set(980 * this.portraits.scale.x / this.portraits.height, 980 * this.portraits.scale.y / this.portraits.height);
-            if (this.portraits.width > 308) {
-                this.portraits.scale.set(308 * this.portraits.scale.x / this.portraits.width, 308 * this.portraits.scale.y / this.portraits.width);
-            }
-            this.portraits.y = 80 + 160 * this.portraits.scale.x;
         }
 
         /**
@@ -213,59 +287,12 @@ module TK.SpaceTac.UI {
                 this.interactive = interactive;
             }
 
-            this.layer_equipments.removeAll(true);
-            this.setActionMessage();
-
-            let upgrade_points = ship.getAvailableUpgradePoints();
-
-            this.ship_name.setText(ship.getName(false));
-            this.ship_level.setText(ship.level.get().toString());
-            this.ship_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
-            this.ship_upgrade_points.setText(upgrade_points.toString());
-            this.layer_upgrades.visible = this.isInteractive() && upgrade_points > 0;
-
-            iteritems(<any>ship.attributes, (key, value: ShipAttribute) => {
-                let text = this.attributes[key];
-                if (text) {
-                    text.setText(value.get().toString());
-                }
-            });
-
-            let slotsinfo = CharacterSheet.getSlotPositions(ship.slots.length, 800, 454, 200, 200);
-            this.ship_slots.removeAll(true);
-            ship.slots.forEach((slot, idx) => {
-                let slot_display = new CharacterSlot(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y, slot.type);
-                slot_display.scale.set(slotsinfo.scaling, slotsinfo.scaling);
-                slot_display.alpha = this.isInteractive() ? 1 : 0.5;
-                this.ship_slots.add(slot_display);
-
-                if (slot.attached) {
-                    let equipment = new CharacterEquipment(this, slot.attached, slot_display);
-                    this.layer_equipments.add(equipment);
-                }
-            });
-
-            slotsinfo = CharacterSheet.getSlotPositions(ship.cargo_space, 638, 496, 200, 200);
-            this.ship_cargo.removeAll(true);
-            range(ship.cargo_space).forEach(idx => {
-                let cargo_slot = new CharacterCargo(this, slotsinfo.positions[idx].x, slotsinfo.positions[idx].y);
-                cargo_slot.scale.set(slotsinfo.scaling, slotsinfo.scaling);
-                cargo_slot.alpha = this.isInteractive() ? 1 : 0.5;
-                this.ship_cargo.add(cargo_slot);
-
-                if (idx < ship.cargo.length) {
-                    let equipment = new CharacterEquipment(this, ship.cargo[idx], cargo_slot);
-                    this.layer_equipments.add(equipment);
-                }
-            });
-
-            this.updateLoot();
+            this.refreshShipInfo();
+            this.refreshUpgrades();
+            this.refreshAttributes();
+            this.refreshActions();
 
             this.updateFleet(ship.fleet);
-
-            if (this.shop) {
-                this.updatePrices(this.shop);
-            }
 
             if (sound) {
                 this.view.audio.playOnce("ui-dialog-open");
@@ -282,14 +309,6 @@ module TK.SpaceTac.UI {
          * Hide the sheet
          */
         hide(animate = true) {
-            this.loot_page = 0;
-            this.loot_items = [];
-            this.shop = null;
-            this.loot_slots.visible = false;
-            this.mode_title.visible = false;
-
-            this.members.forEach(member => member.setSelected(false));
-
             this.view.audio.playOnce("ui-dialog-close");
 
             if (animate) {
@@ -300,146 +319,12 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Set the action message (mainly used while dragging equipment to explain what is happening)
-         */
-        setActionMessage(message = "", color = "#ffffff"): void {
-            if (message != this.action_message.text) {
-                this.action_message.setText(message);
-                this.action_message.fill = color;
-            }
-        }
-
-        /**
-         * Set the list of lootable equipment
-         * 
-         * The list of equipments may be altered if items are taken from it
-         * 
-         * This list will be shown until sheet is closed
-         */
-        setLoot(loot: Equipment[]) {
-            this.loot_page = 0;
-
-            this.loot_items = loot;
-            this.updateLoot();
-            this.loot_slots.visible = true;
-
-            this.mode_title.setText("Lootable items");
-            this.mode_title.visible = true;
-        }
-
-        /**
-         * Set the displayed shop
-         * 
-         * This shop will be shown until sheet is closed
-         */
-        setShop(shop: Shop, title = "Dockyard's equipment") {
-            this.loot_page = 0;
-
-            this.shop = shop;
-            this.updateLoot();
-            this.loot_slots.visible = true;
-
-            this.mode_title.setText(title);
-            this.mode_title.visible = true;
-        }
-
-        /**
-         * Update the price tags on each equipment, for a specific shop
-         */
-        updatePrices(shop: Shop) {
-            this.layer_equipments.children.forEach(equipement => {
-                if (equipement instanceof CharacterEquipment) {
-                    equipement.setPrice(shop.getPrice(equipement.item));
-                }
-            });
-        }
-
-        /**
-         * Change the page displayed in loot/shop section
-         */
-        paginate(offset: number) {
-            let items = this.shop ? this.shop.getStock() : this.loot_items;
-            this.loot_page = clamp(this.loot_page + offset, 0, 1 + Math.floor(items.length / 12));
-            this.refresh();
-        }
-
-        /**
-         * Update the loot slots
-         */
-        private updateLoot() {
-            let per_page = 12;
-            this.loot_slots.removeAll(true);
-
-            let info = CharacterSheet.getSlotPositions(12, 588, 354, 196, 196);
-            let items = this.shop ? this.shop.getStock() : this.loot_items;
-            range(per_page).forEach(idx => {
-                let loot_slot = this.shop ? new CharacterShopSlot(this, info.positions[idx].x, info.positions[idx].y) : new CharacterLootSlot(this, info.positions[idx].x, info.positions[idx].y);
-                loot_slot.scale.set(info.scaling, info.scaling);
-                this.loot_slots.add(loot_slot);
-
-                idx += per_page * this.loot_page;
-
-                if (idx < items.length) {
-                    let equipment = new CharacterEquipment(this, items[idx], loot_slot);
-                    this.layer_equipments.add(equipment);
-                }
-            });
-
-            this.view.animations.setVisible(this.loot_prev, this.loot_page > 0, 200);
-            this.view.animations.setVisible(this.loot_next, (this.loot_page + 1) * per_page < items.length, 200);
-        }
-
-        /**
-         * Get an iterator over equipment containers
-         */
-        iEquipmentContainers(): Iterator<CharacterEquipmentContainer> {
-            let candidates = ichain<CharacterEquipmentContainer>(
-                iarray(<CharacterFleetMember[]>this.portraits.children),
-                iarray(<CharacterSlot[]>this.ship_slots.children),
-                iarray(<CharacterCargo[]>this.ship_cargo.children),
-            );
-
-            if (this.loot_slots.visible) {
-                candidates = ichain(candidates, iarray(<CharacterLootSlot[]>this.loot_slots.children));
-            }
-
-            return candidates;
-        }
-
-        /**
          * Refresh the sheet display
          */
         refresh() {
             if (this.ship) {
                 this.show(this.ship, false, false);
             }
-        }
-
-        /**
-         * Get the positions and scaling for slots, to fit in a rectangle group.
-         */
-        static getSlotPositions(count: number, areawidth: number, areaheight: number, slotwidth: number, slotheight: number): { positions: { x: number, y: number }[], scaling: number } {
-            // Find grid size
-            let rows = 2;
-            let columns = 3;
-            while (count > rows * columns) {
-                rows += 1;
-                columns += 1;
-            }
-
-            // Find scaling
-            let scaling = 1;
-            while (slotwidth * scaling * columns > areawidth || slotheight * scaling * rows > areaheight) {
-                scaling *= 0.99;
-            }
-
-            // Position
-            let positions = range(count).map(i => {
-                let row = Math.floor(i / columns);
-                let column = i % columns;
-                return { x: column * (areawidth - slotwidth * scaling) / (columns - 1), y: row * (areaheight - slotheight * scaling) / (rows - 1) };
-            });
-            return { positions: positions, scaling: scaling };
         }
     }
 }

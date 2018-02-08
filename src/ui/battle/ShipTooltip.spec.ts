@@ -5,11 +5,10 @@ module TK.SpaceTac.UI.Specs {
         test.case("fills ship details", check => {
             let tooltip = new ShipTooltip(testgame.view);
             let ship = testgame.view.battle.play_order[2];
+            TestTools.setShipModel(ship, 58, 140, 12);
             ship.name = "Fury";
-            ship.model = new ShipModel("fake", "Fury");
-            ship.listEquipment().forEach(equ => equ.detach());
-            TestTools.setShipHP(ship, 58, 140);
-            TestTools.setShipAP(ship, 12);
+            ship.model = new BaseModel("fake", "Fury");
+            check.patch(ship.model, "getDescription", () => "Super ship model !");
             TestTools.addWeapon(ship, 50);
             TestTools.setAttribute(ship, "precision", 7);
             TestTools.setAttribute(ship, "maneuvrability", 3);
@@ -24,12 +23,12 @@ module TK.SpaceTac.UI.Specs {
             let images = collectImages((<any>tooltip).container);
             let texts = collectTexts((<any>tooltip).container);
             check.contains(images, "ship-fake-portrait");
-            check.contains(images, "equipment-equipment");
+            check.contains(images, "action-weapon");
             check.equals(texts, [
                 "Level 1 Fury", "Plays in 2 turns",
                 "7", "3", "9", "max", "12", "57", "max", "58", "100", "max", "140",
-                "Active effects", "• hull capacity +50", "• damage -15% for 3 turns", "• limit precision to 10",
-                "Weapons", "equipment Mk1"
+                "Weapon", "• hull capacity +50", "• damage -15% for 3 turns", "• limit precision to 10",
+                "Super ship model !"
             ]);
         });
     });

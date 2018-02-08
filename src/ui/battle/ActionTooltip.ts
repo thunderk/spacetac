@@ -9,10 +9,10 @@ module TK.SpaceTac.UI {
         static fill(filler: TooltipBuilder, ship: Ship, action: BaseAction, position: number) {
             let builder = filler.styled({ size: 20 });
 
-            let icon = builder.image([`equipment-${action.equipment ? action.equipment.code : "---"}`, `action-${action.code}`]);
+            let icon = builder.image(`action-${action.code}`);
             icon.scale.set(0.5);
 
-            builder.text(action.equipment ? action.equipment.name : action.getVerb(), 150, 0, { size: 24 });
+            builder.text(action.getTitle(ship), 150, 0, { size: 24 });
 
             let cost = "";
             if (action instanceof MoveAction) {
@@ -37,8 +37,8 @@ module TK.SpaceTac.UI {
                 builder.text(cost, 150, 40, { color: "#ffdd4b" });
             }
 
-            if (action.equipment && action.equipment.cooldown.overheat) {
-                let cooldown = action.equipment.cooldown;
+            let cooldown = ship.actions.getCooldown(action);
+            if (cooldown.overheat) {
                 if (cooldown.heat > 0) {
                     builder.text("Cooling down ...", 150, 80, { color: "#d8894d" });
                 } else if (cooldown.willOverheat() && cost != "Not enough power") {
@@ -49,7 +49,7 @@ module TK.SpaceTac.UI {
                         builder.text("Unavailable until next turn if used", 150, 80, { color: "#d8894d" });
                     }
                 }
-            } else if (action instanceof ToggleAction && action.activated) {
+            } else if (action instanceof ToggleAction && ship.actions.isToggled(action)) {
                 builder.text(`Activated`, 150, 80, { color: "#dbe748" });
             }
 

@@ -258,8 +258,8 @@ module TK.SpaceTac.UI {
                         }
                     } else {
                         let engine = new MoveFireSimulator(this.ship).findBestEngine();
-                        if (engine && engine.action) {
-                            move_action = <MoveAction>engine.action;
+                        if (engine) {
+                            move_action = engine;
                         }
                     }
                     if (move_action) {
@@ -295,9 +295,9 @@ module TK.SpaceTac.UI {
         /**
          * Set the current targetting action, or null to stop targetting
          */
-        setAction(action: BaseAction | null, mode?: ActionTargettingMode): void {
-            if (action && action.equipment && action.equipment.attached_to && action.equipment.attached_to.ship) {
-                this.ship = action.equipment.attached_to.ship;
+        setAction(ship: Ship | null, action: BaseAction | null, mode?: ActionTargettingMode): void {
+            if (action && ship && ship.actions.getById(action.id)) {
+                this.ship = ship;
                 this.action = action;
                 this.mode = (typeof mode == "undefined") ? action.getTargettingMode(this.ship) : mode;
 

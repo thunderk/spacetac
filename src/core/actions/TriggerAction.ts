@@ -1,34 +1,56 @@
 /// <reference path="BaseAction.ts"/>
 
 module TK.SpaceTac {
+    /** 
+     * Configuration of a trigger action
+     */
+    export interface TriggerActionConfig {
+        // Effects applied on target
+        effects: BaseEffect[]
+        // Power consumption
+        power: number
+        // Maximal range of the weapon (distance to target)
+        range: number
+        // Radius around the target that will be impacted
+        blast: number
+        // Angle of the area between the source and the target that will be impacted
+        angle: number
+        // Influence of "precision" of firing ship (0..100)
+        aim: number
+        // Influence of "maneuvrability" of impacted ship (0..100)
+        evasion: number
+        // Influence of luck (0..100)
+        luck: number
+    }
+
     /**
      * Action to trigger an equipment (for example a weapon), with an optional target
      * 
      * The target will be resolved as a list of ships, on which all the action effects will be applied
      */
-    export class TriggerAction extends BaseAction {
-        constructor(
-            // Mandatory equipment
-            readonly equipment: Equipment,
-            // Effects applied on target
-            readonly effects: BaseEffect[] = [],
-            // Power consumption
-            readonly power = 1,
-            // Maximal range of the weapon (distance to target)
-            readonly range = 0,
-            // Radius around the target that will be impacted
-            readonly blast = 0,
-            // Angle of the area between the source and the target that will be impacted
-            readonly angle = 0,
-            // Influence of "precision" of firing ship (0..100)
-            readonly aim = 0,
-            // Influence of "maneuvrability" of impacted ship (0..100)
-            readonly evasion = 0,
-            // Influence of luck
-            readonly luck = 0,
-            code = `fire-${equipment.code}`
-        ) {
-            super(code, equipment);
+    export class TriggerAction extends BaseAction implements TriggerActionConfig {
+        effects: BaseEffect[] = []
+        power = 1
+        range = 0
+        blast = 0
+        angle = 0
+        aim = 0
+        evasion = 0
+        luck = 0
+
+        constructor(name?: string, config?: Partial<TriggerActionConfig>, code?: string) {
+            super(name, code);
+
+            if (config) {
+                this.configureTrigger(config);
+            }
+        }
+
+        /**
+         * Configure the triggering and effects of this action
+         */
+        configureTrigger(config: Partial<TriggerActionConfig>) {
+            copyfields(config, this);
         }
 
         getVerb(): string {
@@ -180,13 +202,13 @@ module TK.SpaceTac {
                 let angle = arenaAngle(ship.location, target);
                 if (Math.abs(angularDifference(angle, ship.arena_angle)) > 1e-6) {
                     let destination = new ArenaLocationAngle(ship.arena_x, ship.arena_y, angle);
-                    let engine = first(ship.listEquipment(SlotType.Engine), () => true);
+                    let engine = <MoveAction | null>first(ship.actions.listAll(), action => action instanceof MoveAction);
                     result.push(new ShipMoveDiff(ship, ship.location, destination, engine));
                 }
 
                 // Fire a projectile
-                if (this.equipment && this.equipment.slot_type == SlotType.Weapon) {
-                    result.push(new ProjectileFiredDiff(ship, this.equipment, target));
+                if (this.range) {
+                    result.push(new ProjectileFiredDiff(ship, this, target));
                 }
             }
 

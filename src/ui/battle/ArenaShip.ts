@@ -210,15 +210,13 @@ module TK.SpaceTac.UI {
             } else if (diff instanceof ShipActionToggleDiff) {
                 return {
                     foreground: async (animate, timer) => {
-                        let action = this.ship.getAction(diff.action);
-                        if (action && action.equipment) {
-                            let equname = action.equipment.name;
-
+                        let action = this.ship.actions.getById(diff.action);
+                        if (action) {
                             if (animate) {
                                 if (diff.activated) {
-                                    await this.displayEffect(`${equname} ON`, true);
+                                    await this.displayEffect(`${action.name} ON`, true);
                                 } else {
-                                    await this.displayEffect(`${equname} OFF`, false);
+                                    await this.displayEffect(`${action.name} OFF`, false);
                                 }
                             }
 
@@ -228,24 +226,24 @@ module TK.SpaceTac.UI {
                     }
                 }
             } else if (diff instanceof ShipActionUsedDiff) {
-                let action = this.ship.getAction(diff.action);
+                let action = this.ship.actions.getById(diff.action);
                 if (action) {
-                    if (!(action instanceof ToggleAction) && action.equipment) {
-                        let equipment = action.equipment;
-                        return {
-                            foreground: async (animate, timer) => {
-                                if (animate) {
-                                    await this.displayEffect(equipment.name, true);
-                                    await timer.sleep(300);
-                                }
-                            }
-                        }
-                    } else if (action instanceof EndTurnAction) {
+                    if (action instanceof EndTurnAction) {
                         return {
                             foreground: async (animate, timer) => {
                                 if (animate) {
                                     await this.displayEffect("End turn", true);
                                     await timer.sleep(500);
+                                }
+                            }
+                        }
+                    } else if (!(action instanceof ToggleAction)) {
+                        let action_name = action.name;
+                        return {
+                            foreground: async (animate, timer) => {
+                                if (animate) {
+                                    await this.displayEffect(action_name, true);
+                                    await timer.sleep(300);
                                 }
                             }
                         }
@@ -408,13 +406,11 @@ module TK.SpaceTac.UI {
          */
         updateEffectsRadius(): void {
             this.effects_radius.clear();
-            this.ship.getAvailableActions().forEach(action => {
-                if (action instanceof ToggleAction && action.activated) {
-                    this.effects_radius.lineStyle(2, 0xe9f2f9, 0.3);
-                    this.effects_radius.beginFill(0xe9f2f9, 0.0);
-                    this.effects_radius.drawCircle(0, 0, action.radius * 2);
-                    this.effects_radius.endFill();
-                }
+            this.ship.actions.listToggled().forEach(action => {
+                this.effects_radius.lineStyle(2, 0xe9f2f9, 0.3);
+                this.effects_radius.beginFill(0xe9f2f9, 0.0);
+                this.effects_radius.drawCircle(0, 0, action.radius * 2);
+                this.effects_radius.endFill();
             });
         }
     }

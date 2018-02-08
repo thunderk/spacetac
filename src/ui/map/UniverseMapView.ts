@@ -107,26 +107,13 @@ module TK.SpaceTac.UI {
             this.missions.setPosition(20, 720);
             this.missions.moveToLayer(this.layer_overlay);
 
-            this.zoom_in = new Phaser.Button(this.game, 1540, 172, "map-buttons", () => this.setZoom(this.zoom + 1), undefined, 3, 0);
-            this.zoom_in.anchor.set(0.5, 0.5);
-            UIComponent.setButtonSound(this.zoom_in);
-            this.layer_overlay.add(this.zoom_in);
-            this.tooltip.bindStaticText(this.zoom_in, "Zoom in");
-            this.zoom_out = new Phaser.Button(this.game, 1540, 958, "map-buttons", () => this.setZoom(this.zoom - 1), undefined, 4, 1);
-            this.zoom_out.anchor.set(0.5, 0.5);
-            UIComponent.setButtonSound(this.zoom_out);
-            this.layer_overlay.add(this.zoom_out);
-            this.tooltip.bindStaticText(this.zoom_out, "Zoom out");
-            this.button_options = new Phaser.Button(this.game, 1436, 69, "map-buttons", () => this.showOptions(), undefined, 5, 2);
-            this.button_options.angle = -90;
-            this.button_options.anchor.set(0.5, 0.5);
-            UIComponent.setButtonSound(this.button_options);
-            this.layer_overlay.add(this.button_options);
-            this.tooltip.bindStaticText(this.button_options, "Game options");
+            builder.in(this.layer_overlay, builder => {
+                this.zoom_in = builder.button("map-zoom-in", 1787, 54, () => this.setZoom(this.zoom + 1), "Zoom in");
+                this.zoom_out = builder.button("map-zoom-out", 1787, 840, () => this.setZoom(this.zoom - 1), "Zoom out");
+                this.button_options = builder.button("map-options", 1628, 0, () => this.showOptions(), "Game options");
+            });
 
-            this.character_sheet = new CharacterSheet(this, this.getWidth() - 307);
-            this.character_sheet.show(this.player.fleet.ships[0], false);
-            this.character_sheet.hide(false);
+            this.character_sheet = new CharacterSheet(this);
             this.layer_overlay.add(this.character_sheet);
 
             this.conversation = new MissionConversationDisplay(this);
@@ -286,7 +273,7 @@ module TK.SpaceTac.UI {
                 this.setLinksAlpha(0.6, duration);
                 this.zoom = 1;
             } else {
-                this.setCamera(current_star.x, current_star.y, current_star.radius * 2, duration);
+                this.setCamera(current_star.x - current_star.radius * 0.3, current_star.y, current_star.radius * 2, duration);
                 this.setLinksAlpha(0.2, duration);
                 this.zoom = 2;
             }
@@ -323,7 +310,6 @@ module TK.SpaceTac.UI {
         openShop(): void {
             let location = this.session.getLocation();
             if (this.interactive && location && location.shop) {
-                this.character_sheet.setShop(location.shop);
                 this.character_sheet.show(this.player.fleet.ships[0]);
             }
         }

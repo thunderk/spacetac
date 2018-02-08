@@ -34,15 +34,16 @@ module TK.SpaceTac.UI.Specs {
             check.equals(battleview.targetting.active, false);
             battleview.setInteractionEnabled(true);
 
-            let weapon = TestTools.addWeapon(nn(battleview.battle.playing_ship), 10);
-            battleview.enterTargettingMode(nn(weapon.action), ActionTargettingMode.SPACE);
+            let ship = nn(battleview.battle.playing_ship);
+            let weapon = TestTools.addWeapon(ship, 10);
+            battleview.enterTargettingMode(ship, weapon, ActionTargettingMode.SPACE);
             check.equals(battleview.targetting.active, true);
 
             battleview.cursorHovered(new ArenaLocation(5, 8), null);
             check.equals(battleview.targetting.target, Target.newFromLocation(5, 8));
             check.equals(battleview.ship_hovered, null);
 
-            let ship = battleview.battle.play_order[3];
+            ship = battleview.battle.play_order[3];
             battleview.cursorHovered(ship.location, ship);
             check.equals(battleview.targetting.target, Target.newFromLocation(ship.arena_x, ship.arena_y));
             check.equals(battleview.ship_hovered, null);

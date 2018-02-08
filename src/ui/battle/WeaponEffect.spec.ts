@@ -17,7 +17,7 @@ module TK.SpaceTac.UI.Specs {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
-            let effect = new WeaponEffect(battleview.arena, new Ship(), new Target(0, 0), new Equipment());
+            let effect = new WeaponEffect(battleview.arena, new Ship(), new Target(0, 0), new TriggerAction("weapon"));
             effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1000, 3000, true);
 
             let layer = battleview.arena.layer_weapon_effects;
@@ -35,7 +35,7 @@ module TK.SpaceTac.UI.Specs {
             battleview.timer = new Timer();
 
             let ship = nn(battleview.battle.playing_ship);
-            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), new Equipment());
+            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), new TriggerAction("weapon"));
             effect.gunEffect();
 
             let layer = battleview.arena.layer_weapon_effects;
@@ -50,9 +50,8 @@ module TK.SpaceTac.UI.Specs {
             let ship = nn(battleview.battle.playing_ship);
             ship.setArenaPosition(50, 30);
 
-            let weapon = new Equipment();
-            weapon.action = new TriggerAction(weapon, [new DamageEffect()], 1, 500);
-            check.patch(weapon.action, "getImpactedShips", () => [ship]);
+            let weapon = new TriggerAction("weapon", { effects: [new DamageEffect()], range: 500 });
+            check.patch(weapon, "getImpactedShips", () => [ship]);
 
             let dest = new Ship();
             let effect = new WeaponEffect(battleview.arena, dest, Target.newFromShip(dest), weapon);
@@ -80,7 +79,7 @@ module TK.SpaceTac.UI.Specs {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
-            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(50, 50), new Equipment());
+            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(50, 50), new TriggerAction("weapon"));
 
             effect.gunEffect();
             checkEmitters("gun effect started", 1);
@@ -97,7 +96,7 @@ module TK.SpaceTac.UI.Specs {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
-            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(31, 49), new Equipment());
+            let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(31, 49), new TriggerAction("weapon"));
 
             let result = effect.angularLaser({ x: 20, y: 30 }, 300, Math.PI / 4, -Math.PI / 2, 5);
             check.equals(result, 200);

@@ -1,18 +1,22 @@
 module TK.SpaceTac.Specs {
     testing("DeployDroneAction", test => {
         test.case("stores useful information", check => {
-            let equipment = new Equipment(SlotType.Weapon, "testdrone");
-            let action = new DeployDroneAction(equipment);
+            let ship = new Ship();
+            let action = new DeployDroneAction("testdrone");
+            ship.actions.addCustom(action);
 
-            check.equals(action.code, "deploy-testdrone");
-            check.equals(action.getVerb(), "Deploy");
-            check.same(action.equipment, equipment);
+            check.equals(action.code, "testdrone");
+            check.equals(action.getVerb(ship), "Deploy");
+
+            ship.actions.toggle(action, true);
+            check.equals(action.getVerb(ship), "Recall");
         });
 
         test.case("allows to deploy in range", check => {
             let ship = new Ship();
             ship.setArenaPosition(0, 0);
-            let action = new DeployDroneAction(new Equipment(), 0, 8);
+            let action = new DeployDroneAction("testdrone", { power: 0 }, { deploy_distance: 8 });
+            ship.actions.addCustom(action);
 
             check.equals(action.checkTarget(ship, new Target(8, 0, null)), new Target(8, 0, null));
             check.equals(action.checkTarget(ship, new Target(12, 0, null)), new Target(8, 0, null));
@@ -26,12 +30,10 @@ module TK.SpaceTac.Specs {
             let battle = TestTools.createBattle();
             let ship = battle.play_order[0];
             ship.setArenaPosition(0, 0);
-            TestTools.setShipAP(ship, 3);
+            TestTools.setShipModel(ship, 100, 0, 3);
 
-            let equipment = new Equipment(SlotType.Weapon, "testdrone");
-            let action = new DeployDroneAction(equipment, 2, 8, 4, [new DamageEffect(50)]);
-            equipment.action = action;
-            ship.addSlot(SlotType.Weapon).attach(equipment);
+            let action = new DeployDroneAction("testdrone", { power: 2 }, { deploy_distance: 8, drone_radius: 4, drone_effects: [new DamageEffect(50)] });
+            ship.actions.addCustom(action);
 
             TestTools.actionChain(check, battle, [
                 [ship, action, new Target(5, 0)],

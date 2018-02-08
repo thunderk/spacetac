@@ -145,19 +145,5 @@ module TK.SpaceTac {
                 return any(this.ships, ship => ship.alive);
             }
         }
-
-        /**
-         * Add an equipment to the first available cargo slot
-         * 
-         * Returns true on success, false if no empty cargo slot was available.
-         */
-        addCargo(equipment: Equipment): boolean {
-            let ship = first(this.ships, ship => ship.getFreeCargoSpace() > 0);
-            if (ship) {
-                return ship.addCargo(equipment);
-            } else {
-                return false;
-            }
-        }
     }
 }

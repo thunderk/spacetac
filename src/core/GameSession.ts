@@ -152,11 +152,6 @@ module TK.SpaceTac {
                 // Reset ships status
                 iforeach(battle.iships(), ship => ship.restoreInitialState());
 
-                // In case of victory for current player, generate loot
-                if (battle.outcome.winner == this.player.fleet) {
-                    battle.outcome.createLoot(battle);
-                }
-
                 // If the battle happened in a star location, keep it informed
                 let location = this.universe.getLocation(this.player.fleet.location);
                 if (location) {

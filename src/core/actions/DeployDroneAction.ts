@@ -1,12 +1,10 @@
 /// <reference path="ToggleAction.ts"/>
 
 module TK.SpaceTac {
-    /**
-     * Action to deploy a drone in space
-     * 
-     * This is a toggled action, meaning that deploying a drone requires a permanent power supply from the ship
+    /** 
+     * Configuration of a toggle action
      */
-    export class DeployDroneAction extends ToggleAction {
+    export interface DeployDroneActionConfig {
         // Maximal distance the drone may be deployed
         deploy_distance: number
 
@@ -15,21 +13,39 @@ module TK.SpaceTac {
 
         // Effects applied to ships in range of the drone
         drone_effects: BaseEffect[]
+    }
 
-        constructor(equipment: Equipment, power = 1, deploy_distance = 0, radius = 0, effects: BaseEffect[] = []) {
-            super(equipment, power, 0, [], `deploy-${equipment.code}`);
+    /**
+     * Action to deploy a drone in space
+     * 
+     * This is a toggled action, meaning that deploying a drone requires a permanent power supply from the ship
+     */
+    export class DeployDroneAction extends ToggleAction implements DeployDroneActionConfig {
+        deploy_distance = 0
+        drone_radius = 0
+        drone_effects: BaseEffect[] = []
 
-            this.deploy_distance = deploy_distance;
-            this.drone_radius = radius;
-            this.drone_effects = effects;
+        constructor(name: string, toggle_config?: Partial<ToggleActionConfig>, drone_config?: Partial<DeployDroneActionConfig>, code?: string) {
+            super(name, toggle_config, code);
+
+            if (drone_config) {
+                this.configureDrone(drone_config);
+            }
         }
 
-        getVerb(): string {
-            return this.activated ? "Recall" : "Deploy";
+        /**
+         * Configure the deployed drone
+         */
+        configureDrone(config: Partial<DeployDroneActionConfig>): void {
+            copyfields(config, this);
+        }
+
+        getVerb(ship: Ship): string {
+            return ship.actions.isToggled(this) ? "Recall" : "Deploy";
         }
 
         getTargettingMode(ship: Ship): ActionTargettingMode {
-            return this.activated ? ActionTargettingMode.SELF : ActionTargettingMode.SPACE;
+            return ship.actions.isToggled(this) ? ActionTargettingMode.SELF : ActionTargettingMode.SPACE;
         }
 
         getDefaultTarget(ship: Ship): Target {
@@ -42,7 +58,7 @@ module TK.SpaceTac {
         }
 
         getRangeRadius(ship: Ship): number {
-            return this.activated ? 0 : this.deploy_distance;
+            return ship.actions.isToggled(this) ? 0 : this.deploy_distance;
         }
 
         filterImpactedShips(source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
@@ -57,7 +73,7 @@ module TK.SpaceTac {
         getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
             let result = super.getSpecificDiffs(ship, battle, target);
 
-            if (this.activated) {
+            if (ship.actions.isToggled(this)) {
                 let drone = first(battle.drones.list(), idrone => this.is(idrone.parent));
                 if (drone) {
                     result.push(new DroneRecalledDiff(drone));
@@ -65,7 +81,7 @@ module TK.SpaceTac {
                     return [];
                 }
             } else {
-                let drone = new Drone(ship, this.equipment.code);
+                let drone = new Drone(ship, this.code);
                 drone.parent = this;
                 drone.x = target.x;
                 drone.y = target.y;

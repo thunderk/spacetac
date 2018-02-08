@@ -1,8 +1,8 @@
 module TK.SpaceTac {
     /**
-     * Reward for a mission (either an equipment or money)
+     * Reward for a mission (currently, only money)
      */
-    export type MissionReward = Equipment | number
+    export type MissionReward = number
 
     /**
      * Level of difficulty for a mission
@@ -84,11 +84,7 @@ module TK.SpaceTac {
          */
         getRewardText(): string {
             if (this.reward) {
-                if (this.reward instanceof Equipment) {
-                    return this.reward.getFullName();
-                } else {
-                    return `${this.reward} zotys`;
-                }
+                return `${this.reward} zotys`;
             } else {
                 return "-";
             }
@@ -146,11 +142,7 @@ module TK.SpaceTac {
             if (!this.completed) {
                 this.completed = true;
                 if (this.reward) {
-                    if (this.reward instanceof Equipment) {
-                        this.fleet.addCargo(this.reward);
-                    } else {
-                        this.fleet.credits += this.reward;
-                    }
+                    this.fleet.credits += this.reward;
                 }
             }
         }

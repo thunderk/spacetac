@@ -53,14 +53,14 @@ module TK.SpaceTac {
         }
 
         /**
-         * Find the best available engine for moving
+         * Find the best available move action
          */
-        findBestEngine(): Equipment | null {
-            let engines = this.ship.listEquipment(SlotType.Engine);
-            if (engines.length == 0) {
+        findBestEngine(): MoveAction | null {
+            let actions = <MoveAction[]>this.ship.actions.listAll().filter(action => action instanceof MoveAction);
+            if (actions.length == 0) {
                 return null;
             } else {
-                return maxBy(engines, engine => (engine.action instanceof MoveAction) ? engine.action.getDistanceByActionPoint(this.ship) : 0);
+                return maxBy(actions, action => action.getDistanceByActionPoint(this.ship));
             }
         }
 
@@ -141,9 +141,9 @@ module TK.SpaceTac {
                 }
             } else {
                 let engine = this.findBestEngine();
-                if (engine && engine.action instanceof MoveAction) {
+                if (engine) {
                     let approach_radius = action.getRangeRadius(this.ship);
-                    let approach = this.getApproach(engine.action, target, approach_radius, move_margin);
+                    let approach = this.getApproach(engine, target, approach_radius, move_margin);
                     if (approach instanceof Target) {
                         result.need_move = true;
                         move_target = approach;
@@ -162,13 +162,13 @@ module TK.SpaceTac {
             // Check move AP
             if (result.need_move && move_target) {
                 let engine = this.findBestEngine();
-                if (engine && engine.action) {
-                    result.total_move_ap = engine.action.getActionPointsUsage(this.ship, move_target);
+                if (engine) {
+                    result.total_move_ap = engine.getActionPointsUsage(this.ship, move_target);
                     result.can_move = ap > 0;
                     result.can_end_move = result.total_move_ap <= ap;
                     result.move_location = move_target;
                     // TODO Split in "this turn" part and "next turn" part if needed
-                    result.parts.push({ action: engine.action, target: move_target, ap: result.total_move_ap, possible: result.can_move });
+                    result.parts.push({ action: engine, target: move_target, ap: result.total_move_ap, possible: result.can_move });
 
                     ap -= result.total_move_ap;
                 }

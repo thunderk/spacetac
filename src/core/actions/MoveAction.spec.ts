@@ -7,8 +7,8 @@ module TK.SpaceTac.Specs {
             ship.setValue("power", 6);
             ship.arena_x = 0;
             ship.arena_y = 0;
-            var engine = new Equipment();
-            var action = new MoveAction(engine, 10);
+            var action = new MoveAction("Engine", { distance_per_power: 10 });
+            ship.actions.addCustom(action);
 
             check.equals(action.getDistanceByActionPoint(ship), 10);
 
@@ -26,7 +26,8 @@ module TK.SpaceTac.Specs {
         test.case("forbids targetting a ship", check => {
             var ship1 = new Ship(null, "Test1");
             var ship2 = new Ship(null, "Test2");
-            var action = new MoveAction(new Equipment());
+            var action = new MoveAction();
+            ship1.actions.addCustom(action);
 
             var result = action.checkTarget(ship1, Target.newFromShip(ship1));
             check.equals(result, null);
@@ -39,13 +40,11 @@ module TK.SpaceTac.Specs {
             let battle = TestTools.createBattle();
             let ship = battle.play_order[0];
             ship.setArenaPosition(500, 600)
-            TestTools.setShipAP(ship, 20);
+            TestTools.setShipModel(ship, 100, 0, 20);
             ship.setValue("power", 5);
 
-            let engine = new Equipment(SlotType.Engine);
-            let action = new MoveAction(engine, 1);
-            engine.action = action;
-            ship.addSlot(SlotType.Engine).attach(engine);
+            let action = new MoveAction("Engine", { distance_per_power: 1 });
+            ship.actions.addCustom(action);
 
             TestTools.actionChain(check, battle, [
                 [ship, action, Target.newFromLocation(510, 605)],
@@ -67,11 +66,11 @@ module TK.SpaceTac.Specs {
             var battle = TestTools.createBattle(1, 1);
             var ship = battle.fleets[0].ships[0];
             var enemy = battle.fleets[1].ships[0];
-            TestTools.setShipAP(ship, 100);
+            TestTools.setShipModel(ship, 100, 0, 100);
             ship.setArenaPosition(500, 500);
             enemy.setArenaPosition(1000, 500);
 
-            var action = new MoveAction(new Equipment(), 1000, 200);
+            var action = new MoveAction("Engine", { distance_per_power: 1000, safety_distance: 200 });
 
             var result = action.checkLocationTarget(ship, Target.newFromLocation(700, 500));
             check.equals(result, Target.newFromLocation(700, 500));
@@ -94,11 +93,11 @@ module TK.SpaceTac.Specs {
             var ship = battle.fleets[0].ships[0];
             var enemy1 = battle.fleets[1].ships[0];
             var enemy2 = battle.fleets[1].ships[1];
-            TestTools.setShipAP(ship, 100);
+            TestTools.setShipModel(ship, 100, 0, 100);
             enemy1.setArenaPosition(0, 800);
             enemy2.setArenaPosition(0, 1000);
 
-            var action = new MoveAction(new Equipment(), 1000, 150);
+            var action = new MoveAction("Engine", { distance_per_power: 1000, safety_distance: 150 });
 
             var result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1100));
             check.equals(result, Target.newFromLocation(0, 650));
@@ -109,11 +108,11 @@ module TK.SpaceTac.Specs {
             var ship = battle.fleets[0].ships[0];
             var enemy1 = battle.fleets[1].ships[0];
             var enemy2 = battle.fleets[1].ships[1];
-            TestTools.setShipAP(ship, 100);
+            TestTools.setShipModel(ship, 100, 0, 100);
             enemy1.setArenaPosition(0, 500);
             enemy2.setArenaPosition(0, 800);
 
-            var action = new MoveAction(new Equipment(), 1000, 600);
+            var action = new MoveAction("Engine", { distance_per_power: 1000, safety_distance: 600 });
 
             let result = action.checkLocationTarget(ship, Target.newFromLocation(0, 1000));
             check.equals(result, null);
@@ -124,7 +123,7 @@ module TK.SpaceTac.Specs {
         test.case("applies ship maneuvrability to determine distance per power point", check => {
             let ship = new Ship();
 
-            let action = new MoveAction(new Equipment(), 100, undefined, 60);
+            let action = new MoveAction("Engine", { distance_per_power: 100, maneuvrability_factor: 60 });
             TestTools.setAttribute(ship, "maneuvrability", 0);
             check.nears(action.getDistanceByActionPoint(ship), 40);
             TestTools.setAttribute(ship, "maneuvrability", 1);
@@ -134,7 +133,7 @@ module TK.SpaceTac.Specs {
             TestTools.setAttribute(ship, "maneuvrability", 10);
             check.nears(action.getDistanceByActionPoint(ship), 90);
 
-            action = new MoveAction(new Equipment(), 100, undefined, 0);
+            action = new MoveAction("Engine", { distance_per_power: 100, maneuvrability_factor: 0 });
             TestTools.setAttribute(ship, "maneuvrability", 0);
             check.nears(action.getDistanceByActionPoint(ship), 100);
             TestTools.setAttribute(ship, "maneuvrability", 10);
@@ -142,13 +141,13 @@ module TK.SpaceTac.Specs {
         });
 
         test.case("builds a textual description", check => {
-            let action = new MoveAction(new Equipment(), 58, 0, 0);
+            let action = new MoveAction("Engine", { distance_per_power: 58, safety_distance: 0 });
             check.equals(action.getEffectsDescription(), "Move: 58km per power point");
 
-            action = new MoveAction(new Equipment(), 58, 12, 0);
+            action = new MoveAction("Engine", { distance_per_power: 58, safety_distance: 12 });
             check.equals(action.getEffectsDescription(), "Move: 58km per power point (safety: 12km)");
 
-            action = new MoveAction(new Equipment(), 58, 12, 80);
+            action = new MoveAction("Engine", { distance_per_power: 58, safety_distance: 12, maneuvrability_factor: 80 });
             check.equals(action.getEffectsDescription(), "Move: 12-58km per power point (safety: 12km)");
         });
     });

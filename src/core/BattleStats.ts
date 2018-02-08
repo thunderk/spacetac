@@ -58,23 +58,5 @@ module TK.SpaceTac {
                 }
             }
         }
-
-        /**
-         * Get the raw value of a fleet
-         */
-        private getFleetValue(fleet: Fleet): number {
-            return sum(fleet.ships.map(ship => {
-                return sum(ship.listEquipment().map(equipment => equipment.getPrice()));
-            }));
-        }
-
-        /**
-         * Store the fleets' value, for equipment wear display
-         */
-        addFleetsValue(attacker: Fleet, defender: Fleet, positive = true): void {
-            let sgn = positive ? 1 : -1;
-            this.addStat("Equipment wear (zotys)", sgn * this.getFleetValue(attacker), true);
-            this.addStat("Equipment wear (zotys)", sgn * this.getFleetValue(defender), false);
-        }
     }
 }

@@ -24,31 +24,34 @@ module TK.SpaceTac {
      */
     export class BaseAction extends RObject {
         // Identifier code for the type of action
-        code: string
+        readonly code: string
 
-        // Equipment that triggers this action
-        equipment: Equipment | null
+        // Full name of the action
+        readonly name: string
+
+        // Cooldown configuration
+        private cooldown = new Cooldown()
 
         // Create the action
-        constructor(code = "nothing", equipment: Equipment | null = null) {
+        constructor(name = "Nothing", code?: string) {
             super();
 
-            this.code = code;
-            this.equipment = equipment;
+            this.code = code ? code : name.toLowerCase().replace(" ", "");
+            this.name = name;
         }
 
         /**
          * Get the verb for this action
          */
-        getVerb(): string {
-            return "Idle";
+        getVerb(ship: Ship): string {
+            return "Do";
         }
 
         /**
-         * Get the relevent cooldown for this action
+         * Get the full title for this action (verb and name)
          */
-        get cooldown(): Cooldown {
-            return this.equipment ? this.equipment.cooldown : new Cooldown();
+        getTitle(ship: Ship): string {
+            return `${this.getVerb(ship)} ${this.name}`;
         }
 
         /**
@@ -66,18 +69,18 @@ module TK.SpaceTac {
         }
 
         /**
-         * Get the number of turns this action is unavailable, because of overheating
+         * Configure the cooldown for this action
          */
-        getCooldownDuration(estimated = false): number {
-            let cooldown = this.cooldown;
-            return estimated ? this.cooldown.cooling : this.cooldown.heat;
+        configureCooldown(overheat: number, cooling: number): void {
+            this.cooldown.configure(overheat, cooling);
         }
 
         /**
-         * Get the number of remaining uses before overheat, infinity if there is no overheat
+         * Get the cooldown configuration
          */
-        getUsesBeforeOverheat(): number {
-            return this.cooldown.getRemainingUses();
+        getCooldown(): Cooldown {
+            // TODO Split configuration (readonly) and usage
+            return this.cooldown;
         }
 
         /**
@@ -94,6 +97,10 @@ module TK.SpaceTac {
                 return "ship not playing";
             }
 
+            if (!ship.actions.getById(this.id)) {
+                return "action not available";
+            }
+
             // Check AP usage
             if (remaining_ap === null) {
                 remaining_ap = ship.getValue("power");
@@ -104,7 +111,7 @@ module TK.SpaceTac {
             }
 
             // Check cooldown
-            if (!this.cooldown.canUse()) {
+            if (!ship.actions.isUsable(this)) {
                 return "overheated";
             }
 

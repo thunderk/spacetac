@@ -118,7 +118,6 @@ module TK.SpaceTac.UI {
                 this.loadSheet("map/action.png", 323, 192);
                 this.loadImage("map/orbit.png");
                 this.loadImage("map/boundaries.png");
-                this.loadSheet("map/buttons.png", 115, 191);
                 this.loadSheet("map/mission-action.png", 192, 56);
 
                 this.loadSound("music/division.mp3");

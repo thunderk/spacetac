@@ -48,7 +48,7 @@ module TK.SpaceTac.Specs {
             let enemy = new Fleet();
             enemy.addShip();
             let battle = new Battle(fleet, enemy);
-            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 10, 0));
+            battle.ships.list().forEach(ship => TestTools.setShipModel(ship, 10, 0));
             battle.start();
             battle.performChecks();
             check.equals(battle.ended, false);

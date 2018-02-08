@@ -3,10 +3,10 @@ module TK.SpaceTac.Specs {
         test.case("takes or gives value", check => {
             let battle = new Battle();
             let ship1 = battle.fleets[0].addShip();
-            TestTools.setShipHP(ship1, 100, 50);
+            TestTools.setShipModel(ship1, 100, 50);
             ship1.setValue("hull", 10);
             let ship2 = battle.fleets[0].addShip();
-            TestTools.setShipHP(ship2, 100, 50);
+            TestTools.setShipModel(ship2, 100, 50);
 
             let effect = new ValueTransferEffect("hull", -30);
             battle.applyDiffs(effect.getOnDiffs(ship2, ship1, 1));

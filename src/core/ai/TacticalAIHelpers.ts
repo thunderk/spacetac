@@ -14,7 +14,7 @@ module TK.SpaceTac {
      * Get a list of all playable actions (like the actionbar for player) for a ship
      */
     function getPlayableActions(ship: Ship): Iterator<BaseAction> {
-        let actions = ship.getAvailableActions();
+        let actions = ship.actions.listAll();
         return ifilter(iarray(actions), action => !action.checkCannotBeApplied(ship));
     }
 
@@ -142,10 +142,11 @@ module TK.SpaceTac {
          * Evaluate doing nothing, between -1 and 1
          */
         static evaluateIdling(ship: Ship, battle: Battle, maneuver: Maneuver): number {
-            let lost = ship.getValue("power") - maneuver.getPowerUsage() + ship.getAttribute("power_generation") - ship.getAttribute("power_capacity");
-            if (lost > 0) {
-                return -lost / ship.getAttribute("power_capacity");
-            } else if (maneuver.action instanceof TriggerAction || maneuver.action instanceof DeployDroneAction) {
+            if (maneuver.action instanceof EndTurnAction) {
+                return -ship.getValue("power") / ship.getAttribute("power_capacity");
+            } else if (maneuver.action instanceof TriggerAction || maneuver.action instanceof ToggleAction) {
+                // TODO Evaluate if drone is useful
+                // TODO Check there are "interesting" effects
                 if (maneuver.effects.length == 0) {
                     return -1;
                 } else {
@@ -215,8 +216,9 @@ module TK.SpaceTac {
          * Evaluate the cost of overheating an equipment
          */
         static evaluateOverheat(ship: Ship, battle: Battle, maneuver: Maneuver): number {
-            if (maneuver.action.equipment && maneuver.action.equipment.cooldown.willOverheat()) {
-                return -Math.min(1, 0.4 * maneuver.action.equipment.cooldown.cooling);
+            let cooldown = ship.actions.getCooldown(maneuver.action);
+            if (cooldown.willOverheat()) {
+                return -Math.min(1, 0.4 * cooldown.cooling);
             } else {
                 return 0;
             }

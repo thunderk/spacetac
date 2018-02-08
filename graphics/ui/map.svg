@@ -804,7 +804,7 @@
        height="1.0909113">
       <feGaussianBlur
          inkscape:collect="always"
-         stdDeviation="0.87056823"
+         stdDeviation="0.87"
          id="feGaussianBlur5519" />
     </filter>
     <filter
@@ -1090,19 +1090,6 @@
          result="composite2"
          id="feComposite6295" />
     </filter>
-    <filter
-       inkscape:collect="always"
-       style="color-interpolation-filters:sRGB"
-       id="filter6390"
-       x="-0.0936"
-       width="1.1872"
-       y="-0.0936"
-       height="1.1872">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1.1866562"
-         id="feGaussianBlur6392" />
-    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -1111,11 +1098,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710682"
-     inkscape:cx="728.12591"
-     inkscape:cy="574.187"
+     inkscape:zoom="1.175"
+     inkscape:cx="1702.4952"
+     inkscape:cy="235.31089"
      inkscape:document-units="px"
-     inkscape:current-layer="g6210"
+     inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      inkscape:snap-bbox="true"
@@ -1625,9 +1612,9 @@
        style="display:inline">
       <g
          id="g5061"
-         transform="translate(85.195844,18.256263)"
+         transform="translate(167.74587,18.256263)"
          style="display:inline;filter:url(#filter5500)"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-in-hover.png"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/map/zoom-in.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96">
         <g
@@ -1654,9 +1641,9 @@
          style="display:inline"
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
-         inkscape:export-filename="/tmp/temp.png"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/map/options.png"
          id="g4766"
-         transform="rotate(-90,274.10252,151.75608)">
+         transform="rotate(-90,315.37748,110.48112)">
         <g
            id="g5998">
           <use
@@ -1704,10 +1691,10 @@
       <g
          style="display:inline"
          id="g5335"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-hover.png"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/map/zoom-out.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96"
-         transform="translate(0,-4.2333336)">
+         transform="translate(82.550003,-4.2333336)">
         <use
            inkscape:export-ydpi="96"
            inkscape:export-xdpi="96"
@@ -1948,9 +1935,9 @@
          sodipodi:nodetypes="ccccccc"
          inkscape:connector-curvature="0"
          id="path5014-3"
-         d="M 407.58479,68.772624 395.03383,56.257748 V 35.322624 l 12.55096,-12.514874 12.55096,12.514874 v 20.935124 z"
+         d="M 490.13483,68.772624 477.58387,56.257748 V 35.322624 l 12.55096,-12.514874 12.55096,12.514874 v 20.935124 z"
          style="display:inline;fill:#93aac7;fill-opacity:0.57021281;fill-rule:evenodd;stroke:none;stroke-width:0.69788885;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5517)"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-in-hover.png"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/map/zoom-in-hover.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96" />
       <use
@@ -1960,8 +1947,8 @@
          id="use4855"
          width="100%"
          height="100%"
-         transform="translate(-5.6259523e-6,207.69819)"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/map/zoom-out-hover.png"
+         transform="translate(-5.6107176e-6,207.69819)"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/map/zoom-out-hover.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96" />
       <rect
@@ -1978,8 +1965,8 @@
          id="use6000"
          width="100%"
          height="100%"
-         transform="rotate(90,407.58466,18.273681)"
-         inkscape:export-filename="/tmp/temp.png"
+         transform="rotate(90,490.13458,18.273681)"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/map/options-hover.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96" />
     </g>
@@ -2192,31 +2179,12 @@
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="Character sheet">
-    <g
-       transform="translate(0,-11.249983)"
-       id="g4931">
-      <rect
-         y="11.249983"
-         x="426.50833"
-         height="285.75"
-         width="81.491669"
-         id="rect4514"
-         style="opacity:1;fill:#20262e;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.2854228;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <rect
-         y="37.4282"
-         x="433.63654"
-         height="67.235291"
-         width="67.235291"
-         id="rect4926"
-         style="fill:#43535c;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.23345587px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
-    </g>
-  </g>
+     inkscape:label="Character sheet" />
   <g
      inkscape:groupmode="layer"
      id="layer4"
      inkscape:label="Mission dialog"
-     style="display:inline">
+     style="display:none">
     <g
        id="g6210"
        transform="translate(-4.1823501,30.369099)">

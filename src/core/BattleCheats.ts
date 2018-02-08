@@ -36,23 +36,5 @@ module TK.SpaceTac {
             });
             this.battle.endBattle(first(this.battle.fleets, fleet => !this.player.is(fleet.player)));
         }
-
-        /**
-         * Add an equipment to current playing ship
-         */
-        equip(name: string): void {
-            let ship = this.battle.playing_ship;
-            if (ship) {
-                let generator = new LootGenerator();
-                generator.setTemplateFilter(template => template.name == name);
-
-                let equipment = generator.generateHighest(ship.skills);
-                if (equipment) {
-                    let slot_type = nn(equipment.slot_type);
-                    let slot = ship.getFreeSlot(slot_type) || ship.addSlot(slot_type);
-                    slot.attach(equipment);
-                }
-            }
-        }
     }
 }

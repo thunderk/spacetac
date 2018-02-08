@@ -21,13 +21,11 @@ module TK.SpaceTac {
         universe: Universe
         around: StarLocation
         random: RandomGenerator
-        equipment_generator: LootGenerator
 
         constructor(universe: Universe, around: StarLocation, random = RandomGenerator.global) {
             this.universe = universe;
             this.around = around;
             this.random = random;
-            this.equipment_generator = new LootGenerator(this.random);
         }
 
         /**
@@ -65,48 +63,11 @@ module TK.SpaceTac {
         }
 
         /**
-         * Try to generate an equipment of given value
-         */
-        tryGenerateEquipmentReward(value: number): Equipment | null {
-            let minvalue = value * 0.8;
-            let maxvalue = value * 1.2;
-            let qualities = [EquipmentQuality.FINE, EquipmentQuality.PREMIUM, EquipmentQuality.LEGENDARY];
-
-            let candidates: Equipment[] = [];
-            for (let pass = 0; pass < 10; pass++) {
-                let equipment: Equipment | null;
-                let level = 1;
-                do {
-                    let quality = qualities[this.random.weighted([15, 12, 2])];
-                    equipment = this.equipment_generator.generate(level, quality);
-                    if (equipment && equipment.getPrice() >= minvalue && equipment.getPrice() <= maxvalue) {
-                        candidates.push(equipment);
-                    }
-                    level += 1;
-                } while (equipment && equipment.getPrice() < maxvalue * 1.5 && level < 20);
-            }
-
-            if (candidates.length > 0) {
-                return this.random.choice(candidates);
-            } else {
-                return null;
-            }
-        }
-
-        /**
          * Generate a reward
          */
         generateReward(value: number): MissionReward {
-            if (this.random.bool()) {
-                let equipment = this.tryGenerateEquipmentReward(value);
-                if (equipment) {
-                    return equipment;
-                } else {
-                    return value;
-                }
-            } else {
-                return value;
-            }
+            // TODO
+            return value;
         }
 
         /**

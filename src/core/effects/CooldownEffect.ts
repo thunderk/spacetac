@@ -19,14 +19,14 @@ module TK.SpaceTac {
         }
 
         getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
-            let equipments = ship.listEquipment().filter(equ => equ.cooldown.heat > 0);
+            let actions = ship.actions.listOverheated();
 
-            if (this.maxcount && equipments.length > this.maxcount) {
+            if (this.maxcount && actions.length > this.maxcount) {
                 let random = RandomGenerator.global;
-                equipments = random.sample(equipments, this.maxcount);
+                actions = random.sample(actions, this.maxcount);
             }
 
-            return equipments.map(equ => new ShipCooldownDiff(ship, equ, this.cooling || equ.cooldown.heat));
+            return actions.map(action => new ShipCooldownDiff(ship, action, this.cooling || ship.actions.getCooldown(action).heat));
         }
 
         isBeneficial(): boolean {

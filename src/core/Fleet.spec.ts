@@ -164,40 +164,5 @@ module TK.SpaceTac {
             ship4.setDead();
             check.equals(fleet.isAlive(), false);
         });
-
-        test.case("adds cargo in first empty slot", check => {
-            let fleet = new Fleet();
-            let ship1 = fleet.addShip();
-            ship1.cargo_space = 1;
-            let ship2 = fleet.addShip();
-            ship2.cargo_space = 2;
-
-            check.equals(ship1.cargo, []);
-            check.equals(ship2.cargo, []);
-
-            let equipment1 = new Equipment();
-            let result = fleet.addCargo(equipment1);
-            check.equals(result, true);
-            check.equals(ship1.cargo, [equipment1]);
-            check.equals(ship2.cargo, []);
-
-            let equipment2 = new Equipment();
-            result = fleet.addCargo(equipment2);
-            check.equals(result, true);
-            check.equals(ship1.cargo, [equipment1]);
-            check.equals(ship2.cargo, [equipment2]);
-
-            let equipment3 = new Equipment();
-            result = fleet.addCargo(equipment3);
-            check.equals(result, true);
-            check.equals(ship1.cargo, [equipment1]);
-            check.equals(ship2.cargo, [equipment2, equipment3]);
-
-            let equipment4 = new Equipment();
-            result = fleet.addCargo(equipment4);
-            check.equals(result, false);
-            check.equals(ship1.cargo, [equipment1]);
-            check.equals(ship2.cargo, [equipment2, equipment3]);
-        });
     });
 }

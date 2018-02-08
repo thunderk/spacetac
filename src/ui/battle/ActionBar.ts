@@ -83,7 +83,7 @@ module TK.SpaceTac.UI {
                 } else if (diff instanceof ShipCooldownDiff) {
                     return {
                         background: async () => {
-                            let icons = this.action_icons.filter(icon => icon.action.equipment && icon.action.equipment.is(diff.equipment));
+                            let icons = this.action_icons.filter(icon => icon.action.is(diff.action));
                             icons.forEach(icon => icon.refresh());
                         }
                     }
@@ -226,11 +226,7 @@ module TK.SpaceTac.UI {
             this.clearAll();
 
             if (ship && this.battleview.player.is(ship.fleet.player) && ship.alive) {
-                var actions = ship.getAvailableActions();
-                actions.forEach((action: BaseAction) => {
-                    this.addAction(ship, action);
-                });
-
+                ship.actions.listAll().forEach(action => this.addAction(ship, action));
                 this.ship = ship;
             } else {
                 this.ship = null;

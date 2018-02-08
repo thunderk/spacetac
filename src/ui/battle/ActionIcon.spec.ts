@@ -32,8 +32,8 @@ module TK.SpaceTac.UI.Specs {
         test.case("displays disabled and fading states", check => {
             let bar = testgame.view.action_bar;
             let ship = new Ship();
-            TestTools.setShipAP(ship, 5);
-            let action = nn(TestTools.addWeapon(ship, 50, 3).action);
+            TestTools.setShipModel(ship, 100, 0, 5);
+            let action = TestTools.addWeapon(ship, 50, 3);
             let icon = new ActionIcon(bar, ship, action, 0);
 
             check.equals(icon.container.name, "battle-actionbar-frame-enabled", "5/5");
@@ -70,11 +70,9 @@ module TK.SpaceTac.UI.Specs {
         test.case("displays toggle state", check => {
             let bar = testgame.view.action_bar;
             let ship = new Ship();
-            TestTools.setShipAP(ship, 5);
-            let equipment = new Equipment(SlotType.Weapon);
-            ship.addSlot(SlotType.Weapon).attach(equipment);
-            let action = new ToggleAction(equipment, 2);
-            equipment.action = action;
+            TestTools.setShipModel(ship, 100, 0, 5);
+            let action = new ToggleAction("toggle", { power: 2 });
+            ship.actions.addCustom(action);
             let icon = new ActionIcon(bar, ship, action, 0);
 
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "initial");
@@ -82,7 +80,7 @@ module TK.SpaceTac.UI.Specs {
             check.equals(icon.img_sticky.name, "battle-actionbar-sticky-untoggled", "initial");
             check.same(icon.img_sticky.visible, true, "initial");
 
-            action.activated = true;
+            ship.actions.toggle(action, true);
             icon.refresh();
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-toggled", "initial");
             check.equals(icon.img_power.name, "battle-actionbar-consumption-toggled", "initial");
@@ -93,9 +91,10 @@ module TK.SpaceTac.UI.Specs {
         test.case("displays overheat/cooldown", check => {
             let bar = testgame.view.action_bar;
             let ship = new Ship();
-            TestTools.setShipAP(ship, 5);
-            let action = nn(TestTools.addWeapon(ship, 50, 3).action);
-            action.cooldown.configure(1, 3);
+            let action = new TriggerAction("weapon");
+
+            action.configureCooldown(1, 3);
+            TestTools.setShipModel(ship, 100, 0, 5, 1, [action]);
             let icon = new ActionIcon(bar, ship, action, 0);
             check.same(icon.img_sticky.visible, false, "initial");
             check.equals(icon.img_sticky.name, "battle-actionbar-sticky-untoggled", "initial");
@@ -106,14 +105,16 @@ module TK.SpaceTac.UI.Specs {
             check.equals(icon.img_sticky.name, "battle-actionbar-sticky-overheat", "overheat");
             check.same(icon.img_sticky.children.length, 3, "overheat");
 
-            action.cooldown.configure(1, 12);
+            action.configureCooldown(1, 12);
+            TestTools.setShipModel(ship, 100, 0, 5, 1, [action]);
             icon.refresh(action);
             check.same(icon.img_sticky.visible, true, "superheat");
             check.equals(icon.img_sticky.name, "battle-actionbar-sticky-overheat", "superheat");
             check.same(icon.img_sticky.children.length, 5, "superheat");
 
-            action.cooldown.configure(1, 4);
-            action.cooldown.use();
+            action.configureCooldown(1, 4);
+            TestTools.setShipModel(ship, 100, 0, 5, 1, [action]);
+            ship.actions.getCooldown(action).use();
             icon.refresh(action);
             check.same(icon.img_sticky.visible, true, "cooling");
             check.equals(icon.img_sticky.name, "battle-actionbar-sticky-disabled", "cooling");
@@ -125,8 +126,8 @@ module TK.SpaceTac.UI.Specs {
 
             let bar = testgame.view.action_bar;
             let ship = new Ship();
-            TestTools.setShipAP(ship, 5);
-            let action = nn(TestTools.addWeapon(ship, 50, 3).action);
+            TestTools.setShipModel(ship, 100, 0, 5);
+            let action = TestTools.addWeapon(ship, 50, 3);
             let icon = new ActionIcon(bar, ship, action, 0);
             check.same(icon.img_targetting.visible, false, "initial");
 

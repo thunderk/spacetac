@@ -54,25 +54,9 @@ module TK.SpaceTac.UI {
                     parent.exitBattle();
                 });
             } else if (victory) {
-                if (this.outcome.loot.length) {
-                    this.addActionButton(535, "Loot equipment", "Open character sheet to loot equipment from defeated fleet", () => {
-                        let sheet = new CharacterSheet(this.view, undefined, undefined, () => {
-                            sheet.destroy(true);
-                            this.refreshContent();
-                        });
-                        sheet.show(this.player.fleet.ships[0], false, undefined, true);
-                        sheet.setLoot(outcome.loot);
-                        this.view.add.existing(sheet);
-                    });
-
-                    this.addActionButton(957, "Back to map", "Exit the battle and go back to the map", () => {
-                        parent.exitBattle();
-                    });
-                } else {
-                    this.addActionButton(747, "Back to map", "Exit the battle and go back to the map", () => {
-                        parent.exitBattle();
-                    });
-                }
+                this.addActionButton(747, "Back to map", "Exit the battle and go back to the map", () => {
+                    parent.exitBattle();
+                });
             } else {
                 this.addActionButton(535, "Revert battle", "Go back to where the fleet was before the battle happened", () => {
                     parent.revertBattle();

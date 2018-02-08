@@ -44,8 +44,6 @@ module TK.SpaceTac.UI {
             this.register((diff) => this.checkProjectileFired(diff));
             this.register((diff) => this.checkShipDeath(diff));
             this.register((diff) => this.checkBattleEnded(diff));
-            this.register((diff) => this.checkDroneDeployed(diff));
-            this.register((diff) => this.checkDroneRecalled(diff));
         }
 
         /**
@@ -136,7 +134,7 @@ module TK.SpaceTac.UI {
                     changed = true;
                 } else if (!immediate && diff instanceof ShipActionEndedDiff) {
                     let ship = this.view.battle.getShip(diff.ship_id);
-                    if (ship && ship.getAction(diff.action) instanceof EndTurnAction) {
+                    if (ship && ship.actions.getById(diff.action) instanceof EndTurnAction) {
                         changed = true;
                     }
                 }
@@ -260,9 +258,9 @@ module TK.SpaceTac.UI {
             if (diff instanceof ProjectileFiredDiff) {
                 let ship = this.view.battle.getShip(diff.ship_id);
                 if (ship) {
-                    let equipment = ship.getEquipment(diff.equipment);
-                    if (equipment && equipment.slot_type == SlotType.Weapon) {
-                        let effect = new WeaponEffect(this.view.arena, ship, diff.target, equipment);
+                    let action = ship.actions.getById(diff.action);
+                    if (action && action instanceof TriggerAction) {
+                        let effect = new WeaponEffect(this.view.arena, ship, diff.target, action);
                         return {
                             foreground: async (animate, timer) => {
                                 if (animate) {
@@ -316,62 +314,6 @@ module TK.SpaceTac.UI {
 
             return {};
         }
-
-        /**
-         * Check if a new drone as been deployed
-         */
-        private checkDroneDeployed(diff: BaseBattleDiff): LogProcessorDelegate {
-            if (diff instanceof DroneDeployedDiff) {
-                return {
-                    foreground: async (animate) => {
-                        let duration = this.view.arena.addDrone(diff.drone, animate);
-                        if (duration) {
-                            this.view.gameui.audio.playOnce("battle-drone-deploy");
-                            if (animate) {
-                                await this.view.timer.sleep(duration);
-                            }
-                        }
-                    }
-                }
-            } else {
-                return {};
-            }
-        }
-
-        /**
-         * Check if a drone as been recalled
-         */
-        private checkDroneRecalled(diff: BaseBattleDiff): LogProcessorDelegate {
-            if (diff instanceof DroneRecalledDiff) {
-                return {
-                    foreground: async () => {
-                        let duration = this.view.arena.removeDrone(diff.drone);
-                        if (duration) {
-                            this.view.gameui.audio.playOnce("battle-drone-destroy");
-                            await this.view.timer.sleep(duration);
-                        }
-                    }
-                }
-            } else {
-                return {};
-            }
-        }
-
-        // Drone applied
-        /*private processDroneAppliedEvent(event: DroneAppliedDiff): number {
-            let drone = this.view.arena.findDrone(event.drone);
-            if (drone) {
-                let duration = drone.setApplied();
-
-                if (duration) {
-                    this.view.gameui.audio.playOnce("battle-drone-activate");
-                }
-
-                return duration;
-            } else {
-                return 0;
-            }
-        }*/
     }
 
     /**

@@ -65,9 +65,12 @@ module TK.SpaceTac.UI {
 
             this.range_hint.setLayer(this.layer_hints);
             this.addShipSprites();
+            view.battle.drones.list().forEach(drone => this.addDrone(drone, false));
 
             this.container.onDestroy.add(() => this.destroy());
 
+            view.log_processor.register(diff => this.checkDroneDeployed(diff));
+            view.log_processor.register(diff => this.checkDroneRecalled(diff));
             view.log_processor.watchForShipChange(ship => {
                 return {
                     foreground: async () => {
@@ -291,6 +294,46 @@ module TK.SpaceTac.UI {
          */
         getBoundaries(): IBounded {
             return this.boundaries;
+        }
+
+        /**
+         * Check if a new drone as been deployed
+         */
+        private checkDroneDeployed(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (diff instanceof DroneDeployedDiff) {
+                return {
+                    foreground: async (animate) => {
+                        let duration = this.addDrone(diff.drone, animate);
+                        if (duration) {
+                            this.view.gameui.audio.playOnce("battle-drone-deploy");
+                            if (animate) {
+                                await this.view.timer.sleep(duration);
+                            }
+                        }
+                    }
+                }
+            } else {
+                return {};
+            }
+        }
+
+        /**
+         * Check if a drone as been recalled
+         */
+        private checkDroneRecalled(diff: BaseBattleDiff): LogProcessorDelegate {
+            if (diff instanceof DroneRecalledDiff) {
+                return {
+                    foreground: async () => {
+                        let duration = this.removeDrone(diff.drone);
+                        if (duration) {
+                            this.view.gameui.audio.playOnce("battle-drone-destroy");
+                            await this.view.timer.sleep(duration);
+                        }
+                    }
+                }
+            } else {
+                return {};
+            }
         }
     }
 }

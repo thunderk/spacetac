@@ -21,21 +21,5 @@ module TK.SpaceTac.Specs {
             check.same(nn(battle.outcome).winner, battle.fleets[1], "winner");
             check.equals(any(battle.fleets[0].ships, ship => ship.alive), false, "all allies dead");
         })
-
-        test.case("adds an equipment", check => {
-            let battle = new Battle();
-            let ship = new Ship();
-            TestTools.setShipPlaying(battle, ship);
-            ship.upgradeSkill("skill_materials");
-            let cheats = new BattleCheats(battle, battle.fleets[0].player);
-
-            check.equals(ship.listEquipment(), []);
-
-            cheats.equip("Iron Hull");
-
-            let result = ship.listEquipment();
-            check.equals(result.length, 1);
-            check.containing(result[0], { name: "Iron Hull", level: 1 });
-        })
     })
 }

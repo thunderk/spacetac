@@ -16,12 +16,12 @@ module TK.SpaceTac.UI.Specs {
             ship.setArenaPosition(10, 20);
             let weapon = TestTools.addWeapon(ship);
             let engine = TestTools.addEngine(ship, 12);
-            targetting.setAction(weapon.action);
+            targetting.setAction(ship, weapon);
 
             let drawvector = check.patch(targetting, "drawVector", null);
 
             let part = {
-                action: nn(weapon.action),
+                action: <BaseAction>weapon,
                 target: new Target(50, 30),
                 ap: 5,
                 possible: true
@@ -36,8 +36,8 @@ module TK.SpaceTac.UI.Specs {
                 [0x8e8e8e, 10, 20, 50, 30, 0]
             ]);
 
-            targetting.action = engine.action;
-            part.action = nn(engine.action);
+            targetting.action = engine;
+            part.action = engine;
             targetting.drawPart(part, true, null);
             check.called(drawvector, [
                 [0xe09c47, 10, 20, 50, 30, 12]
@@ -48,7 +48,7 @@ module TK.SpaceTac.UI.Specs {
             let targetting = newTargetting();
             let ship = nn(testgame.view.battle.playing_ship);
             let impacts = targetting.impact_indicators;
-            let action = new TriggerAction(new Equipment(), [], 1, 0, 50);
+            let action = new TriggerAction("weapon", { range: 50 });
 
             let collect = check.patch(action, "getImpactedShips", iterator([
                 [new Ship(), new Ship(), new Ship()],
@@ -85,7 +85,7 @@ module TK.SpaceTac.UI.Specs {
 
             let engine = TestTools.addEngine(ship, 8000);
             let weapon = TestTools.addWeapon(ship, 30, 5, 100, 50);
-            targetting.setAction(weapon.action);
+            targetting.setAction(ship, weapon);
             targetting.setTarget(Target.newFromLocation(156, 65));
 
             check.patch(targetting, "simulate", () => {
@@ -99,8 +99,8 @@ module TK.SpaceTac.UI.Specs {
                 result.need_fire = true;
                 result.can_fire = true;
                 result.parts = [
-                    { action: nn(engine.action), target: Target.newFromLocation(80, 20), ap: 1, possible: true },
-                    { action: nn(weapon.action), target: Target.newFromLocation(156, 65), ap: 5, possible: true }
+                    { action: engine, target: Target.newFromLocation(80, 20), ap: 1, possible: true },
+                    { action: weapon, target: Target.newFromLocation(156, 65), ap: 5, possible: true }
                 ]
                 targetting.simulation = result;
             });
@@ -121,30 +121,30 @@ module TK.SpaceTac.UI.Specs {
         test.case("snaps on ships according to targetting mode", check => {
             let targetting = newTargetting();
             let playing_ship = nn(testgame.view.battle.playing_ship);
-            let action = TestTools.addWeapon(playing_ship).action;
+            let action = TestTools.addWeapon(playing_ship);
 
             let ship1 = testgame.view.battle.play_order[1];
             let ship2 = testgame.view.battle.play_order[2];
             ship1.setArenaPosition(8000, 50);
             ship2.setArenaPosition(8000, 230);
 
-            targetting.setAction(action, ActionTargettingMode.SPACE);
+            targetting.setAction(playing_ship, action, ActionTargettingMode.SPACE);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
             check.equals(targetting.target, Target.newFromLocation(8000, 60), "space");
 
-            targetting.setAction(action, ActionTargettingMode.SHIP);
+            targetting.setAction(playing_ship, action, ActionTargettingMode.SHIP);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
             check.equals(targetting.target, Target.newFromShip(ship1), "ship 1");
             targetting.setTargetFromLocation({ x: 8100, y: 200 });
             check.equals(targetting.target, Target.newFromShip(ship2), "ship 2");
 
-            targetting.setAction(action, ActionTargettingMode.SURROUNDINGS);
+            targetting.setAction(playing_ship, action, ActionTargettingMode.SURROUNDINGS);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
             check.equals(targetting.target, new Target(8000, 60, playing_ship), "surroundings 1");
             targetting.setTargetFromLocation({ x: playing_ship.arena_x + 10, y: playing_ship.arena_y - 20 });
             check.equals(targetting.target, Target.newFromShip(playing_ship), "surroundings 2");
 
-            targetting.setAction(action, ActionTargettingMode.SELF);
+            targetting.setAction(playing_ship, action, ActionTargettingMode.SELF);
             targetting.setTargetFromLocation({ x: 8000, y: 60 });
             check.equals(targetting.target, Target.newFromShip(playing_ship), "self 1");
             targetting.setTargetFromLocation({ x: 0, y: 0 });
@@ -155,26 +155,25 @@ module TK.SpaceTac.UI.Specs {
             let targetting = newTargetting();
             let ship = nn(testgame.view.battle.playing_ship);
             ship.setArenaPosition(0, 0);
-            ship.listEquipment(SlotType.Engine).forEach(engine => engine.detach());
-            TestTools.setShipAP(ship, 8);
-            let move = TestTools.addEngine(ship, 100).action;
-            let fire = TestTools.addWeapon(ship, 50, 2, 300, 100).action;
+            TestTools.setShipModel(ship, 100, 0, 8);
+            let move = TestTools.addEngine(ship, 100);
+            let fire = TestTools.addWeapon(ship, 50, 2, 300, 100);
             let last_call: any = null;
             check.patch(targetting.range_hint, "clear", () => last_call = null);
             check.patch(targetting.range_hint, "update", (ship: Ship, action: BaseAction, radius: number) => last_call = [ship, action, radius]);
 
             // move action
-            targetting.setAction(move);
+            targetting.setAction(ship, move);
             targetting.setTargetFromLocation({ x: 200, y: 0 });
             check.equals(last_call, [ship, move, 800]);
 
             // fire action
-            targetting.setAction(fire);
+            targetting.setAction(ship, fire);
             targetting.setTargetFromLocation({ x: 200, y: 0 });
             check.equals(last_call, [ship, fire, undefined]);
 
             // move+fire
-            targetting.setAction(fire);
+            targetting.setAction(ship, fire);
             targetting.setTargetFromLocation({ x: 400, y: 0 });
             check.equals(last_call, [ship, move, 600]);
         });

@@ -7,7 +7,7 @@ module TK.SpaceTac.Specs {
             let ship1a = battle.fleets[1].addShip(new Ship(null, "1A"));
             let ship1b = battle.fleets[1].addShip(new Ship(null, "1B"));
 
-            TestTools.setShipAP(ship0a, 10);
+            TestTools.setShipModel(ship0a, 100, 0, 10);
             TestTools.setShipPlaying(battle, ship0a);
 
             let result = imaterialize(TacticalAIHelpers.produceDirectShots(ship0a, battle));
@@ -17,10 +17,10 @@ module TK.SpaceTac.Specs {
             let weapon2 = TestTools.addWeapon(ship0a, 15);
             result = imaterialize(TacticalAIHelpers.produceDirectShots(ship0a, battle));
             check.equals(result.length, 4);
-            check.contains(result, new Maneuver(ship0a, nn(weapon1.action), Target.newFromShip(ship1a)));
-            check.contains(result, new Maneuver(ship0a, nn(weapon1.action), Target.newFromShip(ship1b)));
-            check.contains(result, new Maneuver(ship0a, nn(weapon2.action), Target.newFromShip(ship1a)));
-            check.contains(result, new Maneuver(ship0a, nn(weapon2.action), Target.newFromShip(ship1b)));
+            check.contains(result, new Maneuver(ship0a, weapon1, Target.newFromShip(ship1a)));
+            check.contains(result, new Maneuver(ship0a, weapon1, Target.newFromShip(ship1b)));
+            check.contains(result, new Maneuver(ship0a, weapon2, Target.newFromShip(ship1a)));
+            check.contains(result, new Maneuver(ship0a, weapon2, Target.newFromShip(ship1b)));
         });
 
         test.case("produces random moves inside a grid", check => {
@@ -29,7 +29,7 @@ module TK.SpaceTac.Specs {
             battle.height = 100;
             let ship = battle.fleets[0].addShip();
 
-            TestTools.setShipAP(ship, 10);
+            TestTools.setShipModel(ship, 100, 0, 10);
             TestTools.setShipPlaying(battle, ship);
 
             let result = imaterialize(TacticalAIHelpers.produceRandomMoves(ship, battle, 2, 1));
@@ -39,10 +39,10 @@ module TK.SpaceTac.Specs {
 
             result = imaterialize(TacticalAIHelpers.produceRandomMoves(ship, battle, 2, 1, new SkewedRandomGenerator([0.5], true)));
             check.equals(result, [
-                new Maneuver(ship, nn(engine.action), Target.newFromLocation(25, 25)),
-                new Maneuver(ship, nn(engine.action), Target.newFromLocation(75, 25)),
-                new Maneuver(ship, nn(engine.action), Target.newFromLocation(25, 75)),
-                new Maneuver(ship, nn(engine.action), Target.newFromLocation(75, 75)),
+                new Maneuver(ship, engine, Target.newFromLocation(25, 25)),
+                new Maneuver(ship, engine, Target.newFromLocation(75, 25)),
+                new Maneuver(ship, engine, Target.newFromLocation(25, 75)),
+                new Maneuver(ship, engine, Target.newFromLocation(75, 75)),
             ]);
         });
 
@@ -51,8 +51,9 @@ module TK.SpaceTac.Specs {
             let ship = battle.fleets[0].addShip();
             let weapon = TestTools.addWeapon(ship, 50, 1, 1000, 105);
 
-            TestTools.setShipAP(ship, 10);
+            TestTools.setShipModel(ship, 100, 0, 10);
             TestTools.setShipPlaying(battle, ship);
+            ship.actions.addCustom(weapon);
 
             let result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             check.equals(result.length, 0);
@@ -68,8 +69,8 @@ module TK.SpaceTac.Specs {
 
             result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             check.equals(result, [
-                new Maneuver(ship, nn(weapon.action), Target.newFromLocation(600, 0)),
-                new Maneuver(ship, nn(weapon.action), Target.newFromLocation(600, 0)),
+                new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
+                new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
             ]);
 
             let enemy3 = battle.fleets[1].addShip();
@@ -77,8 +78,8 @@ module TK.SpaceTac.Specs {
 
             result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             check.equals(result, [
-                new Maneuver(ship, nn(weapon.action), Target.newFromLocation(600, 0)),
-                new Maneuver(ship, nn(weapon.action), Target.newFromLocation(600, 0)),
+                new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
+                new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
             ]);
         });
 
@@ -86,7 +87,7 @@ module TK.SpaceTac.Specs {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
             let weapon = TestTools.addWeapon(ship, 50, 5, 100);
-            let action = nn(weapon.action);
+            let action = weapon;
             let engine = TestTools.addEngine(ship, 25);
 
             let maneuver = new Maneuver(ship, new BaseAction("fake"), new Target(0, 0), 0);
@@ -95,11 +96,11 @@ module TK.SpaceTac.Specs {
             maneuver = new Maneuver(ship, action, Target.newFromLocation(100, 0), 0);
             check.same(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver), -Infinity);
 
-            TestTools.setShipAP(ship, 4);
+            TestTools.setShipModel(ship, 100, 0, 4, 1, [engine, action]);
             maneuver = new Maneuver(ship, action, Target.newFromLocation(100, 0), 0);
             check.same(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver), -Infinity);
 
-            TestTools.setShipAP(ship, 10);
+            TestTools.setShipModel(ship, 100, 0, 10, 1, [engine, action]);
             maneuver = new Maneuver(ship, action, Target.newFromLocation(100, 0), 0);
             check.equals(TacticalAIHelpers.evaluateTurnCost(ship, battle, maneuver), 0.5);  // 5 power remaining on 10
 
@@ -116,37 +117,37 @@ module TK.SpaceTac.Specs {
         test.case("evaluates the drawback of doing nothing", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
-            TestTools.setShipAP(ship, 10, 5);
+            TestTools.setShipModel(ship, 100, 0, 10);
             let engine = TestTools.addEngine(ship, 50);
             let weapon = TestTools.addWeapon(ship, 10, 2, 100, 10);
 
-            let maneuver = new Maneuver(ship, nn(weapon.action), Target.newFromLocation(0, 0));
-            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -0.3);
+            let maneuver = new Maneuver(ship, weapon, Target.newFromLocation(0, 0));
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), 0.5);
 
-            maneuver = new Maneuver(ship, nn(engine.action), Target.newFromLocation(0, 0));
-            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -0.5);
+            maneuver = new Maneuver(ship, engine, Target.newFromLocation(0, 0));
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), 0);
+
+            maneuver = new Maneuver(ship, EndTurnAction.SINGLETON, Target.newFromShip(ship));
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -1);
 
             ship.setValue("power", 2);
 
-            maneuver = new Maneuver(ship, nn(weapon.action), Target.newFromLocation(0, 0));
-            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), 0.5);
-
-            maneuver = new Maneuver(ship, nn(engine.action), Target.newFromLocation(0, 0));
-            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), 0);
+            maneuver = new Maneuver(ship, EndTurnAction.SINGLETON, Target.newFromShip(ship));
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -0.2);
         });
 
         test.case("evaluates damage to enemies", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
             let weapon = TestTools.addWeapon(ship, 50, 5, 500, 100);
-            let action = nn(weapon.action);
+            let action = weapon;
 
             let enemy1 = battle.fleets[1].addShip();
             enemy1.setArenaPosition(250, 0);
-            TestTools.setShipHP(enemy1, 50, 25);
+            TestTools.setShipModel(enemy1, 50, 25);
             let enemy2 = battle.fleets[1].addShip();
             enemy2.setArenaPosition(300, 0);
-            TestTools.setShipHP(enemy2, 25, 0);
+            TestTools.setShipModel(enemy2, 25, 0);
 
             // no enemies hurt
             let maneuver = new Maneuver(ship, action, Target.newFromLocation(100, 0));
@@ -164,11 +165,11 @@ module TK.SpaceTac.Specs {
         test.case("evaluates ship clustering", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
+            TestTools.setShipModel(ship, 100, 0, 10);
             TestTools.addEngine(ship, 100);
-            TestTools.setShipAP(ship, 10);
             let weapon = TestTools.addWeapon(ship, 100, 1, 100, 10);
 
-            let maneuver = new Maneuver(ship, nn(weapon.action), Target.newFromLocation(200, 0), 0.5);
+            let maneuver = new Maneuver(ship, weapon, Target.newFromLocation(200, 0), 0.5);
             check.nears(maneuver.simulation.move_location.x, 100.5, 1);
             check.equals(maneuver.simulation.move_location.y, 0);
             check.equals(TacticalAIHelpers.evaluateClustering(ship, battle, maneuver), 0);
@@ -190,7 +191,7 @@ module TK.SpaceTac.Specs {
             let battle = new Battle(undefined, undefined, 200, 100);
             let ship = battle.fleets[0].addShip();
             let weapon = TestTools.addWeapon(ship, 1, 1, 400);
-            let action = nn(weapon.action);
+            let action = weapon;
 
             ship.setArenaPosition(0, 0);
             let maneuver = new Maneuver(ship, action, new Target(0, 0), 0);
@@ -214,19 +215,27 @@ module TK.SpaceTac.Specs {
             let ship = battle.fleets[0].addShip();
             let weapon = TestTools.addWeapon(ship, 1, 1, 400);
 
-            let maneuver = new Maneuver(ship, nn(weapon.action), new Target(0, 0));
+            let maneuver = new Maneuver(ship, weapon, new Target(0, 0));
             check.equals(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver), 0);
 
-            weapon.cooldown.configure(1, 1);
+            weapon.configureCooldown(1, 1);
+            ship.actions.updateFromShip(ship);
+            ship.actions.addCustom(weapon);
             check.equals(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver), -0.4);
 
-            weapon.cooldown.configure(1, 2);
+            weapon.configureCooldown(1, 2);
+            ship.actions.updateFromShip(ship);
+            ship.actions.addCustom(weapon);
             check.equals(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver), -0.8);
 
-            weapon.cooldown.configure(1, 3);
+            weapon.configureCooldown(1, 3);
+            ship.actions.updateFromShip(ship);
+            ship.actions.addCustom(weapon);
             check.equals(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver), -1);
 
-            weapon.cooldown.configure(2, 1);
+            weapon.configureCooldown(2, 1);
+            ship.actions.updateFromShip(ship);
+            ship.actions.addCustom(weapon);
             check.equals(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver), 0);
         });
     });

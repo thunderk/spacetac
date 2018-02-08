@@ -5,7 +5,7 @@ module TK.SpaceTac.Specs {
             let ship = battle.fleets[0].addShip();
             check.equals(ship.location, new ArenaLocationAngle(0, 0, 0));
 
-            let engine = new Equipment();
+            let engine = new MoveAction();
             let event = new ShipMoveDiff(ship, ship.location, new ArenaLocationAngle(50, 20, 1.2), engine);
             event.apply(battle);
             check.equals(ship.location, new ArenaLocationAngle(50, 20, 1.2));

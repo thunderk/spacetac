@@ -109,7 +109,7 @@ module TK.SpaceTac.UI.Specs {
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { shadow: true });
             checkcomp(["View layers", "base", 0], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0)" });
-            checkcomp(["View layers", "base", 1], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0.6)", shadowFill: true, shadowOffsetX: 3, shadowOffsetY: 4, shadowBlur: 6, shadowStroke: true });
+            checkcomp(["View layers", "base", 1], Phaser.Text, "", { shadowColor: "rgba(0,0,0,0.6)", shadowFill: true, shadowOffsetX: 3, shadowOffsetY: 4, shadowBlur: 3, shadowStroke: true });
 
             builder.clear();
             builder.text("", 0, 0, {});
@@ -168,6 +168,42 @@ module TK.SpaceTac.UI.Specs {
             testClick(button1);
             check.equals(a, 3);
         })
+
+        test.case("can create toggle buttons", check => {
+            let builder = new UIBuilder(testgame.view);
+
+            let mock = check.mockfunc("identity", (x: any) => x);
+            let button1 = builder.button("test-image1", 0, 0, undefined, undefined, <any>mock.func);
+            let button2 = builder.button("test-image2");
+
+            let result = builder.switch(button2, true);
+            check.equals(result, false, "button2");
+            check.called(mock, 0);
+            testClick(button2);
+            check.called(mock, 0);
+
+            check.in("button1 on", check => {
+                result = builder.switch(button1, true);
+                check.equals(result, true);
+                check.called(mock, [[true]]);
+            });
+
+            check.in("button1 off", check => {
+                result = builder.switch(button1, false);
+                check.equals(result, false);
+                check.called(mock, [[false]]);
+            });
+
+            check.in("button1 first click", check => {
+                testClick(button1);
+                check.called(mock, [[true]]);
+            });
+
+            check.in("button1 second click", check => {
+                testClick(button1);
+                check.called(mock, [[false]]);
+            });
+        });
 
         test.case("can create shaders", check => {
             let builder = new UIBuilder(testgame.view);
@@ -240,6 +276,52 @@ module TK.SpaceTac.UI.Specs {
             checkcomp(["View layers", "base", 0], Phaser.Text, "", { text: "test-mod-text" });
             checkcomp(["View layers", "base", 1], Phaser.Image, "test-mod-image");
             checkcomp(["View layers", "base", 2], Phaser.Button, "test-mod-button");
+        })
+
+        test.case("distributes children along an axis", check => {
+            let builder = new UIBuilder(testgame.view);
+            builder = builder.in(builder.group("test"));
+
+            let c1 = builder.text("");
+            let c2 = builder.button("test");
+            let c3 = builder.group("test");
+
+            check.equals(c1.x, 0);
+            check.equals(c1.y, 0);
+            check.equals(c2.x, 0);
+            check.equals(c2.y, 0);
+            check.equals(c3.x, 0);
+            check.equals(c3.y, 0);
+
+            check.patch(UITools, "getScreenBounds", (obj: any) => {
+                if (obj === c1) {
+                    return { width: 100, height: 51 };
+                } else if (obj === c2) {
+                    return { width: 20, height: 7 };
+                } else if (obj === c3) {
+                    return { width: 60, height: 11 };
+                } else {
+                    return { width: 0, height: 0 };
+                }
+            });
+
+            builder.distribute("x", 100, 400);
+
+            check.equals(c1.x, 130);
+            check.equals(c1.y, 0);
+            check.equals(c2.x, 260);
+            check.equals(c2.y, 0);
+            check.equals(c3.x, 310);
+            check.equals(c3.y, 0);
+
+            builder.distribute("y", 60, 180);
+
+            check.equals(c1.x, 130);
+            check.equals(c1.y, 73);
+            check.equals(c2.x, 260);
+            check.equals(c2.y, 137);
+            check.equals(c3.x, 310);
+            check.equals(c3.y, 156);
         })
     })
 }

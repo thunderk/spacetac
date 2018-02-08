@@ -1,36 +1,5 @@
 module TK.SpaceTac.Specs {
     testing("Shop", test => {
-        test.case("generates a stock", check => {
-            let shop = new Shop();
-            check.equals((<any>shop).stock.length, 0);
-            check.greater(shop.getStock().length, 20);
-        });
-
-        test.case("buys and sells items", check => {
-            let equ1 = new Equipment(SlotType.Shield, "shield");
-            equ1.price = 50;
-            let equ2 = new Equipment(SlotType.Hull, "hull");
-            equ2.price = 150;
-            let shop = new Shop(1, [equ1, equ2], 0);
-            let fleet = new Fleet();
-            fleet.credits = 1000;
-            check.patch(shop, "getPrice", () => 800);
-
-            let result = shop.sellToFleet(equ1, fleet);
-            check.equals(result, true);
-            check.equals(shop.getStock(), [equ2]);
-            check.equals(fleet.credits, 200);
-            result = shop.sellToFleet(equ2, fleet);
-            check.equals(result, false);
-            check.equals(shop.getStock(), [equ2]);
-            check.equals(fleet.credits, 200);
-
-            result = shop.buyFromFleet(equ1, fleet);
-            check.equals(result, true);
-            check.equals(shop.getStock(), [equ1, equ2]);
-            check.equals(fleet.credits, 1000);
-        });
-
         test.case("generates secondary missions", check => {
             let universe = new Universe();
             universe.generate(4);

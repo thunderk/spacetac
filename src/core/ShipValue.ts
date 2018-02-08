@@ -7,16 +7,9 @@ module TK.SpaceTac {
         "hull": "Physical structure of the ship",
         "shield": "Shield around the ship that may absorb damage",
         "power": "Power available to supply the equipments",
-        "skill_materials": "Usage of physical materials such as bullets, shells...",
-        "skill_photons": "Forces of light, and electromagnetic radiation",
-        "skill_antimatter": "Manipulation of matter and antimatter particles",
-        "skill_quantum": "Application of quantum uncertainty principle",
-        "skill_gravity": "Interaction with gravitational forces",
-        "skill_time": "Control of relativity's time properties",
         "hull_capacity": "Maximal Hull value before the ship risks collapsing",
         "shield_capacity": "Maximal Shield value to protect the hull from damage",
         "power_capacity": "Maximal Power value to use equipment",
-        "power_generation": "Power generated at the end of the ship's turn",
         "maneuvrability": "Ability to move first, fast and to evade weapons",
         "precision": "Ability to target far and aim good",
     }
@@ -25,16 +18,9 @@ module TK.SpaceTac {
         "hull": "hull",
         "shield": "shield",
         "power": "power",
-        "skill_materials": "materials skill",
-        "skill_photons": "photons skill",
-        "skill_antimatter": "antimatter skill",
-        "skill_quantum": "quantum skill",
-        "skill_gravity": "gravity skill",
-        "skill_time": "time skill",
         "hull_capacity": "hull capacity",
         "shield_capacity": "shield capacity",
         "power_capacity": "power capacity",
-        "power_generation": "power generation",
         "maneuvrability": "maneuvrability",
         "precision": "precision",
     }
@@ -127,30 +113,15 @@ module TK.SpaceTac {
     }
 
     /**
-     * Set of upgradable skills for a ship
-     */
-    export class ShipSkills {
-        // Skills
-        skill_materials = new ShipAttribute()
-        skill_photons = new ShipAttribute()
-        skill_antimatter = new ShipAttribute()
-        skill_quantum = new ShipAttribute()
-        skill_gravity = new ShipAttribute()
-        skill_time = new ShipAttribute()
-    }
-
-    /**
      * Set of ShipAttribute for a ship
      */
-    export class ShipAttributes extends ShipSkills {
+    export class ShipAttributes {
         // Maximal hull value
         hull_capacity = new ShipAttribute()
         // Maximal shield value
         shield_capacity = new ShipAttribute()
         // Maximal power value
         power_capacity = new ShipAttribute()
-        // Power value recovered each turn
-        power_generation = new ShipAttribute()
         // Ability to move first and fast
         maneuvrability = new ShipAttribute()
         // Ability to fire far and good
@@ -169,7 +140,6 @@ module TK.SpaceTac {
     /**
      * Static attributes and values object for property queries
      */
-    export const SHIP_SKILLS = new ShipSkills();
     export const SHIP_ATTRIBUTES = new ShipAttributes();
     export const SHIP_VALUES = new ShipValues();
 

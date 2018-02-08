@@ -1,25 +1,23 @@
 module TK.SpaceTac.Specs {
     testing("TriggerAction", test => {
         test.case("constructs correctly", check => {
-            let equipment = new Equipment(SlotType.Weapon, "testweapon");
-            let action = new TriggerAction(equipment, [], 4, 30, 10);
-
-            check.equals(action.code, "fire-testweapon");
+            let action = new TriggerAction("testweapon", { power: 4, range: 30, blast: 10 });
+            check.equals(action.code, "testweapon");
             check.equals(action.getVerb(), "Fire");
-            check.same(action.equipment, equipment);
+
+            action = new TriggerAction("testweapon", { blast: 10 });
+            check.equals(action.getVerb(), "Trigger");
         })
 
         test.case("applies effects to alive ships in blast radius", check => {
             let fleet = new Fleet();
             let ship = new Ship(fleet, "ship");
-            let equipment = new Equipment(SlotType.Weapon, "testweapon");
             let effect = new BaseEffect("testeffect");
             let mock_apply = check.patch(effect, "getOnDiffs");
-            let action = new TriggerAction(equipment, [effect], 5, 100, 10);
-            equipment.action = action;
-            ship.addSlot(SlotType.Weapon).attach(equipment);
+            let action = new TriggerAction("testweapon", { power: 5, range: 100, blast: 10, effects: [effect] });
 
-            TestTools.setShipAP(ship, 10);
+            TestTools.setShipModel(ship, 100, 0, 10);
+            ship.actions.addCustom(action);
 
             let ship1 = new Ship(fleet, "ship1");
             ship1.setArenaPosition(65, 72);
@@ -45,8 +43,7 @@ module TK.SpaceTac.Specs {
             ship1.setArenaPosition(50, 10);
             let ship2 = new Ship();
             ship2.setArenaPosition(150, 10);
-            let weapon = TestTools.addWeapon(ship1, 1, 0, 100, 30);
-            let action = nn(weapon.action);
+            let action = TestTools.addWeapon(ship1, 1, 0, 100, 30);
 
             let target = action.checkTarget(ship1, new Target(150, 10));
             check.equals(target, new Target(150, 10));
@@ -74,14 +71,14 @@ module TK.SpaceTac.Specs {
             ship3.setArenaPosition(0, 30);
             let ships = [ship1, ship2, ship3];
 
-            let action = new TriggerAction(new Equipment(), [], 1, 50);
+            let action = new TriggerAction("testaction", { range: 50 });
             check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromShip(ship2), ships), [ship2]);
             check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromLocation(10, 50), ships), []);
 
-            action = new TriggerAction(new Equipment(), [], 1, 50, 40);
+            action = new TriggerAction("testaction", { range: 50, blast: 40 });
             check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromLocation(20, 20), ships), [ship1, ship3]);
 
-            action = new TriggerAction(new Equipment(), [], 1, 100, 0, 30);
+            action = new TriggerAction("testaction", { range: 100, angle: 30 });
             check.equals(action.filterImpactedShips({ x: 0, y: 51 }, Target.newFromLocation(30, 50), ships), [ship1, ship2]);
         })
 
@@ -93,7 +90,7 @@ module TK.SpaceTac.Specs {
                 TestTools.setAttribute(ship1, "precision", precision);
                 TestTools.setAttribute(ship2, "maneuvrability", maneuvrability);
 
-                let action = new TriggerAction(new Equipment(), [], 1, 0, 0, 0, precision_factor, maneuvrability_factor);
+                let action = new TriggerAction("testaction", { aim: precision_factor, evasion: maneuvrability_factor });
                 check.nears(action.getSuccessFactor(ship1, ship2), result, 3,
                     `precision ${precision} (weight ${precision_factor}), maneuvrability ${maneuvrability} (weight ${maneuvrability_factor})`);
             }
@@ -134,7 +131,7 @@ module TK.SpaceTac.Specs {
             function verify(success_base: number, luck: number, random: number, expected: number) {
                 let ship1 = new Ship();
                 let ship2 = new Ship();
-                let action = new TriggerAction(new Equipment(), [], 1, 0, 0, 0, 0, 0, luck);
+                let action = new TriggerAction("testaction", { luck: luck });
                 check.patch(action, "getSuccessFactor", () => success_base);
                 check.nears(action.getEffectiveSuccess(ship1, ship2, new SkewedRandomGenerator([random])), expected, 5,
                     `success ${success_base}, luck ${luck}, random ${random}`);
@@ -163,28 +160,26 @@ module TK.SpaceTac.Specs {
 
         test.case("guesses targetting mode", check => {
             let ship = new Ship();
-            let equ = new Equipment();
-            let action = new TriggerAction(equ, []);
+            let action = new TriggerAction("testaction");
             check.equals(action.getTargettingMode(ship), ActionTargettingMode.SELF_CONFIRM, "self");
 
-            action = new TriggerAction(equ, [], 1, 50);
+            action = new TriggerAction("testaction", { range: 50 });
             check.equals(action.getTargettingMode(ship), ActionTargettingMode.SHIP, "ship");
 
-            action = new TriggerAction(equ, [], 1, 50, 20);
+            action = new TriggerAction("testaction", { range: 50, blast: 20 });
             check.equals(action.getTargettingMode(ship), ActionTargettingMode.SPACE, "blast");
 
-            action = new TriggerAction(equ, [], 1, 0, 20);
+            action = new TriggerAction("testaction", { blast: 20 });
             check.equals(action.getTargettingMode(ship), ActionTargettingMode.SURROUNDINGS, "surroundings");
 
-            action = new TriggerAction(equ, [], 1, 50, 0, 15);
+            action = new TriggerAction("testaction", { range: 50, angle: 15 });
             check.equals(action.getTargettingMode(ship), ActionTargettingMode.SPACE, "angle");
         })
 
         test.case("rotates toward the target", check => {
             let battle = TestTools.createBattle();
             let ship = battle.play_order[0];
-            let weapon = TestTools.addWeapon(ship, 1, 0, 100, 30);
-            let action = nn(weapon.action);
+            let action = TestTools.addWeapon(ship, 1, 0, 100, 30);
             check.patch(action, "checkTarget", (ship: Ship, target: Target) => target);
             check.equals(ship.arena_angle, 0);
 
@@ -198,32 +193,32 @@ module TK.SpaceTac.Specs {
         })
 
         test.case("builds a textual description", check => {
-            let effects: BaseEffect[] = [];
-            let action = new TriggerAction(new Equipment(), effects, 0);
+            let action = new TriggerAction();
             check.equals(action.getEffectsDescription(), "");
 
-            effects.push(new AttributeMultiplyEffect("precision", 20));
+            let effects: BaseEffect[] = [new AttributeMultiplyEffect("precision", 20)];
+            action.configureTrigger({ effects: effects, power: 0 });
             check.equals(action.getEffectsDescription(), "Trigger:\n• precision +20% on self");
 
-            action = new TriggerAction(new Equipment(), effects, 2);
+            action.configureTrigger({ effects: effects, power: 2 });
             check.equals(action.getEffectsDescription(), "Trigger (power 2):\n• precision +20% on self");
 
-            action = new TriggerAction(new Equipment(), effects, 2, 120);
+            action.configureTrigger({ effects: effects, power: 2, range: 120 });
             check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• precision +20% on target");
 
-            action = new TriggerAction(new Equipment(), effects, 2, 120, 0, 0, 10);
+            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10 });
             check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%):\n• precision +20% on target");
 
-            action = new TriggerAction(new Equipment(), effects, 2, 120, 0, 0, 10, 35);
+            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10, evasion: 35 });
             check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%, evasion -35%):\n• precision +20% on target");
 
-            action = new TriggerAction(new Equipment(), effects, 2, 120, 0, 80, 10, 35);
+            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10, evasion: 35, angle: 80 });
             check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%, evasion -35%):\n• precision +20% in 80° arc");
 
-            action = new TriggerAction(new Equipment(), effects, 2, 120, 100, 80, 10, 35);
+            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10, evasion: 35, blast: 100, angle: 80 });
             check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%, evasion -35%):\n• precision +20% in 100km radius");
 
-            action = new TriggerAction(new Equipment(), effects, 2, 120, 100, 80, 10, 35, 15);
+            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10, evasion: 35, blast: 100, angle: 80, luck: 15 });
             check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%, evasion -35%, luck ±15%):\n• precision +20% in 100km radius");
         })
     });

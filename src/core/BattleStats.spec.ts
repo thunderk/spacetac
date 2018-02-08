@@ -71,26 +71,5 @@ module TK.SpaceTac.Specs {
             stats.processLog(battle.log, battle.fleets[0], true);
             check.equals(stats.stats, { "Drones deployed": [1, 1] });
         })
-
-        test.case("evaluates equipment depreciation", check => {
-            let stats = new BattleStats();
-            let battle = new Battle();
-            let attacker = battle.fleets[0].addShip();
-            let defender = battle.fleets[1].addShip();
-
-            let equ1 = TestTools.addEngine(attacker, 50);
-            equ1.price = 1000;
-            let equ2 = TestTools.addEngine(defender, 50);
-            equ2.price = 1100;
-
-            stats.addFleetsValue(attacker.fleet, defender.fleet);
-            check.equals(stats.stats, { "Equipment wear (zotys)": [1000, 1100] });
-
-            equ1.price = 500;
-            equ2.price = 800;
-
-            stats.addFleetsValue(attacker.fleet, defender.fleet, false);
-            check.equals(stats.stats, { "Equipment wear (zotys)": [500, 300] });
-        })
     })
 }

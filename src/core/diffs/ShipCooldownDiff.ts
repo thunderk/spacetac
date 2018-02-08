@@ -2,43 +2,45 @@
 
 module TK.SpaceTac {
     /**
-     * A ship's equipment cools down
+     * A ship's action cools down
      */
     export class ShipCooldownDiff extends BaseBattleShipDiff {
-        // Equipment to cool
-        equipment: RObjectId
+        // Action to cool
+        action: RObjectId
 
         // Quantity of heat to dissipate
         heat: number
 
-        constructor(ship: Ship | RObjectId, equipment: Equipment | RObjectId, heat: number) {
+        constructor(ship: Ship | RObjectId, action: BaseAction | RObjectId, heat: number) {
             super(ship);
 
-            this.equipment = (equipment instanceof Equipment) ? equipment.id : equipment;
+            this.action = (action instanceof BaseAction) ? action.id : action;
             this.heat = heat;
         }
 
         applyOnShip(ship: Ship, battle: Battle) {
-            let equipment = ship.getEquipment(this.equipment);
-            if (equipment) {
-                equipment.cooldown.heat -= this.heat;
-                if (equipment.cooldown.heat == 0) {
-                    equipment.cooldown.uses = 0;
+            let action = ship.actions.getById(this.action);
+            if (action) {
+                let cooldown = ship.actions.getCooldown(action);
+                cooldown.heat -= this.heat;
+                if (cooldown.heat == 0) {
+                    cooldown.uses = 0;
                 }
             } else {
-                console.error("Cannot apply diff, equipment not found", this);
+                console.error("Cannot apply diff, action not found", this, ship.actions);
             }
         }
 
         revertOnShip(ship: Ship, battle: Battle) {
-            let equipment = ship.getEquipment(this.equipment);
-            if (equipment) {
-                if (equipment.cooldown.heat == 0) {
-                    equipment.cooldown.uses = equipment.cooldown.overheat;
+            let action = ship.actions.getById(this.action);
+            if (action) {
+                let cooldown = ship.actions.getCooldown(action);
+                if (cooldown.heat == 0) {
+                    cooldown.uses = cooldown.overheat;
                 }
-                equipment.cooldown.heat += this.heat;
+                cooldown.heat += this.heat;
             } else {
-                console.error("Cannot revert diff, equipment not found", this);
+                console.error("Cannot revert diff, action not found", this, ship.actions);
             }
         }
     }

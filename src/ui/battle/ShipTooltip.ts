@@ -23,10 +23,9 @@ module TK.SpaceTac.UI {
 
             builder.configure(10, 6, this.battleview.arena.getBoundaries());
 
-            let portrait_bg = builder.image("battle-tooltip-ship-portrait", -18, -18);
+            let portrait_bg = builder.image("battle-tooltip-ship-portrait", 0, 0);
             builder.in(portrait_bg, builder => {
-                let portrait = builder.image(`ship-${ship.model.code}-portrait`, portrait_bg.width / 2, portrait_bg.height / 2);
-                portrait.anchor.set(0.5);
+                let portrait = builder.image(`ship-${ship.model.code}-portrait`, 1, 1);
                 portrait.scale.set(0.75);
             });
 
@@ -37,36 +36,32 @@ module TK.SpaceTac.UI {
                 let turns = this.battleview.battle.getPlayOrder(ship);
                 builder.text((turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), 230, 36, { color: "#cccccc", size: 18 });
 
-                ShipTooltip.addValue(builder, 0, "#aa6f33", "character-attribute-precision", ship.getAttribute("precision"));
-                ShipTooltip.addValue(builder, 1, "#c1f06b", "character-attribute-maneuvrability", ship.getAttribute("maneuvrability"));
-                ShipTooltip.addValue(builder, 2, "#ffdd4b", "character-value-power", ship.getValue("power"), ship.getAttribute("power_capacity"));
-                ShipTooltip.addValue(builder, 3, "#eb4e4a", "character-value-hull", ship.getValue("hull"), ship.getAttribute("hull_capacity"));
-                ShipTooltip.addValue(builder, 4, "#2ad8dc", "character-value-shield", ship.getValue("shield"), ship.getAttribute("shield_capacity"));
+                ShipTooltip.addValue(builder, 0, "#aa6f33", "attribute-precision", ship.getAttribute("precision"));
+                ShipTooltip.addValue(builder, 1, "#c1f06b", "attribute-maneuvrability", ship.getAttribute("maneuvrability"));
+                ShipTooltip.addValue(builder, 2, "#ffdd4b", "attribute-power_capacity", ship.getValue("power"), ship.getAttribute("power_capacity"));
+                ShipTooltip.addValue(builder, 3, "#eb4e4a", "attribute-hull_capacity", ship.getValue("hull"), ship.getAttribute("hull_capacity"));
+                ShipTooltip.addValue(builder, 4, "#2ad8dc", "attribute-shield_capacity", ship.getValue("shield"), ship.getAttribute("shield_capacity"));
 
                 let iy = 210;
-                let effects = ship.active_effects.list();
-                if (effects.length > 0) {
-                    builder.text("Active effects", 0, iy, { color: "#ffffff", size: 18, bold: true });
-                    iy += 30;
-                    effects.forEach(effect => {
-                        builder.text(`• ${effect.getDescription()}`, 0, iy, { color: effect.isBeneficial() ? "#afe9c6" : "#e9afaf" });
-                        iy += 26;
-                    });
-                }
 
-                let weapons = ship.listEquipment(SlotType.Weapon);
-                if (weapons.length > 0) {
-                    builder.text("Weapons", 0, iy, { size: 18, bold: true });
-                    iy += 30;
-                    weapons.forEach(weapon => {
-                        let icon = builder.image(`equipment-${weapon.code}`, 0, iy);
-                        icon.scale.set(0.1);
-                        builder.text(weapon.getFullName(), 32, iy);
-                        iy += 26;
-                    });
-                }
+                ship.actions.listAll().forEach(action => {
+                    if (!(action instanceof EndTurnAction) && !(action instanceof MoveAction)) {
+                        let icon = builder.image(`action-${action.code}`, 0, iy);
+                        icon.scale.set(0.15);
+                        builder.text(action.name, 46, iy + 8);
+                        iy += 40;
+                    }
+                });
+
+                ship.active_effects.list().forEach(effect => {
+                    builder.text(`• ${effect.getDescription()}`, 0, iy, { color: effect.isBeneficial() ? "#afe9c6" : "#e9afaf" });
+                    iy += 32;
+                });
+
+                builder.text(ship.model.getDescription(), 0, iy + 4, { size: 14, color: "#999999", width: 540 });
             } else {
-                builder.text("Emergency Stasis Protocol\nship disabled", 140, 36, { color: "#a899db", size: 20, center: true, vcenter: true });
+                builder.text("Emergency Stasis Protocol\nship disabled", 140, 36,
+                    { color: "#a899db", size: 20, center: true, vcenter: true });
             }
 
             let sprite = this.battleview.arena.findShipSprite(ship);

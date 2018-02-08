@@ -18,6 +18,24 @@ module TK.SpaceTac.UI {
     // Common UI tools functions
     export class UITools {
         /**
+         * Get the screen bounding rectanle of a displayed object
+         * 
+         * This is a workaround for bugs in getLocalBounds and getBounds
+         */
+        static getScreenBounds(obj: Phaser.Image | Phaser.Sprite | Phaser.Group | Phaser.Graphics): IBounded {
+            obj.updateTransform();
+
+            let rects: IBounded[] = [obj.getBounds()];
+            obj.children.forEach(child => {
+                if (child instanceof Phaser.Image || child instanceof Phaser.Sprite || child instanceof Phaser.Group || child instanceof Phaser.Graphics) {
+                    rects.push(UITools.getScreenBounds(child));
+                }
+            });
+
+            return rects.reduce(UITools.unionRects, { x: 0, y: 0, width: 0, height: 0 });
+        }
+
+        /**
          * Get the position of an object, adjusted to remain inside a container
          */
         static positionInside(obj: IBounded, container: IBounded): [number, number] {
@@ -52,7 +70,41 @@ module TK.SpaceTac.UI {
             }
         }
 
-        // Constraint an angle in radians the ]-pi;pi] range.
+        /**
+         * Compare two rectangles
+         */
+        static compareRects(rct1: IBounded, rct2: IBounded) {
+            return rct1.x == rct2.x && rct1.y == rct2.y && rct1.width == rct2.width && rct1.height == rct2.height;
+        }
+
+        /**
+         * Returns the bounding rectangle containing two other rectangles
+         */
+        static unionRects(rct1: IBounded, rct2: IBounded): IBounded {
+            let result: IBounded;
+            if (rct1.width == 0 || rct1.height == 0) {
+                result = rct2;
+            } else if (rct2.width == 0 || rct2.height == 0) {
+                result = rct1;
+            } else {
+                let xmin = Math.min(rct1.x, rct2.x);
+                let xmax = Math.max(rct1.x + rct1.width, rct2.x + rct2.width);
+                let ymin = Math.min(rct1.y, rct2.y);
+                let ymax = Math.max(rct1.y + rct1.height, rct2.y + rct2.height);
+
+                result = { x: xmin, y: ymin, width: xmax - xmin, height: ymax - ymin };
+            }
+
+            if (result.width == 0 || result.height == 0) {
+                return { x: 0, y: 0, width: 0, height: 0 };
+            } else {
+                return result;
+            }
+        }
+
+        /**
+         * Constraint an angle in radians the ]-pi;pi] range.
+         */
         static normalizeAngle(angle: number): number {
             angle = angle % (2 * Math.PI);
             if (angle <= -Math.PI) {
@@ -81,24 +133,32 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Draw a background around a container
-         * 
-         * Content's top-left corner is supposed to be at (0,0)
+         * Draw a background around a content
          */
         static drawBackground(content: Phaser.Group | Phaser.Text, background: Phaser.Graphics, border = 6): [number, number] {
-            let bounds = content.getBounds();
-            let width = bounds.width + 2 * border;
-            let height = bounds.height + 2 * border;
+            if (content.parent === background.parent) {
+                let bounds = content.getLocalBounds();
 
-            if (background.width != width || background.height != height) {
-                background.clear();
-                background.lineStyle(2, 0x404450);
-                background.beginFill(0x202225, 0.9);
-                background.drawRect(-border, -border, width, height);
-                background.endFill();
+                let x = bounds.x - border;
+                let y = bounds.y - border;
+                let width = bounds.width + 2 * border;
+                let height = bounds.height + 2 * border;
+
+                if (!(background.width && background.data.bg_bounds && UITools.compareRects(background.data.bg_bounds, bounds))) {
+                    background.clear();
+                    background.lineStyle(2, 0x404450);
+                    background.beginFill(0x202225, 0.9);
+                    background.drawRect(x, y, width, height);
+                    background.endFill();
+
+                    background.data.bg_bounds = copy(bounds);
+                }
+
+                return [width, height];
+            } else {
+                console.error("Cannot draw background with different parents", content, background);
+                return [0, 0];
             }
-
-            return [width, height];
         }
     }
 }

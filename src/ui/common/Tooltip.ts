@@ -2,6 +2,8 @@
 
 module TK.SpaceTac.UI {
 
+    export type TooltipFiller = string | ((filler: TooltipBuilder) => string) | ((filler: TooltipBuilder) => boolean);
+
     class TooltipContainer extends Phaser.Group {
         view: BaseView
         background: Phaser.Graphics
@@ -167,6 +169,23 @@ module TK.SpaceTac.UI {
          */
         bindStaticText(obj: Phaser.Button, text: string): void {
             this.bindDynamicText(obj, () => text);
+        }
+
+        /**
+         * Show a tooltip for a component
+         */
+        show(obj: Phaser.Button, content: TooltipFiller): void {
+            let builder = this.getBuilder();
+            let scontent = (typeof content == "string") ? content : content(builder);
+            if (typeof scontent == "string") {
+                builder.text(scontent, 0, 0, { color: "#cccccc", size: 20 });
+            }
+
+            if (scontent) {
+                this.container.show(obj.getBounds());
+            } else {
+                this.hide();
+            }
         }
 
         /**

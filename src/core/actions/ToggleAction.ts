@@ -1,35 +1,49 @@
 /// <reference path="BaseAction.ts"/>
 
 module TK.SpaceTac {
+    /** 
+     * Configuration of a toggle action
+     */
+    export interface ToggleActionConfig {
+        // Power consumption (while active)
+        power: number
+        // Effect radius
+        radius: number
+        // Effects applied
+        effects: BaseEffect[]
+    }
+
     /**
      * Action to toggle some effects on the ship or around it, until next turn start
      * 
      * Toggle actions consume power when activated, and restore it when deactivated
      */
     export class ToggleAction extends BaseAction {
-        // Current activation status
-        activated = false
+        power = 1
+        radius = 0
+        effects: BaseEffect[] = []
 
-        constructor(
-            // Mandatory equipment
-            readonly equipment: Equipment,
-            // Power consumption (while active)
-            readonly power = 1,
-            // Effect radius
-            readonly radius = 0,
-            // Effects applied
-            readonly effects: BaseEffect[] = [],
-            code = `toggle-${equipment.code}`
-        ) {
-            super(code, equipment);
+        constructor(name: string, config?: Partial<ToggleActionConfig>, code?: string) {
+            super(name, code);
+
+            if (config) {
+                this.configureToggle(config);
+            }
         }
 
-        getVerb(): string {
-            return this.activated ? "Deactivate" : "Activate";
+        /**
+         * Configure the toggling
+         */
+        configureToggle(config: Partial<ToggleActionConfig>): void {
+            copyfields(config, this);
+        }
+
+        getVerb(ship: Ship): string {
+            return ship.actions.isToggled(this) ? "Deactivate" : "Activate";
         }
 
         getTargettingMode(ship: Ship): ActionTargettingMode {
-            if (this.activated || !this.radius) {
+            if (ship.actions.isToggled(this) || !this.radius) {
                 return ActionTargettingMode.SELF_CONFIRM;
             } else {
                 return ActionTargettingMode.SURROUNDINGS;
@@ -37,7 +51,7 @@ module TK.SpaceTac {
         }
 
         getActionPointsUsage(ship: Ship, target: Target | null): number {
-            return this.activated ? -this.power : this.power;
+            return ship.actions.isToggled(this) ? -this.power : this.power;
         }
 
         getRangeRadius(ship: Ship): number {
@@ -53,14 +67,16 @@ module TK.SpaceTac {
         }
 
         getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+            let activated = ship.actions.isToggled(this);
+
             let result: BaseBattleDiff[] = [
-                new ShipActionToggleDiff(ship, this, !this.activated)
+                new ShipActionToggleDiff(ship, this, !activated)
             ];
 
             let ships = this.getImpactedShips(ship, target, ship.location);
             ships.forEach(iship => {
                 this.effects.forEach(effect => {
-                    if (this.activated) {
+                    if (activated) {
                         result.push(new ShipEffectRemovedDiff(iship, effect));
                         result = result.concat(effect.getOffDiffs(iship));
                     } else {

@@ -19,12 +19,13 @@ module TK.SpaceTac {
         }
 
         applyOnShip(ship: Ship, battle: Battle): void {
-            let action = ship.getAction(this.action);
+            let action = ship.actions.getById(this.action);
             if (action && action instanceof ToggleAction) {
-                if (action.activated == this.activated) {
+                let activated = ship.actions.isToggled(action);
+                if (activated == this.activated) {
                     console.warn("Diff not applied - action already in good state", this, action);
                 } else {
-                    action.activated = this.activated;
+                    ship.actions.toggle(action, this.activated);
                 }
             } else {
                 console.error("Diff not applied - action not found on ship", this, ship);

@@ -52,11 +52,9 @@ module TK.SpaceTac.Specs {
 
             let battle = nn(session.getBattle());
             battle.endBattle(session.player.fleet);
-            let spyloot = check.patch(nn(battle.outcome), "createLoot", null);
             session.setBattleEnded();
             check.notequals(session.getBattle(), null);
             check.equals(location1.encounter, null);
-            check.called(spyloot, 1);
 
             // Defeat case
             location2.encounter = new Fleet();
@@ -66,11 +64,9 @@ module TK.SpaceTac.Specs {
 
             battle = nn(session.getBattle());
             battle.endBattle(null);
-            spyloot = check.patch(nn(battle.outcome), "createLoot", null);
             session.setBattleEnded();
             check.notequals(session.getBattle(), null);
             check.notequals(location2.encounter, null);
-            check.called(spyloot, 0);
         });
 
         test.case("generates a new campaign", check => {

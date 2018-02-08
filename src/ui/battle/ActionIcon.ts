@@ -50,7 +50,7 @@ module TK.SpaceTac.UI {
             let builder = new UIBuilder(this.view, this.container);
 
             // Action icon
-            this.img_action = builder.image([`action-${action.code}`, `equipment-${action.equipment ? action.equipment.code : "---"}`]);
+            this.img_action = builder.image(`action-${action.code}`);
             this.img_action.anchor.set(0.5);
             this.img_action.scale.set(0.35);
             this.img_action.alpha = 0.2;
@@ -147,7 +147,7 @@ module TK.SpaceTac.UI {
                 this.processSelection(Target.newFromShip(this.ship));
             } else {
                 // Switch to targetting mode (will apply action when a target is selected)
-                this.view.enterTargettingMode(this.action, mode);
+                this.view.enterTargettingMode(this.ship, this.action, mode);
             }
         }
 
@@ -170,13 +170,14 @@ module TK.SpaceTac.UI {
         refresh(used: BaseAction | null = null, power_consumption = 0): void {
             let disabled = bool(this.action.checkCannotBeApplied(this.ship));
             let selected = (used === this.action);
-            let toggled = (this.action instanceof ToggleAction) && this.action.activated;
+            let toggled = (this.action instanceof ToggleAction) && this.ship.actions.isToggled(this.action);
             let fading = bool(this.action.checkCannotBeApplied(this.ship, this.ship.getValue("power") - power_consumption));
-            let cooldown = this.action.cooldown.heat;
+            let cooldown = this.ship.actions.getCooldown(this.action);
+            let heat = cooldown.heat;
             let targetting = used !== null;
-            if (this.action == used && this.action.cooldown.willOverheat()) {
+            if (this.action == used && cooldown.willOverheat()) {
                 fading = true;
-                cooldown = this.action.cooldown.cooling;
+                heat = cooldown.cooling;
             }
 
             // inputs
@@ -242,7 +243,7 @@ module TK.SpaceTac.UI {
             }
 
             // right
-            if (toggled != this.toggled || disabled != this.disabled || cooldown != this.cooldown) {
+            if (toggled != this.toggled || disabled != this.disabled || heat != this.cooldown) {
                 destroyChildren(this.img_sticky);
                 if (this.action instanceof ToggleAction) {
                     if (toggled) {
@@ -251,13 +252,13 @@ module TK.SpaceTac.UI {
                         this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-untoggled");
                     }
                     this.img_sticky.visible = !disabled;
-                } else if (cooldown) {
+                } else if (heat) {
                     if (disabled) {
                         this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-disabled");
                     } else {
                         this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-overheat");
                     }
-                    range(Math.min(cooldown - 1, 4)).forEach(i => {
+                    range(Math.min(heat - 1, 4)).forEach(i => {
                         this.img_sticky.addChild(this.view.newImage("battle-actionbar-cooldown-one", 0, 2 - i * 7));
                     });
                     this.img_sticky.addChild(this.view.newImage("battle-actionbar-cooldown-front", -4, -20));
@@ -272,7 +273,7 @@ module TK.SpaceTac.UI {
             this.targetting = targetting;
             this.fading = fading;
             this.toggled = toggled;
-            this.cooldown = cooldown;
+            this.cooldown = heat;
         }
     }
 }

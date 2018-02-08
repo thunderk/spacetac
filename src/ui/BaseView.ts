@@ -240,10 +240,10 @@ module TK.SpaceTac.UI {
         /**
          * Get an image from atlases
          */
-        getImageInfo(name: string): { key: string, frame: number } {
+        getImageInfo(name: string): { key: string, frame: number, exists: boolean } {
             // TODO Cache
             if (this.game.cache.checkImageKey(name)) {
-                return { key: name, frame: 0 };
+                return { key: name, frame: 0, exists: true };
             } else {
                 let i = 1;
                 while (this.game.cache.checkImageKey(`atlas-${i}`)) {
@@ -251,11 +251,11 @@ module TK.SpaceTac.UI {
                     let frames = data.getFrames();
                     let frame = first(frames, frame => AssetLoading.getKey(frame.name) == `graphics-exported-${name}`);
                     if (frame) {
-                        return { key: `atlas-${i}`, frame: frame.index };
+                        return { key: `atlas-${i}`, frame: frame.index, exists: true };
                     }
                     i++;
                 }
-                return { key: `-missing-${name}`, frame: 0 };
+                return { key: `-missing-${name}`, frame: 0, exists: false };
             }
         }
 

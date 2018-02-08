@@ -12,9 +12,9 @@ module TK.SpaceTac {
         end: ArenaLocationAngle
 
         // Engine used
-        engine: Equipment | null
+        engine: MoveAction | null
 
-        constructor(ship: Ship | RObjectId, start: ArenaLocationAngle, end: ArenaLocationAngle, engine: Equipment | null = null) {
+        constructor(ship: Ship | RObjectId, start: ArenaLocationAngle, end: ArenaLocationAngle, engine: MoveAction | null = null) {
             super(ship);
 
             this.start = start;

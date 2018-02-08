@@ -23,40 +23,30 @@ module TK.SpaceTac {
         }
 
         protected applyOnShip(ship: Ship, battle: Battle): void {
-            let action = first(ship.getAvailableActions(), action => action.is(this.action));
+            let action = ship.actions.getById(this.action);
 
             if (!action) {
                 console.error("Action failed - not found on ship", this, ship);
                 return;
             }
 
-            if (action.cooldown.canUse()) {
-                action.cooldown.use(1);
+            if (ship.actions.isUsable(action)) {
+                ship.actions.storeUsage(action, 1);
             } else {
                 console.error("Action apply failed - in cooldown", this, ship);
                 return;
             }
-
-            if (action.equipment) {
-                action.equipment.addWear(1);
-                ship.listEquipment(SlotType.Power).forEach(equipment => equipment.addWear(1));
-            }
         }
 
         protected revertOnShip(ship: Ship, battle: Battle): void {
-            let action = first(ship.getAvailableActions(), action => action.is(this.action));
+            let action = ship.actions.getById(this.action);
 
             if (!action) {
                 console.error("Action revert failed - not found on ship", this, ship);
                 return;
             }
 
-            action.cooldown.use(-1);
-
-            if (action.equipment) {
-                action.equipment.addWear(-1);
-                ship.listEquipment(SlotType.Power).forEach(equipment => equipment.addWear(-1));
-            }
+            ship.actions.storeUsage(action, -1);
         }
     }
 }

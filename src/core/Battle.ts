@@ -274,9 +274,8 @@ module TK.SpaceTac {
             this.outcome = null;
             this.cycle = 1;
             this.placeShips();
-            this.stats.addFleetsValue(this.fleets[0], this.fleets[1]);
-            this.throwInitiative();
             iforeach(this.iships(), ship => ship.restoreInitialState());
+            this.throwInitiative();
             this.setPlayingShip(this.play_order[0]);
         }
 
@@ -354,7 +353,7 @@ module TK.SpaceTac {
         applyOneAction(action_id: RObjectId, target?: Target): boolean {
             let ship = this.playing_ship;
             if (ship) {
-                let action = ship.getAction(action_id);
+                let action = ship.actions.getById(action_id);
                 if (action) {
                     if (!target) {
                         target = action.getDefaultTarget(ship);

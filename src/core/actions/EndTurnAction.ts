@@ -4,28 +4,27 @@ module TK.SpaceTac {
     /**
      * Action to end the ship's turn
      * 
-     * This action is not provided by an equipment and is always available
+     * This action is always available (through its singleton)
      */
     export class EndTurnAction extends BaseAction {
         // Singleton that may be used for all ships
         static SINGLETON = new EndTurnAction();
 
         constructor() {
-            super("endturn");
+            super("End turn");
         }
 
-        getVerb(): string {
-            return "End ship's turn";
+        getVerb(ship: Ship): string {
+            return this.name;
+        }
+
+        getTitle(ship: Ship): string {
+            return this.name;
         }
 
         getActionPointsUsage(ship: Ship, target: Target | null): number {
             let toggled_cost = isum(imap(ship.iToggleActions(true), action => action.power));
-            let power_diff = ship.getAttribute("power_generation") - toggled_cost;
-            let power_excess = ship.getValue("power") + power_diff - ship.getAttribute("power_capacity");
-            if (power_excess > 0) {
-                power_diff -= power_excess;
-            }
-            return -power_diff;
+            return ship.getValue("power") + toggled_cost - ship.getAttribute("power_capacity");
         }
 
         getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
@@ -33,10 +32,12 @@ module TK.SpaceTac {
                 let result: BaseBattleDiff[] = [];
                 let new_ship = battle.getNextShip();
 
-                // Cool down equipment
-                ship.listEquipment().filter(equ => equ.cooldown.heat > 0).forEach(equ => {
-                    result.push(new ShipCooldownDiff(ship, equ, 1));
-                });
+                // Cool down actions
+                ship.actions.listAll().forEach(action => {
+                    if (ship.actions.getCooldown(action).heat > 0) {
+                        result.push(new ShipCooldownDiff(ship, action, 1));
+                    }
+                })
 
                 // "On turn end" effects
                 iforeach(ship.active_effects.iterator(), effect => {

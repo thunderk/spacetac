@@ -1,21 +1,25 @@
 module TK.SpaceTac.Specs {
     testing("ToggleAction", test => {
         test.case("returns correct targetting mode", check => {
-            let action = new ToggleAction(new Equipment(), 1, 0, []);
-            check.same(action.getTargettingMode(new Ship()), ActionTargettingMode.SELF_CONFIRM);
+            let action = new ToggleAction("testtoggle");
+            let ship = new Ship();
+            ship.actions.addCustom(action);
 
-            action.activated = true;
-            check.same(action.getTargettingMode(new Ship()), ActionTargettingMode.SELF_CONFIRM);
+            check.same(action.getTargettingMode(ship), ActionTargettingMode.SELF_CONFIRM);
 
-            action = new ToggleAction(new Equipment(), 1, 50, []);
-            check.same(action.getTargettingMode(new Ship()), ActionTargettingMode.SURROUNDINGS);
+            ship.actions.toggle(action, true);
+            check.same(action.getTargettingMode(ship), ActionTargettingMode.SELF_CONFIRM);
 
-            action.activated = true;
-            check.same(action.getTargettingMode(new Ship()), ActionTargettingMode.SELF_CONFIRM);
+            action = new ToggleAction("testtoggle", { radius: 50 });
+            ship.actions.addCustom(action);
+            check.same(action.getTargettingMode(ship), ActionTargettingMode.SURROUNDINGS);
+
+            ship.actions.toggle(action, true);
+            check.same(action.getTargettingMode(ship), ActionTargettingMode.SELF_CONFIRM);
         })
 
         test.case("collects impacted ships", check => {
-            let action = new ToggleAction(new Equipment(), 1, 50, []);
+            let action = new ToggleAction("testtoggle", { radius: 50 });
             let battle = new Battle();
             let ship1 = battle.fleets[0].addShip();
             ship1.setArenaPosition(0, 0);

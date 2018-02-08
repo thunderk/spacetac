@@ -1,10 +1,11 @@
 module TK.SpaceTac {
     /**
-     * Level and experience system for a ship.
+     * Level and experience system for a ship, with enabled upgrades.
      */
     export class ShipLevel {
-        private level = 1;
-        private experience = 0;
+        private level = 1
+        private experience = 0
+        private upgrades: string[] = []
 
         /**
          * Get current level
@@ -18,6 +19,13 @@ module TK.SpaceTac {
          */
         getExperience(): number {
             return this.experience;
+        }
+
+        /**
+         * Get the activated upgrades
+         */
+        getUpgrades(): string[] {
+            return acopy(this.upgrades);
         }
 
         /**
@@ -73,30 +81,32 @@ module TK.SpaceTac {
         }
 
         /**
-         * Get skill points given by current level
+         * Get upgrade points given by current level
+         * 
+         * This does not deduce activated upgrades usage
          */
-        getSkillPoints(): number {
-            return 5 + 5 * this.level;
+        getUpgradePoints(): number {
+            return this.level > 1 ? (3 * this.level) : 0;
         }
 
         /**
-         * Get the level needed to have a given total of points
+         * (De)Activate an upgrade
+         * 
+         * This does not check the upgrade points needed
          */
-        static getLevelForPoints(points: number): number {
-            let lev = new ShipLevel();
-            while (lev.getSkillPoints() < points) {
-                lev.forceLevelUp();
+        activateUpgrade(upgrade: ModelUpgrade, active: boolean): void {
+            if (active) {
+                add(this.upgrades, upgrade.code);
+            } else {
+                remove(this.upgrades, upgrade.code);
             }
-            return lev.level;
         }
 
         /**
-         * Get the points available at a given level
+         * Check if an upgrade is active
          */
-        static getPointsForLevel(level: number): number {
-            let lev = new ShipLevel();
-            lev.forceLevel(level);
-            return lev.getSkillPoints();
+        hasUpgrade(upgrade: ModelUpgrade): boolean {
+            return contains(this.upgrades, upgrade.code);
         }
     }
 }

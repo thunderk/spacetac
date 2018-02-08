@@ -34,11 +34,10 @@ module TK.SpaceTac.UI.Specs {
             mission = new Mission(universe);
             mission.title = "Do not do evil";
             mission.setDifficulty(MissionDifficulty.easy, 1);
-            mission.reward = new Equipment();
-            mission.reward.name = "Boy Scout Cap";
+            mission.reward = 3500;
             shop_missions.push(mission);
             missions.refresh();
-            checkTexts(missions, ["Proposed jobs", "Save the universe!", "Hard - Reward: 15000 zotys", "Do not do evil", "Easy - Reward: Boy Scout Cap Mk1"]);
+            checkTexts(missions, ["Proposed jobs", "Save the universe!", "Hard - Reward: 15000 zotys", "Do not do evil", "Easy - Reward: 3500 zotys"]);
 
             mission = new Mission(universe);
             mission.title = "Collect some money";
@@ -46,7 +45,7 @@ module TK.SpaceTac.UI.Specs {
             player.missions.addSecondary(mission, player.fleet);
             missions.refresh();
             checkTexts(missions, ["Active jobs", "Collect some money", "Normal - Reward: -",
-                "Proposed jobs", "Save the universe!", "Hard - Reward: 15000 zotys", "Do not do evil", "Easy - Reward: Boy Scout Cap Mk1"]);
+                "Proposed jobs", "Save the universe!", "Hard - Reward: 15000 zotys", "Do not do evil", "Easy - Reward: 3500 zotys"]);
 
             mission = new Mission(universe, undefined, true);
             mission.title = "Kill the villain";
@@ -54,7 +53,7 @@ module TK.SpaceTac.UI.Specs {
             player.missions.main = mission;
             missions.refresh();
             checkTexts(missions, ["Active jobs", "Collect some money", "Normal - Reward: -",
-                "Proposed jobs", "Save the universe!", "Hard - Reward: 15000 zotys", "Do not do evil", "Easy - Reward: Boy Scout Cap Mk1"]);
+                "Proposed jobs", "Save the universe!", "Hard - Reward: 15000 zotys", "Do not do evil", "Easy - Reward: 3500 zotys"]);
         });
     });
 }

@@ -4,7 +4,7 @@ module TK.SpaceTac {
      */
     export class ShipGenerator {
         // Random number generator used
-        random: RandomGenerator;
+        random: RandomGenerator
 
         constructor(random = RandomGenerator.global) {
             this.random = random;
@@ -13,47 +13,35 @@ module TK.SpaceTac {
         /**
          * Generate a ship of a givel level.
          * 
-         * If *upgrade* is true, the ship's upgrade points will be randomly spent before chosing equipment
-         * 
-         * If *force_damage_equipment, at least one "damaging" weapon will be chosen
+         * If *upgrade* is true, random levelling options will be chosen
          */
-        generate(level: number, model: ShipModel | null = null, upgrade = true, force_damage_equipment = true): Ship {
+        generate(level: number, model: BaseModel | null = null, upgrade = true): Ship {
             if (!model) {
                 // Get a random model
-                model = ShipModel.getRandomModel(level, this.random);
+                model = BaseModel.getRandomModel(level, this.random);
             }
 
-            let result = new Ship(null, undefined, model);
-            let loot = new LootGenerator(this.random);
+            let result = new Ship(null, null, model);
 
-            // Set all skills to 1 (to be able to use at least basic equipment)
-            keys(result.skills).forEach(skill => result.upgradeSkill(skill));
-
-            // Level upgrade
             result.level.forceLevel(level);
             if (upgrade) {
-                while (result.getAvailableUpgradePoints() > 0) {
-                    result.upgradeSkill(this.random.choice(keys(SHIP_SKILLS)));
-                }
-            }
+                let iteration = 0;
+                while (iteration < 100) {
+                    iteration += 1;
 
-            // Fill equipment slots
-            result.slots.forEach(slot => {
-                if (slot.type == SlotType.Weapon && force_damage_equipment) {
-                    loot.setTemplateFilter(template => template.hasDamageEffect());
-                    force_damage_equipment = false;
-                }
+                    let points = result.getAvailableUpgradePoints();
+                    let upgrades = model.getAvailableUpgrades(result.level.get()).filter(upgrade => {
+                        return (upgrade.cost || 0) <= points && !result.level.hasUpgrade(upgrade);
+                    });
 
-                let equipment = loot.generateHighest(result.skills, EquipmentQuality.COMMON, slot.type);
-                if (equipment) {
-                    slot.attach(equipment)
-                    if (slot.attached !== equipment) {
-                        console.error("Cannot attach generated equipment to slot", equipment, slot);
+                    if (upgrades.length > 0) {
+                        let upgrade = this.random.choice(upgrades);
+                        result.activateUpgrade(upgrade, true);
+                    } else {
+                        break;
                     }
                 }
-
-                loot.setTemplateFilter(() => true);
-            });
+            }
 
             return result;
         }

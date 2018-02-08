@@ -30,7 +30,7 @@ module TK.SpaceTac.UI.Specs {
             TestTools.addWeapon(ship, 10, 1, 100);
             bar.setShip(ship);
             check.equals(bar.action_icons.length, 3);
-            check.equals(bar.action_icons[1].action.code, "fire-equipment");
+            check.equals(bar.action_icons[1].action.code, "weapon");
         });
 
         test.case("updates power points display", check => {
@@ -54,7 +54,7 @@ module TK.SpaceTac.UI.Specs {
 
             // not owned ship
             let ship = new Ship();
-            TestTools.setShipAP(ship, 8);
+            TestTools.setShipModel(ship, 100, 0, 8);
             bar.setShip(ship);
             checkpoints("not owned ship");
 

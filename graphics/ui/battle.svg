@@ -16,7 +16,7 @@
    viewBox="0 0 1920 1080"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.2 (unknown)"
+   inkscape:version="0.92.1 r15371"
    sodipodi:docname="battle.svg"
    inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/actionbar/power-generated.png"
    inkscape:export-xdpi="96"
@@ -3200,6 +3200,42 @@
        y1="123.97214"
        x2="111.73327"
        y2="123.97214" />
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Drop Shadow"
+       id="filter6088"
+       x="0"
+       y="0"
+       width="1.1000000000000001"
+       height="1.1000000000000001">
+      <feFlood
+         flood-opacity="0.564706"
+         flood-color="rgb(64,68,80)"
+         result="flood"
+         id="feFlood6078" />
+      <feComposite
+         in="flood"
+         in2="SourceGraphic"
+         operator="in"
+         result="composite1"
+         id="feComposite6080" />
+      <feGaussianBlur
+         in="composite1"
+         stdDeviation="2"
+         result="blur"
+         id="feGaussianBlur6082" />
+      <feOffset
+         dx="4"
+         dy="4"
+         result="offset"
+         id="feOffset6084" />
+      <feComposite
+         in="SourceGraphic"
+         in2="offset"
+         operator="over"
+         result="composite2"
+         id="feComposite6086" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -3209,8 +3245,8 @@
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="1317.1113"
-     inkscape:cy="451.49885"
+     inkscape:cx="1342.5671"
+     inkscape:cy="597.16284"
      inkscape:document-units="px"
      inkscape:current-layer="g7473"
      showgrid="false"
@@ -7793,13 +7829,13 @@
       <rect
          inkscape:export-ydpi="96"
          inkscape:export-xdpi="96"
-         inkscape:export-filename="/home/michael/workspace/spacetac/graphics/exported/battle/tooltip/ship-portrait.png"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/battle/tooltip/ship-portrait.png"
          y="492.55179"
          x="460.07184"
          height="193.97655"
          width="193.97672"
          id="rect4260-1"
-         style="display:inline;opacity:1;fill:#43535c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6021-5);enable-background:new" />
+         style="display:inline;opacity:1;fill:#43535c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:3.5999999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new;filter:url(#filter6088)" />
     </g>
   </g>
   <g

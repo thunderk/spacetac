@@ -9,6 +9,7 @@ module TK.SpaceTac.UI {
     export type UIContainer = Phaser.Group | Phaser.Image
 
     export type ShaderValue = number | { x: number, y: number }
+    export type UIOnOffCallback = (on: boolean) => boolean
 
     /**
      * Text style interface
@@ -51,6 +52,17 @@ module TK.SpaceTac.UI {
 
         // Word wrapping
         width = 0
+    }
+
+    /**
+     * Button options
+     */
+    export type UIButtonOptions = {
+        // Name of the hover picture (by default, the button name, with "-hover" appended)
+        hover_name?: string
+
+        // Name of the "on" picture (by default, the button name, with "-on" appended)
+        on_name?: string
     }
 
     /**
@@ -101,11 +113,7 @@ module TK.SpaceTac.UI {
          * Clear the current container of all component
          */
         clear(): void {
-            if (this.parent instanceof Phaser.Group) {
-                this.parent.removeAll(true);
-            } else {
-                this.parent.children.forEach(child => (<any>child).destroy());
-            }
+            destroyChildren(this.parent);
         }
 
         /**
@@ -147,7 +155,7 @@ module TK.SpaceTac.UI {
                 result.wordWrapWidth = style.width;
             }
             if (style.shadow) {
-                result.setShadow(3, 4, "rgba(0,0,0,0.6)", 6);
+                result.setShadow(3, 4, "rgba(0,0,0,0.6)", 3);
             }
             if (style.stroke_width) {
                 result.stroke = style.stroke_color;
@@ -176,24 +184,81 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Add a clickable button
+         * Add a hoverable and/or clickable button
+         * 
+         * If an image with "-hover" suffix is found in atlases, it will be used as hover mask (added as button child)
          */
-        button(name: string, x = 0, y = 0, onclick?: Function, tooltip?: string | (() => string)): UIButton {
+        button(name: string, x = 0, y = 0, onclick?: Function, tooltip?: TooltipFiller, onoffcallback?: UIOnOffCallback, options: UIButtonOptions = {}): UIButton {
             let info = this.view.getImageInfo(name);
-            let result = new Phaser.Button(this.game, x, y, info.key, onclick || nop, null, info.frame, info.frame);
+            let result = new Phaser.Button(this.game, x, y, info.key, undefined, null, info.frame, info.frame);
             result.name = name;
+
             let clickable = bool(onclick);
             result.input.useHandCursor = clickable;
             if (clickable) {
                 UIComponent.setButtonSound(result);
             }
-            if (tooltip) {
-                if (typeof tooltip == "string") {
-                    this.view.tooltip.bindStaticText(result, tooltip);
-                } else {
-                    this.view.tooltip.bindDynamicText(result, tooltip);
+
+            let onstatus = false;
+
+            if (clickable || tooltip || onoffcallback) {
+                // On mask
+                let on_mask: Phaser.Image | null = null;
+                if (onoffcallback) {
+                    let on_info = this.view.getImageInfo(options.on_name || (name + "-on"));
+                    if (on_info.exists) {
+                        on_mask = new Phaser.Image(this.game, 0, 0, on_info.key, on_info.frame);
+                        on_mask.visible = false;
+                        result.addChild(on_mask);
+                    }
+                    // TODO Find a better way to handle this (extend Button ?)
+                    result.data.onoffcallback = (on: boolean): boolean => {
+                        onstatus = onoffcallback(on);
+                        if (on_mask) {
+                            on_mask.anchor.set(result.anchor.x, result.anchor.y);
+                            this.view.animations.setVisible(on_mask, onstatus, 100);
+                        }
+                        return onstatus;
+                    }
                 }
+
+                // Hover mask
+                let hover_info = this.view.getImageInfo(options.hover_name || (name + "-hover"));
+                let hover_mask: Phaser.Image | null = null;
+                if (hover_info.exists) {
+                    hover_mask = new Phaser.Image(this.game, 0, 0, hover_info.key, hover_info.frame);
+                    hover_mask.visible = false;
+                    result.addChild(hover_mask);
+                }
+
+                this.view.inputs.setHoverClick(result,
+                    () => {
+                        if (tooltip) {
+                            this.view.tooltip.show(result, tooltip);
+                        }
+                        if (hover_mask) {
+                            hover_mask.anchor.set(result.anchor.x, result.anchor.y);
+                            this.view.animations.show(hover_mask, 100);
+                        }
+                    },
+                    () => {
+                        if (tooltip) {
+                            this.view.tooltip.hide();
+                        }
+                        if (hover_mask) {
+                            this.view.animations.hide(hover_mask, 100)
+                        }
+                    },
+                    () => {
+                        if (onclick) {
+                            onclick();
+                        }
+                        if (onoffcallback) {
+                            this.switch(result, !onstatus);
+                        }
+                    }, 100);
             }
+
             this.add(result);
             return result;
         }
@@ -258,6 +323,53 @@ module TK.SpaceTac.UI {
                     component.loadTexture(info.key, info.frame);
                 }
             }
+        }
+
+        /**
+         * Change the status on/off on a button
+         * 
+         * Return the final effective status
+         */
+        switch(button: UIButton, on: boolean): boolean {
+            if (button.data.onoffcallback) {
+                return button.data.onoffcallback(on);
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Select a single button inside the container, toggle its "on" status, and toggle all other button to "off"
+         * 
+         * This is the equivalent of radio buttons
+         */
+        select(button: UIButton): void {
+            this.parent.children.forEach(child => {
+                if (child instanceof Phaser.Button && child.data.onoffcallback && child !== button) {
+                    child.data.onoffcallback(false);
+                }
+            });
+            this.switch(button, true);
+        }
+
+        /**
+         * Evenly distribute the children of this builder along an axis
+         */
+        distribute(along: "x" | "y", start: number, end: number): void {
+            let sizes = this.parent.children.map(child => {
+                if (child instanceof Phaser.Image || child instanceof Phaser.Sprite || child instanceof Phaser.Group) {
+                    return UITools.getScreenBounds(child)[along == "x" ? "width" : "height"];
+                } else {
+                    return 0;
+                }
+            });
+            let spacing = ((end - start) - sum(sizes)) / (sizes.length + 1);
+            let offset = start;
+            this.parent.children.forEach((child, idx) => {
+                offset += spacing;
+                child[along] = Math.round(offset);
+                offset += sizes[idx];
+            });
         }
     }
 }

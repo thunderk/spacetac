@@ -22,8 +22,8 @@ module TK.SpaceTac {
         });
 
         test.case("has a description", check => {
-            let effect = new AttributeMultiplyEffect("power_generation", 20);
-            check.equals(effect.getDescription(), "power generation +20%");
+            let effect = new AttributeMultiplyEffect("power_capacity", 20);
+            check.equals(effect.getDescription(), "power capacity +20%");
         });
     });
 }

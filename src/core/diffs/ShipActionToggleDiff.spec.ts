@@ -4,23 +4,22 @@ module TK.SpaceTac.Specs {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
 
-            let generator = TestTools.setShipAP(ship, 10);
-            let weapon = TestTools.addWeapon(ship, 50, 3, 10, 20);
-            let action = new ToggleAction(weapon, 2);
-            weapon.action = action;
+            let generator = TestTools.setShipModel(ship, 100, 0, 10);
+            let action = new ToggleAction("testtoggle", { power: 2 });
+            ship.actions.addCustom(action);
 
             TestTools.diffChain(check, battle, [
                 new ShipActionToggleDiff(ship, action, true),
                 new ShipActionToggleDiff(ship, action, false),
             ], [
                     check => {
-                        check.equals(action.activated, false, "not activated");
+                        check.equals(ship.actions.isToggled(action), false, "not activated");
                     },
                     check => {
-                        check.equals(action.activated, true, "activated");
+                        check.equals(ship.actions.isToggled(action), true, "activated");
                     },
                     check => {
-                        check.equals(action.activated, false, "not activated");
+                        check.equals(ship.actions.isToggled(action), false, "not activated");
                     },
                 ]);
         });

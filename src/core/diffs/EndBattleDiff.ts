@@ -22,26 +22,10 @@ module TK.SpaceTac {
 
         apply(battle: Battle): void {
             battle.outcome = this.outcome;
-
-            iforeach(battle.iships(), ship => {
-                ship.listEquipment().forEach(equipment => {
-                    equipment.addWear(this.cycles);
-                });
-            });
-
-            battle.stats.addFleetsValue(battle.fleets[0], battle.fleets[1], false);
         }
 
         revert(battle: Battle): void {
             battle.outcome = null;
-
-            battle.stats.addFleetsValue(battle.fleets[0], battle.fleets[1], true);
-
-            iforeach(battle.iships(), ship => {
-                ship.listEquipment().forEach(equipment => {
-                    equipment.addWear(-this.cycles);
-                });
-            });
         }
     }
 }

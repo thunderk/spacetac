@@ -6,23 +6,23 @@ module TK.SpaceTac.Specs {
             let ship2 = battle.fleets[1].addShip();
             let ship3 = battle.fleets[1].addShip();
             let ship4 = battle.fleets[1].addShip();
+            ship1.setArenaPosition(0, 0);
+            TestTools.setShipModel(ship1, 20, 20, 10);
+            ship2.setArenaPosition(500, 0);
+            TestTools.setShipModel(ship2, 70, 100);
+            ship3.setArenaPosition(560, 0);
+            TestTools.setShipModel(ship3, 80, 30);
+            ship4.setArenaPosition(640, 0);
+            TestTools.setShipModel(ship4, 30, 30);
+
             let weapon = TestTools.addWeapon(ship1, 50, 2, 200, 100);
             let engine = TestTools.addEngine(ship1, 100);
-            ship1.setArenaPosition(0, 0);
-            TestTools.setShipHP(ship1, 20, 20);
-            TestTools.setShipAP(ship1, 10);
-            ship2.setArenaPosition(500, 0);
-            TestTools.setShipHP(ship2, 70, 100);
-            ship3.setArenaPosition(560, 0);
-            TestTools.setShipHP(ship3, 80, 30);
-            ship4.setArenaPosition(640, 0);
-            TestTools.setShipHP(ship4, 30, 30);
 
-            let maneuver = new Maneuver(ship1, nn(weapon.action), Target.newFromLocation(530, 0));
-            check.contains(maneuver.effects, new ShipActionUsedDiff(ship1, nn(engine.action), Target.newFromLocation(331, 0)), "engine use");
+            let maneuver = new Maneuver(ship1, weapon, Target.newFromLocation(530, 0));
+            check.contains(maneuver.effects, new ShipActionUsedDiff(ship1, engine, Target.newFromLocation(331, 0)), "engine use");
             check.contains(maneuver.effects, new ShipValueDiff(ship1, "power", -4), "engine power");
             check.contains(maneuver.effects, new ShipMoveDiff(ship1, ship1.location, new ArenaLocationAngle(331, 0), engine), "move");
-            check.contains(maneuver.effects, new ShipActionUsedDiff(ship1, nn(weapon.action), Target.newFromLocation(530, 0)), "weapon use");
+            check.contains(maneuver.effects, new ShipActionUsedDiff(ship1, weapon, Target.newFromLocation(530, 0)), "weapon use");
             check.contains(maneuver.effects, new ProjectileFiredDiff(ship1, weapon, Target.newFromLocation(530, 0)), "weapon power");
             check.contains(maneuver.effects, new ShipValueDiff(ship1, "power", -2), "weapon power");
             check.contains(maneuver.effects, new ShipValueDiff(ship2, "shield", -50), "ship2 shield value");

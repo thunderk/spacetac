@@ -7,13 +7,13 @@ module TK.SpaceTac {
      * This does not do anything, and is just there for animations
      */
     export class ProjectileFiredDiff extends BaseBattleShipDiff {
-        equipment: RObjectId
+        action: RObjectId
         target: Target
 
-        constructor(ship: Ship, equipment: Equipment, target: Target) {
+        constructor(ship: Ship, action: TriggerAction, target: Target) {
             super(ship);
 
-            this.equipment = equipment.id;
+            this.action = action.id;
             this.target = target;
         }
     }

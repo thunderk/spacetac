@@ -33,9 +33,9 @@ module TK.SpaceTac.UI {
         private destination: IArenaLocation
 
         // Weapon used
-        private weapon: Equipment
+        private action: TriggerAction
 
-        constructor(arena: Arena, ship: Ship, target: Target, weapon: Equipment) {
+        constructor(arena: Arena, ship: Ship, target: Target, action: TriggerAction) {
             this.ui = arena.game;
             this.arena = arena;
             this.view = arena.view;
@@ -43,7 +43,7 @@ module TK.SpaceTac.UI {
             this.layer = arena.layer_weapon_effects;
             this.ship = ship;
             this.target = target;
-            this.weapon = weapon;
+            this.action = action;
 
             this.source = Target.newFromShip(this.ship);
             this.destination = this.target;
@@ -56,15 +56,15 @@ module TK.SpaceTac.UI {
          */
         start(): number {
             // Fire effect
-            let effect = this.getEffectForWeapon(this.weapon.code, this.weapon.action);
+            let effect = this.getEffectForWeapon(this.action.code, this.action);
             let duration = effect();
 
             // Damage effect
-            let action = this.weapon.action;
-            if (action instanceof TriggerAction && any(action.effects, effect => effect instanceof DamageEffect)) {
+            let action = this.action;
+            if (any(action.effects, effect => effect instanceof DamageEffect)) {
                 let ships = action.getImpactedShips(this.ship, this.target, this.source);
                 let source = action.blast ? this.target : this.source;
-                let damage_duration = this.damageEffect(source, ships, duration * 0.4, this.weapon.code == "gatlinggun");
+                let damage_duration = this.damageEffect(source, ships, duration * 0.4, this.action.code == "gatlinggun");
                 duration = Math.max(duration, damage_duration);
             }
 
@@ -177,7 +177,7 @@ module TK.SpaceTac.UI {
             missile.rotation = arenaAngle(this.source, this.destination);
             this.layer.add(missile);
 
-            let blast_radius = (this.weapon.action instanceof TriggerAction) ? this.weapon.action.blast : 0;
+            let blast_radius = this.action.blast;
 
             let projectile_duration = arenaDistance(this.source, this.destination) * 1.5;
             let tween = this.ui.tweens.create(missile);

@@ -76,39 +76,5 @@ module TK.SpaceTac.Specs {
             check.same(mission.difficulty, MissionDifficulty.easy);
             check.equals(mission.value, 6400);
         })
-
-        test.case("generates equipment reward", check => {
-            let generator = new MissionGenerator(new Universe(), new StarLocation());
-            let template = new LootTemplate(SlotType.Weapon, "Test Weapon");
-            generator.equipment_generator.templates = [template];
-
-            template.price = irepeat(350);
-            let result = generator.tryGenerateEquipmentReward(500);
-            check.equals(result, null);
-
-            template.price = irepeat(800);
-            result = generator.tryGenerateEquipmentReward(500);
-            check.equals(result, null);
-
-            template.price = irepeat(500);
-            result = generator.tryGenerateEquipmentReward(500);
-            check.notequals(result, null);
-        })
-
-        test.case("falls back to money reward when no suitable equipment have been generated", check => {
-            let generator = new MissionGenerator(new Universe(), new StarLocation());
-            generator.equipment_generator.templates = [];
-
-            let result = generator.generateReward(15000);
-            check.equals(result, 15000);
-
-            let template = new LootTemplate(SlotType.Weapon, "Test Weapon");
-            template.price = irepeat(15000);
-            generator.equipment_generator.templates.push(template);
-
-            generator.random = new SkewedRandomGenerator([0], true);
-            result = generator.generateReward(15000);
-            check.equals(result instanceof Equipment, true);
-        })
     });
 }

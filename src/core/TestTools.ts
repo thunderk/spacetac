@@ -15,100 +15,72 @@ module TK.SpaceTac {
             }
 
             var battle = new Battle(fleet1, fleet2);
-            battle.ships.list().forEach(ship => TestTools.setShipHP(ship, 1, 0));
+            battle.ships.list().forEach(ship => TestTools.setShipModel(ship, 1, 0));
             battle.play_order = fleet1.ships.concat(fleet2.ships);
             battle.setPlayingShip(battle.play_order[0]);
             return battle;
         }
 
-        // Get or add an equipment of a given slot type
-        static getOrGenEquipment(ship: Ship, slot: SlotType, template: LootTemplate, force_generate = false): Equipment {
-            var equipped = ship.listEquipment(slot);
-            var equipment: Equipment;
-            if (force_generate || equipped.length === 0) {
-                equipment = template.generate(1);
-                equipment.requirements = {};
-                ship.addSlot(slot).attach(equipment);
-            } else {
-                equipment = equipped[0];
-            }
-
-            return equipment;
-        }
-
         /**
          * Add an engine, allowing a ship to move *distance*, for each action points
          */
-        static addEngine(ship: Ship, distance: number): Equipment {
-            let equipment = ship.addSlot(SlotType.Engine).attach(new Equipment(SlotType.Engine));
-            equipment.action = new MoveAction(equipment, distance);
-            return equipment;
+        static addEngine(ship: Ship, distance: number): MoveAction {
+            let action = new MoveAction("Engine", { distance_per_power: distance });
+            ship.actions.addCustom(action);
+            return action;
         }
 
         /**
          * Add a weapon to a ship
          */
-        static addWeapon(ship: Ship, damage = 100, power_usage = 1, max_distance = 100, blast = 0, angle = 0): Equipment {
-            var equipment = ship.addSlot(SlotType.Weapon).attach(new Equipment(SlotType.Weapon));
-            equipment.action = new TriggerAction(equipment, [new DamageEffect(damage)], power_usage, max_distance, blast, angle);
-            return equipment;
+        static addWeapon(ship: Ship, damage = 100, power_usage = 1, max_distance = 100, blast = 0, angle = 0): TriggerAction {
+            let action = new TriggerAction("Weapon", {
+                effects: [new DamageEffect(damage)],
+                power: power_usage,
+                range: max_distance,
+                blast: blast,
+                angle: angle,
+            });
+            ship.actions.addCustom(action);
+            return action;
         }
 
-        // Set the current playing ship
+        /**
+         * Force the current playing ship
+         */
         static setShipPlaying(battle: Battle, ship: Ship): void {
             add(battle.play_order, ship);
             battle.play_index = battle.play_order.indexOf(ship);
             ship.playing = true;
         }
 
-        // Set a ship action points, adding/updating an equipment if needed
-        static setShipAP(ship: Ship, points: number, recovery: number = 0): Equipment {
-            var equipment = this.getOrGenEquipment(ship, SlotType.Power, new Equipments.NuclearReactor());
+        /**
+         * Set a ship attributes (by changing its model)
+         */
+        static setShipModel(ship: Ship, hull: number, shield = 0, power = 0, level = 1, actions: BaseAction[] = [], effects: BaseEffect[] = []) {
+            let model = new BaseModel();
+            ship.level.forceLevel(level);
+            ship.model = model;
 
-            equipment.effects.forEach(effect => {
-                if (effect instanceof AttributeEffect) {
-                    if (effect.attrcode === "power_capacity") {
-                        effect.value = points;
-                    } else if (effect.attrcode === "power_generation") {
-                        effect.value = recovery;
-                    }
-                }
-            });
+            // TODO Use a BaseModel subclass would be prettier
+            model.getActions = () => actions;
+            model.getEffects = () => effects.concat([
+                new AttributeEffect("hull_capacity", hull),
+                new AttributeEffect("shield_capacity", shield),
+                new AttributeEffect("power_capacity", power),
+            ]);
 
-            ship.updateAttributes();
-            ship.setValue("power", points);
-
-            return equipment;
-        }
-
-        // Set a ship hull and shield points, adding/updating an equipment if needed
-        static setShipHP(ship: Ship, hull_points: number, shield_points: number): [Equipment, Equipment] {
-            var hull = TestTools.getOrGenEquipment(ship, SlotType.Hull, new Equipments.IronHull());
-            var shield = TestTools.getOrGenEquipment(ship, SlotType.Shield, new Equipments.ForceField());
-
-            hull.effects.forEach(effect => {
-                if (effect instanceof AttributeEffect) {
-                    if (effect.attrcode === "hull_capacity") {
-                        effect.value = hull_points;
-                    }
-                }
-            });
-            shield.effects.forEach((effect: BaseEffect) => {
-                if (effect instanceof AttributeEffect) {
-                    if (effect.attrcode === "shield_capacity") {
-                        effect.value = shield_points;
-                    }
-                }
-            });
+            ship.actions.updateFromShip(ship);
 
             ship.updateAttributes();
             ship.restoreHealth();
-
-            return [hull, shield];
+            ship.setValue("power", power);
         }
 
         /**
          * Force a ship attribute to a given value
+         * 
+         * Beware that a call to ship.updateAttributes() may cancel this
          */
         static setAttribute(ship: Ship, name: keyof ShipAttributes, value: number): void {
             let attr = ship.attributes[name];
@@ -155,6 +127,62 @@ module TK.SpaceTac {
                 battle.revertOneAction();
                 checks[i](check.sub(`after action ${i + 1} reverted`));
             }
+        }
+    }
+
+    function strip<T>(obj: T, attr: keyof T): any {
+        let result: any = {};
+        copyfields(obj, result);
+        delete result[attr];
+        return result;
+    }
+
+    function strip_id(effect: RObject): any {
+        if (effect instanceof StickyEffect) {
+            let result = strip(effect, "id");
+            result.base = strip_id(result.base);
+            return result;
+        } else {
+            return strip(effect, "id");
+        }
+    }
+
+    export function compare_effects(check: TestContext, effects1: BaseEffect[], effects2: BaseEffect[]): void {
+        check.equals(effects1.map(strip_id), effects2.map(strip_id), "effects");
+    }
+
+    export function compare_action(check: TestContext, action1: BaseAction | null, action2: BaseAction | null): void {
+        if (action1 === null || action2 === null) {
+            check.equals(action1, action2, "action");
+        } else {
+            check.equals(strip_id(action1), strip_id(action2), "action");
+        }
+    }
+
+    export function compare_trigger_action(check: TestContext, action1: BaseAction | null, action2: TriggerAction | null): void {
+        if (action1 === null || action2 === null || !(action1 instanceof TriggerAction)) {
+            check.equals(action1, action2, "action");
+        } else {
+            check.equals(strip_id(strip(action1, "effects")), strip_id(strip(action2, "effects")), "action");
+            compare_effects(check, action1.effects, action2.effects);
+        }
+    }
+
+    export function compare_toggle_action(check: TestContext, action1: BaseAction | null, action2: ToggleAction | null): void {
+        if (action1 === null || action2 === null || !(action1 instanceof ToggleAction)) {
+            check.equals(action1, action2, "action");
+        } else {
+            check.equals(strip_id(strip(action1, "effects")), strip_id(strip(action2, "effects")), "action");
+            compare_effects(check, action1.effects, action2.effects);
+        }
+    }
+
+    export function compare_drone_action(check: TestContext, action1: BaseAction | null, action2: DeployDroneAction | null): void {
+        if (action1 === null || action2 === null || !(action1 instanceof DeployDroneAction)) {
+            check.equals(action1, action2, "action");
+        } else {
+            check.equals(strip_id(strip(action1, "drone_effects")), strip_id(strip(action2, "drone_effects")), "action");
+            compare_effects(check, action1.drone_effects, action2.drone_effects);
         }
     }
 }

@@ -3,9 +3,9 @@ module TK.SpaceTac.Specs {
 
         function simpleWeaponCase(distance = 10, ship_ap = 5, weapon_ap = 3, engine_distance = 5): [Ship, MoveFireSimulator, BaseAction] {
             let ship = new Ship();
-            TestTools.setShipAP(ship, ship_ap);
+            TestTools.setShipModel(ship, 100, 0, ship_ap);
             TestTools.addEngine(ship, engine_distance);
-            let action = new TriggerAction(new Equipment(), [], weapon_ap, distance);
+            let action = new TriggerAction("weapon", { power: weapon_ap, range: distance });
             let simulator = new MoveFireSimulator(ship);
             return [ship, simulator, action];
         }
@@ -21,7 +21,6 @@ module TK.SpaceTac.Specs {
             let engine4 = TestTools.addEngine(ship, 70);
             let best = simulator.findBestEngine();
             check.same(best, engine3);
-            check.equals((<MoveAction>nn(best).action).distance_per_power, 150);
         });
 
         test.case("fires directly when in range", check => {
@@ -65,7 +64,7 @@ module TK.SpaceTac.Specs {
             check.same(result.can_fire, true, 'can_fire');
             check.same(result.total_fire_ap, 3, 'total_fire_ap');
 
-            let move_action = ship.listEquipment(SlotType.Engine)[0].action;
+            let move_action = ship.actions.listAll().filter(action => action instanceof MoveAction)[0];
             check.equals(result.parts, [
                 { action: move_action, target: new Target(ship.arena_x + 5, ship.arena_y, null), ap: 1, possible: true },
                 { action: action, target: new Target(ship.arena_x + 15, ship.arena_y, null), ap: 3, possible: true }
@@ -111,7 +110,7 @@ module TK.SpaceTac.Specs {
             let battle = new Battle();
             battle.fleets[0].addShip(ship);
             let ship1 = battle.fleets[0].addShip();
-            let moveaction = <MoveAction>nn(simulator.findBestEngine()).action;
+            let moveaction = nn(simulator.findBestEngine());
             (<any>moveaction).safety_distance = 30;
             battle.ship_separation = 30;
 
@@ -143,7 +142,7 @@ module TK.SpaceTac.Specs {
             check.same(result.can_fire, false, 'can_fire');
             check.same(result.total_fire_ap, 2, 'total_fire_ap');
 
-            let move_action = ship.listEquipment(SlotType.Engine)[0].action;
+            let move_action = ship.actions.listAll().filter(action => action instanceof MoveAction)[0];
             check.equals(result.parts, [
                 { action: move_action, target: new Target(ship.arena_x + 10, ship.arena_y, null), ap: 2, possible: true },
                 { action: action, target: new Target(ship.arena_x + 18, ship.arena_y, null), ap: 2, possible: false }
@@ -152,7 +151,7 @@ module TK.SpaceTac.Specs {
 
         test.case("does nothing if trying to move in the same spot", check => {
             let [ship, simulator, action] = simpleWeaponCase();
-            let move_action = nn(ship.listEquipment(SlotType.Engine)[0].action)
+            let move_action = ship.actions.listAll().filter(action => action instanceof MoveAction)[0];
             let result = simulator.simulateAction(move_action, new Target(ship.arena_x, ship.arena_y, null));
             check.equals(result.success, false);
             check.equals(result.need_move, false);
