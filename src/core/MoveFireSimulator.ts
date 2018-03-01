@@ -53,15 +53,12 @@ module TK.SpaceTac {
         }
 
         /**
-         * Find the best available move action
+         * Find an engine action, to make an approach
+         * 
+         * This will return the first available engine, in the definition order
          */
-        findBestEngine(): MoveAction | null {
-            let actions = <MoveAction[]>this.ship.actions.listAll().filter(action => action instanceof MoveAction);
-            if (actions.length == 0) {
-                return null;
-            } else {
-                return maxBy(actions, action => action.getDistanceByActionPoint(this.ship));
-            }
+        findEngine(): MoveAction | null {
+            return first(cfilter(this.ship.actions.listAll(), MoveAction), action => action.getCooldown().canUse());
         }
 
         /**
@@ -140,7 +137,7 @@ module TK.SpaceTac {
                     move_target = corrected_target;
                 }
             } else {
-                let engine = this.findBestEngine();
+                let engine = this.findEngine();
                 if (engine) {
                     let approach_radius = action.getRangeRadius(this.ship);
                     let approach = this.getApproach(engine, target, approach_radius, move_margin);
@@ -161,7 +158,7 @@ module TK.SpaceTac {
 
             // Check move AP
             if (result.need_move && move_target) {
-                let engine = this.findBestEngine();
+                let engine = this.findEngine();
                 if (engine) {
                     result.total_move_ap = engine.getActionPointsUsage(this.ship, move_target);
                     result.can_move = ap > 0;

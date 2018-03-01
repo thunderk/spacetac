@@ -257,7 +257,7 @@ module TK.SpaceTac.UI {
                             move_action = <MoveAction>last_move.action;
                         }
                     } else {
-                        let engine = new MoveFireSimulator(this.ship).findBestEngine();
+                        let engine = new MoveFireSimulator(this.ship).findEngine();
                         if (engine) {
                             move_action = engine;
                         }

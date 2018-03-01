@@ -10,17 +10,20 @@ module TK.SpaceTac.Specs {
             return [ship, simulator, action];
         }
 
-        test.case("finds the best engine to make a move", check => {
+        test.case("finds a suitable engine to make an approach", check => {
             let ship = new Ship();
             let simulator = new MoveFireSimulator(ship);
-            check.equals(simulator.findBestEngine(), null);
+            check.equals(simulator.findEngine(), null);
             let engine1 = TestTools.addEngine(ship, 100);
-            check.same(simulator.findBestEngine(), engine1);
+            check.same(simulator.findEngine(), engine1);
             let engine2 = TestTools.addEngine(ship, 120);
-            let engine3 = TestTools.addEngine(ship, 150);
-            let engine4 = TestTools.addEngine(ship, 70);
-            let best = simulator.findBestEngine();
-            check.same(best, engine3);
+            check.same(simulator.findEngine(), engine1);
+            engine1.configureCooldown(1, 1);
+            engine1.getCooldown().use();
+            check.same(simulator.findEngine(), engine2);
+            engine2.configureCooldown(1, 1);
+            engine2.getCooldown().use();
+            check.equals(simulator.findEngine(), null);
         });
 
         test.case("fires directly when in range", check => {
@@ -110,7 +113,7 @@ module TK.SpaceTac.Specs {
             let battle = new Battle();
             battle.fleets[0].addShip(ship);
             let ship1 = battle.fleets[0].addShip();
-            let moveaction = nn(simulator.findBestEngine());
+            let moveaction = nn(simulator.findEngine());
             (<any>moveaction).safety_distance = 30;
             battle.ship_separation = 30;
 

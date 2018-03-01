@@ -29,7 +29,6 @@ module TK.SpaceTac {
                 }, "fractalhull");
                 hull.configureCooldown(1, 4);
 
-                // TODO Is currently always used by move-fire simulator
                 let disengage = new MoveAction("Disengage", {
                     distance_per_power: 1000,
                     safety_distance: 200,
