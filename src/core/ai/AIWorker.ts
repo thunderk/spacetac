@@ -27,7 +27,7 @@ module TK.SpaceTac {
          * Process AI in a webworker if possible, else do the work in the render thread
          */
         async processAuto(feedback: AIFeedback): Promise<void> {
-            if ((<any>window).Worker) {
+            if (!this.debug && (<any>window).Worker) {
                 await this.processInWorker(feedback);
             } else {
                 await this.processHere(feedback);

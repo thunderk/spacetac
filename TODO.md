@@ -69,7 +69,6 @@ Ships models and actions
 Artificial Intelligence
 -----------------------
 
-* Fix tendency to use moves for nothing
 * Produce interesting "angle" areas
 * Evaluate active effects
 * Account for luck

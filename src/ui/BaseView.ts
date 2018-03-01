@@ -29,6 +29,9 @@ module TK.SpaceTac.UI {
         dialogs_layer!: Phaser.Group
         dialogs_opened: UIDialog[] = []
 
+        // Verbose debug output
+        readonly debug = false
+
         // Get the size of display
         getWidth(): number {
             return this.game.width || 1280;

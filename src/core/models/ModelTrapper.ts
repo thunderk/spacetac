@@ -33,7 +33,7 @@ module TK.SpaceTac {
                 let missile = new TriggerAction("Defense Missiles", {
                     effects: [new DamageEffect(25, 30)],
                     power: 3,
-                    range: 200, blast: 200,
+                    range: 200, blast: 180,
                 }, "submunitionmissile");
 
                 return [

@@ -120,20 +120,31 @@ module TK.SpaceTac.Specs {
             TestTools.setShipModel(ship, 100, 0, 10);
             let engine = TestTools.addEngine(ship, 50);
             let weapon = TestTools.addWeapon(ship, 10, 2, 100, 10);
+            let toggle = ship.actions.addCustom(new ToggleAction("test"));
 
             let maneuver = new Maneuver(ship, weapon, Target.newFromLocation(0, 0));
-            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), 0.5);
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), 0.5, "fire");
 
-            maneuver = new Maneuver(ship, engine, Target.newFromLocation(0, 0));
-            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), 0);
+            maneuver = new Maneuver(ship, toggle, Target.newFromShip(ship));
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), 0.5, "toggle on");
+
+            ship.actions.toggle(toggle, true);
+            maneuver = new Maneuver(ship, toggle, Target.newFromShip(ship));
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -0.2, "toggle off");
+
+            maneuver = new Maneuver(ship, engine, Target.newFromLocation(0, 48));
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -0.9, "move only, at full power");
 
             maneuver = new Maneuver(ship, EndTurnAction.SINGLETON, Target.newFromShip(ship));
-            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -1);
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -1, "end turn, at full power");
 
             ship.setValue("power", 2);
 
+            maneuver = new Maneuver(ship, engine, Target.newFromLocation(0, 48));
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -0.1, "move only, at reduced power");
+
             maneuver = new Maneuver(ship, EndTurnAction.SINGLETON, Target.newFromShip(ship));
-            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -0.2);
+            check.equals(TacticalAIHelpers.evaluateIdling(ship, battle, maneuver), -0.2, "end turn, at reduced power");
         });
 
         test.case("evaluates damage to enemies", check => {

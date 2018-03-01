@@ -40,7 +40,7 @@ module TK.SpaceTac {
                     [maneuver, producer] = producer();
                 }
 
-                if (maneuver) {
+                if (maneuver && maneuver.isPossible()) {
                     if (producer) {
                         this.producers.push(producer);
                     }
@@ -113,12 +113,12 @@ module TK.SpaceTac {
 
             let evaluators: EvaluatorHelper[] = [
                 scaled(TacticalAIHelpers.evaluateTurnCost, 1),
-                scaled(TacticalAIHelpers.evaluateOverheat, 10),
-                scaled(TacticalAIHelpers.evaluateEnemyHealth, 500),
-                scaled(TacticalAIHelpers.evaluateAllyHealth, 800),
-                scaled(TacticalAIHelpers.evaluateClustering, 3),
-                scaled(TacticalAIHelpers.evaluatePosition, 1),
-                scaled(TacticalAIHelpers.evaluateIdling, 1),
+                scaled(TacticalAIHelpers.evaluateOverheat, 3),
+                scaled(TacticalAIHelpers.evaluateEnemyHealth, 5),
+                scaled(TacticalAIHelpers.evaluateAllyHealth, 20),
+                scaled(TacticalAIHelpers.evaluateClustering, 4),
+                scaled(TacticalAIHelpers.evaluatePosition, 0.5),
+                scaled(TacticalAIHelpers.evaluateIdling, 2),
             ]
 
             let battle = nn(this.ship.getBattle());

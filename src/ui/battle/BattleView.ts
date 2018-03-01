@@ -174,7 +174,7 @@ module TK.SpaceTac.UI {
                 return;
             }
 
-            if (this.actual_battle.playAI()) {
+            if (this.actual_battle.playAI(this.debug)) {
                 if (this.interacting) {
                     this.action_bar.setShip(new Ship());
                 }

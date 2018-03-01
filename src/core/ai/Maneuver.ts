@@ -42,6 +42,13 @@ module TK.SpaceTac {
         }
 
         /**
+         * Returns true if the maneuver has at least one part doable
+         */
+        isPossible(): boolean {
+            return any(this.simulation.parts, part => part.possible);
+        }
+
+        /**
          * Returns true if the maneuver cannot be fully done this turn
          */
         isIncomplete(): boolean {
@@ -87,7 +94,9 @@ module TK.SpaceTac {
                 for (let i = 0; i < parts.length; i++) {
                     let part = parts[i];
                     if (part.action instanceof EndTurnAction || part.possible) {
-                        return battle.applyOneAction(part.action.id, part.target);
+                        if (!battle.applyOneAction(part.action.id, part.target)) {
+                            return false;
+                        }
                     } else {
                         return false;
                     }

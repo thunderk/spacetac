@@ -59,7 +59,7 @@ module TK.SpaceTac {
          * Produce a turn end.
          */
         static produceEndTurn(ship: Ship, battle: Battle): TacticalProducer {
-            return isingle(new Maneuver(ship, new EndTurnAction(), Target.newFromShip(ship)));
+            return isingle(new Maneuver(ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)));
         }
 
         /**
@@ -142,16 +142,16 @@ module TK.SpaceTac {
          * Evaluate doing nothing, between -1 and 1
          */
         static evaluateIdling(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+            let power_capacity = ship.getAttribute("power_capacity") || 1;
+
             if (maneuver.action instanceof EndTurnAction) {
-                return -ship.getValue("power") / ship.getAttribute("power_capacity");
-            } else if (maneuver.action instanceof TriggerAction || maneuver.action instanceof ToggleAction) {
-                // TODO Evaluate if drone is useful
-                // TODO Check there are "interesting" effects
-                if (maneuver.effects.length == 0) {
-                    return -1;
-                } else {
-                    return 0.5;
-                }
+                return -ship.getValue("power") / power_capacity;
+            } else if (maneuver.action instanceof TriggerAction) {
+                return 0.5;
+            } else if (maneuver.action instanceof ToggleAction) {
+                return ship.actions.isToggled(maneuver.action) ? -0.2 : 0.5;
+            } else if (maneuver.action instanceof MoveAction) {
+                return -(ship.getValue("power") - maneuver.getPowerUsage()) / power_capacity;
             } else {
                 return 0;
             }
