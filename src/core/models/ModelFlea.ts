@@ -25,6 +25,8 @@ module TK.SpaceTac {
 
                 let gatling = new TriggerAction("Gatling Gun", {
                     effects: [new DamageEffect(5, 30)],
+                    power: 3,
+                    range: 300,
                 }, "gatlinggun");
                 gatling.configureCooldown(2, 1);
 
