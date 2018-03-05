@@ -256,7 +256,7 @@ module TK.SpaceTac.UI {
 
                 let builder = this.builder.in(this.group_portraits);
                 fleet.ships.forEach((ship, idx) => {
-                    let button: UIButton
+                    let button: UIButton;
                     button = new CharacterPortrait(ship).draw(builder, 64 + idx * 140, 64, () => {
                         if (button) {
                             builder.select(button);
@@ -267,6 +267,10 @@ module TK.SpaceTac.UI {
                             this.refreshUpgrades();
                         }
                     });
+
+                    if (ship == this.ship) {
+                        builder.switch(button, true);
+                    }
                 });
             }
         }

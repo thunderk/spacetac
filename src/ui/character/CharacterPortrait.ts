@@ -14,7 +14,6 @@ module TK.SpaceTac.UI {
             button.anchor.set(0.5);
 
             builder.in(button, builder => {
-                // FIXME Under hover/on
                 let portrait = builder.image(`ship-${this.ship.model.code}-portrait`, 0, 0, true);
                 portrait.scale.set(0.5);
             });

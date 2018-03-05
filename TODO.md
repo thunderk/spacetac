@@ -24,8 +24,6 @@ Map/story
 Character sheet
 ---------------
 
-* Fix the hover/on not working on fleet members
-* Improve tooltip content
 * Replace the close icon by a validation icon in creation view
 * Allow to change/buy ship model
 * Allow to rename a personality (in creation view only)

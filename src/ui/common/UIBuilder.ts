@@ -122,6 +122,14 @@ module TK.SpaceTac.UI {
         private add(child: UIText | UIImage | UIButton | UIContainer): void {
             if (this.parent instanceof Phaser.Group) {
                 this.parent.add(child);
+            } else if (this.parent instanceof Phaser.Button) {
+                // Protect the "on" and "hover" layers
+                let layer = first(this.parent.children, child => child instanceof Phaser.Image && (child.name == "*on*" || child.name == "*hover*"));
+                if (layer) {
+                    this.parent.addChildAt(child, this.parent.getChildIndex(layer));
+                } else {
+                    this.parent.addChild(child);
+                }
             } else {
                 this.parent.addChild(child);
             }
@@ -208,6 +216,7 @@ module TK.SpaceTac.UI {
                     let on_info = this.view.getImageInfo(options.on_name || (name + "-on"));
                     if (on_info.exists) {
                         on_mask = new Phaser.Image(this.game, 0, 0, on_info.key, on_info.frame);
+                        on_mask.name = "*on*";
                         on_mask.visible = false;
                         result.addChild(on_mask);
                     }
@@ -227,6 +236,7 @@ module TK.SpaceTac.UI {
                 let hover_mask: Phaser.Image | null = null;
                 if (hover_info.exists) {
                     hover_mask = new Phaser.Image(this.game, 0, 0, hover_info.key, hover_info.frame);
+                    hover_mask.name = "*hover*";
                     hover_mask.visible = false;
                     result.addChild(hover_mask);
                 }
@@ -252,8 +262,7 @@ module TK.SpaceTac.UI {
                     () => {
                         if (onclick) {
                             onclick();
-                        }
-                        if (onoffcallback) {
+                        } else if (onoffcallback) {
                             this.switch(result, !onstatus);
                         }
                     }, 100);
