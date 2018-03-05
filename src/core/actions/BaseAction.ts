@@ -105,7 +105,7 @@ module TK.SpaceTac {
             if (remaining_ap === null) {
                 remaining_ap = ship.getValue("power");
             }
-            var ap_usage = this.getActionPointsUsage(ship, null);
+            var ap_usage = this.getPowerUsage(ship, null);
             if (remaining_ap < ap_usage) {
                 return "not enough power";
             }
@@ -119,11 +119,11 @@ module TK.SpaceTac {
         }
 
         /**
-         * Get the number of action points the action applied to a target would use
+         * Get the power usage, for applying this action on an hypothetical target
          * 
          * If target is null, an estimated cost is returned.
          */
-        getActionPointsUsage(ship: Ship, target: Target | null): number {
+        getPowerUsage(ship: Ship, target: Target | null): number {
             return 0;
         }
 
@@ -196,7 +196,7 @@ module TK.SpaceTac {
             result.push(new ShipActionUsedDiff(ship, this, target));
 
             // Power usage
-            let cost = this.getActionPointsUsage(ship, target);
+            let cost = this.getPowerUsage(ship, target);
             if (cost) {
                 result = result.concat(ship.getValueDiffs("power", -cost, true));
             }
@@ -232,7 +232,7 @@ module TK.SpaceTac {
                 return false;
             }
 
-            let cost = this.getActionPointsUsage(ship, checked_target);
+            let cost = this.getPowerUsage(ship, checked_target);
             if (ship.getValue("power") < cost) {
                 console.warn("Action rejected - not enough power", ship, this, checked_target);
                 return false;

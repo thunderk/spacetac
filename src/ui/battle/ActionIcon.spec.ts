@@ -15,7 +15,7 @@ module TK.SpaceTac.UI.Specs {
             check.same(icon.img_power.visible, false, "no change");
 
             let cost = 3;
-            check.patch(action, "getActionPointsUsage", () => cost);
+            check.patch(action, "getPowerUsage", () => cost);
             icon.refresh();
             check.in("power cost = 3", check => {
                 check.equals(icon.img_power.visible, true);

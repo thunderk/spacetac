@@ -225,7 +225,7 @@ module TK.SpaceTac.UI {
             }
 
             // left
-            let cost = this.action.getActionPointsUsage(this.ship, null);
+            let cost = this.action.getPowerUsage(this.ship, null);
             this.img_power.visible = bool(cost);
             this.text_power.text = `${Math.abs(cost)}\n${cost < 0 ? "+" : "-"}`;
             this.text_power.fill = (cost > 0) ? "#ffdd4b" : "#dbe748";

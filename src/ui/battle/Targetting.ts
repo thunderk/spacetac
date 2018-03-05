@@ -112,7 +112,7 @@ module TK.SpaceTac.UI {
             let move = part.action instanceof MoveAction;
             let color = (enabled && part.possible) ? (move ? 0xe09c47 : 0xdc6441) : 0x8e8e8e;
             let src = previous ? previous.target : this.ship.location;
-            let gradation = (part.action instanceof MoveAction) ? part.action.getDistanceByActionPoint(this.ship) : 0;
+            let gradation = (part.action instanceof MoveAction) ? part.action.getDistanceByPower(this.ship) : 0;
             this.drawVector(color, src.x, src.y, part.target.x, part.target.y, gradation);
         }
 
@@ -265,7 +265,7 @@ module TK.SpaceTac.UI {
                     if (move_action) {
                         let power = this.ship.getValue("power");
                         if (this.action !== move_action) {
-                            power = Math.max(power - this.action.getActionPointsUsage(this.ship, this.target), 0);
+                            power = Math.max(power - this.action.getPowerUsage(this.ship, this.target), 0);
                         }
                         let radius = move_action.getRangeRadiusForPower(this.ship, power);
                         this.range_hint.update(this.ship, move_action, radius);

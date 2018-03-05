@@ -22,7 +22,7 @@ module TK.SpaceTac {
             return this.name;
         }
 
-        getActionPointsUsage(ship: Ship, target: Target | null): number {
+        getPowerUsage(ship: Ship, target: Target | null): number {
             let toggled_cost = isum(imap(ship.iToggleActions(true), action => action.power));
             return ship.getValue("power") + toggled_cost - ship.getAttribute("power_capacity");
         }

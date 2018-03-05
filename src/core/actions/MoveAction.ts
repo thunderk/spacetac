@@ -67,10 +67,10 @@ module TK.SpaceTac {
             }
         }
 
-        getActionPointsUsage(ship: Ship, target: Target | null): number {
+        getPowerUsage(ship: Ship, target: Target | null): number {
             if (target) {
                 let distance = Target.newFromShip(ship).getDistanceTo(target);
-                return Math.ceil(distance / this.getDistanceByActionPoint(ship));
+                return Math.ceil(distance / this.getDistanceByPower(ship));
             } else {
                 return 0;
             }
@@ -84,26 +84,26 @@ module TK.SpaceTac {
          * Get the distance reachable with a given power 
          */
         getRangeRadiusForPower(ship: Ship, power = ship.getValue("power")): number {
-            return power * this.getDistanceByActionPoint(ship);
+            return power * this.getDistanceByPower(ship);
         }
 
         /**
-         * Get the distance range that may be traveled with 1 action point
+         * Get the distance range that may be traveled with 1 power point
          * 
          * The actual range will then depend on the ship maneuvrability
          */
-        getDistanceRangeByActionPoint(): IntegerRange {
+        getDistanceRangeByPower(): IntegerRange {
             let min_distance = Math.ceil(this.distance_per_power * (1 - this.maneuvrability_factor * 0.01));
             return new IntegerRange(min_distance, this.distance_per_power);
         }
 
         /**
-         * Get the distance that may be traveled with 1 action point
+         * Get the distance that may be traveled with 1 power point
          */
-        getDistanceByActionPoint(ship: Ship): number {
+        getDistanceByPower(ship: Ship): number {
             let maneuvrability = Math.max(ship.getAttribute("maneuvrability"), 0);
             let factor = maneuvrability / (maneuvrability + 2);
-            let range = this.getDistanceRangeByActionPoint();
+            let range = this.getDistanceRangeByPower();
             return range.getProportional(factor);
         }
 
@@ -147,7 +147,7 @@ module TK.SpaceTac {
         }
 
         getEffectsDescription(): string {
-            let range = this.getDistanceRangeByActionPoint();
+            let range = this.getDistanceRangeByPower();
             let rangeinfo = (range.max == range.min) ? `${range.min}` : `${range.min}-${range.max}`;
             let result = `Move: ${rangeinfo}km per power point`;
 

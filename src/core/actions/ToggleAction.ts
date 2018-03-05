@@ -50,7 +50,7 @@ module TK.SpaceTac {
             }
         }
 
-        getActionPointsUsage(ship: Ship, target: Target | null): number {
+        getPowerUsage(ship: Ship, target: Target | null): number {
             return ship.actions.isToggled(this) ? -this.power : this.power;
         }
 

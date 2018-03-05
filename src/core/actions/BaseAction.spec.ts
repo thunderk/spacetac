@@ -39,9 +39,9 @@ module TK.SpaceTac.Specs {
                 ]);
         })
 
-        test.case("checks against remaining AP", check => {
+        test.case("checks against remaining power", check => {
             let action = new BaseAction("test");
-            check.patch(action, "getActionPointsUsage", () => 3);
+            check.patch(action, "getPowerUsage", () => 3);
 
             let ship = new Ship();
             check.equals(action.checkCannotBeApplied(ship), "action not available");

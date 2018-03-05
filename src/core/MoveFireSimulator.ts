@@ -128,6 +128,7 @@ module TK.SpaceTac {
 
             // Move or approach needed ?
             let move_target: Target | null = null;
+            let move_action: MoveAction | null = null;
             result.move_location = Target.newFromShip(this.ship);
             if (action instanceof MoveAction) {
                 let corrected_target = action.applyReachableRange(this.ship, target, move_margin);
@@ -136,11 +137,12 @@ module TK.SpaceTac {
                     result.need_move = target.getDistanceTo(this.ship.location) > 0;
                     move_target = corrected_target;
                 }
+                move_action = action;
             } else {
-                let engine = this.findEngine();
-                if (engine) {
+                move_action = this.findEngine();
+                if (move_action) {
                     let approach_radius = action.getRangeRadius(this.ship);
-                    let approach = this.getApproach(engine, target, approach_radius, move_margin);
+                    let approach = this.getApproach(move_action, target, approach_radius, move_margin);
                     if (approach instanceof Target) {
                         result.need_move = true;
                         move_target = approach;
@@ -157,18 +159,15 @@ module TK.SpaceTac {
             }
 
             // Check move AP
-            if (result.need_move && move_target) {
-                let engine = this.findEngine();
-                if (engine) {
-                    result.total_move_ap = engine.getActionPointsUsage(this.ship, move_target);
-                    result.can_move = ap > 0;
-                    result.can_end_move = result.total_move_ap <= ap;
-                    result.move_location = move_target;
-                    // TODO Split in "this turn" part and "next turn" part if needed
-                    result.parts.push({ action: engine, target: move_target, ap: result.total_move_ap, possible: result.can_move });
+            if (result.need_move && move_target && move_action) {
+                result.total_move_ap = move_action.getPowerUsage(this.ship, move_target);
+                result.can_move = ap > 0;
+                result.can_end_move = result.total_move_ap <= ap;
+                result.move_location = move_target;
+                // TODO Split in "this turn" part and "next turn" part if needed
+                result.parts.push({ action: move_action, target: move_target, ap: result.total_move_ap, possible: result.can_move });
 
-                    ap -= result.total_move_ap;
-                }
+                ap -= result.total_move_ap;
             }
 
             // Check action AP
@@ -176,7 +175,7 @@ module TK.SpaceTac {
                 result.success = result.need_move && result.can_move;
             } else {
                 result.need_fire = true;
-                result.total_fire_ap = action.getActionPointsUsage(this.ship, target);
+                result.total_fire_ap = action.getPowerUsage(this.ship, target);
                 result.can_fire = result.total_fire_ap <= ap;
                 result.fire_location = target;
                 result.parts.push({ action: action, target: target, ap: result.total_fire_ap, possible: (!result.need_move || result.can_end_move) && result.can_fire });

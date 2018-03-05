@@ -10,7 +10,7 @@ module TK.SpaceTac.Specs {
             var action = new MoveAction("Engine", { distance_per_power: 10 });
             ship.actions.addCustom(action);
 
-            check.equals(action.getDistanceByActionPoint(ship), 10);
+            check.equals(action.getDistanceByPower(ship), 10);
 
             var result = action.checkTarget(ship, Target.newFromLocation(0, 20));
             check.equals(result, Target.newFromLocation(0, 20));
@@ -125,19 +125,19 @@ module TK.SpaceTac.Specs {
 
             let action = new MoveAction("Engine", { distance_per_power: 100, maneuvrability_factor: 60 });
             TestTools.setAttribute(ship, "maneuvrability", 0);
-            check.nears(action.getDistanceByActionPoint(ship), 40);
+            check.nears(action.getDistanceByPower(ship), 40);
             TestTools.setAttribute(ship, "maneuvrability", 1);
-            check.nears(action.getDistanceByActionPoint(ship), 60);
+            check.nears(action.getDistanceByPower(ship), 60);
             TestTools.setAttribute(ship, "maneuvrability", 2);
-            check.nears(action.getDistanceByActionPoint(ship), 70);
+            check.nears(action.getDistanceByPower(ship), 70);
             TestTools.setAttribute(ship, "maneuvrability", 10);
-            check.nears(action.getDistanceByActionPoint(ship), 90);
+            check.nears(action.getDistanceByPower(ship), 90);
 
             action = new MoveAction("Engine", { distance_per_power: 100, maneuvrability_factor: 0 });
             TestTools.setAttribute(ship, "maneuvrability", 0);
-            check.nears(action.getDistanceByActionPoint(ship), 100);
+            check.nears(action.getDistanceByPower(ship), 100);
             TestTools.setAttribute(ship, "maneuvrability", 10);
-            check.nears(action.getDistanceByActionPoint(ship), 100);
+            check.nears(action.getDistanceByPower(ship), 100);
         });
 
         test.case("builds a textual description", check => {
