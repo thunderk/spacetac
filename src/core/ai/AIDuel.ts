@@ -97,7 +97,7 @@ module TK.SpaceTac {
             } else {
                 this.update(-1);
             }
-            this.scheduled = Timer.global.schedule(100, () => this.next());
+            this.scheduled = Timer.global.schedule(50, () => this.next());
         }
 
         /**

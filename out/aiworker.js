@@ -19,5 +19,5 @@ onmessage = function (e) {
         debug("[AI Worker] Send", maneuver);
         postMessage(serializer.serialize(maneuver));
         return maneuver.apply(battle);
-    }).catch(postMessage).then(close);
+    }).catch(postMessage);
 }

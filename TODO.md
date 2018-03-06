@@ -32,6 +32,7 @@ Character sheet
 Battle
 ------
 
+* Fix stats only filling for one fleet
 * Add a voluntary retreat option
 * Toggle bar/text display in power section of action bar
 * Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat
@@ -67,6 +68,7 @@ Ships models and actions
 Artificial Intelligence
 -----------------------
 
+* If web worker is not responsive, or produces only errors, it should be disabled for the session
 * Produce interesting "angle" areas
 * Evaluate active effects
 * Account for luck

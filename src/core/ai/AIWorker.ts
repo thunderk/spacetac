@@ -1,4 +1,20 @@
 module TK.SpaceTac {
+    /** 
+     * Initialize the background worker, if possible
+     */
+    function initializeWorker(): Worker | null {
+        if (typeof window != "undefined" && (<any>window).Worker) {
+            try {
+                return new Worker('aiworker.js');  // TODO not hard-coded
+            } catch {
+                console.error("Could not initialize AI web worker");
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     /**
      * AI processing, either in the current process or in a web worker
      */
@@ -6,6 +22,7 @@ module TK.SpaceTac {
         private battle: Battle;
         private ship: Ship;
         private debug: boolean;
+        private static worker = initializeWorker();
 
         constructor(battle: Battle, debug = false) {
             this.battle = battle;
@@ -27,8 +44,13 @@ module TK.SpaceTac {
          * Process AI in a webworker if possible, else do the work in the render thread
          */
         async processAuto(feedback: AIFeedback): Promise<void> {
-            if (!this.debug && (<any>window).Worker) {
-                await this.processInWorker(feedback);
+            if (!this.debug && AIWorker.worker) {
+                try {
+                    await this.processInWorker(AIWorker.worker, feedback);
+                } catch (err) {
+                    console.error("Web worker error, falling back to main thread", err);
+                    await this.processHere(feedback);
+                }
             } else {
                 await this.processHere(feedback);
             }
@@ -37,14 +59,10 @@ module TK.SpaceTac {
         /**
          * Process AI in a webworker
          */
-        async processInWorker(feedback: AIFeedback): Promise<void> {
-            let worker = new Worker('aiworker.js');  // TODO not hard-coded
+        async processInWorker(worker: Worker, feedback: AIFeedback): Promise<void> {
             let serializer = new Serializer(TK.SpaceTac);
             let promise = new Promise((resolve, reject) => {
-                worker.onerror = (error) => {
-                    worker.terminate();
-                    reject(error);
-                };
+                worker.onerror = reject;
                 worker.onmessage = (message) => {
                     let maneuver = serializer.unserialize(message.data);
                     if (maneuver instanceof Maneuver) {
@@ -56,7 +74,6 @@ module TK.SpaceTac {
                             resolve();
                         }
                     } else {
-                        worker.terminate();
                         reject("Received something that is not a Maneuver");
                     }
                 };
