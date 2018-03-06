@@ -1,4 +1,4 @@
-.env
+.venv
 coverage
 /node_modules
 /out/vendor

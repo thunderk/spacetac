@@ -4,7 +4,6 @@
   "description": "A tactical RPG set in space",
   "main": "src/build.js",
   "scripts": {
-    "shell": "${SHELL} || true",
     "postinstall": "rm -rf out/vendor && mkdir -p out/vendor && cp -r node_modules/phaser/build out/vendor/phaser && cp -r node_modules/parse/dist out/vendor/parse && cp -r node_modules/jasmine-core/lib/jasmine-core out/vendor/jasmine",
     "build": "tsc -p .",
     "atlas": "rm -f out/assets/atlas* && find graphics/exported -name '*.png' -print0 | xargs -0 gf-pack --name out/assets/atlas --fullpath --width 1024 --height 1024 --square --powerOfTwo --trim --padding 2",

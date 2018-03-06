@@ -1,0 +1,14 @@
+# Activation script for virtual nodejs environment
+# Usage:
+#  source activate_node
+
+if [ \! -f "./activate_node" ]
+then
+    echo "Not in project directory"
+    exit 1
+fi
+
+vdir="./.venv"
+test -x "${vdir}/bin/nodeenv" || ( virtualenv -p python3 "${vdir}" && "${vdir}/bin/pip" install --upgrade nodeenv )
+test -e "${vdir}/node/bin/activate" || "${vdir}/bin/nodeenv" --node=9.3.0 --force "${vdir}/node"
+source "${vdir}/node/bin/activate"

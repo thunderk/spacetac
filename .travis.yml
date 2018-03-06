@@ -1,7 +1,9 @@
 language: node_js
 sudo: false
-cache: yarn
 node_js:
-    - "6"
+    - "node"
 after_success:
-    - yarn run codecov
+    - npm run codecov
+cache:
+  directories:
+    - "node_modules"

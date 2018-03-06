@@ -16,17 +16,21 @@
 
 ## How to develop
 
-The only hard dependency of the toolchain is [yarn](https://yarnpkg.com).
+The only hard dependency of the toolchain is Node.js (with npm).
 
-If yarn is not installed on your system but Python3 is, yarn will be automatically installed in a local virtual environment.
+If Node.js is not installed on your system but Python3 is, you can use the following commands to (de)activate a virtual
+and local Node.js environment:
+
+    source activate_node  # From now on, "npm" command will be the one from virtual environment
+    deactivate_node       # This restores the environment as before the "source" command
 
 If you want to build on your computer, clone the repository, then run:
 
-    ./spacetac install    # Install dependencies
-    ./spacetac run build  # Build the final JS
-    ./spacetac run atlas  # Pack the images and sounds
-    ./spacetac test       # Run unit tests
-    ./spacetac start      # Start development server, and open game in web browser
+    npm install    # Install dependencies
+    npm run build  # Build the final JS
+    npm run atlas  # Pack the images and sounds
+    npm test       # Run unit tests
+    npm start      # Start development server, and open game in web browser
 
 ## Credits
 
