@@ -27,10 +27,8 @@ and local Node.js environment:
 If you want to build on your computer, clone the repository, then run:
 
     npm install    # Install dependencies
-    npm run build  # Build the final JS
-    npm run atlas  # Pack the images and sounds
-    npm test       # Run unit tests
     npm start      # Start development server, and open game in web browser
+    npm test       # Run unit tests
 
 ## Credits
 

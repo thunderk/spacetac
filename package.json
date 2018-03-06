@@ -2,17 +2,13 @@
   "name": "spacetac",
   "version": "0.1.0",
   "description": "A tactical RPG set in space",
-  "main": "src/build.js",
+  "main": "out/build.js",
   "scripts": {
-    "postinstall": "rm -rf out/vendor && mkdir -p out/vendor && cp -r node_modules/phaser/build out/vendor/phaser && cp -r node_modules/parse/dist out/vendor/parse && cp -r node_modules/jasmine-core/lib/jasmine-core out/vendor/jasmine",
-    "build": "tsc -p .",
-    "atlas": "rm -f out/assets/atlas* && find graphics/exported -name '*.png' -print0 | xargs -0 gf-pack --name out/assets/atlas --fullpath --width 1024 --height 1024 --square --powerOfTwo --trim --padding 2",
-    "pretest": "tsc -p .",
-    "test": "karma start spec/support/karma.conf.js && remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html",
-    "prestart": "tsc -p . || true",
-    "start": "live-server out --host=127.0.0.1 --port=8012 --ignore=coverage",
+    "build": "taskr build",
+    "test": "taskr test",
+    "start": "taskr",
     "codecov": "remap-istanbul -i out/coverage/coverage.json -o out/coverage/mapped.json -t json && codecov -f out/coverage/mapped.json",
-    "deploy": "rsync -avz --delete ./out/ hosting.thunderk.net:/srv/website/spacetac/"
+    "deploy": "taskr deploy"
   },
   "repository": {
     "type": "git",
@@ -21,6 +17,8 @@
   "author": "Michael Lemaire",
   "license": "MIT",
   "devDependencies": {
+    "@taskr/shell": "^1.1.0",
+    "@taskr/watch": "^1.1.0",
     "@types/jasmine": "^2.8.6",
     "babel-polyfill": "6.26.0",
     "codecov": "3.0.0",
@@ -33,7 +31,9 @@
     "karma-spec-reporter": "^0.0.32",
     "live-server": "1.2.0",
     "remap-istanbul": "^0.10.1",
-    "typescript": "^2.7.1"
+    "taskr": "^1.1.0",
+    "typescript": "^2.7.1",
+    "uglify-js": "^3.3.13"
   },
   "dependencies": {
     "jasmine-core": "^2.9.1",

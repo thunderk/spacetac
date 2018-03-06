@@ -1,6 +1,6 @@
 {
     "version": "0.1.0",
-    "command": "./spacetac",
+    "command": ".venv/node/bin/npm",
     "isShellCommand": true,
     "args": [
         "run",
