@@ -5,7 +5,7 @@ module TK.SpaceTac.Specs {
             check.equals(ship.getName(false), "Ship");
             check.equals(ship.getName(true), "Level 1 Ship");
 
-            ship.model = new BaseModel("test", "Hauler");
+            ship.model = new ShipModel("test", "Hauler");
             check.equals(ship.getName(false), "Hauler");
             check.equals(ship.getName(true), "Level 1 Hauler");
 
@@ -35,7 +35,7 @@ module TK.SpaceTac.Specs {
         });
 
         test.case("applies permanent effects of ship model on attributes", check => {
-            let model = new BaseModel();
+            let model = new ShipModel();
             let ship = new Ship(null, null, model);
 
             check.patch(model, "getEffects", () => [
@@ -151,17 +151,19 @@ module TK.SpaceTac.Specs {
             let ship = new Ship();
             check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons");
 
-            check.patch(ship.model, "getEffects", () => [new AttributeEffect("maneuvrability", 4)]);
-            ship.updateAttributes();
-            check.equals(ship.getAttribute("maneuvrability"), 4);
-            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nLevel 1 Ship: +4");
+            check.patch(ship, "getUpgrades", () => [
+                { code: "Base", effects: [new AttributeEffect("maneuvrability", 3)] },
+                { code: "Up1", effects: [new AttributeEffect("precision", 1)] },
+                { code: "Up2", effects: [new AttributeEffect("precision", 1), new AttributeEffect("maneuvrability", 1)] }
+            ]);
+            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nBase: +3\nUp2: +1");
 
             ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("maneuvrability", 3)));
-            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nLevel 1 Ship: +4\nSticky effect: limit to 3");
+            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nBase: +3\nUp2: +1\nSticky effect: limit to 3");
 
             ship.active_effects.remove(ship.active_effects.list()[0]);
             ship.active_effects.add(new AttributeEffect("maneuvrability", -1));
-            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nLevel 1 Ship: +4\nActive effect: -1");
+            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nBase: +3\nUp2: +1\nActive effect: -1");
         });
 
         test.case("produces death diffs", check => {

@@ -1,7 +1,7 @@
-/// <reference path="BaseModel.ts" />
+/// <reference path="ShipModel.ts" />
 
 module TK.SpaceTac {
-    export class ModelCreeper extends BaseModel {
+    export class ModelCreeper extends ShipModel {
         constructor() {
             super("creeper", "Creeper");
         }
@@ -10,7 +10,7 @@ module TK.SpaceTac {
             return "A fast ship, with low firepower but extensive support modules.";
         }
 
-        getLevelUpgrades(level: number): ModelUpgrade[] {
+        getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
                     distance_per_power: 220,
@@ -40,7 +40,7 @@ module TK.SpaceTac {
 
                 return [
                     {
-                        code: "Base Attributes",
+                        code: "Creeper Base",
                         effects: [
                             new AttributeEffect("precision", 3),
                             new AttributeEffect("maneuvrability", 12),

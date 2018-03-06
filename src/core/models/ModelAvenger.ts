@@ -1,7 +1,7 @@
-/// <reference path="BaseModel.ts" />
+/// <reference path="ShipModel.ts" />
 
 module TK.SpaceTac {
-    export class ModelAvenger extends BaseModel {
+    export class ModelAvenger extends ShipModel {
         constructor() {
             super("avenger", "Avenger");
         }
@@ -10,7 +10,7 @@ module TK.SpaceTac {
             return "A heavy ship, dedicated to firing high precision charged shots across great distances.";
         }
 
-        getLevelUpgrades(level: number): ModelUpgrade[] {
+        getLevelUpgrades(level: number): ShipUpgrade[] {
             let engine = new MoveAction("Engine", {
                 distance_per_power: 50,
                 safety_distance: 250,
@@ -35,19 +35,10 @@ module TK.SpaceTac {
             }, "submunitionmissile");
             long_range_missile.configureCooldown(1, 2);
 
-            let shield_booster = new TriggerAction("Shield Booster", {
-                effects: [
-                    new StickyEffect(new AttributeEffect("shield_capacity", 50), 2),
-                    new ValueEffect("shield", 70),
-                ],
-                power: 2
-            }, "forcefield");
-            shield_booster.configureCooldown(1, 4);
-
             if (level == 1) {
                 return [
                     {
-                        code: "Base Attributes",
+                        code: "Avenger Base",
                         effects: [
                             new AttributeEffect("precision", 8),
                             new AttributeEffect("maneuvrability", 0),
@@ -73,28 +64,41 @@ module TK.SpaceTac {
                 return [
                     {
                         code: "Laser Targetting",
+                        description: "Improved targetting, using fine-grained laser sensors",
                         cost: 1,
-                        effects: [new AttributeEffect("precision", 2)]
+                        effects: [new AttributeEffect("precision", 2)],
                     },
                     {
                         code: "Basic Countermeasures",
+                        description: "Chaffs and lures to divert enemy fire",
                         cost: 1,
-                        effects: [new AttributeEffect("maneuvrability", 2)]
+                        effects: [new AttributeEffect("maneuvrability", 2)],
                     },
                     {
                         code: "Targetting Assist",
+                        description: "Share your targetting subnetwork with nearby ships",
                         cost: 3,
                         actions: [new ToggleAction("Targetting Assist", {
                             power: 3,
                             radius: 300,
                             effects: [new AttributeEffect("precision", 2)]
-                        }, "precisionboost")]
+                        }, "precisionboost")],
                     },
                 ];
             } else if (level == 3) {
+                let shield_booster = new TriggerAction("Shield Booster", {
+                    effects: [
+                        new StickyEffect(new AttributeEffect("shield_capacity", 50), 2),
+                        new ValueEffect("shield", 70),
+                    ],
+                    power: 2
+                }, "forcefield");
+                shield_booster.configureCooldown(1, 4);
+
                 return [
                     {
                         code: "Gyroscopic Stabilizers",
+                        description: "Heavy mercury gyroscopes, used to stabilize the whole ship while firing",
                         cost: 1,
                         effects: [
                             new AttributeEffect("precision", 3),
@@ -103,11 +107,13 @@ module TK.SpaceTac {
                     },
                     {
                         code: "Shield Booster",
+                        description: "Temporary power surge directed toward the shield mainframe, to boost its output",
                         cost: 3,
                         actions: [shield_booster]
                     },
                     {
                         code: "Hard Coated Hull",
+                        description: "Improved metal coating of outer hull layers, making them more damage resistant",
                         cost: 2,
                         effects: [new AttributeEffect("hull_capacity", 10)]
                     },

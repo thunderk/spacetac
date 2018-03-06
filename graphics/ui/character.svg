@@ -878,11 +878,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.99999999"
-     inkscape:cx="549.91693"
-     inkscape:cy="482.67414"
+     inkscape:zoom="0.5"
+     inkscape:cx="984.86575"
+     inkscape:cy="573.79438"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="layer4"
      showgrid="false"
      units="px"
      showborder="true"
@@ -998,7 +998,7 @@
     </g>
   </g>
   <g
-     inkscape:label="Calque 1"
+     inkscape:label="Common"
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-11.249983)"
@@ -1182,12 +1182,12 @@
       <image
          sodipodi:absref="/home/michael/workspace/perso/spacetac/graphics/ui/pics/portrait.png"
          xlink:href="pics/portrait.png"
-         width="256"
-         height="256"
-         preserveAspectRatio="none"
-         id="image12382"
+         y="154.4881"
          x="310.76187"
-         y="154.4881" />
+         id="image12382"
+         preserveAspectRatio="none"
+         height="256"
+         width="256" />
     </g>
     <use
        x="0"
@@ -1232,8 +1232,528 @@
     <g
        id="g13917" />
     <g
+       id="g14081">
+      <rect
+         y="41.249985"
+         x="30"
+         height="700"
+         width="140"
+         id="rect14072"
+         style="fill:url(#linearGradient14196);fill-opacity:1;fill-rule:evenodd;stroke:#7b91ad;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <g
+         id="g14583">
+        <g
+           id="g14528">
+          <path
+             style="display:inline;opacity:0.71300001;fill:#526272;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.77002335;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter14517)"
+             id="path14200"
+             sodipodi:type="arc"
+             sodipodi:cx="-184.14612"
+             sodipodi:cy="87.613945"
+             sodipodi:rx="22.335249"
+             sodipodi:ry="22.335249"
+             sodipodi:start="5.4977871"
+             sodipodi:end="0.78539816"
+             d="m -168.35271,71.820538 a 22.335249,22.335249 0 0 1 6.54184,15.793406 22.335249,22.335249 0 0 1 -6.54184,15.793406"
+             sodipodi:open="true"
+             transform="matrix(-1,0,0,1,0,-22)" />
+          <path
+             style="opacity:0.35400008;fill:url(#linearGradient14596);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+             inkscape:transform-center-x="3.47873"
+             d="m 168.54176,53.563271 1e-5,24.101348 -10.87239,-12.050673 z"
+             id="path14587"
+             inkscape:connector-curvature="0"
+             sodipodi:nodetypes="cccc" />
+        </g>
+        <use
+           transform="translate(0,38.267029)"
+           height="100%"
+           width="100%"
+           id="use14530"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,76.533997)"
+           height="100%"
+           width="100%"
+           id="use14532"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,114.80096)"
+           height="100%"
+           width="100%"
+           id="use14534"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,153.06781)"
+           height="100%"
+           width="100%"
+           id="use14536"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,191.33478)"
+           height="100%"
+           width="100%"
+           id="use14538"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,229.60175)"
+           height="100%"
+           width="100%"
+           id="use14540"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,267.86871)"
+           height="100%"
+           width="100%"
+           id="use14542"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,306.13566)"
+           height="100%"
+           width="100%"
+           id="use14544"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,344.40266)"
+           height="100%"
+           width="100%"
+           id="use14546"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,382.6696)"
+           height="100%"
+           width="100%"
+           id="use14548"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,420.93649)"
+           height="100%"
+           width="100%"
+           id="use14550"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,459.20346)"
+           height="100%"
+           width="100%"
+           id="use14552"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,497.47038)"
+           height="100%"
+           width="100%"
+           id="use14554"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,535.73736)"
+           height="100%"
+           width="100%"
+           id="use14556"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,574.00433)"
+           height="100%"
+           width="100%"
+           id="use14558"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,612.27128)"
+           height="100%"
+           width="100%"
+           id="use14560"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+        <use
+           transform="translate(0,650.53824)"
+           height="100%"
+           width="100%"
+           id="use14562"
+           xlink:href="#g14528"
+           y="0"
+           x="0" />
+      </g>
+      <use
+         x="0"
+         y="0"
+         xlink:href="#g14583"
+         id="use14585"
+         width="100%"
+         height="100%"
+         transform="matrix(-1,0,0,1,199.84882,0)" />
+    </g>
+    <use
+       x="0"
+       y="0"
+       xlink:href="#g14081"
+       id="use14083"
+       width="100%"
+       height="100%"
+       transform="matrix(-1,0,0,1,869.5,0.49999826)"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/ship-column.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <g
+       id="g13723">
+      <g
+         id="g13712"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/level-upgrades.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96">
+        <path
+           style="fill:#232a32;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="m 602,1000.25 h 210 l -21.29289,90 h -210 z"
+           id="rect11747"
+           inkscape:connector-curvature="0"
+           sodipodi:nodetypes="ccccc" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path13725"
+           d="m 602,1000.25 h 210 l -21.29289,90 h -210 z"
+           style="fill:url(#linearGradient13733);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+        <path
+           sodipodi:nodetypes="ccccc"
+           inkscape:connector-curvature="0"
+           id="path13708"
+           d="m 602,1000.25 h 210 l -21.29289,90 h -210 z"
+           style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a5b4c6;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      </g>
+      <g
+         transform="translate(-2,12)"
+         id="g13702">
+        <use
+           transform="translate(-464.12243,101.20043)"
+           style="display:inline"
+           x="0"
+           y="0"
+           xlink:href="#g4717"
+           id="use4729"
+           width="100%"
+           height="100%"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/upgrade-point.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
+        <text
+           id="text7309-3-1-9-2-7"
+           y="1059.1364"
+           x="692.38733"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;display:inline;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
+           xml:space="preserve"><tspan
+             id="tspan7343-1-4-1-20-5"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1"
+             y="1059.1364"
+             x="692.38733"
+             sodipodi:role="line">12</tspan></text>
+      </g>
+      <text
+         id="text4619-5"
+         y="1027.25"
+         x="630.97443"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;display:inline;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
+         xml:space="preserve"><tspan
+           style="font-size:21.33333397px;fill:#e7ebf0;fill-opacity:1"
+           y="1027.25"
+           x="630.97443"
+           id="tspan4617-4"
+           sodipodi:role="line">Upgrade points</tspan></text>
+    </g>
+    <g
+       id="g12989"
+       transform="translate(-0.77904,-50.000005)">
+      <path
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/scroll.png"
+         inkscape:transform-center-y="3.6247564e-06"
+         inkscape:transform-center-x="-1.4454898"
+         d="m 348.01098,69.452232 0,-10.014587 8.67289,5.007294 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="3.1415927"
+         sodipodi:arg1="2.0943951"
+         sodipodi:r2="2.8909619"
+         sodipodi:r1="5.7819242"
+         sodipodi:cy="64.444939"
+         sodipodi:cx="350.90195"
+         sodipodi:sides="3"
+         id="path4777"
+         style="display:inline;fill:#267482;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter9551)"
+         sodipodi:type="star"
+         transform="matrix(3.7795275,0,0,3.7795275,-684.48226,322.67856)" />
+      <use
+         transform="rotate(180,435.77904,566.24998)"
+         height="100%"
+         width="100%"
+         id="use9596"
+         inkscape:transform-center-y="-1.2199088e-05"
+         inkscape:transform-center-x="1.4454981"
+         xlink:href="#path4777"
+         y="0"
+         x="0" />
+    </g>
+    <g
+       id="g12941"
+       transform="translate(1.375106,9.8138628)">
+      <use
+         transform="translate(-1151.1698,48.019536)"
+         height="100%"
+         width="100%"
+         id="use12923"
+         xlink:href="#g12865"
+         y="0"
+         x="0" />
+      <use
+         transform="translate(0,112.28857)"
+         height="100%"
+         width="100%"
+         id="use12925"
+         xlink:href="#use12923"
+         y="0"
+         x="0" />
+      <use
+         transform="translate(0,224.57711)"
+         height="100%"
+         width="100%"
+         id="use12927"
+         xlink:href="#use12923"
+         y="0"
+         x="0" />
+      <use
+         transform="translate(0,336.86572)"
+         height="100%"
+         width="100%"
+         id="use12929"
+         xlink:href="#use12923"
+         y="0"
+         x="0" />
+      <use
+         transform="translate(0,449.15422)"
+         height="100%"
+         width="100%"
+         id="use12931"
+         xlink:href="#use12923"
+         y="0"
+         x="0" />
+      <use
+         transform="translate(0,561.44278)"
+         height="100%"
+         width="100%"
+         id="use12933"
+         xlink:href="#use12923"
+         y="0"
+         x="0" />
+    </g>
+    <g
+       id="g12984"
+       transform="translate(-12.470644,73.621072)">
+      <use
+         transform="matrix(1.5,0,0,1.5,-733.33264,-1276.8558)"
+         height="100%"
+         width="100%"
+         id="use12712"
+         xlink:href="#image4664"
+         y="0"
+         x="0"
+         style="display:inline" />
+      <use
+         transform="translate(0,230)"
+         height="100%"
+         width="100%"
+         id="use12977"
+         xlink:href="#use12712"
+         y="0"
+         x="0" />
+      <use
+         transform="translate(2,460)"
+         height="100%"
+         width="100%"
+         id="use12979"
+         xlink:href="#use12712"
+         y="0"
+         x="0" />
+    </g>
+    <g
+       transform="translate(-20.84124,-2.86645)"
+       id="g13805">
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path13799"
+         d="m 270.51332,1012.2998 h 370.65584 l -16.8549,71.6333 H 287.36822 Z"
+         style="display:inline;fill:#2b2b24;fill-opacity:1;fill-rule:evenodd;stroke:#ada17b;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.62127662"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/level-display.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <path
+         style="display:inline;opacity:1;fill:url(#linearGradient13850);fill-opacity:1;fill-rule:evenodd;stroke:#bfba20;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.00425535"
+         d="m 270.51332,1012.2998 h 370.65584 l -16.8549,71.6333 H 287.36822 Z"
+         id="path13842"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc"
+         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/level-experience.png"
+         inkscape:export-xdpi="96"
+         inkscape:export-ydpi="96" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
+         x="457.60583"
+         y="1062.1165"
+         id="text13803"><tspan
+           sodipodi:role="line"
+           x="457.60583"
+           y="1062.1165"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1"
+           id="tspan13801">Level 9</tspan></text>
+    </g>
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#ced3d9;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect13891"
+       width="128"
+       height="128"
+       x="230"
+       y="766.25"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/portrait-on.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96" />
+    <text
+       id="text4619-5-5"
+       y="65.749977"
+       x="48.6175"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;display:inline;fill:#a0afc3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789-5-5)"
+       xml:space="preserve"><tspan
+         style="font-size:21.33333397px;fill:#a0afc3;fill-opacity:1"
+         y="65.749977"
+         x="48.6175"
+         id="tspan4617-4-2"
+         sodipodi:role="line">Attributes</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;display:inline;fill:#a0afc3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789-5-5)"
+       x="731.63831"
+       y="65.749977"
+       id="text14176"><tspan
+         sodipodi:role="line"
+         id="tspan14174"
+         x="731.63831"
+         y="65.749977"
+         style="font-size:21.33333397px;fill:#a0afc3;fill-opacity:1">Actions</tspan></text>
+    <rect
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/portrait-hover.png"
+       y="773.52264"
+       x="378.34415"
+       height="113.45454"
+       width="113.45454"
+       id="rect4873"
+       style="opacity:0.67099998;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:3.54500008;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5187)" />
+    <rect
+       inkscape:export-ydpi="96"
+       inkscape:export-xdpi="96"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/portrait.png"
+       y="766.24994"
+       x="88.928574"
+       height="128"
+       width="128"
+       id="rect4875"
+       style="fill:none;fill-rule:evenodd;stroke:#4d5156;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.45319148" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="Creation"
+     style="display:inline">
+    <g
+       id="g13832"
+       transform="translate(0,-17.249983)"
+       style="display:inline;stroke:none"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/name-button.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path13822"
+         d="m 685.08629,918.27565 h 47.24163 l -16.8549,71.6333 h -47.24163 z"
+         style="display:inline;fill:#232a32;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter14056)" />
+      <text
+         id="text7309-3-9-4"
+         y="970.57117"
+         x="697.05078"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           id="tspan7343-1-9-7"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none"
+           y="970.57117"
+           x="697.05078"
+           sodipodi:role="line">...</tspan></text>
+    </g>
+    <g
+       style="display:inline;stroke:none"
+       transform="translate(-22.627417,211.85262)"
+       id="g14972"
+       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/name-button-hover.png"
+       inkscape:export-xdpi="96"
+       inkscape:export-ydpi="96">
+      <path
+         style="display:inline;fill:#284e77;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter14056)"
+         d="m 685.08629,918.27565 h 47.24163 l -16.8549,71.6333 h -47.24163 z"
+         id="path14966"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="ccccc" />
+      <text
+         xml:space="preserve"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         x="697.05078"
+         y="970.57117"
+         id="text14970"><tspan
+           sodipodi:role="line"
+           x="697.05078"
+           y="970.57117"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none"
+           id="tspan14968">...</tspan></text>
+    </g>
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="Edition"
+     style="display:inline">
+    <g
+       style="display:inline"
        id="g13386"
-       transform="translate(39.664806,6.1e-5)">
+       transform="translate(39.664806,-11.249922)">
       <text
          id="text7309-3-1-9"
          y="113.84992"
@@ -1676,7 +2196,7 @@
     <g
        style="display:inline;fill:#fafbfd;fill-opacity:0.1255319"
        id="use7546-1"
-       transform="translate(423.739,637.5569)"
+       transform="translate(423.739,626.30692)"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/upgrade-on.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -1707,8 +2227,9 @@
          style="fill:none;fill-opacity:0.02765958;fill-rule:evenodd;stroke:#bfc8aa;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <g
+       style="display:inline"
        id="g13533"
-       transform="translate(0.33514404,-1.7e-5)"
+       transform="translate(0.33514404,-11.25)"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/upgrade-locked.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -1746,290 +2267,10 @@
            y="1017.7109" />
       </g>
     </g>
-    <g
-       id="g14081">
-      <rect
-         y="41.249985"
-         x="30"
-         height="700"
-         width="140"
-         id="rect14072"
-         style="fill:url(#linearGradient14196);fill-opacity:1;fill-rule:evenodd;stroke:#7b91ad;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <g
-         id="g14583">
-        <g
-           id="g14528">
-          <path
-             style="display:inline;opacity:0.71300001;fill:#526272;fill-opacity:1;fill-rule:evenodd;stroke:#ffffff;stroke-width:0.77002335;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter14517)"
-             id="path14200"
-             sodipodi:type="arc"
-             sodipodi:cx="-184.14612"
-             sodipodi:cy="87.613945"
-             sodipodi:rx="22.335249"
-             sodipodi:ry="22.335249"
-             sodipodi:start="5.4977871"
-             sodipodi:end="0.78539816"
-             d="m -168.35271,71.820538 a 22.335249,22.335249 0 0 1 6.54184,15.793406 22.335249,22.335249 0 0 1 -6.54184,15.793406"
-             sodipodi:open="true"
-             transform="matrix(-1,0,0,1,0,-22)" />
-          <path
-             style="opacity:0.35400008;fill:url(#linearGradient14596);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-             inkscape:transform-center-x="3.47873"
-             d="m 168.54176,53.563271 1e-5,24.101348 -10.87239,-12.050673 z"
-             id="path14587"
-             inkscape:connector-curvature="0"
-             sodipodi:nodetypes="cccc" />
-        </g>
-        <use
-           transform="translate(0,38.267029)"
-           height="100%"
-           width="100%"
-           id="use14530"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,76.533997)"
-           height="100%"
-           width="100%"
-           id="use14532"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,114.80096)"
-           height="100%"
-           width="100%"
-           id="use14534"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,153.06781)"
-           height="100%"
-           width="100%"
-           id="use14536"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,191.33478)"
-           height="100%"
-           width="100%"
-           id="use14538"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,229.60175)"
-           height="100%"
-           width="100%"
-           id="use14540"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,267.86871)"
-           height="100%"
-           width="100%"
-           id="use14542"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,306.13566)"
-           height="100%"
-           width="100%"
-           id="use14544"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,344.40266)"
-           height="100%"
-           width="100%"
-           id="use14546"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,382.6696)"
-           height="100%"
-           width="100%"
-           id="use14548"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,420.93649)"
-           height="100%"
-           width="100%"
-           id="use14550"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,459.20346)"
-           height="100%"
-           width="100%"
-           id="use14552"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,497.47038)"
-           height="100%"
-           width="100%"
-           id="use14554"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,535.73736)"
-           height="100%"
-           width="100%"
-           id="use14556"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,574.00433)"
-           height="100%"
-           width="100%"
-           id="use14558"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,612.27128)"
-           height="100%"
-           width="100%"
-           id="use14560"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-        <use
-           transform="translate(0,650.53824)"
-           height="100%"
-           width="100%"
-           id="use14562"
-           xlink:href="#g14528"
-           y="0"
-           x="0" />
-      </g>
-      <use
-         x="0"
-         y="0"
-         xlink:href="#g14583"
-         id="use14585"
-         width="100%"
-         height="100%"
-         transform="matrix(-1,0,0,1,199.84882,0)" />
-    </g>
-    <use
-       x="0"
-       y="0"
-       xlink:href="#g14081"
-       id="use14083"
-       width="100%"
-       height="100%"
-       transform="matrix(-1,0,0,1,869.5,0.49999826)"
-       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/ship-column.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <g
-       id="g13723">
-      <g
-         id="g13712"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/level-upgrades.png"
-         inkscape:export-xdpi="96"
-         inkscape:export-ydpi="96">
-        <path
-           style="fill:#232a32;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-           d="m 602,1000.25 h 210 l -21.29289,90 h -210 z"
-           id="rect11747"
-           inkscape:connector-curvature="0"
-           sodipodi:nodetypes="ccccc" />
-        <path
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0"
-           id="path13725"
-           d="m 602,1000.25 h 210 l -21.29289,90 h -210 z"
-           style="fill:url(#linearGradient13733);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-        <path
-           sodipodi:nodetypes="ccccc"
-           inkscape:connector-curvature="0"
-           id="path13708"
-           d="m 602,1000.25 h 210 l -21.29289,90 h -210 z"
-           style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#a5b4c6;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      </g>
-      <g
-         transform="translate(-2,12)"
-         id="g13702">
-        <use
-           transform="translate(-464.12243,101.20043)"
-           style="display:inline"
-           x="0"
-           y="0"
-           xlink:href="#g4717"
-           id="use4729"
-           width="100%"
-           height="100%"
-           inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/upgrade-point.png"
-           inkscape:export-xdpi="96"
-           inkscape:export-ydpi="96" />
-        <text
-           id="text7309-3-1-9-2-7"
-           y="1059.1364"
-           x="692.38733"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;display:inline;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
-           xml:space="preserve"><tspan
-             id="tspan7343-1-4-1-20-5"
-             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1"
-             y="1059.1364"
-             x="692.38733"
-             sodipodi:role="line">12</tspan></text>
-      </g>
-      <text
-         id="text4619-5"
-         y="1027.25"
-         x="630.97443"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;display:inline;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
-         xml:space="preserve"><tspan
-           style="font-size:21.33333397px;fill:#e7ebf0;fill-opacity:1"
-           y="1027.25"
-           x="630.97443"
-           id="tspan4617-4"
-           sodipodi:role="line">Upgrade points</tspan></text>
-    </g>
-    <g
-       id="g13832"
-       transform="translate(0,-6)"
-       style="stroke:none"
-       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/name-button.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
-      <path
-         sodipodi:nodetypes="ccccc"
-         inkscape:connector-curvature="0"
-         id="path13822"
-         d="m 685.08629,918.27565 h 47.24163 l -16.8549,71.6333 h -47.24163 z"
-         style="display:inline;fill:#232a32;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter14056)" />
-      <text
-         id="text7309-3-9-4"
-         y="970.57117"
-         x="697.05078"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           id="tspan7343-1-9-7"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none"
-           y="970.57117"
-           x="697.05078"
-           sodipodi:role="line">...</tspan></text>
-    </g>
     <text
+       transform="translate(0,-11.249983)"
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;display:inline;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
        x="1067.7312"
        y="924.81647"
        id="text4619"><tspan
@@ -2041,16 +2282,20 @@
     <image
        sodipodi:absref="/home/michael/workspace/perso/spacetac/graphics/ui/pics/action.png"
        xlink:href="pics/action.png"
-       width="64"
-       height="64"
-       preserveAspectRatio="none"
-       id="image4664"
+       y="889.23981"
        x="977.53552"
-       y="889.23981" />
+       id="image4664"
+       preserveAspectRatio="none"
+       height="64"
+       width="64"
+       style="display:inline"
+       transform="translate(0,-11.249983)" />
     <g
+       transform="translate(0,-11.249983)"
+       style="display:inline"
        id="g4697">
       <use
-         transform="translate(315.99999)"
+         transform="translate(315.99999,11.249983)"
          height="100%"
          width="100%"
          id="use4667"
@@ -2075,6 +2320,7 @@
            sodipodi:role="line">Gatling</tspan></text>
     </g>
     <use
+       style="display:inline"
        x="0"
        y="0"
        xlink:href="#g4697"
@@ -2083,8 +2329,9 @@
        height="100%"
        transform="translate(0,-99.999997)" />
     <g
+       style="display:inline"
        id="g4727"
-       transform="rotate(90,1242.25,946.99999)">
+       transform="rotate(90,1247.875,941.375)">
       <g
          id="g4717"
          transform="translate(-9.000001)">
@@ -2113,45 +2360,11 @@
          x="0" />
     </g>
     <g
-       id="g12989"
-       transform="translate(-0.77904,-50.000005)">
-      <path
-         inkscape:export-ydpi="96"
-         inkscape:export-xdpi="96"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/character/scroll.png"
-         inkscape:transform-center-y="3.6247564e-06"
-         inkscape:transform-center-x="-1.4454898"
-         d="m 348.01098,69.452232 0,-10.014587 8.67289,5.007294 z"
-         inkscape:randomized="0"
-         inkscape:rounded="0"
-         inkscape:flatsided="true"
-         sodipodi:arg2="3.1415927"
-         sodipodi:arg1="2.0943951"
-         sodipodi:r2="2.8909619"
-         sodipodi:r1="5.7819242"
-         sodipodi:cy="64.444939"
-         sodipodi:cx="350.90195"
-         sodipodi:sides="3"
-         id="path4777"
-         style="display:inline;fill:#267482;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458335px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter9551)"
-         sodipodi:type="star"
-         transform="matrix(3.7795275,0,0,3.7795275,-684.48226,322.67856)" />
-      <use
-         transform="rotate(180,435.77904,566.24998)"
-         height="100%"
-         width="100%"
-         id="use9596"
-         inkscape:transform-center-y="-1.2199088e-05"
-         inkscape:transform-center-x="1.4454981"
-         xlink:href="#path4777"
-         y="0"
-         x="0" />
-    </g>
-    <g
+       style="display:inline"
        id="g12947"
-       transform="translate(37)">
+       transform="translate(37,-11.249983)">
       <use
-         transform="matrix(0.75,0,0,0.75,256.49876,-564.41617)"
+         transform="matrix(0.75,0,0,0.75,256.49876,-555.97868)"
          height="100%"
          width="100%"
          id="use12729"
@@ -2172,17 +2385,18 @@
            style="font-size:21.33333397px;line-height:15.27999938%;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1">Gatling Gun</tspan></text>
     </g>
     <g
+       style="display:inline"
        id="g12865"
-       transform="translate(190,6)">
+       transform="translate(190,-5.249983)">
       <image
          sodipodi:absref="/home/michael/workspace/perso/spacetac/graphics/ui/pics/attribute.png"
          xlink:href="pics/attribute.png"
-         width="52"
-         height="52"
-         preserveAspectRatio="none"
-         id="image12836"
+         y="39.945179"
          x="1017.6896"
-         y="39.945179" />
+         id="image12836"
+         preserveAspectRatio="none"
+         height="52"
+         width="52" />
       <text
          xml:space="preserve"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:15.27999938%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;display:inline;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
@@ -2196,6 +2410,7 @@
            style="font-size:29.33333397px;line-height:15.27999938%;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1">12</tspan></text>
     </g>
     <use
+       style="display:inline"
        x="0"
        y="0"
        xlink:href="#g12865"
@@ -2204,6 +2419,7 @@
        height="100%"
        transform="translate(108.04588)" />
     <use
+       style="display:inline"
        x="0"
        y="0"
        xlink:href="#g12865"
@@ -2212,6 +2428,7 @@
        height="100%"
        transform="translate(216.09181)" />
     <use
+       style="display:inline"
        x="0"
        y="0"
        xlink:href="#g12865"
@@ -2220,6 +2437,7 @@
        height="100%"
        transform="translate(324.13768)" />
     <use
+       style="display:inline"
        x="0"
        y="0"
        xlink:href="#g12865"
@@ -2228,6 +2446,7 @@
        height="100%"
        transform="translate(432.18368)" />
     <use
+       style="display:inline"
        x="0"
        y="0"
        xlink:href="#g12865"
@@ -2236,6 +2455,7 @@
        height="100%"
        transform="translate(540.22958)" />
     <text
+       transform="translate(0,-11.249983)"
        id="text4619-3-1-5"
        y="68.208717"
        x="1086.0133"
@@ -2246,59 +2466,8 @@
          x="1086.0133"
          sodipodi:role="line"
          id="tspan12775-3">Base equipment</tspan></text>
-    <g
-       id="g12941"
-       transform="translate(1.375106,9.8138628)">
-      <use
-         transform="translate(-1151.1698,36.769553)"
-         height="100%"
-         width="100%"
-         id="use12923"
-         xlink:href="#g12865"
-         y="0"
-         x="0" />
-      <use
-         transform="translate(0,112.28857)"
-         height="100%"
-         width="100%"
-         id="use12925"
-         xlink:href="#use12923"
-         y="0"
-         x="0" />
-      <use
-         transform="translate(0,224.57711)"
-         height="100%"
-         width="100%"
-         id="use12927"
-         xlink:href="#use12923"
-         y="0"
-         x="0" />
-      <use
-         transform="translate(0,336.86572)"
-         height="100%"
-         width="100%"
-         id="use12929"
-         xlink:href="#use12923"
-         y="0"
-         x="0" />
-      <use
-         transform="translate(0,449.15422)"
-         height="100%"
-         width="100%"
-         id="use12931"
-         xlink:href="#use12923"
-         y="0"
-         x="0" />
-      <use
-         transform="translate(0,561.44278)"
-         height="100%"
-         width="100%"
-         id="use12933"
-         xlink:href="#use12923"
-         y="0"
-         x="0" />
-    </g>
     <use
+       style="display:inline"
        x="0"
        y="0"
        xlink:href="#g12947"
@@ -2307,6 +2476,7 @@
        height="100%"
        transform="translate(304.10505)" />
     <use
+       style="display:inline"
        x="0"
        y="0"
        xlink:href="#g12947"
@@ -2315,100 +2485,8 @@
        height="100%"
        transform="translate(608.21024)" />
     <g
-       id="g12984"
-       transform="translate(-12.470644,73.621072)">
-      <use
-         transform="matrix(1.5,0,0,1.5,-733.33264,-1293.7308)"
-         height="100%"
-         width="100%"
-         id="use12712"
-         xlink:href="#image4664"
-         y="0"
-         x="0"
-         style="display:inline" />
-      <use
-         transform="translate(0,230)"
-         height="100%"
-         width="100%"
-         id="use12977"
-         xlink:href="#use12712"
-         y="0"
-         x="0" />
-      <use
-         transform="translate(2,460)"
-         height="100%"
-         width="100%"
-         id="use12979"
-         xlink:href="#use12712"
-         y="0"
-         x="0" />
-    </g>
-    <g
-       transform="translate(-20.84124,-2.86645)"
-       id="g13805">
-      <path
-         sodipodi:nodetypes="ccccc"
-         inkscape:connector-curvature="0"
-         id="path13799"
-         d="m 270.51332,1012.2998 h 370.65584 l -16.8549,71.6333 H 287.36822 Z"
-         style="display:inline;fill:#2b2b24;fill-opacity:1;fill-rule:evenodd;stroke:#ada17b;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.62127662"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/level-display.png"
-         inkscape:export-xdpi="96"
-         inkscape:export-ydpi="96" />
-      <path
-         style="display:inline;opacity:1;fill:url(#linearGradient13850);fill-opacity:1;fill-rule:evenodd;stroke:#bfba20;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.00425535"
-         d="m 270.51332,1012.2998 h 370.65584 l -16.8549,71.6333 H 287.36822 Z"
-         id="path13842"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/level-experience.png"
-         inkscape:export-xdpi="96"
-         inkscape:export-ydpi="96" />
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789)"
-         x="457.60583"
-         y="1062.1165"
-         id="text13803"><tspan
-           sodipodi:role="line"
-           x="457.60583"
-           y="1062.1165"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1"
-           id="tspan13801">Level 9</tspan></text>
-    </g>
-    <rect
-       style="fill:none;fill-rule:evenodd;stroke:#ced3d9;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       id="rect13891"
-       width="128"
-       height="128"
-       x="230"
-       y="766.25"
-       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/portrait-on.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96" />
-    <text
-       id="text4619-5-5"
-       y="65.749977"
-       x="48.6175"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;display:inline;fill:#a0afc3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789-5-5)"
-       xml:space="preserve"><tspan
-         style="font-size:21.33333397px;fill:#a0afc3;fill-opacity:1"
-         y="65.749977"
-         x="48.6175"
-         id="tspan4617-4-2"
-         sodipodi:role="line">Attributes</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:64px;line-height:25px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;letter-spacing:0px;word-spacing:0px;display:inline;fill:#a0afc3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter13789-5-5)"
-       x="731.63831"
-       y="65.749977"
-       id="text14176"><tspan
-         sodipodi:role="line"
-         id="tspan14174"
-         x="731.63831"
-         y="65.749977"
-         style="font-size:21.33333397px;fill:#a0afc3;fill-opacity:1">Actions</tspan></text>
-    <g
+       transform="translate(0,-11.249983)"
+       style="display:inline"
        id="g14940"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/close-button.png"
        inkscape:export-xdpi="96"
@@ -2438,8 +2516,9 @@
          style="fill:none;fill-rule:evenodd;stroke:url(#linearGradient14910);stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <g
+       style="display:inline"
        id="g14950"
-       transform="translate(135.0574,-0.70710678)"
+       transform="translate(135.0574,-11.95709)"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/close-button-hover.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96">
@@ -2468,35 +2547,11 @@
          inkscape:connector-curvature="0" />
     </g>
     <g
-       style="stroke:none"
-       transform="translate(-22.627417,223.1026)"
-       id="g14972"
-       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/name-button-hover.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
-      <path
-         style="display:inline;fill:#284e77;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter14056)"
-         d="m 685.08629,918.27565 h 47.24163 l -16.8549,71.6333 h -47.24163 z"
-         id="path14966"
-         inkscape:connector-curvature="0"
-         sodipodi:nodetypes="ccccc" />
-      <text
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:24px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         x="697.05078"
-         y="970.57117"
-         id="text14970"><tspan
-           sodipodi:role="line"
-           x="697.05078"
-           y="970.57117"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:37.33333206px;line-height:26.59000158%;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;text-align:center;text-anchor:middle;fill:#e7ebf0;fill-opacity:1;stroke:none"
-           id="tspan14968">...</tspan></text>
-    </g>
-    <g
+       style="display:inline"
        inkscape:export-ydpi="96"
        inkscape:export-xdpi="96"
        inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/upgrade-hover.png"
-       transform="translate(315.50273,-1.7283203e-5)"
+       transform="translate(315.50273,-11.25)"
        id="g15118">
       <rect
          style="display:inline;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#232a32;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.00425535"
@@ -2526,26 +2581,6 @@
        id="use15017"
        width="100%"
        height="100%"
-       transform="translate(-1.2460938e-5,98.994954)" />
-    <rect
-       inkscape:export-ydpi="96"
-       inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/portrait-hover.png"
-       y="773.52264"
-       x="378.34415"
-       height="113.45454"
-       width="113.45454"
-       id="rect4873"
-       style="opacity:0.67099998;fill:none;fill-rule:evenodd;stroke:#ffffff;stroke-width:3.54500008;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5187)" />
-    <rect
-       inkscape:export-ydpi="96"
-       inkscape:export-xdpi="96"
-       inkscape:export-filename="/home/michael/workspace/perso/spacetac/graphics/exported/character/portrait.png"
-       y="766.24994"
-       x="88.928574"
-       height="128"
-       width="128"
-       id="rect4875"
-       style="fill:none;fill-rule:evenodd;stroke:#4d5156;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.45319148" />
+       transform="translate(-1.2460938e-5,98.994957)" />
   </g>
 </svg>

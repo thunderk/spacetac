@@ -58,7 +58,7 @@ module TK.SpaceTac {
          * Set a ship attributes (by changing its model)
          */
         static setShipModel(ship: Ship, hull: number, shield = 0, power = 0, level = 1, actions: BaseAction[] = [], effects: BaseEffect[] = []) {
-            let model = new BaseModel();
+            let model = new ShipModel();
             ship.level.forceLevel(level);
             ship.model = model;
 

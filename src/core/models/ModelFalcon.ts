@@ -1,7 +1,7 @@
-/// <reference path="BaseModel.ts" />
+/// <reference path="ShipModel.ts" />
 
 module TK.SpaceTac {
-    export class ModelFalcon extends BaseModel {
+    export class ModelFalcon extends ShipModel {
         constructor() {
             super("falcon", "Falcon");
         }
@@ -10,7 +10,7 @@ module TK.SpaceTac {
             return "A ship with an efficient targetting system, allowing to hit multiple foes.";
         }
 
-        getLevelUpgrades(level: number): ModelUpgrade[] {
+        getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
                     distance_per_power: 130,
@@ -32,7 +32,7 @@ module TK.SpaceTac {
 
                 return [
                     {
-                        code: "Base Attributes",
+                        code: "Falcon Base",
                         effects: [
                             new AttributeEffect("precision", 8),
                             new AttributeEffect("maneuvrability", 4),

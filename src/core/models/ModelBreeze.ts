@@ -1,7 +1,7 @@
-/// <reference path="BaseModel.ts" />
+/// <reference path="ShipModel.ts" />
 
 module TK.SpaceTac {
-    export class ModelBreeze extends BaseModel {
+    export class ModelBreeze extends ShipModel {
         constructor() {
             super("breeze", "Breeze");
         }
@@ -10,7 +10,7 @@ module TK.SpaceTac {
             return "A swift piece of maneuvrability, able to go deep behind enemy lines, and come back without a scratch.";
         }
 
-        getLevelUpgrades(level: number): ModelUpgrade[] {
+        getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
                     distance_per_power: 300,
@@ -36,7 +36,7 @@ module TK.SpaceTac {
 
                 return [
                     {
-                        code: "Base Attributes",
+                        code: "Breeze Base",
                         effects: [
                             new AttributeEffect("precision", 3),
                             new AttributeEffect("maneuvrability", 12),

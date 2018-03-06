@@ -94,7 +94,7 @@ module TK.SpaceTac {
          * 
          * This does not check the upgrade points needed
          */
-        activateUpgrade(upgrade: ModelUpgrade, active: boolean): void {
+        activateUpgrade(upgrade: ShipUpgrade, active: boolean): void {
             if (active) {
                 add(this.upgrades, upgrade.code);
             } else {
@@ -105,7 +105,7 @@ module TK.SpaceTac {
         /**
          * Check if an upgrade is active
          */
-        hasUpgrade(upgrade: ModelUpgrade): boolean {
+        hasUpgrade(upgrade: ShipUpgrade): boolean {
             return contains(this.upgrades, upgrade.code);
         }
     }

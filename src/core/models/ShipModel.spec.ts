@@ -1,25 +1,25 @@
 module TK.SpaceTac.Specs {
-    testing("BaseModel", test => {
+    testing("ShipModel", test => {
         test.case("picks random models from default collection", check => {
             check.patch(console, "error", null);
-            check.patch(BaseModel, "getDefaultCollection", iterator([
-                [new BaseModel("a")],
+            check.patch(ShipModel, "getDefaultCollection", iterator([
+                [new ShipModel("a")],
                 [],
-                [new BaseModel("a"), new BaseModel("b")],
-                [new BaseModel("a")],
+                [new ShipModel("a"), new ShipModel("b")],
+                [new ShipModel("a")],
                 [],
             ]));
 
-            check.equals(BaseModel.getRandomModel(), new BaseModel("a"), "pick from a one-item list");
-            check.equals(BaseModel.getRandomModel(), new BaseModel(), "pick from an empty list");
+            check.equals(ShipModel.getRandomModel(), new ShipModel("a"), "pick from a one-item list");
+            check.equals(ShipModel.getRandomModel(), new ShipModel(), "pick from an empty list");
 
-            check.equals(sorted(BaseModel.getRandomModels(2), (a, b) => cmp(a.code, b.code)), [new BaseModel("a"), new BaseModel("b")], "sample from good-sized list");
-            check.equals(BaseModel.getRandomModels(2), [new BaseModel("a"), new BaseModel("a")], "sample from too small list");
-            check.equals(BaseModel.getRandomModels(2), [new BaseModel(), new BaseModel()], "sample from empty list");
+            check.equals(sorted(ShipModel.getRandomModels(2), (a, b) => cmp(a.code, b.code)), [new ShipModel("a"), new ShipModel("b")], "sample from good-sized list");
+            check.equals(ShipModel.getRandomModels(2), [new ShipModel("a"), new ShipModel("a")], "sample from too small list");
+            check.equals(ShipModel.getRandomModels(2), [new ShipModel(), new ShipModel()], "sample from empty list");
         });
 
         test.case("makes upgrades available by level", check => {
-            let model = new BaseModel();
+            let model = new ShipModel();
 
             function verify(desc: string, level: number, specific: string[], available: string[], activated: string[], chosen: string[] = []) {
                 check.in(`${desc} level ${level}`, check => {
@@ -31,7 +31,7 @@ module TK.SpaceTac.Specs {
 
             verify("initial", 1, [], [], []);
 
-            check.patch(model, "getLevelUpgrades", (level: number): ModelUpgrade[] => {
+            check.patch(model, "getLevelUpgrades", (level: number): ShipUpgrade[] => {
                 if (level == 1) {
                     return [
                         { code: "l1" },

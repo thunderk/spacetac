@@ -12,7 +12,7 @@ module TK.SpaceTac.UI {
         create() {
             super.create();
 
-            let models = BaseModel.getRandomModels(2);
+            let models = ShipModel.getRandomModels(2);
 
             this.built_fleet = new Fleet();
             this.built_fleet.addShip(new Ship(null, MissionGenerator.generateCharacterName(), models[0]));

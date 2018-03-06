@@ -1,7 +1,7 @@
-/// <reference path="BaseModel.ts" />
+/// <reference path="ShipModel.ts" />
 
 module TK.SpaceTac {
-    export class ModelXander extends BaseModel {
+    export class ModelXander extends ShipModel {
         constructor() {
             super("xander", "Xander");
         }
@@ -10,7 +10,7 @@ module TK.SpaceTac {
             return "A ship with impressive survival capabilities.";
         }
 
-        getLevelUpgrades(level: number): ModelUpgrade[] {
+        getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
                     distance_per_power: 150,
@@ -37,7 +37,7 @@ module TK.SpaceTac {
 
                 return [
                     {
-                        code: "Base Attributes",
+                        code: "Xander Base",
                         effects: [
                             new AttributeEffect("precision", 8),
                             new AttributeEffect("maneuvrability", 5),

@@ -15,10 +15,10 @@ module TK.SpaceTac {
          * 
          * If *upgrade* is true, random levelling options will be chosen
          */
-        generate(level: number, model: BaseModel | null = null, upgrade = true): Ship {
+        generate(level: number, model: ShipModel | null = null, upgrade = true): Ship {
             if (!model) {
                 // Get a random model
-                model = BaseModel.getRandomModel(level, this.random);
+                model = ShipModel.getRandomModel(level, this.random);
             }
 
             let result = new Ship(null, null, model);

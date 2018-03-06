@@ -4,7 +4,7 @@ module TK.SpaceTac.Specs {
             let actions = new ActionList();
             check.equals(actions.listAll(), [EndTurnAction.SINGLETON]);
 
-            let model = new BaseModel();
+            let model = new ShipModel();
             let ship = new Ship(null, null, model);
             actions.updateFromShip(ship);
             check.equals(actions.listAll(), [EndTurnAction.SINGLETON]);
@@ -17,8 +17,8 @@ module TK.SpaceTac.Specs {
             check.equals(actions.listAll(), [action1, action2, EndTurnAction.SINGLETON]);
             check.called(mock, [[3, []]]);
 
-            let up1: ModelUpgrade = { code: "up1" };
-            let up2: ModelUpgrade = { code: "up2" };
+            let up1: ShipUpgrade = { code: "up1" };
+            let up2: ShipUpgrade = { code: "up2" };
             check.patch(model, "getLevelUpgrades", () => [up1, up2]);
             ship.level.activateUpgrade(up1, true);
             actions.updateFromShip(ship);

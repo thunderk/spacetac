@@ -7,7 +7,7 @@ module TK.SpaceTac.UI.Specs {
             let ship = testgame.view.battle.play_order[2];
             TestTools.setShipModel(ship, 58, 140, 12);
             ship.name = "Fury";
-            ship.model = new BaseModel("fake", "Fury");
+            ship.model = new ShipModel("fake", "Fury");
             check.patch(ship.model, "getDescription", () => "Super ship model !");
             TestTools.addWeapon(ship, 50);
             TestTools.setAttribute(ship, "precision", 7);

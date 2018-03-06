@@ -6,7 +6,7 @@ module TK.SpaceTac {
      */
     export class Ship extends RObject {
         // Ship model
-        model: BaseModel
+        model: ShipModel
 
         // Fleet this ship is a member of
         fleet: Fleet
@@ -52,7 +52,7 @@ module TK.SpaceTac {
         play_priority = 0
 
         // Create a new ship inside a fleet
-        constructor(fleet: Fleet | null = null, name: string | null = null, model = new BaseModel()) {
+        constructor(fleet: Fleet | null = null, name: string | null = null, model = new ShipModel()) {
             super();
 
             this.fleet = fleet || new Fleet();
@@ -139,14 +139,14 @@ module TK.SpaceTac {
         /**
          * Get the list of activated upgrades
          */
-        getUpgrades(): ModelUpgrade[] {
+        getUpgrades(): ShipUpgrade[] {
             return this.model.getActivatedUpgrades(this.level.get(), this.level.getUpgrades());
         }
 
         /**
          * Toggle an upgrade
          */
-        activateUpgrade(upgrade: ModelUpgrade, on: boolean): void {
+        activateUpgrade(upgrade: ShipUpgrade, on: boolean): void {
             if (on && (upgrade.cost || 0) > this.getAvailableUpgradePoints()) {
                 return;
             }
@@ -402,8 +402,10 @@ module TK.SpaceTac {
                 }
             }
 
-            this.getModelEffects().forEach(effect => {
-                addEffect(`Level ${this.level.get()} ${this.model.name}`, effect);
+            this.getUpgrades().forEach(upgrade => {
+                if (upgrade.effects) {
+                    upgrade.effects.forEach(effect => addEffect(upgrade.code, effect));
+                }
             });
 
             this.active_effects.list().forEach(effect => {

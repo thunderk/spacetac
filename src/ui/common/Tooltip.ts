@@ -4,7 +4,7 @@ module TK.SpaceTac.UI {
 
     export type TooltipFiller = string | ((filler: TooltipBuilder) => string) | ((filler: TooltipBuilder) => boolean);
 
-    class TooltipContainer extends Phaser.Group {
+    export class TooltipContainer extends Phaser.Group {
         view: BaseView
         background: Phaser.Graphics
         content: Phaser.Group

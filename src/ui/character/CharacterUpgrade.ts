@@ -5,7 +5,7 @@ module TK.SpaceTac.UI {
     export class CharacterUpgrade {
         constructor(
             readonly ship: Ship,
-            readonly upgrade: ModelUpgrade,
+            readonly upgrade: ShipUpgrade,
             readonly level: number
         ) {
         }
@@ -28,7 +28,7 @@ module TK.SpaceTac.UI {
                 if (enabled) {
                     builder.text(this.upgrade.code, 166, 40, { size: 16, color: "#e7ebf0", width: 210 });
 
-                    let icon = builder.image(this.getIcon(this.upgrade), 40, 40, true);
+                    let icon = builder.image(this.getIcon(), 40, 40, true);
                     if (icon.width && icon.width > 64) {
                         icon.scale.set(64 / icon.width);
                     }
@@ -60,23 +60,32 @@ module TK.SpaceTac.UI {
         /**
          * Fill the tooltip for this upgrade
          */
-        private fillTooltip(builder: TooltipBuilder): boolean {
+        fillTooltip(builder: TooltipBuilder): boolean {
             builder.text(this.upgrade.code, 0, 0, { size: 20 });
 
-            let y = 30;
+            let y = 42;
 
-            if (this.upgrade.effects) {
+            if (bool(this.upgrade.effects)) {
+                builder.text("Permanent effects:", 0, y);
+                y += 30;
                 this.upgrade.effects.forEach(effect => {
-                    builder.text(effect.getDescription(), 0, y);
+                    builder.text(`• ${effect.getDescription()}`, 0, y);
                     y += 30;
                 });
             }
 
-            if (this.upgrade.actions) {
+            if (bool(this.upgrade.actions)) {
                 this.upgrade.actions.forEach(action => {
-                    builder.text(action.getEffectsDescription(), 0, y);
-                    y += 60;
+                    action.getEffectsDescription().split('\n').forEach(line => {
+                        builder.text(line, 0, y);
+                        y += 30;
+                    })
                 });
+            }
+
+            if (bool(this.upgrade.description)) {
+                y += 10;
+                builder.text(this.upgrade.description, 0, y, { size: 14, color: "#999999", width: 540 });
             }
 
             return true;
@@ -85,7 +94,9 @@ module TK.SpaceTac.UI {
         /**
          * Get an icon code for an upgrade
          */
-        private getIcon(upgrade: ModelUpgrade): string {
+        getIcon(): string {
+            let upgrade = this.upgrade;
+
             if (upgrade.actions && upgrade.actions.length) {
                 return `action-${upgrade.actions[0].code}`;
             } else if (upgrade.effects && upgrade.effects.length) {

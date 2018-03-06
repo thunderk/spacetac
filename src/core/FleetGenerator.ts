@@ -15,7 +15,7 @@ module TK.SpaceTac {
             var fleet = new Fleet(player);
             var ship_generator = new ShipGenerator(this.random);
 
-            let models = this.random.sample(BaseModel.getDefaultCollection(), ship_count);
+            let models = this.random.sample(ShipModel.getDefaultCollection(), ship_count);
 
             range(ship_count).forEach(i => {
                 var ship = ship_generator.generate(level, models[i] || null, upgrade);
