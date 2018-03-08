@@ -83,7 +83,7 @@ function pack(stage) {
             return {
                 type: "atlasJSONHash",
                 key: fname,
-                atlasURL: `assets/${fname}.json`,
+                atlasURL: `assets/${fname}.json?t=${Date.now()}`,
                 textureURL: `assets/${fname}.png`,
                 atlasData: null
             }
@@ -97,7 +97,7 @@ function pack(stage) {
                 return {
                     type: "audio",
                     key: key,
-                    urls: [`assets/${key}.${ext}`],
+                    urls: [`assets/${key}.${ext}?t=${Date.now()}`],
                     autoDecode: (ext == 'mp3')
                 };
             })));
@@ -111,7 +111,7 @@ function pack(stage) {
                 return {
                     type: "shader",
                     key: key,
-                    url: `assets/${key}.${ext}`
+                    url: `assets/${key}.${ext}?t=${Date.now()}`
                 };
             })));
         });

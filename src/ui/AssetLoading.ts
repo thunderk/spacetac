@@ -41,7 +41,7 @@ module TK.SpaceTac.UI {
 
             if (this.required >= AssetLoadingRange.MENU && AssetLoading.loaded < AssetLoadingRange.MENU) {
                 console.log("Loading menu assets");
-                this.load.pack("stage1", "assets/pack1.json");
+                this.load.pack("stage1", `assets/pack1.json?t=${Date.now()}`);
 
                 // TODO pack
                 this.loadSheet("common/particles.png", 32);
@@ -50,12 +50,12 @@ module TK.SpaceTac.UI {
 
             if (this.required >= AssetLoadingRange.BATTLE && AssetLoading.loaded < AssetLoadingRange.BATTLE) {
                 console.log("Loading battle assets");
-                this.load.pack("stage2", "assets/pack2.json");
+                this.load.pack("stage2", `assets/pack2.json?t=${Date.now()}`);
             }
 
             if (this.required >= AssetLoadingRange.CAMPAIGN && AssetLoading.loaded < AssetLoadingRange.CAMPAIGN) {
                 console.log("Loading campaign assets");
-                this.load.pack("stage3", "assets/pack3.json");
+                this.load.pack("stage3", `assets/pack3.json?t=${Date.now()}`);
             }
 
             this.load.start();
