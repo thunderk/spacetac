@@ -44,23 +44,20 @@ module TK.SpaceTac.UI {
             });
 
             // Menu buttons
-            this.button_new_game = this.addButton(322, 674, "New Game", "Start a new campaign in a generated universe", () => this.onNewGame());
-            this.button_load_game = this.addButton(960, 674, "Load / Join", "Load a saved game or join a friend", () => this.onLoadGame());
-            this.button_quick_battle = this.addButton(1606, 674, "Quick Battle", "Play a single generated battle", () => this.onQuickBattle());
+            this.button_new_game = this.addButton(320, 730, "New Game", "Start a new campaign in a generated universe", () => this.onNewGame());
+            this.button_load_game = this.addButton(958, 730, "Load / Join", "Load a saved game or join a friend", () => this.onLoadGame());
+            this.button_quick_battle = this.addButton(1604, 730, "Quick Battle", "Play a single generated battle", () => this.onQuickBattle());
 
             // Fullscreen button
-            let button = new Phaser.Button(this.game, this.getWidth(), 0, "options-options", () => this.options.toggleBoolean("fullscreen"), null, 2, 2);
+            let button = builder.in(this.layer_title).button("options-option-fullscreen", this.getWidth(), 0, () => this.options.toggleBoolean("fullscreen"), "Toggle full-screen");
             button.anchor.set(1, 0);
-            this.tooltip.bindStaticText(button, "Toggle full-screen");
-            this.layer_title.add(button);
 
             // Title
-            let title = this.add.image(960, 225, "menu-title", 0, this.layer_title);
-            title.anchor.set(0.5, 0);
+            let title = builder.in(this.layer_title).image("menu-title", 274, 187);
 
             // Dialogs
             this.dialog_load_game = new LoadDialog(this);
-            this.dialog_load_game.setPosition(264, 160);
+            this.dialog_load_game.setPosition(286, 120);
             this.dialog_load_game.moveToLayer(this.layer_title);
             this.dialog_load_game.setVisible(false);
 
@@ -90,31 +87,14 @@ module TK.SpaceTac.UI {
         }
 
         addButton(x: number, y: number, caption: string, tooltip: string, callback: Function): Phaser.Button {
-            var button = this.add.button(x - 20, y + 20, "menu-button", callback);
-            button.anchor.set(0.5, 0);
-            button.input.useHandCursor = true;
+            let builder = new UIBuilder(this).in(this.layer_title);
 
-            UIComponent.setButtonSound(button);
+            let result = builder.button("menu-button", x, y, callback, tooltip);
+            result.anchor.set(0.5);
 
-            var text = new Phaser.Text(this.game, 0, 76, caption,
-                { align: "center", font: "bold 40pt SpaceTac", fill: "#529aee" });
-            text.anchor.set(0.5, 0.5);
-            button.addChild(text);
+            builder.in(result).text(caption, 0, 0, { bold: true, size: 40, color: "#529aee" });
 
-            button.onInputOver.add(() => {
-                button.loadTexture("menu-button-hover");
-                text.fill = "#54b9ff";
-            });
-            button.onInputOut.add(() => {
-                button.loadTexture("menu-button");
-                text.fill = "#529aee";
-            });
-
-            this.tooltip.bindStaticText(button, tooltip);
-
-            this.layer_title.add(button);
-
-            return button;
+            return result;
         }
 
         // Called when "New Game" is clicked

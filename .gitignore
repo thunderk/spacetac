@@ -2,7 +2,7 @@
 coverage
 /node_modules
 /out/vendor
-/out/assets/atlas*
+/out/assets
 /out/build.*
 /graphics/**/*.blend?*
 /typings/

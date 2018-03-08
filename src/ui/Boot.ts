@@ -7,8 +7,8 @@ module TK.SpaceTac.UI {
     export class Boot extends Phaser.State {
         preload() {
             if (!(<MainUI>this.game).headless) {
-                this.load.image("preload-background", "assets/images/preload/bar-background.png");
-                this.load.image("preload-bar", "assets/images/preload/bar-content.png");
+                this.load.image("preload-background", "images/preload/bar-background.png");
+                this.load.image("preload-bar", "images/preload/bar-content.png");
             }
         }
 

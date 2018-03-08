@@ -93,7 +93,8 @@ module TK.SpaceTac.UI {
         setupMouseCapture() {
             let view = this.view;
 
-            var background = new Phaser.Button(view.game, 0, 0, "battle-arena-background");
+            let info = view.getImageInfo("battle-arena-background");
+            var background = new Phaser.Button(view.game, 0, 0, info.key, undefined, undefined, info.frame, info.frame);
             background.name = "mouse-capture";
             background.scale.set(this.boundaries.width / background.width, this.boundaries.height / background.height);
             this.mouse_capture = background;

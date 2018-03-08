@@ -10,7 +10,7 @@ module TK.SpaceTac.UI {
 
         // Power indicator
         power: Phaser.Group
-        power_icons: Phaser.Group
+        power_icons!: Phaser.Group
 
         // Indicator of interaction disabled
         icon_waiting: Phaser.Image
@@ -31,23 +31,24 @@ module TK.SpaceTac.UI {
 
             battleview.layer_borders.add(this);
 
+            let builder = new UIBuilder(battleview, this);
+
             // Background
-            this.add(new Phaser.Image(this.game, 0, 0, "battle-actionbar-background", 0));
+            builder.image("battle-actionbar-background");
 
             // Group for actions
-            this.actions = this.game.add.group(this, "actions");
-            this.actions.position.set(86, 6);
-            this.actions.add(new Phaser.Image(this.game, 0, 0, "battle-actionbar-actions-background"));
+            this.actions = builder.group("actions", 86, 6);
+            builder.in(this.actions).image("battle-actionbar-actions-background");
 
             // Power bar
-            this.power = this.game.add.group(this, "power");
-            this.power.position.set(1468, 0);
-            this.power.add(battleview.newImage("battle-actionbar-power-background", 0, 6));
-            this.power_icons = this.game.add.group(this.power, "power icons");
-            this.power_icons.position.set(50, 14);
+            this.power = builder.group("power", 1468, 0);
+            builder.in(this.power, builder => {
+                builder.image("battle-actionbar-power-background", 0, 6);
+                this.power_icons = builder.group("power icons", 50, 14);
+            });
 
             // Playing ship
-            this.add(battleview.newImage("battle-actionbar-ship", 1730, -2));
+            builder.image("battle-actionbar-ship", 1730, -2);
 
             // Waiting icon
             this.icon_waiting = new Phaser.Image(this.game, this.width / 2, this.height / 2, "common-waiting", 0);
@@ -56,8 +57,7 @@ module TK.SpaceTac.UI {
             this.add(this.icon_waiting);
 
             // Options button
-            let button = battleview.add.button(0, 0, "battle-actionbar-button-menu", () => battleview.showOptions(), null, 1, 0, 0, 1, this);
-            battleview.tooltip.bindStaticText(button, "Game options");
+            builder.button("battle-actionbar-button-menu", 0, 0, () => battleview.showOptions(), "Game options");
 
             // Log processing
             battleview.log_processor.register(diff => {

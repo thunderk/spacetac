@@ -41,7 +41,7 @@ module TK.SpaceTac.UI {
         valuebar_experience: ValueBar
 
         constructor(view: BaseView, onclose?: Function) {
-            super(view.game, 0, 0, "character-sheet");
+            super(view.game, 0, 0, view.getImageInfo("character-sheet").key, view.getImageInfo("character-sheet").frame);
 
             this.view = view;
             this.builder = new UIBuilder(view, this).styled({ color: "#e7ebf0", size: 16, shadow: true });

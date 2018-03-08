@@ -85,7 +85,7 @@ module TK.SpaceTac.UI {
          */
         build(configs: ParticleConfig[]): Phaser.Image {
             if (configs.length == 0) {
-                return this.view.game.add.image(0, 0, "common-transparent");
+                return this.view.newImage("common-transparent");
             } else {
                 let base = configs[0];
                 let result = base.getImage(this.view.game, 1);

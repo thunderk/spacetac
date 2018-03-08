@@ -34,7 +34,7 @@ module TK.SpaceTac.UI {
                 offset += 110;
 
                 active.forEach(mission => {
-                    this.addMission(offset, mission, 0, () => null);
+                    this.addMission(offset, mission, true, () => null);
                     offset += 110;
                 });
             }
@@ -45,7 +45,7 @@ module TK.SpaceTac.UI {
                 offset += 110;
 
                 proposed.forEach(mission => {
-                    this.addMission(offset, mission, 2, () => {
+                    this.addMission(offset, mission, false, () => {
                         this.shop.acceptMission(mission, this.player);
                         this.close();
                         this.on_change();
@@ -58,7 +58,7 @@ module TK.SpaceTac.UI {
         /**
          * Add a mission text
          */
-        addMission(yoffset: number, mission: Mission, button_frame: number, button_callback: Function) {
+        addMission(yoffset: number, mission: Mission, active: boolean, button_callback: Function) {
             let title = mission.title;
             let subtitle = `${capitalize(MissionDifficulty[mission.difficulty])} - Reward: ${mission.getRewardText()}`;
 
@@ -69,7 +69,7 @@ module TK.SpaceTac.UI {
             if (subtitle) {
                 this.addText(380, yoffset + 22, subtitle, "#d2e1f3", 18, false, false, 620, true);
             }
-            this.addButton(1120, yoffset, button_callback, "map-mission-action", button_frame, button_frame + 1);
+            this.builder.button(active ? "map-mission-action-cancel" : "map-mission-action-accept", 1120, yoffset, button_callback).anchor.set(0.5);
         }
     }
 }

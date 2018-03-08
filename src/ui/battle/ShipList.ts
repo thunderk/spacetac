@@ -40,7 +40,8 @@ module TK.SpaceTac.UI {
             this.items = [];
             this.hovered = null;
 
-            this.info_button = new Phaser.Button(view.game, 0, 0, "battle-shiplist-info-button");
+            let info = view.getImageInfo("battle-shiplist-info-button");
+            this.info_button = new Phaser.Button(view.game, 0, 0, info.key, undefined, undefined, info.frame, info.frame);
             this.view.inputs.setHoverClick(this.info_button,
                 () => tactical_mode.manipulate("shiplist")(true),
                 () => tactical_mode.manipulate("shiplist")(false),

@@ -248,15 +248,17 @@ module TK.SpaceTac.UI {
             if (this.game.cache.checkImageKey(name)) {
                 return { key: name, frame: 0, exists: true };
             } else {
-                let i = 1;
-                while (this.game.cache.checkImageKey(`atlas-${i}`)) {
-                    let data = this.game.cache.getFrameData(`atlas-${i}`);
-                    let frames = data.getFrames();
-                    let frame = first(frames, frame => AssetLoading.getKey(frame.name) == `graphics-exported-${name}`);
-                    if (frame) {
-                        return { key: `atlas-${i}`, frame: frame.index, exists: true };
+                for (let j = 1; j <= 3; j++) {
+                    let i = 1;
+                    while (this.game.cache.checkImageKey(`atlas${j}-${i}`)) {
+                        let data = this.game.cache.getFrameData(`atlas${j}-${i}`);
+                        let frames = data.getFrames();
+                        let frame = first(frames, frame => AssetLoading.getKey(frame.name) == `data-stage${j}-image-${name}`);
+                        if (frame) {
+                            return { key: `atlas${j}-${i}`, frame: frame.index, exists: true };
+                        }
+                        i++;
                     }
-                    i++;
                 }
                 return { key: `-missing-${name}`, frame: 0, exists: false };
             }

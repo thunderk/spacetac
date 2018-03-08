@@ -60,7 +60,7 @@ module TK.SpaceTac.UI {
             this.builder = new UIBuilder(this.view, this.container);
 
             if (background_key) {
-                this.background = this.addInternalChild(new Phaser.Image(this.view.game, 0, 0, background_key));
+                this.background = this.builder.image(background_key, 0, 0, false);
             } else {
                 this.background = null;
             }
@@ -213,20 +213,19 @@ module TK.SpaceTac.UI {
 
         /**
          * Add a button in the component, positioning its center.
+         * 
+         * DEPRECATED - Use UIBuilder directly
          */
         addButton(x: number, y: number, on_click: Function, background: string, frame_normal = 0, frame_hover = 1, tooltip = ""): Phaser.Button {
-            let button = new Phaser.Button(this.view.game, x, y, background, on_click, undefined, frame_hover, frame_normal);
-            UIComponent.setButtonSound(button);
-            button.anchor.set(0.5, 0.5);
-            if (tooltip) {
-                this.view.tooltip.bindStaticText(button, tooltip);
-            }
-            this.addInternalChild(button);
-            return button;
+            let result = this.builder.button(background, x, y, on_click, tooltip);
+            result.anchor.set(0.5);
+            return result;
         }
 
         /**
          * Add a static text.
+         * 
+         * DEPRECATED - Use UIBuilder directly
          */
         addText(x: number, y: number, content: string, color = "#ffffff", size = 16, bold = false, center = true, width = 0, vcenter = center): Phaser.Text {
             return this.builder.text(content, x, y, { color: color, size: size, bold: bold, center: center, width: width, vcenter: vcenter });
@@ -246,6 +245,8 @@ module TK.SpaceTac.UI {
 
         /**
          * Add a static image, from atlases, positioning its center.
+         * 
+         * DEPRECATED - Use UIBuilder directly
          */
         addImage(x: number, y: number, name: string, scale = 1): Phaser.Image {
             let result = this.builder.image(name, x, y);
@@ -264,41 +265,6 @@ module TK.SpaceTac.UI {
             image.animations.add("loop").play(3, true);
             this.addInternalChild(image);
             return image;
-        }
-
-        /**
-         * Add a 2-states toggle button.
-         * 
-         * *background* should have three frames (toggled, untoggled and hovered).
-         * 
-         * Returns a function to force the state of the button.
-         */
-        addToggleButton(x: number, y: number, background: UIImageInfo, content: UIImageInfo | UITextInfo, on_change: (toggled: boolean) => void): (toggled: boolean) => void {
-            let toggled = false;
-            let toggle = (state: boolean, broadcast = false) => {
-                toggled = state;
-                if (typeof background !== "string") {
-                    image.frame = (toggled ? background.frame : background.frame1) || background.frame || 0;
-                }
-                contentobj.alpha = toggled ? 1 : 0.5;
-                if (broadcast) {
-                    on_change(toggled);
-                }
-            };
-
-            let button = new Phaser.Button(this.container.game, x, y, "common-transparent", () => toggle(!toggled, true));
-            UIComponent.setButtonSound(button);
-
-            let image = imageFromInfo(this.game, background);
-            let contentobj = autoFromInfo(this.game, content);
-
-            button.addChild(image);
-            button.addChild(contentobj);
-            this.addInternalChild(button);
-
-            toggle(toggled);
-
-            return toggle;
         }
 
         /**

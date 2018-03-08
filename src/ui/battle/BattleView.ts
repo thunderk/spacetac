@@ -96,6 +96,8 @@ module TK.SpaceTac.UI {
             this.interacting = false;
             this.log_processor = new LogProcessor(this);
 
+            let builder = new UIBuilder(this);
+
             // Add layers
             this.layer_background = this.getLayer("background");
             this.layer_arena = this.getLayer("arena");
@@ -104,8 +106,7 @@ module TK.SpaceTac.UI {
             this.layer_sheets = this.getLayer("character_sheet");
 
             // Background
-            this.background = new Phaser.Image(game, 0, 0, "battle-background", 0);
-            this.layer_background.add(this.background);
+            this.background = builder.in(this.layer_background).image("battle-background");
 
             // Add arena (local battlefield map)
             this.arena = new Arena(this, this.layer_arena);

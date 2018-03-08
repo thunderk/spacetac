@@ -21,7 +21,8 @@ module TK.SpaceTac.UI {
 
         // Create a ship button for the battle ship list
         constructor(list: ShipList, x: number, y: number, ship: Ship, owned: boolean, ship_buttons: IShipButton) {
-            super(list.view.game, x, y, "battle-shiplist-item-background");
+            let info = list.view.getImageInfo("battle-shiplist-item-background");
+            super(list.view.game, x, y, info.key, undefined, undefined, info.frame, info.frame);
             this.view = list.view;
 
             this.ship = ship;
@@ -37,11 +38,11 @@ module TK.SpaceTac.UI {
             this.portrait.angle = 180;
             this.addChild(this.portrait);
 
-            this.damage_indicator = new Phaser.Image(this.game, 18, 9, "battle-shiplist-damage", 0);
+            this.damage_indicator = this.view.newImage("battle-shiplist-damage", 18, 9);
             this.damage_indicator.alpha = 0;
             this.addChild(this.damage_indicator);
 
-            this.hover_indicator = new Phaser.Image(this.game, 17, 8, "battle-shiplist-hover", 0);
+            this.hover_indicator = this.view.newImage("battle-shiplist-hover", 17, 8);
             this.hover_indicator.visible = false;
             this.addChild(this.hover_indicator);
 

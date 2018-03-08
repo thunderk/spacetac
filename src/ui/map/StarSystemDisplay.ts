@@ -2,6 +2,7 @@ module TK.SpaceTac.UI {
     // Group to display a star system
     export class StarSystemDisplay extends Phaser.Image {
         view: UniverseMapView
+        builder: UIBuilder
         circles: Phaser.Group
         starsystem: Star
         player: Player
@@ -10,9 +11,10 @@ module TK.SpaceTac.UI {
         label: Phaser.Button
 
         constructor(parent: UniverseMapView, starsystem: Star) {
-            super(parent.game, starsystem.x, starsystem.y, "map-starsystem-background");
+            super(parent.game, starsystem.x, starsystem.y, parent.getImageInfo("map-starsystem-background").key, parent.getImageInfo("map-starsystem-background").frame);
 
             this.view = parent;
+            this.builder = new UIBuilder(parent, this);
 
             this.anchor.set(0.5, 0.5);
 
@@ -24,10 +26,8 @@ module TK.SpaceTac.UI {
             this.fleet_display = parent.player_fleet;
 
             // Show boundary
-            this.circles = new Phaser.Group(this.game);
-            this.addChild(this.circles);
-            let boundaries = this.game.add.image(0, 0, "map-boundaries", 0, this.circles);
-            boundaries.anchor.set(0.5);
+            this.circles = this.builder.group("circles");
+            let boundaries = this.builder.in(this.circles).image("map-boundaries", 0, 0, true);
             boundaries.scale.set(starsystem.radius / (this.scale.x * 256));
 
             // Show locations
@@ -67,17 +67,12 @@ module TK.SpaceTac.UI {
             });
 
             // Show name
-            this.label = new Phaser.Button(this.game, 0, 460, "map-name");
-            this.label.anchor.set(0.5, 0.5);
-            this.label.input.useHandCursor = false;
-            let label_content = new Phaser.Text(this.game, 0, 0, this.starsystem.name, { align: "center", font: `32pt SpaceTac`, fill: "#b8d2f1" });
-            label_content.anchor.set(0.6, 0.5);
-            this.label.addChild(label_content);
-            let label_level = new Phaser.Text(this.game, 243, 30, this.starsystem.level.toString(), { align: "center", font: `24pt SpaceTac`, fill: "#a0a0a0" });
-            label_level.anchor.set(0.6, 0.5);
-            this.label.addChild(label_level);
-            this.addChild(this.label);
-            this.view.tooltip.bindStaticText(this.label, `Level ${this.starsystem.level} starsystem`);
+            this.label = this.builder.button("map-name", 0, 460, undefined, `Level ${this.starsystem.level} starsystem`);
+            this.label.anchor.set(0.5);
+            this.builder.in(this.label, builder => {
+                builder.text(this.starsystem.name, -30, 0, { size: 32, color: "#b8d2f1" });
+                builder.text(this.starsystem.level.toString(), 243, 30, { size: 24, color: "#a0a0a0" });
+            });
         }
 
         addImage(x: number, y: number, name: string, onclick: Function | null = null): Phaser.Image {
@@ -97,12 +92,9 @@ module TK.SpaceTac.UI {
             let radius = Math.sqrt(x * x + y * y);
             let angle = Math.atan2(y, x);
 
-            let circle = this.game.add.image(0, 0, "map-orbit", 0, this.circles);
-            circle.anchor.set(0.5);
+            let circle = this.builder.in(this.circles).image("map-orbit", 0, 0, true);
             circle.scale.set(radius / (this.scale.x * 198));
             circle.rotation = angle - 0.01;
-
-            this.circles.add(circle);
         }
 
         /**

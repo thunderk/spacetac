@@ -17,23 +17,37 @@ module TK.SpaceTac.UI {
             this.clearContent();
             this.addCloseButton("common-dialog-close", 1304, 131, 0, 1);
 
-            let toggle = this.addToggleButton(415, 381,
-                { key: "options-toggle", frame: 0, frame1: 1, frame2: 2 },
-                { key: "options-options", frame: 0 },
-                toggled => options.setNumberValue("mainvolume", toggled ? 1 : 0));
-            toggle(options.getNumberValue("mainvolume") > 0);
+            this.addToggleButton(415, 381, "options-option-sound", "Toggle all sound",
+                toggled => options.setNumberValue("mainvolume", toggled ? 1 : 0),
+                options.getNumberValue("mainvolume") > 0
+            );
 
-            toggle = this.addToggleButton(this.width / 2, 381,
-                { key: "options-toggle", frame: 0, frame1: 1, frame2: 2 },
-                { key: "options-options", frame: 1 },
-                toggled => options.setNumberValue("musicvolume", toggled ? 1 : 0));
-            toggle(options.getNumberValue("musicvolume") > 0);
+            this.addToggleButton(this.width / 2, 381, "options-option-music", "Toggle music",
+                toggled => options.setNumberValue("musicvolume", toggled ? 1 : 0),
+                options.getNumberValue("musicvolume") > 0
+            );
 
-            toggle = this.addToggleButton(this.width - 415, 381,
-                { key: "options-toggle", frame: 0, frame1: 1, frame2: 2 },
-                { key: "options-options", frame: 2 },
-                toggled => options.setBooleanValue("fullscreen", toggled));
-            toggle(options.getBooleanValue("fullscreen"));
+            this.addToggleButton(this.width - 415, 381, "options-option-fullscreen", "Toggle fullscreen",
+                toggled => options.setBooleanValue("fullscreen", toggled),
+                options.getBooleanValue("fullscreen")
+            );
+        }
+
+        /**
+         * Add a toggle button
+         */
+        addToggleButton(x: number, y: number, key: string, tooltip: string, callback: (state: boolean) => boolean, initial: boolean): UIButton {
+            let button = this.builder.button("options-toggle", x, y, undefined, tooltip, state => {
+                if (callback(state)) {
+                    return state;
+                } else {
+                    return !state;
+                }
+            });
+            button.anchor.set(0.5);
+            this.builder.in(button).image(key, 0, 0, true);
+            this.builder.switch(button, initial);
+            return button;
         }
 
         /**

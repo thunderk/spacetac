@@ -16,14 +16,14 @@ module TK.SpaceTac.UI {
             this.clearContent();
 
             if (title) {
-                this.addImageF(239, 57, "map-subname");
-                this.addText(239, 57, title, "#b8d2f1", 22, false, true);
+                this.builder.image("map-subname", 239, 57, true);
+                this.builder.text(title, 239, 57, { color: "#b8d2f1", size: 22 })
             }
 
             for (let idx = actions.length - 1; idx >= 0; idx--) {
                 let [label, action] = actions[idx];
-                this.addButton(172, 48 + idx * 100 + 96, action, "map-action", 0, 1);
-                this.addText(186, 48 + idx * 100 + 136, label, "#b8d2f1", 20, false, true);
+                this.builder.button("map-action", 172, 48 + idx * 100 + 96, action).anchor.set(0.5);
+                this.builder.text(label, 186, 48 + idx * 100 + 136, { color: "#b8d2f1", size: 20 });
             }
         }
 

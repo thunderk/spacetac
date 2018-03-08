@@ -351,11 +351,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70000001"
-     inkscape:cx="875.53821"
-     inkscape:cy="617.34631"
+     inkscape:zoom="1.4"
+     inkscape:cx="1069.2736"
+     inkscape:cy="738.11651"
      inkscape:document-units="px"
-     inkscape:current-layer="layer5"
+     inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      showborder="true"
@@ -472,15 +472,14 @@
          inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/options/toggle1.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96">
-        <circle
-           style="fill:#31465e;fill-opacity:1;fill-rule:evenodd;stroke:#858585;stroke-width:0.79374999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.42340429"
-           id="path10135"
-           cx="146.61314"
-           cy="97.070984"
-           r="19.318401"
-           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/options/toggle1.png"
-           inkscape:export-xdpi="96"
-           inkscape:export-ydpi="96" />
+        <use
+           transform="translate(-48.682678)"
+           x="0"
+           y="0"
+           xlink:href="#circle10137"
+           id="use4641"
+           width="100%"
+           height="100%" />
         <g
            id="g10133"
            transform="matrix(0.3526946,0,0,0.3526946,77.493197,56.672958)"
@@ -517,6 +516,15 @@
              y="0"
              x="0" />
         </g>
+        <circle
+           style="fill:#5e8bbd;fill-opacity:0.55106381;fill-rule:evenodd;stroke:#858585;stroke-width:0.79374999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.42340429"
+           id="path10135"
+           cx="146.61314"
+           cy="97.070984"
+           r="19.318401"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/data/stage1/image/options/toggle-on.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
       </g>
       <g
          transform="translate(2.9111111,-11.249983)"
@@ -584,15 +592,14 @@
       <g
          id="g5459"
          transform="translate(37.041668,-11.249983)">
-        <circle
-           r="19.318401"
-           cy="97.070984"
-           cx="242.3924"
-           id="circle4699"
-           style="fill:#31465e;fill-opacity:1;fill-rule:evenodd;stroke:#c7daea;stroke-width:0.79374999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.84893613"
-           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/options/toggle3.png"
-           inkscape:export-xdpi="96"
-           inkscape:export-ydpi="96" />
+        <use
+           transform="translate(47.096573)"
+           x="0"
+           y="0"
+           xlink:href="#circle10137"
+           id="use4679"
+           width="100%"
+           height="100%" />
         <g
            transform="translate(-249.58397,81.463658)"
            style="display:inline"
@@ -632,6 +639,15 @@
                transform="rotate(180,492.02625,15.573401)" />
           </g>
         </g>
+        <circle
+           r="19.318401"
+           cy="97.070984"
+           cx="242.3924"
+           id="circle4699"
+           style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#c7daea;stroke-width:0.79374999;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.84893613"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/data/stage1/image/options/toggle-hover.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96" />
       </g>
     </g>
   </g>

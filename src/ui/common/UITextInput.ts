@@ -11,7 +11,7 @@ module TK.SpaceTac.UI {
         constructor(parent: UIComponent, width: number, height: number, maxlength?: number, fontcolor = "#FFFFFF") {
             super(parent, width, height);
 
-            let input_bg = new Phaser.Image(this.game, 0, 0, "common-transparent");
+            let input_bg = this.builder.image("common-transparent", 0, 0, false);
             input_bg.scale.set(width, height);
             input_bg.inputEnabled = true;
             input_bg.input.useHandCursor = true;

@@ -43,7 +43,7 @@ module TK.SpaceTac.UI {
             // Visual effects
             this.drawn_info = new Phaser.Graphics(view.game, 0, 0);
             this.drawn_info.visible = false;
-            this.move_ghost = new Phaser.Image(view.game, 0, 0, "common-transparent");
+            this.move_ghost = view.newImage("common-transparent");
             this.move_ghost.anchor.set(0.5, 0.5);
             this.move_ghost.alpha = 0.8;
             this.move_ghost.visible = false;
