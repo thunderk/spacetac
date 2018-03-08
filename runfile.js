@@ -33,9 +33,9 @@ function exec(command) {
 /**
  * Build app from typescript sources
  */
-function ts() {
+function ts(dist = false) {
     console.log("Building app...");
-    return exec("tsc -p .");
+    return exec(`tsc -p ${dist ? "./tsconfig.dist.json" : "."}`);
 }
 
 /**
@@ -160,9 +160,9 @@ function watch_vendors() {
 /**
  * Trigger a single build
  */
-function build() {
+function build(dist = false) {
     return Promise.all([
-        ts(),
+        ts(dist),
         data(),
         vendors()
     ]);
@@ -172,14 +172,15 @@ function build() {
  * Optimize the build for production
  */
 function optimize() {
-    return exec("uglifyjs out/build.js --source-map --output out/build.min.js");
+    // TODO do not overwrite dev build
+    return exec("uglifyjs out/build.dist.js --source-map --output out/build.js");
 }
 
 /**
  * Deploy to production
  */
 function deploy(task) {
-    return build().then(optimize).then(() => {
+    return build(true).then(optimize).then(() => {
         return exec("rsync -avz --delete ./out/ hosting.thunderk.net:/srv/website/spacetac/")
     });
 }
@@ -188,7 +189,7 @@ function deploy(task) {
  * Run tests in karma, using freshly built app
  */
 function test(task) {
-    return build().then(() => {
+    return ts().then(() => {
         return exec("karma start spec/support/karma.conf.js");
     }).then(() => {
         return exec("remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html");

@@ -1,0 +1,10 @@
+{
+    "extends": "./tsconfig",
+    "compilerOptions": {
+        "out": "out/build.dist.js",
+        "removeComments": true
+    },
+    "exclude": [
+        "src/**/*.spec.ts"
+    ]
+}

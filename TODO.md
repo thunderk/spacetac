@@ -94,7 +94,6 @@ Common UI
 Technical
 ---------
 
-* Remove testing code from optimized build
 * Fix alpha being altered in atlases
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile
