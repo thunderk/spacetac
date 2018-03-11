@@ -286,7 +286,7 @@ module TK.SpaceTac.UI {
             if (this.targetting.active) {
                 this.validationPressed();
             } else if (this.ship_hovered && this.player.is(this.ship_hovered.fleet.player) && this.interacting) {
-                this.character_sheet.show(this.ship_hovered, undefined, undefined, false);
+                this.character_sheet.show(this.ship_hovered, CharacterSheetMode.DISPLAY);
                 this.setShipHovered(null);
             }
         }

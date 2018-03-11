@@ -310,7 +310,7 @@ module TK.SpaceTac.UI {
         openShop(): void {
             let location = this.session.getLocation();
             if (this.interactive && location && location.shop) {
-                this.character_sheet.show(this.player.fleet.ships[0]);
+                this.character_sheet.show(this.player.fleet.ships[0], CharacterSheetMode.EDITION);
             }
         }
 

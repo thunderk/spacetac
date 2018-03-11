@@ -26,7 +26,6 @@ Character sheet
 
 * Replace the close icon by a validation icon in creation view
 * Allow to change/buy ship model
-* Allow to rename a personality (in creation view only)
 * Add personality indicators (editable in creation view)
 
 Battle
@@ -86,7 +85,7 @@ Common UI
 * Fix calling setHoverClick several times on the same button not working as expected
 * Fix tooltip remaining when the hovered object is hidden by animations
 * If ProgressiveMessage animation performance is bad, show the text directly
-* Add caret/focus to text input
+* Add caret/focus and configurable background to text input
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator

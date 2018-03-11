@@ -1,10 +1,16 @@
 module TK.SpaceTac.UI {
+    export enum CharacterSheetMode {
+        CREATION,
+        EDITION,
+        DISPLAY
+    }
+
     /**
      * Character sheet, displaying ship characteristics
      */
     export class CharacterSheet extends Phaser.Image {
-        // Globally interactive sheet (equipment can be moved, points upgraded)
-        interactive = true
+        // Global sheet mode
+        mode: CharacterSheetMode = CharacterSheetMode.DISPLAY
 
         // Parent view
         view: BaseView
@@ -22,8 +28,9 @@ module TK.SpaceTac.UI {
         group_actions: Phaser.Image
         group_upgrades: Phaser.Group
 
-        // Close button
-        close_button: Phaser.Button
+        // Buttons
+        close_button: UIButton
+        rename_button: UIButton
 
         // Currently displayed fleet
         fleet?: Fleet
@@ -74,7 +81,7 @@ module TK.SpaceTac.UI {
             let name_bg = this.builder.image("character-name-display", 434, 940, true);
             this.text_name = this.builder.in(name_bg).text("", 0, 0, { size: 28 });
 
-            this.builder.button("character-name-button", 656, 890, () => this.renamePersonality(), "Rename personality");
+            this.rename_button = this.builder.button("character-name-button", 656, 890, () => this.renamePersonality(), "Rename personality");
 
             let points_bg = this.builder.image("character-level-upgrades", 582, 986);
             this.builder.in(points_bg, builder => {
@@ -98,14 +105,24 @@ module TK.SpaceTac.UI {
          * Check if the sheet should be interactive
          */
         isInteractive(): boolean {
-            return this.ship ? (this.interactive && !this.ship.critical) : false;
+            return this.ship ? (this.mode != CharacterSheetMode.DISPLAY && !this.ship.critical) : false;
         }
 
         /**
          * Open a dialog to rename the ship's personality
          */
         renamePersonality(): void {
-            // TODO
+            if (!this.ship) {
+                return;
+            }
+            let ship = this.ship;
+
+            UITextDialog.ask(this.view, "Choose a name for this ship's personality", ship.name || undefined).then(name => {
+                if (bool(name)) {
+                    ship.name = name;
+                    this.refreshShipInfo();
+                }
+            });
         }
 
         /**
@@ -121,6 +138,7 @@ module TK.SpaceTac.UI {
                 this.text_description.setText(ship.model.getDescription());
                 this.text_upgrade_points.setText(`${ship.getAvailableUpgradePoints()}`);
                 this.valuebar_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
+                this.rename_button.visible = this.mode == CharacterSheetMode.CREATION;
             }
         }
 
@@ -285,11 +303,9 @@ module TK.SpaceTac.UI {
         /**
          * Show the sheet for a given ship
          */
-        show(ship: Ship, animate = true, sound = true, interactive?: boolean) {
+        show(ship: Ship, mode: CharacterSheetMode = CharacterSheetMode.DISPLAY, animate = true, sound = true) {
             this.ship = ship;
-            if (typeof interactive != "undefined") {
-                this.interactive = interactive;
-            }
+            this.mode = mode;
 
             this.refreshShipInfo();
             this.refreshUpgrades();
@@ -327,7 +343,7 @@ module TK.SpaceTac.UI {
          */
         refresh() {
             if (this.ship) {
-                this.show(this.ship, false, false);
+                this.show(this.ship, this.mode, false, false);
             }
         }
     }

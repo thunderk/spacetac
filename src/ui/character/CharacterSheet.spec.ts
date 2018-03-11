@@ -17,7 +17,7 @@ module TK.SpaceTac.UI.Specs {
                 let ship2 = fleet.addShip();
                 ship2.name = "Ship 2";
 
-                sheet.show(ship1, false);
+                sheet.show(ship1, undefined, false);
 
                 check.equals(sheet.x, 0);
                 check.equals(sheet.group_portraits.length, 2);
@@ -36,20 +36,20 @@ module TK.SpaceTac.UI.Specs {
 
                 let ship = new Ship();
                 ship.critical = true;
-                sheet.show(ship);
+                sheet.show(ship, CharacterSheetMode.EDITION);
                 check.equals(sheet.isInteractive(), false, "critical ship");
 
                 ship.critical = false;
-                sheet.show(ship);
+                sheet.show(ship, CharacterSheetMode.EDITION);
                 check.equals(sheet.isInteractive(), true, "normal ship");
 
-                sheet.show(ship, undefined, undefined, false);
+                sheet.show(ship, CharacterSheetMode.DISPLAY);
                 check.equals(sheet.isInteractive(), false, "interactivity disabled");
 
-                sheet.show(ship);
+                sheet.show(ship, CharacterSheetMode.DISPLAY);
                 check.equals(sheet.isInteractive(), false, "interactivity stays disabled");
 
-                sheet.show(ship, undefined, undefined, true);
+                sheet.show(ship, CharacterSheetMode.EDITION);
                 check.equals(sheet.isInteractive(), true, "interactivity reenabled");
             });
         });
