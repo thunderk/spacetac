@@ -34,9 +34,6 @@ module TK.SpaceTac {
         border = 50
         ship_separation = 100
 
-        // Timer to use for scheduled things
-        timer = Timer.global
-
         // Indicator that an AI is playing
         ai_playing = false
 

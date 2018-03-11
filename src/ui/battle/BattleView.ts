@@ -80,8 +80,6 @@ module TK.SpaceTac.UI {
             this.background = null;
             this.multi = new MultiBattle();
 
-            this.battle.timer = this.timer;
-
             this.toggle_tactical_mode = new Toggle(
                 () => this.arena.setTacticalMode(true),
                 () => this.arena.setTacticalMode(false)

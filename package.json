@@ -23,7 +23,7 @@
     "gamefroot-texture-packer": "Gamefroot/Gamefroot-Texture-Packer.git#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
     "glob": "^7.1.2",
     "glob-watcher": "^5.0.1",
-    "jasmine": "^2.9.0",
+    "jasmine": "^3.1.0",
     "karma": "^2.0.0",
     "karma-coverage": "1.1.1",
     "karma-jasmine": "^1.1.1",
@@ -37,7 +37,7 @@
     "uglify-js": "^3.3.13"
   },
   "dependencies": {
-    "jasmine-core": "^2.9.1",
+    "jasmine-core": "^3.1.0",
     "parse": "^1.11.0",
     "phaser": "2.6.2"
   }

@@ -42,7 +42,7 @@ function ts(dist = false) {
  * Start watching for typescript changes
  */
 function watch_ts() {
-    watch(["./src/**/*.ts"], ts);
+    watch(["./src/**/*.ts", "package.json"], () => ts());
 }
 
 /**
@@ -134,7 +134,7 @@ function data() {
  * Start watch for data changes
  */
 function watch_data() {
-    watch(["./data/**/*.*"], data);
+    watch(["./data/**/*.*"], () => data());
 }
 
 /**
@@ -154,7 +154,7 @@ function vendors() {
  * Start watching for vendors changes
  */
 function watch_vendors() {
-    watch(['package.json'], vendors);
+    watch(['package.json'], () => vendors());
 }
 
 /**
