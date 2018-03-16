@@ -189,7 +189,7 @@ function deploy(task) {
  * Run tests in karma, using freshly built app
  */
 function test(task) {
-    return ts().then(() => {
+    return Promise.all([ts(), vendors()]).then(() => {
         return exec("karma start spec/support/karma.conf.js");
     }).then(() => {
         return exec("remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html");
