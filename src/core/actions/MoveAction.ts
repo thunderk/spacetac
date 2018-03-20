@@ -7,8 +7,6 @@ module TK.SpaceTac {
         distance_per_power: number
         // Safety distance from other ships
         safety_distance: number
-        // Impact of maneuvrability (in % of distance)
-        maneuvrability_factor: number
     }
 
     /**
@@ -68,9 +66,11 @@ module TK.SpaceTac {
         }
 
         getPowerUsage(ship: Ship, target: Target | null): number {
-            if (target) {
+            if (this.distance_per_power == 0) {
+                return Infinity;
+            } else if (target) {
                 let distance = Target.newFromShip(ship).getDistanceTo(target);
-                return Math.ceil(distance / this.getDistanceByPower(ship));
+                return Math.ceil(distance / this.distance_per_power);
             } else {
                 return 0;
             }
@@ -84,27 +84,7 @@ module TK.SpaceTac {
          * Get the distance reachable with a given power 
          */
         getRangeRadiusForPower(ship: Ship, power = ship.getValue("power")): number {
-            return power * this.getDistanceByPower(ship);
-        }
-
-        /**
-         * Get the distance range that may be traveled with 1 power point
-         * 
-         * The actual range will then depend on the ship maneuvrability
-         */
-        getDistanceRangeByPower(): IntegerRange {
-            let min_distance = Math.ceil(this.distance_per_power * (1 - this.maneuvrability_factor * 0.01));
-            return new IntegerRange(min_distance, this.distance_per_power);
-        }
-
-        /**
-         * Get the distance that may be traveled with 1 power point
-         */
-        getDistanceByPower(ship: Ship): number {
-            let maneuvrability = Math.max(ship.getAttribute("maneuvrability"), 0);
-            let factor = maneuvrability / (maneuvrability + 2);
-            let range = this.getDistanceRangeByPower();
-            return range.getProportional(factor);
+            return power * this.distance_per_power;
         }
 
         /**
@@ -147,9 +127,7 @@ module TK.SpaceTac {
         }
 
         getEffectsDescription(): string {
-            let range = this.getDistanceRangeByPower();
-            let rangeinfo = (range.max == range.min) ? `${range.min}` : `${range.min}-${range.max}`;
-            let result = `Move: ${rangeinfo}km per power point`;
+            let result = `Move: ${this.distance_per_power}km per power point`;
 
             if (this.safety_distance) {
                 result += ` (safety: ${this.safety_distance}km)`;

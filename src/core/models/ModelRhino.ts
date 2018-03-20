@@ -17,17 +17,16 @@ module TK.SpaceTac {
                 });
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(30, 20)],
+                    effects: [new DamageEffect(40)],
                     power: 3,
                     range: 400,
                 }, "gatlinggun");
                 gatling.configureCooldown(2, 2);
 
                 let laser = new TriggerAction("Prokhorov Laser", {
-                    effects: [new DamageEffect(25, 25)],
+                    effects: [new DamageEffect(35)],
                     power: 4,
                     range: 250, angle: 60,
-                    aim: 30, evasion: 45, luck: 30,
                 }, "prokhorovlaser");
 
                 return [

@@ -18,7 +18,7 @@ module TK.SpaceTac {
             this.maxcount = maxcount;
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             let actions = ship.actions.listOverheated();
 
             if (this.maxcount && actions.length > this.maxcount) {

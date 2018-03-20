@@ -31,7 +31,7 @@ module TK.SpaceTac {
                 depleter.configureCooldown(1, 1);
 
                 let missile = new TriggerAction("Defense Missiles", {
-                    effects: [new DamageEffect(25, 30)],
+                    effects: [new DamageEffect(40)],
                     power: 3,
                     range: 200, blast: 180,
                 }, "submunitionmissile");

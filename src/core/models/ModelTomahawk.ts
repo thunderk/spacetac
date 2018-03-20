@@ -17,26 +17,26 @@ module TK.SpaceTac {
                 });
 
                 let gatling1 = new TriggerAction("Primary Gatling", {
-                    effects: [new DamageEffect(15, 15)],
+                    effects: [new DamageEffect(22)],
                     power: 2, range: 400
                 }, "gatlinggun");
                 gatling1.configureCooldown(1, 1);
 
                 let gatling2 = new TriggerAction("Secondary Gatling", {
-                    effects: [new DamageEffect(20, 15)],
+                    effects: [new DamageEffect(28)],
                     power: 1, range: 200
                 }, "gatlinggun");
                 gatling2.configureCooldown(1, 1);
 
                 let missile = new TriggerAction("Diffuse Missiles", {
-                    effects: [new DamageEffect(10, 18)],
+                    effects: [new DamageEffect(19)],
                     power: 2,
                     range: 200, blast: 100,
                 }, "submunitionmissile");
                 missile.configureCooldown(1, 1);
 
                 let laser = new TriggerAction("Low-power Laser", {
-                    effects: [new DamageEffect(20, 20)],
+                    effects: [new DamageEffect(26)],
                     power: 2,
                     range: 200, angle: 30
                 }, "prokhorovlaser");

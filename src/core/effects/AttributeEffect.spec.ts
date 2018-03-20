@@ -6,11 +6,11 @@ module TK.SpaceTac {
             check.equals(ship.getAttribute("maneuvrability"), 0, "initial");
 
             let effect1 = new AttributeEffect("maneuvrability", 20);
-            battle.applyDiffs(effect1.getOnDiffs(ship, ship, 1));
+            battle.applyDiffs(effect1.getOnDiffs(ship, ship));
             check.equals(ship.getAttribute("maneuvrability"), 20, "applied 1");
 
             let effect2 = new AttributeEffect("maneuvrability", 10);
-            battle.applyDiffs(effect2.getOnDiffs(ship, ship, 1));
+            battle.applyDiffs(effect2.getOnDiffs(ship, ship));
             check.equals(ship.getAttribute("maneuvrability"), 30, "applied 2");
 
             battle.applyDiffs(effect1.getOffDiffs(ship));

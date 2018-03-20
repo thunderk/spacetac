@@ -19,7 +19,7 @@ module TK.SpaceTac {
         /**
          * Get the list of diffs needed to activate this effect on a ship
          */
-        getOnDiffs(ship: Ship, source: Ship | Drone, success = 1): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             return [];
         }
 

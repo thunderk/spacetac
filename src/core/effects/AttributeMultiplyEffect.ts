@@ -21,7 +21,7 @@ module TK.SpaceTac {
             this.value = value;
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             return [
                 new ShipAttributeDiff(ship, this.attrcode, { multiplier: this.value }, {}),
             ];

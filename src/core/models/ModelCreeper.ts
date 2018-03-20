@@ -17,7 +17,7 @@ module TK.SpaceTac {
                 });
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(15, 10)],
+                    effects: [new DamageEffect(20)],
                     power: 2,
                     range: 200,
                 }, "gatlinggun");

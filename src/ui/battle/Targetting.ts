@@ -112,7 +112,7 @@ module TK.SpaceTac.UI {
             let move = part.action instanceof MoveAction;
             let color = (enabled && part.possible) ? (move ? 0xe09c47 : 0xdc6441) : 0x8e8e8e;
             let src = previous ? previous.target : this.ship.location;
-            let gradation = (part.action instanceof MoveAction) ? part.action.getDistanceByPower(this.ship) : 0;
+            let gradation = (part.action instanceof MoveAction) ? part.action.distance_per_power : 0;
             this.drawVector(color, src.x, src.y, part.target.x, part.target.y, gradation);
         }
 
@@ -123,19 +123,10 @@ module TK.SpaceTac.UI {
             let ships = action.getImpactedShips(ship, target, source);
             if (ships.length) {
                 // TODO differential
-                impacts.removeAll(true);
+                let builder = new UIBuilder(this.view).in(impacts);
+                builder.clear();
                 ships.forEach(iship => {
-                    let builder = new UIBuilder(this.view, impacts);
-
-                    let indicator = builder.image("battle-hud-ship-impacted", iship.arena_x, iship.arena_y, true);
-
-                    if (action instanceof TriggerAction) {
-                        let success = action.getSuccessFactor(ship, iship);
-                        builder.in(indicator, builder => {
-                            builder.image("battle-hud-ship-success-back", -29, -50);
-                            builder.valuebar("battle-hud-ship-success-fill", -28, -49).setValue(success, 1);
-                        });
-                    }
+                    builder.image("battle-hud-ship-impacted", iship.arena_x, iship.arena_y, true);
                 });
                 impacts.visible = true;
             } else {

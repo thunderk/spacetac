@@ -14,16 +14,14 @@ module TK.SpaceTac {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
                     distance_per_power: 300,
-                    safety_distance: 100,
-                    maneuvrability_factor: 60
+                    safety_distance: 100
                 });
                 engine.configureCooldown(2, 1);
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(35, 20)],
+                    effects: [new DamageEffect(45)],
                     power: 2,
                     range: 200,
-                    aim: 30, evasion: 10, luck: 20
                 }, "gatlinggun");
                 gatling.configureCooldown(3, 1);
 

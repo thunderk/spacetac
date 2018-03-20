@@ -17,14 +17,14 @@ module TK.SpaceTac {
                 });
 
                 let missile = new TriggerAction("SubMunition Missile", {
-                    effects: [new DamageEffect(10, 10)],
+                    effects: [new DamageEffect(15)],
                     power: 2,
                     range: 250, blast: 150,
                 }, "submunitionmissile");
                 missile.configureCooldown(2, 2);
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(10, 10)],
+                    effects: [new DamageEffect(15)],
                     power: 1,
                     range: 350,
                 }, "gatlinggun");

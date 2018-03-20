@@ -10,7 +10,7 @@ module TK.SpaceTac.Specs {
             })
 
             let effect = new StickyEffect(new AttributeEffect("precision", 1), 2);
-            battle.applyDiffs(effect.getOnDiffs(ship, ship, 1));
+            battle.applyDiffs(effect.getOnDiffs(ship, ship));
 
             check.in("after", check => {
                 check.equals(ship.active_effects.count(), 1, "one sticky effect");
@@ -25,7 +25,7 @@ module TK.SpaceTac.Specs {
                 }
             })
 
-            battle.applyDiffs(effect.getOnDiffs(ship, ship, 1));
+            battle.applyDiffs(effect.getOnDiffs(ship, ship));
 
             check.in("after second apply", check => {
                 check.equals(ship.active_effects.count(), 1, "one sticky effect");

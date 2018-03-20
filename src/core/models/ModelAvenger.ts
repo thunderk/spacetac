@@ -20,18 +20,16 @@ module TK.SpaceTac {
             // TODO Weapons should be less efficient in short range
 
             let charged_shot = new TriggerAction("Charged Shot", {
-                effects: [new DamageEffect(30, 20)],
+                effects: [new DamageEffect(40)],
                 power: 3,
                 range: 900,
-                aim: 90, evasion: 40, luck: 20
             }, "gatlinggun");
             charged_shot.configureCooldown(2, 2);
 
             let long_range_missile = new TriggerAction("Long Range Missile", {
-                effects: [new DamageEffect(15, 25)],
+                effects: [new DamageEffect(27)],
                 power: 4,
                 range: 700, blast: 120,
-                aim: 70, evasion: 20, luck: 50
             }, "submunitionmissile");
             long_range_missile.configureCooldown(1, 2);
 

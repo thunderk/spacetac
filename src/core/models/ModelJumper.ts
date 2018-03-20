@@ -18,10 +18,9 @@ module TK.SpaceTac {
                 });
 
                 let missile = new TriggerAction("SubMunition Missile", {
-                    effects: [new DamageEffect(30, 30)],
+                    effects: [new DamageEffect(30)],
                     power: 3,
                     range: 400, blast: 120,
-                    aim: 70, evasion: 30, luck: 10,
                 }, "submunitionmissile");
 
                 let protector = new TriggerAction("Damage Reductor", {

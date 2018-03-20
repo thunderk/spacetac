@@ -34,7 +34,7 @@ module TK.SpaceTac.Specs {
 
             action.apply(battle, ship, Target.newFromLocation(50, 50));
             check.called(mock_apply, [
-                [ship2, ship, 1]
+                [ship2, ship]
             ]);
         })
 
@@ -80,82 +80,6 @@ module TK.SpaceTac.Specs {
 
             action = new TriggerAction("testaction", { range: 100, angle: 30 });
             check.equals(action.filterImpactedShips({ x: 0, y: 51 }, Target.newFromLocation(30, 50), ships), [ship1, ship2]);
-        })
-
-        test.case("computes a success factor, from precision and maneuvrability", check => {
-            function verify(precision: number, precision_factor: number, maneuvrability: number, maneuvrability_factor: number, result: number) {
-                let ship1 = new Ship();
-                let ship2 = new Ship();
-
-                TestTools.setAttribute(ship1, "precision", precision);
-                TestTools.setAttribute(ship2, "maneuvrability", maneuvrability);
-
-                let action = new TriggerAction("testaction", { aim: precision_factor, evasion: maneuvrability_factor });
-                check.nears(action.getSuccessFactor(ship1, ship2), result, 3,
-                    `precision ${precision} (weight ${precision_factor}), maneuvrability ${maneuvrability} (weight ${maneuvrability_factor})`);
-            }
-
-            // no weight => always 100%
-            verify(0, 0, 0, 0, 1);
-            verify(10, 0, 20, 0, 1);
-            verify(40, 0, -5, 0, 1);
-
-            // precision only
-            verify(0, 100, 0, 0, 0);
-            verify(1, 100, 1, 0, 0.5);
-            verify(2, 100, 2, 0, 0.8);
-            verify(10, 100, 10, 0, 0.99);
-            verify(1, 50, 1, 0, 0.75);
-
-            // maneuvrability only
-            verify(0, 0, 0, 100, 1);
-            verify(1, 0, 1, 100, 0.5);
-            verify(2, 0, 2, 100, 0.2);
-            verify(10, 0, 10, 100, 0.01);
-            verify(1, 0, 1, 50, 0.75);
-
-            // precision vs maneuvrability
-            verify(0, 100, 0, 100, 0);
-            verify(4, 50, 4, 50, 0.5);
-            verify(4, 50, 8, 50, 0.283);
-            verify(4, 50, 20, 50, 0.016);
-            verify(4, 50, 4, 50, 0.5);
-            verify(8, 50, 4, 50, 0.717);
-            verify(20, 50, 4, 50, 0.984);
-
-            // complex example
-            verify(7, 20, 5, 40, 0.639);
-        })
-
-        test.case("computes an effective success value, with random element", check => {
-            function verify(success_base: number, luck: number, random: number, expected: number) {
-                let ship1 = new Ship();
-                let ship2 = new Ship();
-                let action = new TriggerAction("testaction", { luck: luck });
-                check.patch(action, "getSuccessFactor", () => success_base);
-                check.nears(action.getEffectiveSuccess(ship1, ship2, new SkewedRandomGenerator([random])), expected, 5,
-                    `success ${success_base}, luck ${luck}, random ${random}`);
-            }
-
-            // no luck influence
-            verify(0.3, 0, 0.4, 0.3);
-            verify(0.51, 0, 0.7, 0.51);
-
-            // small luck influence
-            verify(0.5, 5, 0.0, 0);
-            verify(0.5, 5, 0.1, 0.47979);
-            verify(0.5, 5, 0.4, 0.49715);
-            verify(0.5, 5, 0.8, 0.51161);
-            verify(0.5, 5, 1.0, 1.0);
-            verify(0.7, 5, 0.5, 0.69399);
-
-            // large luck influence
-            verify(0.5, 45, 0.0, 0);
-            verify(0.5, 45, 0.1, 0.31336);
-            verify(0.5, 45, 0.4, 0.46864);
-            verify(0.5, 45, 0.8, 0.61679);
-            verify(0.5, 45, 1.0, 1);
-            verify(0.7, 45, 0.5, 0.63485);
         })
 
         test.case("guesses targetting mode", check => {
@@ -206,20 +130,11 @@ module TK.SpaceTac.Specs {
             action.configureTrigger({ effects: effects, power: 2, range: 120 });
             check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• precision +20% on target");
 
-            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10 });
-            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%):\n• precision +20% on target");
+            action.configureTrigger({ effects: effects, power: 2, range: 120, angle: 80 });
+            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• precision +20% in 80° arc");
 
-            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10, evasion: 35 });
-            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%, evasion -35%):\n• precision +20% on target");
-
-            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10, evasion: 35, angle: 80 });
-            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%, evasion -35%):\n• precision +20% in 80° arc");
-
-            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10, evasion: 35, blast: 100, angle: 80 });
-            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%, evasion -35%):\n• precision +20% in 100km radius");
-
-            action.configureTrigger({ effects: effects, power: 2, range: 120, aim: 10, evasion: 35, blast: 100, angle: 80, luck: 15 });
-            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km, aim +10%, evasion -35%, luck ±15%):\n• precision +20% in 100km radius");
+            action.configureTrigger({ effects: effects, power: 2, range: 120, blast: 100, angle: 80 });
+            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• precision +20% in 100km radius");
         })
     });
 }

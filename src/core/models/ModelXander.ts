@@ -17,10 +17,9 @@ module TK.SpaceTac {
                 });
 
                 let laser = new TriggerAction("Prokhorov Laser", {
-                    effects: [new DamageEffect(20, 40)],
+                    effects: [new DamageEffect(35)],
                     power: 3,
                     range: 250, angle: 80,
-                    aim: 30, evasion: 45, luck: 30,
                 });
 
                 let hull = new TriggerAction("Hull Shedding", {

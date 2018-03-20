@@ -8,16 +8,12 @@ module TK.SpaceTac {
      */
     export class DamageEffect extends BaseEffect {
         // Base damage points
-        base: number
+        value: number
 
-        // Range of randomness (effective damage will be between *value* and *value+range*)
-        span: number
-
-        constructor(value = 0, span = 0) {
+        constructor(value = 0) {
             super("damage");
 
-            this.base = value;
-            this.span = span;
+            this.value = value;
         }
 
         /**
@@ -36,9 +32,9 @@ module TK.SpaceTac {
         /**
          * Get the effective damage done to both shield and hull (in this order)
          */
-        getEffectiveDamage(ship: Ship, success: number): ShipDamageDiff {
+        getEffectiveDamage(ship: Ship): ShipDamageDiff {
             // Apply modifiers
-            let theoritical = Math.round((this.base + this.span * success) * this.getFactor(ship));
+            let theoritical = Math.round(this.value * this.getFactor(ship));
             let damage = theoritical;
 
             // Apply on shields
@@ -51,10 +47,10 @@ module TK.SpaceTac {
             return new ShipDamageDiff(ship, hull, shield, theoritical);
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             let result: BaseBattleDiff[] = [];
 
-            let damage = this.getEffectiveDamage(ship, success);
+            let damage = this.getEffectiveDamage(ship);
 
             if (damage.shield || damage.hull) {
                 result.push(damage);
@@ -72,11 +68,7 @@ module TK.SpaceTac {
         }
 
         getDescription(): string {
-            if (this.span > 0) {
-                return `do ${this.base}-${this.base + this.span} damage`;
-            } else {
-                return `do ${this.base} damage`;
-            }
+            return `do ${this.value} damage`;
         }
     }
 }

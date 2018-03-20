@@ -150,8 +150,7 @@ module TK.SpaceTac.Specs {
         test.case("evaluates damage to enemies", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
-            let weapon = TestTools.addWeapon(ship, 50, 5, 500, 100);
-            let action = weapon;
+            let action = TestTools.addWeapon(ship, 50, 5, 500, 100);
 
             let enemy1 = battle.fleets[1].addShip();
             enemy1.setArenaPosition(250, 0);
@@ -162,6 +161,7 @@ module TK.SpaceTac.Specs {
 
             // no enemies hurt
             let maneuver = new Maneuver(ship, action, Target.newFromLocation(100, 0));
+            console.log(maneuver)
             check.nears(TacticalAIHelpers.evaluateEnemyHealth(ship, battle, maneuver), 0, 8);
 
             // one enemy loses half-life

@@ -17,10 +17,9 @@ module TK.SpaceTac {
                 });
 
                 let laser = new TriggerAction("Wingspan Laser", {
-                    effects: [new DamageEffect(25, 25)],
+                    effects: [new DamageEffect(25)],
                     power: 4,
                     range: 250, angle: 140,
-                    aim: 30, evasion: 45, luck: 30,
                 }, "prokhorovlaser");
                 laser.configureCooldown(3, 1);
 

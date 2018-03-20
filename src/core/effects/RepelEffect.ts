@@ -13,7 +13,7 @@ module TK.SpaceTac {
             this.value = value;
         }
 
-        getOnDiffs(ship: Ship, source: Ship | Drone, success: number): BaseBattleDiff[] {
+        getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
             if (ship != source) {
                 let angle = arenaAngle(source.location, ship.location);
                 let destination = new ArenaLocation(ship.arena_x + Math.cos(angle) * this.value, ship.arena_y + Math.sin(angle) * this.value);
