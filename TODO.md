@@ -24,9 +24,9 @@ Map/story
 Character sheet
 ---------------
 
-* Replace the close icon by a validation icon in creation view
-* Allow to change/buy ship model
-* Add personality indicators (editable in creation view)
+* Improve action and attribute tooltips
+* Implement sliders for personality traits
+* Center the portraits when there are less than 5
 
 Battle
 ------

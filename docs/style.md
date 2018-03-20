@@ -1,5 +1,14 @@
 # UI style guidelines
 
+## Shapes
+
+Main UI shapes are:
+
+* long hexagon
+* rectangles, optionally with left and/or right side tilted (if both are tilted, it should be symmetrical)
+
+Buttons should be lit by a pure white line in top-left corner (~75% of the border length)
+
 ## Color palette
 
 http://paletton.com/#uid=63D0c0kcBwN43YM8AMYhnnWlyeQ

@@ -144,6 +144,23 @@ module TK.SpaceTac {
         }
 
         /**
+         * Refresh the actions and attributes from the bound model
+         */
+        refreshFromModel(): void {
+            this.updateAttributes();
+            this.actions.updateFromShip(this);
+        }
+
+        /**
+         * Change the ship model
+         */
+        setModel(model: ShipModel): void {
+            this.model = model;
+            this.level.clearUpgrades();
+            this.refreshFromModel();
+        }
+
+        /**
          * Toggle an upgrade
          */
         activateUpgrade(upgrade: ShipUpgrade, on: boolean): void {
@@ -151,8 +168,7 @@ module TK.SpaceTac {
                 return;
             }
             this.level.activateUpgrade(upgrade, on);
-            this.updateAttributes();
-            this.actions.updateFromShip(this);
+            this.refreshFromModel();
         }
 
         /** 

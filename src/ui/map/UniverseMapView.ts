@@ -113,7 +113,7 @@ module TK.SpaceTac.UI {
                 this.button_options = builder.button("map-options", 1628, 0, () => this.showOptions(), "Game options");
             });
 
-            this.character_sheet = new CharacterSheet(this);
+            this.character_sheet = new CharacterSheet(this, CharacterSheetMode.EDITION);
             this.layer_overlay.add(this.character_sheet);
 
             this.conversation = new MissionConversationDisplay(this);
@@ -165,7 +165,7 @@ module TK.SpaceTac.UI {
                 this.backToRouter();
             } else {
                 this.setZoom(this.zoom);
-                this.character_sheet.updateFleet(this.player.fleet);
+                this.character_sheet.refresh();
                 this.player_fleet.updateShipSprites();
             }
         }
@@ -310,7 +310,7 @@ module TK.SpaceTac.UI {
         openShop(): void {
             let location = this.session.getLocation();
             if (this.interactive && location && location.shop) {
-                this.character_sheet.show(this.player.fleet.ships[0], CharacterSheetMode.EDITION);
+                this.character_sheet.show(this.player.fleet.ships[0]);
             }
         }
 

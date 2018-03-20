@@ -10,7 +10,7 @@ module TK.SpaceTac.UI {
      */
     export class CharacterSheet extends Phaser.Image {
         // Global sheet mode
-        mode: CharacterSheetMode = CharacterSheetMode.DISPLAY
+        mode: CharacterSheetMode
 
         // Parent view
         view: BaseView
@@ -18,19 +18,19 @@ module TK.SpaceTac.UI {
         // UI components builder
         builder: UIBuilder
 
+        // Close/validate button
+        close_button: UIButton
+
         // X positions
         xshown = 0
         xhidden = -2000
 
         // Groups
+        group_level: Phaser.Group
         group_portraits: Phaser.Group
         group_attributes: Phaser.Image
         group_actions: Phaser.Image
         group_upgrades: Phaser.Group
-
-        // Buttons
-        close_button: UIButton
-        rename_button: UIButton
 
         // Currently displayed fleet
         fleet?: Fleet
@@ -39,33 +39,33 @@ module TK.SpaceTac.UI {
         ship?: Ship
 
         // Variable data
+        personality?: CharacterPersonality
         image_portrait: Phaser.Image
         text_model: Phaser.Text
         text_description: Phaser.Text
-        text_name: Phaser.Text
+        text_name?: Phaser.Text
         text_level: Phaser.Text
         text_upgrade_points: Phaser.Text
         valuebar_experience: ValueBar
 
-        constructor(view: BaseView, onclose?: Function) {
+        constructor(view: BaseView, mode: CharacterSheetMode, onclose?: Function) {
             super(view.game, 0, 0, view.getImageInfo("character-sheet").key, view.getImageInfo("character-sheet").frame);
 
+            if (!onclose) {
+                onclose = () => this.hide();
+            }
+
             this.view = view;
-            this.builder = new UIBuilder(view, this).styled({ color: "#e7ebf0", size: 16, shadow: true });
+            this.mode = mode;
+            this.builder = new UIBuilder(view, this).styled({ color: "#dce9f9", size: 16, shadow: true });
 
             this.xhidden = -this.view.getWidth();
             this.x = this.xhidden;
             this.inputEnabled = true;
 
-            if (!onclose) {
-                onclose = () => this.hide();
-            }
-            this.close_button = this.builder.button("character-close-button", 1920, 0, onclose, "Close the character sheet");
-            this.close_button.anchor.set(1, 0);
-
             this.image_portrait = this.builder.image("translucent", 435, 271, true);
 
-            this.builder.image("character-entry", 28, 740);
+            this.builder.image("character-entry", 24, 740);
 
             this.group_portraits = this.builder.group("portraits", 90, 755);
 
@@ -75,26 +75,54 @@ module TK.SpaceTac.UI {
             let description_bg = this.builder.image("character-ship-description", 434, 654, true);
             this.text_description = this.builder.in(description_bg).text("", 0, 0, { color: "#a0afc3", width: 510 });
 
-            this.group_attributes = this.builder.image("character-ship-column", 30, 30);
-            this.group_actions = this.builder.image("character-ship-column", 698, 30);
+            this.group_attributes = this.builder.image("character-ship-column-left", 28, 28);
+            this.group_actions = this.builder.image("character-ship-column-right", 698, 28);
 
-            let name_bg = this.builder.image("character-name-display", 434, 940, true);
-            this.text_name = this.builder.in(name_bg).text("", 0, 0, { size: 28 });
-
-            this.rename_button = this.builder.button("character-name-button", 656, 890, () => this.renamePersonality(), "Rename personality");
-
-            let points_bg = this.builder.image("character-level-upgrades", 582, 986);
+            this.group_level = this.builder.group("level");
+            let points_bg = this.builder.in(this.group_level).image("character-level-upgrades", 582, 986);
             this.builder.in(points_bg, builder => {
                 builder.text("Upgrade points", 46, 10, { center: false, vcenter: false });
                 builder.image("character-upgrade-point", 147, 59, true);
             });
             this.text_upgrade_points = this.builder.in(points_bg).text("", 106, 60, { size: 28 });
 
-            let level_bg = this.builder.image("character-level-display", 434, 1032, true);
+            let level_bg = this.builder.in(this.group_level).image("character-level-display", 434, 1032, true);
             this.text_level = this.builder.in(level_bg).text("", 0, 4, { size: 28 });
             this.valuebar_experience = this.builder.in(level_bg).valuebar("character-level-experience", -level_bg.width * 0.5, -level_bg.height * 0.5);
 
             this.group_upgrades = this.builder.group("upgrades");
+
+            if (this.mode == CharacterSheetMode.CREATION) {
+                this.builder.in(this.builder.image("character-section-title", 180, 30, false)).text("Ship", 80, 45, { color: "#dce9f9", size: 32 });
+
+                this.personality = new CharacterPersonality(this.builder, 950, 30);
+
+                this.close_button = this.builder.button("character-validate-creation", 140, 930, onclose,
+                    "Validate the team, and start the campaign", undefined, {
+                        hover_bottom: true,
+                        text: "Validate team",
+                        text_x: 295,
+                        text_y: 57,
+                        text_style: { size: 32, color: "#fff3df" }
+                    }
+                );
+
+                this.builder.in(this.builder.image("character-creation-help", 970, 680), builder => {
+                    builder.text("Compose your initial team by choosing a model for each ship, and customize the name and personality of the Artificial Intelligence pilot",
+                        405, 150, { color: "#a3bbd9", size: 22, width: 500 });
+                });
+
+                this.builder.button("character-model-prev", 216, 500, () => this.changeModel(-1), "Select previous model", undefined, { center: true });
+                this.builder.button("character-model-next", 654, 500, () => this.changeModel(1), "Select next model", undefined, { center: true });
+
+                this.group_level.visible = false;
+                this.group_upgrades.visible = false;
+            } else {
+                this.text_name = this.builder.in(this.builder.image("character-name-display", 434, 940, true)).text("", 0, 0, { size: 28 });
+
+                this.close_button = this.builder.button("character-close-button", 1920, 0, onclose, "Close the character sheet");
+                this.close_button.anchor.set(1, 0);
+            }
 
             this.refreshUpgrades();
             this.refreshAttributes();
@@ -109,20 +137,22 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Open a dialog to rename the ship's personality
+         * Change the ship model
          */
-        renamePersonality(): void {
-            if (!this.ship) {
-                return;
-            }
-            let ship = this.ship;
+        changeModel(offset: number): void {
+            if (this.mode == CharacterSheetMode.CREATION && this.ship) {
+                let models = ShipModel.getDefaultCollection();
 
-            UITextDialog.ask(this.view, "Choose a name for this ship's personality", ship.name || undefined).then(name => {
-                if (bool(name)) {
-                    ship.name = name;
-                    this.refreshShipInfo();
+                let idx = models.map(model => model.code).indexOf(this.ship.model.code) + offset;
+                if (idx < 0) {
+                    idx = models.length - 1;
+                } else if (idx >= models.length) {
+                    idx = 0;
                 }
-            });
+
+                this.ship.setModel(models[idx]);
+                this.refresh();
+            }
         }
 
         /**
@@ -132,13 +162,17 @@ module TK.SpaceTac.UI {
             if (this.ship) {
                 let ship = this.ship;
                 this.builder.change(this.image_portrait, `ship-${ship.model.code}-portrait`);
-                this.text_name.setText(ship.name || "");
+                if (this.text_name) {
+                    this.text_name.setText(ship.name || "");
+                }
+                if (this.personality) {
+                    this.personality.displayShip(ship);
+                }
                 this.text_model.setText(ship.model.name);
                 this.text_level.setText(`Level ${ship.level.get()}`);
                 this.text_description.setText(ship.model.getDescription());
                 this.text_upgrade_points.setText(`${ship.getAvailableUpgradePoints()}`);
                 this.valuebar_experience.setValue(ship.level.getExperience(), ship.level.getNextGoal());
-                this.rename_button.visible = this.mode == CharacterSheetMode.CREATION;
             }
         }
 
@@ -149,7 +183,7 @@ module TK.SpaceTac.UI {
             let builder = this.builder.in(this.group_upgrades);
             builder.clear();
 
-            if (!this.ship) {
+            if (!this.ship || this.mode == CharacterSheetMode.CREATION) {
                 return;
             }
             let ship = this.ship;
@@ -196,7 +230,7 @@ module TK.SpaceTac.UI {
                     center: true,
                     vcenter: true,
                     size: 28,
-                    color: ship.level.get() >= (i + 1) ? "#e7ebf0" : "#808285"
+                    color: ship.level.get() >= (i + 1) ? "#dce9f9" : "#293038"
                 });
             });
 
@@ -225,7 +259,7 @@ module TK.SpaceTac.UI {
             let builder = this.builder.in(this.group_attributes);
             builder.clear();
 
-            builder.text("Attributes", 74, 20, { color: "#a0afc3" });
+            builder.text("Attributes", 74, 20, { color: "#a3bbd9" });
 
             if (this.ship) {
                 let ship = this.ship;
@@ -248,7 +282,7 @@ module TK.SpaceTac.UI {
             let builder = this.builder.in(this.group_actions);
             builder.clear();
 
-            builder.text("Actions", 74, 20, { color: "#a0afc3" });
+            builder.text("Actions", 74, 20, { color: "#a3bbd9" });
 
             if (this.ship) {
                 let ship = this.ship;
@@ -265,20 +299,20 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Update the fleet sidebar
+         * Refresh the fleet display
          */
-        updateFleet(fleet: Fleet) {
-            if (fleet !== this.fleet || fleet.ships.length != this.group_portraits.length) {
-                destroyChildren(this.group_portraits);
-                this.fleet = fleet;
+        private refreshFleet(): void {
+            destroyChildren(this.group_portraits);
 
+            if (this.fleet) {
                 let builder = this.builder.in(this.group_portraits);
-                fleet.ships.forEach((ship, idx) => {
+                this.fleet.ships.forEach((ship, idx) => {
                     let button: UIButton;
                     button = new CharacterPortrait(ship).draw(builder, 64 + idx * 140, 64, () => {
                         if (button) {
                             builder.select(button);
                             this.ship = ship;
+
                             this.refreshShipInfo();
                             this.refreshActions();
                             this.refreshAttributes();
@@ -303,16 +337,18 @@ module TK.SpaceTac.UI {
         /**
          * Show the sheet for a given ship
          */
-        show(ship: Ship, mode: CharacterSheetMode = CharacterSheetMode.DISPLAY, animate = true, sound = true) {
+        show(ship: Ship, animate = true, sound = true) {
             this.ship = ship;
-            this.mode = mode;
+            this.fleet = ship.fleet;
 
             this.refreshShipInfo();
             this.refreshUpgrades();
             this.refreshAttributes();
             this.refreshActions();
 
-            this.updateFleet(ship.fleet);
+            if (ship.fleet !== this.fleet || ship.fleet.ships.length != this.group_portraits.length) {
+                this.refreshFleet();
+            }
 
             if (sound) {
                 this.view.audio.playOnce("ui-dialog-open");
@@ -343,7 +379,12 @@ module TK.SpaceTac.UI {
          */
         refresh() {
             if (this.ship) {
-                this.show(this.ship, this.mode, false, false);
+                this.refreshShipInfo();
+                this.refreshUpgrades();
+                this.refreshAttributes();
+                this.refreshActions();
+
+                this.refreshFleet();
             }
         }
     }

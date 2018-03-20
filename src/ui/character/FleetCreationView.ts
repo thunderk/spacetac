@@ -19,8 +19,8 @@ module TK.SpaceTac.UI {
             this.built_fleet.addShip(new Ship(null, MissionGenerator.generateCharacterName(), models[1]));
             this.built_fleet.credits = this.built_fleet.ships.length * 1000;
 
-            this.character_sheet = new CharacterSheet(this, () => this.validateFleet());
-            this.character_sheet.show(this.built_fleet.ships[0], CharacterSheetMode.CREATION, false);
+            this.character_sheet = new CharacterSheet(this, CharacterSheetMode.CREATION, () => this.validateFleet());
+            this.character_sheet.show(this.built_fleet.ships[0], false);
             this.getLayer("characters").add(this.character_sheet);
         }
 

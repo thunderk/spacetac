@@ -58,18 +58,35 @@ module TK.SpaceTac.UI {
      * Button options
      */
     export type UIButtonOptions = {
+        // Centering
+        center?: boolean
+
         // Name of the hover picture (by default, the button name, with "-hover" appended)
         hover_name?: string
 
         // Name of the "on" picture (by default, the button name, with "-on" appended)
         on_name?: string
+
+        // Whether "hover" picture should stay near the button (otherwise will be on top)
+        hover_bottom?: boolean
+
+        // Whether "on" picture should stay near the button (otherwise will be on top)
+        on_bottom?: boolean
+
+        // Text content
+        text?: string
+        text_x?: number
+        text_y?: number
+
+        // Text content style override
+        text_style?: UITextStyleI
     }
 
     /**
      * Main UI builder tool
      */
     export class UIBuilder {
-        private view: BaseView
+        view: BaseView
         private game: MainUI
         private parent: UIContainer
         private text_style: UITextStyle
@@ -201,6 +218,10 @@ module TK.SpaceTac.UI {
             let result = new Phaser.Button(this.game, x, y, info.key, undefined, null, info.frame, info.frame);
             result.name = name;
 
+            if (options.center) {
+                result.anchor.set(0.5);
+            }
+
             let clickable = bool(onclick);
             result.input.useHandCursor = clickable;
             if (clickable) {
@@ -216,7 +237,7 @@ module TK.SpaceTac.UI {
                     let on_info = this.view.getImageInfo(options.on_name || (name + "-on"));
                     if (on_info.exists) {
                         on_mask = new Phaser.Image(this.game, 0, 0, on_info.key, on_info.frame);
-                        on_mask.name = "*on*";
+                        on_mask.name = options.on_bottom ? "on" : "*on*";
                         on_mask.visible = false;
                         result.addChild(on_mask);
                     }
@@ -236,7 +257,7 @@ module TK.SpaceTac.UI {
                 let hover_mask: Phaser.Image | null = null;
                 if (hover_info.exists) {
                     hover_mask = new Phaser.Image(this.game, 0, 0, hover_info.key, hover_info.frame);
-                    hover_mask.name = "*hover*";
+                    hover_mask.name = options.hover_bottom ? "hover" : "*hover*";
                     hover_mask.visible = false;
                     result.addChild(hover_mask);
                 }
@@ -266,6 +287,10 @@ module TK.SpaceTac.UI {
                             this.switch(result, !onstatus);
                         }
                     }, 100);
+            }
+
+            if (options.text) {
+                this.in(result).text(options.text, options.text_x || 0, options.text_y || 0, options.text_style);
             }
 
             this.add(result);

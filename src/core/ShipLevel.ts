@@ -108,5 +108,12 @@ module TK.SpaceTac {
         hasUpgrade(upgrade: ShipUpgrade): boolean {
             return contains(this.upgrades, upgrade.code);
         }
+
+        /**
+         * Clear all activated upgrades
+         */
+        clearUpgrades(): void {
+            this.upgrades = [];
+        }
     }
 }

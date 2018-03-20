@@ -39,5 +39,32 @@ module TK.SpaceTac.Specs {
             level.forceLevel(10);
             check.equals(level.get(), 10);
         });
+
+        test.case("manages upgrades", check => {
+            let up1 = { code: "test1" };
+            let up2 = { code: "test2" };
+
+            let level = new ShipLevel();
+            check.equals(level.getUpgrades(), []);
+            check.equals(level.hasUpgrade(up1), false);
+
+            level.activateUpgrade(up1, true);
+            check.equals(level.getUpgrades(), ["test1"]);
+            check.equals(level.hasUpgrade(up1), true);
+
+            level.activateUpgrade(up1, true);
+            check.equals(level.getUpgrades(), ["test1"]);
+            check.equals(level.hasUpgrade(up1), true);
+
+            level.activateUpgrade(up1, false);
+            check.equals(level.getUpgrades(), []);
+            check.equals(level.hasUpgrade(up1), false);
+
+            level.activateUpgrade(up1, true);
+            level.activateUpgrade(up2, true);
+            check.equals(level.getUpgrades(), ["test1", "test2"]);
+            level.clearUpgrades();
+            check.equals(level.getUpgrades(), []);
+        });
     });
 }

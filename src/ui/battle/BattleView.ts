@@ -118,7 +118,7 @@ module TK.SpaceTac.UI {
                 this.layer_borders, this.getWidth() - 112, 0);
             this.ship_list.bindToLog(this.log_processor);
             this.ship_tooltip = new ShipTooltip(this);
-            this.character_sheet = new CharacterSheet(this);
+            this.character_sheet = new CharacterSheet(this, CharacterSheetMode.DISPLAY);
             this.layer_sheets.add(this.character_sheet);
 
             // Targetting info
@@ -286,7 +286,7 @@ module TK.SpaceTac.UI {
             if (this.targetting.active) {
                 this.validationPressed();
             } else if (this.ship_hovered && this.player.is(this.ship_hovered.fleet.player) && this.interacting) {
-                this.character_sheet.show(this.ship_hovered, CharacterSheetMode.DISPLAY);
+                this.character_sheet.show(this.ship_hovered);
                 this.setShipHovered(null);
             }
         }
