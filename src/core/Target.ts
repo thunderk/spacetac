@@ -64,6 +64,18 @@ module TK.SpaceTac {
             return new Target(x, y, null);
         }
 
+        /**
+         * Snap to battle grid
+         */
+        snap(grid: IArenaGrid): Target {
+            if (this.ship_id) {
+                return this;
+            } else {
+                let location = grid.snap(this);
+                return Target.newFromLocation(location.x, location.y);
+            }
+        }
+
         // Get distance to another target
         getDistanceTo(other: { x: number, y: number }): number {
             var dx = other.x - this.x;

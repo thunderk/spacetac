@@ -3,6 +3,9 @@ module TK.SpaceTac {
      * A turn-based battle between fleets
      */
     export class Battle {
+        // Grid for the arena
+        grid?: IArenaGrid
+
         // Battle outcome, if the battle has ended
         outcome: BattleOutcome | null = null
 
@@ -38,6 +41,8 @@ module TK.SpaceTac {
         ai_playing = false
 
         constructor(fleet1 = new Fleet(new Player("Attacker")), fleet2 = new Fleet(new Player("Defender")), width = 1808, height = 948) {
+            this.grid = new HexagonalArenaGrid(50);
+
             this.fleets = [fleet1, fleet2];
             this.ships = new RObjectContainer(fleet1.ships.concat(fleet2.ships));
             this.play_order = [];
