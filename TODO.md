@@ -35,6 +35,7 @@ Battle
 * Add a voluntary retreat option
 * Toggle bar/text display in power section of action bar
 * Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat
+* Add an hexagonal grid (optional, may be enforced only on mobile) and work in units of this grid
 * Add engine trail effect, and sound
 * Allow to skip animations, and allow no animation mode
 * Find incentives to move from starting position (permanent drones or anomalies?)
@@ -52,16 +53,23 @@ Battle
 Ships models and actions
 ------------------------
 
-* Add critical hit/miss (or indicate lucky/unlucky throws)
+* Replace maneuvrability and precision, with evasion (damage avoidance) and movement (for main engine action, km/power)
+* Add vigilance system, to watch if another ship enters a given radius, to be able to interrupt its turn
+* Remove safety margin for move actions (vigilance system should replace it)
 * Add damage over time effect (tricky to make intuitive)
 * Add actions with cost dependent of distance (like current move actions)
 * Add disc targetting (for some jump move actions)
 * Add "chain" effects
 * Add mines equivalent (drones that apply only at the end)
 * RepelEffect should apply on ships in a good order (distance decreasing)
+* Add damage on collisions (when two ships are moved to the same place)
 * Add hull points to drones and make them take area damage
-* Add a target type filter (all, enemies, allies, self or not)
-* Shields should be able to absorb (some type of) damage, even with 1 remaining
+* Allow to customize effects based on whether a target is enemy, allied or self
+* Add damage mode: shield / shield or hull / shield then hull / hull
+* Add pinned effect (cannot be moved)
+* Add a reflect damage effect
+* Add untargettable effect (can only be targetted with area effects)
+* Add damage modifier (to change the options of incoming damage or outgoing damage)
 * Add a balance testing page, using AI battles with or without an upgrade, to help in balancing
 
 Artificial Intelligence
@@ -93,6 +101,7 @@ Common UI
 Technical
 ---------
 
+* Fix "npm test" returning 0 even on failure
 * Fix alpha being altered in atlases
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile
