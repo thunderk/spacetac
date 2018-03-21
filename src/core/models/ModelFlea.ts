@@ -24,7 +24,7 @@ module TK.SpaceTac {
                 depleter.configureCooldown(1, 1);
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(20)],
+                    effects: [new DamageEffect(1)],
                     power: 3,
                     range: 300,
                 }, "gatlinggun");
@@ -36,8 +36,8 @@ module TK.SpaceTac {
                         effects: [
                             new AttributeEffect("precision", 0),
                             new AttributeEffect("maneuvrability", 15),
-                            new AttributeEffect("hull_capacity", 25),
-                            new AttributeEffect("shield_capacity", 45),
+                            new AttributeEffect("hull_capacity", 1),
+                            new AttributeEffect("shield_capacity", 2),
                             new AttributeEffect("power_capacity", 8),
                         ]
                     },

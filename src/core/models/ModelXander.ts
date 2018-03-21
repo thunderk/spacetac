@@ -17,13 +17,13 @@ module TK.SpaceTac {
                 });
 
                 let laser = new TriggerAction("Prokhorov Laser", {
-                    effects: [new DamageEffect(35)],
+                    effects: [new DamageEffect(2)],
                     power: 3,
                     range: 250, angle: 80,
                 });
 
                 let hull = new TriggerAction("Hull Shedding", {
-                    effects: [new ValueEffect("hull", 120)],
+                    effects: [new ValueEffect("hull", 2)],
                     power: 1
                 }, "fractalhull");
                 hull.configureCooldown(1, 4);
@@ -40,8 +40,8 @@ module TK.SpaceTac {
                         effects: [
                             new AttributeEffect("precision", 8),
                             new AttributeEffect("maneuvrability", 5),
-                            new AttributeEffect("hull_capacity", 80),
-                            new AttributeEffect("shield_capacity", 15),
+                            new AttributeEffect("hull_capacity", 2),
+                            new AttributeEffect("shield_capacity", 1),
                             new AttributeEffect("power_capacity", 7),
                         ]
                     },

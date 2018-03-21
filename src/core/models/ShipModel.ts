@@ -56,8 +56,8 @@ module TK.SpaceTac {
          */
         protected getStandardUpgrades(level: number): ShipUpgrade[] {
             return [
-                { code: `Hull upgrade Lv${level - 1}`, effects: [new AttributeEffect("hull_capacity", 5)], cost: 2 },
-                { code: `Shield upgrade Lv${level - 1}`, effects: [new AttributeEffect("shield_capacity", 5)], cost: 2 },
+                { code: `Hull upgrade Lv${level - 1}`, effects: [new AttributeEffect("hull_capacity", 1)], cost: 3 },
+                { code: `Shield upgrade Lv${level - 1}`, effects: [new AttributeEffect("shield_capacity", 1)], cost: 3 },
                 { code: `Power upgrade Lv${level - 1}`, effects: [new AttributeEffect("power_capacity", 1)], cost: 3 },
             ];
         }

@@ -17,7 +17,7 @@ module TK.SpaceTac {
                 });
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(20)],
+                    effects: [new DamageEffect(1)],
                     power: 2,
                     range: 200,
                 }, "gatlinggun");
@@ -34,7 +34,7 @@ module TK.SpaceTac {
                     deploy_distance: 300,
                     drone_radius: 150,
                     drone_effects: [
-                        new ValueEffect("hull", undefined, undefined, undefined, 30)
+                        new ValueEffect("hull", undefined, undefined, undefined, 1)
                     ]
                 }, "repairdrone");
 
@@ -44,8 +44,8 @@ module TK.SpaceTac {
                         effects: [
                             new AttributeEffect("precision", 3),
                             new AttributeEffect("maneuvrability", 12),
-                            new AttributeEffect("hull_capacity", 30),
-                            new AttributeEffect("shield_capacity", 50),
+                            new AttributeEffect("hull_capacity", 1),
+                            new AttributeEffect("shield_capacity", 2),
                             new AttributeEffect("power_capacity", 7),
                         ]
                     },

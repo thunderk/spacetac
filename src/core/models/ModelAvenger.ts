@@ -20,14 +20,14 @@ module TK.SpaceTac {
             // TODO Weapons should be less efficient in short range
 
             let charged_shot = new TriggerAction("Charged Shot", {
-                effects: [new DamageEffect(40)],
-                power: 3,
+                effects: [new DamageEffect(3)],
+                power: 4,
                 range: 900,
             }, "gatlinggun");
             charged_shot.configureCooldown(2, 2);
 
             let long_range_missile = new TriggerAction("Long Range Missile", {
-                effects: [new DamageEffect(27)],
+                effects: [new DamageEffect(2)],
                 power: 4,
                 range: 700, blast: 120,
             }, "submunitionmissile");
@@ -40,8 +40,8 @@ module TK.SpaceTac {
                         effects: [
                             new AttributeEffect("precision", 8),
                             new AttributeEffect("maneuvrability", 0),
-                            new AttributeEffect("hull_capacity", 80),
-                            new AttributeEffect("shield_capacity", 20),
+                            new AttributeEffect("hull_capacity", 2),
+                            new AttributeEffect("shield_capacity", 1),
                             new AttributeEffect("power_capacity", 8),
                         ]
                     },
@@ -86,8 +86,8 @@ module TK.SpaceTac {
             } else if (level == 3) {
                 let shield_booster = new TriggerAction("Shield Booster", {
                     effects: [
-                        new StickyEffect(new AttributeEffect("shield_capacity", 50), 2),
-                        new ValueEffect("shield", 70),
+                        new StickyEffect(new AttributeEffect("shield_capacity", 2), 2),
+                        new ValueEffect("shield", 3),
                     ],
                     power: 2
                 }, "forcefield");
@@ -112,8 +112,8 @@ module TK.SpaceTac {
                     {
                         code: "Hard Coated Hull",
                         description: "Improved metal coating of outer hull layers, making them more damage resistant",
-                        cost: 2,
-                        effects: [new AttributeEffect("hull_capacity", 10)]
+                        cost: 3,
+                        effects: [new AttributeEffect("hull_capacity", 1)]
                     },
                 ];
             } else {

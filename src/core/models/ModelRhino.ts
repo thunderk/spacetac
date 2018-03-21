@@ -17,14 +17,14 @@ module TK.SpaceTac {
                 });
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(40)],
+                    effects: [new DamageEffect(2)],
                     power: 3,
                     range: 400,
                 }, "gatlinggun");
                 gatling.configureCooldown(2, 2);
 
                 let laser = new TriggerAction("Prokhorov Laser", {
-                    effects: [new DamageEffect(35)],
+                    effects: [new DamageEffect(2)],
                     power: 4,
                     range: 250, angle: 60,
                 }, "prokhorovlaser");
@@ -35,8 +35,8 @@ module TK.SpaceTac {
                         effects: [
                             new AttributeEffect("precision", 4),
                             new AttributeEffect("maneuvrability", 3),
-                            new AttributeEffect("hull_capacity", 100),
-                            new AttributeEffect("shield_capacity", 20),
+                            new AttributeEffect("hull_capacity", 3),
+                            new AttributeEffect("shield_capacity", 1),
                             new AttributeEffect("power_capacity", 9),
                         ]
                     },

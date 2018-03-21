@@ -19,14 +19,14 @@ module TK.SpaceTac {
                 engine.configureCooldown(2, 1);
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(45)],
+                    effects: [new DamageEffect(2)],
                     power: 2,
                     range: 200,
                 }, "gatlinggun");
                 gatling.configureCooldown(3, 1);
 
                 let shield_steal = new TriggerAction("Shield Steal", {
-                    effects: [new ValueTransferEffect("shield", -40)],
+                    effects: [new ValueTransferEffect("shield", -1)],
                     power: 1,
                     blast: 300
                 }, "shieldtransfer");
@@ -38,8 +38,8 @@ module TK.SpaceTac {
                         effects: [
                             new AttributeEffect("precision", 3),
                             new AttributeEffect("maneuvrability", 12),
-                            new AttributeEffect("hull_capacity", 30),
-                            new AttributeEffect("shield_capacity", 50),
+                            new AttributeEffect("hull_capacity", 1),
+                            new AttributeEffect("shield_capacity", 2),
                             new AttributeEffect("power_capacity", 7),
                         ]
                     },
