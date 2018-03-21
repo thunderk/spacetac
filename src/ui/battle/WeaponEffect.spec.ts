@@ -50,7 +50,7 @@ module TK.SpaceTac.UI.Specs {
             let ship = nn(battleview.battle.playing_ship);
             ship.setArenaPosition(50, 30);
 
-            let weapon = new TriggerAction("weapon", { effects: [new DamageEffect()], range: 500 });
+            let weapon = new TriggerAction("weapon", { effects: [new DamageEffect(1)], range: 500 });
             check.patch(weapon, "getImpactedShips", () => [ship]);
 
             let dest = new Ship();

@@ -17,7 +17,7 @@ module TK.SpaceTac {
                 });
 
                 let laser = new TriggerAction("Wingspan Laser", {
-                    effects: [new DamageEffect(1)],
+                    effects: [new DamageEffect(2, DamageEffectMode.SHIELD_THEN_HULL)],
                     power: 4,
                     range: 250, angle: 140,
                 }, "prokhorovlaser");

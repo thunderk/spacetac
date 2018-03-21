@@ -35,7 +35,7 @@ module TK.SpaceTac {
          */
         static addWeapon(ship: Ship, damage = 100, power_usage = 1, max_distance = 100, blast = 0, angle = 0): TriggerAction {
             let action = new TriggerAction("Weapon", {
-                effects: [new DamageEffect(damage)],
+                effects: [new DamageEffect(damage, DamageEffectMode.SHIELD_THEN_HULL)],
                 power: power_usage,
                 range: max_distance,
                 blast: blast,

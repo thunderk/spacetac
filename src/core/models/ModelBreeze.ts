@@ -19,7 +19,7 @@ module TK.SpaceTac {
                 engine.configureCooldown(2, 1);
 
                 let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(2)],
+                    effects: [new DamageEffect(2, DamageEffectMode.SHIELD_THEN_HULL)],
                     power: 2,
                     range: 200,
                 }, "gatlinggun");

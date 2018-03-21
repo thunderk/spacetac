@@ -17,7 +17,7 @@ module TK.SpaceTac {
                 });
 
                 let laser = new TriggerAction("Prokhorov Laser", {
-                    effects: [new DamageEffect(2)],
+                    effects: [new DamageEffect(2, DamageEffectMode.SHIELD_THEN_HULL)],
                     power: 3,
                     range: 250, angle: 80,
                 });

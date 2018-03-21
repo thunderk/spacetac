@@ -2,18 +2,34 @@
 
 module TK.SpaceTac {
     /**
+     * Mode for damage effect
+     */
+    export enum DamageEffectMode {
+        // Apply on shield only
+        SHIELD_ONLY,
+        // Apply on shield, then remaining value on hull
+        SHIELD_THEN_HULL,
+        // Apply on shield only if up, otherwise on hull
+        SHIELD_OR_HULL,
+        // Apply on hull only
+        HULL_ONLY
+    }
+
+    /**
      * Apply damage on a ship.
-     * 
-     * Damage is applied on shield while there is some, then on the hull.
      */
     export class DamageEffect extends BaseEffect {
-        // Base damage points
+        // Damage amount
         value: number
 
-        constructor(value = 0) {
+        // Damage mode
+        mode: DamageEffectMode
+
+        constructor(value: number, mode = DamageEffectMode.SHIELD_OR_HULL) {
             super("damage");
 
             this.value = value;
+            this.mode = mode;
         }
 
         /**
@@ -33,18 +49,31 @@ module TK.SpaceTac {
          * Get the effective damage done to both shield and hull (in this order)
          */
         getEffectiveDamage(ship: Ship): ShipDamageDiff {
+            let shield = ship.getValue("shield");
+            let hull = ship.getValue("hull");
+            let dhull = 0;
+            let dshield = 0;
+
             // Apply modifiers
-            let theoritical = Math.round(this.value * this.getFactor(ship));
-            let damage = theoritical;
+            let damage = Math.round(this.value * this.getFactor(ship));
 
-            // Apply on shields
-            let shield = (damage >= ship.getValue("shield")) ? ship.getValue("shield") : damage;
-            damage -= shield;
+            // Split in shield/hull damage
+            if (this.mode == DamageEffectMode.HULL_ONLY) {
+                dhull = Math.min(damage, hull);
+            } else if (this.mode == DamageEffectMode.SHIELD_ONLY) {
+                dshield = Math.min(damage, shield);
+            } else if (this.mode == DamageEffectMode.SHIELD_OR_HULL) {
+                if (shield) {
+                    dshield = Math.min(damage, shield);
+                } else {
+                    dhull = Math.min(damage, hull);
+                }
+            } else {
+                dshield = Math.min(damage, shield);
+                dhull = Math.min(damage - dshield, hull);
+            }
 
-            // Apply on hull
-            let hull = (damage >= ship.getValue("hull")) ? ship.getValue("hull") : damage;
-
-            return new ShipDamageDiff(ship, hull, shield, theoritical);
+            return new ShipDamageDiff(ship, dhull, dshield, damage);
         }
 
         getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
@@ -68,7 +97,16 @@ module TK.SpaceTac {
         }
 
         getDescription(): string {
-            return `do ${this.value} damage`;
+            let mode = "";
+            if (this.mode == DamageEffectMode.HULL_ONLY) {
+                mode = " hull";
+            } else if (this.mode == DamageEffectMode.SHIELD_ONLY) {
+                mode = " shield";
+            } else if (this.mode == DamageEffectMode.SHIELD_THEN_HULL) {
+                mode = " piercing";
+            }
+
+            return `do ${this.value}${mode} damage`;
         }
     }
 }
