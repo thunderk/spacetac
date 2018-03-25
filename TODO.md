@@ -33,6 +33,7 @@ Battle
 
 * Fix stats only filling for one fleet
 * Display shield (and its (dis)appearance)
+* Display estimated damage and displacement in targetting mode
 * Add a voluntary retreat option
 * Toggle bar/text display in power section of action bar
 * Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat
@@ -66,7 +67,7 @@ Ships models and actions
 * Add damage on collisions (when two ships are moved to the same place)
 * Add hull points to drones and make them take area damage
 * Allow to customize effects based on whether a target is enemy, allied or self
-* Add pinned effect (cannot be moved)
+* Add anchored effect (cannot be moved)
 * Add a reflect damage effect
 * Add untargettable effect (can only be targetted with area effects)
 * Add damage modifier (to change the options of incoming damage or outgoing damage)
