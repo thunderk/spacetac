@@ -54,11 +54,10 @@ function atlas(stage) {
         let opts = {
             name: `out/assets/atlas${stage}`,
             fullpath: true,
-            width: 1024,
-            height: 1024,
+            width: 2048,
+            height: 2048,
             square: true,
             powerOfTwo: true,
-            trim: true,
             padding: 2
         };
         return new Promise(resolve => gfPacker(files, opts, resolve));
