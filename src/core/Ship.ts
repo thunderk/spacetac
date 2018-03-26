@@ -112,7 +112,7 @@ module TK.SpaceTac {
 
         // Make an initiative throw, to resolve play order in a battle
         throwInitiative(gen: RandomGenerator): void {
-            this.play_priority = gen.random() * this.attributes.maneuvrability.get();
+            this.play_priority = gen.random() * this.attributes.initiative.get();
         }
 
         /**

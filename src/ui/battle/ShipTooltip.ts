@@ -36,11 +36,10 @@ module TK.SpaceTac.UI {
                 let turns = this.battleview.battle.getPlayOrder(ship);
                 builder.text((turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), 230, 36, { color: "#cccccc", size: 18 });
 
-                ShipTooltip.addValue(builder, 0, "#aa6f33", "attribute-precision", ship.getAttribute("precision"));
-                ShipTooltip.addValue(builder, 1, "#c1f06b", "attribute-maneuvrability", ship.getAttribute("maneuvrability"));
-                ShipTooltip.addValue(builder, 2, "#ffdd4b", "attribute-power_capacity", ship.getValue("power"), ship.getAttribute("power_capacity"));
-                ShipTooltip.addValue(builder, 3, "#eb4e4a", "attribute-hull_capacity", ship.getValue("hull"), ship.getAttribute("hull_capacity"));
-                ShipTooltip.addValue(builder, 4, "#2ad8dc", "attribute-shield_capacity", ship.getValue("shield"), ship.getAttribute("shield_capacity"));
+                ShipTooltip.addValue(builder, 0, "#eb4e4a", "attribute-hull_capacity", ship.getValue("hull"), ship.getAttribute("hull_capacity"));
+                ShipTooltip.addValue(builder, 1, "#2ad8dc", "attribute-shield_capacity", ship.getValue("shield"), ship.getAttribute("shield_capacity"));
+                ShipTooltip.addValue(builder, 2, "#c1f06b", "attribute-evasion", ship.getAttribute("evasion"));
+                ShipTooltip.addValue(builder, 3, "#ffdd4b", "attribute-power_capacity", ship.getValue("power"), ship.getAttribute("power_capacity"));
 
                 let iy = 210;
 

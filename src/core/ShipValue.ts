@@ -4,25 +4,25 @@ module TK.SpaceTac {
     }
 
     export const SHIP_VALUES_DESCRIPTIONS: ShipValuesMapping = {
+        "initiative": "Capacity to play before others in a battle",
         "hull": "Physical structure of the ship",
         "shield": "Shield around the ship that may absorb damage",
         "power": "Power available to supply the equipments",
         "hull_capacity": "Maximal Hull value before the ship risks collapsing",
         "shield_capacity": "Maximal Shield value to protect the hull from damage",
         "power_capacity": "Maximal Power value to use equipment",
-        "maneuvrability": "Ability to move first, fast and to evade weapons",
-        "precision": "Ability to target far and aim good",
+        "evasion": "Damage points that may be evaded by maneuvering",
     }
 
     export const SHIP_VALUES_NAMES: ShipValuesMapping = {
+        "initiative": "initiative",
         "hull": "hull",
         "shield": "shield",
         "power": "power",
         "hull_capacity": "hull capacity",
         "shield_capacity": "shield capacity",
         "power_capacity": "power capacity",
-        "maneuvrability": "maneuvrability",
-        "precision": "precision",
+        "evasion": "evasion",
     }
 
     /**
@@ -116,16 +116,16 @@ module TK.SpaceTac {
      * Set of ShipAttribute for a ship
      */
     export class ShipAttributes {
+        // Initiative (capacity to play first)
+        initiative = new ShipAttribute()
         // Maximal hull value
         hull_capacity = new ShipAttribute()
         // Maximal shield value
         shield_capacity = new ShipAttribute()
         // Maximal power value
         power_capacity = new ShipAttribute()
-        // Ability to move first and fast
-        maneuvrability = new ShipAttribute()
-        // Ability to fire far and good
-        precision = new ShipAttribute()
+        // Damage evation
+        evasion = new ShipAttribute()
     }
 
     /**

@@ -55,7 +55,7 @@ Battle
 Ships models and actions
 ------------------------
 
-* Replace maneuvrability and precision, with evasion (damage avoidance) and movement (for main engine action, km/power)
+* Add movement attribute (for main engine action, km/power)
 * Add vigilance system, to watch if another ship enters a given radius, to be able to interrupt its turn
 * Remove safety margin for move actions (vigilance system should replace it)
 * Add damage over time effect (tricky to make intuitive)

@@ -15,21 +15,21 @@ module TK.SpaceTac.Specs {
             check.equals(level.checkLevelUp(), true);
             check.equals(level.get(), 2);
             check.equals(level.getNextGoal(), 300);
-            check.equals(level.getUpgradePoints(), 6);
+            check.equals(level.getUpgradePoints(), 3);
 
             level.addExperience(200);  // 330
             check.equals(level.get(), 2);
             check.equals(level.checkLevelUp(), true);
             check.equals(level.get(), 3);
             check.equals(level.getNextGoal(), 600);
-            check.equals(level.getUpgradePoints(), 9);
+            check.equals(level.getUpgradePoints(), 5);
 
             level.addExperience(320);  // 650
             check.equals(level.get(), 3);
             check.equals(level.checkLevelUp(), true);
             check.equals(level.get(), 4);
             check.equals(level.getNextGoal(), 1000);
-            check.equals(level.getUpgradePoints(), 12);
+            check.equals(level.getUpgradePoints(), 7);
         });
 
         test.case("forces a given level", check => {

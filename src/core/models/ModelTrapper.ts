@@ -20,7 +20,7 @@ module TK.SpaceTac {
                 let protector = new ToggleAction("Damage Protector", {
                     power: 4,
                     radius: 300,
-                    effects: [new DamageModifierEffect(-35)]
+                    effects: [new AttributeEffect("evasion", 1)]
                 });
 
                 let depleter = new TriggerAction("Power Depleter", {
@@ -40,8 +40,7 @@ module TK.SpaceTac {
                     {
                         code: "Trapper Base",
                         effects: [
-                            new AttributeEffect("precision", 3),
-                            new AttributeEffect("maneuvrability", 2),
+                            new AttributeEffect("evasion", 1),
                             new AttributeEffect("hull_capacity", 1),
                             new AttributeEffect("shield_capacity", 2),
                             new AttributeEffect("power_capacity", 8),

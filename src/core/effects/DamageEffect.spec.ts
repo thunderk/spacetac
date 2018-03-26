@@ -4,21 +4,25 @@ module TK.SpaceTac.Specs {
             let ship = new Ship();
             TestTools.setShipModel(ship, 2, 3);
 
-            check.equals(new DamageEffect(1, DamageEffectMode.HULL_ONLY).getEffectiveDamage(ship), new ShipDamageDiff(ship, 1, 0, 1), "hull 1");
-            check.equals(new DamageEffect(3, DamageEffectMode.HULL_ONLY).getEffectiveDamage(ship), new ShipDamageDiff(ship, 2, 0, 3), "hull 3");
+            check.equals(new DamageEffect(1, DamageEffectMode.HULL_ONLY).getEffectiveDamage(ship), new ShipDamageDiff(ship, 1, 0, 0, 1), "hull 1");
+            check.equals(new DamageEffect(3, DamageEffectMode.HULL_ONLY).getEffectiveDamage(ship), new ShipDamageDiff(ship, 2, 0, 0, 3), "hull 3");
 
-            check.equals(new DamageEffect(1, DamageEffectMode.SHIELD_ONLY).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 1, 1), "shield 1");
-            check.equals(new DamageEffect(4, DamageEffectMode.SHIELD_ONLY).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 3, 4), "shield 4");
+            check.equals(new DamageEffect(1, DamageEffectMode.SHIELD_ONLY).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 1, 0, 1), "shield 1");
+            check.equals(new DamageEffect(4, DamageEffectMode.SHIELD_ONLY).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 3, 0, 4), "shield 4");
 
-            check.equals(new DamageEffect(1, DamageEffectMode.SHIELD_THEN_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 1, 1), "piercing 1");
-            check.equals(new DamageEffect(4, DamageEffectMode.SHIELD_THEN_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 1, 3, 4), "piercing 4");
-            check.equals(new DamageEffect(8, DamageEffectMode.SHIELD_THEN_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 2, 3, 8), "piercing 8");
+            check.equals(new DamageEffect(1, DamageEffectMode.SHIELD_THEN_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 1, 0, 1), "piercing 1");
+            check.equals(new DamageEffect(4, DamageEffectMode.SHIELD_THEN_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 1, 3, 0, 4), "piercing 4");
+            check.equals(new DamageEffect(8, DamageEffectMode.SHIELD_THEN_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 2, 3, 0, 8), "piercing 8");
 
-            check.equals(new DamageEffect(1, DamageEffectMode.SHIELD_OR_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 1, 1), "normal 1");
-            check.equals(new DamageEffect(4, DamageEffectMode.SHIELD_OR_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 3, 4), "normal 4");
+            check.equals(new DamageEffect(1, DamageEffectMode.SHIELD_OR_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 1, 0, 1), "normal 1");
+            check.equals(new DamageEffect(4, DamageEffectMode.SHIELD_OR_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 3, 0, 4), "normal 4");
             ship.setValue("shield", 0);
-            check.equals(new DamageEffect(1, DamageEffectMode.SHIELD_OR_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 1, 0, 1), "normal no shield 1");
-            check.equals(new DamageEffect(4, DamageEffectMode.SHIELD_OR_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 2, 0, 4), "normal no shield 4");
+            check.equals(new DamageEffect(1, DamageEffectMode.SHIELD_OR_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 1, 0, 0, 1), "normal no shield 1");
+            check.equals(new DamageEffect(4, DamageEffectMode.SHIELD_OR_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 2, 0, 0, 4), "normal no shield 4");
+
+            ship.setValue("shield", 3);
+            TestTools.setAttribute(ship, "evasion", 1);
+            check.equals(new DamageEffect(5, DamageEffectMode.SHIELD_THEN_HULL).getEffectiveDamage(ship), new ShipDamageDiff(ship, 1, 3, 1, 5), "piercing 5 evade 1");
         });
 
         test.case("applies damage", check => {
@@ -53,32 +57,6 @@ module TK.SpaceTac.Specs {
             check.equals(new DamageEffect(10, DamageEffectMode.HULL_ONLY).getDescription(), "do 10 hull damage");
             check.equals(new DamageEffect(10, DamageEffectMode.SHIELD_ONLY).getDescription(), "do 10 shield damage");
             check.equals(new DamageEffect(10, DamageEffectMode.SHIELD_THEN_HULL).getDescription(), "do 10 piercing damage");
-        });
-
-        test.case("applies damage modifiers", check => {
-            let ship = new Ship();
-            TestTools.setShipModel(ship, 1000, 1000);
-            let damage = new DamageEffect(200);
-
-            check.equals(damage.getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 200));
-
-            check.patch(ship, "ieffects", iterator([
-                isingle(new DamageModifierEffect(-15)),
-                isingle(new DamageModifierEffect(20)),
-                isingle(new DamageModifierEffect(-150)),
-                isingle(new DamageModifierEffect(180)),
-                iarray([new DamageModifierEffect(10), new DamageModifierEffect(-15)]),
-                isingle(new DamageModifierEffect(3))
-            ]));
-
-            check.equals(damage.getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 170));
-            check.equals(damage.getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 240));
-            check.equals(damage.getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 0));
-            check.equals(damage.getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 400));
-            check.equals(damage.getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 190));
-
-            damage = new DamageEffect(40);
-            check.equals(damage.getEffectiveDamage(ship), new ShipDamageDiff(ship, 0, 41));
         });
     });
 }

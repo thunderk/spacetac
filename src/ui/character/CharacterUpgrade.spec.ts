@@ -67,9 +67,9 @@ module TK.SpaceTac.UI.Specs {
 
             upgrade.effects = [
                 new DamageEffect(10),
-                new AttributeMultiplyEffect("precision", 2)
+                new AttributeMultiplyEffect("evasion", 2)
             ];
-            check.equals(display.getIcon(), "attribute-precision");
+            check.equals(display.getIcon(), "attribute-evasion");
         })
     })
 }

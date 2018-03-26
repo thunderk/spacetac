@@ -33,8 +33,7 @@ module TK.SpaceTac {
                     {
                         code: "Rhino Base",
                         effects: [
-                            new AttributeEffect("precision", 4),
-                            new AttributeEffect("maneuvrability", 3),
+                            new AttributeEffect("initiative", 1),
                             new AttributeEffect("hull_capacity", 3),
                             new AttributeEffect("shield_capacity", 1),
                             new AttributeEffect("power_capacity", 9),

@@ -6,10 +6,10 @@ module TK.SpaceTac.Specs {
 
             check.in("before", check => {
                 check.equals(ship.active_effects.count(), 0, "no sticky effect");
-                check.equals(ship.getAttribute("precision"), 0, "precision");
+                check.equals(ship.getAttribute("evasion"), 0, "evasion");
             })
 
-            let effect = new StickyEffect(new AttributeEffect("precision", 1), 2);
+            let effect = new StickyEffect(new AttributeEffect("evasion", 1), 2);
             battle.applyDiffs(effect.getOnDiffs(ship, ship));
 
             check.in("after", check => {
@@ -18,7 +18,7 @@ module TK.SpaceTac.Specs {
                 if (sticked instanceof StickyEffect) {
                     check.equals(sticked.base, effect.base, "sticked effect");
                     check.equals(sticked.duration, 2, "sticked duration");
-                    check.equals(ship.getAttribute("precision"), 1, "precision");
+                    check.equals(ship.getAttribute("evasion"), 1, "evasion");
                     sticked.duration = 1;
                 } else {
                     check.fail("Not a sticky effect");
@@ -33,7 +33,7 @@ module TK.SpaceTac.Specs {
                 if (sticked instanceof StickyEffect) {
                     check.equals(sticked.base, effect.base, "sticked effect");
                     check.equals(sticked.duration, 2, "sticked duration");
-                    check.equals(ship.getAttribute("precision"), 1, "precision");
+                    check.equals(ship.getAttribute("evasion"), 1, "evasion");
                 } else {
                     check.fail("Not a sticky effect");
                 }

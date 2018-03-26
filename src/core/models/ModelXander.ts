@@ -38,8 +38,8 @@ module TK.SpaceTac {
                     {
                         code: "Xander Base",
                         effects: [
-                            new AttributeEffect("precision", 8),
-                            new AttributeEffect("maneuvrability", 5),
+                            new AttributeEffect("initiative", 1),
+                            new AttributeEffect("evasion", 1),
                             new AttributeEffect("hull_capacity", 2),
                             new AttributeEffect("shield_capacity", 1),
                             new AttributeEffect("power_capacity", 7),

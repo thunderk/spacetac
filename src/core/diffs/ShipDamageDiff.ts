@@ -13,14 +13,18 @@ module TK.SpaceTac {
         // Damage to shield
         shield: number
 
+        // Evaded damage
+        evaded: number
+
         // Theoretical damage value
         theoretical: number
 
-        constructor(ship: Ship, hull: number, shield: number, theoretical = hull + shield) {
+        constructor(ship: Ship, hull: number, shield: number, evaded = 0, theoretical = hull + shield + evaded) {
             super(ship);
 
             this.hull = hull;
             this.shield = shield;
+            this.evaded = evaded;
             this.theoretical = theoretical;
         }
     }

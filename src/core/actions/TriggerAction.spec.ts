@@ -120,21 +120,21 @@ module TK.SpaceTac.Specs {
             let action = new TriggerAction();
             check.equals(action.getEffectsDescription(), "");
 
-            let effects: BaseEffect[] = [new AttributeMultiplyEffect("precision", 20)];
+            let effects: BaseEffect[] = [new AttributeMultiplyEffect("evasion", 20)];
             action.configureTrigger({ effects: effects, power: 0 });
-            check.equals(action.getEffectsDescription(), "Trigger:\n• precision +20% on self");
+            check.equals(action.getEffectsDescription(), "Trigger:\n• evasion +20% on self");
 
             action.configureTrigger({ effects: effects, power: 2 });
-            check.equals(action.getEffectsDescription(), "Trigger (power 2):\n• precision +20% on self");
+            check.equals(action.getEffectsDescription(), "Trigger (power 2):\n• evasion +20% on self");
 
             action.configureTrigger({ effects: effects, power: 2, range: 120 });
-            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• precision +20% on target");
+            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• evasion +20% on target");
 
             action.configureTrigger({ effects: effects, power: 2, range: 120, angle: 80 });
-            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• precision +20% in 80° arc");
+            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• evasion +20% in 80° arc");
 
             action.configureTrigger({ effects: effects, power: 2, range: 120, blast: 100, angle: 80 });
-            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• precision +20% in 100km radius");
+            check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• evasion +20% in 100km radius");
         })
     });
 }

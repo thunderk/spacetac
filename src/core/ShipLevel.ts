@@ -86,7 +86,7 @@ module TK.SpaceTac {
          * This does not deduce activated upgrades usage
          */
         getUpgradePoints(): number {
-            return this.level > 1 ? (3 * this.level) : 0;
+            return this.level > 1 ? (1 + 2 * (this.level - 1)) : 0;
         }
 
         /**

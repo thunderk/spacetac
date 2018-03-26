@@ -34,8 +34,8 @@ module TK.SpaceTac {
                     {
                         code: "Flea Base",
                         effects: [
-                            new AttributeEffect("precision", 0),
-                            new AttributeEffect("maneuvrability", 15),
+                            new AttributeEffect("initiative", 2),
+                            new AttributeEffect("evasion", 1),
                             new AttributeEffect("hull_capacity", 1),
                             new AttributeEffect("shield_capacity", 2),
                             new AttributeEffect("power_capacity", 8),

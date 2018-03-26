@@ -159,7 +159,7 @@ module TK.SpaceTac.Specs {
             let ship = battle.play_order[0];
 
             let effect1 = new BaseEffect("e1");
-            let effect2 = new StickyEffect(new AttributeLimitEffect("precision", 7), 2);
+            let effect2 = new StickyEffect(new AttributeLimitEffect("evasion", 7), 2);
 
             ship.active_effects.add(effect1);
             ship.active_effects.add(effect2);
@@ -175,23 +175,23 @@ module TK.SpaceTac.Specs {
                         check.equals(ship.active_effects.count(), 2, "effect count");
                         check.contains(ship.active_effects.ids(), effect2.id, "sticky effect active");
                         check.equals((<StickyEffect>nn(ship.active_effects.get(effect2.id))).duration, 2, "duration sticky effect");
-                        check.equals(ship.attributes.precision.getMaximal(), 7, "max precision");
+                        check.equals(ship.attributes.evasion.getMaximal(), 7, "max evasion");
                     },
                     check => {
                         check.equals(ship.active_effects.count(), 2, "effect count");
                         check.contains(ship.active_effects.ids(), effect2.id, "sticky effect active");
                         check.equals((<StickyEffect>nn(ship.active_effects.get(effect2.id))).duration, 1, "duration sticky effect");
-                        check.equals(ship.attributes.precision.getMaximal(), 7, "max precision");
+                        check.equals(ship.attributes.evasion.getMaximal(), 7, "max evasion");
                     },
                     check => {
                         check.equals(ship.active_effects.count(), 1, "effect count");
                         check.notcontains(ship.active_effects.ids(), effect2.id, "sticky effect removed");
-                        check.equals(ship.attributes.precision.getMaximal(), Infinity, "max precision");
+                        check.equals(ship.attributes.evasion.getMaximal(), Infinity, "max evasion");
                     },
                     check => {
                         check.equals(ship.active_effects.count(), 1, "effect count");
                         check.notcontains(ship.active_effects.ids(), effect2.id, "sticky effect removed");
-                        check.equals(ship.attributes.precision.getMaximal(), Infinity, "max precision");
+                        check.equals(ship.attributes.evasion.getMaximal(), Infinity, "max evasion");
                     }
                 ]);
         });

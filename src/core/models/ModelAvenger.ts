@@ -38,8 +38,6 @@ module TK.SpaceTac {
                     {
                         code: "Avenger Base",
                         effects: [
-                            new AttributeEffect("precision", 8),
-                            new AttributeEffect("maneuvrability", 0),
                             new AttributeEffect("hull_capacity", 2),
                             new AttributeEffect("shield_capacity", 1),
                             new AttributeEffect("power_capacity", 8),
@@ -56,64 +54,6 @@ module TK.SpaceTac {
                     {
                         code: "Long Range Missile",
                         actions: [long_range_missile]
-                    },
-                ];
-            } else if (level == 2) {
-                return [
-                    {
-                        code: "Laser Targetting",
-                        description: "Improved targetting, using fine-grained laser sensors",
-                        cost: 1,
-                        effects: [new AttributeEffect("precision", 2)],
-                    },
-                    {
-                        code: "Basic Countermeasures",
-                        description: "Chaffs and lures to divert enemy fire",
-                        cost: 1,
-                        effects: [new AttributeEffect("maneuvrability", 2)],
-                    },
-                    {
-                        code: "Targetting Assist",
-                        description: "Share your targetting subnetwork with nearby ships",
-                        cost: 3,
-                        actions: [new ToggleAction("Targetting Assist", {
-                            power: 3,
-                            radius: 300,
-                            effects: [new AttributeEffect("precision", 2)]
-                        }, "precisionboost")],
-                    },
-                ];
-            } else if (level == 3) {
-                let shield_booster = new TriggerAction("Shield Booster", {
-                    effects: [
-                        new StickyEffect(new AttributeEffect("shield_capacity", 2), 2),
-                        new ValueEffect("shield", 3),
-                    ],
-                    power: 2
-                }, "forcefield");
-                shield_booster.configureCooldown(1, 4);
-
-                return [
-                    {
-                        code: "Gyroscopic Stabilizers",
-                        description: "Heavy mercury gyroscopes, used to stabilize the whole ship while firing",
-                        cost: 1,
-                        effects: [
-                            new AttributeEffect("precision", 3),
-                            new AttributeEffect("maneuvrability", -2)
-                        ]
-                    },
-                    {
-                        code: "Shield Booster",
-                        description: "Temporary power surge directed toward the shield mainframe, to boost its output",
-                        cost: 3,
-                        actions: [shield_booster]
-                    },
-                    {
-                        code: "Hard Coated Hull",
-                        description: "Improved metal coating of outer hull layers, making them more damage resistant",
-                        cost: 3,
-                        effects: [new AttributeEffect("hull_capacity", 1)]
                     },
                 ];
             } else {

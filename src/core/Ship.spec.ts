@@ -138,32 +138,32 @@ module TK.SpaceTac.Specs {
             let ship = new Ship();
             check.equals(imaterialize(ship.ieffects()), []);
 
-            let effect1 = new AttributeEffect("precision", 4);
+            let effect1 = new AttributeEffect("evasion", 4);
             check.patch(ship.model, "getEffects", () => [effect1]);
             check.equals(imaterialize(ship.ieffects()), [effect1]);
 
-            let effect2 = new AttributeLimitEffect("precision", 2);
+            let effect2 = new AttributeLimitEffect("evasion", 2);
             ship.active_effects.add(new StickyEffect(effect2, 4));
             check.equals(imaterialize(ship.ieffects()), [effect1, effect2]);
         });
 
         test.case("gets a textual description of an attribute", check => {
             let ship = new Ship();
-            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons");
+            check.equals(ship.getAttributeDescription("evasion"), "Damage points that may be evaded by maneuvering");
 
             check.patch(ship, "getUpgrades", () => [
-                { code: "Base", effects: [new AttributeEffect("maneuvrability", 3)] },
-                { code: "Up1", effects: [new AttributeEffect("precision", 1)] },
-                { code: "Up2", effects: [new AttributeEffect("precision", 1), new AttributeEffect("maneuvrability", 1)] }
+                { code: "Base", effects: [new AttributeEffect("evasion", 3)] },
+                { code: "Up1", effects: [new AttributeEffect("shield_capacity", 1)] },
+                { code: "Up2", effects: [new AttributeEffect("shield_capacity", 1), new AttributeEffect("evasion", 1)] }
             ]);
-            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nBase: +3\nUp2: +1");
+            check.equals(ship.getAttributeDescription("evasion"), "Damage points that may be evaded by maneuvering\n\nBase: +3\nUp2: +1");
 
-            ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("maneuvrability", 3)));
-            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nBase: +3\nUp2: +1\nSticky effect: limit to 3");
+            ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("evasion", 3)));
+            check.equals(ship.getAttributeDescription("evasion"), "Damage points that may be evaded by maneuvering\n\nBase: +3\nUp2: +1\nSticky effect: limit to 3");
 
             ship.active_effects.remove(ship.active_effects.list()[0]);
-            ship.active_effects.add(new AttributeEffect("maneuvrability", -1));
-            check.equals(ship.getAttributeDescription("maneuvrability"), "Ability to move first, fast and to evade weapons\n\nBase: +3\nUp2: +1\nActive effect: -1");
+            ship.active_effects.add(new AttributeEffect("evasion", -1));
+            check.equals(ship.getAttributeDescription("evasion"), "Damage points that may be evaded by maneuvering\n\nBase: +3\nUp2: +1\nActive effect: -1");
         });
 
         test.case("produces death diffs", check => {
@@ -175,17 +175,17 @@ module TK.SpaceTac.Specs {
                 new ShipDeathDiff(battle, ship),
             ]);
 
-            let effect1 = ship.active_effects.add(new AttributeEffect("precision", 2));
-            let effect2 = ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("maneuvrability", 1)));
+            let effect1 = ship.active_effects.add(new AttributeEffect("shield_capacity", 2));
+            let effect2 = ship.active_effects.add(new StickyEffect(new AttributeLimitEffect("evasion", 1)));
             let action1 = ship.actions.addCustom(new ToggleAction("weapon1", { power: 3 }));
             let action2 = ship.actions.addCustom(new ToggleAction("weapon2", { power: 3 }));
             ship.actions.toggle(action2, true);
 
             check.equals(ship.getDeathDiffs(battle), [
                 new ShipEffectRemovedDiff(ship, effect1),
-                new ShipAttributeDiff(ship, "precision", {}, { cumulative: 2 }),
+                new ShipAttributeDiff(ship, "shield_capacity", {}, { cumulative: 2 }),
                 new ShipEffectRemovedDiff(ship, effect2),
-                new ShipAttributeDiff(ship, "maneuvrability", {}, { limit: 1 }),
+                new ShipAttributeDiff(ship, "evasion", {}, { limit: 1 }),
                 new ShipActionToggleDiff(ship, action2, false),
                 new ShipValueDiff(ship, "hull", -1),
                 new ShipDeathDiff(battle, ship),

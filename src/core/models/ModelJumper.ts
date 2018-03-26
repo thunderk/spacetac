@@ -24,7 +24,7 @@ module TK.SpaceTac {
                 }, "submunitionmissile");
 
                 let protector = new TriggerAction("Damage Reductor", {
-                    effects: [new StickyEffect(new DamageModifierEffect(-20), 2)],
+                    effects: [new StickyEffect(new AttributeEffect("evasion", 1), 2)],
                     power: 3,
                     range: 300, blast: 150
                 }, "damageprotector");
@@ -39,8 +39,7 @@ module TK.SpaceTac {
                     {
                         code: "Jumper Base",
                         effects: [
-                            new AttributeEffect("precision", 9),
-                            new AttributeEffect("maneuvrability", 3),
+                            new AttributeEffect("initiative", 1),
                             new AttributeEffect("hull_capacity", 2),
                             new AttributeEffect("shield_capacity", 2),
                             new AttributeEffect("power_capacity", 6),

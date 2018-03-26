@@ -34,8 +34,6 @@ module TK.SpaceTac {
                     {
                         code: "Falcon Base",
                         effects: [
-                            new AttributeEffect("precision", 8),
-                            new AttributeEffect("maneuvrability", 4),
                             new AttributeEffect("hull_capacity", 2),
                             new AttributeEffect("shield_capacity", 2),
                             new AttributeEffect("power_capacity", 9),

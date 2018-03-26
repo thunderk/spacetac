@@ -5,15 +5,15 @@ module TK.SpaceTac {
             var fleet2 = new Fleet();
 
             var ship1 = new Ship(fleet1, "F1S1");
-            TestTools.setAttribute(ship1, "maneuvrability", 2);
+            TestTools.setAttribute(ship1, "initiative", 2);
             var ship2 = new Ship(fleet1, "F1S2");
-            TestTools.setAttribute(ship2, "maneuvrability", 4);
+            TestTools.setAttribute(ship2, "initiative", 4);
             var ship3 = new Ship(fleet1, "F1S3");
-            TestTools.setAttribute(ship3, "maneuvrability", 1);
+            TestTools.setAttribute(ship3, "initiative", 1);
             var ship4 = new Ship(fleet2, "F2S1");
-            TestTools.setAttribute(ship4, "maneuvrability", 8);
+            TestTools.setAttribute(ship4, "initiative", 8);
             var ship5 = new Ship(fleet2, "F2S2");
-            TestTools.setAttribute(ship5, "maneuvrability", 2);
+            TestTools.setAttribute(ship5, "initiative", 2);
 
             var battle = new Battle(fleet1, fleet2);
             check.equals(battle.play_order.length, 0);
@@ -76,7 +76,7 @@ module TK.SpaceTac {
             check.equals(battle.playing_ship, null);
 
             // Force play order
-            iforeach(battle.iships(), ship => TestTools.setAttribute(ship, "maneuvrability", 1));
+            iforeach(battle.iships(), ship => TestTools.setAttribute(ship, "initiative", 1));
             var gen = new SkewedRandomGenerator([0.1, 0.2, 0.0]);
             battle.throwInitiative(gen);
             check.equals(battle.playing_ship, null);
@@ -298,13 +298,13 @@ module TK.SpaceTac {
 
             check.equals(imaterialize(battle.iAreaEffects(100, 50)), [drone1.effects[0]], "drone effects");
 
-            let eq1 = new ToggleAction("eq1", { power: 0, radius: 500, effects: [new AttributeEffect("maneuvrability", 1)] });
+            let eq1 = new ToggleAction("eq1", { power: 0, radius: 500, effects: [new AttributeEffect("initiative", 1)] });
             ship.actions.addCustom(eq1);
             ship.actions.toggle(eq1, true);
-            let eq2 = new ToggleAction("eq2", { power: 0, radius: 500, effects: [new AttributeEffect("maneuvrability", 2)] });
+            let eq2 = new ToggleAction("eq2", { power: 0, radius: 500, effects: [new AttributeEffect("initiative", 2)] });
             ship.actions.addCustom(eq2);
             ship.actions.toggle(eq2, false);
-            let eq3 = new ToggleAction("eq3", { power: 0, radius: 100, effects: [new AttributeEffect("maneuvrability", 3)] });
+            let eq3 = new ToggleAction("eq3", { power: 0, radius: 100, effects: [new AttributeEffect("initiative", 3)] });
             ship.actions.addCustom(eq3);
             ship.actions.toggle(eq3, true);
 

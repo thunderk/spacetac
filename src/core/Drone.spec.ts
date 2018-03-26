@@ -6,7 +6,7 @@ module TK.SpaceTac {
             let battle = TestTools.createBattle();
             let ship = nn(battle.playing_ship);
             TestTools.setShipModel(ship, 100, 0, 10);
-            let weapon = new DeployDroneAction("testdrone", { power: 2 }, { deploy_distance: 300, drone_radius: 30, drone_effects: [new AttributeEffect("precision", 15)] });
+            let weapon = new DeployDroneAction("testdrone", { power: 2 }, { deploy_distance: 300, drone_radius: 30, drone_effects: [new AttributeEffect("evasion", 15)] });
             ship.actions.addCustom(weapon);
             let engine = TestTools.addEngine(ship, 1000);
 
@@ -56,9 +56,9 @@ module TK.SpaceTac {
 
             drone.effects = [
                 new DamageEffect(5),
-                new AttributeEffect("precision", 1)
+                new AttributeEffect("evasion", 1)
             ]
-            check.equals(drone.getDescription(), "While deployed:\n• do 5 damage\n• precision +1");
+            check.equals(drone.getDescription(), "While deployed:\n• do 5 damage\n• evasion +1");
         });
     });
 }

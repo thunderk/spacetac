@@ -7,45 +7,45 @@ module TK.SpaceTac.Specs {
             let ship = battle.fleets[0].addShip();
 
             TestTools.diffChain(check, battle, [
-                new ShipAttributeDiff(ship, "precision", { cumulative: 5 }, {}),
-                new ShipAttributeDiff(ship, "maneuvrability", { cumulative: 8 }, {}),
-                new ShipAttributeDiff(ship, "precision", { cumulative: 2 }, {}),
-                new ShipAttributeDiff(ship, "precision", { cumulative: 4 }, { cumulative: 5 }),
-                new ShipAttributeDiff(ship, "maneuvrability", { multiplier: 50 }, {}),
-                new ShipAttributeDiff(ship, "maneuvrability", { limit: 2 }, {}),
-                new ShipAttributeDiff(ship, "maneuvrability", {}, { multiplier: 50, limit: 2 }),
+                new ShipAttributeDiff(ship, "power_capacity", { cumulative: 5 }, {}),
+                new ShipAttributeDiff(ship, "evasion", { cumulative: 8 }, {}),
+                new ShipAttributeDiff(ship, "power_capacity", { cumulative: 2 }, {}),
+                new ShipAttributeDiff(ship, "power_capacity", { cumulative: 4 }, { cumulative: 5 }),
+                new ShipAttributeDiff(ship, "evasion", { multiplier: 50 }, {}),
+                new ShipAttributeDiff(ship, "evasion", { limit: 2 }, {}),
+                new ShipAttributeDiff(ship, "evasion", {}, { multiplier: 50, limit: 2 }),
             ], [
                     check => {
-                        check.equals(ship.getAttribute("precision"), 0, "precision value");
-                        check.equals(ship.getAttribute("maneuvrability"), 0, "maneuvrability value");
+                        check.equals(ship.getAttribute("power_capacity"), 0, "power capacity value");
+                        check.equals(ship.getAttribute("evasion"), 0, "evasion value");
                     },
                     check => {
-                        check.equals(ship.getAttribute("precision"), 5, "precision value");
-                        check.equals(ship.getAttribute("maneuvrability"), 0, "maneuvrability value");
+                        check.equals(ship.getAttribute("power_capacity"), 5, "power capacity value");
+                        check.equals(ship.getAttribute("evasion"), 0, "evasion value");
                     },
                     check => {
-                        check.equals(ship.getAttribute("precision"), 5, "precision value");
-                        check.equals(ship.getAttribute("maneuvrability"), 8, "maneuvrability value");
+                        check.equals(ship.getAttribute("power_capacity"), 5, "power capacity value");
+                        check.equals(ship.getAttribute("evasion"), 8, "evasion value");
                     },
                     check => {
-                        check.equals(ship.getAttribute("precision"), 7, "precision value");
-                        check.equals(ship.getAttribute("maneuvrability"), 8, "maneuvrability value");
+                        check.equals(ship.getAttribute("power_capacity"), 7, "power capacity value");
+                        check.equals(ship.getAttribute("evasion"), 8, "evasion value");
                     },
                     check => {
-                        check.equals(ship.getAttribute("precision"), 6, "precision value");
-                        check.equals(ship.getAttribute("maneuvrability"), 8, "maneuvrability value");
+                        check.equals(ship.getAttribute("power_capacity"), 6, "power capacity value");
+                        check.equals(ship.getAttribute("evasion"), 8, "evasion value");
                     },
                     check => {
-                        check.equals(ship.getAttribute("precision"), 6, "precision value");
-                        check.equals(ship.getAttribute("maneuvrability"), 12, "maneuvrability value");
+                        check.equals(ship.getAttribute("power_capacity"), 6, "power capacity value");
+                        check.equals(ship.getAttribute("evasion"), 12, "evasion value");
                     },
                     check => {
-                        check.equals(ship.getAttribute("precision"), 6, "precision value");
-                        check.equals(ship.getAttribute("maneuvrability"), 2, "maneuvrability value");
+                        check.equals(ship.getAttribute("power_capacity"), 6, "power capacity value");
+                        check.equals(ship.getAttribute("evasion"), 2, "evasion value");
                     },
                     check => {
-                        check.equals(ship.getAttribute("precision"), 6, "precision value");
-                        check.equals(ship.getAttribute("maneuvrability"), 8, "maneuvrability value");
+                        check.equals(ship.getAttribute("power_capacity"), 6, "power capacity value");
+                        check.equals(ship.getAttribute("evasion"), 8, "evasion value");
                     },
                 ])
         });

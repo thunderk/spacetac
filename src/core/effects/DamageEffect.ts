@@ -25,24 +25,15 @@ module TK.SpaceTac {
         // Damage mode
         mode: DamageEffectMode
 
-        constructor(value: number, mode = DamageEffectMode.SHIELD_OR_HULL) {
+        // Evadable damage (applies evasion)
+        evadable: boolean
+
+        constructor(value: number, mode = DamageEffectMode.SHIELD_OR_HULL, evadable = true) {
             super("damage");
 
             this.value = value;
             this.mode = mode;
-        }
-
-        /**
-         * Apply damage modifiers to get the final damage factor
-         */
-        getFactor(ship: Ship): number {
-            let percent = 0;
-            iforeach(ship.ieffects(), effect => {
-                if (effect instanceof DamageModifierEffect) {
-                    percent += effect.factor;
-                }
-            });
-            return (clamp(percent, -100, 100) + 100) / 100;
+            this.evadable = true;
         }
 
         /**
@@ -54,8 +45,9 @@ module TK.SpaceTac {
             let dhull = 0;
             let dshield = 0;
 
-            // Apply modifiers
-            let damage = Math.round(this.value * this.getFactor(ship));
+            // Apply evasion
+            let evaded = this.evadable ? Math.min(this.value, ship.getAttribute("evasion")) : 0;
+            let damage = this.value - evaded;
 
             // Split in shield/hull damage
             if (this.mode == DamageEffectMode.HULL_ONLY) {
@@ -73,7 +65,7 @@ module TK.SpaceTac {
                 dhull = Math.min(damage - dshield, hull);
             }
 
-            return new ShipDamageDiff(ship, dhull, dshield, damage);
+            return new ShipDamageDiff(ship, dhull, dshield, evaded, this.value);
         }
 
         getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {

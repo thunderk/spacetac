@@ -28,8 +28,8 @@ module TK.SpaceTac.Specs {
             check.contains(maneuver.effects, new ShipValueDiff(ship2, "shield", -50), "ship2 shield value");
             check.contains(maneuver.effects, new ShipValueDiff(ship3, "shield", -30), "ship3 shield value");
             check.contains(maneuver.effects, new ShipValueDiff(ship3, "hull", -20), "ship3 hull value");
-            check.contains(maneuver.effects, new ShipDamageDiff(ship2, 0, 50, 50), "ship2 damage");
-            check.contains(maneuver.effects, new ShipDamageDiff(ship3, 20, 30, 50), "ship3 damage");
+            check.contains(maneuver.effects, new ShipDamageDiff(ship2, 0, 50, 0, 50), "ship2 damage");
+            check.contains(maneuver.effects, new ShipDamageDiff(ship3, 20, 30, 0, 50), "ship3 damage");
         });
     });
 }

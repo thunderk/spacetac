@@ -34,8 +34,7 @@ module TK.SpaceTac {
                     {
                         code: "Commodore Base",
                         effects: [
-                            new AttributeEffect("precision", 5),
-                            new AttributeEffect("maneuvrability", 6),
+                            new AttributeEffect("initiative", 2),
                             new AttributeEffect("hull_capacity", 2),
                             new AttributeEffect("shield_capacity", 1),
                             new AttributeEffect("power_capacity", 8),
