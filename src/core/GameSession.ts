@@ -94,8 +94,7 @@ module TK.SpaceTac {
          */
         setCampaignFleet(fleet: Fleet | null = null, story = true) {
             if (fleet) {
-                this.player.fleet = fleet;
-                fleet.setPlayer(this.player);
+                this.player.setFleet(fleet);
             } else {
                 let fleet_generator = new FleetGenerator();
                 this.player.fleet = fleet_generator.generate(1, this.player, 2);
@@ -112,10 +111,11 @@ module TK.SpaceTac {
          * Start a new "quick battle" game
          */
         startQuickBattle(with_ai: boolean = false): void {
+            this.player = new Player();
             this.universe = new Universe();
 
             let battle = Battle.newQuickRandom(true, RandomGenerator.global.randInt(1, 10));
-            battle.fleets[0].setPlayer(this.player);
+            this.player.setFleet(battle.fleets[0]);
             this.player.setBattle(battle);
 
             this.reactions = new PersonalityReactions();

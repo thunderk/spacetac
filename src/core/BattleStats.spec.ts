@@ -25,17 +25,17 @@ module TK.SpaceTac.Specs {
             stats.processLog(battle.log, battle.fleets[0]);
             check.equals(stats.stats, {});
 
-            battle.log.add(new ShipDamageDiff(attacker, 10, 12));
+            battle.log.add(new ShipDamageDiff(attacker, 1, 3, 2));
             stats.processLog(battle.log, battle.fleets[0], true);
-            check.equals(stats.stats, { "Damage dealt": [0, 22] });
+            check.equals(stats.stats, { "Damage to hull": [0, 1], "Damage shielded": [0, 3], "Damage evaded": [0, 2] });
 
-            battle.log.add(new ShipDamageDiff(defender, 40, 0));
+            battle.log.add(new ShipDamageDiff(defender, 2, 1, 3));
             stats.processLog(battle.log, battle.fleets[0], true);
-            check.equals(stats.stats, { "Damage dealt": [40, 22] });
+            check.equals(stats.stats, { "Damage to hull": [2, 1], "Damage shielded": [1, 3], "Damage evaded": [3, 2] });
 
-            battle.log.add(new ShipDamageDiff(attacker, 5, 4));
+            battle.log.add(new ShipDamageDiff(attacker, 1, 1, 1));
             stats.processLog(battle.log, battle.fleets[0], true);
-            check.equals(stats.stats, { "Damage dealt": [40, 31] });
+            check.equals(stats.stats, { "Damage to hull": [2, 2], "Damage shielded": [1, 4], "Damage evaded": [3, 3] });
         })
 
         test.case("collects distance moved", check => {

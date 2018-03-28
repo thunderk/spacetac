@@ -31,7 +31,6 @@ Character sheet
 Battle
 ------
 
-* Fix stats only filling for one fleet
 * Display shield (and its (dis)appearance)
 * Display estimated damage and displacement in targetting mode
 * Add a voluntary retreat option

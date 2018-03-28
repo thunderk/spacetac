@@ -33,6 +33,14 @@ module TK.SpaceTac {
         }
 
         /**
+         * Set the fleet for this player
+         */
+        setFleet(fleet: Fleet): void {
+            this.fleet = fleet;
+            fleet.setPlayer(this);
+        }
+
+        /**
          * Get a cheats object
          */
         getCheats(): BattleCheats | null {

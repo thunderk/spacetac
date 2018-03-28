@@ -36,6 +36,15 @@ module TK.SpaceTac.Specs {
             compare(loaded_session, session);
         });
 
+        test.case("generates a quick battle", check => {
+            var session = new GameSession();
+            session.startQuickBattle();
+
+            check.same(session.getBattle(), session.player.fleet.battle, "battle");
+            check.same(session.player.fleet, session.fleet, "fleet");
+            check.same(nn(session.getBattle()).fleets[0], session.fleet, "attacker fleet");
+        });
+
         test.case("applies battle outcome to bound player", check => {
             let session = new GameSession();
             check.equals(session.getBattle(), null);
