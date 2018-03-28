@@ -57,6 +57,7 @@ module TK.SpaceTac.Specs {
             check.equals(new DamageEffect(10, DamageEffectMode.HULL_ONLY).getDescription(), "do 10 hull damage");
             check.equals(new DamageEffect(10, DamageEffectMode.SHIELD_ONLY).getDescription(), "do 10 shield damage");
             check.equals(new DamageEffect(10, DamageEffectMode.SHIELD_THEN_HULL).getDescription(), "do 10 piercing damage");
+            check.equals(new DamageEffect(10, DamageEffectMode.SHIELD_ONLY, false).getDescription(), "do 10 unevadable shield damage");
         });
     });
 }

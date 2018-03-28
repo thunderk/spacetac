@@ -18,7 +18,7 @@ module TK.SpaceTac {
                 engine.configureCooldown(1, 1);
 
                 let protector = new ToggleAction("Damage Protector", {
-                    power: 4,
+                    power: 3,
                     radius: 300,
                     effects: [new AttributeEffect("evasion", 1)]
                 });
@@ -31,7 +31,7 @@ module TK.SpaceTac {
                 depleter.configureCooldown(1, 1);
 
                 let missile = new TriggerAction("Defense Missiles", {
-                    effects: [new DamageEffect(2)],
+                    effects: [new DamageEffect(3, DamageEffectMode.SHIELD_THEN_HULL)],
                     power: 3,
                     range: 200, blast: 180,
                 }, "submunitionmissile");
@@ -43,7 +43,7 @@ module TK.SpaceTac {
                             new AttributeEffect("evasion", 1),
                             new AttributeEffect("hull_capacity", 1),
                             new AttributeEffect("shield_capacity", 2),
-                            new AttributeEffect("power_capacity", 8),
+                            new AttributeEffect("power_capacity", 6),
                         ]
                     },
                     {

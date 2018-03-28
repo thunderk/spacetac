@@ -13,7 +13,7 @@ module TK.SpaceTac {
         getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
-                    distance_per_power: 140,
+                    distance_per_power: 120,
                 });
 
                 let gatling = new TriggerAction("Gatling Gun", {
@@ -24,7 +24,7 @@ module TK.SpaceTac {
                 gatling.configureCooldown(2, 2);
 
                 let laser = new TriggerAction("Prokhorov Laser", {
-                    effects: [new DamageEffect(2)],
+                    effects: [new DamageEffect(3)],
                     power: 4,
                     range: 250, angle: 60,
                 }, "prokhorovlaser");
@@ -35,8 +35,8 @@ module TK.SpaceTac {
                         effects: [
                             new AttributeEffect("initiative", 1),
                             new AttributeEffect("hull_capacity", 3),
-                            new AttributeEffect("shield_capacity", 1),
-                            new AttributeEffect("power_capacity", 9),
+                            new AttributeEffect("shield_capacity", 3),
+                            new AttributeEffect("power_capacity", 6),
                         ]
                     },
                     {

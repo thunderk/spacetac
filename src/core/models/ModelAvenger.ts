@@ -12,7 +12,7 @@ module TK.SpaceTac {
 
         getLevelUpgrades(level: number): ShipUpgrade[] {
             let engine = new MoveAction("Engine", {
-                distance_per_power: 50,
+                distance_per_power: 60,
                 safety_distance: 250,
             });
             engine.configureCooldown(1, 1);
@@ -39,8 +39,8 @@ module TK.SpaceTac {
                         code: "Avenger Base",
                         effects: [
                             new AttributeEffect("hull_capacity", 2),
-                            new AttributeEffect("shield_capacity", 1),
-                            new AttributeEffect("power_capacity", 8),
+                            new AttributeEffect("shield_capacity", 2),
+                            new AttributeEffect("power_capacity", 4),
                         ]
                     },
                     {

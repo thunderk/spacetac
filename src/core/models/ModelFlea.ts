@@ -13,7 +13,7 @@ module TK.SpaceTac {
         getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
-                    distance_per_power: 400,
+                    distance_per_power: 420,
                 });
 
                 let depleter = new TriggerAction("Power Depleter", {
@@ -23,11 +23,11 @@ module TK.SpaceTac {
                 }, "powerdepleter");
                 depleter.configureCooldown(1, 1);
 
-                let gatling = new TriggerAction("Gatling Gun", {
-                    effects: [new DamageEffect(1)],
+                let gatling = new TriggerAction("Shield Basher", {
+                    effects: [new DamageEffect(2, DamageEffectMode.SHIELD_ONLY, false)],
                     power: 3,
                     range: 300,
-                }, "gatlinggun");
+                }, "submunitionmissile");
                 gatling.configureCooldown(2, 1);
 
                 return [
@@ -38,7 +38,7 @@ module TK.SpaceTac {
                             new AttributeEffect("evasion", 1),
                             new AttributeEffect("hull_capacity", 1),
                             new AttributeEffect("shield_capacity", 2),
-                            new AttributeEffect("power_capacity", 8),
+                            new AttributeEffect("power_capacity", 6),
                         ]
                     },
                     {

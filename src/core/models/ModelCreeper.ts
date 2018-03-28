@@ -13,7 +13,7 @@ module TK.SpaceTac {
         getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
-                    distance_per_power: 220,
+                    distance_per_power: 240,
                 });
 
                 let gatling = new TriggerAction("Gatling Gun", {
@@ -43,9 +43,9 @@ module TK.SpaceTac {
                         code: "Creeper Base",
                         effects: [
                             new AttributeEffect("initiative", 3),
-                            new AttributeEffect("hull_capacity", 1),
+                            new AttributeEffect("hull_capacity", 2),
                             new AttributeEffect("shield_capacity", 2),
-                            new AttributeEffect("power_capacity", 7),
+                            new AttributeEffect("power_capacity", 5),
                         ]
                     },
                     {

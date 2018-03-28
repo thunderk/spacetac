@@ -13,12 +13,12 @@ module TK.SpaceTac {
         getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
-                    distance_per_power: 200,
+                    distance_per_power: 310,
                     safety_distance: 160,
                 });
 
                 let missile = new TriggerAction("SubMunition Missile", {
-                    effects: [new DamageEffect(1)],
+                    effects: [new DamageEffect(2)],
                     power: 3,
                     range: 400, blast: 120,
                 }, "submunitionmissile");
@@ -40,7 +40,7 @@ module TK.SpaceTac {
                         code: "Jumper Base",
                         effects: [
                             new AttributeEffect("initiative", 1),
-                            new AttributeEffect("hull_capacity", 2),
+                            new AttributeEffect("hull_capacity", 3),
                             new AttributeEffect("shield_capacity", 2),
                             new AttributeEffect("power_capacity", 6),
                         ]

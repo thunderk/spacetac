@@ -13,11 +13,11 @@ module TK.SpaceTac {
         getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
-                    distance_per_power: 150,
+                    distance_per_power: 120,
                 });
 
                 let laser = new TriggerAction("Wingspan Laser", {
-                    effects: [new DamageEffect(2, DamageEffectMode.SHIELD_THEN_HULL)],
+                    effects: [new DamageEffect(3, DamageEffectMode.SHIELD_THEN_HULL)],
                     power: 4,
                     range: 250, angle: 140,
                 }, "prokhorovlaser");
@@ -36,8 +36,8 @@ module TK.SpaceTac {
                         effects: [
                             new AttributeEffect("initiative", 2),
                             new AttributeEffect("hull_capacity", 2),
-                            new AttributeEffect("shield_capacity", 1),
-                            new AttributeEffect("power_capacity", 8),
+                            new AttributeEffect("shield_capacity", 3),
+                            new AttributeEffect("power_capacity", 5),
                         ]
                     },
                     {

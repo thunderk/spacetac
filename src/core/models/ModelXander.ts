@@ -13,7 +13,7 @@ module TK.SpaceTac {
         getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
-                    distance_per_power: 150,
+                    distance_per_power: 280,
                 });
 
                 let laser = new TriggerAction("Prokhorov Laser", {
@@ -39,10 +39,10 @@ module TK.SpaceTac {
                         code: "Xander Base",
                         effects: [
                             new AttributeEffect("initiative", 1),
-                            new AttributeEffect("evasion", 1),
+                            new AttributeEffect("evasion", 2),
                             new AttributeEffect("hull_capacity", 2),
                             new AttributeEffect("shield_capacity", 1),
-                            new AttributeEffect("power_capacity", 7),
+                            new AttributeEffect("power_capacity", 6),
                         ]
                     },
                     {

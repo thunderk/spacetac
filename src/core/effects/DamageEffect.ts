@@ -33,7 +33,7 @@ module TK.SpaceTac {
 
             this.value = value;
             this.mode = mode;
-            this.evadable = true;
+            this.evadable = evadable;
         }
 
         /**
@@ -98,7 +98,12 @@ module TK.SpaceTac {
                 mode = " piercing";
             }
 
-            return `do ${this.value}${mode} damage`;
+            let modifier = "";
+            if (!this.evadable) {
+                modifier = " unevadable";
+            }
+
+            return `do ${this.value}${modifier}${mode} damage`;
         }
     }
 }
