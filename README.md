@@ -109,12 +109,11 @@ For battle purpose, the ship is to be considered "dead".
 
 Attributes represent a ship's ability to use its HSP system and weapons:
 
+* **Initiative** - Capacity to play before others in a battle
 * **Hull capacity** - Maximal Hull value (when the battle starts)
 * **Shield capacity** - Maximal Shield value (when the battle starts)
 * **Power capacity** - Maximal Power value
-* **Power generation** - Power generated at the end of a ship's turn
-* **Maneuverability** - Ability to move first and fast
-* **Precision** - Ability to target far and good
+* **Evasion** - Reduces incoming evadable damage
 
 These attributes are the sum of all currently applied effects (permanent effects from the ship design,
 or temporary effects caused by a weapon or a drone).
@@ -124,13 +123,11 @@ or temporary effects caused by a weapon or a drone).
 ### Drones
 
 Drones are static objects, deployed by ships, that apply effects in a circular zone around themselves.
+They are small and cannot be the target of weapons or other effects.
 
-Drones activate between two ship turns. At each activation, the drone effects are applied to any ship
-in the surrounding zone. A drone will live for a given number of activations, before being destroyed.
-
-Drones are fully autonomous, and once deployed, are not controlled by their owner ship.
-
-They are small and cannot be the direct target of weapons.
+Drones consume power while deployed, that is restituted when recalled. At the end of the owner ship's
+turn, power consumption of all deployed drones is removed from generated power (if your starting power
+is 7, but have 2 drones with 3 power consumption, you will start the turn with 1 power).
 
 ### Overheat/Cooldown
 
@@ -139,6 +136,19 @@ Equipments may overheat, and need to cooldown for some time, during which it can
 If an action has "overheat 2 / cooldown 3", using it twice in the same turn will cause it to
 overheat. It then needs three "end of turns" to cool down and be available again. Using this action
 only once per turn is safe, and will never overheat it.
+
+### Damage
+
+There are four types of damage:
+
+* Hull (damages the hull directly)
+* Shield (damages the shield directly, do nothing if there is no more shield)
+* Basic (will either be absorbed by shield, reducing its value, or by the hull when there is no shield)
+* Piercing (will reduce the shield and continue with the hull if the shield reaches 0)
+
+The default damage type when unspecified is *Basic*.
+
+Some damage may be evadable (a 3 damage will be reduced to 2 on a ship with evasion=1), some not.
 
 ## Keyboard shortcuts
 
