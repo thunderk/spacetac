@@ -13,34 +13,27 @@ module TK.SpaceTac {
         getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
                 let engine = new MoveAction("Engine", {
-                    distance_per_power: 160,
+                    distance_per_power: 120,
                 });
 
                 let gatling1 = new TriggerAction("Primary Gatling", {
                     effects: [new DamageEffect(3)],
                     power: 2, range: 400
                 }, "gatlinggun");
-                gatling1.configureCooldown(1, 1);
+                gatling1.configureCooldown(1, 2);
 
                 let gatling2 = new TriggerAction("Secondary Gatling", {
                     effects: [new DamageEffect(2)],
                     power: 1, range: 200
                 }, "gatlinggun");
-                gatling2.configureCooldown(1, 1);
+                gatling2.configureCooldown(1, 2);
 
                 let missile = new TriggerAction("Diffuse Missiles", {
                     effects: [new DamageEffect(2)],
                     power: 2,
                     range: 200, blast: 100,
                 }, "submunitionmissile");
-                missile.configureCooldown(1, 1);
-
-                let laser = new TriggerAction("Low-power Laser", {
-                    effects: [new DamageEffect(2)],
-                    power: 2,
-                    range: 200, angle: 30
-                }, "prokhorovlaser");
-                laser.configureCooldown(1, 1);
+                missile.configureCooldown(1, 2);
 
                 let cooler = new TriggerAction("Circuits Cooler", {
                     effects: [new CooldownEffect(1, 1)],
@@ -54,7 +47,7 @@ module TK.SpaceTac {
                             new AttributeEffect("initiative", 2),
                             new AttributeEffect("hull_capacity", 2),
                             new AttributeEffect("shield_capacity", 1),
-                            new AttributeEffect("power_capacity", 7),
+                            new AttributeEffect("power_capacity", 5),
                         ]
                     },
                     {
@@ -72,10 +65,6 @@ module TK.SpaceTac {
                     {
                         code: "SubMunition Missile",
                         actions: [missile]
-                    },
-                    {
-                        code: "Laser",
-                        actions: [laser]
                     },
                     {
                         code: "Cooler",

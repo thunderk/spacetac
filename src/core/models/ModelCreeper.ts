@@ -30,11 +30,11 @@ module TK.SpaceTac {
                 }, "gravitshield");
                 repulse.configureCooldown(1, 1);
 
-                let repairdrone = new DeployDroneAction("Repair Drone", { power: 3 }, {
+                let repairdrone = new DeployDroneAction("Repair Drone", { power: 3, filter: ActionTargettingFilter.ALLIES }, {
                     deploy_distance: 300,
                     drone_radius: 150,
                     drone_effects: [
-                        new ValueEffect("hull", undefined, undefined, undefined, 1)
+                        new ValueEffect("hull", 0, 0, 0, 1)
                     ]
                 }, "repairdrone");
 

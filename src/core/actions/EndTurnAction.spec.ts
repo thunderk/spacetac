@@ -164,7 +164,7 @@ module TK.SpaceTac.Specs {
             ship.active_effects.add(effect1);
             ship.active_effects.add(effect2);
             effect2.base.getOnDiffs(ship, ship).forEach(effect => effect.apply(battle));
-            check.patch(battle, "iAreaEffects", () => isingle(effect1));
+            check.patch(battle, "getAreaEffects", (): [Ship, BaseEffect][] => [[ship, effect1]]);
 
             TestTools.actionChain(check, battle, [
                 [ship, EndTurnAction.SINGLETON, Target.newFromShip(ship)],

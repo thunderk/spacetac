@@ -61,11 +61,44 @@ module TK.SpaceTac.Specs {
             let effect1 = ship1.active_effects.add(new StickyEffect(new BaseEffect("e1")));
             let effect2 = ship1.active_effects.add(new BaseEffect("e2"));
             let effect3 = ship1.active_effects.add(new BaseEffect("e3"));
-            check.patch(battle, "iAreaEffects", () => isingle(effect3));
+            check.patch(battle, "getAreaEffects", (): [Ship, BaseEffect][] => [[ship1, effect3]]);
             check.in("sticky+obsolete+missing", check => {
                 check.equals(checks.checkAreaEffects(), [
                     new ShipEffectRemovedDiff(ship1, effect2),
                     new ShipEffectAddedDiff(ship2, effect3)
+                ], "effects diff");
+            });
+        })
+
+        test.case("applies vigilance actions", check => {
+            let battle = new Battle();
+            let ship1 = battle.fleets[0].addShip();
+            ship1.setArenaPosition(100, 100);
+            TestTools.setShipModel(ship1, 10, 0, 5);
+            let ship2 = battle.fleets[1].addShip();
+            ship2.setArenaPosition(1000, 1000);
+            TestTools.setShipModel(ship2, 10);
+            TestTools.setShipPlaying(battle, ship1);
+
+            let vig1 = ship1.actions.addCustom(new VigilanceAction("Vig1", { radius: 100, filter: ActionTargettingFilter.ENEMIES }, { intruder_effects: [new DamageEffect(1)] }));
+            let vig2 = ship1.actions.addCustom(new VigilanceAction("Vig2", { radius: 50, filter: ActionTargettingFilter.ENEMIES }, { intruder_effects: [new DamageEffect(2)] }));
+            let vig3 = ship1.actions.addCustom(new VigilanceAction("Vig3", { radius: 100, filter: ActionTargettingFilter.ALLIES }, { intruder_effects: [new DamageEffect(3)] }));
+            battle.applyOneAction(vig1.id);
+            battle.applyOneAction(vig2.id);
+            battle.applyOneAction(vig3.id);
+
+            let checks = new BattleChecks(battle);
+            check.in("initial state", check => {
+                check.equals(checks.checkAreaEffects(), [], "effects diff");
+            });
+
+            ship2.setArenaPosition(100, 160);
+            check.in("ship2 moved in range", check => {
+                check.equals(checks.checkAreaEffects(), [
+                    new ShipEffectAddedDiff(ship2, vig1.effects[0]),
+                    new VigilanceAppliedDiff(ship1, vig1, ship2),
+                    new ShipDamageDiff(ship2, 1, 0),
+                    new ShipValueDiff(ship2, "hull", -1),
                 ], "effects diff");
             });
         })

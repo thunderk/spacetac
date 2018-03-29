@@ -72,14 +72,14 @@ module TK.SpaceTac.Specs {
             let ships = [ship1, ship2, ship3];
 
             let action = new TriggerAction("testaction", { range: 50 });
-            check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromShip(ship2), ships), [ship2]);
-            check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromLocation(10, 50), ships), []);
+            check.equals(action.filterImpactedShips(ship1, { x: 0, y: 0 }, Target.newFromShip(ship2), ships), [ship2]);
+            check.equals(action.filterImpactedShips(ship1, { x: 0, y: 0 }, Target.newFromLocation(10, 50), ships), []);
 
             action = new TriggerAction("testaction", { range: 50, blast: 40 });
-            check.equals(action.filterImpactedShips({ x: 0, y: 0 }, Target.newFromLocation(20, 20), ships), [ship1, ship3]);
+            check.equals(action.filterImpactedShips(ship1, { x: 0, y: 0 }, Target.newFromLocation(20, 20), ships), [ship1, ship3]);
 
             action = new TriggerAction("testaction", { range: 100, angle: 30 });
-            check.equals(action.filterImpactedShips({ x: 0, y: 51 }, Target.newFromLocation(30, 50), ships), [ship1, ship2]);
+            check.equals(action.filterImpactedShips(ship1, { x: 0, y: 51 }, Target.newFromLocation(30, 50), ships), [ship1, ship2]);
         })
 
         test.case("guesses targetting mode", check => {

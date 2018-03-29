@@ -91,5 +91,26 @@ module TK.SpaceTac.Specs {
             cooldown.cool();
             check.equals(action.checkCannotBeApplied(ship), null);
         })
+
+        test.case("helps applying a targetting filter", check => {
+            let fleet1 = new Fleet();
+            let fleet2 = new Fleet();
+            let ship1a = fleet1.addShip();
+            let ship1b = fleet1.addShip();
+            let ship2a = fleet2.addShip();
+            let ship2b = fleet2.addShip();
+            let ships = [ship1a, ship1b, ship2a, ship2b];
+
+            check.equals(BaseAction.filterTargets(ship1a, ships, ActionTargettingFilter.ALL),
+                [ship1a, ship1b, ship2a, ship2b], "ALL");
+            check.equals(BaseAction.filterTargets(ship1a, ships, ActionTargettingFilter.ALL_BUT_SELF),
+                [ship1b, ship2a, ship2b], "ALL_BUT_SELF");
+            check.equals(BaseAction.filterTargets(ship1a, ships, ActionTargettingFilter.ALLIES),
+                [ship1a, ship1b], "ALLIES");
+            check.equals(BaseAction.filterTargets(ship1a, ships, ActionTargettingFilter.ALLIES_BUT_SELF),
+                [ship1b], "ALLIES_BUT_SELF");
+            check.equals(BaseAction.filterTargets(ship1a, ships, ActionTargettingFilter.ENEMIES),
+                [ship2a, ship2b], "ENEMIES");
+        });
     });
 }

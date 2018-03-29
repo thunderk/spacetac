@@ -295,13 +295,13 @@ module TK.SpaceTac.UI.Specs {
 
             check.patch(UITools, "getScreenBounds", (obj: any) => {
                 if (obj === c1) {
-                    return { width: 100, height: 51 };
+                    return { x: 0, y: 0, width: 100, height: 51 };
                 } else if (obj === c2) {
-                    return { width: 20, height: 7 };
+                    return { x: 0, y: 0, width: 20, height: 7 };
                 } else if (obj === c3) {
-                    return { width: 60, height: 11 };
+                    return { x: 0, y: 0, width: 60, height: 11 };
                 } else {
-                    return { width: 0, height: 0 };
+                    return { x: 0, y: 0, width: 0, height: 0 };
                 }
             });
 

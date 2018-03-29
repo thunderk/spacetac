@@ -2,13 +2,12 @@ module TK.SpaceTac.Specs {
     testing("ShipModel", test => {
         test.case("picks random models from default collection", check => {
             check.patch(console, "error", null);
-            check.patch(ShipModel, "getDefaultCollection", iterator([
+            check.patch(ShipModel, "getDefaultCollection", nnf([], iterator([
                 [new ShipModel("a")],
                 [],
                 [new ShipModel("a"), new ShipModel("b")],
                 [new ShipModel("a")],
-                [],
-            ]));
+            ])));
 
             check.equals(ShipModel.getRandomModel(), new ShipModel("a"), "pick from a one-item list");
             check.equals(ShipModel.getRandomModel(), new ShipModel(), "pick from an empty list");

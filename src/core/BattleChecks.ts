@@ -7,9 +7,7 @@ module TK.SpaceTac {
      * To fix the state, new diffs will be applied
      */
     export class BattleChecks {
-        private battle: Battle;
-        constructor(battle: Battle) {
-            this.battle = battle;
+        constructor(private battle: Battle) {
         }
 
         /**
@@ -23,12 +21,13 @@ module TK.SpaceTac {
                 diffs = this.checkAll();
 
                 if (diffs.length > 0) {
+                    //console.log("Battle checks diffs", diffs);
                     this.battle.applyDiffs(diffs);
                 }
 
                 loops += 1;
                 if (loops >= 1000) {
-                    console.error("Battle checks locked in infinite loop", diffs);
+                    console.error("Battle checks stuck in infinite loop", diffs);
                     break;
                 }
             } while (diffs.length > 0);
@@ -124,32 +123,38 @@ module TK.SpaceTac {
         }
 
         /**
-         * Check area effects (remove obsolete ones, and add missing ones)
+         * Get the diffs to apply to a ship, if moving at a given location
          */
-        checkAreaEffects(): BaseBattleDiff[] {
+        getAreaEffectsDiff(ship: Ship): BaseBattleDiff[] {
             let result: BaseBattleDiff[] = [];
+            let expected = this.battle.getAreaEffects(ship);
+            let expected_hash = new RObjectContainer(expected.map(x => x[1]));
 
-            iforeach(this.battle.iships(true), ship => {
-                let expected = new RObjectContainer(imaterialize(this.battle.iAreaEffects(ship.arena_x, ship.arena_y)));
+            // Remove obsolete effects
+            ship.active_effects.list().forEach(effect => {
+                if (!(effect instanceof StickyEffect) && !expected_hash.get(effect.id)) {
+                    result.push(new ShipEffectRemovedDiff(ship, effect));
+                    result = result.concat(effect.getOffDiffs(ship));
+                }
+            });
 
-                // Remove obsolete effects
-                ship.active_effects.list().forEach(effect => {
-                    if (!(effect instanceof StickyEffect) && !expected.get(effect.id)) {
-                        result.push(new ShipEffectRemovedDiff(ship, effect));
-                        result = result.concat(effect.getOffDiffs(ship));
-                    }
-                });
-
-                // Add missing effects
-                expected.list().forEach(effect => {
-                    if (!ship.active_effects.get(effect.id)) {
-                        result.push(new ShipEffectAddedDiff(ship, effect));
-                        result = result.concat(effect.getOnDiffs(ship, ship));  // TODO correct source
-                    }
-                });
+            // Add missing effects
+            expected.forEach(([source, effect]) => {
+                if (!ship.active_effects.get(effect.id)) {
+                    result.push(new ShipEffectAddedDiff(ship, effect));
+                    result = result.concat(effect.getOnDiffs(ship, source));
+                }
             });
 
             return result;
+        }
+
+        /**
+         * Check area effects (remove obsolete ones, and add missing ones)
+         */
+        checkAreaEffects(): BaseBattleDiff[] {
+            let ships = imaterialize(this.battle.iships(true));
+            return flatten(ships.map(ship => this.getAreaEffectsDiff(ship)));
         }
     }
 }

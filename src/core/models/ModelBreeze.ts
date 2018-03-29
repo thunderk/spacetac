@@ -23,7 +23,7 @@ module TK.SpaceTac {
                     power: 2,
                     range: 200,
                 }, "gatlinggun");
-                gatling.configureCooldown(3, 1);
+                gatling.configureCooldown(2, 1);
 
                 let shield_steal = new TriggerAction("Shield Steal", {
                     effects: [new ValueTransferEffect("shield", -1)],

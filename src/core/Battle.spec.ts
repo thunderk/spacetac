@@ -280,8 +280,10 @@ module TK.SpaceTac {
         test.case("lists area effects", check => {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
+            let peer = battle.fleets[1].addShip();
+            peer.setArenaPosition(100, 50);
 
-            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [], "initial");
+            check.equals(battle.getAreaEffects(peer), [], "initial");
 
             let drone1 = new Drone(ship);
             drone1.x = 120;
@@ -296,7 +298,7 @@ module TK.SpaceTac {
             drone2.effects = [new DamageEffect(14)];
             battle.addDrone(drone2);
 
-            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [drone1.effects[0]], "drone effects");
+            check.equals(battle.getAreaEffects(peer), [[drone1, drone1.effects[0]]], "drone effects");
 
             let eq1 = new ToggleAction("eq1", { power: 0, radius: 500, effects: [new AttributeEffect("initiative", 1)] });
             ship.actions.addCustom(eq1);
@@ -308,9 +310,9 @@ module TK.SpaceTac {
             ship.actions.addCustom(eq3);
             ship.actions.toggle(eq3, true);
 
-            check.equals(imaterialize(battle.iAreaEffects(100, 50)), [
-                drone1.effects[0],
-                eq1.effects[0],
+            check.equals(battle.getAreaEffects(peer), [
+                [drone1, drone1.effects[0]],
+                [ship, eq1.effects[0]],
             ], "drone and toggle effects");
         });
 

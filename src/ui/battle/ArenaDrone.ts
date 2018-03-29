@@ -25,8 +25,8 @@ module TK.SpaceTac.UI {
             this.drone = drone;
 
             this.radius = new Phaser.Graphics(this.game, 0, 0);
-            this.radius.lineStyle(2, 0xe9f2f9, 0.3);
-            this.radius.beginFill(0xe9f2f9, 0.0);
+            this.radius.lineStyle(2, 0xe9f2f9, 0.5);
+            this.radius.beginFill(0xe9f2f9, 0.1);
             this.radius.drawCircle(0, 0, drone.radius * 2);
             this.radius.endFill();
             this.add(this.radius);

@@ -328,15 +328,23 @@ module TK.SpaceTac {
         }
 
         /**
-         * Get the list of area effects at a given location
+         * Get the list of area effects that are expected to apply on a given ship
          */
-        iAreaEffects(x: number, y: number): Iterator<BaseEffect> {
-            let drones_in_range = ifilter(this.drones.iterator(), drone => drone.isInRange(x, y));
+        getAreaEffects(ship: Ship): [Ship | Drone, BaseEffect][] {
+            let drone_effects = this.drones.list().map(drone => {
+                // FIXME Should apply filterImpactedShips from drone action
+                if (drone.isInRange(ship.arena_x, ship.arena_y)) {
+                    return drone.effects.map((effect): [Ship | Drone, BaseEffect] => [drone, effect]);
+                } else {
+                    return [];
+                }
+            });
 
-            return ichain(
-                ichainit(imap(drones_in_range, drone => iarray(drone.effects))),
-                ichainit(imap(this.iships(), ship => ship.iAreaEffects(x, y)))
-            );
+            let ships_effects = this.ships.list().map(iship => {
+                return iship.getAreaEffects(ship).map((effect): [Ship | Drone, BaseEffect] => [iship, effect]);
+            });
+
+            return flatten(drone_effects.concat(ships_effects));
         }
 
         /**

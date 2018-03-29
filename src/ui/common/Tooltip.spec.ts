@@ -5,13 +5,13 @@ module TK.SpaceTac.UI.Specs {
 
         test.case("shows near the hovered button", check => {
             let button = testgame.view.add.button();
-            check.patch(button, "getBounds", () => ({ x: 100, y: 50, width: 50, height: 25 }));
+            check.patch(button, "getBounds", () => new PIXI.Rectangle(100, 50, 50, 25));
 
             let tooltip = new Tooltip(testgame.view);
             tooltip.bind(button, filler => true);
 
             let container = <Phaser.Group>(<any>tooltip).container;
-            check.patch((<any>container).content, "getBounds", () => ({ x: 0, y: 0, width: 32, height: 32 }));
+            check.patch((<any>container).content, "getBounds", () => new PIXI.Rectangle(0, 0, 32, 32));
             check.equals(container.visible, false);
 
             button.onInputOver.dispatch();

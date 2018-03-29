@@ -7,7 +7,7 @@ module TK.SpaceTac.UI.Specs {
             let inputs = testgame.view.inputs;
 
             let pointer = new Phaser.Pointer(testgame.ui, 0);
-            function newButton(): [Phaser.Button, { enter: Mock, leave: Mock, click: Mock }] {
+            function newButton(): [Phaser.Button, { enter: Mock<Function>, leave: Mock<Function>, click: Mock<Function> }] {
                 let button = new Phaser.Button(testgame.ui);
                 let mocks = {
                     enter: check.mockfunc("enter"),

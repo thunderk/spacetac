@@ -23,6 +23,7 @@ module TK.SpaceTac {
                 }, "submunitionmissile");
                 missile.configureCooldown(2, 2);
 
+                // TODO targetting enemies only
                 let gatling = new TriggerAction("Multi-head Gatling", {
                     effects: [new DamageEffect(2)],
                     power: 2,

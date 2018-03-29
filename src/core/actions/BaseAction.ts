@@ -18,6 +18,24 @@ module TK.SpaceTac {
     }
 
     /**
+     * Targetting filter for an action.
+     * 
+     * This will filter ships inside the targetted area, to determine which will receive the action effects.
+     */
+    export enum ActionTargettingFilter {
+        // Apply on all ships
+        ALL,
+        // Apply on all ships except the actor
+        ALL_BUT_SELF,
+        // Apply on all allies, including the actor
+        ALLIES,
+        // Apply on all allies, except the actor
+        ALLIES_BUT_SELF,
+        // Apply on all enemies
+        ENEMIES
+    }
+
+    /**
      * Base class for a battle action.
      * 
      * An action should be the only way to modify a battle state.
@@ -139,7 +157,7 @@ module TK.SpaceTac {
          * 
          * This may be used as an indicator for helping the player in targetting, or to effectively apply the effects
          */
-        filterImpactedShips(source: IArenaLocation, target: Target, ships: Ship[]): Ship[] {
+        filterImpactedShips(ship: Ship, source: IArenaLocation, target: Target, ships: Ship[]): Ship[] {
             return [];
         }
 
@@ -149,9 +167,49 @@ module TK.SpaceTac {
         getImpactedShips(ship: Ship, target: Target, source: IArenaLocation = ship.location): Ship[] {
             let battle = ship.getBattle();
             if (battle) {
-                return this.filterImpactedShips(source, target, imaterialize(battle.iships(true)));
+                return this.filterImpactedShips(ship, source, target, imaterialize(battle.iships(true)));
             } else {
                 return [];
+            }
+        }
+
+        /**
+         * Helper to apply a targetting filter on a list of ships, to determine which ones are impacted
+         */
+        static filterTargets(source: Ship, ships: Ship[], filter: ActionTargettingFilter): Ship[] {
+            return ships.filter(ship => {
+                if (filter == ActionTargettingFilter.ALL) {
+                    return true;
+                } else if (filter == ActionTargettingFilter.ALL_BUT_SELF) {
+                    return !ship.is(source);
+                } else if (filter == ActionTargettingFilter.ALLIES) {
+                    return ship.fleet.player.is(source.fleet.player);
+                } else if (filter == ActionTargettingFilter.ALLIES_BUT_SELF) {
+                    return ship.fleet.player.is(source.fleet.player) && !ship.is(source);
+                } else if (filter == ActionTargettingFilter.ENEMIES) {
+                    return !ship.fleet.player.is(source.fleet.player);
+                } else {
+                    return false;
+                }
+            });
+        }
+
+        /**
+         * Get a name to represent the group of ships specified by a target filter
+         */
+        static getFilterDesc(filter: ActionTargettingFilter, plural = true): string {
+            if (filter == ActionTargettingFilter.ALL) {
+                return plural ? "ships" : "ship";
+            } else if (filter == ActionTargettingFilter.ALL_BUT_SELF) {
+                return plural ? "other ships" : "other ship";
+            } else if (filter == ActionTargettingFilter.ALLIES) {
+                return plural ? "team members" : "team member";
+            } else if (filter == ActionTargettingFilter.ALLIES_BUT_SELF) {
+                return plural ? "teammates" : "teammates";
+            } else if (filter == ActionTargettingFilter.ENEMIES) {
+                return plural ? "enemies" : "enemy";
+            } else {
+                return "";
             }
         }
 

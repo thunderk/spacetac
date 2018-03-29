@@ -31,6 +31,8 @@ Character sheet
 Battle
 ------
 
+* Improve arena ships layering (sometimes information is displayed behind other sprites)
+* In the ship tooltip, show power cost, toggled and overheat states
 * Display shield (and its (dis)appearance)
 * Display estimated damage and displacement in targetting mode
 * Add a voluntary retreat option
@@ -54,9 +56,10 @@ Battle
 Ships models and actions
 ------------------------
 
+* Fix vigilance action triggering when the ship moves with one active (moving should disable vigilance actions)
+* Fix vigilance action not disabling when reaching the maximum number of triggerings
+* Highlight the effects area that will contain the new position when move-targetting
 * Add movement attribute (for main engine action, km/power)
-* Add vigilance system, to watch if another ship enters a given radius, to be able to interrupt its turn
-* Remove safety margin for move actions (vigilance system should replace it)
 * Add damage over time effect (tricky to make intuitive)
 * Add actions with cost dependent of distance (like current move actions)
 * Add disc targetting (for some jump move actions)
@@ -102,6 +105,7 @@ Technical
 ---------
 
 * Fix "npm test" returning 0 even on failure
+* Fix "npm start" stopping when there is an error in initial build
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile
 

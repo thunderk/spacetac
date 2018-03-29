@@ -19,8 +19,8 @@ module TK.SpaceTac.Multi.Specs {
 
         test.acase("says hello on start", async check => {
             let [storage, peer1, peer2] = newExchange("abc");
-            check.patch(peer1, "getNextId", iterator(["1A", "1B", "1C"]));
-            check.patch(peer2, "getNextId", iterator(["2A", "2B", "2C"]));
+            check.patch(peer1, "getNextId", nnf("", iterator(["1A", "1B", "1C"])));
+            check.patch(peer2, "getNextId", nnf("", iterator(["2A", "2B", "2C"])));
 
             check.equals(peer1.next, "hello");
             check.equals(peer2.next, "hello");
@@ -49,8 +49,8 @@ module TK.SpaceTac.Multi.Specs {
 
             // same peers, new message chain
             [storage, peer1, peer2] = newExchange("abc", storage);
-            check.patch(peer1, "getNextId", iterator(["1R", "1S", "1T"]));
-            check.patch(peer2, "getNextId", iterator(["2R", "2S", "2T"]));
+            check.patch(peer1, "getNextId", nnf("", iterator(["1R", "1S", "1T"])));
+            check.patch(peer2, "getNextId", nnf("", iterator(["2R", "2S", "2T"])));
 
             await Promise.all([peer1.start(), peer2.start()]);
 

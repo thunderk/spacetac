@@ -263,6 +263,16 @@ module TK.SpaceTac.UI {
                         }
                     }
                 };
+            } else if (diff instanceof VigilanceAppliedDiff) {
+                let action = this.ship.actions.getById(diff.action);
+                return {
+                    foreground: async (animate, timer) => {
+                        if (animate && action) {
+                            await this.displayEffect(`${action.name} (vigilance)`, true);
+                            await timer.sleep(300);
+                        }
+                    }
+                }
             } else {
                 return {};
             }
@@ -386,7 +396,7 @@ module TK.SpaceTac.UI {
         updateActiveEffects() {
             this.active_effects_display.removeAll();
 
-            let effects = this.ship.active_effects.list();
+            let effects = this.ship.active_effects.list().filter(effect => !effect.isInternal());
 
             let count = effects.length;
             if (count) {
@@ -407,8 +417,9 @@ module TK.SpaceTac.UI {
         updateEffectsRadius(): void {
             this.effects_radius.clear();
             this.ship.actions.listToggled().forEach(action => {
-                this.effects_radius.lineStyle(2, 0xe9f2f9, 0.3);
-                this.effects_radius.beginFill(0xe9f2f9, 0.0);
+                let color = (action instanceof VigilanceAction) ? 0xf4bf42 : 0xe9f2f9;
+                this.effects_radius.lineStyle(2, color, 0.5);
+                this.effects_radius.beginFill(color, 0.1);
                 this.effects_radius.drawCircle(0, 0, action.radius * 2);
                 this.effects_radius.endFill();
             });

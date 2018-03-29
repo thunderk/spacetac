@@ -2,7 +2,7 @@
 
 module TK.SpaceTac {
     /** 
-     * Configuration of a toggle action
+     * Configuration of a drone deployment action
      */
     export interface DeployDroneActionConfig {
         // Maximal distance the drone may be deployed
@@ -61,8 +61,10 @@ module TK.SpaceTac {
             return ship.actions.isToggled(this) ? 0 : this.deploy_distance;
         }
 
-        filterImpactedShips(source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
-            return ships.filter(ship => arenaDistance(ship.location, target) <= this.drone_radius);
+        filterImpactedShips(ship: Ship, source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
+            let result = ships.filter(iship => arenaDistance(iship.location, target) <= this.radius);
+            result = BaseAction.filterTargets(ship, result, this.filter);
+            return result;
         }
 
         checkLocationTarget(ship: Ship, target: Target): Target {
@@ -96,8 +98,8 @@ module TK.SpaceTac {
 
         getEffectsDescription(): string {
             let desc = `Deploy drone (power usage ${this.power}, max range ${this.deploy_distance}km)`;
+            let suffix = `on ${BaseAction.getFilterDesc(this.filter)} in ${this.drone_radius}km radius`;
             let effects = this.drone_effects.map(effect => {
-                let suffix = `for ships in ${this.drone_radius}km radius`;
                 return "• " + effect.getDescription() + " " + suffix;
             });
             return `${desc}:\n${effects.join("\n")}`;

@@ -23,6 +23,11 @@ module TK.SpaceTac {
                 }, "prokhorovlaser");
                 laser.configureCooldown(3, 1);
 
+                let interceptors = new VigilanceAction("Interceptors Field", { radius: 200, power: 3, filter: ActionTargettingFilter.ENEMIES }, {
+                    intruder_count: 1,
+                    intruder_effects: [new DamageEffect(4, DamageEffectMode.SHIELD_THEN_HULL)]
+                }, "interceptors");
+
                 let power_steal = new TriggerAction("Power Thief", {
                     effects: [new ValueTransferEffect("power", -1)],
                     power: 1,
@@ -51,6 +56,10 @@ module TK.SpaceTac {
                     {
                         code: "Power Thief",
                         actions: [power_steal]
+                    },
+                    {
+                        code: "Interceptors Field",
+                        actions: [interceptors]
                     },
                 ];
             } else {

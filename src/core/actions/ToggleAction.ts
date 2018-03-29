@@ -11,6 +11,8 @@ module TK.SpaceTac {
         radius: number
         // Effects applied
         effects: BaseEffect[]
+        // Filtering ships that will receive the effects
+        filter: ActionTargettingFilter
     }
 
     /**
@@ -22,6 +24,7 @@ module TK.SpaceTac {
         power = 1
         radius = 0
         effects: BaseEffect[] = []
+        filter = ActionTargettingFilter.ALL
 
         constructor(name: string, config?: Partial<ToggleActionConfig>, code?: string) {
             super(name, code);
@@ -58,15 +61,17 @@ module TK.SpaceTac {
             return 0;
         }
 
-        filterImpactedShips(source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
-            return ships.filter(ship => arenaDistance(ship.location, source) <= this.radius);
+        filterImpactedShips(ship: Ship, source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
+            let result = ships.filter(iship => arenaDistance(iship.location, source) <= this.radius);
+            result = BaseAction.filterTargets(ship, result, this.filter);
+            return result;
         }
 
         checkShipTarget(ship: Ship, target: Target): Target | null {
             return ship.is(target.ship_id) ? target : null;
         }
 
-        getSpecificDiffs(ship: Ship, battle: Battle, target: Target): BaseBattleDiff[] {
+        getSpecificDiffs(ship: Ship, battle: Battle, target: Target, apply_effects = true): BaseBattleDiff[] {
             let activated = ship.actions.isToggled(this);
 
             let result: BaseBattleDiff[] = [
@@ -78,10 +83,14 @@ module TK.SpaceTac {
                 this.effects.forEach(effect => {
                     if (activated) {
                         result.push(new ShipEffectRemovedDiff(iship, effect));
-                        result = result.concat(effect.getOffDiffs(iship));
+                        if (apply_effects) {
+                            result = result.concat(effect.getOffDiffs(iship));
+                        }
                     } else {
                         result.push(new ShipEffectAddedDiff(iship, effect));
-                        result = result.concat(effect.getOnDiffs(iship, ship));
+                        if (apply_effects) {
+                            result = result.concat(effect.getOnDiffs(iship, ship));
+                        }
                     }
                 });
             });
@@ -94,9 +103,10 @@ module TK.SpaceTac {
                 return "";
             }
 
+            // TODO filter
             let desc = `When active (power usage ${this.power})`;
             let effects = this.effects.map(effect => {
-                let suffix = this.radius ? `in ${this.radius}km radius` : "on owner ship";
+                let suffix = this.radius ? `on ${BaseAction.getFilterDesc(this.filter)} in ${this.radius}km radius` : "on owner ship";
                 return "• " + effect.getDescription() + " " + suffix;
             });
             return `${desc}:\n${effects.join("\n")}`;

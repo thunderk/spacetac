@@ -161,7 +161,6 @@ module TK.SpaceTac.Specs {
 
             // no enemies hurt
             let maneuver = new Maneuver(ship, action, Target.newFromLocation(100, 0));
-            console.log(maneuver)
             check.nears(TacticalAIHelpers.evaluateEnemyHealth(ship, battle, maneuver), 0, 8);
 
             // one enemy loses half-life

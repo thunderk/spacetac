@@ -9,7 +9,7 @@ module TK.SpaceTac.Multi.Specs {
 
             await storage.upsert("sessioninfo", { token: token }, {});
 
-            check.patch(connection, "generateToken", iterator([token, "123456"]));
+            check.patch(connection, "generateToken", nnf("", iterator([token, "123456"])));
 
             let other = await connection.getUnusedToken(5);
             check.equals(other, "123456");

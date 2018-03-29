@@ -50,11 +50,11 @@ module TK.SpaceTac.UI.Specs {
             let impacts = targetting.impact_indicators;
             let action = new TriggerAction("weapon", { range: 50 });
 
-            let collect = check.patch(action, "getImpactedShips", iterator([
+            let collect = check.patch(action, "getImpactedShips", nnf([], iterator([
                 [new Ship(), new Ship(), new Ship()],
                 [new Ship(), new Ship()],
                 []
-            ]));
+            ])));
             targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 10));
 
             check.called(collect, [
@@ -159,8 +159,12 @@ module TK.SpaceTac.UI.Specs {
             let move = TestTools.addEngine(ship, 100);
             let fire = TestTools.addWeapon(ship, 50, 2, 300, 100);
             let last_call: any = null;
-            check.patch(targetting.range_hint, "clear", () => last_call = null);
-            check.patch(targetting.range_hint, "update", (ship: Ship, action: BaseAction, radius: number) => last_call = [ship, action, radius]);
+            check.patch(targetting.range_hint, "clear", () => {
+                last_call = null;
+            });
+            check.patch(targetting.range_hint, "update", (ship: Ship, action: BaseAction, radius: number) => {
+                last_call = [ship, action, radius];
+            });
 
             // move action
             targetting.setAction(ship, move);

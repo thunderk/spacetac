@@ -388,17 +388,18 @@ module TK.SpaceTac {
         }
 
         /**
-         * Iterator over area effects from this ship impacting a location
+         * Get the effects that this ship has on another ship (which may be herself)
          */
-        iAreaEffects(x: number, y: number): Iterator<BaseEffect> {
-            let distance = Target.newFromShip(this).getDistanceTo({ x: x, y: y });
-            return ichainit(imap(this.iToggleActions(true), action => {
-                if (distance <= action.radius) {
-                    return iarray(action.effects);
+        getAreaEffects(ship: Ship): BaseEffect[] {
+            let toggled = imaterialize(this.iToggleActions(true));
+            let effects = toggled.map(action => {
+                if (bool(action.filterImpactedShips(this, this.location, Target.newFromShip(ship), [ship]))) {
+                    return action.effects;
                 } else {
-                    return IEMPTY;
+                    return [];
                 }
-            }));
+            });
+            return flatten(effects);
         }
 
         /**

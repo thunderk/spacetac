@@ -18,9 +18,10 @@ module TK.SpaceTac {
                 engine.configureCooldown(1, 1);
 
                 let protector = new ToggleAction("Damage Protector", {
-                    power: 3,
+                    power: 4,
                     radius: 300,
-                    effects: [new AttributeEffect("evasion", 1)]
+                    effects: [new AttributeEffect("evasion", 1)],
+                    filter: ActionTargettingFilter.ALLIES
                 });
 
                 let depleter = new TriggerAction("Power Depleter", {

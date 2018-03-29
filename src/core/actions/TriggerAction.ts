@@ -90,22 +90,22 @@ module TK.SpaceTac {
             return this.range;
         }
 
-        filterImpactedShips(source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
+        filterImpactedShips(ship: Ship, source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
             if (this.blast) {
                 return ships.filter(ship => arenaDistance(ship.location, target) <= this.blast);
             } else if (this.angle) {
                 let angle = arenaAngle(source, target);
                 let maxangle = (this.angle * 0.5) * Math.PI / 180;
-                return ships.filter(ship => {
-                    let dist = arenaDistance(source, ship.location);
+                return ships.filter(iship => {
+                    let dist = arenaDistance(source, iship.location);
                     if (dist < 0.000001 || dist > this.range) {
                         return false;
                     } else {
-                        return Math.abs(angularDifference(arenaAngle(source, ship.location), angle)) < maxangle;
+                        return Math.abs(angularDifference(arenaAngle(source, iship.location), angle)) < maxangle;
                     }
                 });
             } else {
-                return ships.filter(ship => ship.is(target.ship_id));
+                return ships.filter(iship => iship.is(target.ship_id));
             }
         }
 

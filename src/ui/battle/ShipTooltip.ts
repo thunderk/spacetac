@@ -53,8 +53,10 @@ module TK.SpaceTac.UI {
                 });
 
                 ship.active_effects.list().forEach(effect => {
-                    builder.text(`• ${effect.getDescription()}`, 0, iy, { color: effect.isBeneficial() ? "#afe9c6" : "#e9afaf" });
-                    iy += 32;
+                    if (!effect.isInternal()) {
+                        builder.text(`• ${effect.getDescription()}`, 0, iy, { color: effect.isBeneficial() ? "#afe9c6" : "#e9afaf" });
+                        iy += 32;
+                    }
                 });
 
                 builder.text(ship.model.getDescription(), 0, iy + 4, { size: 14, color: "#999999", width: 540 });
