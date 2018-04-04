@@ -49,11 +49,11 @@ module TK.SpaceTac {
 
             let suffix: string;
             if (this.intruder_count == 0) {
-                suffix = `for all incoming ${BaseAction.getFilterDesc(this.filter)}`;
+                suffix = `on all incoming ${BaseAction.getFilterDesc(this.filter)}`;
             } else if (this.intruder_count == 1) {
-                suffix = `for the first incoming ${BaseAction.getFilterDesc(this.filter, false)}`;
+                suffix = `on the first incoming ${BaseAction.getFilterDesc(this.filter, false)}`;
             } else {
-                suffix = `for the first ${this.intruder_count} incoming ${BaseAction.getFilterDesc(this.filter)}`;
+                suffix = `on the first ${this.intruder_count} incoming ${BaseAction.getFilterDesc(this.filter)}`;
             }
 
             let effects = this.intruder_effects.map(effect => {

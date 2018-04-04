@@ -103,8 +103,6 @@ Common UI
 Technical
 ---------
 
-* Fix "npm test" returning 0 even on failure
-* Fix "npm start" stopping when there is an error in initial build
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile
 

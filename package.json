@@ -5,7 +5,7 @@
   "main": "out/build.js",
   "scripts": {
     "build": "run build",
-    "test": "run test",
+    "test": "run ci",
     "start": "run continuous",
     "codecov": "remap-istanbul -i out/coverage/coverage.json -o out/coverage/mapped.json -t json && codecov -f out/coverage/mapped.json",
     "deploy": "run deploy"

@@ -24,25 +24,25 @@ module TK.SpaceTac.Specs {
                 intruder_count: 0,
                 intruder_effects: [new ValueEffect("hull", -1)]
             });
-            check.equals(action.getEffectsDescription(), "Watch a 120km area (power usage 2):\n• hull -1 for all incoming ships");
+            check.equals(action.getEffectsDescription(), "Watch a 120km area (power usage 2):\n• hull -1 on all incoming ships");
 
             action = new VigilanceAction("Reactive Fire", { power: 2, radius: 120 }, {
                 intruder_count: 1,
                 intruder_effects: [new ValueEffect("hull", -1)]
             });
-            check.equals(action.getEffectsDescription(), "Watch a 120km area (power usage 2):\n• hull -1 for the first incoming ship");
+            check.equals(action.getEffectsDescription(), "Watch a 120km area (power usage 2):\n• hull -1 on the first incoming ship");
 
             action = new VigilanceAction("Reactive Fire", { power: 2, radius: 120 }, {
                 intruder_count: 3,
                 intruder_effects: [new ValueEffect("hull", -1)]
             });
-            check.equals(action.getEffectsDescription(), "Watch a 120km area (power usage 2):\n• hull -1 for the first 3 incoming ships");
+            check.equals(action.getEffectsDescription(), "Watch a 120km area (power usage 2):\n• hull -1 on the first 3 incoming ships");
 
             action = new VigilanceAction("Reactive Fire", { power: 2, radius: 120, filter: ActionTargettingFilter.ALLIES }, {
                 intruder_count: 3,
                 intruder_effects: [new ValueEffect("hull", -1)]
             });
-            check.equals(action.getEffectsDescription(), "Watch a 120km area (power usage 2):\n• hull -1 for the first 3 incoming team members");
+            check.equals(action.getEffectsDescription(), "Watch a 120km area (power usage 2):\n• hull -1 on the first 3 incoming team members");
         });
 
         test.case("handles the vigilance effect to know who to target", check => {

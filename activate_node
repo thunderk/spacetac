@@ -10,5 +10,5 @@ fi
 
 vdir="./.venv"
 test -x "${vdir}/bin/nodeenv" || ( virtualenv -p python3 "${vdir}" && "${vdir}/bin/pip" install --upgrade nodeenv )
-test -e "${vdir}/node/bin/activate" || "${vdir}/bin/nodeenv" --node=9.3.0 --force "${vdir}/node"
+test -e "${vdir}/node/bin/activate" || "${vdir}/bin/nodeenv" --node=9.11.1 --force "${vdir}/node"
 source "${vdir}/node/bin/activate"
