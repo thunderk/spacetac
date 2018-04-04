@@ -254,15 +254,18 @@ module TK.SpaceTac.UI {
                     return {};
                 }
             } else if (diff instanceof ShipMoveDiff) {
-                return {
-                    background: async (animate: boolean, timer: Timer) => {
-                        this.moveTo(diff.start.x, diff.start.y, diff.start.angle, false);
-                        let duration = this.moveTo(diff.end.x, diff.end.y, diff.end.angle, animate, !!diff.engine);
-                        if (duration && animate) {
-                            await timer.sleep(duration);
-                        }
+                let func = async (animate: boolean, timer: Timer) => {
+                    this.moveTo(diff.start.x, diff.start.y, diff.start.angle, false);
+                    let duration = this.moveTo(diff.end.x, diff.end.y, diff.end.angle, animate, !!diff.engine);
+                    if (duration && animate) {
+                        await timer.sleep(duration);
                     }
                 };
+                if (diff.engine) {
+                    return { foreground: func };
+                } else {
+                    return { background: func };
+                }
             } else if (diff instanceof VigilanceAppliedDiff) {
                 let action = this.ship.actions.getById(diff.action);
                 return {
