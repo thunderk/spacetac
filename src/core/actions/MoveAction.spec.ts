@@ -125,5 +125,16 @@ module TK.SpaceTac.Specs {
             action = new MoveAction("Engine", { distance_per_power: 58, safety_distance: 12 });
             check.equals(action.getEffectsDescription(), "Move: 58km per power point (safety: 12km)");
         });
+
+        test.case("can't be used while in vigilance", check => {
+            let ship = new Ship();
+            TestTools.setShipModel(ship, 10, 10, 10);
+            let vigilance = ship.actions.addCustom(new VigilanceAction("Vigilance"));
+            let action = ship.actions.addCustom(new MoveAction("Engine"));
+
+            check.equals(action.checkCannotBeApplied(ship), null);
+            ship.actions.toggle(vigilance, true);
+            check.equals(action.checkCannotBeApplied(ship), ActionUnavailability.VIGILANCE);
+        });
     });
 }

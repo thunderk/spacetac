@@ -48,7 +48,7 @@ module TK.SpaceTac {
             return Target.newFromLocation(ship.arena_x + Math.cos(ship.arena_angle) * 100, ship.arena_y + Math.sin(ship.arena_angle) * 100);
         }
 
-        checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): string | null {
+        checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): ActionUnavailability | null {
             let base = super.checkCannotBeApplied(ship, Infinity);
             if (base) {
                 return base;
@@ -58,11 +58,16 @@ module TK.SpaceTac {
             if (remaining_ap === null) {
                 remaining_ap = ship.getValue("power");
             }
-            if (remaining_ap > 0.0001) {
-                return null;
-            } else {
-                return "not enough power";
+            if (remaining_ap < 0.0001) {
+                return ActionUnavailability.POWER;
             }
+
+            // Check vigilance actions
+            if (any(ship.getToggleActions(true), action => action instanceof VigilanceAction)) {
+                return ActionUnavailability.VIGILANCE;
+            }
+
+            return null;
         }
 
         getPowerUsage(ship: Ship, target: Target | null): number {

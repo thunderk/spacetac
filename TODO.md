@@ -56,7 +56,6 @@ Battle
 Ships models and actions
 ------------------------
 
-* Fix vigilance action triggering when the ship moves with one active (moving should disable vigilance actions)
 * Fix vigilance action not disabling when reaching the maximum number of triggerings
 * Highlight the effects area that will contain the new position when move-targetting
 * Add movement attribute (for main engine action, km/power)

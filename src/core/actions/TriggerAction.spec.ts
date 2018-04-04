@@ -136,5 +136,16 @@ module TK.SpaceTac.Specs {
             action.configureTrigger({ effects: effects, power: 2, range: 120, blast: 100, angle: 80 });
             check.equals(action.getEffectsDescription(), "Fire (power 2, range 120km):\n• evasion +20% in 100km radius");
         })
+
+        test.case("can't be used while in vigilance", check => {
+            let ship = new Ship();
+            TestTools.setShipModel(ship, 10, 10, 10);
+            let vigilance = ship.actions.addCustom(new VigilanceAction("Vigilance"));
+            let action = ship.actions.addCustom(new TriggerAction("Weapon"));
+
+            check.equals(action.checkCannotBeApplied(ship), null);
+            ship.actions.toggle(vigilance, true);
+            check.equals(action.checkCannotBeApplied(ship), ActionUnavailability.VIGILANCE);
+        })
     });
 }

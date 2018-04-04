@@ -23,7 +23,7 @@ module TK.SpaceTac {
         }
 
         getPowerUsage(ship: Ship, target: Target | null): number {
-            let toggled_cost = isum(imap(ship.iToggleActions(true), action => action.power));
+            let toggled_cost = sum(ship.getToggleActions(true).map(action => action.power));
             return ship.getValue("power") + toggled_cost - ship.getAttribute("power_capacity");
         }
 

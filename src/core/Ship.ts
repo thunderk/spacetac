@@ -295,7 +295,7 @@ module TK.SpaceTac {
             });
 
             // Deactivate toggle actions
-            iforeach(this.iToggleActions(true), action => {
+            this.getToggleActions(true).forEach(action => {
                 result = result.concat(action.getSpecificDiffs(this, battle, Target.newFromShip(this)));
             });
 
@@ -381,17 +381,19 @@ module TK.SpaceTac {
         /**
          * Iterator over toggle actions
          */
-        iToggleActions(only_active = false): Iterator<ToggleAction> {
-            return <Iterator<ToggleAction>>ifilter(iarray(this.actions.listAll()), action => {
-                return (action instanceof ToggleAction && (!only_active || this.actions.isToggled(action)));
-            });
+        getToggleActions(only_active = false): ToggleAction[] {
+            let result = cfilter(this.actions.listAll(), ToggleAction);
+            if (only_active) {
+                result = result.filter(action => this.actions.isToggled(action));
+            }
+            return result;
         }
 
         /**
          * Get the effects that this ship has on another ship (which may be herself)
          */
         getAreaEffects(ship: Ship): BaseEffect[] {
-            let toggled = imaterialize(this.iToggleActions(true));
+            let toggled = this.getToggleActions(true);
             let effects = toggled.map(action => {
                 if (bool(action.filterImpactedShips(this, this.location, Target.newFromShip(ship), [ship]))) {
                     return action.effects;

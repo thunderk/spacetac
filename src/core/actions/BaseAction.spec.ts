@@ -44,22 +44,22 @@ module TK.SpaceTac.Specs {
             check.patch(action, "getPowerUsage", () => 3);
 
             let ship = new Ship();
-            check.equals(action.checkCannotBeApplied(ship), "action not available");
+            check.equals(action.checkCannotBeApplied(ship), ActionUnavailability.NO_SUCH_ACTION);
 
             ship.actions.addCustom(action);
-            check.equals(action.checkCannotBeApplied(ship), "not enough power");
+            check.equals(action.checkCannotBeApplied(ship), ActionUnavailability.POWER);
 
             ship.setValue("power", 5);
             check.equals(action.checkCannotBeApplied(ship), null);
             check.equals(action.checkCannotBeApplied(ship, 4), null);
             check.equals(action.checkCannotBeApplied(ship, 3), null);
-            check.equals(action.checkCannotBeApplied(ship, 2), "not enough power");
+            check.equals(action.checkCannotBeApplied(ship, 2), ActionUnavailability.POWER);
 
             ship.setValue("power", 3);
             check.equals(action.checkCannotBeApplied(ship), null);
 
             ship.setValue("power", 2);
-            check.equals(action.checkCannotBeApplied(ship), "not enough power");
+            check.equals(action.checkCannotBeApplied(ship), ActionUnavailability.POWER);
         })
 
         test.case("checks against overheat", check => {
@@ -80,13 +80,13 @@ module TK.SpaceTac.Specs {
             check.equals(action.checkCannotBeApplied(ship), null);
 
             cooldown.use();
-            check.equals(action.checkCannotBeApplied(ship), "overheated");
+            check.equals(action.checkCannotBeApplied(ship), ActionUnavailability.OVERHEATED);
 
             cooldown.cool();
-            check.equals(action.checkCannotBeApplied(ship), "overheated");
+            check.equals(action.checkCannotBeApplied(ship), ActionUnavailability.OVERHEATED);
 
             cooldown.cool();
-            check.equals(action.checkCannotBeApplied(ship), "overheated");
+            check.equals(action.checkCannotBeApplied(ship), ActionUnavailability.OVERHEATED);
 
             cooldown.cool();
             check.equals(action.checkCannotBeApplied(ship), null);

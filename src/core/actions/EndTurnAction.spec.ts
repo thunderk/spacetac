@@ -8,11 +8,11 @@ module TK.SpaceTac.Specs {
             battle.setPlayingShip(battle.play_order[0]);
 
             let action = new EndTurnAction();
-            check.equals(action.checkCannotBeApplied(battle.play_order[0]), "action not available");
+            check.equals(action.checkCannotBeApplied(battle.play_order[0]), ActionUnavailability.NO_SUCH_ACTION);
 
             action = EndTurnAction.SINGLETON;
             check.equals(action.checkCannotBeApplied(battle.play_order[0]), null);
-            check.equals(action.checkCannotBeApplied(battle.play_order[1]), "ship not playing");
+            check.equals(action.checkCannotBeApplied(battle.play_order[1]), ActionUnavailability.NOT_PLAYING);
         });
 
         test.case("changes active ship", check => {

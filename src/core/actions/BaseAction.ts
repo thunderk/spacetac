@@ -36,6 +36,22 @@ module TK.SpaceTac {
     }
 
     /**
+     * Reasons for action unavailibility
+     */
+    export enum ActionUnavailability {
+        // Ship is not playing
+        NOT_PLAYING = "Not this ship turn",
+        // Action is not available
+        NO_SUCH_ACTION = "Action not available",
+        // Not enough power remaining
+        POWER = "Not enough power",
+        // Action is overheated
+        OVERHEATED = "Overheated",
+        // Vigilance is activated
+        VIGILANCE = "In vigilance"
+    }
+
+    /**
      * Base class for a battle action.
      * 
      * An action should be the only way to modify a battle state.
@@ -106,17 +122,17 @@ module TK.SpaceTac {
          * 
          * Method to extend to set conditions
          * 
-         * Returns an informative message indicating why the action cannot be used, null otherwise
+         * Returns an unavalability reason, null otherwise
          */
-        checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): string | null {
+        checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): ActionUnavailability | null {
             let battle = ship.getBattle();
             if (battle && battle.playing_ship !== ship) {
                 // Ship is not playing
-                return "ship not playing";
+                return ActionUnavailability.NOT_PLAYING;
             }
 
             if (!ship.actions.getById(this.id)) {
-                return "action not available";
+                return ActionUnavailability.NO_SUCH_ACTION;
             }
 
             // Check AP usage
@@ -125,12 +141,12 @@ module TK.SpaceTac {
             }
             var ap_usage = this.getPowerUsage(ship, null);
             if (remaining_ap < ap_usage) {
-                return "not enough power";
+                return ActionUnavailability.POWER;
             }
 
             // Check cooldown
             if (!ship.actions.isUsable(this)) {
-                return "overheated";
+                return ActionUnavailability.OVERHEATED;
             }
 
             return null;

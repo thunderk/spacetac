@@ -14,34 +14,25 @@ module TK.SpaceTac.UI {
 
             builder.text(action.getTitle(ship), 150, 0, { size: 24 });
 
-            let cost = "";
-            if (action instanceof MoveAction) {
-                if (ship.getValue("power") == 0) {
-                    cost = "Not enough power";
-                } else {
-                    cost = `Cost: 1 power per ${action.distance_per_power}km`;
-                }
+            let unavailable = action.checkCannotBeApplied(ship);
+            if (unavailable != null) {
+                builder.text(unavailable, 150, 40, { color: "#e54d2b" });
+            } else if (action instanceof MoveAction) {
+                let cost = `Cost: 1 power per ${action.distance_per_power}km`;
+                builder.text(cost, 150, 40, { color: "#ffdd4b" });
             } else {
                 let power_usage = action.getPowerUsage(ship, null);
                 if (power_usage) {
-                    if (ship.getValue("power") < power_usage) {
-                        cost = "Not enough power";
-                    } else if (power_usage > 0) {
-                        cost = `Cost: ${power_usage} power`;
-                    } else {
-                        cost = `Recover: ${-power_usage} power`;
-                    }
+                    let cost = (power_usage > 0) ? `Cost: ${power_usage} power` : `Recover: ${-power_usage} power`;
+                    builder.text(cost, 150, 40, { color: "#ffdd4b" });
                 }
-            }
-            if (cost) {
-                builder.text(cost, 150, 40, { color: "#ffdd4b" });
             }
 
             let cooldown = ship.actions.getCooldown(action);
             if (cooldown.overheat) {
                 if (cooldown.heat > 0) {
                     builder.text("Cooling down ...", 150, 80, { color: "#d8894d" });
-                } else if (cooldown.willOverheat() && cost != "Not enough power") {
+                } else if (!unavailable && cooldown.willOverheat()) {
                     if (cooldown.cooling > 1) {
                         let turns = cooldown.cooling - 1;
                         builder.text(`Unavailable for ${turns} turn${turns > 1 ? "s" : ""} if used`, 150, 80, { color: "#d8894d" });

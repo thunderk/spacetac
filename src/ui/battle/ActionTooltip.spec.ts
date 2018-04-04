@@ -9,9 +9,9 @@ module TK.SpaceTac.UI.Specs {
             let ship = new Ship();
             TestTools.setShipModel(ship, 100, 0, 10);
 
-            let action1 = new MoveAction("Thruster");
-            let action2 = new TriggerAction("Superweapon", { effects: [new DamageEffect(12)], power: 2, range: 50 });
-            let action3 = new EndTurnAction();
+            let action1 = ship.actions.addCustom(new MoveAction("Thruster"));
+            let action2 = ship.actions.addCustom(new TriggerAction("Superweapon", { effects: [new DamageEffect(12)], power: 2, range: 50 }));
+            let action3 = ship.actions.addCustom(new EndTurnAction());
 
             ActionTooltip.fill(tooltip.getBuilder(), ship, action1, 0);
             checkText(check, (<any>tooltip).container.content.children[1], "Use Thruster");

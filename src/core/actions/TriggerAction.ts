@@ -90,6 +90,21 @@ module TK.SpaceTac {
             return this.range;
         }
 
+        checkCannotBeApplied(ship: Ship, remaining_ap: number | null = null): ActionUnavailability | null {
+            let base = super.checkCannotBeApplied(ship, remaining_ap);
+            if (base) {
+                return base;
+            }
+
+            // Check vigilance actions
+            if (any(ship.getToggleActions(true), action => action instanceof VigilanceAction)) {
+                // TODO Could allow trigger actions that does not involve a move effect
+                return ActionUnavailability.VIGILANCE;
+            }
+
+            return null;
+        }
+
         filterImpactedShips(ship: Ship, source: ArenaLocation, target: Target, ships: Ship[]): Ship[] {
             if (this.blast) {
                 return ships.filter(ship => arenaDistance(ship.location, target) <= this.blast);
