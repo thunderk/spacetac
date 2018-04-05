@@ -72,11 +72,11 @@ Ships models and actions
 * Add a reflect damage effect
 * Add untargettable effect (can only be targetted with area effects)
 * Add damage modifier (to change the options of incoming damage or outgoing damage)
-* Add a balance testing page, using AI battles with or without an upgrade, to help in balancing
 
 Artificial Intelligence
 -----------------------
 
+* Account for overheated engines
 * If web worker is not responsive, or produces only errors, it should be disabled for the session
 * Produce interesting "angle" areas
 * Evaluate active effects
@@ -85,7 +85,6 @@ Artificial Intelligence
 * Use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
 * Abandon fight if the AI judges there is no hope of victory
 * Add combination of random small move and actual maneuver, as producer
-* New duel page with producers/evaluators tweaking
 * Use tree techniques to account for potential future moves
 * Prototype of evolving AI
 
