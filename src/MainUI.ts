@@ -1,24 +1,25 @@
 /// <reference path="lib/phaser.d.ts"/>
 
+declare var global: any;
+declare var module: any;
+
 if (typeof window != "undefined") {
     // If jasmine is not present, ignore describe
     (<any>window).describe = (<any>window).describe || function () { };
-}
-
-declare var global: any;
-if (typeof global != "undefined") {
-    // In node, does not extend Phaser classes
-    var handler = {
-        get(target: any, name: any) {
-            return function () { }
+} else {
+    if (typeof global != "undefined") {
+        // In node, does not extend Phaser classes
+        var handler = {
+            get(target: any, name: any) {
+                return function () { }
+            }
         }
+        global.Phaser = new Proxy({}, handler);
     }
-    global.Phaser = new Proxy({}, handler);
-}
 
-declare var module: any;
-if (typeof module != "undefined") {
-    module.exports = { TK };
+    if (typeof module != "undefined") {
+        module.exports = { TK };
+    }
 }
 
 module TK.SpaceTac {
