@@ -76,7 +76,6 @@ Ships models and actions
 Artificial Intelligence
 -----------------------
 
-* Account for overheated engines
 * If web worker is not responsive, or produces only errors, it should be disabled for the session
 * Produce interesting "angle" areas
 * Evaluate active effects

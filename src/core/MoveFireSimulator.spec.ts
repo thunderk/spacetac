@@ -13,17 +13,17 @@ module TK.SpaceTac.Specs {
         test.case("finds a suitable engine to make an approach", check => {
             let ship = new Ship();
             let simulator = new MoveFireSimulator(ship);
-            check.equals(simulator.findEngine(), null);
+            check.equals(simulator.findEngine(), null, "no engine");
             let engine1 = TestTools.addEngine(ship, 100);
-            check.same(simulator.findEngine(), engine1);
-            let engine2 = TestTools.addEngine(ship, 120);
-            check.same(simulator.findEngine(), engine1);
             engine1.configureCooldown(1, 1);
-            engine1.getCooldown().use();
-            check.same(simulator.findEngine(), engine2);
+            check.same(simulator.findEngine(), engine1, "one engine");
+            let engine2 = TestTools.addEngine(ship, 120);
             engine2.configureCooldown(1, 1);
-            engine2.getCooldown().use();
-            check.equals(simulator.findEngine(), null);
+            check.same(simulator.findEngine(), engine1, "two engines, choose first one");
+            ship.actions.storeUsage(engine1);
+            check.same(simulator.findEngine(), engine2, "first engine overheated, choose second one");
+            ship.actions.storeUsage(engine2);
+            check.equals(simulator.findEngine(), null, "both engines overheated");
         });
 
         test.case("fires directly when in range", check => {

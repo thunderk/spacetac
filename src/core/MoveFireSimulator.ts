@@ -58,7 +58,8 @@ module TK.SpaceTac {
          * This will return the first available engine, in the definition order
          */
         findEngine(): MoveAction | null {
-            return first(cfilter(this.ship.actions.listAll(), MoveAction), action => action.getCooldown().canUse());
+            let actions = cfilter(this.ship.actions.listAll(), MoveAction);
+            return first(actions, action => this.ship.actions.getCooldown(action).canUse());
         }
 
         /**
