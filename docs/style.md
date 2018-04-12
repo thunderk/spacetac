@@ -13,7 +13,7 @@ Buttons should be lit by a pure white line in top-left corner (~75% of the borde
 
 * First color is for neutral interface and ships
 * Second color is for AI
-* Third color is for story
+* Third color is for story / menu / options
 * Fourth color is for enemy
 
 http://paletton.com/#uid=63D0c0kcBwN43YM8AMYhnnWlyeQ

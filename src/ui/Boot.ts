@@ -18,7 +18,7 @@ module TK.SpaceTac.UI {
             this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
             this.input.maxPointers = 1;
 
-            this.add.image(678, 426, "preload-background");
+            this.add.image(643, 435, "preload-background");
 
             this.game.state.start("router");
         }

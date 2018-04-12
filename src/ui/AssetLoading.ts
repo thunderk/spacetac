@@ -33,11 +33,12 @@ module TK.SpaceTac.UI {
         }
 
         preload() {
-            let text = this.add.text(this.getMidWidth(), 400, "... loading ...", { font: "bold 40pt SpaceTac", fill: "#529aee" });
-            text.anchor.set(0.5);
-            let bg = this.add.image(678, 570, "preload-background");
-            let bar = this.add.image(678, 570, "preload-bar");
+            let bg = this.add.image(643, 435, "preload-background");
+            let bar = this.add.image(643, 435, "preload-bar");
             this.load.setPreloadSprite(bar);
+
+            let text = this.add.text(this.getMidWidth(), 466, "... Loading ...", { font: "normal 36pt SpaceTac", fill: "#dbeff9" });
+            text.anchor.set(0.5);
 
             if (this.required >= AssetLoadingRange.MENU && AssetLoading.loaded < AssetLoadingRange.MENU) {
                 console.log("Loading menu assets");
