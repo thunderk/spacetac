@@ -25,7 +25,7 @@ module TK.SpaceTac.UI {
          * Shortcut to add a single action button at the bottom of dialog
          */
         addActionButton(x: number, text: string, tooltip: string, action: Function) {
-            let button = this.addButton(x, 885, action, "common-dialog-textbutton", 0, 1, tooltip);
+            let button = this.addButton(x, 885, action, "common-dialog-textbutton", tooltip);
             button.addChild(this.addText(0, 0, text, "#d9e0e5"));
         }
 

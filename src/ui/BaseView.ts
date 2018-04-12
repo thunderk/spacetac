@@ -153,8 +153,8 @@ module TK.SpaceTac.UI {
         /**
          * Open options dialog
          */
-        showOptions(): void {
-            let dialog = new OptionsDialog(this);
+        showOptions(credits = false): void {
+            new OptionsDialog(this, credits);
         }
 
         /**

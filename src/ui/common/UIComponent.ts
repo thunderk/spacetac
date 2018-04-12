@@ -216,7 +216,7 @@ module TK.SpaceTac.UI {
          * 
          * DEPRECATED - Use UIBuilder directly
          */
-        addButton(x: number, y: number, on_click: Function, background: string, frame_normal = 0, frame_hover = 1, tooltip = ""): Phaser.Button {
+        addButton(x: number, y: number, on_click: Function, background: string, tooltip = ""): Phaser.Button {
             let result = this.builder.button(background, x, y, on_click, tooltip);
             result.anchor.set(0.5);
             return result;

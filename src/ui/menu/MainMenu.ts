@@ -93,7 +93,7 @@ module TK.SpaceTac.UI {
                         text: "Go", center: true
                     });
                 })
-                let button_options = builder.button("menu-button-small", 1780, 106, () => this.showOptions(), "Options", undefined, {
+                let button_options = builder.button("menu-button-small", 1780, 106, () => this.showOptions(true), "Options", undefined, {
                     center: true,
                     icon: "menu-icon-options",
                 });

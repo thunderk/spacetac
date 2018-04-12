@@ -35,8 +35,8 @@ module TK.SpaceTac.UI {
         /**
          * Add a close button
          */
-        addCloseButton(key = "common-dialog-close", x = 1325, y = 131, frame = 0, frame_hover = 1): void {
-            this.addButton(x, y, () => this.close(), key, frame, frame_hover, "Close this dialog");
+        addCloseButton(key = "common-dialog-close", x = 1290, y = 90): void {
+            this.builder.button(key, x, y, () => this.close(), "Close this dialog");
         }
 
         /**
