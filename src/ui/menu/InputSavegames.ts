@@ -1,29 +1,19 @@
-/// <reference path="../common/UIComponent.ts"/>
-
 module TK.SpaceTac.UI {
     /**
-     * Dialog to load a saved game, or join an online one
+     * Input to display available save games, and load one
      */
-    export class LoadDialog extends UIComponent {
-        saves: [string, string][] = []
-        save_selected = 0
-        save_name: UILabel
-        token_input: UITextInput
+    export class InputSavegames {
+        private saves: [string, string][] = []
+        private save_selected = 0
+        private save_name?: UIText
 
-        constructor(parent: MainMenu) {
-            super(parent, 1344, 566, "menu-load-bg");
+        constructor(private view: BaseView, private builder: UIBuilder, x: number, y: number) {
+            builder.in(builder.image("menu-input", x, y, true), builder => {
+                builder.button("menu-arrow-left", -196, 0, () => this.paginateSave(1), "Older saves", undefined, { center: true });
+                builder.button("menu-arrow-right", 196, 0, () => this.paginateSave(-1), "Newer saves", undefined, { center: true });
 
-            let button = this.addButton(600, 115, () => this.paginateSave(-1), "common-arrow", 0, 0, "Scroll to newer saves");
-            button.angle = 180;
-            this.addButton(1038, 115, () => this.paginateSave(1), "common-arrow", 0, 0, "Scroll to older saves");
-            this.addButton(1224, 115, () => this.load(), "common-button-ok");
-            this.addButton(1224, 341, () => this.join(), "common-button-ok");
-
-            this.save_name = new UILabel(this, 351, 185, "", 32, "#000000");
-            this.save_name.setPosition(645, 28);
-
-            this.token_input = new UITextInput(this, 468, 68, 10, "#000000");
-            this.token_input.setPosition(585, 304);
+                this.save_name = builder.text("", 0, 0, { size: 24 });
+            });
 
             this.refreshSaves();
         }
@@ -47,13 +37,17 @@ module TK.SpaceTac.UI {
          * Set the current selected save game
          */
         setCurrentSave(position: number): void {
+            if (!this.save_name) {
+                return;
+            }
+
             if (this.saves.length == 0) {
-                this.save_name.setContent("No save game found");
+                this.builder.change(this.save_name, "No save game found");
             } else {
                 this.save_selected = clamp(position, 0, this.saves.length - 1);
 
                 let [saveid, saveinfo] = this.saves[this.save_selected];
-                this.save_name.setContent(saveinfo);
+                this.builder.change(this.save_name, saveinfo);
             }
         }
 
@@ -62,24 +56,6 @@ module TK.SpaceTac.UI {
          */
         paginateSave(offset: number) {
             this.setCurrentSave(this.save_selected + offset);
-        }
-
-        /**
-         * Join an online game
-         */
-        join(): void {
-            let token = this.token_input.getContent();
-            let connection = this.view.getConnection();
-
-            connection.loadByToken(token).then(session => {
-                if (session) {
-                    // For now, we will only spectate
-                    session.primary = false;
-                    session.spectator = true;
-
-                    this.view.gameui.setSession(session, token);
-                }
-            });
         }
 
         /**

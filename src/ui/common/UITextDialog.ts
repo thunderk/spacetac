@@ -11,8 +11,7 @@ module TK.SpaceTac.UI {
 
             this.addText(this.width * 0.5, this.height * 0.3, message, "#90FEE3", 32);
 
-            let input = new UITextInput(this, 600, 80, 16);
-            input.setPositionInsideParent(0.5, 0.5);
+            let input = new UITextInput(this.builder.styled({ size: 24 }), "menu-input", this.width / 2, this.height / 2, 12);
             if (initial) {
                 input.setContent(initial);
             }

@@ -6,75 +6,114 @@ module TK.SpaceTac.UI {
      */
     export class MainMenu extends BaseView {
         static returned = false
-        layer_stars!: Phaser.Group
-        layer_presents!: Phaser.Group
-        layer_title!: Phaser.Group
-        button_new_game!: Phaser.Button
-        button_quick_battle!: Phaser.Button
-        button_load_game!: Phaser.Button
-        dialog_load_game!: LoadDialog
 
         create() {
             super.create();
 
             let builder = new UIBuilder(this);
 
-            this.layer_stars = this.getLayer("stars");
-            this.layer_presents = this.getLayer("presents");
-            this.layer_title = this.getLayer("title");
+            // Layers
+            let layer_background = this.getLayer("background");
+            let layer_presents = this.getLayer("presents");
+            let layer_title = this.getLayer("title");
 
-            // Stars
-            for (let i = 0; i < 300; i++) {
-                let fade = Math.random() * 0.5 + 0.5;
-                let x = Math.random() * 0.998 + 0.001;
-                let star = this.add.image(1920 * x, Math.random() * 1080, "common-particles", 32, this.layer_stars);
-                star.anchor.set(0.5, 0.5);
-                star.angle = 225;
-                star.alpha = 0.7 * fade;
-                star.scale.set(0.8 * fade, 0.8 * fade);
-                this.tweens.create(star).to({ x: -30 }, 30000 * x / fade).to({ x: 1950 }, 0.00001).to({ x: 1920 * x }, 30000 * (1 - x) / fade).loop().start();
-            }
+            // Background
+            builder.in(layer_background, builder => {
+                builder.image("menu-background");
+            });
 
             // Presents...
-            builder.in(this.layer_presents, builder => {
+            builder.in(layer_presents, builder => {
                 builder.styled({ center: true }, builder => {
                     builder.text("Michael Lemaire", this.getMidWidth(), this.getHeight() * 0.4, { size: 32 });
                     builder.text("presents", this.getMidWidth(), this.getHeight() * 0.6, { size: 24 });
                 });
             });
 
-            // Menu buttons
-            this.button_new_game = this.addButton(320, 730, "New Game", "Start a new campaign in a generated universe", () => this.onNewGame());
-            this.button_load_game = this.addButton(958, 730, "Load / Join", "Load a saved game or join a friend", () => this.onLoadGame());
-            this.button_quick_battle = this.addButton(1604, 730, "Quick Battle", "Play a single generated battle", () => this.onQuickBattle());
+            builder.styled({ color: "#9fc4d6", size: 40, shadow: true }).in(layer_title, builder => {
+                // Title
+                let title = builder.in(layer_title).image("menu-title", 960, 784, true);
 
-            // Fullscreen button
-            let button = builder.in(this.layer_title).button("options-option-fullscreen", this.getWidth(), 0, () => this.options.toggleBoolean("fullscreen"), "Toggle full-screen");
-            button.anchor.set(1, 0);
-
-            // Title
-            let title = builder.in(this.layer_title).image("menu-title", 274, 187);
-
-            // Dialogs
-            this.dialog_load_game = new LoadDialog(this);
-            this.dialog_load_game.setPosition(286, 120);
-            this.dialog_load_game.moveToLayer(this.layer_title);
-            this.dialog_load_game.setVisible(false);
+                // Buttons
+                let group_new_game = builder.group("new-game", 0, 0, false);
+                let group_load_game = builder.group("load-game", 0, 0, false);
+                let group_join_game = builder.group("join-game", 0, 0, false);
+                let group_skirmish = builder.in(group_new_game).group("skirmish", 0, 0, false);
+                let button_new_game = builder.button("menu-button", 280, 106, undefined, "Start a new game", (on: boolean) => {
+                    if (on) {
+                        this.animations.show(group_new_game, 200);
+                        builder.switch(button_load_game, false);
+                        builder.switch(button_join_game, false);
+                    } else {
+                        this.animations.hide(group_new_game, 200);
+                    }
+                    return on;
+                }, { text: "New game", center: true, on_bottom: true });
+                let button_campaign = builder.in(group_new_game).button("menu-button", 770, 106, () => this.startCampaign(), "Start a campaign in story mode", undefined, {
+                    text: "Campaign", center: true
+                });
+                let button_skirmish = builder.in(group_new_game).button("menu-button", 770, 266, undefined, "Start a quick battle", (on: boolean) => {
+                    this.animations.setVisible(group_skirmish, on, 200);
+                    return on;
+                }, { text: "Skirmish", center: true, on_bottom: true });
+                let button_skirmish_shipcount = this.addNumberSelector(builder.in(group_skirmish), 1130, 266, "Ships", 2, 5, 3);
+                let button_skirmish_level = this.addNumberSelector(builder.in(group_skirmish), 1386, 266, "Level", 1, 10, 1);
+                let button_skirmish_go = builder.in(group_skirmish).button("menu-button-small", 1632, 266, () => {
+                    this.startSkirmish(button_skirmish_shipcount(), button_skirmish_level())
+                }, "Start the skirmish with selected settings", undefined, { text: "Go", center: true });
+                let button_load_game = builder.button("menu-button", 280, 266, undefined, "Load a previously saved game", (on: boolean) => {
+                    if (on) {
+                        this.animations.show(group_load_game, 200);
+                        builder.switch(button_new_game, false);
+                        builder.switch(button_join_game, false);
+                    } else {
+                        this.animations.hide(group_load_game, 200);
+                    }
+                    return on;
+                }, { text: "Load game", center: true, on_bottom: true });
+                builder.in(group_load_game, builder => {
+                    let input = new InputSavegames(this, builder, 770, 266);
+                    builder.button("menu-button-small", 1112, 266, () => input.load(), "Load the selected save game", undefined, {
+                        text: "Go", center: true
+                    });
+                })
+                let button_join_game = builder.button("menu-button", 280, 426, undefined, "Join a friend's game", (on: boolean) => {
+                    if (on) {
+                        this.animations.show(group_join_game, 200);
+                        builder.switch(button_new_game, false);
+                        builder.switch(button_load_game, false);
+                    } else {
+                        this.animations.hide(group_join_game, 200);
+                    }
+                    return on;
+                }, { text: "Join game", center: true, on_bottom: true });
+                builder.in(group_join_game, builder => {
+                    let input = new InputInviteCode(this, builder, 770, 426);
+                    builder.button("menu-button-small", 1112, 426, () => input.join(), "Join the game", undefined, {
+                        text: "Go", center: true
+                    });
+                })
+                let button_options = builder.button("menu-button-small", 1780, 106, () => this.showOptions(), "Options", undefined, {
+                    center: true,
+                    icon: "menu-icon-options",
+                });
+            });
 
             // Animations
-            this.layer_stars.visible = false;
-            this.layer_presents.visible = false;
-            this.layer_title.visible = false;
-            this.animations.show(this.layer_presents, 500);
-            this.animations.show(this.layer_stars, 5000);
+            layer_background.visible = false;
+            layer_presents.visible = false;
+            layer_title.visible = false;
+            this.animations.show(layer_presents, 500);
+            this.animations.show(layer_background, 5000);
             let fading = this.timer.schedule(5000, () => {
-                this.animations.show(this.layer_title, 1000);
-                this.animations.hide(this.layer_presents, 300);
+                this.animations.show(layer_title, 1000);
+                this.animations.hide(layer_presents, 300);
             });
             let pass = () => {
                 this.timer.cancel(fading);
-                this.animations.show(this.layer_title, 0);
-                this.animations.hide(this.layer_presents, 0);
+                this.animations.show(layer_background, 0);
+                this.animations.show(layer_title, 0);
+                this.animations.hide(layer_presents, 0);
             };
             if (MainMenu.returned) {
                 pass();
@@ -86,38 +125,40 @@ module TK.SpaceTac.UI {
             this.gameui.audio.startMusic("supernatural");
         }
 
-        addButton(x: number, y: number, caption: string, tooltip: string, callback: Function): Phaser.Button {
-            let builder = new UIBuilder(this).in(this.layer_title);
-
-            let result = builder.button("menu-button", x, y, callback, tooltip);
-            result.anchor.set(0.5);
-
-            builder.in(result).text(caption, 0, 0, { bold: true, size: 40, color: "#529aee" });
-
-            return result;
+        /**
+         * Add a number selector in a given range
+         */
+        addNumberSelector(builder: UIBuilder, x: number, y: number, label: string, min: number, max: number, initial: number): () => number {
+            let value = initial;
+            builder.in(builder.image("menu-input-small", x, y + 30, true), builder => {
+                let display = builder.text(`${value}`, 0, -32);
+                builder.text(label, 0, 54, { color: "#6690a4", size: 28 });
+                builder.button("menu-arrow-left", -68, -32, () => {
+                    value = Math.max(min, value - 1);
+                    builder.change(display, `${value}`);
+                }, undefined, undefined, { center: true });
+                builder.button("menu-arrow-right", 68, -32, () => {
+                    value = Math.min(max, value + 1);
+                    builder.change(display, `${value}`);
+                }, undefined, undefined, { center: true });
+            });
+            return () => value;
         }
 
-        // Called when "New Game" is clicked
-        onNewGame(): void {
-            var gameui = <MainUI>this.game;
-
-            gameui.session.startNewGame(false);
-
-            this.game.state.start("router");
+        /**
+         * Start a campaign mode
+         */
+        startCampaign(): void {
+            this.session.startNewGame(false);
+            this.backToRouter();
         }
 
-        // Called when "Quick Battle" is clicked
-        onQuickBattle(): void {
-            var gameui = <MainUI>this.game;
-
-            gameui.session.startQuickBattle(true);
-
-            this.game.state.start("router");
-        }
-
-        // Called when "Load Game" is clicked
-        onLoadGame(): void {
-            this.dialog_load_game.setVisible(true);
+        /**
+         * Start a skirmish
+         */
+        startSkirmish(shipcount: number, level: number): void {
+            this.session.startQuickBattle(true, level, shipcount);
+            this.backToRouter();
         }
     }
 }

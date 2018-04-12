@@ -85,6 +85,7 @@ module TK.SpaceTac.UI {
                 }
                 tween.start();
             } else {
+                this.tweens.removeFrom(obj, false);
                 obj.alpha = alpha;
                 if (obj.input) {
                     obj.input.enabled = true;

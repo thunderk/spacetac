@@ -3,7 +3,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("LoadDialog", test => {
-        let testgame = setupSingleView(test, () => [new MainMenu(), []]);
+        let testgame = setupEmptyView(test);
 
         test.acase("joins remote sessions as spectator", async check => {
             return new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ module TK.SpaceTac.UI.Specs {
                 check.equals(session.primary, true);
                 check.equals(session.spectator, false);
                 view.getConnection().publish(session, "Test").then(token => {
-                    let dialog = new LoadDialog(view);
+                    let dialog = new InputInviteCode(view, new UIBuilder(view), 0, 0);
                     dialog.token_input.setContent(token);
 
                     check.patch(view.gameui, "setSession", (joined: GameSession) => {

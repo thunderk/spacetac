@@ -80,6 +80,11 @@ module TK.SpaceTac.UI {
 
         // Text content style override
         text_style?: UITextStyleI
+
+        // Icon content
+        icon?: string
+        icon_x?: number
+        icon_y?: number
     }
 
     /**
@@ -155,9 +160,10 @@ module TK.SpaceTac.UI {
         /**
          * Add a group of components
          */
-        group(name: string, x = 0, y = 0): UIGroup {
+        group(name: string, x = 0, y = 0, visible = true): UIGroup {
             let result = new Phaser.Group(this.game, undefined, name);
             result.position.set(x, y);
+            result.visible = visible;
             this.add(result);
             return result;
         }
@@ -291,6 +297,10 @@ module TK.SpaceTac.UI {
 
             if (options.text) {
                 this.in(result).text(options.text, options.text_x || 0, options.text_y || 0, options.text_style);
+            }
+
+            if (options.icon) {
+                this.in(result).image(options.icon, options.icon_x || 0, options.icon_y || 0, options.center);
             }
 
             this.add(result);
