@@ -2316,6 +2316,19 @@
        x2="55.103851"
        y2="1037.9482"
        gradientUnits="userSpaceOnUse" />
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter4857"
+       x="-0.017067132"
+       width="1.0341343"
+       y="-0.31885285"
+       height="1.6377057">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="9.6249985"
+         id="feGaussianBlur4859" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2324,11 +2337,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.70710675"
-     inkscape:cx="1734.7124"
-     inkscape:cy="1143.7203"
+     inkscape:zoom="1.4142135"
+     inkscape:cx="785.52181"
+     inkscape:cy="66.349141"
      inkscape:document-units="px"
-     inkscape:current-layer="layer11"
+     inkscape:current-layer="g7598"
      showgrid="false"
      units="px"
      showguides="false"
@@ -4727,16 +4740,27 @@
            id="g7598"
            style="display:inline;enable-background:new"
            transform="translate(-58.748978)">
-          <path
-             style="display:inline;opacity:1;fill:#152127;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter5827);enable-background:new"
-             d="M 143.72162,1395.1606 H 1545.1984 v 120.4463 H 143.72162 Z"
-             id="rect4439"
-             inkscape:connector-curvature="0"
-             sodipodi:nodetypes="ccccc"
+          <g
+             id="g4863"
              inkscape:export-filename="/home/michael/workspace/spacetac/data/stage2/image/battle/actionbar/actions-background.png"
              inkscape:export-xdpi="96"
-             inkscape:export-ydpi="96"
-             clip-path="url(#clipPath6518)" />
+             inkscape:export-ydpi="96">
+            <path
+               clip-path="url(#clipPath6518)"
+               inkscape:export-ydpi="96"
+               inkscape:export-xdpi="96"
+               inkscape:export-filename="/home/michael/workspace/spacetac/data/stage2/image/battle/actionbar/actions-background.png"
+               sodipodi:nodetypes="ccccc"
+               inkscape:connector-curvature="0"
+               id="rect4439"
+               d="M 143.72162,1395.1606 H 1545.1984 v 120.4463 H 143.72162 Z"
+               style="display:inline;opacity:1;fill:#152127;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new" />
+            <path
+               inkscape:connector-curvature="0"
+               id="path4751"
+               d="m 167.7207,1491.6074 c 451.15951,0 902.319,0 1353.4785,0 0,-24.1491 0,-48.2982 0,-72.4472 -451.1595,0 -902.31899,0 -1353.4785,0 0,24.149 0,48.2981 0,72.4472 z"
+               style="display:inline;opacity:1;fill:#0b1216;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:16;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4857);enable-background:new" />
+          </g>
           <g
              id="g9553"
              transform="translate(30.581483,1320.8215)">
