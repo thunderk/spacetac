@@ -27,6 +27,18 @@
      id="defs4">
     <linearGradient
        inkscape:collect="always"
+       id="linearGradient1887">
+      <stop
+         style="stop-color:#4f778b;stop-opacity:1;"
+         offset="0"
+         id="stop1883" />
+      <stop
+         style="stop-color:#4f778b;stop-opacity:0;"
+         offset="1"
+         id="stop1885" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
        id="linearGradient1969">
       <stop
          style="stop-color:#7b8b93;stop-opacity:1"
@@ -2262,6 +2274,48 @@
          stdDeviation="3.7391486"
          id="feGaussianBlur2006" />
     </filter>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath6524-3">
+      <rect
+         style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.80091387px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         id="rect6526-6"
+         width="85.257042"
+         height="42.568779"
+         x="10.073028"
+         y="1028.7733" />
+    </clipPath>
+    <filter
+       inkscape:label="Evanescent"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Blur the contents of objects, preserving the outline and adding progressive transparency at edges"
+       style="color-interpolation-filters:sRGB"
+       id="filter5649-7">
+      <feGaussianBlur
+         result="result6"
+         stdDeviation="3"
+         in="SourceGraphic"
+         id="feGaussianBlur5651-5" />
+      <feColorMatrix
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0 "
+         result="result7"
+         in="SourceGraphic"
+         id="feColorMatrix5653-35" />
+      <feComposite
+         operator="in"
+         in="result6"
+         in2="result7"
+         id="feComposite5655-62" />
+    </filter>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1887"
+       id="linearGradient1889"
+       x1="55.049274"
+       y1="1061.8218"
+       x2="55.103851"
+       y2="1037.9482"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -2270,11 +2324,11 @@
      borderopacity="1"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="22.627416"
-     inkscape:cx="624.93921"
-     inkscape:cy="745.21905"
+     inkscape:zoom="0.70710675"
+     inkscape:cx="1734.7124"
+     inkscape:cy="1143.7203"
      inkscape:document-units="px"
-     inkscape:current-layer="g10129"
+     inkscape:current-layer="layer11"
      showgrid="false"
      units="px"
      showguides="false"
@@ -2867,13 +2921,13 @@
       <image
          sodipodi:absref="/home/michael/workspace/spacetac/graphics/ui/pics/sprite.png"
          xlink:href="pics/sprite.png"
-         width="84.542961"
-         height="84.542961"
-         preserveAspectRatio="none"
-         id="image9266"
-         x="930.039"
+         style="display:inline;enable-background:new"
          y="244.75706"
-         style="display:inline;enable-background:new" />
+         x="930.039"
+         id="image9266"
+         preserveAspectRatio="none"
+         height="84.542961"
+         width="84.542961" />
       <use
          x="0"
          y="0"
@@ -3544,6 +3598,70 @@
          inkscape:export-filename="/home/michael/workspace/spacetac/data/stage2/image/battle/shiplist/info-button-hover.png"
          inkscape:export-xdpi="96"
          inkscape:export-ydpi="96" />
+      <g
+         style="display:inline;enable-background:new"
+         inkscape:export-ydpi="96"
+         inkscape:export-xdpi="96"
+         inkscape:export-filename="/home/michael/workspace/spacetac/data/stage2/image/battle/shiplist/info-button-on.png"
+         transform="matrix(1.3001708,0,0,1.1990242,1944.9791,-1213.7946)"
+         id="g6122-9"
+         clip-path="url(#clipPath6524-3)">
+        <rect
+           transform="matrix(0.99697499,0,0,1.0527025,0.15942261,-56.50468)"
+           style="fill:#1c1f21;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.9375px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter5649-7)"
+           id="rect6113-1"
+           width="85.515732"
+           height="40.437622"
+           x="9.9436893"
+           y="1030.9446" />
+        <text
+           transform="scale(0.96031513,1.0413248)"
+           id="text6264-2"
+           y="1010.713"
+           x="44.896412"
+           style="font-style:normal;font-weight:normal;font-size:32.03655624px;line-height:18.77141953px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.75085676px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           xml:space="preserve"><tspan
+             style="font-size:32.03655624px;stroke-width:0.75085676px"
+             y="1028.4208"
+             x="44.896412"
+             id="tspan6262-7"
+             sodipodi:role="line" /></text>
+        <rect
+           style="opacity:1;fill:url(#linearGradient1889);fill-opacity:1;stroke:none;stroke-width:0.80091387;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.21194033"
+           id="rect1881"
+           width="61.584957"
+           height="24.405535"
+           x="23.611095"
+           y="1037.7344" />
+        <text
+           transform="scale(0.96031516,1.0413248)"
+           id="text6268-0"
+           y="1014.7706"
+           x="33.913712"
+           style="font-style:normal;font-weight:normal;font-size:36.04112625px;line-height:18.77141953px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#6690a4;fill-opacity:1;stroke:none;stroke-width:0.75085676px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.62924385px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:#dbeff9;fill-opacity:1;stroke-width:0.75085676px"
+             y="1014.7706"
+             x="33.913712"
+             id="tspan6266-9"
+             sodipodi:role="line">TAC</tspan></text>
+        <path
+           style="fill:none;fill-rule:evenodd;stroke:#9fc4d6;stroke-width:1.50171351;stroke-linecap:butt;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           d="m 21.700341,1062.4322 h 63.733223 v -23.2208"
+           id="path6277-3"
+           inkscape:connector-curvature="0" />
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot6279-6"
+           style="font-style:normal;font-weight:normal;font-size:48px;line-height:25px;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           transform="matrix(0.72105911,0,0,0.7818858,9.463562,171.09869)"><flowRegion
+             id="flowRegion6281-0"><rect
+               id="rect6283-6"
+               width="564.27124"
+               height="210.71782"
+               x="123.03658"
+               y="942.69641" /></flowRegion><flowPara
+             id="flowPara6285-2" /></flowRoot>      </g>
     </g>
     <g
        inkscape:groupmode="layer"
@@ -4432,12 +4550,12 @@
           <image
              sodipodi:absref="/home/michael/workspace/spacetac/graphics/ui/pics/action.png"
              xlink:href="pics/action.png"
-             y="-76.905212"
-             x="202.6355"
-             id="image5902"
-             preserveAspectRatio="none"
+             width="56.596996"
              height="56.596996"
-             width="56.596996" />
+             preserveAspectRatio="none"
+             id="image5902"
+             x="202.6355"
+             y="-76.905212" />
           <path
              style="display:inline;fill:url(#linearGradient7413);fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient7415);stroke-width:2.51867056;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;enable-background:new"
              d="m 194.85545,-30.839879 h 72.15707 l 7.5765,16.698951 h -87.31007 z"
@@ -5659,12 +5777,12 @@
       <image
          sodipodi:absref="/home/michael/workspace/spacetac/graphics/ui/pics/portrait.png"
          xlink:href="pics/portrait.png"
-         width="183.97668"
-         height="183.97649"
-         preserveAspectRatio="none"
-         id="image6587"
+         y="497.55182"
          x="465.07187"
-         y="497.55182" />
+         id="image6587"
+         preserveAspectRatio="none"
+         height="183.97649"
+         width="183.97668" />
     </g>
   </g>
   <g
@@ -6315,13 +6433,13 @@
           <image
              sodipodi:absref="/home/michael/workspace/spacetac/graphics/ui/pics/portrait.png"
              xlink:href="pics/portrait.png"
-             width="76.394867"
-             height="76.394867"
-             preserveAspectRatio="none"
-             id="image5590"
-             x="816.54016"
+             style="display:inline;enable-background:new"
              y="313.90408"
-             style="display:inline;enable-background:new" />
+             x="816.54016"
+             id="image5590"
+             preserveAspectRatio="none"
+             height="76.394867"
+             width="76.394867" />
         </g>
         <use
            transform="translate(96.619495)"

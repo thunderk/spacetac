@@ -13,7 +13,10 @@ module TK.SpaceTac.UI {
         action: BaseAction | null = null
         target: Target | null = null
         mode?: ActionTargettingMode
+
+        // Simulated result
         simulation = new MoveFireResult()
+        effects: BaseBattleDiff[] = []
 
         // Move and fire lines
         drawn_info: Phaser.Graphics
@@ -82,6 +85,9 @@ module TK.SpaceTac.UI {
         drawVector(color: number, x1: number, y1: number, x2: number, y2: number, gradation = 0) {
             let line = this.drawn_info;
             line.lineStyle(6, color);
+            line.moveTo(x1, y1);
+            line.lineTo(x2, y2);
+            line.lineStyle(2, 0x000000, 0.6);
             line.moveTo(x1, y1);
             line.lineTo(x2, y2);
             line.visible = true;
@@ -160,14 +166,27 @@ module TK.SpaceTac.UI {
             }
 
             if (radius) {
-                area.lineStyle(2, color, 0.6);
-                area.beginFill(color, 0.2);
                 if (angle) {
+                    area.lineStyle(2, color, 0.6);
+                    area.beginFill(color, 0.2);
                     area.arc(0, 0, radius, angle, -angle, true);
+                    area.endFill();
+
+                    area.lineStyle(1, color, 0.3);
+                    area.beginFill(color, 0.1);
+                    area.arc(0, 0, radius * 0.95, angle * 0.95, -angle * 0.95, true);
+                    area.endFill();
                 } else {
+                    area.lineStyle(2, color, 0.6);
+                    area.beginFill(color, 0.2);
                     area.drawCircle(0, 0, radius * 2);
+                    area.endFill();
+
+                    area.lineStyle(1, color, 0.3);
+                    area.beginFill(color, 0.1);
+                    area.drawCircle(0, 0, radius * 2 * 0.95);
+                    area.endFill();
                 }
-                area.endFill();
             }
         }
 
@@ -276,10 +295,16 @@ module TK.SpaceTac.UI {
          */
         simulate(): void {
             if (this.ship && this.action && this.target) {
-                let simulator = new MoveFireSimulator(this.ship);
+                let ship = this.ship;
+                let simulator = new MoveFireSimulator(ship);
                 this.simulation = simulator.simulateAction(this.action, this.target, 1);
+
+                this.effects = flatten(this.simulation.parts.map(part =>
+                    part.action.getDiffs(ship, nn(ship.getBattle()), part.target)
+                ));
             } else {
                 this.simulation = new MoveFireResult();
+                this.effects = [];
             }
         }
 
