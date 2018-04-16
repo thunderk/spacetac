@@ -53,7 +53,7 @@ module TK.SpaceTac.UI.Specs {
             battle.setPlayingShip(battle.play_order[0]);
             list.refresh(false);
             check.in("started", check => {
-                check.equals(nn(list.findItem(battle.play_order[0])).position, new Phaser.Point(-18, 962), "first ship position");
+                check.equals(nn(list.findItem(battle.play_order[0])).position, new Phaser.Point(-14, 962), "first ship position");
                 check.equals(nn(list.findItem(battle.play_order[1])).position, new Phaser.Point(2, 843), "second ship position");
             });
 
@@ -61,7 +61,7 @@ module TK.SpaceTac.UI.Specs {
             list.refresh(false);
             check.in("end turn", check => {
                 check.equals(nn(list.findItem(battle.play_order[0])).position, new Phaser.Point(2, 843), "first ship position");
-                check.equals(nn(list.findItem(battle.play_order[1])).position, new Phaser.Point(-18, 962), "second ship position");
+                check.equals(nn(list.findItem(battle.play_order[1])).position, new Phaser.Point(-14, 962), "second ship position");
             });
 
             ship = battle.fleets[1].addShip();
@@ -71,7 +71,7 @@ module TK.SpaceTac.UI.Specs {
             list.setShipsFromBattle(battle, false);
             check.in("third ship added", check => {
                 check.equals(list.items.length, 3, "item count");
-                check.equals(nn(list.findItem(battle.play_order[0])).position, new Phaser.Point(-18, 962), "first ship position");
+                check.equals(nn(list.findItem(battle.play_order[0])).position, new Phaser.Point(-14, 962), "first ship position");
                 check.equals(nn(list.findItem(battle.play_order[1])).position, new Phaser.Point(2, 843), "second ship position");
                 check.equals(nn(list.findItem(battle.play_order[2])).position, new Phaser.Point(2, 744), "third ship position");
             });
@@ -81,7 +81,7 @@ module TK.SpaceTac.UI.Specs {
             list.refresh(false);
             check.in("ship dead", check => {
                 check.equals(list.items.length, 3, "item count");
-                check.equals(nn(list.findItem(battle.play_order[0])).position, new Phaser.Point(-18, 962), "first ship position");
+                check.equals(nn(list.findItem(battle.play_order[0])).position, new Phaser.Point(-14, 962), "first ship position");
                 check.equals(nn(list.findItem(dead)).position, new Phaser.Point(200, 843), "dead ship position");
                 check.equals(nn(list.findItem(battle.play_order[1])).position, new Phaser.Point(2, 843), "second ship position");
             });

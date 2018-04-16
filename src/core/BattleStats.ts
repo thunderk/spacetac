@@ -37,7 +37,7 @@ module TK.SpaceTac {
         /**
          * Process a battle log
          */
-        processLog(log: BattleLog, attacker: Fleet, clear = false) {
+        processLog(log: BattleLog, attacker: Fleet, clear = true) {
             if (clear) {
                 this.stats = {};
             }
@@ -49,9 +49,9 @@ module TK.SpaceTac {
                     let diff_ship = diff.ship_id;
                     let attacker_ship = any(attacker.ships, ship => ship.is(diff_ship));
                     if (diff instanceof ShipDamageDiff) {
-                        this.addStat("Damage evaded", diff.evaded, !attacker_ship);
-                        this.addStat("Damage shielded", diff.shield, !attacker_ship);
-                        this.addStat("Damage to hull", diff.hull, !attacker_ship);
+                        this.addStat("Damage evaded", diff.evaded, attacker_ship);
+                        this.addStat("Damage shielded", diff.shield, attacker_ship);
+                        this.addStat("Damage taken", diff.hull, attacker_ship);
                     } else if (diff instanceof ShipMoveDiff) {
                         this.addStat("Move distance (km)", diff.getDistance(), attacker_ship);
                     } else if (diff instanceof DroneDeployedDiff) {
