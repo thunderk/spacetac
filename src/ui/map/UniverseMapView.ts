@@ -125,6 +125,10 @@ module TK.SpaceTac.UI {
             this.inputs.bind(" ", "Conversation step", () => this.conversation.forward());
             this.inputs.bind("Escape", "Skip conversation", () => this.conversation.skipConversation());
             this.inputs.bindCheat("r", "Reveal whole map", () => this.revealAll());
+            this.inputs.bindCheat("u", "Level up", () => {
+                this.player.fleet.ships.forEach(ship => ship.level.forceLevelUp());
+                this.refresh();
+            });
             this.inputs.bindCheat("n", "Next story step", () => {
                 if (this.player.missions.main) {
                     this.player.missions.main.current_part.forceComplete();

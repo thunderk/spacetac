@@ -41,14 +41,14 @@ module TK.SpaceTac.UI {
             builder.in(this.actions).image("battle-actionbar-actions-background");
 
             // Power bar
-            this.power = builder.group("power", 1468, 0);
+            this.power = builder.group("power", 1466, 0);
             builder.in(this.power, builder => {
                 builder.image("battle-actionbar-power-background", 0, 6);
                 this.power_icons = builder.group("power icons", 50, 14);
             });
 
             // Playing ship
-            builder.image("battle-actionbar-ship", 1730, -2);
+            builder.image("battle-actionbar-ship", 1735);
 
             // Waiting icon
             this.icon_waiting = new Phaser.Image(this.game, this.width / 2, this.height / 2, "common-waiting", 0);

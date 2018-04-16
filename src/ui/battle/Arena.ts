@@ -109,7 +109,7 @@ module TK.SpaceTac.UI {
 
             // Watch mouse move to capture hovering over background
             this.input_callback = this.view.input.addMoveCallback((pointer: Phaser.Pointer) => {
-                if (this.view.dialogs_opened.length > 0 || this.view.character_sheet.isOpened()) {
+                if (this.view.dialogs_opened.length > 0 || this.view.character_sheet.isOpened() || this.view.layer_overlay.length > 0) {
                     return;
                 }
 

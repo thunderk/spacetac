@@ -3,80 +3,97 @@ module TK.SpaceTac.UI {
      * Splash screen at the start of battle
      */
     export class BattleSplash {
-        private view: BaseView
-        private message: Phaser.Image
-        private player1: Phaser.Image
-        private player2: Phaser.Image
-
-        constructor(view: BaseView, fleet1: Fleet, fleet2: Fleet) {
-            this.view = view;
-
-            let builder = new UIBuilder(view);
-
-            this.message = builder.image("battle-splash-message-off", view.getMidWidth(), view.getMidHeight(), true);
-            this.message.visible = false;
-
-            this.player1 = builder.in(this.message).image("battle-splash-moving-part", 0, -70, true);
-            this.player1.visible = false;
-
-            let player1_name = builder.in(this.player1).text(fleet1.name, -240, 22, { size: 22, bold: true, color: "#154d13" });
-            player1_name.angle = -48;
-
-            fleet1.ships.forEach((ship, index) => {
-                let ship_card = builder.in(this.player1).image("battle-splash-shipcard-top", -100 + index * 96, -26, true);
-                let ship_portrait = builder.in(ship_card).image(`ship-${ship.model.code}-portrait`, -2, 2, true);
-                ship_portrait.scale.set(0.3);
-            });
-
-            this.player2 = builder.in(this.message).image("battle-splash-moving-part", 0, 70, true);
-            this.player2.angle = 180;
-            this.player2.visible = false;
-
-            let player2_name = builder.in(this.player2).text(fleet2.name, -240, 22, { size: 22, bold: true, color: "#651713" });
-            player2_name.angle = -228;
-
-            fleet2.ships.forEach((ship, index) => {
-                let ship_card = builder.in(this.player2).image("battle-splash-shipcard-top", -104 + index * 96, -32, true);
-                ship_card.angle = 180;
-                let ship_portrait = builder.in(ship_card).image(`ship-${ship.model.code}-portrait`, -2, -12, true);
-                ship_portrait.scale.set(0.3);
-            });
+        constructor(private view: BaseView, private fleet1: Fleet, private fleet2: Fleet) {
         }
 
         /**
-         * Add the splash to a view layer
+         * Create and animate splash component, returns when the animation is ended
          */
-        moveToLayer(layer: Phaser.Group): void {
-            layer.add(this.message);
+        private async components(builder: UIBuilder): Promise<void> {
+            let base = builder.image("battle-splash-message-off", this.view.getMidWidth(), this.view.getMidHeight(), true);
+
+            let message = builder.in(base).image("battle-splash-message-on", 0, 0, true);
+            message.visible = false;
+
+            let player1 = builder.in(base).image("battle-splash-moving-part", 0, -50, true);
+            player1.visible = false;
+
+            let player1_name = builder.in(player1).text(this.fleet1.name, -224, 0, { size: 22, bold: true, color: "#154d13" });
+            player1_name.angle = -48;
+
+            this.fleet1.ships.forEach((ship, index) => {
+                let ship_card = builder.in(player1).image("battle-splash-ship-card", -86 + index * 96, -72, true);
+                let ship_portrait = builder.in(ship_card).image(`ship-${ship.model.code}-portrait`, 0, 0, true);
+                ship_portrait.scale.set(0.3);
+            });
+
+            let player2 = builder.in(base).image("battle-splash-moving-part", 0, 50, true);
+            player2.angle = 180;
+            player2.visible = false;
+
+            let player2_name = builder.in(player2).text(this.fleet2.name, -224, 0, { size: 22, bold: true, color: "#651713" });
+            player2_name.angle = -228;
+
+            this.fleet2.ships.forEach((ship, index) => {
+                let ship_card = builder.in(player2).image("battle-splash-ship-card", -86 + index * 96, -72, true);
+                let ship_portrait = builder.in(ship_card).image(`ship-${ship.model.code}-portrait`, 0, 0, true);
+                ship_portrait.angle = 180;
+                ship_portrait.scale.set(0.3);
+            });
+
+            let anims = this.view.animations;
+
+            base.visible = true;
+            base.scale.set(0.8);
+
+            await anims.addAnimation(base.scale, { x: 1, y: 1 }, 300, Phaser.Easing.Bounce.Out);
+
+            this.view.timer.schedule(600, () => {
+                message.visible = true;
+                message.alpha = 0.7;
+            });
+            this.view.timer.schedule(660, () => message.alpha = 0.1);
+            this.view.timer.schedule(680, () => message.alpha = 0.8);
+            this.view.timer.schedule(710, () => message.alpha = 0.3);
+            this.view.timer.schedule(760, () => message.alpha = 1);
+
+            player1.x = -2000;
+            player1.visible = true;
+            player2.x = 2000;
+            player2.visible = true;
+            anims.addAnimation(player2, { x: 147 }, 600, Phaser.Easing.Bounce.Out, 400);
+            await anims.addAnimation(player1, { x: -150 }, 600, Phaser.Easing.Bounce.Out, 400);
+        }
+
+        /**
+         * Create an overlay, returns when it is clicked
+         */
+        overlay(builder: UIBuilder): Promise<void> {
+            return new Promise(resolve => {
+                let overlay = builder.button("translucent-black", 0, 0, resolve);
+                overlay.input.useHandCursor = true;
+                overlay.scale.set(this.view.getWidth() / overlay.width, this.view.getHeight() / overlay.height);
+            });
         }
 
         /**
          * Start the animation
          */
-        async start(): Promise<void> {
-            let anims = this.view.animations;
-            this.message.visible = true;
-            this.message.scale.set(0.8);
+        start(parent?: UIGroup): Promise<void> {
+            let builder = new UIBuilder(this.view, parent);
+            let group = builder.group("splash");
 
-            await anims.addAnimation(this.message.scale, { x: 1, y: 1 }, 300, Phaser.Easing.Bounce.Out);
+            let overlay = this.overlay(builder.in(group));
+            let components = this.components(builder.in(group));
 
-            let builder = new UIBuilder(this.view);
-            this.view.timer.schedule(600, () => builder.change(this.message, "battle-splash-message-on"));
-            this.view.timer.schedule(630, () => builder.change(this.message, "battle-splash-message-off"));
-            this.view.timer.schedule(640, () => builder.change(this.message, "battle-splash-message-on"));
-            this.view.timer.schedule(655, () => builder.change(this.message, "battle-splash-message-off"));
-            this.view.timer.schedule(680, () => builder.change(this.message, "battle-splash-message-on"));
-
-            this.player1.x = -2000;
-            this.player1.visible = true;
-            this.player2.x = 2000;
-            this.player2.visible = true;
-            anims.addAnimation(this.player2, { x: 129 }, 600, Phaser.Easing.Bounce.Out, 400);
-            await anims.addAnimation(this.player1, { x: -133 }, 600, Phaser.Easing.Bounce.Out, 400);
-
-            await anims.addAnimation(this.message, { alpha: 0 }, 500, Phaser.Easing.Linear.None, 1500);
-
-            this.message.destroy(true);
+            return Promise.all([
+                overlay.then(() => {
+                    group.visible = false;
+                }),
+                components
+            ]).then(() => {
+                group.destroy(true);
+            });
         }
     }
 }

@@ -83,7 +83,7 @@ module TK.SpaceTac.UI {
         bindCheat(key: string, desc: string, action: Function): void {
             this.bind(key, `Cheat: ${desc}`, () => {
                 if (this.cheat) {
-                    console.warn(`Cheat ! ${desc}`);
+                    this.game.displayMessage(`Cheat ! ${desc}`);
                     action();
                 }
             });

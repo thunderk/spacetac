@@ -27,22 +27,22 @@ module TK.SpaceTac.UI {
 
             this.ship = ship;
 
-            this.player_indicator = this.view.newImage(owned ? "battle-hud-ship-own-mini" : "battle-hud-ship-enemy-mini", 10, 52);
-            this.player_indicator.anchor.set(0.5, 0.5);
-            this.player_indicator.angle = 90;
+            this.player_indicator = this.view.newImage(owned ? "battle-hud-ship-own-mini" : "battle-hud-ship-enemy-mini", 102, 52);
+            this.player_indicator.anchor.set(0.5);
+            this.player_indicator.angle = -90;
             this.addChild(this.player_indicator);
 
-            this.portrait = this.view.newImage(`ship-${ship.model.code}-sprite`, 62, 52);
-            this.portrait.anchor.set(0.5, 0.5);
-            this.portrait.scale.set(0.8, 0.8);
+            this.portrait = this.view.newImage(`ship-${ship.model.code}-sprite`, 52, 52);
+            this.portrait.anchor.set(0.5);
+            this.portrait.scale.set(0.8);
             this.portrait.angle = 180;
             this.addChild(this.portrait);
 
-            this.damage_indicator = this.view.newImage("battle-shiplist-damage", 18, 9);
+            this.damage_indicator = this.view.newImage("battle-shiplist-damage", 8, 9);
             this.damage_indicator.alpha = 0;
             this.addChild(this.damage_indicator);
 
-            this.hover_indicator = this.view.newImage("battle-shiplist-hover", 17, 8);
+            this.hover_indicator = this.view.newImage("battle-shiplist-hover", 7, 8);
             this.hover_indicator.visible = false;
             this.addChild(this.hover_indicator);
 

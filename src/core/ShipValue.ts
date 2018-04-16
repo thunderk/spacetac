@@ -122,10 +122,10 @@ module TK.SpaceTac {
         hull_capacity = new ShipAttribute()
         // Maximal shield value
         shield_capacity = new ShipAttribute()
+        // Damage evasion
+        evasion = new ShipAttribute()
         // Maximal power value
         power_capacity = new ShipAttribute()
-        // Damage evation
-        evasion = new ShipAttribute()
     }
 
     /**

@@ -67,7 +67,7 @@ module TK.SpaceTac.UI {
 
             let sprite = this.battleview.arena.findShipSprite(ship);
             if (sprite) {
-                this.container.show(sprite.frame.getBounds());
+                this.container.show(sprite.frame_owner.getBounds());
             }
         }
 

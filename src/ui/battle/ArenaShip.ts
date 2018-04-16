@@ -1,5 +1,7 @@
 module TK.SpaceTac.UI {
-    // Ship sprite in the arena (BattleView)
+    /**
+     * Ship sprite in the arena, with corresponding HUD
+     */
     export class ArenaShip extends Phaser.Group {
         // Link to the view
         arena: Arena
@@ -19,19 +21,19 @@ module TK.SpaceTac.UI {
 
         // HSP display
         hsp: Phaser.Image
-        hull_bar: ValueBar
-        hull_text: Phaser.Text
-        shield_bar: ValueBar
-        shield_text: Phaser.Text
         power_text: Phaser.Text
+        life_hull: UIGroup
+        life_shield: UIGroup
+        life_evasion: UIGroup
         toggle_hsp: Toggle
 
         // Play order
         play_order: Phaser.Text
         toggle_play_order: Toggle
 
-        // Frame to indicate the owner of the ship, and if it is playing
-        frame: Phaser.Image
+        // Frames to indicate the owner, if the ship is hovered, and if it is hovered
+        frame_owner: UIImage
+        frame_hover: UIImage
 
         // Effects display
         active_effects_display: Phaser.Group
@@ -44,6 +46,7 @@ module TK.SpaceTac.UI {
             super(parent.game);
             this.arena = parent;
             this.battleview = parent.view;
+            let builder = new UIBuilder(parent.view).in(this);
 
             this.ship = ship;
             this.enemy = !this.battleview.player.is(this.ship.fleet.player);
@@ -53,59 +56,33 @@ module TK.SpaceTac.UI {
             this.add(this.effects_radius);
 
             // Add frame indicating which side this ship is on
-            this.frame = this.battleview.newImage(this.enemy ? "battle-hud-ship-enemy" : "battle-hud-ship-own");
-            this.frame.anchor.set(0.5, 0.5);
-            this.add(this.frame);
+            this.frame_owner = builder.image(this.enemy ? "battle-hud-ship-enemy" : "battle-hud-ship-own", 0, 0, true);
             this.setPlaying(false);
+            this.frame_hover = builder.image("battle-hud-ship-hover", 0, 0, true);
+            this.frame_hover.visible = false;
 
             // Add ship sprite
-            this.sprite = this.battleview.newImage(`ship-${ship.model.code}-sprite`);
+            this.sprite = builder.image(`ship-${ship.model.code}-sprite`, 0, 0, true);
             this.sprite.rotation = ship.arena_angle;
-            this.sprite.anchor.set(0.5, 0.5);
-            this.add(this.sprite);
 
             // Add stasis effect
-            this.stasis = this.battleview.newImage("battle-hud-ship-stasis");
-            this.stasis.anchor.set(0.5, 0.5);
+            this.stasis = builder.image("battle-hud-ship-stasis", 0, 0, true);
             this.stasis.alpha = 0.9;
             this.stasis.visible = !ship.alive;
-            this.add(this.stasis);
 
             // HSP display
-            this.hsp = this.battleview.newImage("battle-hud-ship-hsp", -50, 28);
-            this.add(this.hsp);
-            this.hull_bar = new ValueBar(this.battleview, "battle-hud-ship-hull", ValueBarOrientation.WEST, 48, 15);
-            this.hull_bar.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity"));
-            this.hsp.addChild(this.hull_bar.node);
-            this.shield_bar = new ValueBar(this.battleview, "battle-hud-ship-shield", ValueBarOrientation.EAST, 53, 15);
-            this.shield_bar.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity"));
-            this.hsp.addChild(this.shield_bar.node);
-            this.hull_text = new Phaser.Text(this.game, 0, 20, `${this.ship.getValue("hull")}`,
-                { align: "left", font: "12pt SpaceTac", fill: "#eb4e4a" });
-            this.hull_text.setShadow(1, 1, "#000000");
-            this.hull_text.anchor.set(0, 1);
-            this.hsp.addChild(this.hull_text);
-            this.shield_text = new Phaser.Text(this.game, 104, 20, `${this.ship.getValue("shield")}`,
-                { align: "right", font: "12pt SpaceTac", fill: "#2ad8dc" });
-            this.shield_text.setShadow(1, 1, "#000000");
-            this.shield_text.anchor.set(1, 1);
-            this.hsp.addChild(this.shield_text);
-            this.power_text = new Phaser.Text(this.game, 51, 10, `${this.ship.getValue("power")}`,
-                { align: "center", font: "10pt SpaceTac", fill: "#ffdd4b" });
-            this.power_text.setShadow(1, 1, "#000000");
-            this.power_text.anchor.set(0.5, 0.5);
-            this.hsp.addChild(this.power_text);
+            this.hsp = builder.image("battle-hud-hsp-background", 0, 34, true);
+            this.power_text = builder.in(this.hsp).text(`${ship.getValue("power")}`, -42, 2,
+                { size: 13, color: "#ffdd4b", bold: true, shadow: true, center: true });
+            this.life_hull = builder.in(this.hsp).group("hull");
+            this.life_shield = builder.in(this.hsp).group("shield");
+            this.life_evasion = builder.in(this.hsp).group("evasion");
             this.toggle_hsp = this.battleview.animations.newVisibilityToggle(this.hsp, 200, false);
 
             // Play order display
-            let play_order_bg = this.battleview.newImage("battle-hud-ship-play-order", -44, 0);
-            play_order_bg.anchor.set(0.5, 0.5);
-            this.play_order = new Phaser.Text(this.game, -2, 3, "", { font: "bold 12pt SpaceTac", fill: "#d1d1d1" });
-            this.play_order.setShadow(1, 1, "#000000");
-            this.play_order.anchor.set(0.5, 0.5);
-            play_order_bg.addChild(this.play_order);
-            this.toggle_play_order = this.battleview.animations.newVisibilityToggle(play_order_bg, 200, false);
-            this.add(play_order_bg);
+            let play_order = builder.image("battle-hud-ship-play-order", -44, 0, true)
+            this.play_order = builder.in(play_order).text("", -2, 3, { size: 12, bold: true, color: "#d1d1d1", shadow: true, center: true });
+            this.toggle_play_order = this.battleview.animations.newVisibilityToggle(play_order, 200, false);
 
             // Effects display
             this.active_effects_display = new Phaser.Group(this.game);
@@ -116,6 +93,9 @@ module TK.SpaceTac.UI {
             this.effects_messages_toggle = this.battleview.animations.newVisibilityToggle(this.effects_messages, 500, false);
 
             this.updatePlayOrder();
+            this.updateHull(this.ship.getValue("hull"));
+            this.updateShield(this.ship.getValue("shield"));
+            this.updateEvasion(this.ship.getAttribute("evasion"));
             this.updateActiveEffects();
             this.updateEffectsRadius();
 
@@ -162,20 +142,23 @@ module TK.SpaceTac.UI {
                         }
 
                         if (diff.code == "hull") {
-                            this.hull_bar.setValue(this.ship.getValue("hull"), this.ship.getAttribute("hull_capacity") || 0);
-                            this.hull_text.text = `${this.ship.getValue("hull")}`;
                             if (animate) {
-                                await this.battleview.animations.blink(this.hull_text);
+                                this.updateHull(this.ship.getValue("hull") - diff.diff, diff.diff);
+                                await timer.sleep(1000);
+                                this.updateHull(this.ship.getValue("hull"));
+                                await timer.sleep(500);
+                            } else {
+                                this.updateHull(this.ship.getValue("hull"));
                             }
                         } else if (diff.code == "shield") {
-                            this.shield_bar.setValue(this.ship.getValue("shield"), this.ship.getAttribute("shield_capacity") || 0);
-                            this.shield_text.text = `${this.ship.getValue("shield")}`;
                             if (animate) {
-                                await this.battleview.animations.blink(this.shield_text);
+                                this.updateShield(this.ship.getValue("shield") - diff.diff, diff.diff);
+                                await timer.sleep(1000);
+                                this.updateShield(this.ship.getValue("shield"));
+                                await timer.sleep(500);
+                            } else {
+                                this.updateShield(this.ship.getValue("shield"));
                             }
-                            /*if (this.shield_bar.getValue() == 0) {
-                                this.displayEffect("Shield failure", false);
-                            }*/
                         } else if (diff.code == "power") {
                             this.power_text.text = `${this.ship.getValue("power")}`;
                             if (animate) {
@@ -193,8 +176,13 @@ module TK.SpaceTac.UI {
                 return {
                     background: async (animate, timer) => {
                         if (animate) {
-                            this.displayAttributeChanged(diff)
-                            await timer.sleep(1000);
+                            this.displayAttributeChanged(diff);
+                            if (diff.code == "evasion") {
+                                // TODO diff
+                                this.updateEvasion(this.ship.getAttribute("evasion"));
+                                this.toggle_hsp.manipulate("attribute")(2000);
+                            }
+                            await timer.sleep(2000);
                         }
                     }
                 }
@@ -298,6 +286,8 @@ module TK.SpaceTac.UI {
                 this.toggle_hsp.manipulate(client)(false);
                 this.toggle_play_order.manipulate(client)(false);
             }
+
+            this.battleview.animations.setVisible(this.frame_hover, hovered && this.ship.alive && !tactical, 200);
         }
 
         /**
@@ -306,12 +296,12 @@ module TK.SpaceTac.UI {
          * This will alter the HUD frame to show this state
          */
         async setPlaying(playing: boolean, animate = true): Promise<void> {
-            this.frame.alpha = playing ? 1 : 0.35;
-            this.frame.visible = this.ship.alive;
+            this.frame_owner.alpha = playing ? 1 : 0.35;
+            this.frame_owner.visible = this.ship.alive;
 
             if (playing && animate) {
                 this.battleview.audio.playOnce("battle-ship-change");
-                await this.battleview.animations.blink(this.frame);
+                await this.battleview.animations.blink(this.frame_owner);
             }
         }
 
@@ -365,8 +355,8 @@ module TK.SpaceTac.UI {
                 (this.ship.arena_y < arena.height * 0.9) ? 50 : (-50 - this.effects_messages.height)
             );
 
-            this.effects_messages_toggle.manipulate("added")(1000);
-            await this.battleview.timer.sleep(1000);
+            this.effects_messages_toggle.manipulate("added")(1400);
+            await this.battleview.timer.sleep(1500);
         }
 
         /**
@@ -391,6 +381,57 @@ module TK.SpaceTac.UI {
             } else {
                 this.play_order.text = play_order.toString();
             }
+        }
+
+        /**
+         * Reposition the HSP indicators
+         */
+        repositionLifeIndicators(): void {
+            this.life_hull.x = -25;
+            this.life_shield.x = this.life_hull.x + (this.life_hull.length * 9);
+            this.life_evasion.x = this.life_shield.x + (this.life_shield.length * 9);
+        }
+
+        /**
+         * Update the hull indicator
+         */
+        updateHull(current: number, diff = 0): void {
+            let builder = new UIBuilder(this.battleview, this.life_hull);
+            builder.clear();
+
+            range(current).forEach(i => {
+                builder.image("battle-hud-hsp-hull", i * 9, 0, true);
+            });
+
+            this.repositionLifeIndicators();
+        }
+
+        /**
+         * Update the shield indicator
+         */
+        updateShield(current: number, diff = 0): void {
+            let builder = new UIBuilder(this.battleview, this.life_shield);
+            builder.clear();
+
+            range(current).forEach(i => {
+                builder.image("battle-hud-hsp-shield", i * 9, 0, true);
+            });
+
+            this.repositionLifeIndicators();
+        }
+
+        /**
+         * Update the evasion indicator
+         */
+        updateEvasion(current: number, diff = 0): void {
+            let builder = new UIBuilder(this.battleview, this.life_evasion);
+            builder.clear();
+
+            range(current).forEach(i => {
+                builder.image("battle-hud-hsp-evasion", i * 9, 0, true);
+            });
+
+            this.repositionLifeIndicators();
         }
 
         /**

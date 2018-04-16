@@ -125,7 +125,7 @@ module TK.SpaceTac.UI {
                         item.visible = false;
                     } else {
                         if (position == 0) {
-                            item.moveTo(-18, 962, animate ? 1000 : 0);
+                            item.moveTo(-14, 962, animate ? 1000 : 0);
                         } else {
                             item.moveTo(2, 942 - position * 99, animate ? 1000 : 0);
                         }

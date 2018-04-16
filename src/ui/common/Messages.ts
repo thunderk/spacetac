@@ -9,13 +9,12 @@ module TK.SpaceTac.UI {
             super(parent.view.game);
 
             this.view = parent.view;
+            let builder = new UIBuilder(this.view).in(this);
 
             this.background = new Phaser.Graphics(this.game);
             this.add(this.background);
 
-            this.text = new Phaser.Text(this.game, 0, 0, text,
-                { font: "bold 14pt SpaceTac", fill: "#90FEE3" });
-            this.add(this.text);
+            this.text = builder.text(text, 0, 0, { color: "#DBEFF9", shadow: true, size: 16, center: false, vcenter: false });
 
             this.position.set(parent.view.getWidth(), 10);
 

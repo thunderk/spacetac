@@ -213,8 +213,7 @@ module TK.SpaceTac.UI {
          */
         showSplash(): Promise<void> {
             let splash = new BattleSplash(this, this.battle.fleets[0], this.battle.fleets[1]);
-            splash.moveToLayer(this.layer_overlay);
-            return splash.start();
+            return splash.start(this.layer_overlay);
         }
 
         /**

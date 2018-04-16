@@ -16,7 +16,7 @@
    version="1.1"
    id="svg8"
    sodipodi:docname="title.svg"
-   inkscape:version="0.92.1 r15371"
+   inkscape:version="0.92.3 (3ce5693, 2018-03-11)"
    inkscape:export-filename="/home/michael/workspace/spacetac/out/assets/images/menu/title.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
@@ -45,15 +45,15 @@
       <stop
          id="stop6072"
          offset="0"
-         style="stop-color:#1b3b4b;stop-opacity:1" />
+         style="stop-color:#8e9599;stop-opacity:1" />
       <stop
-         style="stop-color:#1b3b4b;stop-opacity:0.62127662"
-         offset="0.42624518"
+         style="stop-color:#6c9bb1;stop-opacity:0.97254902"
+         offset="0.5514378"
          id="stop6074" />
       <stop
          id="stop6076"
          offset="1"
-         style="stop-color:#dbeff9;stop-opacity:0.10425532" />
+         style="stop-color:#8ea2ac;stop-opacity:1" />
     </linearGradient>
     <linearGradient
        id="linearGradient6070"
@@ -435,38 +435,6 @@
          d="M 169.2551,50.035267 H 369.1266 V 162.26318 H 169.2551 Z"
          style="display:inline;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.65267009px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
     </clipPath>
-    <filter
-       style="color-interpolation-filters:sRGB;"
-       inkscape:label="Drop Shadow"
-       id="filter6258">
-      <feFlood
-         flood-opacity="0.623529"
-         flood-color="rgb(102,144,164)"
-         result="flood"
-         id="feFlood6248" />
-      <feComposite
-         in="flood"
-         in2="SourceGraphic"
-         operator="in"
-         result="composite1"
-         id="feComposite6250" />
-      <feGaussianBlur
-         in="composite1"
-         stdDeviation="6.9"
-         result="blur"
-         id="feGaussianBlur6252" />
-      <feOffset
-         dx="0"
-         dy="0"
-         result="offset"
-         id="feOffset6254" />
-      <feComposite
-         in="SourceGraphic"
-         in2="offset"
-         operator="over"
-         result="composite2"
-         id="feComposite6256" />
-    </filter>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient6484"
@@ -567,6 +535,32 @@
          stdDeviation="37.729402"
          id="feGaussianBlur1466" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1356"
+       x="-0.059728358"
+       width="1.1194567"
+       y="-0.32978172"
+       height="1.6595634">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="24.682331"
+         id="feGaussianBlur1358" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1406"
+       x="-0.0099213645"
+       width="1.0198427"
+       y="-0.054779418"
+       height="1.1095588">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="4.0999353"
+         id="feGaussianBlur1408" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -575,11 +569,11 @@
      borderopacity="0.36862745"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.54663483"
-     inkscape:cx="933.00761"
-     inkscape:cy="576.40196"
+     inkscape:zoom="0.77305842"
+     inkscape:cx="929.02692"
+     inkscape:cy="418.06157"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g1368"
      showgrid="false"
      showguides="false"
      inkscape:lockguides="false"
@@ -1395,20 +1389,51 @@
            height="100%"
            transform="matrix(-1,0,0,1,1854.4715,301.84684)" />
       </g>
-      <text
-         inkscape:export-ydpi="96"
-         inkscape:export-xdpi="96"
-         inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title.png"
-         id="text4529"
-         y="911.17249"
-         x="464.10831"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:25.00000191px;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:0px;word-spacing:0px;display:inline;fill:url(#radialGradient7707);fill-opacity:1;stroke:url(#linearGradient7709);stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter6258)"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:213.33334351px;line-height:24.98268127px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:url(#radialGradient7707);fill-opacity:1;stroke:url(#linearGradient7709);stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+      <g
+         id="g1368">
+        <text
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title.png"
+           id="text1336"
            y="911.17249"
            x="464.10831"
-           id="tspan4527"
-           sodipodi:role="line">SpaceTac</tspan></text>
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:25.00000191px;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:0px;word-spacing:0px;display:inline;opacity:0.35100002;fill:#9fc4d6;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter1356)"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:213.33334351px;line-height:24.98268127px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:#9fc4d6;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             y="911.17249"
+             x="464.10831"
+             id="tspan1334"
+             sodipodi:role="line">SpaceTac</tspan></text>
+        <text
+           inkscape:export-ydpi="96"
+           inkscape:export-xdpi="96"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title.png"
+           id="text1372"
+           y="911.17249"
+           x="464.10831"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:25.00000191px;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:0px;word-spacing:0px;display:inline;fill:none;fill-opacity:1;stroke:#262626;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter1406)"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:213.33334351px;line-height:24.98268127px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:none;fill-opacity:1;stroke:#262626;stroke-width:6;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+             y="911.17249"
+             x="464.10831"
+             id="tspan1370"
+             sodipodi:role="line">SpaceTac</tspan></text>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:192px;line-height:25.00000191px;font-family:'Arial Black';-inkscape-font-specification:'Arial Black, ';letter-spacing:0px;word-spacing:0px;display:inline;fill:url(#radialGradient7707);fill-opacity:1;stroke:url(#linearGradient7709);stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+           x="464.10831"
+           y="911.17249"
+           id="text4529"
+           inkscape:export-filename="/home/michael/workspace/perso/spacetac/out/assets/images/menu/title.png"
+           inkscape:export-xdpi="96"
+           inkscape:export-ydpi="96"><tspan
+             sodipodi:role="line"
+             id="tspan4527"
+             x="464.10831"
+             y="911.17249"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:213.33334351px;line-height:24.98268127px;font-family:DAGGERSQUARE;-inkscape-font-specification:DAGGERSQUARE;fill:url(#radialGradient7707);fill-opacity:1;stroke:url(#linearGradient7709);stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1">SpaceTac</tspan></text>
+      </g>
       <g
          id="g1404">
         <text

@@ -146,8 +146,8 @@ module TK.SpaceTac.UI {
 
                 if (!(background.width && background.data.bg_bounds && UITools.compareRects(background.data.bg_bounds, bounds))) {
                     background.clear();
-                    background.lineStyle(2, 0x404450);
-                    background.beginFill(0x202225);
+                    background.lineStyle(2, 0x6690a4);
+                    background.beginFill(0x162730);
                     background.drawRect(x, y, width, height);
                     background.endFill();
 
