@@ -24,7 +24,7 @@ module TK.SpaceTac.UI {
 
             // Presents...
             builder.in(layer_presents, builder => {
-                builder.styled({ center: true }, builder => {
+                builder.styled({ center: true, color: "#DBEFF9", shadow: true }, builder => {
                     builder.text("Michael Lemaire", this.getMidWidth(), this.getHeight() * 0.4, { size: 32 });
                     builder.text("presents", this.getMidWidth(), this.getHeight() * 0.6, { size: 24 });
                 });

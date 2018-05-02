@@ -15,17 +15,20 @@ module TK.SpaceTac.UI {
         padding = 10
 
         // Background fill color
-        background = 0x202225
+        background = 0x1B3B4B
         alpha = 0.9
 
         // Border color and width
-        border = 0x404450
+        border = 0x3A6479
         border_width = 2
 
-        // Text font style
-        text_color = "#ffffff"
-        text_size = 20
-        text_bold = true
+        // Text style
+        text: UITextStyleI = {
+            color: "#DBEFF9",
+            size: 20,
+            bold: true,
+            shadow: true
+        }
 
         // Portrait or image to display (from atlases)
         image = ""
@@ -42,23 +45,30 @@ module TK.SpaceTac.UI {
 
             this.drawBackground(style.background, style.border, style.border_width, style.alpha);
 
+            let builder = this.builder.styled(style.text);
+            if (!style.center) {
+                builder = builder.styled({ center: false, vcenter: false });
+            }
+
             let offset = 0;
             if (style.image_size && style.image) {
                 offset = style.image_size + style.padding;
                 width -= offset;
 
                 let ioffset = style.padding + Math.floor(style.image_size / 2);
-                this.addImage(ioffset, ioffset, style.image);
+                builder.image(style.image, ioffset, ioffset);
 
                 if (style.image_caption) {
-                    let text_size = Math.ceil(style.text_size * 0.6);
-                    this.addText(ioffset, style.padding + style.image_size + text_size, style.image_caption,
-                        style.text_color, text_size, false, true, style.image_size);
+                    let text_size = Math.ceil(style.text.size ? style.text.size * 0.6 : 16);
+                    builder.text(style.image_caption, ioffset, style.padding + style.image_size + text_size, {
+                        size: text_size
+                    });
                 }
             }
 
-            let text = this.addText(offset + (style.center ? width / 2 : style.padding), style.center ? height / 2 : style.padding, message,
-                style.text_color, style.text_size, style.text_bold, style.center, width - style.padding * 2, style.center);
+            let text = builder.text(message, offset + (style.center ? width / 2 : style.padding), style.center ? height / 2 : style.padding, {
+                width: width - style.padding * 2
+            });
 
             let i = 0;
             let colorchar = () => {

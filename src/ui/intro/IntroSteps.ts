@@ -82,30 +82,29 @@ module TK.SpaceTac.UI {
 
                 let galaxy = game.add.group(layer, "galaxy");
                 galaxy.position.set(mwidth, mheight);
-                game.tweens.create(galaxy).to({ rotation: Math.PI * 2 }, 60000).loop().start();
+                game.tweens.create(galaxy).to({ rotation: Math.PI * 2 }, 150000).loop().start();
                 game.tweens.create(galaxy).from({ alpha: 0 }, 3000).start();
 
-                let random = RandomGenerator.global;
-                range(500).forEach(i => {
-                    let distance = random.random() * mheight;
-                    let angle = random.random() * Math.PI * 2;
+                let builder = new UIBuilder(this.view, galaxy);
+                let back1 = builder.image("intro-galaxy1", 0, 0, true);
+                back1.scale.set(2.5);
+                let back2 = builder.image("intro-galaxy2", 0, 0, true);
+                back2.scale.set(1.5);
+                game.tweens.create(back2).to({ rotation: Math.PI * 2 }, 300000).loop().start();
 
-                    let color = random.weighted([5000, 0, 40, 10, 3, 15, 2, 10, 6, 30, 40, 50, 100, 80, 120, 140]);
+                let random = RandomGenerator.global;
+                range(200).forEach(i => {
+                    let distance = (0.3 + random.random() * 0.7) * mheight;
+                    let angle = random.random() * Math.PI * 2;
                     let power = 0.4 + random.random() * 0.6;
 
                     let star = game.add.image(distance * Math.cos(angle), distance * Math.sin(angle),
-                        "common-particles", 16 + color, galaxy);
-                    star.scale.set(0.1 + random.random() * 0.2);
+                        "common-particles", 16, galaxy);
+                    star.scale.set(0.15 + random.random() * 0.2);
                     star.anchor.set(0.5);
                     star.alpha = power * 0.5;
                     game.tweens.create(star).to({ alpha: star.alpha + 0.5 }, 200 + random.random() * 500,
                         undefined, true, 1000 + random.random() * 3000, undefined, true).repeat(-1, 2000 + random.random() * 5000).start();
-
-                    let dust = game.add.image(distance * Math.cos(angle), distance * Math.sin(angle),
-                        "common-particles", color, galaxy);
-                    dust.anchor.set(0.5);
-                    dust.alpha = 0.05 * power;
-                    dust.scale.set(5);
                 });
             }
         }
