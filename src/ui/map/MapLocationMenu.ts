@@ -4,26 +4,31 @@ module TK.SpaceTac.UI {
     /**
      * Menu to display selected map location, and associated actions
      */
-    export class MapLocationMenu extends UIComponent {
-        constructor(view: BaseView) {
-            super(view, 478, 500);
+    export class MapLocationMenu {
+        readonly container: UIContainer
+        private content: UIBuilder
+
+        constructor(private view: BaseView, parent?: UIContainer, x = 0, y = 0) {
+            let builder = new UIBuilder(view, parent);
+            this.container = builder.container("location-menu", x, y);
+            this.content = builder.in(this.container);
         }
 
         /**
          * Set information displayed, with title and actions to show in menu
          */
         setInfo(title: string, actions: [string, Function][]) {
-            this.clearContent();
+            this.content.clear();
 
             if (title) {
-                this.builder.image("map-subname", 239, 57, true);
-                this.builder.text(title, 239, 57, { color: "#b8d2f1", size: 22 })
+                this.content.image("map-subname", 239, 57, true);
+                this.content.text(title, 239, 57, { color: "#b8d2f1", size: 22 })
             }
 
             for (let idx = actions.length - 1; idx >= 0; idx--) {
                 let [label, action] = actions[idx];
-                this.builder.button("map-action", 172, 48 + idx * 100 + 96, action).anchor.set(0.5);
-                this.builder.text(label, 186, 48 + idx * 100 + 136, { color: "#b8d2f1", size: 20 });
+                this.content.button("map-action", 172, 48 + idx * 100 + 96, action, undefined, undefined, { center: true });
+                this.content.text(label, 186, 48 + idx * 100 + 136, { color: "#b8d2f1", size: 20 });
             }
         }
 

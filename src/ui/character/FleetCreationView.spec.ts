@@ -2,12 +2,14 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("FleetCreationView", test => {
-        let testgame = setupSingleView(test, () => [new FleetCreationView, []]);
+        let testgame = setupSingleView(test, () => [new FleetCreationView({}), []]);
 
         test.acase("validates the fleet creation", async check => {
+            let mock_router = check.patch(testgame.view, "backToRouter");
+
             check.same(testgame.ui.session.isFleetCreated(), false, "no fleet created");
             check.same(testgame.ui.session.player.fleet.ships.length, 0, "empty session fleet");
-            check.same(testgame.view.dialogs_layer.children.length, 0, "no dialogs");
+            check.same(testgame.view.dialogs_layer.length, 0, "no dialogs");
             check.same(testgame.view.character_sheet.fleet, testgame.view.built_fleet);
             check.same(testgame.view.built_fleet.ships.length, 2, "initial fleet should have two ships");
 
@@ -21,7 +23,7 @@ module TK.SpaceTac.UI.Specs {
             await dialog.forceResult(false);
             check.same(testgame.view.dialogs_opened.length, 0, "confirmation dialog destroyed after 'no'");
             check.same(testgame.ui.session.isFleetCreated(), false, "still no fleet created after 'no'");
-            check.equals(testgame.state, "test_initial");
+            check.called(mock_router, 0);
 
             // close sheet, click on yes in confirmation dialog
             testClick(testgame.view.character_sheet.close_button);
@@ -30,7 +32,7 @@ module TK.SpaceTac.UI.Specs {
             check.same(testgame.view.dialogs_opened.length, 0, "confirmation dialog destroyed after 'yes'");
             check.same(testgame.ui.session.isFleetCreated(), true, "fleet created");
             check.same(testgame.ui.session.player.fleet.ships.length, 2, "session fleet now has two ships");
-            check.equals(testgame.state, "router");
+            check.called(mock_router, 1);
         })
     })
 }

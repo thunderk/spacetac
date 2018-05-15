@@ -2,13 +2,12 @@
 /// <reference path="MainMenu.ts" />
 
 module TK.SpaceTac.UI.Specs {
-    testing("LoadDialog", test => {
+    testing("InputInviteCode", test => {
         let testgame = setupEmptyView(test);
 
         test.acase("joins remote sessions as spectator", async check => {
             return new Promise((resolve, reject) => {
-                let view = <MainMenu>testgame.ui.state.getCurrentState();
-
+                let view = testgame.view;
                 let session = new GameSession();
                 check.equals(session.primary, true);
                 check.equals(session.spectator, false);

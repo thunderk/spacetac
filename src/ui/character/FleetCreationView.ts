@@ -21,7 +21,7 @@ module TK.SpaceTac.UI {
 
             this.character_sheet = new CharacterSheet(this, CharacterSheetMode.CREATION, () => this.validateFleet());
             this.character_sheet.show(this.built_fleet.ships[0], false);
-            this.getLayer("characters").add(this.character_sheet);
+            this.character_sheet.moveToLayer(this.getLayer("characters"));
         }
 
         /**

@@ -8,7 +8,7 @@ module TK.SpaceTac.UI {
         view: BattleView
 
         // Container
-        container: Phaser.Button
+        container: UIButton
 
         // Related ship
         ship: Ship
@@ -25,40 +25,39 @@ module TK.SpaceTac.UI {
         cooldown = 0
 
         // Images
-        img_targetting!: Phaser.Image
-        img_top: Phaser.Image | null = null
-        img_bottom: Phaser.Image
-        img_power: Phaser.Image
-        img_sticky: Phaser.Image
-        img_action: Phaser.Image
+        img_targetting!: UIImage
+        img_top: UIImage | null = null
+        img_bottom: UIImage
+        img_power: UIImage
+        img_cooldown_group: UIContainer
+        img_cooldown: UIImage
+        img_action: UIImage
 
         // Indicators
-        text_power!: Phaser.Text
+        text_power!: UIText
 
         constructor(bar: ActionBar, ship: Ship, action: BaseAction, position: number) {
             this.bar = bar;
             this.view = bar.battleview;
 
-            let info = this.view.getImageInfo("battle-actionbar-frame-disabled");
-            this.container = this.view.add.button(0, 0, info.key, () => this.processClick(), undefined, info.frame, info.frame);
-            this.container.anchor.set(0.5);
-            this.container.input.useHandCursor = false;
+            let builder = new UIBuilder(this.view);
+            this.container = builder.button("battle-actionbar-frame-disabled", 0, 0, () => this.processClick(), filler => {
+                ActionTooltip.fill(filler, this.ship, this.action, position);
+                return true;
+            }, undefined, { center: true });
+            builder = builder.in(this.container);
 
             this.ship = ship;
             this.action = action;
 
-            let builder = new UIBuilder(this.view, this.container);
-
             // Action icon
-            this.img_action = builder.image(`action-${action.code}`);
-            this.img_action.anchor.set(0.5);
-            this.img_action.scale.set(0.35);
-            this.img_action.alpha = 0.2;
+            this.img_action = builder.image(`action-${action.code}`, 0, 0, true);
+            this.img_action.setScale(0.35);
+            this.img_action.setAlpha(0.2);
 
             // Hotkey indicator
             if (!(action instanceof EndTurnAction)) {
-                this.img_top = builder.image("battle-actionbar-hotkey", 0, -47);
-                this.img_top.anchor.set(0.5);
+                this.img_top = builder.image("battle-actionbar-hotkey", 0, -47, true);
                 builder.in(this.img_top, builder => {
                     builder.text(`${(position + 1) % 10}`, 0, 0, {
                         size: 12, color: "#d1d1d1", shadow: true, center: true, vcenter: true
@@ -67,19 +66,16 @@ module TK.SpaceTac.UI {
             }
 
             // Bottom indicator
-            this.img_bottom = builder.image("battle-actionbar-bottom-disabled", 0, 40);
-            this.img_bottom.anchor.set(0.5);
+            this.img_bottom = builder.image("battle-actionbar-bottom-disabled", 0, 40, true);
             builder.in(this.img_bottom, builder => {
                 this.img_targetting = builder.image("battle-actionbar-bottom-targetting", 0, 12);
-                this.img_targetting.anchor.set(0.5);
-                this.img_targetting.visible = false;
+                this.img_targetting.setVisible(false);
             });
 
             // Left indicator
             this.selected = false;
-            this.img_power = builder.image("battle-actionbar-consumption-disabled", -46);
-            this.img_power.anchor.set(0.5);
-            this.img_power.visible = false;
+            this.img_power = builder.image("battle-actionbar-consumption-disabled", -46, 0, true);
+            this.img_power.setVisible(false);
             builder.in(this.img_power, builder => {
                 this.text_power = builder.text("", -2, 4, {
                     size: 16, color: "#ffdd4b", shadow: true, center: true, vcenter: true
@@ -87,15 +83,8 @@ module TK.SpaceTac.UI {
             });
 
             // Right indicator
-            this.img_sticky = builder.image("battle-actionbar-sticky-untoggled", 46);
-            this.img_sticky.anchor.set(0.5);
-            this.img_sticky.visible = action instanceof ToggleAction;
-
-            // Events
-            this.view.tooltip.bind(this.container, filler => {
-                ActionTooltip.fill(filler, this.ship, this.action, position);
-                return true;
-            });
+            this.img_cooldown_group = builder.container("cooldown", 46, 0, action instanceof ToggleAction);
+            this.img_cooldown = builder.in(this.img_cooldown_group).image("battle-actionbar-sticky-untoggled", 46, 0, true);
 
             // Initialize
             this.refresh();
@@ -111,9 +100,9 @@ module TK.SpaceTac.UI {
         /**
          * Move to a given layer and position
          */
-        moveTo(layer: Phaser.Group, x = 0, y = 0): void {
+        moveTo(layer: UIContainer, x = 0, y = 0): void {
             layer.add(this.container);
-            this.container.position.set(x, y);
+            this.container.setPosition(x, y);
         }
 
         /**
@@ -182,7 +171,7 @@ module TK.SpaceTac.UI {
 
             // inputs
             if (disabled != this.disabled) {
-                this.container.input.useHandCursor = !disabled;
+                //this.container.input.useHandCursor = !disabled;
             }
 
             // frame
@@ -193,11 +182,7 @@ module TK.SpaceTac.UI {
                 } else if (fading) {
                     name = "battle-actionbar-frame-fading";
                 }
-
-                let info = this.view.getImageInfo(name);
-                this.container.name = name;
-                this.container.loadTexture(info.key);
-                this.container.setFrames(info.frame, info.frame, info.frame, info.frame);
+                this.container.setBaseImage(name);
             }
 
             // action icon
@@ -226,10 +211,10 @@ module TK.SpaceTac.UI {
 
             // left
             let cost = this.action.getPowerUsage(this.ship, null);
-            this.img_power.visible = bool(cost);
-            this.text_power.text = `${Math.abs(cost)}\n${cost < 0 ? "+" : "-"}`;
-            this.text_power.fill = (cost > 0) ? "#ffdd4b" : "#dbe748";
-            this.text_power.alpha = disabled ? 0.2 : 1;
+            this.img_power.setVisible(bool(cost));
+            this.text_power.setText(`${Math.abs(cost)}\n${cost < 0 ? "+" : "-"}`);
+            this.text_power.setColor((cost > 0) ? "#ffdd4b" : "#dbe748");
+            this.text_power.setAlpha(disabled ? 0.2 : 1);
             if (disabled != this.disabled || selected != this.selected || toggled != this.toggled) {
                 if (disabled) {
                     this.view.changeImage(this.img_power, "battle-actionbar-consumption-disabled");
@@ -244,27 +229,28 @@ module TK.SpaceTac.UI {
 
             // right
             if (toggled != this.toggled || disabled != this.disabled || heat != this.cooldown) {
-                destroyChildren(this.img_sticky);
+                let builder = new UIBuilder(this.view, this.img_cooldown_group);
+                destroyChildren(this.img_cooldown_group, 1);
                 if (this.action instanceof ToggleAction) {
                     if (toggled) {
-                        this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-toggled");
+                        builder.change(this.img_cooldown, "battle-actionbar-sticky-toggled");
                     } else {
-                        this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-untoggled");
+                        builder.change(this.img_cooldown, "battle-actionbar-sticky-untoggled");
                     }
-                    this.img_sticky.visible = !disabled;
+                    this.img_cooldown.visible = !disabled;
                 } else if (heat) {
                     if (disabled) {
-                        this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-disabled");
+                        builder.change(this.img_cooldown, "battle-actionbar-sticky-disabled");
                     } else {
-                        this.view.changeImage(this.img_sticky, "battle-actionbar-sticky-overheat");
+                        builder.change(this.img_cooldown, "battle-actionbar-sticky-overheat");
                     }
                     range(Math.min(heat - 1, 4)).forEach(i => {
-                        this.img_sticky.addChild(this.view.newImage("battle-actionbar-cooldown-one", 0, 2 - i * 7));
+                        builder.image("battle-actionbar-cooldown-one", 0, 2 - i * 7);
                     });
-                    this.img_sticky.addChild(this.view.newImage("battle-actionbar-cooldown-front", -4, -20));
-                    this.img_sticky.visible = true;
+                    builder.image("battle-actionbar-cooldown-front", -4, -20);
+                    this.img_cooldown.visible = true;
                 } else {
-                    this.img_sticky.visible = false;
+                    this.img_cooldown.visible = false;
                 }
             }
 

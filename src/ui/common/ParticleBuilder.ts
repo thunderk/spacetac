@@ -56,16 +56,16 @@ module TK.SpaceTac.UI {
         /**
          * Get a particle image for this config
          */
-        getImage(game: Phaser.Game, scaling = 1, angle = 0): Phaser.Image {
+        getImage(view: BaseView): UIImage {
             let frame = this.shape * 16 + this.color;
-            let result = game.add.image(0, 0, "common-particles", frame);
-            result.data.frame = frame;
-            result.data.key = "common-particles";
-            result.anchor.set(0.5);
-            result.angle = angle + this.angle;
-            result.alpha = this.alpha;
-            result.scale.set(this.scale * scaling);
-            result.position.set(this.offsetx * scaling, this.offsety * scaling);
+            let result = view.add.image(0, 0, "common-particles", frame);
+            result.setDataEnabled();
+            (<any>result.data).frame = frame;
+            (<any>result.data).key = "common-particles";
+            result.setAngle(this.angle);
+            result.setAlpha(this.alpha);
+            result.setScale(this.scale);
+            result.setPosition(this.offsetx, this.offsety);
             return result;
         }
     }
@@ -83,18 +83,14 @@ module TK.SpaceTac.UI {
         /**
          * Build a composed particle
          */
-        build(configs: ParticleConfig[]): Phaser.Image {
-            if (configs.length == 0) {
-                return this.view.newImage("common-transparent");
-            } else {
-                let base = configs[0];
-                let result = base.getImage(this.view.game, 1);
-                configs.slice(1).forEach(config => {
-                    let sub = config.getImage(this.view.game, 1 / base.scale, -base.angle);
-                    result.addChild(sub);
-                });
-                return result;
-            }
+        build(configs: ParticleConfig[]): UIContainer {
+            let result = this.view.add.container(0, 0);
+
+            configs.forEach(config => {
+                result.add(config.getImage(this.view));
+            });
+
+            return result;
         }
     }
 }

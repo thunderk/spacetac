@@ -10,7 +10,7 @@ module TK.SpaceTac.UI {
             let builder = filler.styled({ size: 20 });
 
             let icon = builder.image(`action-${action.code}`);
-            icon.scale.set(0.5);
+            icon.setScale(0.5);
 
             builder.text(action.getTitle(ship), 150, 0, { size: 24 });
 

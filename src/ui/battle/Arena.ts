@@ -15,10 +15,7 @@ module TK.SpaceTac.UI {
         range_hint: RangeHint
 
         // Input capture
-        private mouse_capture?: Phaser.Button
-
-        // Input callback to receive mouse move events
-        private input_callback: any = null
+        private mouse_capture?: UIImage
 
         // List of ship sprites
         private ship_sprites: ArenaShip[] = []
@@ -32,42 +29,45 @@ module TK.SpaceTac.UI {
         private playing: ArenaShip | null
 
         // Layer for particles
-        container: Phaser.Group
-        layer_garbage: Phaser.Group
-        layer_hints: Phaser.Group
-        layer_drones: Phaser.Group
-        layer_ships: Phaser.Group
-        layer_weapon_effects: Phaser.Group
-        layer_targetting: Phaser.Group
+        container: UIContainer
+        layer_garbage: UIContainer
+        layer_hints: UIContainer
+        layer_drones: UIContainer
+        layer_ships: UIContainer
+        layer_weapon_effects: UIContainer
+        layer_targetting: UIContainer
 
         // Callbacks to receive cursor events
         callbacks_hover: ((location: ArenaLocation | null, ship: Ship | null) => void)[] = []
         callbacks_click: (() => void)[] = []
 
         // Create a graphical arena for ship sprites to fight in a 2D space
-        constructor(view: BattleView, container?: Phaser.Group) {
+        constructor(view: BattleView, container?: UIContainer) {
             this.view = view;
             this.playing = null;
             this.hovered = null;
             this.range_hint = new RangeHint(this);
 
-            this.container = container || new Phaser.Group(view.game, undefined, "arena");
-            this.container.position.set(this.boundaries.x, this.boundaries.y);
+            let builder = new UIBuilder(view, container);
+            if (!container) {
+                container = builder.container("arena");
+                builder = builder.in(container);
+            }
+            this.container = container;
+            container.setPosition(this.boundaries.x, this.boundaries.y);
 
             this.setupMouseCapture();
 
-            this.layer_garbage = this.container.add(new Phaser.Group(view.game, undefined, "garbage"));
-            this.layer_hints = this.container.add(new Phaser.Group(view.game, undefined, "hints"));
-            this.layer_drones = this.container.add(new Phaser.Group(view.game, undefined, "drones"));
-            this.layer_ships = this.container.add(new Phaser.Group(view.game, undefined, "ships"));
-            this.layer_weapon_effects = this.container.add(new Phaser.Group(view.game, undefined, "effects"));
-            this.layer_targetting = this.container.add(new Phaser.Group(view.game, undefined, "targetting"));
+            this.layer_garbage = builder.container("garbage");
+            this.layer_hints = builder.container("hints");
+            this.layer_drones = builder.container("drones");
+            this.layer_ships = builder.container("ships");
+            this.layer_weapon_effects = builder.container("effects");
+            this.layer_targetting = builder.container("targetting");
 
             this.range_hint.setLayer(this.layer_hints);
             this.addShipSprites();
             view.battle.drones.list().forEach(drone => this.addDrone(drone, false));
-
-            this.container.onDestroy.add(() => this.destroy());
 
             view.log_processor.register(diff => this.checkDroneDeployed(diff));
             view.log_processor.register(diff => this.checkDroneRecalled(diff));
@@ -83,7 +83,7 @@ module TK.SpaceTac.UI {
         /**
          * Move to a specific layer
          */
-        moveToLayer(layer: Phaser.Group): void {
+        moveToLayer(layer: UIContainer): void {
             layer.add(this.container);
         }
 
@@ -93,35 +93,31 @@ module TK.SpaceTac.UI {
         setupMouseCapture() {
             let view = this.view;
 
-            let info = view.getImageInfo("battle-arena-background");
-            var background = new Phaser.Button(view.game, 0, 0, info.key, undefined, undefined, info.frame, info.frame);
-            background.name = "mouse-capture";
-            background.scale.set(this.boundaries.width / background.width, this.boundaries.height / background.height);
-            this.mouse_capture = background;
+            let background = new UIBuilder(view, this.container).image("battle-arena-background");
+            background.setName("mouse-capture");
+            background.setScale(this.boundaries.width / background.width, this.boundaries.height / background.height)
 
             // Capture clicks on background
-            background.onInputUp.add(() => {
+            background.setInteractive();
+            background.on("pointerup", () => {
                 this.callbacks_click.forEach(callback => callback());
             });
-            background.onInputOut.add(() => {
+            background.on("pointerout", () => {
                 this.callbacks_hover.forEach(callback => callback(null, null));
             });
 
             // Watch mouse move to capture hovering over background
-            this.input_callback = this.view.input.addMoveCallback((pointer: Phaser.Pointer) => {
+            view.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
                 if (this.view.dialogs_opened.length > 0 || this.view.character_sheet.isOpened() || this.view.layer_overlay.length > 0) {
                     return;
                 }
 
-                let point = new Phaser.Point();
-                if (view.input.hitTest(background, pointer, point)) {
-                    let location = new ArenaLocation(point.x * background.scale.x, point.y * background.scale.y);
-                    let ship = this.getShip(location);
-                    this.callbacks_hover.forEach(callback => callback(location, ship));
-                }
+                let location = new ArenaLocation(pointer.x, pointer.y);
+                let ship = this.getShip(location);
+                this.callbacks_hover.forEach(callback => callback(location, ship));
             }, null);
 
-            this.container.add(this.mouse_capture);
+            this.mouse_capture = background;
         }
 
         /**
@@ -133,16 +129,6 @@ module TK.SpaceTac.UI {
                 return nearest.ship;
             } else {
                 return null;
-            }
-        }
-
-        /**
-         * Call when the arena is destroyed to properly remove input handlers
-         */
-        destroy() {
-            if (this.input_callback) {
-                this.view.input.deleteMoveCallback(this.input_callback);
-                this.input_callback = null;
             }
         }
 
@@ -244,15 +230,16 @@ module TK.SpaceTac.UI {
                 this.drone_sprites.push(sprite);
 
                 if (animate) {
-                    sprite.position.set(owner.arena_x, owner.arena_y);
-                    sprite.sprite.rotation = owner.arena_angle;
-                    let move_duration = Animations.moveInSpace(sprite, drone.x, drone.y, angle, sprite.sprite);
-                    this.view.tweens.create(sprite.radius).from({ alpha: 0 }, 500, Phaser.Easing.Cubic.In, true, move_duration);
+                    sprite.radius.setAlpha(0);
+                    sprite.setPosition(owner.arena_x, owner.arena_y);
+                    sprite.sprite.setRotation(owner.arena_angle);
+                    let move_duration = this.view.animations.moveInSpace(sprite, drone.x, drone.y, angle, sprite.sprite);
+                    this.view.animations.addAnimation(sprite.radius, { alpha: 1 }, 500, "Cubic.easeIn", move_duration);
 
                     return move_duration + 500;
                 } else {
-                    sprite.position.set(drone.x, drone.y);
-                    sprite.sprite.rotation = angle;
+                    sprite.setPosition(drone.x, drone.y);
+                    sprite.setRotation(angle);
                     return 0;
                 }
 

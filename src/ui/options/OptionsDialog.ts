@@ -13,16 +13,17 @@ module TK.SpaceTac.UI {
             } else {
                 this.pageMenu();
             }
+
+            this.addCloseButton();
         }
 
         pageCommon() {
             let options = this.view.options;
 
-            this.clearContent();
-            this.addCloseButton();
+            this.content.clear();
 
-            this.builder.image("options-logo", 473, 71);
-            this.builder.image("options-buttons-background", 244, 357);
+            this.content.image("options-logo", 473, 71);
+            this.content.image("options-buttons-background", 244, 357);
 
             this.addToggleButton(415, 381, "options-option-sound", "Toggle all sound",
                 toggled => options.setNumberValue("mainvolume", toggled ? 1 : 0),
@@ -44,16 +45,15 @@ module TK.SpaceTac.UI {
          * Add a toggle button
          */
         addToggleButton(x: number, y: number, key: string, tooltip: string, callback: (state: boolean) => boolean, initial: boolean): UIButton {
-            let button = this.builder.button("options-toggle", x, y, undefined, tooltip, state => {
+            let button = this.content.button("options-toggle", x, y, undefined, tooltip, state => {
                 if (callback(state)) {
                     return state;
                 } else {
                     return !state;
                 }
-            });
-            button.anchor.set(0.5);
-            this.builder.in(button).image(key, 0, 0, true);
-            this.builder.switch(button, initial);
+            }, { center: true });
+            this.content.in(button).image(key, 0, 0, true);
+            button.toggle(initial);
             return button;
         }
 
@@ -64,7 +64,7 @@ module TK.SpaceTac.UI {
             this.pageCommon();
 
             if (this.view.session.primary) {
-                this.builder.button("options-button", this.width / 2, 600, () => this.pageInvite(), "Invite a friend to join this game as spectator", undefined, {
+                this.content.button("options-button", this.width / 2, 600, () => this.pageInvite(), "Invite a friend to join this game as spectator", undefined, {
                     center: true,
                     text: "Invite a friend",
                     text_style: {
@@ -74,7 +74,7 @@ module TK.SpaceTac.UI {
                 });
             }
 
-            this.builder.button("options-button", this.width / 2, 800, () => this.view.gameui.quitGame(), "End the current game and go back to main menu", undefined, {
+            this.content.button("options-button", this.width / 2, 800, () => this.view.gameui.quitGame(), "End the current game and go back to main menu", undefined, {
                 center: true,
                 text: "Quit to menu",
                 text_style: {
@@ -90,7 +90,7 @@ module TK.SpaceTac.UI {
         pageCredits() {
             this.pageCommon();
 
-            this.builder.text("Credits", this.width / 2, 566, { center: true, size: 48, color: "#dbeff9", shadow: true });
+            this.content.text("Credits", this.width / 2, 566, { center: true, size: 48, color: "#dbeff9", shadow: true });
             let credits = "Michaël Lemaire - Code and graphics\n\
 Viktor Hahn - Ship models\n\
 KenneyNL - Sound effects\n\
@@ -98,7 +98,7 @@ Matthieu Desprez - Beta testing and ideas\n\
 Néstor Delgado - Font\n\
 Nicolas Forgo - Ship models\n\
 Kevin MacLeod - Musics";
-            this.builder.text(credits, this.width / 2, 754, { center: true, size: 24, color: "#9fc4d6", shadow: true });
+            this.content.text(credits, this.width / 2, 754, { center: true, size: 24, color: "#9fc4d6", shadow: true });
         }
 
         /**
@@ -131,11 +131,13 @@ Kevin MacLeod - Musics";
         private displayMultiplayerToken(token: string) {
             this.pageCommon();
 
-            this.addText(this.width / 2, 540, "Give this invite code to your friend:", "#dbeff9", 36, false, true);
-            this.addText(this.width / 2, 620, token, "#9FC4D6", 36, true, true);
-            this.addText(this.width / 2, 700, "Waiting for a connection...", "#BF9757", 36, false, true);
+            this.content.styled({ size: 36 }, content => {
+                content.text("Give this invite code to your friend:", this.width / 2, 540, { color: "#dbeff9" });
+                content.text(token, this.width / 2, 620, { color: "#9FC4D6" });
+                content.text("Waiting for a connection...", this.width / 2, 700, { color: "#BF9757" });
+            });
 
-            this.builder.button("options-button", this.width / 2, 840, () => this.pageMenu(), "Cancel waiting for the other person to connect", undefined, {
+            this.content.button("options-button", this.width / 2, 840, () => this.pageMenu(), "Cancel waiting for the other person to connect", undefined, {
                 center: true,
                 text: "Cancel",
                 text_style: {
@@ -151,9 +153,13 @@ Kevin MacLeod - Musics";
         private displayConnectionError() {
             this.pageCommon();
 
-            this.addText(this.width / 2, 620, "Could not establish connection to server", "#b35b56", 36, true, true);
+            this.content.text("Could not establish connection to server", this.width / 2, 620, {
+                color: "#b35b56",
+                size: 36,
+                bold: true
+            });
 
-            this.builder.button("options-button", this.width / 2, 840, () => this.pageMenu(), "Cancel the connection", undefined, {
+            this.content.button("options-button", this.width / 2, 840, () => this.pageMenu(), "Cancel the connection", undefined, {
                 center: true,
                 text: "Cancel",
                 text_style: {

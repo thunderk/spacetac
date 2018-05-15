@@ -3,15 +3,16 @@ module TK.SpaceTac.UI {
      * Marker to show a mission location on the map
      */
     export class MissionLocationMarker {
-        private view: BaseView
-        private container: Phaser.Group
+        private builder: UIBuilder
         private markers: [StarLocation | Star, string][] = []
         private zoomed = true
         private current_star?: Star
 
-        constructor(view: BaseView, parent: Phaser.Group) {
+        constructor(private view: BaseView, parent: UIContainer) {
             this.view = view;
-            this.container = view.game.add.group(parent, "mission_markers");
+
+            let builder = new UIBuilder(view, parent);
+            this.builder = builder.in(builder.container("mission_markers"));
         }
 
         /**
@@ -35,16 +36,14 @@ module TK.SpaceTac.UI {
          * Refresh the display
          */
         refresh(): void {
-            this.container.removeAll(true);
+            this.builder.clear();
 
             this.markers.forEach(([location, name], index) => {
                 let focus = this.zoomed ? location : (location instanceof StarLocation ? location.star : location);
                 if (location !== this.current_star || !this.zoomed) {
                     let marker = this.getMarker(focus, index - 1);
-                    let image = this.view.newImage(name, marker.x, marker.y);
-                    image.scale.set(marker.scale);
-                    image.anchor.set(0.5);
-                    this.container.add(image);
+                    let image = this.builder.image(name, marker.x, marker.y);
+                    image.setScale(marker.scale);
                 }
             });
         }

@@ -1,6 +1,8 @@
 module TK.SpaceTac.UI {
-    // One item in a ship list (used in BattleView)
-    export class ShipListItem extends Phaser.Button {
+    /**
+     * One item in a ship list (used in BattleView)
+     */
+    export class ShipListItem extends UIContainer {
         // Reference to the view
         view: BaseView
 
@@ -8,43 +10,40 @@ module TK.SpaceTac.UI {
         ship: Ship
 
         // Player indicator
-        player_indicator: Phaser.Image
+        player_indicator: UIImage
 
         // Portrait
-        portrait: Phaser.Image
+        portrait: UIImage
 
         // Damage flashing indicator
-        damage_indicator: Phaser.Image
+        damage_indicator: UIImage
 
         // Hover indicator
-        hover_indicator: Phaser.Image
+        hover_indicator: UIImage
 
         // Create a ship button for the battle ship list
         constructor(list: ShipList, x: number, y: number, ship: Ship, owned: boolean, ship_buttons: IShipButton) {
-            let info = list.view.getImageInfo("battle-shiplist-item-background");
-            super(list.view.game, x, y, info.key, undefined, undefined, info.frame, info.frame);
+            // TODO Make it an UIButton
+            super(list.view, x, y);
             this.view = list.view;
-
             this.ship = ship;
 
-            this.player_indicator = this.view.newImage(owned ? "battle-hud-ship-own-mini" : "battle-hud-ship-enemy-mini", 102, 52);
-            this.player_indicator.anchor.set(0.5);
-            this.player_indicator.angle = -90;
-            this.addChild(this.player_indicator);
+            let builder = new UIBuilder(list.view, this);
 
-            this.portrait = this.view.newImage(`ship-${ship.model.code}-sprite`, 52, 52);
-            this.portrait.anchor.set(0.5);
-            this.portrait.scale.set(0.8);
-            this.portrait.angle = 180;
-            this.addChild(this.portrait);
+            builder.image("battle-shiplist-item-background");
 
-            this.damage_indicator = this.view.newImage("battle-shiplist-damage", 8, 9);
-            this.damage_indicator.alpha = 0;
-            this.addChild(this.damage_indicator);
+            this.player_indicator = builder.image(owned ? "battle-hud-ship-own-mini" : "battle-hud-ship-enemy-mini", 102, 52, true);
+            this.player_indicator.setAngle(-90);
 
-            this.hover_indicator = this.view.newImage("battle-shiplist-hover", 7, 8);
+            this.portrait = builder.image(`ship-${ship.model.code}-sprite`, 52, 52, true);
+            this.portrait.setScale(0.8)
+            this.portrait.setAngle(180);
+
+            this.damage_indicator = builder.image("battle-shiplist-damage", 8, 9);
+            this.damage_indicator.visible = false;
+
+            this.hover_indicator = builder.image("battle-shiplist-hover", 7, 8);
             this.hover_indicator.visible = false;
-            this.addChild(this.hover_indicator);
 
             this.view.inputs.setHoverClick(this,
                 () => ship_buttons.cursorOnShip(ship),
@@ -53,22 +52,38 @@ module TK.SpaceTac.UI {
             );
         }
 
-        // Flash a damage indicator
-        setDamageHit() {
-            this.game.tweens.create(this.damage_indicator).to({ alpha: 1 }, 100).to({ alpha: 0 }, 150).repeatAll(2).start();
+        get location(): { x: number, y: number } {
+            return { x: this.x, y: this.y };
         }
 
-        // Move to a given location on screen
-        moveTo(x: number, y: number, duration: number) {
+        /**
+         * Flash a damage indicator
+         */
+        setDamageHit() {
+            this.view.tweens.add({
+                targets: this.damage_indicator,
+                duration: 100,
+                alpha: 1,
+                repeat: 2,
+                yoyo: true
+            });
+        }
+
+        /**
+         * Move to a given location on screen
+         */
+        moveAt(x: number, y: number, duration: number) {
             if (duration && (this.x != x || this.y != y)) {
-                this.view.animations.addAnimation(this, { x: x, y: y }, duration);
+                this.view.animations.addAnimation<UIContainer>(this, { x: x, y: y }, duration);
             } else {
                 this.x = x;
                 this.y = y;
             }
         }
 
-        // Set the hovered status
+        /**
+         * Set the hovered status
+         */
         setHovered(hovered: boolean) {
             this.view.animations.setVisible(this.hover_indicator, hovered, 200);
         }

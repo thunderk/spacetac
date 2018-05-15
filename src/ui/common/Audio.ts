@@ -1,46 +1,85 @@
 module TK.SpaceTac.UI {
-    // Utility functions for sounds
+    class AudioSettings {
+        main_volume = 1
+        music_volume = 1
+    }
+
+    /**
+     * Utility functions to play sounds and musics
+     */
     export class Audio {
-        private game: MainUI
-        private music: Phaser.Sound | null = null
-        private music_volume = 1
+        private static SETTINGS = new AudioSettings();
+        private music: Phaser.Sound.BaseSound | undefined
         private music_playing_volume = 1
 
-        constructor(game: MainUI) {
-            this.game = game;
+        constructor(private view: BaseView | null) {
         }
 
-        // Check if the sound system is up and running
-        isActive(): boolean {
-            return !this.game.headless && this.game.sound.context;
+        /**
+         * Check if the sound system is active, and return a manager to operate with it
+         */
+        private getManager(): Phaser.Sound.BaseSoundManager | null {
+            if (this.view) {
+                return this.view.sound;
+            } else {
+                return null;
+            }
         }
 
-        // Play a ponctual sound
+        /**
+         * Check if an audio key is present in cache
+         */
+        hasCache(key: string): boolean {
+            return this.view ? this.view.cache.audio.has(key) : false;
+        }
+
+        /**
+         * Play a single sound effect (fire-and-forget)
+         */
         playOnce(key: string): void {
-            if (this.isActive()) {
-                this.game.sound.play(key);
+            let manager = this.getManager();
+            if (manager) {
+                if (this.hasCache(key)) {
+                    manager.play(key);
+                } else {
+                    console.warn("Missing sound", key);
+                }
             }
         }
 
-        // Start a background music
+        /**
+         * Start a background music in repeat
+         */
         startMusic(key: string, volume = 1): void {
-            key = "music-" + key;
-            if (this.isActive()) {
+            let manager = this.getManager();
+            if (manager) {
                 this.stopMusic();
+
                 if (!this.music) {
-                    this.music_playing_volume = volume;
-                    this.music = this.game.sound.play(key, volume * this.music_volume, true);
+                    key = "music-" + key;
+                    if (this.hasCache(key)) {
+                        this.music_playing_volume = volume;
+                        this.music = manager.add(key, {
+                            volume: volume * Audio.SETTINGS.music_volume,
+                            loop: true
+                        });
+                        this.music.play();
+                    } else {
+                        console.warn("Missing music", key);
+                    }
                 }
             }
         }
 
-        // Stop currently playing background music
+        /**
+         * Stop currently playing background music
+         */
         stopMusic(): void {
-            if (this.isActive()) {
-                if (this.music) {
-                    this.music.stop();
-                    this.music = null;
-                }
+            let music = this.music;
+            if (music) {
+                music.stop();
+                music.destroy();
+                this.music = undefined;
             }
         }
 
@@ -48,19 +87,18 @@ module TK.SpaceTac.UI {
          * Get the main volume (0-1)
          */
         getMainVolume(): number {
-            if (this.isActive()) {
-                return this.game.sound.volume;
-            } else {
-                return 0;
-            }
+            return Audio.SETTINGS.main_volume;
         }
 
         /**
          * Set the main volume (0-1)
          */
         setMainVolume(value: number) {
-            if (this.isActive()) {
-                this.game.sound.volume = clamp(value, 0, 1);
+            Audio.SETTINGS.main_volume = clamp(value, 0, 1);
+
+            let manager = this.getManager();
+            if (manager) {
+                manager.volume = Audio.SETTINGS.main_volume;
             }
         }
 
@@ -68,17 +106,22 @@ module TK.SpaceTac.UI {
          * Get the music volume (0-1)
          */
         getMusicVolume(): number {
-            return this.music_volume;
+            return Audio.SETTINGS.music_volume;
         }
 
         /**
          * Set the music volume (0-1)
          */
         setMusicVolume(value: number) {
-            this.music_volume = value;
-            if (this.isActive()) {
-                if (this.music) {
-                    this.music.volume = value * this.music_playing_volume;
+            Audio.SETTINGS.music_volume = clamp(value, 0, 1);
+
+            let music = this.music;
+            if (music) {
+                // TODO Set music volume
+                if (value) {
+                    music.resume();
+                } else {
+                    music.pause();
                 }
             }
         }

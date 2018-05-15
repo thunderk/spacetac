@@ -5,7 +5,7 @@ module TK.SpaceTac.UI.Specs {
         test.case("controls visibility", check => {
             let component = new UIComponent(testgame.view, 50, 50);
 
-            let container = <Phaser.Group>(<any>component).container;
+            let container = <UIContainer>(<any>component).container;
             check.equals(container.visible, true);
 
             component.setVisible(false);
@@ -17,7 +17,7 @@ module TK.SpaceTac.UI.Specs {
             // with transition
             component.setVisible(false, 500);
             check.equals(container.visible, true);
-            check.equals(testgame.view.animations.simulate(container, 'alpha'), [1, 0.5, 0]);
+            check.equals(testgame.view.animations.simulate(container, 'alpha'), [1, 0.75, 0.5, 0.25, 0]);
         });
 
         test.case("sets position inside parent", check => {

@@ -22,7 +22,7 @@ module TK.SpaceTac.UI {
                 }
             };
 
-            this.input.onTap.add(nextStep);
+            this.input.on("pointerup", nextStep);
 
             this.inputs.bind("Home", "Rewind", () => steps.rewind());
             this.inputs.bind("Space", "Next step", nextStep);
@@ -32,7 +32,7 @@ module TK.SpaceTac.UI {
                 }
             });
 
-            this.gameui.audio.startMusic("division");
+            this.audio.startMusic("division");
         }
     }
 }

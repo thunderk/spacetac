@@ -332,7 +332,7 @@ module TK.SpaceTac {
          */
         getAreaEffects(ship: Ship): [Ship | Drone, BaseEffect][] {
             let drone_effects = this.drones.list().map(drone => {
-                // FIXME Should apply filterImpactedShips from drone action
+                // TODO Should apply filterImpactedShips from drone action
                 if (drone.isInRange(ship.arena_x, ship.arena_y)) {
                     return drone.effects.map((effect): [Ship | Drone, BaseEffect] => [drone, effect]);
                 } else {

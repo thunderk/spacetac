@@ -1,6 +1,17 @@
 To-Do-list
 ==========
 
+Phaser 3 migration
+------------------
+
+* Pause the game when the window isn't focused (except in headless)
+* Fit the game in window size
+* Fix top-right messages positions
+* Make the AI-thinking loader work again
+* Fix the character sheet layout
+* Fix the crash in gatling animation
+* Fix valuebar requiring to be in root display list
+
 Menu/settings/saves
 -------------------
 
@@ -20,6 +31,7 @@ Map/story
 * Forbid to end up with more than 5 ships in the fleet because of escorts
 * Fix problems when several dialogs are active at the same time
 * Add a zoom level, to see the location only
+* Restore the progressive text effect
 
 Character sheet
 ---------------
@@ -94,6 +106,7 @@ Common UI
 * Fix tooltip remaining when the hovered object is hidden by animations
 * If ProgressiveMessage animation performance is bad, show the text directly
 * Add caret/focus and configurable background to text input
+* Release keybord grabbing when UITextInput is hidden or loses focus
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
@@ -103,6 +116,7 @@ Technical
 
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile
+* Add cache for image texture lookup (getImageInfo)
 
 Network
 -------

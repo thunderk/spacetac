@@ -8,12 +8,12 @@ module TK.SpaceTac.UI {
         private debug = false
         private view: BaseView
         private game: MainUI
-        private input: Phaser.Input
+        private input: Phaser.Input.InputManager
 
         private cheats_allowed: boolean
         private cheat: boolean
 
-        private hovered: Phaser.Button | null = null
+        private hovered: UIButton | UIContainer | UIImage | null = null
 
         private binds: { [key: string]: KeyPressedCallback } = {}
 
@@ -23,11 +23,9 @@ module TK.SpaceTac.UI {
         constructor(view: BaseView) {
             this.view = view;
             this.game = view.gameui;
-            this.input = view.input;
+            this.input = view.input.manager;
             this.cheats_allowed = true;
             this.cheat = false;
-
-            this.input.reset(true);
 
             // Default mappings
             this.bind("s", "Quick save", () => {
@@ -35,7 +33,7 @@ module TK.SpaceTac.UI {
             });
             this.bind("l", "Quick load", () => {
                 this.game.loadGame();
-                this.game.state.start("router");
+                this.view.backToRouter();
             });
             this.bind("m", "Toggle sound", () => {
                 this.game.options.setNumberValue("mainvolume", this.game.options.getNumberValue("mainvolume") > 0 ? 0 : 1);
@@ -51,7 +49,7 @@ module TK.SpaceTac.UI {
             });
 
             if (!this.game.headless) {
-                this.input.keyboard.addCallbacks(this, undefined, (event: KeyboardEvent) => {
+                this.input.keyboard.on("keyup", (event: KeyboardEvent) => {
                     if (this.debug) {
                         console.log(event);
                     }
@@ -66,6 +64,13 @@ module TK.SpaceTac.UI {
                     }
                 });
             }
+        }
+
+        /**
+         * Remove the bindings
+         */
+        destroy(): void {
+            this.input.keyboard.removeAllListeners("keyup");
         }
 
         /**
@@ -126,45 +131,11 @@ module TK.SpaceTac.UI {
          * Force the cursor out of currently hovered object
          */
         private forceLeaveHovered() {
-            if (this.hovered && this.hovered.data.hover_pointer) {
-                (<any>this.hovered.input)._pointerOutHandler(this.hovered.data.hover_pointer);
-            }
-        }
-
-        /**
-         * Setup dragging on an UI component
-         * 
-         * If no drag or drop function is defined, dragging is disabled
-         * 
-         * If update function is defined, it will receive (a lot of) cursor moves while dragging
-         */
-        setDragDrop(obj: Phaser.Button | Phaser.Image, drag?: Function, drop?: Function, update?: Function): void {
-            obj.events.onDragStart.removeAll();
-            obj.events.onDragStop.removeAll();
-            obj.events.onDragUpdate.removeAll();
-
-            if (drag && drop) {
-                obj.inputEnabled = true;
-                obj.input.enableDrag(false, true);
-
-                obj.events.onDragStart.add(() => {
-                    this.forceLeaveHovered();
-                    this.view.audio.playOnce("ui-drag");
-                    drag();
-                });
-
-                obj.events.onDragStop.add(() => {
-                    this.view.audio.playOnce("ui-drop");
-                    drop();
-                });
-
-                if (update) {
-                    obj.events.onDragUpdate.add(() => {
-                        update();
-                    });
+            if (this.hovered && this.hovered.data) {
+                let pointer = this.hovered.data.get("pointer");
+                if (pointer) {
+                    this.hovered.emit("pointerout", pointer);
                 }
-            } else {
-                obj.input.disableDrag();
             }
         }
 
@@ -172,17 +143,24 @@ module TK.SpaceTac.UI {
          * Setup hover/click handlers on an UI element
          * 
          * This is done in a way that should be compatible with touch-enabled screen
-         * 
-         * Returns functions that may be used to force the behavior
          */
-        setHoverClick(obj: Phaser.Button, enter: Function = nop, leave: Function = nop, click: Function = nop, hovertime = 300, holdtime = 600) {
+        setHoverClick(obj: UIButton | UIContainer | UIImage, enter: Function = nop, leave: Function = nop, click: Function = nop, hovertime = 300, holdtime = 600, sound = false): void {
             let holdstart = Timer.nowMs();
             let enternext: Function | null = null;
             let entercalled = false;
             let cursorinside = false;
             let destroyed = false;
 
-            obj.input.useHandCursor = true;
+            obj.setDataEnabled();
+
+            if (obj instanceof UIImage) {
+                obj.setInteractive();
+            } else if (!(obj instanceof UIButton)) {
+                let bounds = obj.getBounds();
+                bounds.x -= obj.x;
+                bounds.y -= obj.y;
+                obj.setInteractive(bounds, Phaser.Geom.Rectangle.Contains);
+            }
 
             let prevententer = () => {
                 if (enternext != null) {
@@ -210,15 +188,13 @@ module TK.SpaceTac.UI {
                 }
             }
 
-            if (obj.events) {
-                obj.events.onDestroy.addOnce(() => {
-                    destroyed = true;
-                    effectiveleave();
-                });
-            }
+            obj.on("destroy", () => {
+                destroyed = true;
+                effectiveleave();
+            });
 
-            obj.onInputOver.add((_: any, pointer: Phaser.Pointer) => {
-                if (destroyed) return;
+            obj.on("pointerover", (pointer: Phaser.Input.Pointer) => {
+                if (destroyed || !UITools.isVisible(obj)) return;
 
                 if (this.hovered) {
                     if (this.hovered === obj) {
@@ -228,15 +204,13 @@ module TK.SpaceTac.UI {
                     }
                 }
                 this.hovered = obj;
-                this.hovered.data.hover_pointer = pointer;
+                this.hovered.data.set("pointer", pointer);
 
-                if (obj.visible && obj.alpha) {
-                    cursorinside = true;
-                    enternext = Timer.global.schedule(hovertime, effectiveenter);
-                }
+                cursorinside = true;
+                enternext = Timer.global.schedule(hovertime, effectiveenter);
             });
 
-            obj.onInputOut.add(() => {
+            obj.on("pointerout", (pointer: Phaser.Input.Pointer) => {
                 if (destroyed) return;
 
                 if (this.hovered === obj) {
@@ -247,18 +221,21 @@ module TK.SpaceTac.UI {
                 effectiveleave();
             });
 
-            obj.onInputDown.add(() => {
+            obj.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
                 if (destroyed) return;
 
-                if (obj.visible && obj.alpha) {
+                if (UITools.isVisible(obj)) {
                     holdstart = Timer.nowMs();
+                    if (sound) {
+                        this.view.audio.playOnce("ui-button-down");
+                    }
                     if (!cursorinside && !enternext) {
                         enternext = Timer.global.schedule(holdtime, effectiveenter);
                     }
                 }
             });
 
-            obj.onInputUp.add(() => {
+            obj.on("pointerup", (event: Phaser.Input.Pointer) => {
                 if (destroyed) return;
 
                 if (!cursorinside) {
@@ -268,6 +245,9 @@ module TK.SpaceTac.UI {
                 if (Timer.fromMs(holdstart) < holdtime) {
                     if (!cursorinside) {
                         effectiveenter();
+                    }
+                    if (sound) {
+                        this.view.audio.playOnce("ui-button-up");
                     }
                     click();
                     if (!cursorinside) {

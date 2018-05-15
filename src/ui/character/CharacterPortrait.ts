@@ -10,12 +10,11 @@ module TK.SpaceTac.UI {
          * Draw the portrait (anchored at the center)
          */
         draw(builder: UIBuilder, x: number, y: number, onselect: () => void): UIButton {
-            let button = builder.button("character-portrait", x, y, onselect, this.ship.getName(), identity);
-            button.anchor.set(0.5);
+            let button = builder.button("character-portrait", x, y, onselect, this.ship.getName(), identity, { center: true });
 
             builder.in(button, builder => {
                 let portrait = builder.image(`ship-${this.ship.model.code}-portrait`, 0, 0, true);
-                portrait.scale.set(0.5);
+                portrait.setScale(0.5);
             });
 
             return button;

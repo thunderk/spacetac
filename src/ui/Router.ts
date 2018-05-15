@@ -6,19 +6,20 @@ module TK.SpaceTac.UI {
      * 
      * If needed, it will go back to the asset loading state.
      */
-    export class Router extends Phaser.State {
+    export class Router extends BaseView {
         create() {
-            var ui = <MainUI>this.game;
-            var session = ui.session;
+            super.create();
+
+            let session = this.session;
 
             if (session.getBattle()) {
                 // A battle is raging, go to it
-                this.goToState("battle", AssetLoadingRange.BATTLE, session.player, session.getBattle());
+                this.goToState("battle", AssetLoadingRange.BATTLE, { player: session.player, battle: session.getBattle() });
             } else if (session.hasUniverse()) {
                 // Campaign mode
                 if (session.isFleetCreated()) {
                     // Go to the universe map
-                    this.goToState("universe", AssetLoadingRange.CAMPAIGN, session.universe, session.player);
+                    this.goToState("universe", AssetLoadingRange.CAMPAIGN, { player: session.player, universe: session.universe });
                 } else if (session.isIntroViewed()) {
                     // Build initial fleet
                     this.goToState("creation", AssetLoadingRange.CAMPAIGN);
@@ -32,11 +33,11 @@ module TK.SpaceTac.UI {
             }
         }
 
-        goToState(name: string, asset_range: AssetLoadingRange, ...args: any[]) {
+        goToState(name: string, asset_range: AssetLoadingRange, data?: object) {
             if (AssetLoading.isRangeLoaded(this.game, asset_range)) {
-                this.game.state.start(name, true, false, ...args);
+                this.scene.start(name, data);
             } else {
-                this.game.state.start("loading", true, false, asset_range);
+                this.scene.start("loading", { range: asset_range });
             }
         }
     }

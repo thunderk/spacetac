@@ -4,26 +4,27 @@ module TK.SpaceTac.UI.Specs {
         let clock = test.clock();
 
         test.case("shows near the hovered button", check => {
-            let button = testgame.view.add.button();
-            check.patch(button, "getBounds", () => new PIXI.Rectangle(100, 50, 50, 25));
+            let button = new UIBuilder(testgame.view).button("fake");
+            check.patch(button, "getBounds", () => new Phaser.Geom.Rectangle(100, 50, 50, 25));
 
             let tooltip = new Tooltip(testgame.view);
             tooltip.bind(button, filler => true);
 
-            let container = <Phaser.Group>(<any>tooltip).container;
-            check.patch((<any>container).content, "getBounds", () => new PIXI.Rectangle(0, 0, 32, 32));
+            let container = tooltip.container;
+            check.patch(container.content, "getBounds", () => new Phaser.Geom.Rectangle(0, 0, 32, 32));
             check.equals(container.visible, false);
 
-            button.onInputOver.dispatch();
+            let pointer = {};
+            button.emit("pointerover", { pointer: pointer });
             check.equals(container.visible, false);
 
             clock.forward(1000);
             container.update();
             check.equals(container.visible, true);
-            check.equals(container.x, 109);
+            check.equals(container.x, 113);
             check.equals(container.y, 91);
 
-            button.onInputOut.dispatch();
+            button.emit("pointerout", { pointer: pointer });
             check.equals(container.visible, false);
         });
     });

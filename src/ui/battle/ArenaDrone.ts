@@ -2,7 +2,7 @@ module TK.SpaceTac.UI {
     /**
      * Drone sprite in the arena
      */
-    export class ArenaDrone extends Phaser.Group {
+    export class ArenaDrone extends UIContainer {
         // Link to view
         view: BattleView
 
@@ -10,43 +10,36 @@ module TK.SpaceTac.UI {
         drone: Drone
 
         // Sprite
-        sprite: Phaser.Button
+        sprite: UIButton
 
         // Radius
-        radius: Phaser.Graphics
+        radius: UIGraphics
 
         // Activation effect
-        activation: Phaser.Graphics
+        activation: UIGraphics
 
         constructor(battleview: BattleView, drone: Drone) {
-            super(battleview.game);
+            super(battleview);
 
             this.view = battleview;
             this.drone = drone;
 
-            this.radius = new Phaser.Graphics(this.game, 0, 0);
+            let builder = new UIBuilder(battleview, this);
+
+            this.radius = builder.graphics("radius");
+            this.radius.fillStyle(0xe9f2f9, 0.1);
+            this.radius.fillCircle(0, 0, drone.radius);
             this.radius.lineStyle(2, 0xe9f2f9, 0.5);
-            this.radius.beginFill(0xe9f2f9, 0.1);
-            this.radius.drawCircle(0, 0, drone.radius * 2);
-            this.radius.endFill();
-            this.add(this.radius);
+            this.radius.strokeCircle(0, 0, drone.radius);
 
-            this.activation = new Phaser.Graphics(this.game, 0, 0);
+            this.activation = builder.graphics("activation", 0, 0, false);
+            this.activation.fillStyle(0xe9f2f9, 0.0);
+            this.activation.fillCircle(0, 0, drone.radius);
             this.activation.lineStyle(2, 0xe9f2f9, 0.7);
-            this.activation.beginFill(0xe9f2f9, 0.0);
-            this.activation.drawCircle(0, 0, drone.radius * 2);
-            this.activation.endFill();
-            this.activation.visible = false;
-            this.add(this.activation);
+            this.activation.strokeCircle(0, 0, drone.radius);
 
-            this.sprite = this.view.newButton(`action-${drone.code}`);
-            this.sprite.anchor.set(0.5, 0.5);
-            this.sprite.scale.set(0.1, 0.1);
-            this.add(this.sprite);
-
-            this.view.tooltip.bindDynamicText(this.sprite, () => {
-                return this.drone.getDescription();
-            });
+            this.sprite = builder.button(`action-${drone.code}`, 0, 0, undefined, () => this.drone.getDescription(), undefined, { center: true });
+            this.sprite.setScale(0.1, 0.1);
         }
 
         /**
@@ -55,11 +48,9 @@ module TK.SpaceTac.UI {
          * Return the animation duration
          */
         setApplied(): number {
-            this.activation.scale.set(0.001, 0.001);
+            this.activation.setScale(0.001, 0.001);
             this.activation.visible = true;
-            let tween = this.game.tweens.create(this.activation.scale).to({ x: 1, y: 1 }, 500);
-            tween.onComplete.addOnce(() => this.activation.visible = false);
-            tween.start();
+            let tween = this.view.animations.addAnimation(this.activation, { scaleX: 1, scaleY: 1 }, 500).then(() => this.activation.setVisible(false));
             return 500;
         }
 
@@ -69,14 +60,8 @@ module TK.SpaceTac.UI {
          * Return the animation duration
          */
         setDestroyed(): number {
-            this.game.tweens.create(this).to({ alpha: 0.3 }, 300).delay(200).start();
-
-            let tween = this.game.tweens.create(this.radius.scale).to({ x: 0, y: 0 }, 500);
-            tween.onComplete.addOnce(() => {
-                this.destroy();
-            });
-            tween.start();
-
+            this.view.animations.addAnimation<UIContainer>(this, { alpha: 0.3 }, 300, undefined, 200);
+            this.view.animations.addAnimation(this.radius, { scaleX: 0, scaleY: 0 }, 500).then(() => this.destroy());
             return 500;
         }
 
@@ -84,7 +69,7 @@ module TK.SpaceTac.UI {
          * Set the tactical mode display
          */
         setTacticalMode(active: boolean) {
-            this.sprite.scale.set(active ? 0.2 : 0.1);
+            this.sprite.setScale(active ? 0.2 : 0.1);
         }
     }
 }

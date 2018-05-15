@@ -26,19 +26,28 @@ module TK.SpaceTac.UI {
             }
         }
 
-        init(range = AssetLoadingRange.NONE) {
-            super.init();
+        init(data: any) {
+            super.init(data);
 
-            this.required = range;
+            this.required = data ? data.range : AssetLoadingRange.NONE;
         }
 
         preload() {
             let bg = this.add.image(643, 435, "preload-background");
+            bg.setOrigin(0);
             let bar = this.add.image(643, 435, "preload-bar");
-            this.load.setPreloadSprite(bar);
+            bar.setOrigin(0);
+            let mask = this.make.graphics({ x: bar.x, y: bar.y, add: false });
+            mask.fillStyle(0xffffff);
+            bar.setMask(new Phaser.Display.Masks.GeometryMask(this, mask));
+
+            this.load.on('progress', (value: number) => {
+                mask.clear();
+                mask.fillRect(0, 0, value * bar.width, bar.height);
+            });
 
             let text = this.add.text(this.getMidWidth(), 466, "... Loading ...", { font: "normal 36pt SpaceTac", fill: "#dbeff9" });
-            text.anchor.set(0.5);
+            text.setOrigin(0.5);
 
             if (this.required >= AssetLoadingRange.MENU && AssetLoading.loaded < AssetLoadingRange.MENU) {
                 console.log("Loading menu assets");
@@ -58,15 +67,13 @@ module TK.SpaceTac.UI {
                 console.log("Loading campaign assets");
                 this.load.pack("stage3", `assets/pack3.json?t=${Date.now()}`);
             }
-
-            this.load.start();
         }
 
         create() {
             super.create();
 
             AssetLoading.loaded = Math.max(AssetLoading.loaded, this.required);
-            this.game.state.start("router");
+            this.backToRouter();
         }
 
         static getKey(path: string): string {
@@ -74,11 +81,19 @@ module TK.SpaceTac.UI {
         }
 
         loadSheet(path: string, frame_width: number, frame_height = frame_width) {
-            this.load.spritesheet(AssetLoading.getKey(path), "images/" + path, frame_width, frame_height);
+            this.load.spritesheet(AssetLoading.getKey(path), "images/" + path, {
+                frameWidth: frame_width,
+                frameHeight: frame_height,
+            });
         }
 
-        loadAnimation(path: string, frame_width: number, frame_height = frame_width, count?: number) {
-            this.load.spritesheet(AssetLoading.getKey(path), "images/" + path, frame_width, frame_height, count);
+        loadAnimation(path: string, frame_width: number, frame_height = frame_width, count: number) {
+            this.load.spritesheet(AssetLoading.getKey(path), "images/" + path, {
+                frameWidth: frame_width,
+                frameHeight: frame_height,
+                startFrame: 0,
+                endFrame: count - 1
+            });
         }
     }
 }

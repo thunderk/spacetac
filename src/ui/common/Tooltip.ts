@@ -4,25 +4,24 @@ module TK.SpaceTac.UI {
 
     export type TooltipFiller = string | ((filler: TooltipBuilder) => string) | ((filler: TooltipBuilder) => boolean);
 
-    export class TooltipContainer extends Phaser.Group {
+    export class TooltipContainer extends UIContainer {
         view: BaseView
-        background: Phaser.Graphics
-        content: Phaser.Group
+        background: UIBackground
+        content: UIContainer
         item?: IBounded
         border = 10
         margin = 6
         viewport: IBounded | null = null
 
         constructor(view: BaseView) {
-            super(view.game);
+            super(view);
 
             this.view = view;
             this.visible = false;
 
-            this.background = new Phaser.Graphics(this.game);
-            this.add(this.background);
+            this.background = new UIBackground(view, this);
 
-            this.content = new Phaser.Group(this.game);
+            this.content = new UIContainer(view);
             this.add(this.content);
 
             this.view.tooltip_layer.add(this);
@@ -64,7 +63,7 @@ module TK.SpaceTac.UI {
                 x += this.border;
                 y += this.border;
                 if (x != this.x || y != this.y) {
-                    this.position.set(x, y);
+                    this.setPosition(x, y);
                 }
             }
         }
@@ -80,7 +79,7 @@ module TK.SpaceTac.UI {
      * Functions used to fill a tooltip content
      */
     export class TooltipBuilder extends UIBuilder {
-        private container: TooltipContainer;
+        private content: TooltipContainer;
 
         constructor(container: TooltipContainer) {
             let style = new UITextStyle();
@@ -89,17 +88,17 @@ module TK.SpaceTac.UI {
             style.shadow = true;
             super(container.view, container.content, style);
 
-            this.container = container;
+            this.content = container;
         }
 
         /**
          * Configure the positioning and base style of the tooltip
          */
         configure(border = 10, margin = 6, viewport: IBounded | null = null): void {
-            this.container.border = border;
-            this.container.margin = margin;
+            this.content.border = border;
+            this.content.margin = margin;
             if (viewport) {
-                this.container.viewport = viewport;
+                this.content.viewport = viewport;
             }
         }
     }
@@ -108,8 +107,8 @@ module TK.SpaceTac.UI {
      * Tooltip system, to display information on hover
      */
     export class Tooltip {
-        protected view: BaseView;
-        protected container: TooltipContainer;
+        readonly view: BaseView;
+        readonly container: TooltipContainer;
 
         constructor(view: BaseView) {
             this.view = view;
@@ -132,13 +131,13 @@ module TK.SpaceTac.UI {
          * 
          * When the component is hovered, the function is called to allow filling the tooltip container
          */
-        bind(obj: Phaser.Button, func: (filler: TooltipBuilder) => boolean): void {
+        bind(obj: UIButton | UIImage, func: (filler: TooltipBuilder) => boolean): void {
             this.view.inputs.setHoverClick(obj,
                 // enter
                 () => {
                     this.hide();
                     if (func(this.getBuilder())) {
-                        this.container.show(obj.getBounds());
+                        this.container.show(UITools.getBounds(obj));
                     }
                 },
                 // leave
@@ -146,13 +145,13 @@ module TK.SpaceTac.UI {
                 // click
                 () => this.hide()
             );
-            obj.onInputDown.add(() => this.hide());
+            obj.on("pointerdown", () => this.hide());
         }
 
         /**
          * Bind to an UI component to display a dynamic text
          */
-        bindDynamicText(obj: Phaser.Button, text_getter: () => string): void {
+        bindDynamicText(obj: UIButton | UIImage, text_getter: () => string): void {
             this.bind(obj, filler => {
                 let content = text_getter();
                 if (content) {
@@ -167,14 +166,14 @@ module TK.SpaceTac.UI {
         /**
          * Bind to an UI component to display a simple text
          */
-        bindStaticText(obj: Phaser.Button, text: string): void {
+        bindStaticText(obj: UIButton | UIImage, text: string): void {
             this.bindDynamicText(obj, () => text);
         }
 
         /**
          * Show a tooltip for a component
          */
-        show(obj: Phaser.Button, content: TooltipFiller): void {
+        show(obj: UIButton, content: TooltipFiller): void {
             let builder = this.getBuilder();
             let scontent = (typeof content == "string") ? content : content(builder);
             if (typeof scontent == "string") {
@@ -182,7 +181,7 @@ module TK.SpaceTac.UI {
             }
 
             if (scontent) {
-                this.container.show(obj.getBounds());
+                this.container.show(UITools.getBounds(obj));
             } else {
                 this.hide();
             }

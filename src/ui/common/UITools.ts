@@ -11,28 +11,49 @@ module TK.SpaceTac.UI {
      * 
      * This is a workaround for a removeChildren bug
      */
-    export function destroyChildren(obj: Phaser.Image | Phaser.Sprite | Phaser.Group, start = 0, end = obj.children.length - 1) {
-        obj.children.slice(start, end + 1).forEach(child => (<any>child).destroy());
+    export function destroyChildren(obj: UIContainer, start = 0, end = obj.length - 1) {
+        obj.list.slice(start, end + 1).forEach(child => child.destroy());
     }
 
-    // Common UI tools functions
+    /**
+     * Common UI function to work around some Phaser limitations
+     */
     export class UITools {
         /**
-         * Get the screen bounding rectanle of a displayed object
-         * 
-         * This is a workaround for bugs in getLocalBounds and getBounds
+         * Check that a game object has transform and bounds available
          */
-        static getScreenBounds(obj: Phaser.Image | Phaser.Sprite | Phaser.Group | Phaser.Graphics): IBounded {
-            obj.updateTransform();
+        static isSpatial(obj: any): obj is Phaser.GameObjects.Components.GetBounds & Phaser.GameObjects.Components.Transform {
+            return obj instanceof UIImage || obj instanceof UIText || obj instanceof UIContainer;
+        }
 
-            let rects: IBounded[] = [obj.getBounds()];
-            obj.children.forEach(child => {
-                if (child instanceof Phaser.Image || child instanceof Phaser.Sprite || child instanceof Phaser.Group || child instanceof Phaser.Graphics) {
-                    rects.push(UITools.getScreenBounds(child));
+        /**
+         * Get the bounding rectanle of a displayed object, in screen space
+         */
+        static getBounds(obj: UIContainer | (Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.GetBounds)): IBounded {
+            let result: IBounded;
+
+            if (obj instanceof UIContainer) {
+                result = obj.getBounds();
+            } else {
+                result = obj.getBounds();
+            }
+
+            return result;
+        }
+
+        /**
+         * Check if a game object is visible
+         */
+        static isVisible(obj: Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Alpha): boolean {
+            if (obj.visible && obj.alpha) {
+                if (obj.parentContainer) {
+                    return this.isVisible(obj.parentContainer);
+                } else {
+                    return true;
                 }
-            });
-
-            return rects.reduce(UITools.unionRects, { x: 0, y: 0, width: 0, height: 0 });
+            } else {
+                return false;
+            }
         }
 
         /**
@@ -61,12 +82,12 @@ module TK.SpaceTac.UI {
         /**
          * Reposition an object to remain inside a container
          */
-        static keepInside(obj: Phaser.Button | Phaser.Sprite | Phaser.Image | Phaser.Group | Phaser.Graphics, rect: IBounded) {
-            let objbounds = obj.getBounds();
+        static keepInside(obj: UIButton | UIImage | UIContainer, rect: IBounded) {
+            let objbounds = UITools.getBounds(obj);
             let [x, y] = UITools.positionInside({ x: obj.x, y: obj.y, width: objbounds.width, height: objbounds.height }, rect);
 
             if (x != obj.x || y != obj.y) {
-                obj.position.set(x, y);
+                obj.setPosition(x, y);
             }
         }
 
@@ -135,26 +156,10 @@ module TK.SpaceTac.UI {
         /**
          * Draw a background around a content
          */
-        static drawBackground(content: Phaser.Group | Phaser.Text, background: Phaser.Graphics, border = 6): [number, number] {
-            if (content.parent === background.parent) {
-                let bounds = content.getLocalBounds();
-
-                let x = bounds.x - border;
-                let y = bounds.y - border;
-                let width = bounds.width + 2 * border;
-                let height = bounds.height + 2 * border;
-
-                if (!(background.width && background.data.bg_bounds && UITools.compareRects(background.data.bg_bounds, bounds))) {
-                    background.clear();
-                    background.lineStyle(2, 0x6690a4);
-                    background.beginFill(0x162730);
-                    background.drawRect(x, y, width, height);
-                    background.endFill();
-
-                    background.data.bg_bounds = copy(bounds);
-                }
-
-                return [width, height];
+        static drawBackground(content: UIContainer | UIText, background: UIBackground, border = 6): [number, number] {
+            if (content.parentContainer === background.parent) {
+                background.adaptToContent(content);
+                return [background.width, background.height];
             } else {
                 console.error("Cannot draw background with different parents", content, background);
                 return [0, 0];

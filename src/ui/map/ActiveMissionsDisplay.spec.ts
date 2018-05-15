@@ -7,17 +7,17 @@ module TK.SpaceTac.UI.Specs {
             let missions = new ActiveMissions();
             let display = new ActiveMissionsDisplay(view, missions);
 
-            let container = <Phaser.Group>(<any>display).container;
-            check.equals(container.children.length, 0);
+            let container = display.container;
+            check.equals(container.length, 0);
 
             let mission = new Mission(new Universe(), new Fleet());
             mission.addPart(new MissionPart(mission, "Get back to base"));
             missions.secondary = [mission];
 
             display.checkUpdate();
-            check.equals(container.children.length, 2);
-            check.equals(container.children[0] instanceof Phaser.Image, true);
-            checkText(check, container.children[1], "Get back to base");
+            check.equals(container.length, 2);
+            check.equals(container.list[0] instanceof UIImage, true);
+            checkText(check, container.list[1], "Get back to base");
         });
     });
 }

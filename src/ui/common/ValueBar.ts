@@ -18,7 +18,7 @@ module TK.SpaceTac.UI {
      */
     export class ValueBar {
         // Phaser node
-        node: Phaser.Image
+        node: UIImage
 
         // Orientation
         private orientation: ValueBarOrientation
@@ -35,22 +35,27 @@ module TK.SpaceTac.UI {
         // Original size
         private original_width: number
         private original_height: number
-        private crop_rect: Phaser.Rectangle
+        private crop_rect: Phaser.Geom.Rectangle
+        private crop_mask: Phaser.GameObjects.Graphics
 
         constructor(view: BaseView, name: string, orientation: ValueBarOrientation, x = 0, y = 0) {
             this.node = view.newImage(name, x, y);
+            if (orientation == ValueBarOrientation.WEST) {
+                this.node.setOrigin(1, 0);
+            } else if (orientation == ValueBarOrientation.NORTH) {
+                this.node.setOrigin(0, 1);
+            } else {
+                this.node.setOrigin(0, 0);
+            }
+
             this.orientation = orientation;
             this.original_width = this.node.width;
             this.original_height = this.node.height;
 
-            this.crop_rect = new Phaser.Rectangle(0, 0, this.original_width, this.original_height);
-            this.node.crop(this.crop_rect);
-
-            if (orientation == ValueBarOrientation.WEST) {
-                this.node.anchor.set(1, 0);
-            } else if (orientation == ValueBarOrientation.NORTH) {
-                this.node.anchor.set(0, 1);
-            }
+            this.crop_rect = new Phaser.Geom.Rectangle(0, 0, this.original_width, this.original_height);
+            this.crop_mask = view.make.graphics({ x: x, y: y, add: false });
+            this.crop_mask.fillStyle(0xffffff);
+            this.node.setMask(new Phaser.Display.Masks.GeometryMask(view, this.crop_mask));
 
             this.setValue(0, 1000);
         }
@@ -76,7 +81,9 @@ module TK.SpaceTac.UI {
                     this.crop_rect.height = Math.round(this.original_height * this.proportional);
                     break;
             }
-            this.node.updateCrop();
+
+            this.crop_mask.clear();
+            this.crop_mask.fillRectShape(this.crop_rect);
         }
 
         /**

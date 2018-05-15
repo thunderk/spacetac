@@ -25,8 +25,11 @@ module TK.SpaceTac.UI {
          * Shortcut to add a single action button at the bottom of dialog
          */
         addActionButton(x: number, text: string, tooltip: string, action: Function) {
-            let button = this.addButton(x, 885, action, "common-dialog-textbutton", tooltip);
-            button.addChild(this.addText(0, 0, text, "#d9e0e5"));
+            let button = this.content.button("common-dialog-textbutton", x, 885, action, tooltip, undefined, {
+                center: true,
+                text: text,
+                text_style: { color: "#d9e0e5" }
+            });
         }
 
         /**
@@ -37,16 +40,16 @@ module TK.SpaceTac.UI {
             let outcome = this.outcome;
             let victory = outcome.winner && this.player.is(outcome.winner.player);
 
-            this.clearContent();
+            this.content.clear();
 
-            this.addImage(747, 180, victory ? "battle-outcome-title-victory" : "battle-outcome-title-defeat");
+            this.content.image(victory ? "battle-outcome-title-victory" : "battle-outcome-title-defeat", 747, 180, true);
 
-            this.addText(815, 320, "You", "#ffffff", 20);
-            this.addText(1015, 320, "Enemy", "#ffffff", 20);
+            this.content.text("You", 815, 320, { color: "#ffffff", size: 20 });
+            this.content.text("Enemy", 1015, 320, { color: "#ffffff", size: 20 });
             this.stats.getImportant(10).forEach((stat, index) => {
-                this.addText(530, 364 + 40 * index, stat.name, "#ffffff", 20);
-                this.addText(815, 364 + 40 * index, stat.attacker.toString(), "#8ba883", 20, true);
-                this.addText(1015, 364 + 40 * index, stat.defender.toString(), "#cd6767", 20, true);
+                this.content.text(stat.name, 530, 364 + 40 * index, { color: "#ffffff", size: 20 });
+                this.content.text(stat.attacker.toString(), 815, 364 + 40 * index, { color: "#8ba883", size: 20, bold: true });
+                this.content.text(stat.defender.toString(), 1015, 364 + 40 * index, { color: "#cd6767", size: 20, bold: true });
             });
 
             if (!this.battleview.session.hasUniverse()) {

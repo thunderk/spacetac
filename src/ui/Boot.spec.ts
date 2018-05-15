@@ -3,11 +3,11 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("Boot", test => {
-        let testgame = setupSingleView(test, () => [new Boot(), []]);
+        let testgame = setupSingleView(test, () => [new Boot({}), {}]);
 
         test.case("places empty loading background", check => {
-            check.equals(testgame.ui.world.children.length, 1);
-            check.equals(testgame.ui.world.children[0] instanceof Phaser.Image, true);
+            check.equals(testgame.view.children.length, 1);
+            check.equals(testgame.view.children.list[0] instanceof Phaser.GameObjects.Image, true);
         });
     });
 }

@@ -89,7 +89,7 @@ module TK.SpaceTac {
             // TODO Work with groups of 3, 4 ...
             let weapons = <Iterator<TriggerAction>>ifilter(getPlayableActions(ship), action => action instanceof TriggerAction && action.blast > 0);
             let enemies = battle.ienemies(ship, true);
-            // FIXME This produces duplicates (x, y) and (y, x)
+            // TODO This produces duplicates (x, y) and (y, x)
             let couples = ifilter(icombine(enemies, enemies), ([e1, e2]) => e1 != e2);
             let candidates = ifilter(icombine(weapons, couples), ([weapon, [e1, e2]]) => Target.newFromShip(e1).getDistanceTo(Target.newFromShip(e2)) < weapon.blast * 2);
             let result = imap(candidates, ([weapon, [e1, e2]]) => new Maneuver(ship, weapon, Target.newFromLocation((e1.arena_x + e2.arena_x) / 2, (e1.arena_y + e2.arena_y) / 2)));

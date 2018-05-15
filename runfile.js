@@ -82,11 +82,10 @@ async function pack(stage) {
     let items = files.map(file => {
         let fname = path.basename(file);
         return {
-            type: "atlasJSONHash",
+            type: "atlas",
             key: fname,
             atlasURL: `assets/${fname}.json?t=${Date.now()}`,
-            textureURL: `assets/${fname}.png`,
-            atlasData: null
+            textureURL: `assets/${fname}.png`
         }
     });
 
@@ -98,7 +97,7 @@ async function pack(stage) {
         return {
             type: "audio",
             key: key,
-            urls: [`assets/${key}.${ext}?t=${Date.now()}`],
+            url: `assets/${key}.${ext}?t=${Date.now()}`,
             autoDecode: (ext == 'mp3')
         };
     }));
@@ -116,7 +115,7 @@ async function pack(stage) {
     }));
 
     let packdata = {};
-    packdata[`stage${stage}`] = items;
+    packdata[`stage${stage}`] = { files: items };
     await new Promise(resolve => fs.writeFile(`out/assets/pack${stage}.json`, JSON.stringify(packdata), 'utf8', resolve));
 }
 
@@ -143,7 +142,7 @@ async function vendors() {
     console.log("Copying vendors...");
     shell.rm('-rf', 'out/vendor');
     shell.mkdir('-p', 'out/vendor');
-    shell.cp('-R', 'node_modules/phaser/build', 'out/vendor/phaser');
+    shell.cp('-R', 'node_modules/phaser/dist', 'out/vendor/phaser');
     shell.cp('-R', 'node_modules/parse/dist', 'out/vendor/parse');
     shell.cp('-R', 'node_modules/jasmine-core/lib/jasmine-core', 'out/vendor/jasmine');
 }
@@ -181,7 +180,10 @@ async function optimize() {
 async function deploy(task) {
     await build(true);
     await optimize();
-    await exec("rsync -avz --delete ./out/ hosting.thunderk.net:/srv/website/spacetac/");
+
+    let branch = await run('git rev-parse --abbrev-ref HEAD', { stdio: 'pipe', async: true });
+    let suffix = (branch == "master") ? "" : "x";
+    await exec(`rsync -avz --delete ./out/ hosting.thunderk.net:/srv/website/spacetac${suffix}/`);
 }
 
 /**

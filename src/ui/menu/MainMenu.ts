@@ -24,7 +24,7 @@ module TK.SpaceTac.UI {
 
             // Presents...
             builder.in(layer_presents, builder => {
-                builder.styled({ center: true, color: "#DBEFF9", shadow: true }, builder => {
+                builder.styled({ center: true, color: "#FFFFFF", shadow: true }, builder => {
                     builder.text("Michael Lemaire", this.getMidWidth(), this.getHeight() * 0.4, { size: 32 });
                     builder.text("presents", this.getMidWidth(), this.getHeight() * 0.6, { size: 24 });
                 });
@@ -35,15 +35,15 @@ module TK.SpaceTac.UI {
                 let title = builder.in(layer_title).image("menu-title", 960, 784, true);
 
                 // Buttons
-                let group_new_game = builder.group("new-game", 0, 0, false);
-                let group_load_game = builder.group("load-game", 0, 0, false);
-                let group_join_game = builder.group("join-game", 0, 0, false);
-                let group_skirmish = builder.in(group_new_game).group("skirmish", 0, 0, false);
+                let group_new_game = builder.container("new-game", 0, 0, false);
+                let group_load_game = builder.container("load-game", 0, 0, false);
+                let group_join_game = builder.container("join-game", 0, 0, false);
+                let group_skirmish = builder.in(group_new_game).container("skirmish", 0, 0, false);
                 let button_new_game = builder.button("menu-button", 280, 106, undefined, "Start a new game", (on: boolean) => {
                     if (on) {
                         this.animations.show(group_new_game, 200);
-                        builder.switch(button_load_game, false);
-                        builder.switch(button_join_game, false);
+                        button_load_game.toggle(false);
+                        button_join_game.toggle(false);
                     } else {
                         this.animations.hide(group_new_game, 200);
                     }
@@ -64,8 +64,8 @@ module TK.SpaceTac.UI {
                 let button_load_game = builder.button("menu-button", 280, 266, undefined, "Load a previously saved game", (on: boolean) => {
                     if (on) {
                         this.animations.show(group_load_game, 200);
-                        builder.switch(button_new_game, false);
-                        builder.switch(button_join_game, false);
+                        button_new_game.toggle(false);
+                        button_join_game.toggle(false);
                     } else {
                         this.animations.hide(group_load_game, 200);
                     }
@@ -80,8 +80,8 @@ module TK.SpaceTac.UI {
                 let button_join_game = builder.button("menu-button", 280, 426, undefined, "Join a friend's game", (on: boolean) => {
                     if (on) {
                         this.animations.show(group_join_game, 200);
-                        builder.switch(button_new_game, false);
-                        builder.switch(button_load_game, false);
+                        button_new_game.toggle(false);
+                        button_load_game.toggle(false);
                     } else {
                         this.animations.hide(group_join_game, 200);
                     }
@@ -118,11 +118,11 @@ module TK.SpaceTac.UI {
             if (MainMenu.returned) {
                 pass();
             } else {
-                this.input.onTap.addOnce(pass);
+                this.input.on("pointerup", pass);
                 MainMenu.returned = true;
             }
 
-            this.gameui.audio.startMusic("supernatural");
+            this.audio.startMusic("supernatural");
         }
 
         /**

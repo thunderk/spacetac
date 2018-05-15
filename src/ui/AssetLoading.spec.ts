@@ -2,12 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("AssetLoading", test => {
-        let testgame = setupSingleView(test, () => [new AssetLoading(), []]);
-
-        test.case("loads correctly", check => {
-            check.equals(testgame.ui.state.current, "test");
-            // TODO test asset loading
-        });
+        let testgame = setupSingleView(test, () => [new AssetLoading({}), []]);
 
         test.case("builds cache keys from path", check => {
             check.equals(AssetLoading.getKey("dir/file-path"), "dir-file-path");

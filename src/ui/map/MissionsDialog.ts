@@ -16,6 +16,7 @@ module TK.SpaceTac.UI {
             this.location = view.session.getLocation();
             this.on_change = on_change || (() => null);
 
+            this.addCloseButton();
             this.refresh();
         }
 
@@ -23,14 +24,13 @@ module TK.SpaceTac.UI {
          * Refresh the dialog content
          */
         refresh() {
-            this.clearContent();
-            this.addCloseButton();
+            this.content.clear();
 
             let offset = 160;
 
             let active = this.player.missions.getCurrent().filter(mission => !mission.main);
             if (active.length) {
-                this.addText(this.width / 2, offset, "Active jobs", "#b8d2f1", 36);
+                this.content.text("Active jobs", this.width / 2, offset, { color: "#b8d2f1", size: 36 });
                 offset += 110;
 
                 active.forEach(mission => {
@@ -41,7 +41,7 @@ module TK.SpaceTac.UI {
 
             let proposed = this.shop.getMissions(this.location);
             if (proposed.length) {
-                this.addText(this.width / 2, offset, "Proposed jobs", "#b8d2f1", 36);
+                this.content.text("Proposed jobs", this.width / 2, offset, { color: "#b8d2f1", size: 36 });
                 offset += 110;
 
                 proposed.forEach(mission => {
@@ -62,14 +62,14 @@ module TK.SpaceTac.UI {
             let title = mission.title;
             let subtitle = `${capitalize(MissionDifficulty[mission.difficulty])} - Reward: ${mission.getRewardText()}`;
 
-            this.addImage(320, yoffset, "map-mission-standard");
+            this.content.image("map-mission-standard", 320, yoffset, true);
             if (title) {
-                this.addText(380, yoffset - 15, title, "#d2e1f3", 22, false, false, 620, true);
+                this.content.text(title, 380, yoffset - 15, { color: "#d2e1f3", size: 22, width: 620, center: false });
             }
             if (subtitle) {
-                this.addText(380, yoffset + 22, subtitle, "#d2e1f3", 18, false, false, 620, true);
+                this.content.text(subtitle, 380, yoffset + 22, { color: "#d2e1f3", size: 18, width: 620, center: false });
             }
-            this.builder.button(active ? "map-mission-action-cancel" : "map-mission-action-accept", 1120, yoffset, button_callback).anchor.set(0.5);
+            this.content.button(active ? "map-mission-action-cancel" : "map-mission-action-accept", 1120, yoffset, button_callback, undefined, undefined, { center: true });
         }
     }
 }

@@ -9,17 +9,17 @@ module TK.SpaceTac.UI {
         constructor(view: BaseView, message: string, initial?: string) {
             super(view);
 
-            this.addText(this.width * 0.5, this.height * 0.3, message, "#90FEE3", 32);
+            this.content.text(message, this.width * 0.5, this.height * 0.3, { color: "#90FEE3", size: 32 });
 
-            let input = new UITextInput(this.builder.styled({ size: 24 }), "menu-input", this.width / 2, this.height / 2, 12);
+            let input = new UITextInput(this.content.styled({ size: 24 }), "menu-input", this.width / 2, this.height / 2, 12);
             if (initial) {
                 input.setContent(initial);
             }
 
             this.result = new Promise((resolve, reject) => {
                 this.result_resolver = resolve;
-                this.addButton(this.width * 0.4, this.height * 0.7, () => resolve(null), "common-button-cancel");
-                this.addButton(this.width * 0.6, this.height * 0.7, () => resolve(input.getContent()), "common-button-ok");
+                this.content.button("common-button-cancel", this.width * 0.4, this.height * 0.7, () => resolve(null));
+                this.content.button("common-button-ok", this.width * 0.6, this.height * 0.7, () => resolve(input.getContent()));
             });
         }
 

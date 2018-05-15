@@ -38,15 +38,16 @@ module TK.SpaceTac.UI.Specs {
 
             function checkpoints(desc: string, available = 0, using = 0, used = 0) {
                 check.in(desc, check => {
-                    check.same(bar.power_icons.children.length, available + using + used, "icon count");
-                    bar.power_icons.children.forEach((child, idx) => {
-                        let img = <Phaser.Image>child;
-                        if (idx < available) {
-                            check.equals(img.name, "battle-actionbar-power-available", `icon ${idx}`);
-                        } else if (idx < available + using) {
-                            check.equals(img.name, "battle-actionbar-power-move", `icon ${idx}`);
-                        } else {
-                            check.equals(img.name, "battle-actionbar-power-used", `icon ${idx}`);
+                    check.same(bar.power_icons.length, available + using + used, "icon count");
+                    bar.power_icons.list.forEach((child, idx) => {
+                        if (check.instance(child, UIImage, `${idx} icon should be an image`)) {
+                            if (idx < available) {
+                                check.equals(child.name, "battle-actionbar-power-available", `icon ${idx}`);
+                            } else if (idx < available + using) {
+                                check.equals(child.name, "battle-actionbar-power-move", `icon ${idx}`);
+                            } else {
+                                check.equals(child.name, "battle-actionbar-power-used", `icon ${idx}`);
+                            }
                         }
                     });
                 });

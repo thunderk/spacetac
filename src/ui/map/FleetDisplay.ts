@@ -12,14 +12,13 @@ module TK.SpaceTac.UI {
     /**
      * Group to display a fleet
      */
-    export class FleetDisplay extends Phaser.Group {
+    export class FleetDisplay extends UIContainer {
         private map: UniverseMapView
         private fleet: Fleet
-        private tween: Phaser.Tween
         private ship_count = 0
 
         constructor(parent: UniverseMapView, fleet: Fleet) {
-            super(parent.game);
+            super(parent);
 
             this.map = parent;
             this.fleet = fleet;
@@ -28,11 +27,10 @@ module TK.SpaceTac.UI {
 
             let location = this.map.universe.getLocation(fleet.location);
             if (location) {
-                this.position.set(location.star.x + location.x, location.star.y + location.y);
+                this.setPosition(location.star.x + location.x, location.star.y + location.y);
             }
-            this.scale.set(SCALING, SCALING);
+            this.setScale(SCALING, SCALING);
 
-            this.tween = this.game.tweens.create(this);
             this.loopOrbit();
         }
 
@@ -41,13 +39,14 @@ module TK.SpaceTac.UI {
          */
         updateShipSprites() {
             if (this.ship_count != this.fleet.ships.length) {
-                this.removeAll(true);
+                let builder = new UIBuilder(this.map, this);
+
+                builder.clear();
+
                 this.fleet.ships.forEach((ship, index) => {
                     let offset = LOCATIONS[index];
-                    let sprite = this.map.newImage(`ship-${ship.model.code}-sprite`, offset[0], offset[1] + 150);
-                    sprite.scale.set(64 / sprite.width);
-                    sprite.anchor.set(0.5, 0.5);
-                    this.add(sprite);
+                    let sprite = builder.image(`ship-${ship.model.code}-sprite`, offset[0], offset[1] + 150, true);
+                    sprite.setScale(64 / sprite.width);
                 });
 
                 this.ship_count = this.fleet.ships.length;
@@ -62,7 +61,7 @@ module TK.SpaceTac.UI {
          * Animate to a given position in orbit of its current star location
          */
         goToOrbitPoint(angle: number, speed = 1, fullturns = 0, then: Function | null = null, ease = false) {
-            this.tween.stop(false);
+            this.map.animations.killPrevious(this);
             this.rotation %= PI2;
 
             let target = -angle;
@@ -71,11 +70,10 @@ module TK.SpaceTac.UI {
             }
             target -= PI2 * fullturns;
             let distance = Math.abs(target - this.rotation) / PI2;
-            this.tween = this.game.tweens.create(this).to({ rotation: target }, 30000 * distance / speed, ease ? Phaser.Easing.Cubic.In : Phaser.Easing.Linear.None);
+            let tween = this.map.animations.addAnimation<UIContainer>(this, { rotation: target }, 30000 * distance / speed, ease ? "Cubic.easeIn" : "Linear");
             if (then) {
-                this.tween.onComplete.addOnce(then);
+                tween.then(() => then());
             }
-            this.tween.start();
         }
 
         /**
@@ -103,10 +101,10 @@ module TK.SpaceTac.UI {
                     if (on_leave) {
                         on_leave(duration);
                     }
-                    let tween = this.game.tweens.create(this.position).to({ x: this.x + dx, y: this.y + dy }, duration, Phaser.Easing.Cubic.Out);
-                    tween.onComplete.addOnce(() => {
+                    let tween = this.map.animations.addAnimation<UIContainer>(this, { x: this.x + dx, y: this.y + dy }, duration, "Cubic.easeOut");
+                    tween.then(() => {
                         if (this.fleet.battle) {
-                            this.game.state.start("router");
+                            this.map.backToRouter();
                         } else {
                             this.map.current_location.setFleetMoving(false);
                             this.loopOrbit();
@@ -116,7 +114,6 @@ module TK.SpaceTac.UI {
                             on_finished();
                         }
                     });
-                    tween.start();
                 }, true);
             }
         }

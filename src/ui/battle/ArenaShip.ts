@@ -2,7 +2,7 @@ module TK.SpaceTac.UI {
     /**
      * Ship sprite in the arena, with corresponding HUD
      */
-    export class ArenaShip extends Phaser.Group {
+    export class ArenaShip extends UIContainer {
         // Link to the view
         arena: Arena
         battleview: BattleView
@@ -14,21 +14,21 @@ module TK.SpaceTac.UI {
         enemy: boolean
 
         // Ship sprite
-        sprite: Phaser.Image
+        sprite: UIImage
 
         // Stasis effect
-        stasis: Phaser.Image
+        stasis: UIImage
 
         // HSP display
-        hsp: Phaser.Image
-        power_text: Phaser.Text
-        life_hull: UIGroup
-        life_shield: UIGroup
-        life_evasion: UIGroup
+        hsp: UIContainer
+        power_text: UIText
+        life_hull: UIContainer
+        life_shield: UIContainer
+        life_evasion: UIContainer
         toggle_hsp: Toggle
 
         // Play order
-        play_order: Phaser.Text
+        play_order: UIText
         toggle_play_order: Toggle
 
         // Frames to indicate the owner, if the ship is hovered, and if it is hovered
@@ -36,24 +36,24 @@ module TK.SpaceTac.UI {
         frame_hover: UIImage
 
         // Effects display
-        active_effects_display: Phaser.Group
-        effects_radius: Phaser.Graphics
-        effects_messages: Phaser.Group
+        active_effects_display: UIContainer
+        effects_radius: UIGraphics
+        effects_messages: UIContainer
         effects_messages_toggle: Toggle
 
         // Create a ship sprite usable in the Arena
         constructor(parent: Arena, ship: Ship) {
-            super(parent.game);
+            super(parent.view);
             this.arena = parent;
             this.battleview = parent.view;
-            let builder = new UIBuilder(parent.view).in(this);
+
+            let builder = new UIBuilder(this.battleview).in(this);
 
             this.ship = ship;
             this.enemy = !this.battleview.player.is(this.ship.fleet.player);
 
             // Add effects radius
-            this.effects_radius = new Phaser.Graphics(this.game);
-            this.add(this.effects_radius);
+            this.effects_radius = builder.graphics("effect-radius");
 
             // Add frame indicating which side this ship is on
             this.frame_owner = builder.image(this.enemy ? "battle-hud-ship-enemy" : "battle-hud-ship-own", 0, 0, true);
@@ -71,12 +71,13 @@ module TK.SpaceTac.UI {
             this.stasis.visible = !ship.alive;
 
             // HSP display
-            this.hsp = builder.image("battle-hud-hsp-background", 0, 34, true);
+            this.hsp = builder.container("hsp", 0, 34);
+            builder.in(this.hsp).image("battle-hud-hsp-background", 0, 0, true);
             this.power_text = builder.in(this.hsp).text(`${ship.getValue("power")}`, -42, 2,
                 { size: 13, color: "#ffdd4b", bold: true, shadow: true, center: true });
-            this.life_hull = builder.in(this.hsp).group("hull");
-            this.life_shield = builder.in(this.hsp).group("shield");
-            this.life_evasion = builder.in(this.hsp).group("evasion");
+            this.life_hull = builder.in(this.hsp).container("hull");
+            this.life_shield = builder.in(this.hsp).container("shield");
+            this.life_evasion = builder.in(this.hsp).container("evasion");
             this.toggle_hsp = this.battleview.animations.newVisibilityToggle(this.hsp, 200, false);
 
             // Play order display
@@ -85,11 +86,8 @@ module TK.SpaceTac.UI {
             this.toggle_play_order = this.battleview.animations.newVisibilityToggle(play_order, 200, false);
 
             // Effects display
-            this.active_effects_display = new Phaser.Group(this.game);
-            this.active_effects_display.position.set(0, -44);
-            this.add(this.active_effects_display);
-            this.effects_messages = new Phaser.Group(this.game);
-            this.add(this.effects_messages);
+            this.active_effects_display = builder.container("active-effects", 0, -44);
+            this.effects_messages = builder.container("effects-messages");
             this.effects_messages_toggle = this.battleview.animations.newVisibilityToggle(this.effects_messages, 500, false);
 
             this.updatePlayOrder();
@@ -101,10 +99,10 @@ module TK.SpaceTac.UI {
 
             // Set location
             if (this.battleview.battle.cycle == 1 && this.battleview.battle.play_index == 0 && ship.alive && this.battleview.player.is(ship.fleet.player)) {
-                this.position.set(ship.arena_x - 500 * Math.cos(ship.arena_angle), ship.arena_y - 500 * Math.sin(ship.arena_angle));
-                this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle);
+                this.setPosition(ship.arena_x - 500 * Math.cos(ship.arena_angle), ship.arena_y - 500 * Math.sin(ship.arena_angle));
+                this.moveToArenaLocation(ship.arena_x, ship.arena_y, ship.arena_angle);
             } else {
-                this.moveTo(ship.arena_x, ship.arena_y, ship.arena_angle, false);
+                this.moveToArenaLocation(ship.arena_x, ship.arena_y, ship.arena_angle, false);
             }
 
             // Log processing
@@ -243,8 +241,8 @@ module TK.SpaceTac.UI {
                 }
             } else if (diff instanceof ShipMoveDiff) {
                 let func = async (animate: boolean, timer: Timer) => {
-                    this.moveTo(diff.start.x, diff.start.y, diff.start.angle, false);
-                    let duration = this.moveTo(diff.end.x, diff.end.y, diff.end.angle, animate, !!diff.engine);
+                    this.moveToArenaLocation(diff.start.x, diff.start.y, diff.start.angle, false);
+                    let duration = this.moveToArenaLocation(diff.end.x, diff.end.y, diff.end.angle, animate, !!diff.engine);
                     if (duration && animate) {
                         await timer.sleep(duration);
                     }
@@ -325,9 +323,9 @@ module TK.SpaceTac.UI {
          * 
          * Return the duration of animation
          */
-        moveTo(x: number, y: number, facing_angle: number, animate = true, engine = true): number {
+        moveToArenaLocation(x: number, y: number, facing_angle: number, animate = true, engine = true): number {
             if (animate) {
-                let animation = engine ? Animations.moveInSpace : Animations.moveTo;
+                let animation = bound(this.arena.view.animations, engine ? "moveInSpace" : "moveTo");
                 let duration = animation(this, x, y, facing_angle, this.sprite);
                 return duration;
             } else {
@@ -346,11 +344,14 @@ module TK.SpaceTac.UI {
                 this.effects_messages.removeAll(true);
             }
 
-            let text = new Phaser.Text(this.game, 0, 20 * this.effects_messages.children.length, message, { font: "14pt SpaceTac", fill: beneficial ? "#afe9c6" : "#e9afaf" });
-            this.effects_messages.addChild(text);
+            let builder = new UIBuilder(this.arena.view, this.effects_messages);
+
+            let text = builder.text(message, 0, 20 * this.effects_messages.length, {
+                color: beneficial ? "#afe9c6" : "#e9afaf"
+            })
 
             let arena = this.battleview.arena.getBoundaries();
-            this.effects_messages.position.set(
+            this.effects_messages.setPosition(
                 (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects_messages.width) : (-this.effects_messages.width * 0.5)),
                 (this.ship.arena_y < arena.height * 0.9) ? 50 : (-50 - this.effects_messages.height)
             );
@@ -449,7 +450,6 @@ module TK.SpaceTac.UI {
                 effects.forEach((effect, index) => {
                     let name = effect.isBeneficial() ? "battle-hud-ship-effect-good" : "battle-hud-ship-effect-bad";
                     let dot = this.battleview.newImage(name, positions[index] - 35, 0);
-                    dot.anchor.set(0.5, 0.5);
                     this.active_effects_display.add(dot);
                 });
             }
@@ -463,9 +463,8 @@ module TK.SpaceTac.UI {
             this.ship.actions.listToggled().forEach(action => {
                 let color = (action instanceof VigilanceAction) ? 0xf4bf42 : 0xe9f2f9;
                 this.effects_radius.lineStyle(2, color, 0.5);
-                this.effects_radius.beginFill(color, 0.1);
-                this.effects_radius.drawCircle(0, 0, action.radius * 2);
-                this.effects_radius.endFill();
+                this.effects_radius.fillStyle(color, 0.1);
+                this.effects_radius.fillCircle(0, 0, action.radius);
             });
         }
     }

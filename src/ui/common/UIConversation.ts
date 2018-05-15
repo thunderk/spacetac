@@ -56,12 +56,13 @@ module TK.SpaceTac.UI {
                 width -= offset;
 
                 let ioffset = style.padding + Math.floor(style.image_size / 2);
-                builder.image(style.image, ioffset, ioffset);
+                builder.image(style.image, ioffset, ioffset, true);
 
                 if (style.image_caption) {
                     let text_size = Math.ceil(style.text.size ? style.text.size * 0.6 : 16);
                     builder.text(style.image_caption, ioffset, style.padding + style.image_size + text_size, {
-                        size: text_size
+                        size: text_size,
+                        center: true
                     });
                 }
             }
@@ -70,7 +71,7 @@ module TK.SpaceTac.UI {
                 width: width - style.padding * 2
             });
 
-            let i = 0;
+            /*let i = 0;
             let colorchar = () => {
                 text.clearColors();
                 if (i < message.length) {
@@ -79,7 +80,7 @@ module TK.SpaceTac.UI {
                     this.view.timer.schedule(10, colorchar);
                 }
             }
-            colorchar();
+            colorchar();*/
         }
     }
 
@@ -90,7 +91,7 @@ module TK.SpaceTac.UI {
         private step = -1
         private on_step: UIConversationCallback
         private ended = false
-        private on_end = new Phaser.Signal()
+        private on_end = new Phaser.Events.EventEmitter()
 
         constructor(parent: BaseView, on_step: UIConversationCallback) {
             super(parent, parent.getWidth(), parent.getHeight());
@@ -106,7 +107,7 @@ module TK.SpaceTac.UI {
         destroy() {
             if (!this.ended) {
                 this.ended = true;
-                this.on_end.dispatch();
+                this.on_end.emit("done");
             }
 
             super.destroy();
@@ -119,8 +120,8 @@ module TK.SpaceTac.UI {
             if (this.ended) {
                 return Promise.resolve();
             } else {
-                return new Promise((resolve, reject) => {
-                    this.on_end.addOnce(resolve);
+                return new Promise(resolve => {
+                    this.on_end.on("done", resolve);
                 });
             }
         }

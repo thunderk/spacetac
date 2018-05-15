@@ -3,10 +3,10 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("Router", test => {
-        let testgame = setupSingleView(test, () => [new Router(), []]);
+        let testgame = setupSingleView(test, () => [new Router({}), {}]);
 
         test.case("loads correctly", check => {
-            check.equals(testgame.ui.state.current, "test");
+            check.instance(testgame.ui.getActiveScene(), Router, "active scene should be Router");
             // TODO test routing
         });
     });

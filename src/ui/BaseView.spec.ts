@@ -5,7 +5,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView(test);
 
         test.case("initializes variables", check => {
-            let view = <BaseView>testgame.ui.state.getCurrentState();
+            let view = nn(testgame.ui.getActiveScene());
 
             check.equals(view.messages instanceof Messages, true);
             check.equals(view.inputs instanceof InputManager, true);

@@ -9,17 +9,12 @@ module TK.SpaceTac.UI.Specs {
             fleet.loopOrbit();
             check.equals(fleet.rotation, 0);
 
-            mapview.game.tweens.update();
-            let tween = first(mapview.game.tweens.getAll(), tw => tw.target == fleet);
-            if (tween) {
-                let tweendata = tween.generateData(0.1);
-                check.equals(tweendata.length, 3);
-                check.nears(tweendata[0].rotation, -Math.PI * 2 / 3);
-                check.nears(tweendata[1].rotation, -Math.PI * 4 / 3);
-                check.nears(tweendata[2].rotation, -Math.PI * 2);
-            } else {
-                check.fail("No tween found");
-            }
+            let tweendata = mapview.animations.simulate(fleet, "rotation", 4);
+            check.equals(tweendata.length, 4);
+            check.nears(tweendata[0], 0);
+            check.nears(tweendata[1], -Math.PI * 2 / 3);
+            check.nears(tweendata[2], Math.PI * 2 / 3);
+            check.nears(tweendata[3], 0);
         });
     });
 }

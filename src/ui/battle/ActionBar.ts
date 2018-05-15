@@ -1,19 +1,23 @@
+/// <reference path="../common/UIContainer.ts" />
+
 module TK.SpaceTac.UI {
-    // Bar with all available action icons displayed
-    export class ActionBar extends Phaser.Group {
+    /**
+     * Bar on the border of screen to display all available action icons
+     */
+    export class ActionBar extends UIContainer {
         // Link to the parent battleview
         battleview: BattleView
 
         // List of action icons
-        actions: Phaser.Group
+        actions: UIContainer
         action_icons: ActionIcon[]
 
         // Power indicator
-        power: Phaser.Group
-        power_icons!: Phaser.Group
+        power: UIContainer
+        power_icons!: UIContainer
 
         // Indicator of interaction disabled
-        icon_waiting: Phaser.Image
+        icon_waiting: UIImage
 
         // Current ship, whose actions are displayed
         ship: Ship | null
@@ -23,7 +27,7 @@ module TK.SpaceTac.UI {
 
         // Create an empty action bar
         constructor(battleview: BattleView) {
-            super(battleview.game);
+            super(battleview);
 
             this.battleview = battleview;
             this.action_icons = [];
@@ -34,27 +38,26 @@ module TK.SpaceTac.UI {
             let builder = new UIBuilder(battleview, this);
 
             // Background
-            builder.image("battle-actionbar-background");
+            let base = builder.image("battle-actionbar-background");
 
             // Group for actions
-            this.actions = builder.group("actions", 86, 6);
+            this.actions = builder.container("actions", 86, 6);
             builder.in(this.actions).image("battle-actionbar-actions-background");
 
             // Power bar
-            this.power = builder.group("power", 1466, 0);
+            this.power = builder.container("power", 1466, 0);
             builder.in(this.power, builder => {
                 builder.image("battle-actionbar-power-background", 0, 6);
-                this.power_icons = builder.group("power icons", 50, 14);
+                this.power_icons = builder.container("power icons", 50, 14);
             });
 
             // Playing ship
             builder.image("battle-actionbar-ship", 1735);
 
             // Waiting icon
-            this.icon_waiting = new Phaser.Image(this.game, this.width / 2, this.height / 2, "common-waiting", 0);
-            this.icon_waiting.anchor.set(0.5, 0.5);
-            this.icon_waiting.animations.add("loop").play(9, true);
-            this.add(this.icon_waiting);
+            this.icon_waiting = builder.image("common-waiting", base.width / 2, base.height / 2, true);
+            // FIXME
+            //this.icon_waiting.animations.add("loop").play(9, true);
 
             // Options button
             builder.button("battle-actionbar-button-menu", 0, 0, () => battleview.showOptions(), "Game options");
@@ -105,7 +108,7 @@ module TK.SpaceTac.UI {
                     }
                 }
             });
-            this.setInteractive(false);
+            this.setInteractivity(false);
         }
 
         /**
@@ -118,7 +121,7 @@ module TK.SpaceTac.UI {
         /**
          * Set the interactivity state
          */
-        setInteractive(interactive: boolean) {
+        setInteractivity(interactive: boolean) {
             if (this.interactive != interactive) {
                 this.interactive = interactive;
 
@@ -167,7 +170,7 @@ module TK.SpaceTac.UI {
             let power_capacity = this.ship ? this.ship.getAttribute("power_capacity") : 0;
             let power_value = this.ship ? this.ship.getValue("power") : 0;
 
-            let current_power = this.power_icons.children.length;
+            let current_power = this.power_icons.length;
 
             if (current_power > power_capacity) {
                 destroyChildren(this.power_icons, power_capacity, current_power);
@@ -175,14 +178,13 @@ module TK.SpaceTac.UI {
                 range(power_capacity - current_power).forEach(i => {
                     let x = (current_power + i) % 5;
                     let y = ((current_power + i) - x) / 5;
-                    let image = this.battleview.newImage("battle-actionbar-power-used", x * 43, y * 22);
-                    this.power_icons.add(image);
+                    let image = new UIBuilder(this.battleview, this.power_icons).image("battle-actionbar-power-used", x * 43, y * 22);
                 });
             }
 
             let remaining_power = power_value - move_power - fire_power;
-            this.power_icons.children.forEach((obj, idx) => {
-                let img = <Phaser.Image>obj;
+            this.power_icons.list.forEach((obj, idx) => {
+                let img = <UIImage>obj;
                 if (idx < remaining_power) {
                     this.battleview.changeImage(img, "battle-actionbar-power-available");
                 } else if (idx < remaining_power + move_power) {

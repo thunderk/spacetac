@@ -8,7 +8,7 @@ module TK.SpaceTac.UI {
     /**
      * Character sheet, displaying ship characteristics
      */
-    export class CharacterSheet extends Phaser.Image {
+    export class CharacterSheet {
         // Global sheet mode
         mode: CharacterSheetMode
 
@@ -16,6 +16,7 @@ module TK.SpaceTac.UI {
         view: BaseView
 
         // UI components builder
+        container: UIContainer
         builder: UIBuilder
 
         // Close/validate button
@@ -26,11 +27,11 @@ module TK.SpaceTac.UI {
         xhidden = -2000
 
         // Groups
-        group_level: Phaser.Group
-        group_portraits: Phaser.Group
-        group_attributes: Phaser.Image
-        group_actions: Phaser.Image
-        group_upgrades: Phaser.Group
+        group_level: UIContainer
+        group_portraits: UIContainer
+        group_attributes: UIContainer
+        group_actions: UIContainer
+        group_upgrades: UIContainer
 
         // Currently displayed fleet
         fleet?: Fleet
@@ -40,34 +41,40 @@ module TK.SpaceTac.UI {
 
         // Variable data
         personality?: CharacterPersonality
-        image_portrait: Phaser.Image
-        text_model: Phaser.Text
-        text_description: Phaser.Text
-        text_name?: Phaser.Text
-        text_level: Phaser.Text
-        text_upgrade_points: Phaser.Text
+        image_portrait: UIImage
+        text_model: UIText
+        text_description: UIText
+        text_name?: UIText
+        text_level: UIText
+        text_upgrade_points: UIText
         valuebar_experience: ValueBar
 
         constructor(view: BaseView, mode: CharacterSheetMode, onclose?: Function) {
-            super(view.game, 0, 0, view.getImageInfo("character-sheet").key, view.getImageInfo("character-sheet").frame);
+            this.view = view;
+            this.mode = mode;
+
+            let builder = new UIBuilder(view);
+            this.container = builder.container("character-sheet");
+
+            builder = builder.in(this.container);
+            let bg = builder.image("character-sheet");
+            bg.setInteractive();
+
+            this.builder = builder.styled({ color: "#dce9f9", size: 16, shadow: true });
+
 
             if (!onclose) {
                 onclose = () => this.hide();
             }
 
-            this.view = view;
-            this.mode = mode;
-            this.builder = new UIBuilder(view, this).styled({ color: "#dce9f9", size: 16, shadow: true });
-
             this.xhidden = -this.view.getWidth();
-            this.x = this.xhidden;
-            this.inputEnabled = true;
+            this.container.x = this.xhidden;
 
             this.image_portrait = this.builder.image("translucent", 435, 271, true);
 
             this.builder.image("character-entry", 24, 740);
 
-            this.group_portraits = this.builder.group("portraits", 90, 755);
+            this.group_portraits = this.builder.container("portraits", 90, 755);
 
             let model_bg = this.builder.image("character-ship-model", 434, 500, true);
             this.text_model = this.builder.in(model_bg).text("", 0, 0, { size: 28 });
@@ -75,10 +82,10 @@ module TK.SpaceTac.UI {
             let description_bg = this.builder.image("character-ship-description", 434, 654, true);
             this.text_description = this.builder.in(description_bg).text("", 0, 0, { color: "#a0afc3", width: 510 });
 
-            this.group_attributes = this.builder.image("character-ship-column-left", 28, 28);
-            this.group_actions = this.builder.image("character-ship-column-right", 698, 28);
+            this.group_attributes = this.builder.container("attributes", 28, 28);
+            this.group_actions = this.builder.container("actions", 698, 28);
 
-            this.group_level = this.builder.group("level");
+            this.group_level = this.builder.container("level");
             let points_bg = this.builder.in(this.group_level).image("character-level-upgrades", 582, 986);
             this.builder.in(points_bg, builder => {
                 builder.text("Upgrade points", 46, 10, { center: false, vcenter: false });
@@ -90,7 +97,7 @@ module TK.SpaceTac.UI {
             this.text_level = this.builder.in(level_bg).text("", 0, 4, { size: 28 });
             this.valuebar_experience = this.builder.in(level_bg).valuebar("character-level-experience", -level_bg.width * 0.5, -level_bg.height * 0.5);
 
-            this.group_upgrades = this.builder.group("upgrades");
+            this.group_upgrades = this.builder.container("upgrades");
 
             if (this.mode == CharacterSheetMode.CREATION) {
                 this.builder.in(this.builder.image("character-section-title", 180, 30, false)).text("Ship", 80, 45, { color: "#dce9f9", size: 32 });
@@ -120,13 +127,19 @@ module TK.SpaceTac.UI {
             } else {
                 this.text_name = this.builder.in(this.builder.image("character-name-display", 434, 940, true)).text("", 0, 0, { size: 28 });
 
-                this.close_button = this.builder.button("character-close-button", 1920, 0, onclose, "Close the character sheet");
-                this.close_button.anchor.set(1, 0);
+                this.close_button = this.builder.button("character-close-button", 1837, 0, onclose, "Close the character sheet");
             }
 
             this.refreshUpgrades();
             this.refreshAttributes();
             this.refreshActions();
+        }
+
+        /**
+         * Move the sheet to a specific layer
+         */
+        moveToLayer(layer: UIContainer): void {
+            layer.add(this.container);
         }
 
         /**
@@ -194,7 +207,7 @@ module TK.SpaceTac.UI {
             builder.styled({ center: false, vcenter: false }).in(initial, builder => {
                 builder.text("Base equipment", 32, 8, { color: "#e2e9d1" });
 
-                builder.in(builder.group("attributes"), builder => {
+                builder.in(builder.container("attributes"), builder => {
                     let effects = cfilter(ship.model.getEffects(1, []), AttributeEffect);
                     effects.forEach(effect => {
                         let button = builder.button(`attribute-${effect.attrcode}`, 0, 8, undefined,
@@ -207,14 +220,14 @@ module TK.SpaceTac.UI {
                     builder.distribute("x", 236, 870);
                 });
 
-                builder.in(builder.group("actions"), builder => {
+                builder.in(builder.container("actions"), builder => {
                     let actions = ship.model.getActions(1, []);
                     actions.forEach(action => {
                         let button = builder.button("translucent", 0, 66, undefined, action.getEffectsDescription());
 
                         builder.in(button, builder => {
                             let icon = builder.image(`action-${action.code}`);
-                            icon.scale.set(0.1875);
+                            icon.setScale(0.1875);
                             if (actions.length < 5) {
                                 builder.text(`${action.name}`, 56, 12, { size: 16 });
                             }
@@ -259,11 +272,13 @@ module TK.SpaceTac.UI {
             let builder = this.builder.in(this.group_attributes);
             builder.clear();
 
+            builder.image("character-ship-column-left", 0, 0);
+
             builder.text("Attributes", 74, 20, { color: "#a3bbd9" });
 
             if (this.ship) {
                 let ship = this.ship;
-                builder.in(builder.group("items"), builder => {
+                builder.in(builder.container("items"), builder => {
                     keys(SHIP_ATTRIBUTES).forEach(attribute => {
                         let button = builder.button(`attribute-${attribute}`, 24, 0, undefined,
                             ship.getAttributeDescription(attribute));
@@ -282,16 +297,18 @@ module TK.SpaceTac.UI {
             let builder = this.builder.in(this.group_actions);
             builder.clear();
 
+            builder.image("character-ship-column-right", 0, 0);
+
             builder.text("Actions", 74, 20, { color: "#a3bbd9" });
 
             if (this.ship) {
                 let ship = this.ship;
-                builder.in(builder.group("items"), builder => {
+                builder.in(builder.container("items"), builder => {
                     let actions = ship.actions.listAll().filter(action => !(action instanceof EndTurnAction));
                     actions.forEach(action => {
                         let button = builder.button(`action-${action.code}`, 24, 0, undefined,
                             action.getEffectsDescription());
-                        button.scale.set(0.375);
+                        button.setScale(0.375);
                     });
                     builder.distribute("y", 40, 688);
                 });
@@ -310,7 +327,7 @@ module TK.SpaceTac.UI {
                     let button: UIButton;
                     button = new CharacterPortrait(ship).draw(builder, 64 + idx * 140, 64, () => {
                         if (button) {
-                            builder.select(button);
+                            button.toggle(true, UIButtonUnicity.EXCLUSIVE_MIN);
                             this.ship = ship;
 
                             this.refreshShipInfo();
@@ -321,7 +338,7 @@ module TK.SpaceTac.UI {
                     });
 
                     if (ship == this.ship) {
-                        builder.switch(button, true);
+                        button.toggle(true);
                     }
                 });
             }
@@ -331,7 +348,7 @@ module TK.SpaceTac.UI {
          * Check if the sheet is shown
          */
         isOpened(): boolean {
-            return this.x != this.xhidden;
+            return this.container.x != this.xhidden;
         }
 
         /**
@@ -355,9 +372,14 @@ module TK.SpaceTac.UI {
             }
 
             if (animate) {
-                this.game.tweens.create(this).to({ x: this.xshown }, 400, Phaser.Easing.Circular.InOut, true);
+                this.view.tweens.add({
+                    targets: this.container,
+                    x: this.xshown,
+                    duration: 400,
+                    easing: 'Circ.easeInOut'
+                });
             } else {
-                this.x = this.xshown;
+                this.container.x = this.xshown;
             }
         }
 
@@ -368,9 +390,14 @@ module TK.SpaceTac.UI {
             this.view.audio.playOnce("ui-dialog-close");
 
             if (animate) {
-                this.game.tweens.create(this).to({ x: this.xhidden }, 400, Phaser.Easing.Circular.InOut, true);
+                this.view.tweens.add({
+                    targets: this.container,
+                    x: this.xhidden,
+                    duration: 400,
+                    ease: 'Circ.easeInOut'
+                });
             } else {
-                this.x = this.xhidden;
+                this.container.x = this.xhidden;
             }
         }
 

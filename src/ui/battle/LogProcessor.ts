@@ -52,7 +52,7 @@ module TK.SpaceTac.UI {
         start() {
             if (!this.view.gameui.headless) {
                 this.log.play(async diff => {
-                    while (this.view.game.paused) {
+                    while (this.view.isPaused()) {
                         await this.view.timer.sleep(500);
                     }
 

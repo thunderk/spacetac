@@ -1,66 +1,64 @@
 module TK.SpaceTac.UI {
-    // A single displayed message
-    class Message extends Phaser.Group {
+    /**
+     * A single displayed message
+     */
+    class Message extends UIContainer {
         view: BaseView
-        background: Phaser.Graphics
-        text: Phaser.Text
+        background: UIBackground
+        text: UIText
 
         constructor(parent: Messages, text: string, duration: number) {
-            super(parent.view.game);
+            super(parent.view);
 
             this.view = parent.view;
             let builder = new UIBuilder(this.view).in(this);
 
-            this.background = new Phaser.Graphics(this.game);
-            this.add(this.background);
+            this.background = new UIBackground(this.view, this);
 
             this.text = builder.text(text, 0, 0, { color: "#DBEFF9", shadow: true, size: 16, center: false, vcenter: false });
 
-            this.position.set(parent.view.getWidth(), 10);
+            UITools.drawBackground(this.text, this.background, 6);
 
+            let bounds = UITools.getBounds(this);
+            this.setPosition(parent.view.getWidth() - bounds.width - 10, 10);
             parent.view.timer.schedule(duration, () => this.hide());
         }
 
-        // Hide the message
+        /**
+         * Hide the message
+         */
         hide() {
-            var tween = this.game.tweens.create(this);
-            tween.to({ y: this.y + 50, alpha: 0 }, 400, Phaser.Easing.Circular.In);
-            tween.onComplete.addOnce(() => {
-                this.destroy();
-            });
-            tween.start();
-        }
-
-        update() {
-            UITools.drawBackground(this.text, this.background, 6);
-
-            this.x = this.view.getWidth() - this.width - 10;
+            this.view.animations.addAnimation<UIContainer>(this, { y: this.y + 50, alpha: 0 }, 400, "Circ.easeIn").then(() => this.destroy());
         }
     }
 
-    // Visual notifications of game-related messages (eg. "Game saved"...)
+    /**
+     * Visual notifications of game-related messages (eg. "Game saved"...)
+     */
     export class Messages {
         // Link to parent view
-        view: BaseView;
+        view: BaseView
 
         // Main group to hold the visual messages
-        container: Phaser.Group;
+        container: UIContainer
 
-        constructor(parent: BaseView) {
-            this.view = parent;
-
-            this.container = new Phaser.Group(parent.game);
-            parent.add.existing(this.container);
+        constructor(view: BaseView) {
+            this.view = view;
+            this.container = new UIBuilder(view, view.messages_layer).container("messages");
         }
 
-        // Add a new message to the notifications
+        /**
+         * Add a new message to the notifications
+         */
         addMessage(text: string, duration: number = 3000): void {
-            this.container.forEachExists((child: Message) => {
-                child.y += child.height + 5;
-            }, this);
+            let message = new Message(this, text, duration);
+            this.container.add(message);
 
-            var message = new Message(this, text, duration);
-            this.container.addChild(message);
+            let bounds = UITools.getBounds(message);
+
+            cfilter(this.container.list, Message).forEach(child => {
+                child.y += bounds.height + 5;
+            });
         }
     }
 }

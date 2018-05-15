@@ -60,7 +60,7 @@ module TK.SpaceTac.UI.Specs {
             check.called(collect, [
                 [ship, new Target(20, 10), ship.location]
             ])
-            check.equals(targetting.impact_indicators.children.length, 3);
+            check.equals(targetting.impact_indicators.length, 3);
             check.equals(targetting.impact_indicators.visible, true);
 
             targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 11));
@@ -68,7 +68,7 @@ module TK.SpaceTac.UI.Specs {
             check.called(collect, [
                 [ship, new Target(20, 11), ship.location]
             ])
-            check.equals(targetting.impact_indicators.children.length, 2);
+            check.equals(targetting.impact_indicators.length, 2);
             check.equals(targetting.impact_indicators.visible, true);
 
             targetting.updateImpactIndicators(impacts, ship, action, new Target(20, 12));
@@ -109,12 +109,15 @@ module TK.SpaceTac.UI.Specs {
             check.equals(targetting.container.visible, true);
             check.equals(targetting.drawn_info.visible, true);
             check.equals(targetting.fire_arrow.visible, true);
-            check.containing(targetting.fire_arrow.position, { x: 156, y: 65 });
+            check.equals(targetting.fire_arrow.x, 156);
+            check.equals(targetting.fire_arrow.y, 65);
             check.nears(targetting.fire_arrow.rotation, 0.534594, 5);
             check.equals(targetting.impact_area.visible, true);
-            check.containing(targetting.impact_area.position, { x: 156, y: 65 });
+            check.equals(targetting.impact_area.x, 156);
+            check.equals(targetting.impact_area.y, 65);
             check.equals(targetting.move_ghost.visible, true);
-            check.containing(targetting.move_ghost.position, { x: 80, y: 20 });
+            check.equals(targetting.move_ghost.x, 80);
+            check.equals(targetting.move_ghost.y, 20);
             check.nears(targetting.move_ghost.rotation, 0.534594, 5);
         })
 

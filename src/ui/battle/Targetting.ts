@@ -6,7 +6,7 @@ module TK.SpaceTac.UI {
      */
     export class Targetting {
         // Container group
-        container: Phaser.Group
+        container: UIContainer
 
         // Current action
         ship: Ship | null = null
@@ -19,13 +19,13 @@ module TK.SpaceTac.UI {
         effects: BaseBattleDiff[] = []
 
         // Move and fire lines
-        drawn_info: Phaser.Graphics
-        move_ghost: Phaser.Image
-        fire_arrow: Phaser.Image
+        drawn_info: UIGraphics
+        move_ghost: UIImage
+        fire_arrow: UIImage
 
         // Impact area
-        impact_area: Phaser.Graphics
-        impact_indicators: Phaser.Group
+        impact_area: UIGraphics
+        impact_indicators: UIContainer
 
         // Collaborators to update
         actionbar: ActionBar
@@ -41,34 +41,29 @@ module TK.SpaceTac.UI {
             this.tactical_mode = tactical_mode.manipulate("targetting");
             this.range_hint = range_hint;
 
-            this.container = view.add.group();
+            let builder = new UIBuilder(view);
+            this.container = builder.container("targetting");
+            builder = builder.in(this.container);
 
             // Visual effects
-            this.drawn_info = new Phaser.Graphics(view.game, 0, 0);
-            this.drawn_info.visible = false;
-            this.move_ghost = view.newImage("common-transparent");
-            this.move_ghost.anchor.set(0.5, 0.5);
-            this.move_ghost.alpha = 0.8;
-            this.move_ghost.visible = false;
-            this.fire_arrow = this.view.newImage("battle-hud-simulator-ok");
-            this.fire_arrow.anchor.set(1, 0.5);
-            this.fire_arrow.visible = false;
-            this.impact_indicators = new Phaser.Group(view.game);
-            this.impact_indicators.visible = false;
-            this.impact_area = new Phaser.Graphics(view.game);
-            this.impact_area.visible = false;
-
-            this.container.add(this.impact_area);
-            this.container.add(this.drawn_info);
-            this.container.add(this.move_ghost);
-            this.container.add(this.fire_arrow);
-            this.container.add(this.impact_indicators);
+            this.impact_area = builder.graphics("impact-area");
+            this.impact_area.setVisible(false);
+            this.drawn_info = builder.graphics("lines");
+            this.drawn_info.setVisible(false);
+            this.move_ghost = builder.image("common-transparent", 0, 0, true);
+            this.move_ghost.setAlpha(0.8);
+            this.move_ghost.setVisible(false);
+            this.fire_arrow = builder.image("battle-hud-simulator-ok");
+            this.fire_arrow.setOrigin(1, 0.5);
+            this.fire_arrow.setVisible(false);
+            this.impact_indicators = builder.container("impact-indicators");
+            this.impact_indicators.setVisible(false);
         }
 
         /**
          * Move to a given view layer
          */
-        moveToLayer(layer: Phaser.Group): void {
+        moveToLayer(layer: UIContainer): void {
             layer.add(this.container);
         }
 
@@ -85,11 +80,16 @@ module TK.SpaceTac.UI {
         drawVector(color: number, x1: number, y1: number, x2: number, y2: number, gradation = 0) {
             let line = this.drawn_info;
             line.lineStyle(6, color);
+            line.beginPath();
             line.moveTo(x1, y1);
             line.lineTo(x2, y2);
+            line.strokePath();
+            line.beginPath();
             line.lineStyle(2, 0x000000, 0.6);
             line.moveTo(x1, y1);
             line.lineTo(x2, y2);
+            line.closePath();
+            line.strokePath();
             line.visible = true;
 
             if (gradation) {
@@ -125,7 +125,7 @@ module TK.SpaceTac.UI {
         /**
          * Update impact indicators (highlighting impacted ships, with success factor)
          */
-        updateImpactIndicators(impacts: Phaser.Group, ship: Ship, action: BaseAction, target: Target, source: IArenaLocation = ship.location): void {
+        updateImpactIndicators(impacts: UIContainer, ship: Ship, action: BaseAction, target: Target, source: IArenaLocation = ship.location): void {
             let ships = action.getImpactedShips(ship, target, source);
             if (ships.length) {
                 // TODO differential
@@ -143,7 +143,7 @@ module TK.SpaceTac.UI {
         /**
          * Update impact graphics (area display)
          */
-        updateImpactArea(area: Phaser.Graphics, action: BaseAction): void {
+        updateImpactArea(area: UIGraphics, action: BaseAction): void {
             area.clear();
 
             let color = 0;
@@ -168,24 +168,20 @@ module TK.SpaceTac.UI {
             if (radius) {
                 if (angle) {
                     area.lineStyle(2, color, 0.6);
-                    area.beginFill(color, 0.2);
+                    area.fillStyle(color, 0.2);
                     area.arc(0, 0, radius, angle, -angle, true);
-                    area.endFill();
 
                     area.lineStyle(1, color, 0.3);
-                    area.beginFill(color, 0.1);
+                    area.fillStyle(color, 0.1);
                     area.arc(0, 0, radius * 0.95, angle * 0.95, -angle * 0.95, true);
-                    area.endFill();
                 } else {
                     area.lineStyle(2, color, 0.6);
-                    area.beginFill(color, 0.2);
-                    area.drawCircle(0, 0, radius * 2);
-                    area.endFill();
+                    area.fillStyle(color, 0.2);
+                    area.fillCircle(0, 0, radius);
 
                     area.lineStyle(1, color, 0.3);
-                    area.beginFill(color, 0.1);
-                    area.drawCircle(0, 0, radius * 2 * 0.95);
-                    area.endFill();
+                    area.fillStyle(color, 0.1);
+                    area.fillCircle(0, 0, radius * 0.95);
                 }
             }
         }
@@ -214,7 +210,7 @@ module TK.SpaceTac.UI {
 
                     if (simulation.need_move) {
                         this.move_ghost.visible = true;
-                        this.move_ghost.position.set(simulation.move_location.x, simulation.move_location.y);
+                        this.move_ghost.setPosition(simulation.move_location.x, simulation.move_location.y);
                         this.move_ghost.rotation = angle;
                     } else {
                         this.move_ghost.visible = false;
@@ -222,18 +218,18 @@ module TK.SpaceTac.UI {
 
                     if (simulation.need_fire) {
                         if (this.action instanceof TriggerAction && this.action.angle) {
-                            this.impact_area.position.set(simulation.move_location.x, simulation.move_location.y);
-                            this.impact_area.rotation = arenaAngle(simulation.move_location, simulation.fire_location);
+                            this.impact_area.setPosition(simulation.move_location.x, simulation.move_location.y);
+                            this.impact_area.setRotation(arenaAngle(simulation.move_location, simulation.fire_location));
                         } else {
-                            this.impact_area.position.set(this.target.x, this.target.y);
+                            this.impact_area.setPosition(this.target.x, this.target.y);
                         }
                         this.impact_area.alpha = simulation.can_fire ? 1 : 0.5;
                         this.impact_area.visible = true;
 
                         this.updateImpactIndicators(this.impact_indicators, this.ship, this.action, this.target, this.simulation.move_location);
 
-                        this.fire_arrow.position.set(this.target.x, this.target.y);
-                        this.fire_arrow.rotation = angle;
+                        this.fire_arrow.setPosition(this.target.x, this.target.y);
+                        this.fire_arrow.setRotation(angle);
                         this.view.changeImage(this.fire_arrow, simulation.complete ? "battle-hud-simulator-ok" : "battle-hud-simulator-power");
                         this.fire_arrow.visible = true;
                     } else {
@@ -243,8 +239,8 @@ module TK.SpaceTac.UI {
                     }
                 } else {
                     this.drawVector(0x888888, this.ship.arena_x, this.ship.arena_y, this.target.x, this.target.y);
-                    this.fire_arrow.position.set(this.target.x, this.target.y);
-                    this.fire_arrow.rotation = angle;
+                    this.fire_arrow.setPosition(this.target.x, this.target.y);
+                    this.fire_arrow.setRotation(angle);
                     this.view.changeImage(this.fire_arrow, "battle-hud-simulator-failed");
                     this.fire_arrow.visible = true;
                     this.impact_area.visible = false;

@@ -2,7 +2,7 @@
 
 module TK.SpaceTac.UI.Specs {
     testing("CharacterUpgrade", test => {
-        let testgame = setupSingleView(test, () => [new BaseView(), []]);
+        let testgame = setupEmptyView(test);
 
         test.acase("fills tooltip content", async check => {
             let ship = new Ship();
@@ -19,7 +19,7 @@ module TK.SpaceTac.UI.Specs {
             let tooltip = new TooltipContainer(testgame.view);
             let builder = new TooltipBuilder(tooltip);
             display.fillTooltip(builder);
-            check.equals(cfilter(tooltip.content.children, Phaser.Text).map(child => child.text), [
+            check.equals(collectTexts(tooltip.content), [
                 "Test Upgrade",
                 "Permanent effects:",
                 "• hull capacity +10",
@@ -35,7 +35,7 @@ module TK.SpaceTac.UI.Specs {
 
             builder.clear();
             display.fillTooltip(builder);
-            check.equals(cfilter(tooltip.content.children, Phaser.Text).map(child => child.text), [
+            check.equals(collectTexts(tooltip.content), [
                 "Test Upgrade",
                 "Fire (power 1, range 50km):",
                 "• do 10 damage on target",

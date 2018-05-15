@@ -10,8 +10,8 @@ if (typeof window != "undefined") {
     if (typeof global != "undefined") {
         // In node, does not extend Phaser classes
         var handler = {
-            get(target: any, name: any) {
-                return function () { }
+            get(target: any, name: any): any {
+                return new Proxy({}, handler);
             }
         }
         global.Phaser = new Proxy({}, handler);
@@ -29,22 +29,23 @@ module TK.SpaceTac {
         session: GameSession
         session_token: string | null
 
-        // Audio manager
-        audio!: UI.Audio
-
         // Game options
         options!: UI.GameOptions
 
         // Storage used
         storage: Storage
 
-        // Headless mode
-        headless: boolean
+        // Debug mode
+        debug = false
 
         constructor(headless: boolean = false) {
-            super(1920, 1080, headless ? Phaser.HEADLESS : Phaser.AUTO, '-space-tac');
-
-            this.headless = headless;
+            super({
+                width: 1920,
+                height: 1080,
+                type: headless ? Phaser.HEADLESS : Phaser.AUTO,
+                backgroundColor: '#000000',
+                parent: '-space-tac'
+            });
 
             this.storage = localStorage;
 
@@ -52,30 +53,53 @@ module TK.SpaceTac {
             this.session_token = null;
 
             if (!headless) {
-                this.state.onStateChange.add((state: string) => console.log(`View change: ${state}`));
+                this.scene.add('boot', UI.Boot);
+                this.scene.add('loading', UI.AssetLoading);
+                this.scene.add('mainmenu', UI.MainMenu);
+                this.scene.add('router', UI.Router);
+                this.scene.add('battle', UI.BattleView);
+                this.scene.add('intro', UI.IntroView);
+                this.scene.add('creation', UI.FleetCreationView);
+                this.scene.add('universe', UI.UniverseMapView);
 
-                this.state.add('boot', UI.Boot);
-                this.state.add('loading', UI.AssetLoading);
-                this.state.add('mainmenu', UI.MainMenu);
-                this.state.add('router', UI.Router);
-                this.state.add('battle', UI.BattleView);
-                this.state.add('intro', UI.IntroView);
-                this.state.add('creation', UI.FleetCreationView);
-                this.state.add('universe', UI.UniverseMapView);
-
-                this.state.start('boot');
+                this.goToScene('boot');
             }
         }
 
         boot() {
-            if (this.renderType == Phaser.HEADLESS) {
-                this.headless = true;
-            }
-
             super.boot();
-
-            this.audio = new UI.Audio(this);
             this.options = new UI.GameOptions(this);
+        }
+
+        get headless(): boolean {
+            return this.config.renderType == Phaser.HEADLESS;
+        }
+
+        /**
+         * Get the audio manager for current scene
+         */
+        get audio(): UI.Audio {
+            let scene = this.getActiveScene();
+            if (scene) {
+                return scene.audio;
+            } else {
+                return new UI.Audio(null);
+            }
+        }
+
+        /**
+         * Get the currently active scene
+         */
+        getActiveScene(): UI.BaseView | null {
+            let active = first(<string[]>keys(this.scene.scenes), key => this.scene.isActive(key));
+            if (active) {
+                let scene = this.scene.getScene(active);
+                return (scene instanceof UI.BaseView) ? scene : null;
+            } else if (this.headless) {
+                return this.scene.scenes[0];
+            } else {
+                return null;
+            }
         }
 
         /**
@@ -90,10 +114,23 @@ module TK.SpaceTac {
          * Display a popup message in current view
          */
         displayMessage(message: string) {
-            let state = <UI.BaseView>this.state.getCurrentState();
-            if (state) {
-                state.messages.addMessage(message);
-            }
+            iteritems(<any>this.scene.keys, (key: string, scene: UI.BaseView) => {
+                if (scene.messages && this.scene.isVisible(key)) {
+                    scene.messages.addMessage(message);
+                }
+            });
+        }
+
+        /**
+         * Change the active scene
+         */
+        goToScene(name: string): void {
+            this.scene.scenes.forEach(scene => {
+                if (this.scene.isActive(scene)) {
+                    scene.shutdown();
+                }
+            });
+            this.scene.start(name);
         }
 
         /**
@@ -101,7 +138,7 @@ module TK.SpaceTac {
          */
         quitGame() {
             this.resetSession();
-            this.state.start('router');
+            this.goToScene('router');
         }
 
         /**
@@ -124,7 +161,7 @@ module TK.SpaceTac {
         setSession(session: GameSession, token?: string): void {
             this.session = session;
             this.session_token = token || null;
-            this.state.start("router");
+            this.goToScene("router");
         }
 
         /**
@@ -171,7 +208,9 @@ module TK.SpaceTac {
          * Check if the game is currently fullscreen
          */
         isFullscreen(): boolean {
-            return this.scale.isFullScreen;
+            // FIXME
+            return false;
+            //return this.scale.isFullScreen;
         }
 
         /**
@@ -180,13 +219,15 @@ module TK.SpaceTac {
          * Returns true if the result is fullscreen
          */
         toggleFullscreen(active: boolean | null = null): boolean {
-            if (active === false || (active !== true && this.isFullscreen())) {
+            // FIXME
+            /*if (active === false || (active !== true && this.isFullscreen())) {
                 this.scale.stopFullScreen();
                 return false;
             } else {
                 this.scale.startFullScreen(true);
                 return true;
-            }
+            }*/
+            return false;
         }
     }
 }

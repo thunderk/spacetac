@@ -77,15 +77,15 @@ module TK.SpaceTac.UI.Specs {
 
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "initial");
             check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "initial");
-            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-untoggled", "initial");
-            check.same(icon.img_sticky.visible, true, "initial");
+            check.equals(icon.img_cooldown.name, "battle-actionbar-sticky-untoggled", "initial");
+            check.same(icon.img_cooldown.visible, true, "initial");
 
             ship.actions.toggle(action, true);
             icon.refresh();
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-toggled", "initial");
             check.equals(icon.img_power.name, "battle-actionbar-consumption-toggled", "initial");
-            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-toggled", "initial");
-            check.same(icon.img_sticky.visible, true, "initial");
+            check.equals(icon.img_cooldown.name, "battle-actionbar-sticky-toggled", "initial");
+            check.same(icon.img_cooldown.visible, true, "initial");
         })
 
         test.case("displays overheat/cooldown", check => {
@@ -96,29 +96,29 @@ module TK.SpaceTac.UI.Specs {
             action.configureCooldown(1, 3);
             TestTools.setShipModel(ship, 100, 0, 5, 1, [action]);
             let icon = new ActionIcon(bar, ship, action, 0);
-            check.same(icon.img_sticky.visible, false, "initial");
-            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-untoggled", "initial");
-            check.same(icon.img_sticky.children.length, 0, "initial");
+            check.same(icon.img_cooldown.visible, false, "initial");
+            check.equals(icon.img_cooldown.name, "battle-actionbar-sticky-untoggled", "initial");
+            check.same(icon.img_cooldown_group.length, 1, "initial");
 
             icon.refresh(action);
-            check.same(icon.img_sticky.visible, true, "overheat");
-            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-overheat", "overheat");
-            check.same(icon.img_sticky.children.length, 3, "overheat");
+            check.same(icon.img_cooldown.visible, true, "overheat");
+            check.equals(icon.img_cooldown.name, "battle-actionbar-sticky-overheat", "overheat");
+            check.same(icon.img_cooldown_group.length, 4, "overheat");
 
             action.configureCooldown(1, 12);
             TestTools.setShipModel(ship, 100, 0, 5, 1, [action]);
             icon.refresh(action);
-            check.same(icon.img_sticky.visible, true, "superheat");
-            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-overheat", "superheat");
-            check.same(icon.img_sticky.children.length, 5, "superheat");
+            check.same(icon.img_cooldown.visible, true, "superheat");
+            check.equals(icon.img_cooldown.name, "battle-actionbar-sticky-overheat", "superheat");
+            check.same(icon.img_cooldown_group.length, 6, "superheat");
 
             action.configureCooldown(1, 4);
             TestTools.setShipModel(ship, 100, 0, 5, 1, [action]);
             ship.actions.getCooldown(action).use();
             icon.refresh(action);
-            check.same(icon.img_sticky.visible, true, "cooling");
-            check.equals(icon.img_sticky.name, "battle-actionbar-sticky-disabled", "cooling");
-            check.same(icon.img_sticky.children.length, 4, "cooling");
+            check.same(icon.img_cooldown.visible, true, "cooling");
+            check.equals(icon.img_cooldown.name, "battle-actionbar-sticky-disabled", "cooling");
+            check.same(icon.img_cooldown_group.length, 5, "cooling");
         })
 
         test.case("displays currently targetting", check => {

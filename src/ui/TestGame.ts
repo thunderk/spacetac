@@ -1,25 +1,22 @@
 /// <reference path="../common/Testing.ts" />
 
 module TK.SpaceTac.UI.Specs {
-    let test_ui: MainUI;
-
     /**
      * Class to hold references to test objects (used as singleton in "describe" blocks)
      * 
      * Attributes should only be accessed from inside corresponding "it" blocks (they are initialized by the setup).
      */
-    export class TestGame<T extends Phaser.State> {
+    export class TestGame<T extends Phaser.Scene> {
         ui!: MainUI;
         view!: T;
         multistorage!: Multi.FakeRemoteStorage;
-        state!: string;
         clock!: FakeClock;
     }
 
     /**
      * Setup a headless test UI, with a single view started.
      */
-    export function setupSingleView<T extends Phaser.State>(test: TestSuite, buildView: () => [T, any[]]) {
+    export function setupSingleView<T extends Phaser.Scene & { create: Function }>(test: TestSuite, buildView: () => [T, object]) {
         let testgame = new TestGame<T>();
 
         test.asetup(() => new Promise((resolve, reject) => {
@@ -27,47 +24,26 @@ module TK.SpaceTac.UI.Specs {
             check.patch(console, "log", null);
             check.patch(console, "warn", null);
 
-            if (!test_ui) {
-                test_ui = new MainUI(true);
+            testgame.ui = new MainUI(true);
 
-                if (test_ui.load) {
-                    check.patch(test_ui.load, 'image', null);
-                    check.patch(test_ui.load, 'audio', null);
-                }
-            }
+            let [scene, scenedata] = buildView();
 
-            testgame.ui = test_ui;
-            testgame.ui.resetSession();
-
-            let [state, stateargs] = buildView();
-
-            if (state instanceof BaseView) {
+            if (scene instanceof BaseView) {
                 testgame.multistorage = new Multi.FakeRemoteStorage();
                 let connection = new Multi.Connection(RandomGenerator.global.id(12), testgame.multistorage);
-                check.patch(state, "getConnection", () => connection);
+                check.patch(scene, "getConnection", () => connection);
             }
 
-            let orig_create = bound(state, "create");
-            check.patch(state, "create", () => {
+            let orig_create = bound(scene, "create");
+            check.patch(scene, "create", () => {
                 orig_create();
                 resolve();
             });
 
-            testgame.ui.state.add("test", state);
-            testgame.ui.state.start("test", true, false, ...stateargs);
+            testgame.ui.scene.add("test", scene, true, scenedata);
 
-            testgame.state = "test_initial";
-            check.patch(testgame.ui.state, "start", (name: string) => {
-                testgame.state = name;
-            });
-
-            if (!testgame.ui.isBooted) {
-                testgame.ui.device.canvas = true;
-                testgame.ui.boot();
-            }
-
-            testgame.view = state;
-        }));
+            testgame.view = scene;
+        }), () => testgame.ui.destroy(true));
 
         return testgame;
     }
@@ -77,7 +53,7 @@ module TK.SpaceTac.UI.Specs {
      */
     export function setupEmptyView(test: TestSuite): TestGame<BaseView> {
         return setupSingleView(test, () => {
-            return [new BaseView(), []];
+            return [new BaseView({}), {}];
         });
     }
 
@@ -86,14 +62,14 @@ module TK.SpaceTac.UI.Specs {
      */
     export function setupBattleview(test: TestSuite): TestGame<BattleView> {
         return setupSingleView(test, () => {
-            let view = new BattleView();
+            let view = new BattleView({});
             view.splash = false;
 
             let battle = Battle.newQuickRandom();
             let player = new Player();
             nn(battle.playing_ship).fleet.setPlayer(player);
 
-            return [view, [player, battle]];
+            return [view, { player, battle }];
         });
     }
 
@@ -102,11 +78,11 @@ module TK.SpaceTac.UI.Specs {
      */
     export function setupMapview(test: TestSuite): TestGame<UniverseMapView> {
         return setupSingleView(test, () => {
-            let mapview = new UniverseMapView();
+            let mapview = new UniverseMapView({});
             let session = new GameSession();
             session.startNewGame();
 
-            return [mapview, [session.universe, session.player]];
+            return [mapview, { universe: session.universe, player: session.player }];
         });
     }
 
@@ -114,9 +90,9 @@ module TK.SpaceTac.UI.Specs {
      * Crawn through the children of a node
      */
     export function crawlChildren(node: UIContainer, recursive: boolean, callback: (child: any) => void): void {
-        node.children.forEach(child => {
+        node.list.forEach(child => {
             callback(child);
-            if (recursive && (child instanceof Phaser.Group || child instanceof Phaser.Image)) {
+            if (recursive && child instanceof UIContainer) {
                 crawlChildren(child, true, callback);
             }
         });
@@ -128,7 +104,7 @@ module TK.SpaceTac.UI.Specs {
     export function collectImages(node: UIContainer, recursive = true): (string | null)[] {
         let result: (string | null)[] = [];
         crawlChildren(node, recursive, child => {
-            if (child instanceof Phaser.Image) {
+            if (child instanceof UIImage) {
                 result.push(child.name || null);
             }
         });
@@ -141,7 +117,7 @@ module TK.SpaceTac.UI.Specs {
     export function collectTexts(node: UIContainer, recursive = true): (string | null)[] {
         let result: (string | null)[] = [];
         crawlChildren(node, recursive, child => {
-            if (child instanceof Phaser.Text) {
+            if (child instanceof UIText) {
                 result.push(child.text || null);
             }
         });
@@ -152,20 +128,19 @@ module TK.SpaceTac.UI.Specs {
      * Check a given text node
      */
     export function checkText(check: TestContext, node: any, content: string): void {
-        check.equals(node instanceof Phaser.Text, true);
-
-        let tnode = <Phaser.Text>node;
-        check.equals(tnode.text, content);
+        if (check.instance(node, UIText, "node should be an UIText")) {
+            check.equals(node.text, content);
+        }
     }
 
     /**
      * Check that a layer contains the given component at a given index
      */
-    export function checkComponentInLayer(check: TestContext, layer: Phaser.Group, index: number, component: UIComponent) {
-        if (index >= layer.children.length) {
+    export function checkComponentInLayer(check: TestContext, layer: UIContainer, index: number, component: UIComponent) {
+        if (index >= layer.list.length) {
             check.fail(`Not enough children in group ${layer.name} for ${component} at index ${index}`);
         } else {
-            let child = layer.children[index];
+            let child = layer.list[index];
             if (child !== (<any>component).container) {
                 check.fail(`${component} is not at index ${index} in ${layer.name}`);
             }
@@ -175,8 +150,8 @@ module TK.SpaceTac.UI.Specs {
     /**
      * Simulate a click on a button
      */
-    export function testClick(button: Phaser.Button): void {
-        button.onInputDown.dispatch();
-        button.onInputUp.dispatch();
+    export function testClick(button: UIButton): void {
+        button.emit("pointerdown");
+        button.emit("pointerup");
     }
 }

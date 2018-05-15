@@ -9,7 +9,7 @@ module TK.SpaceTac.UI.Specs {
                 check.patch(view, "getWidth", () => 1240);
                 let sheet = new CharacterSheet(view, CharacterSheetMode.DISPLAY);
 
-                check.equals(sheet.x, -1240);
+                check.equals(sheet.container.x, -1240);
 
                 let fleet = new Fleet();
                 let ship1 = fleet.addShip();
@@ -19,13 +19,13 @@ module TK.SpaceTac.UI.Specs {
 
                 sheet.show(ship1, false);
 
-                check.equals(sheet.x, 0);
+                check.equals(sheet.container.x, 0);
                 check.equals(sheet.group_portraits.length, 2);
 
                 check.equals(sheet.text_name && sheet.text_name.text, "Ship 1");
 
-                let portrait = as(Phaser.Button, sheet.group_portraits.getChildAt(1));
-                portrait.onInputUp.dispatch();
+                let portrait = as(UIButton, sheet.group_portraits.getAt(1));
+                portrait.emit("pointerup");
 
                 check.equals(sheet.text_name && sheet.text_name.text, "Ship 2");
             });

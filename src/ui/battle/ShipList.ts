@@ -16,7 +16,7 @@ module TK.SpaceTac.UI {
         ship_buttons: IShipButton
 
         // Container
-        container: Phaser.Image
+        container: UIContainer
 
         // List of ship items
         items: ShipListItem[]
@@ -25,14 +25,16 @@ module TK.SpaceTac.UI {
         hovered: ShipListItem | null
 
         // Info button
-        info_button: Phaser.Button
+        info_button: UIButton
 
         constructor(view: BaseView, battle: Battle, player: Player, tactical_mode: Toggle, ship_buttons: IShipButton, parent?: UIContainer, x = 0, y = 0) {
             let builder = new UIBuilder(view, parent);
-            this.container = builder.image("battle-shiplist-background", x, y);
+            this.container = builder.container("shiplist", x, y);
+
+            builder = builder.in(this.container);
+            builder.image("battle-shiplist-background", 0, 0);
 
             this.view = view;
-            // TODO Should use an UI game state, not the actual game state
             this.battle = battle;
             this.player = player;
             this.ship_buttons = ship_buttons;
@@ -40,13 +42,8 @@ module TK.SpaceTac.UI {
             this.items = [];
             this.hovered = null;
 
-            let info = view.getImageInfo("battle-shiplist-info-button");
-            this.info_button = new Phaser.Button(view.game, 0, 0, info.key, undefined, undefined, info.frame, info.frame);
-            this.view.inputs.setHoverClick(this.info_button,
-                () => tactical_mode.manipulate("shiplist")(true),
-                () => tactical_mode.manipulate("shiplist")(false),
-                () => null);
-            this.container.addChild(this.info_button);
+            // FIXME
+            this.info_button = builder.button("battle-shiplist-info-button", 0, 0, () => null, "Tactical display", on => tactical_mode.manipulate("shiplist")(on));
 
             this.setShipsFromBattle(battle);
         }
@@ -103,7 +100,7 @@ module TK.SpaceTac.UI {
             var owned = ship.isPlayedBy(this.player);
             var result = new ShipListItem(this, 200, this.container.height / 2, ship, owned, this.ship_buttons);
             this.items.push(result);
-            this.container.addChild(result);
+            this.container.add(result);
             return result;
         }
 
@@ -125,15 +122,16 @@ module TK.SpaceTac.UI {
                         item.visible = false;
                     } else {
                         if (position == 0) {
-                            item.moveTo(-14, 962, animate ? 1000 : 0);
+                            item.moveAt(-14, 962, animate ? 1000 : 0);
                         } else {
-                            item.moveTo(2, 942 - position * 99, animate ? 1000 : 0);
+                            item.moveAt(2, 942 - position * 99, animate ? 1000 : 0);
                         }
                         item.visible = true;
-                        this.container.setChildIndex(item, position);
+                        item.setZ(99 - position);
                     }
                 } else {
-                    item.moveTo(200, item.y, animate ? 1000 : 0);
+                    item.setZ(100);
+                    item.moveAt(200, item.y, animate ? 1000 : 0);
                 }
             });
         }

@@ -3,21 +3,19 @@ module TK.SpaceTac.UI {
      * UI component to allow the user to enter a small text
      */
     export class UITextInput {
-        private content: Phaser.Text
-        private placeholder: Phaser.Text
+        private container: UIButton
+        private content: UIText
+        private placeholder: UIText
         private maxlength: number
 
         constructor(builder: UIBuilder, background: string, x = 0, y = 0, maxlength: number, placeholder = "") {
-            let input_bg = builder.image(background, x, y, true);
-            input_bg.inputEnabled = true;
-            input_bg.input.useHandCursor = true;
-            input_bg.events.onInputUp.add(() => {
+            this.container = builder.button(background, x, y, () => {
                 builder.view.inputs.grabKeyboard(this, key => this.processKey(key));
-            });
+            }, undefined, undefined, { center: true });
 
-            this.content = builder.in(input_bg).text("");
-            this.placeholder = builder.in(input_bg).text(placeholder);
-            this.placeholder.alpha = 0.5;
+            this.content = builder.in(this.container).text("", 0, 0, { center: true });
+            this.placeholder = builder.in(this.container).text(placeholder, 0, 0, { center: true });
+            this.placeholder.setAlpha(0.5);
             this.maxlength = maxlength;
         }
 
@@ -43,8 +41,8 @@ module TK.SpaceTac.UI {
          * Set the current text content
          */
         setContent(content: string): void {
-            this.content.text = content.slice(0, this.maxlength);
-            this.placeholder.visible = !this.content.text;
+            this.content.setText(content.slice(0, this.maxlength));
+            this.placeholder.setVisible(!this.content.text);
         }
     }
 }

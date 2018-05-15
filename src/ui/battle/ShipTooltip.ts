@@ -26,7 +26,7 @@ module TK.SpaceTac.UI {
             let portrait_bg = builder.image("battle-tooltip-ship-portrait", 0, 0);
             builder.in(portrait_bg, builder => {
                 let portrait = builder.image(`ship-${ship.model.code}-portrait`, 1, 1);
-                portrait.scale.set(0.75);
+                portrait.setScale(0.75);
             });
 
             let enemy = !this.battleview.player.is(ship.fleet.player);
@@ -46,7 +46,7 @@ module TK.SpaceTac.UI {
                 ship.actions.listAll().forEach(action => {
                     if (!(action instanceof EndTurnAction) && !(action instanceof MoveAction)) {
                         let icon = builder.image(`action-${action.code}`, 0, iy);
-                        icon.scale.set(0.15);
+                        icon.setScale(0.15);
                         builder.text(action.name, 46, iy + 8);
                         iy += 40;
                     }
@@ -67,7 +67,7 @@ module TK.SpaceTac.UI {
 
             let sprite = this.battleview.arena.findShipSprite(ship);
             if (sprite) {
-                this.container.show(sprite.frame_owner.getBounds());
+                this.container.show(UITools.getBounds(sprite.frame_owner));
             }
         }
 

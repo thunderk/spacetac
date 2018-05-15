@@ -1,49 +1,59 @@
-/// <reference path="../common/UIComponent.ts" />
-
 module TK.SpaceTac.UI {
     /**
      * Base class for modal dialogs
      * 
      * When a modal dialog opens, an overlay is displayed behind it to prevent clicking through it
      */
-    export class UIDialog extends UIComponent {
-        constructor(parent: BaseView, width = 1495, height = 1080, background = "common-dialog") {
-            super(parent, width, height, background);
+    export class UIDialog {
+        readonly base: UIContainer
+        readonly content: UIBuilder
+        readonly width: number
+        readonly height: number
 
-            if (parent.dialogs_opened.length == 0) {
-                this.addOverlay(parent.dialogs_layer);
+        constructor(readonly view: BaseView, background_key = "common-dialog") {
+            if (view.dialogs_opened.length == 0) {
+                this.addOverlay(view.dialogs_layer);
             }
-            add(parent.dialogs_opened, this);
 
-            this.view.audio.playOnce("ui-dialog-open");
+            let builder = new UIBuilder(view, view.dialogs_layer);
+            this.base = builder.container("dialog-base");
+            builder = builder.in(this.base);
 
-            this.moveToLayer(parent.dialogs_layer);
-            this.setPositionInsideParent(0.5, 0.5);
+            let background = builder.image(background_key);
+            this.width = background.width;
+            this.height = background.height;
+
+            this.base.setPosition((this.view.getWidth() - this.width) / 2, (this.view.getHeight() - this.height) / 2);
+
+            this.content = builder.in(builder.container("content"));
+
+            add(view.dialogs_opened, this);
+
+            view.audio.playOnce("ui-dialog-open");
         }
 
         /**
-         * Add a control-capturing overlay
+         * Add an input-capturing overlay
          */
-        addOverlay(layer: Phaser.Group): void {
-            let info = this.view.getImageInfo("translucent");
-            let overlay = layer.game.add.button(0, 0, info.key, () => null, undefined, info.frame, info.frame);
-            overlay.input.useHandCursor = false;
-            overlay.scale.set(this.view.getWidth() / overlay.width, this.view.getHeight() / overlay.height);
-            layer.add(overlay);
+        addOverlay(layer: UIContainer): void {
+            let overlay = new UIBuilder(this.view, layer).image("translucent");
+            overlay.setInteractive();
+            overlay.setScale(this.view.getWidth() / overlay.width, this.view.getHeight() / overlay.height);
         }
 
         /**
          * Add a close button
          */
         addCloseButton(key = "common-dialog-close", x = 1290, y = 90): void {
-            this.builder.button(key, x, y, () => this.close(), "Close this dialog");
+            let builder = new UIBuilder(this.view, this.base);
+            builder.button(key, x, y, () => this.close(), "Close this dialog");
         }
 
         /**
          * Close the dialog, removing the overlay if needed
          */
         close() {
-            this.destroy();
+            this.base.destroy();
 
             this.view.audio.playOnce("ui-dialog-close");
 

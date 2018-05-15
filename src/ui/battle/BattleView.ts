@@ -27,17 +27,17 @@ module TK.SpaceTac.UI {
         multi!: MultiBattle
 
         // Layers
-        layer_background!: Phaser.Group
-        layer_arena!: Phaser.Group
-        layer_borders!: Phaser.Group
-        layer_overlay!: Phaser.Group
-        layer_sheets!: Phaser.Group
+        layer_background!: UIContainer
+        layer_arena!: UIContainer
+        layer_borders!: UIContainer
+        layer_overlay!: UIContainer
+        layer_sheets!: UIContainer
 
         // Battleground container
         arena!: Arena
 
         // Background image
-        background!: Phaser.Image | null
+        background!: UIImage | null
 
         // Targetting mode (null if we're not in this mode)
         targetting!: Targetting
@@ -70,12 +70,12 @@ module TK.SpaceTac.UI {
         splash = true
 
         // Init the view, binding it to a specific battle
-        init(player: Player, battle: Battle) {
-            super.init();
+        init(data: { player: Player, battle: Battle }) {
+            super.init(data);
 
-            this.player = player;
-            this.actual_battle = battle;
-            this.battle = duplicate(battle, <any>TK.SpaceTac);
+            this.player = data.player;
+            this.actual_battle = data.battle;
+            this.battle = duplicate(data.battle, <any>TK.SpaceTac);
             this.ship_hovered = null;
             this.background = null;
             this.multi = new MultiBattle();
@@ -113,20 +113,20 @@ module TK.SpaceTac.UI {
 
             // Add UI elements
             this.action_bar = new ActionBar(this);
-            this.action_bar.position.set(0, this.getHeight() - 132);
+            this.action_bar.setPosition(0, this.getHeight() - 132);
             this.ship_list = new ShipList(this, this.battle, this.player, this.toggle_tactical_mode, this,
                 this.layer_borders, this.getWidth() - 112, 0);
             this.ship_list.bindToLog(this.log_processor);
             this.ship_tooltip = new ShipTooltip(this);
             this.character_sheet = new CharacterSheet(this, CharacterSheetMode.DISPLAY);
-            this.layer_sheets.add(this.character_sheet);
+            this.character_sheet.moveToLayer(this.layer_sheets);
 
             // Targetting info
             this.targetting = new Targetting(this, this.action_bar, this.toggle_tactical_mode, this.arena.range_hint);
             this.targetting.moveToLayer(this.arena.layer_targetting);
 
             // BGM
-            this.gameui.audio.startMusic("mechanolith", 0.2);
+            this.audio.startMusic("mechanolith", 0.2);
 
             // Key mapping
             this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.manipulate("keyboard")(3000));
@@ -313,7 +313,7 @@ module TK.SpaceTac.UI {
             }
 
             if (enabled != this.interacting) {
-                this.action_bar.setInteractive(enabled);
+                this.action_bar.setInteractivity(enabled);
                 this.exitTargettingMode();
                 this.interacting = enabled;
 
@@ -364,7 +364,7 @@ module TK.SpaceTac.UI {
          */
         exitBattle() {
             this.session.exitBattle();
-            this.game.state.start('router');
+            this.backToRouter();
         }
 
         /**
@@ -372,7 +372,7 @@ module TK.SpaceTac.UI {
          */
         revertBattle() {
             this.session.revertBattle();
-            this.game.state.start('router');
+            this.backToRouter();
         }
     }
 }

@@ -10,14 +10,7 @@ module TK.SpaceTac.UI.Specs {
             check.patch(shop, "getMissions", () => shop_missions);
 
             function checkTexts(dialog: MissionsDialog, expected: string[]) {
-                let i = 0;
-                let container = <Phaser.Group>(<any>dialog).container;
-                container.children.forEach(child => {
-                    if (child instanceof Phaser.Text) {
-                        check.equals(child.text, expected[i++]);
-                    }
-                });
-                check.equals(i, expected.length);
+                check.equals(collectTexts(dialog.base), expected);
             }
 
             let missions = new MissionsDialog(testgame.view, shop, player);

@@ -3,7 +3,6 @@ module TK.SpaceTac.UI {
         x: number
         y: number
         rotation: number
-        game: Phaser.Game
     };
 
     /**
@@ -23,10 +22,10 @@ module TK.SpaceTac.UI {
      * This is a wrapper around phaser's tweens.
      */
     export class Animations {
-        private tweens: Phaser.TweenManager
+        private tweens: Phaser.Tweens.TweenManager
         private immediate = false
 
-        constructor(tweens: Phaser.TweenManager) {
+        constructor(tweens: Phaser.Tweens.TweenManager) {
             this.tweens = tweens;
         }
 
@@ -40,14 +39,11 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Create a tween on an object.
-         * 
-         * If a previous tween is running for this object, it will be stopped, and a new one will be created.
+         * Kill previous tweens from an object
          */
-        private createTween(obj: any): Phaser.Tween {
-            this.tweens.removeFrom(obj, false);
-            let result = this.tweens.create(obj);
-            return result;
+        killPrevious(obj: object): void {
+            // TODO Only updated properties
+            this.tweens.killTweensOf(obj);
         }
 
         /**
@@ -55,10 +51,16 @@ module TK.SpaceTac.UI {
          * 
          * This may be heavy work and should only be done in testing code.
          */
-        simulate(obj: any, property: string, points = 5, duration = 1000): number[] {
-            let tween = first(this.tweens.getAll().concat((<any>this.tweens)._add), tween => tween.target === obj && !tween.pendingDelete);
+        simulate(obj: any, property: string, points = 5): number[] {
+            this.tweens.preUpdate();
+            let tween = first(this.tweens.getTweensOf(obj), tween => tween.isPlaying());
             if (tween) {
-                return [obj[property]].concat(tween.generateData(1000 * (points - 1) / duration).map(data => data[property]));
+                let tween_obj = tween;
+                tween_obj.update(0, 0);
+                return range(points).map(i => {
+                    tween_obj.seek(i / (points - 1));
+                    return obj[property];
+                });
             } else {
                 return [];
             }
@@ -68,28 +70,33 @@ module TK.SpaceTac.UI {
          * Display an object, with opacity transition
          */
         show(obj: IAnimationFadeable, duration = 1000, alpha = 1): void {
+            this.killPrevious(obj);
+
             if (!obj.visible) {
                 obj.alpha = 0;
                 obj.visible = true;
             }
 
-            if (duration && !this.immediate) {
-                let tween = this.createTween(obj);
-                tween.to({ alpha: alpha }, duration);
-                if (obj.input) {
-                    let input = obj.input;
-                    tween.onComplete.addOnce(() => {
-                        input.enabled = true
-                        obj.freezeFrames = false;
-                    });
-                }
-                tween.start();
-            } else {
-                this.tweens.removeFrom(obj, false);
-                obj.alpha = alpha;
-                if (obj.input) {
-                    obj.input.enabled = true;
+            let onComplete: Function | undefined;
+            if (obj.input) {
+                let input = obj.input;
+                onComplete = () => {
+                    input.enabled = true
                     obj.freezeFrames = false;
+                };
+            }
+
+            if (duration && !this.immediate) {
+                this.tweens.add({
+                    targets: obj,
+                    alpha: alpha,
+                    duration: duration,
+                    onComplete: onComplete
+                })
+            } else {
+                obj.alpha = alpha;
+                if (onComplete) {
+                    onComplete();
                 }
             }
         }
@@ -98,6 +105,8 @@ module TK.SpaceTac.UI {
          * Hide an object, with opacity transition
          */
         hide(obj: IAnimationFadeable, duration = 1000, alpha = 0): void {
+            this.killPrevious(obj);
+
             if (obj.changeStateFrame) {
                 obj.changeStateFrame("Out");
                 obj.freezeFrames = true;
@@ -107,16 +116,18 @@ module TK.SpaceTac.UI {
                 obj.input.enabled = false;
             }
 
+            let onComplete = () => obj.visible = alpha > 0;
+
             if (duration && !this.immediate) {
-                let tween = this.createTween(obj);
-                tween.to({ alpha: alpha }, duration);
-                if (alpha == 0) {
-                    tween.onComplete.addOnce(() => obj.visible = false);
-                }
-                tween.start();
+                this.tweens.add({
+                    targets: obj,
+                    alpha: alpha,
+                    duration: duration,
+                    onComplete: onComplete
+                });
             } else {
                 obj.alpha = alpha;
-                obj.visible = alpha > 0;
+                onComplete();
             }
         }
 
@@ -143,15 +154,19 @@ module TK.SpaceTac.UI {
         /**
          * Add an asynchronous animation to an object.
          */
-        addAnimation(obj: any, properties: any, duration: number, ease: Function = Phaser.Easing.Linear.None, delay = 0): Promise<void> {
+        addAnimation<T extends object>(obj: T, properties: Partial<T>, duration: number, ease = "Linear", delay = 0, loop = 1, yoyo = false): Promise<void> {
             return new Promise((resolve, reject) => {
-                let tween = this.createTween(obj);
-                tween.to(properties, duration, ease, false, delay);
-                tween.onComplete.addOnce(() => {
-                    this.tweens.remove(tween);
-                    resolve();
-                });
-                tween.start();
+                this.killPrevious(obj);
+
+                this.tweens.add(merge<object>({
+                    targets: obj,
+                    ease: ease,
+                    duration: duration,
+                    delay: delay,
+                    loop: loop - 1,
+                    onComplete: resolve,
+                    yoyo: yoyo
+                }, properties));
 
                 // By security, if the tween is destroyed before completion, we resolve the promise using the timer
                 Timer.global.schedule(delay + duration, resolve);
@@ -178,10 +193,10 @@ module TK.SpaceTac.UI {
          * 
          * Returns the duration
          */
-        static rotationTween(tween: Phaser.Tween, dest: number, speed = 1, easing = Phaser.Easing.Cubic.InOut, property = "rotation"): number {
+        rotationTween(obj: Phaser.GameObjects.Components.Transform, dest: number, speed = 1, easing = "Cubic.easeInOut"): number {
             // Immediately change the object's current rotation to be in range (-pi,pi)
-            let value = UITools.normalizeAngle(tween.target[property]);
-            tween.target[property] = value;
+            let value = UITools.normalizeAngle(obj.rotation);
+            obj.setRotation(value);
 
             // Compute destination angle
             dest = UITools.normalizeAngle(dest);
@@ -193,10 +208,8 @@ module TK.SpaceTac.UI {
             let distance = Math.abs(UITools.normalizeAngle(dest - value)) / Math.PI;
             let duration = distance * 1000 / speed;
 
-            // Update the tween
-            let changes: any = {};
-            changes[property] = dest;
-            tween.to(changes, duration, easing);
+            // Tween
+            this.addAnimation(obj, { rotation: dest }, duration, easing);
 
             return duration;
         }
@@ -206,15 +219,10 @@ module TK.SpaceTac.UI {
          * 
          * Returns the animation duration.
          */
-        static moveTo(obj: PhaserGraphics, x: number, y: number, angle: number, rotated_obj = obj, ease = true): number {
-            let tween_rot = obj.game.tweens.create(rotated_obj);
-            let duration_rot = Animations.rotationTween(tween_rot, angle, 0.5);
-            let tween_pos = obj.game.tweens.create(obj);
+        moveTo(obj: Phaser.GameObjects.Components.Transform, x: number, y: number, angle: number, rotated_obj = obj, ease = true): number {
+            let duration_rot = this.rotationTween(rotated_obj, angle, 0.5);
             let duration_pos = arenaDistance(obj, { x: x, y: y }) * 2;
-            tween_pos.to({ x: x, y: y }, duration_pos, ease ? Phaser.Easing.Quadratic.InOut : undefined);
-
-            tween_rot.start();
-            tween_pos.start();
+            this.addAnimation(obj, { x: x, y: y }, duration_pos, ease ? "Quad.easeInOut" : "Linear");
             return Math.max(duration_rot, duration_pos);
         }
 
@@ -223,32 +231,38 @@ module TK.SpaceTac.UI {
          * 
          * Returns the animation duration.
          */
-        static moveInSpace(obj: PhaserGraphics, x: number, y: number, angle: number, rotated_obj = obj): number {
+        moveInSpace(obj: Phaser.GameObjects.Components.Transform, x: number, y: number, angle: number, rotated_obj = obj): number {
             if (x == obj.x && y == obj.y) {
-                let tween = obj.game.tweens.create(rotated_obj);
-                let duration = Animations.rotationTween(tween, angle, 0.5);
-                tween.start();
-                return duration;
+                this.killPrevious(obj);
+                return this.rotationTween(rotated_obj, angle, 0.5);
             } else {
+                this.killPrevious(obj);
+                this.killPrevious(rotated_obj);
                 let distance = Target.newFromLocation(obj.x, obj.y).getDistanceTo(Target.newFromLocation(x, y));
-                var tween = obj.game.tweens.create(obj);
                 let duration = Math.sqrt(distance / 1000) * 3000;
                 let curve_force = distance * 0.4;
-                tween.to({
-                    x: [obj.x + Math.cos(rotated_obj.rotation) * curve_force, x - Math.cos(angle) * curve_force, x],
-                    y: [obj.y + Math.sin(rotated_obj.rotation) * curve_force, y - Math.sin(angle) * curve_force, y]
-                }, duration, Phaser.Easing.Sinusoidal.InOut);
-                tween.interpolation((v: any, k: any) => Phaser.Math.bezierInterpolation(v, k));
                 let prevx = obj.x;
                 let prevy = obj.y;
-                tween.onUpdateCallback(() => {
-                    if (prevx != obj.x || prevy != obj.y) {
-                        rotated_obj.rotation = Math.atan2(obj.y - prevy, obj.x - prevx);
+                let xpts = [obj.x, obj.x + Math.cos(rotated_obj.rotation) * curve_force, x - Math.cos(angle) * curve_force, x];
+                let ypts = [obj.y, obj.y + Math.sin(rotated_obj.rotation) * curve_force, y - Math.sin(angle) * curve_force, y];
+                let fobj = { t: 0 };
+                this.tweens.add({
+                    targets: [fobj],
+                    t: 1,
+                    duration: duration,
+                    ease: "Sine.easeInOut",
+                    onUpdate: () => {
+                        obj.setPosition(
+                            Phaser.Math.Interpolation.CubicBezier(fobj.t, xpts[0], xpts[1], xpts[2], xpts[3]),
+                            Phaser.Math.Interpolation.CubicBezier(fobj.t, ypts[0], ypts[1], ypts[2], ypts[3]),
+                        )
+                        if (prevx != obj.x || prevy != obj.y) {
+                            rotated_obj.setRotation(Math.atan2(obj.y - prevy, obj.x - prevx));
+                        }
+                        prevx = obj.x;
+                        prevy = obj.y;
                     }
-                    prevx = obj.x;
-                    prevy = obj.y;
-                });
-                tween.start();
+                })
                 return duration;
             }
         }

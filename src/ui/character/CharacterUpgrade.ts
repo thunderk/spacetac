@@ -21,7 +21,7 @@ module TK.SpaceTac.UI {
             let button = builder.button("character-upgrade", x, y, undefined, tooltip, selector);
 
             if (active) {
-                builder.switch(button, true);
+                button.toggle(true);
             }
 
             builder.in(button, builder => {
@@ -30,7 +30,7 @@ module TK.SpaceTac.UI {
 
                     let icon = builder.image(this.getIcon(), 40, 40, true);
                     if (icon.width && icon.width > 64) {
-                        icon.scale.set(64 / icon.width);
+                        icon.setScale(64 / icon.width);
                     }
 
                     range(this.upgrade.cost || 0).forEach(i => {

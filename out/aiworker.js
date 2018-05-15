@@ -1,6 +1,6 @@
 var handler = {
     get(target, name) {
-        return function () { }
+        return new Proxy({}, handler);
     }
 }
 var Phaser = new Proxy({}, handler);

@@ -15,15 +15,15 @@ module TK.SpaceTac.UI {
         interactive = true
 
         // Layers
-        layer_universe!: Phaser.Group
-        layer_overlay!: Phaser.Group
+        layer_universe!: UIContainer
+        layer_overlay!: UIContainer
 
         // Star systems
         starsystems: StarSystemDisplay[] = []
 
         // Links between stars
-        starlinks_group!: Phaser.Group
-        starlinks: Phaser.Graphics[] = []
+        starlinks_group!: UIContainer
+        starlinks: UIGraphics[] = []
 
         // Fleets
         player_fleet!: FleetDisplay
@@ -44,20 +44,20 @@ module TK.SpaceTac.UI {
 
         // Zoom level
         zoom = 0
-        zoom_in!: Phaser.Button
-        zoom_out!: Phaser.Button
+        zoom_in!: UIButton
+        zoom_out!: UIButton
 
         // Options button
-        button_options!: Phaser.Button
+        button_options!: UIButton
 
         /**
          * Init the view, binding it to a universe
          */
-        init(universe: Universe, player: Player) {
-            super.init();
+        init(data: { universe: Universe, player: Player }) {
+            super.init(data);
 
-            this.universe = universe;
-            this.player = player;
+            this.universe = data.universe;
+            this.player = data.player;
         }
 
         /**
@@ -71,27 +71,29 @@ module TK.SpaceTac.UI {
             this.layer_universe = this.getLayer("universe");
             this.layer_overlay = this.getLayer("overlay");
 
-            this.starlinks_group = this.game.add.group(this.layer_universe);
+            this.starlinks_group = builder.in(this.layer_universe).container("starlinks");
+            this.starlinks = [];
             this.starlinks = this.universe.starlinks.map(starlink => {
                 let loc1 = starlink.first.getWarpLocationTo(starlink.second);
                 let loc2 = starlink.second.getWarpLocationTo(starlink.first);
 
-                let result = new Phaser.Graphics(this.game);
+                let result = builder.in(this.starlinks_group).graphics("starlink");
                 if (loc1 && loc2) {
                     result.lineStyle(0.01, 0x6cc7ce);
+                    result.beginPath();
                     result.moveTo(starlink.first.x - 0.5 + loc1.x, starlink.first.y - 0.5 + loc1.y);
                     result.lineTo(starlink.second.x - 0.5 + loc2.x, starlink.second.y - 0.5 + loc2.y);
+                    result.strokePath();
                 }
-                result.data.link = starlink;
+                result.setDataEnabled();
+                result.data.set("link", starlink);
                 return result;
             });
-            this.starlinks.forEach(starlink => this.starlinks_group.add(starlink));
-
-            this.player_fleet = new FleetDisplay(this, this.player.fleet);
 
             this.starsystems = this.universe.stars.map(star => new StarSystemDisplay(this, star));
             this.starsystems.forEach(starsystem => this.layer_universe.add(starsystem));
 
+            this.player_fleet = new FleetDisplay(this, this.player.fleet);
             this.layer_universe.add(this.player_fleet);
 
             this.current_location = new CurrentLocationMarker(this, this.player_fleet);
@@ -99,9 +101,7 @@ module TK.SpaceTac.UI {
 
             this.mission_markers = new MissionLocationMarker(this, this.layer_universe);
 
-            this.actions = new MapLocationMenu(this);
-            this.actions.setPosition(30, 30);
-            this.actions.moveToLayer(this.layer_overlay);
+            this.actions = new MapLocationMenu(this, this.layer_overlay, 30, 30);
 
             this.missions = new ActiveMissionsDisplay(this, this.player.missions, this.mission_markers);
             this.missions.setPosition(20, 720);
@@ -114,12 +114,12 @@ module TK.SpaceTac.UI {
             });
 
             this.character_sheet = new CharacterSheet(this, CharacterSheetMode.EDITION);
-            this.layer_overlay.add(this.character_sheet);
+            this.character_sheet.moveToLayer(this.layer_overlay);
 
             this.conversation = new MissionConversationDisplay(this);
             this.conversation.moveToLayer(this.layer_overlay);
 
-            this.gameui.audio.startMusic("spring-thaw");
+            this.audio.startMusic("spring-thaw");
 
             // Inputs
             this.inputs.bind(" ", "Conversation step", () => this.conversation.forward());
@@ -138,14 +138,8 @@ module TK.SpaceTac.UI {
 
             this.setZoom(2, 0);
 
-            // Add a shader background
-            builder.shader("map-background", { width: this.getWidth(), height: this.getHeight() }, 0, 0, () => {
-                let scale = this.layer_universe.scale.x;
-                return {
-                    offset: { x: (920 - this.layer_universe.x) / scale, y: -(540 - this.layer_universe.y) / scale },
-                    scale: scale
-                }
-            });
+            // Add a background
+            //builder.image("map-background");
 
             // Trigger an auto-save any time we go back to the map
             this.autoSave();
@@ -195,8 +189,10 @@ module TK.SpaceTac.UI {
             }
 
             this.starlinks.forEach(linkgraphics => {
-                let link = <StarLink>linkgraphics.data.link;
-                linkgraphics.visible = this.player.hasVisitedSystem(link.first) || this.player.hasVisitedSystem(link.second);
+                let link = linkgraphics.data.get("link");
+                if (link instanceof StarLink) {
+                    linkgraphics.visible = this.player.hasVisitedSystem(link.first) || this.player.hasVisitedSystem(link.second);
+                }
             })
 
             this.starsystems.forEach(system => system.updateInfo(this.zoom, system.starsystem == current_star));
@@ -226,16 +222,15 @@ module TK.SpaceTac.UI {
         /**
          * Set the camera to center on a target, and to display a given span in height
          */
-        setCamera(x: number, y: number, span: number, duration = 500, easing = Phaser.Easing.Cubic.InOut) {
+        setCamera(x: number, y: number, span: number, duration = 500, easing = "Cubic.easeInOut") {
             let scale = 1000 / span;
             let dest_x = 920 - x * scale;
             let dest_y = 540 - y * scale;
             if (duration) {
-                this.tweens.create(this.layer_universe.position).to({ x: dest_x, y: dest_y }, duration, easing).start();
-                this.tweens.create(this.layer_universe.scale).to({ x: scale, y: scale }, duration, easing).start();
+                this.animations.addAnimation(this.layer_universe, { x: dest_x, y: dest_y, scaleX: scale, scaleY: scale }, duration, easing);
             } else {
-                this.layer_universe.position.set(dest_x, dest_y);
-                this.layer_universe.scale.set(scale);
+                this.layer_universe.setPosition(dest_x, dest_y);
+                this.layer_universe.setScale(scale);
             }
         }
 
@@ -257,7 +252,7 @@ module TK.SpaceTac.UI {
          */
         setLinksAlpha(alpha: number, duration = 500) {
             if (duration) {
-                this.game.add.tween(this.starlinks_group).to({ alpha: alpha }, duration * Math.abs(this.starlinks_group.alpha - alpha)).start();
+                this.animations.addAnimation(this.starlinks_group, { alpha: alpha }, duration * Math.abs(this.starlinks_group.alpha - alpha));
             } else {
                 this.starlinks_group.alpha = alpha;
             }
@@ -297,7 +292,7 @@ module TK.SpaceTac.UI {
                 let dest_star = dest_location.star;
                 this.player_fleet.moveToLocation(dest_location, 3, duration => {
                     this.timer.schedule(duration / 2, () => this.updateInfo(dest_star, false));
-                    this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, Phaser.Easing.Cubic.Out);
+                    this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, "Cubic.Out");
                 }, () => {
                     this.setInteractionEnabled(true);
                     this.refresh();
@@ -348,12 +343,12 @@ module TK.SpaceTac.UI {
          */
         setInteractionEnabled(enabled: boolean) {
             this.interactive = enabled && !this.session.spectator;
-            this.actions.setVisible(enabled && this.zoom == 2, 300);
+            this.animations.setVisible(this.actions.container, enabled && this.zoom == 2, 300);
             this.missions.setVisible(enabled && this.zoom == 2, 300);
             this.animations.setVisible(this.zoom_in, enabled && this.zoom < 2, 300);
             this.animations.setVisible(this.zoom_out, enabled && this.zoom > 0, 300);
             this.animations.setVisible(this.button_options, enabled, 300);
-            this.animations.setVisible(this.character_sheet, enabled, 300);
+            //this.animations.setVisible(this.character_sheet, enabled, 300);
         }
     }
 }

@@ -2,11 +2,8 @@
  * Main way to create UI components
  */
 module TK.SpaceTac.UI {
-    export type UIText = Phaser.Text
-    export type UIImage = Phaser.Image
-    export type UIButton = Phaser.Button
-    export type UIGroup = Phaser.Group
-    export type UIContainer = Phaser.Group | Phaser.Image
+    export type UIParticles = Phaser.GameObjects.Particles.ParticleEmitterManager
+    export type UIBuilderParent = UIImage | UIContainer
 
     export type ShaderValue = number | { x: number, y: number }
     export type UIOnOffCallback = (on: boolean) => boolean
@@ -55,48 +52,15 @@ module TK.SpaceTac.UI {
     }
 
     /**
-     * Button options
-     */
-    export type UIButtonOptions = {
-        // Centering
-        center?: boolean
-
-        // Name of the hover picture (by default, the button name, with "-hover" appended)
-        hover_name?: string
-
-        // Name of the "on" picture (by default, the button name, with "-on" appended)
-        on_name?: string
-
-        // Whether "hover" picture should stay near the button (otherwise will be on top)
-        hover_bottom?: boolean
-
-        // Whether "on" picture should stay near the button (otherwise will be on top)
-        on_bottom?: boolean
-
-        // Text content
-        text?: string
-        text_x?: number
-        text_y?: number
-
-        // Text content style override
-        text_style?: UITextStyleI
-
-        // Icon content
-        icon?: string
-        icon_x?: number
-        icon_y?: number
-    }
-
-    /**
      * Main UI builder tool
      */
     export class UIBuilder {
         view: BaseView
         private game: MainUI
-        private parent: UIContainer
-        private text_style: UITextStyle
+        private parent: UIBuilderParent
+        private text_style: UITextStyleI
 
-        constructor(view: BaseView, parent: UIContainer | string = "base", text_style = new UITextStyle) {
+        constructor(view: BaseView, parent: UIBuilderParent | string = "base", text_style: UITextStyleI = new UITextStyle) {
             this.view = view;
             this.game = view.gameui;
             if (typeof parent == "string") {
@@ -112,7 +76,7 @@ module TK.SpaceTac.UI {
          * 
          * This new builder will inherit the style settings, and will create components in the specified parent
          */
-        in(container: UIContainer | string, body?: (builder: UIBuilder) => void): UIBuilder {
+        in(container: UIBuilderParent | string, body?: (builder: UIBuilder) => void): UIBuilder {
             let result = new UIBuilder(this.view, container, this.text_style);
             if (body) {
                 body(result);
@@ -135,35 +99,39 @@ module TK.SpaceTac.UI {
          * Clear the current container of all component
          */
         clear(): void {
-            destroyChildren(this.parent);
+            if (this.parent instanceof UIImage) {
+                console.error("Cannot clear an image parent, use groups instead");
+            } else {
+                this.parent.removeAll(true);
+            }
         }
 
         /**
          * Internal method to add to the parent
          */
-        private add(child: UIText | UIImage | UIButton | UIContainer): void {
-            if (this.parent instanceof Phaser.Group) {
-                this.parent.add(child);
-            } else if (this.parent instanceof Phaser.Button) {
-                // Protect the "on" and "hover" layers
-                let layer = first(this.parent.children, child => child instanceof Phaser.Image && (child.name == "*on*" || child.name == "*hover*"));
-                if (layer) {
-                    this.parent.addChildAt(child, this.parent.getChildIndex(layer));
+        private add(child: UIText | UIImage | UIButton | UIContainer | UIGraphics): void {
+            if (this.parent instanceof UIImage) {
+                let gparent = this.parent.parentContainer;
+                if (gparent) {
+                    let x = this.parent.x + child.x;
+                    let y = this.parent.y + child.y;
+                    child.setPosition(x, y);
+                    gparent.add(child);
                 } else {
-                    this.parent.addChild(child);
+                    throw new Error("no parent container");
                 }
             } else {
-                this.parent.addChild(child);
+                this.parent.add(child);
             }
         }
 
         /**
-         * Add a group of components
+         * Add a container of other components
          */
-        group(name: string, x = 0, y = 0, visible = true): UIGroup {
-            let result = new Phaser.Group(this.game, undefined, name);
-            result.position.set(x, y);
-            result.visible = visible;
+        container(name: string, x = 0, y = 0, visible = true): UIContainer {
+            let result = new UIContainer(this.view, x, y);
+            result.setName(name);
+            result.setVisible(visible);
             this.add(result);
             return result;
         }
@@ -175,22 +143,20 @@ module TK.SpaceTac.UI {
          */
         text(content: string, x = 0, y = 0, style_changes: UITextStyleI = {}): UIText {
             let style = merge(this.text_style, style_changes);
-            let result = new Phaser.Text(this.game, x, y, content, {
-                font: `${style.bold ? "bold " : ""}${style.size}pt SpaceTac`,
+            let result = new UIText(this.view, x, y, content, {
                 fill: style.color,
                 align: style.center ? "center" : "left"
             });
-            result.anchor.set(style.center ? 0.5 : 0, style.vcenter ? 0.5 : 0);
+            result.setFont(`${style.bold ? "bold " : ""}${style.size}pt SpaceTac`);
+            result.setOrigin(style.center ? 0.5 : 0, style.vcenter ? 0.5 : 0);
             if (style.width) {
-                result.wordWrap = true;
-                result.wordWrapWidth = style.width;
+                result.setWordWrapWidth(style.width);
             }
             if (style.shadow) {
-                result.setShadow(3, 4, "rgba(0,0,0,0.6)", 3);
+                result.setShadow(3, 4, "rgba(0,0,0,0.6)", 3, true, true);
             }
-            if (style.stroke_width) {
-                result.stroke = style.stroke_color;
-                result.strokeThickness = style.stroke_width;
+            if (style.stroke_width && style.stroke_color) {
+                result.setStroke(style.stroke_color, style.stroke_width);
             }
             this.add(result);
             return result;
@@ -205,10 +171,10 @@ module TK.SpaceTac.UI {
             }
 
             let info = this.view.getImageInfo(name);
-            let result = this.game.add.image(x, y, info.key, info.frame);
+            let result = new UIImage(this.view, x, y, info.key, info.frame);
             result.name = name;
-            if (centered) {
-                result.anchor.set(0.5);
+            if (!centered) {
+                result.setOrigin(0);
             }
             this.add(result);
             return result;
@@ -220,89 +186,8 @@ module TK.SpaceTac.UI {
          * If an image with "-hover" suffix is found in atlases, it will be used as hover mask (added as button child)
          */
         button(name: string, x = 0, y = 0, onclick?: Function, tooltip?: TooltipFiller, onoffcallback?: UIOnOffCallback, options: UIButtonOptions = {}): UIButton {
-            let info = this.view.getImageInfo(name);
-            let result = new Phaser.Button(this.game, x, y, info.key, undefined, null, info.frame, info.frame);
-            result.name = name;
-
-            if (options.center) {
-                result.anchor.set(0.5);
-            }
-
-            let clickable = bool(onclick);
-            result.input.useHandCursor = clickable;
-            if (clickable) {
-                UIComponent.setButtonSound(result);
-            }
-
-            let onstatus = false;
-
-            if (clickable || tooltip || onoffcallback) {
-                // On mask
-                let on_mask: Phaser.Image | null = null;
-                if (onoffcallback) {
-                    let on_info = this.view.getImageInfo(options.on_name || (name + "-on"));
-                    if (on_info.exists) {
-                        on_mask = new Phaser.Image(this.game, 0, 0, on_info.key, on_info.frame);
-                        on_mask.name = options.on_bottom ? "on" : "*on*";
-                        on_mask.visible = false;
-                        result.addChild(on_mask);
-                    }
-                    // TODO Find a better way to handle this (extend Button ?)
-                    result.data.onoffcallback = (on: boolean): boolean => {
-                        onstatus = onoffcallback(on);
-                        if (on_mask) {
-                            on_mask.anchor.set(result.anchor.x, result.anchor.y);
-                            this.view.animations.setVisible(on_mask, onstatus, 100);
-                        }
-                        return onstatus;
-                    }
-                }
-
-                // Hover mask
-                let hover_info = this.view.getImageInfo(options.hover_name || (name + "-hover"));
-                let hover_mask: Phaser.Image | null = null;
-                if (hover_info.exists) {
-                    hover_mask = new Phaser.Image(this.game, 0, 0, hover_info.key, hover_info.frame);
-                    hover_mask.name = options.hover_bottom ? "hover" : "*hover*";
-                    hover_mask.visible = false;
-                    result.addChild(hover_mask);
-                }
-
-                this.view.inputs.setHoverClick(result,
-                    () => {
-                        if (tooltip) {
-                            this.view.tooltip.show(result, tooltip);
-                        }
-                        if (hover_mask) {
-                            hover_mask.anchor.set(result.anchor.x, result.anchor.y);
-                            this.view.animations.show(hover_mask, 100);
-                        }
-                    },
-                    () => {
-                        if (tooltip) {
-                            this.view.tooltip.hide();
-                        }
-                        if (hover_mask) {
-                            this.view.animations.hide(hover_mask, 100)
-                        }
-                    },
-                    () => {
-                        if (onclick) {
-                            onclick();
-                        } else if (onoffcallback) {
-                            this.switch(result, !onstatus);
-                        }
-                    }, 100);
-            }
-
-            if (options.text) {
-                this.in(result).text(options.text, options.text_x || 0, options.text_y || 0, options.text_style);
-            }
-
-            if (options.icon) {
-                this.in(result).image(options.icon, options.icon_x || 0, options.icon_y || 0, options.center);
-            }
-
+            options.text_style = merge(this.text_style, options.text_style || {});
+            let result = new UIButton(this.view, name, x, y, onclick, tooltip, onoffcallback, options);
             this.add(result);
             return result;
         }
@@ -317,101 +202,61 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Add a fragment shader area, with optional fallback image
+         * Add a graphics (for drawing)
          */
-        shader(name: string, base: string | { width: number, height: number }, x = 0, y = 0, updater?: () => { [name: string]: ShaderValue }): UIImage {
-            let source = this.game.cache.getShader(name);
-            source = "" + source;
-            let uniforms: any = {};
-            if (updater) {
-                iteritems(updater(), (key, value) => {
-                    uniforms[key] = { type: (typeof value == "number") ? "1f" : "2f", value: value };
-                });
-            }
-            let filter = new Phaser.Filter(this.game, uniforms, source);
-            let result: Phaser.Image;
-            if (typeof base == "string") {
-                result = this.image(base, x, y);
-                result.filters = [filter];
-                filter.setResolution(result.width, result.height);
-            } else {
-                result = filter.addToWorld(x, y, base.width, base.height);
-                this.add(result);
-            }
-            if (updater) {
-                result.update = () => {
-                    iteritems(updater(), (key, value) => filter.uniforms[key].value = value);
-                    filter.update();
-                }
-            }
-            filter.update();
+        graphics(name: string, x = 0, y = 0, visible = true): UIGraphics {
+            let result = new UIGraphics(this.view, name, visible, x, y);
+            this.add(result);
             return result;
+        }
+
+        /**
+         * Emit a bunch of particles
+         */
+        particles(config: ParticlesConfig): void {
+            this.view.particles.emit(config, this.parent instanceof UIContainer ? this.parent : undefined);
         }
 
         /**
          * Change the content of an component
          * 
          * If the component is a text, its content will be changed.
-         * If the component is an image or button, its texture will be changed.
+         * If the component is an image, its texture will be changed.
          */
-        change(component: UIImage | UIButton | UIText, content: string): void {
-            if (component instanceof Phaser.Text) {
-                component.text = content;
+        change(component: UIImage | UIText, content: string): void {
+            // TODO Should be moved custom UIImage and UIText classes
+            if (component instanceof UIText) {
+                component.setText(content);
             } else {
                 let info = this.view.getImageInfo(content);
-                component.name = content;
-                if (component instanceof Phaser.Button) {
-                    component.loadTexture(info.key);
-                    component.setFrames(info.frame, info.frame);
-                } else {
-                    component.loadTexture(info.key, info.frame);
-                }
+                component.setName(content);
+                component.setTexture(info.key, info.frame);
             }
-        }
-
-        /**
-         * Change the status on/off on a button
-         * 
-         * Return the final effective status
-         */
-        switch(button: UIButton, on: boolean): boolean {
-            if (button.data.onoffcallback) {
-                return button.data.onoffcallback(on);
-            } else {
-                return false;
-            }
-        }
-
-        /**
-         * Select a single button inside the container, toggle its "on" status, and toggle all other button to "off"
-         * 
-         * This is the equivalent of radio buttons
-         */
-        select(button: UIButton): void {
-            this.parent.children.forEach(child => {
-                if (child instanceof Phaser.Button && child.data.onoffcallback && child !== button) {
-                    child.data.onoffcallback(false);
-                }
-            });
-            this.switch(button, true);
         }
 
         /**
          * Evenly distribute the children of this builder along an axis
          */
         distribute(along: "x" | "y", start: number, end: number): void {
-            let sizes = this.parent.children.map(child => {
-                if (child instanceof Phaser.Image || child instanceof Phaser.Sprite || child instanceof Phaser.Group) {
-                    return UITools.getScreenBounds(child)[along == "x" ? "width" : "height"];
+            if (!(this.parent instanceof UIContainer)) {
+                throw new Error("UIBuilder.distribute only works on groups");
+            }
+            let children = this.parent.list;
+
+            let sizes = children.map(child => {
+                if (UITools.isSpatial(child)) {
+                    return UITools.getBounds(child)[along == "x" ? "width" : "height"];
                 } else {
                     return 0;
                 }
             });
             let spacing = ((end - start) - sum(sizes)) / (sizes.length + 1);
             let offset = start;
-            this.parent.children.forEach((child, idx) => {
+            children.forEach((child, idx) => {
                 offset += spacing;
-                child[along] = Math.round(offset);
+                if (UITools.isSpatial(child)) {
+                    child[along] = Math.round(offset);
+                }
                 offset += sizes[idx];
             });
         }

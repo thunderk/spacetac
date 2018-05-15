@@ -6,7 +6,7 @@ module TK.SpaceTac.UI {
         view: IntroView
         steps: Function[] = []
         current = 0
-        layers: Phaser.Group[] = []
+        layers: UIContainer[] = []
 
         constructor(view: IntroView) {
             this.view = view;
@@ -76,21 +76,24 @@ module TK.SpaceTac.UI {
         protected galaxy(): Function {
             return () => {
                 let layer = this.getLayer(0);
-                let game = this.view.game;
+                let animations = this.view.animations;
                 let mwidth = this.view.getMidWidth();
                 let mheight = this.view.getMidHeight();
 
-                let galaxy = game.add.group(layer, "galaxy");
-                galaxy.position.set(mwidth, mheight);
-                game.tweens.create(galaxy).to({ rotation: Math.PI * 2 }, 150000).loop().start();
-                game.tweens.create(galaxy).from({ alpha: 0 }, 3000).start();
+                let builder = new UIBuilder(this.view, layer);
 
-                let builder = new UIBuilder(this.view, galaxy);
-                let back1 = builder.image("intro-galaxy1", 0, 0, true);
-                back1.scale.set(2.5);
-                let back2 = builder.image("intro-galaxy2", 0, 0, true);
-                back2.scale.set(1.5);
-                game.tweens.create(back2).to({ rotation: Math.PI * 2 }, 300000).loop().start();
+                let galaxy = builder.container("galaxy", 0, 0, false);
+                galaxy.setPosition(mwidth, mheight);
+                animations.show(galaxy, 3000);
+                animations.addAnimation(galaxy, { rotation: Math.PI * 2 }, 150000, undefined, undefined, Infinity);
+
+                builder.in(galaxy, builder => {
+                    let back1 = builder.image("intro-galaxy1", 0, 0, true);
+                    back1.setScale(2.5);
+                    let back2 = builder.image("intro-galaxy2", 0, 0, true);
+                    back2.setScale(1.5);
+                    animations.addAnimation(back2, { rotation: Math.PI * 2 }, 300000, undefined, undefined, Infinity);
+                });
 
                 let random = RandomGenerator.global;
                 range(200).forEach(i => {
@@ -98,13 +101,20 @@ module TK.SpaceTac.UI {
                     let angle = random.random() * Math.PI * 2;
                     let power = 0.4 + random.random() * 0.6;
 
-                    let star = game.add.image(distance * Math.cos(angle), distance * Math.sin(angle),
-                        "common-particles", 16, galaxy);
-                    star.scale.set(0.15 + random.random() * 0.2);
-                    star.anchor.set(0.5);
-                    star.alpha = power * 0.5;
-                    game.tweens.create(star).to({ alpha: star.alpha + 0.5 }, 200 + random.random() * 500,
-                        undefined, true, 1000 + random.random() * 3000, undefined, true).repeat(-1, 2000 + random.random() * 5000).start();
+                    let star = this.view.add.image(distance * Math.cos(angle), distance * Math.sin(angle),
+                        "common-particles", 16);
+                    star.setScale(0.15 + random.random() * 0.2);
+                    star.setAlpha(power * 0.5);
+                    this.view.tweens.add({
+                        targets: star,
+                        alpha: star.alpha + 0.5,
+                        duration: 200 + random.random() * 500,
+                        delay: 1000 + random.random() * 3000,
+                        yoyo: true,
+                        loop: Infinity,
+                        loopDelay: 2000 + random.random() * 5000
+                    });
+                    galaxy.add(star);
                 });
             }
         }
@@ -115,23 +125,27 @@ module TK.SpaceTac.UI {
         protected exitftl(): Function {
             return () => {
                 let layer = this.getLayer(1);
+
                 let builder = new ParticleBuilder(this.view);
                 let fleet = builder.build([
                     new ParticleConfig(ParticleShape.TRAIL, ParticleColor.BLUEISH, 0.8, 1, 200),
                     new ParticleConfig(ParticleShape.FLARE, ParticleColor.CYAN, 10, 0.2, -45)
                 ]);
-                fleet.position.set(this.view.getMidWidth(), this.view.getMidHeight());
-                this.view.game.add.tween(fleet).from({ x: fleet.x + 1500, y: fleet.y - 750 }, 5000, Phaser.Easing.Circular.Out, true);
-                this.view.game.add.tween(fleet).to({ alpha: 0, width: 40, height: 40 }, 500, Phaser.Easing.Cubic.Out, true, 3500);
-                let flash = this.view.game.add.image(this.view.getMidWidth() + 60, this.view.getMidHeight() - 30, "common-particles", 15);
-                flash.anchor.set(0.5);
-                flash.scale.set(0.1);
-                flash.alpha = 0;
-                let subflash = this.view.game.add.image(0, 0, "common-particles", 0);
-                subflash.anchor.set(0.5);
-                subflash.scale.set(0.5);
-                flash.addChild(subflash);
-                this.view.game.add.tween(flash).to({ alpha: 0.7, width: 60, height: 60 }, 300, Phaser.Easing.Quadratic.Out, true, 3500, undefined, true);
+                fleet.setPosition(this.view.getMidWidth() + 1500, this.view.getMidHeight() - 750);
+                this.view.animations.addAnimation(fleet, { x: this.view.getMidWidth(), y: this.view.getMidHeight() }, 5000, "Circ.easeOut");
+                this.view.animations.addAnimation(fleet, { alpha: 0, scaleX: 1.5, scaleY: 1.5 }, 500, "Cubic.easeOut", 3500);
+
+                let flash = this.view.add.container(this.view.getMidWidth() + 60, this.view.getMidHeight() - 30);
+                flash.setAlpha(0);
+                flash.setScale(0.1);
+                new UIBuilder(this.view).in(flash, builder => {
+                    let sub = this.view.add.image(0, 0, "common-particles", 15);
+                    flash.add(sub);
+                    sub = this.view.add.image(0, 0, "common-particles", 0);
+                    sub.setScale(0.5);
+                    flash.add(sub);
+                });
+                this.view.animations.addAnimation(flash, { alpha: 0.7, scaleX: 2.5, scaleY: 2.5 }, 300, "Quad.easeOut", 3500, undefined, true);
             }
         }
 
@@ -162,7 +176,7 @@ module TK.SpaceTac.UI {
         /**
          * Ensure that a layer exists, and if necessary, clean it
          */
-        protected getLayer(layer: number, clear = false): Phaser.Group {
+        protected getLayer(layer: number, clear = false): UIContainer {
             while (this.layers.length <= layer) {
                 this.layers.push(this.view.getLayer(`Layer ${this.layers.length}`));
             }
