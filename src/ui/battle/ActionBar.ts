@@ -17,7 +17,7 @@ module TK.SpaceTac.UI {
         power_icons!: UIContainer
 
         // Indicator of interaction disabled
-        icon_waiting: UIImage
+        icon_waiting: UIAwaiter
 
         // Current ship, whose actions are displayed
         ship: Ship | null
@@ -55,9 +55,7 @@ module TK.SpaceTac.UI {
             builder.image("battle-actionbar-ship", 1735);
 
             // Waiting icon
-            this.icon_waiting = builder.image("common-waiting", base.width / 2, base.height / 2, true);
-            // FIXME
-            //this.icon_waiting.animations.add("loop").play(9, true);
+            this.icon_waiting = builder.awaiter(base.width / 2, base.height / 2, true, 0.5);
 
             // Options button
             builder.button("battle-actionbar-button-menu", 0, 0, () => battleview.showOptions(), "Game options");

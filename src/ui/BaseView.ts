@@ -18,7 +18,7 @@ module TK.SpaceTac.UI {
 
         // Animations
         animations!: Animations
-        particles!: ParticleSystem
+        particles!: UIParticles
 
         // Timing
         timer!: Timer
@@ -57,7 +57,7 @@ module TK.SpaceTac.UI {
             this.gameui = <MainUI>this.sys.game;
             this.timer = new Timer(this.gameui.headless);
             this.animations = new Animations(this.tweens);
-            this.particles = new ParticleSystem(this);
+            this.particles = new UIParticles(this);
             this.inputs = new InputManager(this);
             this.audio = new Audio(this);
             this.debug = this.gameui.debug;

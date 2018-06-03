@@ -55,7 +55,6 @@ module TK.SpaceTac.UI {
 
                 // TODO pack
                 this.loadSheet("common/particles.png", 32);
-                this.loadAnimation("common/waiting.png", 128, 128, 6);
             }
 
             if (this.required >= AssetLoadingRange.BATTLE && AssetLoading.loaded < AssetLoadingRange.BATTLE) {
@@ -84,15 +83,6 @@ module TK.SpaceTac.UI {
             this.load.spritesheet(AssetLoading.getKey(path), "images/" + path, {
                 frameWidth: frame_width,
                 frameHeight: frame_height,
-            });
-        }
-
-        loadAnimation(path: string, frame_width: number, frame_height = frame_width, count: number) {
-            this.load.spritesheet(AssetLoading.getKey(path), "images/" + path, {
-                frameWidth: frame_width,
-                frameHeight: frame_height,
-                startFrame: 0,
-                endFrame: count - 1
             });
         }
     }

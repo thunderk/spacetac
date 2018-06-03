@@ -7,9 +7,7 @@ Phaser 3 migration
 * Pause the game when the window isn't focused (except in headless)
 * Fit the game in window size
 * Fix top-right messages positions
-* Make the AI-thinking loader work again
 * Fix the character sheet layout
-* Fix the crash in gatling animation
 * Fix valuebar requiring to be in root display list
 
 Menu/settings/saves

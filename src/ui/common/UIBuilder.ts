@@ -2,7 +2,6 @@
  * Main way to create UI components
  */
 module TK.SpaceTac.UI {
-    export type UIParticles = Phaser.GameObjects.Particles.ParticleEmitterManager
     export type UIBuilderParent = UIImage | UIContainer
 
     export type ShaderValue = number | { x: number, y: number }
@@ -215,6 +214,16 @@ module TK.SpaceTac.UI {
          */
         particles(config: ParticlesConfig): void {
             this.view.particles.emit(config, this.parent instanceof UIContainer ? this.parent : undefined);
+        }
+
+        /**
+         * Animation to await something
+         */
+        awaiter(x = 0, y = 0, visible = true, scale = 1): UIAwaiter {
+            let result = new UIAwaiter(this.view, x, y, visible);
+            result.setScale(scale);
+            this.add(result);
+            return result;
         }
 
         /**

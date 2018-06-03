@@ -7,7 +7,7 @@ module TK.SpaceTac.UI {
             super(view);
 
             this.content.text(message, this.width * 0.5, this.height * 0.3, { color: "#90FEE3", size: 32 });
-            //this.addLoader(this.width * 0.5, this.height * 0.6);
+            this.content.awaiter(this.width * 0.5, this.height * 0.6);
         }
 
         /**

@@ -1,6 +1,4 @@
 module TK.SpaceTac.UI {
-    type Manager = Phaser.GameObjects.Particles.ParticleEmitterManager;
-
     export enum ParticleFacingMode {
         INITIAL = 1,
         ALWAYS = 2
@@ -30,19 +28,20 @@ module TK.SpaceTac.UI {
     }
 
     /**
+     * Override of phaser particle manager to fix some issues
+     */
+    export class UIParticleManager extends Phaser.GameObjects.Particles.ParticleEmitterManager {
+        setScrollFactor() {
+        }
+        setAlpha() {
+        }
+    }
+
+    /**
      * System to emit multiple particles of the same texture
      */
-    export class ParticleSystem {
+    export class UIParticles {
         constructor(private view: BaseView) {
-        }
-
-        private getManager(key: string, parent?: UIContainer): Manager {
-            let info = this.view.getImageInfo(key);
-            let result = this.view.add.particles(info.key, info.frame);
-            if (parent) {
-                parent.add(result);
-            }
-            return result;
         }
 
         /**
@@ -51,7 +50,7 @@ module TK.SpaceTac.UI {
          * Returns the total duration in milliseconds
          */
         emit(config: ParticlesConfig, parent?: UIContainer): number {
-            let manager = this.getManager(config.key, parent);
+            let manager = this.createManager(config.key, parent);
             let emitter = manager.createEmitter({});
             if (config.fading) {
                 emitter.setAlpha({ start: 1, end: 0 });
@@ -81,12 +80,27 @@ module TK.SpaceTac.UI {
             let duration = this.emit(config);
             return this.view.timer.sleep(duration);
         }
+
+        /**
+         * Create a new particle manager
+         * 
+         * Automatically called by *emit*.
+         */
+        createManager(key: string, parent?: UIContainer): UIParticleManager {
+            let info = this.view.getImageInfo(key);
+            let result = new UIParticleManager(this.view, info.key, info.frame, []);
+            this.view.add.existing(result);
+            if (parent) {
+                parent.add(result);
+            }
+            return result;
+        }
     }
 
     /**
      * Particle that is rotated to face its initial direction
      */
-    class FacingInitialParticle extends Phaser.GameObjects.Particles.Particle {
+    export class FacingInitialParticle extends Phaser.GameObjects.Particles.Particle {
         fire(x: number, y: number): any {
             let result = super.fire(x, y);
             this.rotation = Math.atan2(this.velocityY, this.velocityX);
@@ -97,7 +111,7 @@ module TK.SpaceTac.UI {
     /**
      * Particle that is rotated to face its movement direction
      */
-    class FacingAlwaysParticle extends FacingInitialParticle {
+    export class FacingAlwaysParticle extends FacingInitialParticle {
         update(delta: any, step: any, processors: any): any {
             let result = super.update(delta, step, processors);
             this.rotation = Math.atan2(this.velocityY, this.velocityX);
