@@ -17,28 +17,28 @@
   "author": "Michael Lemaire",
   "license": "MIT",
   "devDependencies": {
-    "@types/jasmine": "^2.8.6",
+    "@types/jasmine": "^2.8.8",
     "babel-polyfill": "6.26.0",
-    "codecov": "^3.0.1",
-    "gamefroot-texture-packer": "Gamefroot/Gamefroot-Texture-Packer.git#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
+    "codecov": "^3.0.2",
+    "gamefroot-texture-packer": "github:Gamefroot/Gamefroot-Texture-Packer#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
     "glob": "^7.1.2",
     "glob-watcher": "^5.0.1",
     "jasmine": "^3.1.0",
     "karma": "^2.0.2",
-    "karma-coverage": "1.1.1",
+    "karma-coverage": "^1.1.2",
     "karma-jasmine": "^1.1.2",
     "karma-phantomjs-launcher": "1.0.4",
     "karma-spec-reporter": "^0.0.32",
     "live-server": "1.2.0",
     "remap-istanbul": "^0.11.1",
     "runjs": "^4.3.2",
-    "shelljs": "^0.8.1",
-    "typescript": "^2.8.3",
-    "uglify-js": "^3.3.23"
+    "shelljs": "^0.8.2",
+    "typescript": "^2.9.1",
+    "uglify-js": "^3.4.0"
   },
   "dependencies": {
     "jasmine-core": "^3.1.0",
-    "parse": "^1.11.0",
+    "parse": "^1.11.1",
     "phaser": "^3.9.0",
     "process-pool": "^0.3.5"
   }
