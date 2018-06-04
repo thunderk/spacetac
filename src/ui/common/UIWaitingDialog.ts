@@ -6,7 +6,7 @@ module TK.SpaceTac.UI {
         constructor(view: BaseView, message: string, cancel?: Function) {
             super(view);
 
-            this.content.text(message, this.width * 0.5, this.height * 0.3, { color: "#90FEE3", size: 32 });
+            this.content.text(message, this.width * 0.5, this.height * 0.3, { color: "#9FC4D6", size: 32 });
             this.content.awaiter(this.width * 0.5, this.height * 0.6);
         }
 
@@ -15,7 +15,7 @@ module TK.SpaceTac.UI {
          */
         displayError(message: string) {
             this.content.clear();
-            this.content.text(message, this.width * 0.5, this.height * 0.5, { color: "#FE7069", size: 32 });
+            this.content.text(message, this.width * 0.5, this.height * 0.5, { color: "#FFDFBA", size: 32 });
         }
     }
 }

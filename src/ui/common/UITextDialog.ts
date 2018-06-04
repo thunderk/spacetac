@@ -9,19 +9,19 @@ module TK.SpaceTac.UI {
         constructor(view: BaseView, message: string, initial?: string) {
             super(view);
 
-            this.content.text(message, this.width * 0.5, this.height * 0.3, { color: "#90FEE3", size: 32 });
+            this.content.text(message, this.width * 0.5, this.height * 0.3, { color: "#9FC4D6", size: 32, shadow: true });
 
-            let input = new UITextInput(this.content.styled({ size: 24 }), "menu-input", this.width / 2, this.height / 2, 12);
+            let input = new UITextInput(this.content.styled({ size: 26, color: "#DBEFF9", shadow: true }), "menu-input", this.width / 2, this.height / 2, 12);
             if (initial) {
                 input.setContent(initial);
             }
 
-            this.result = new Promise((resolve, reject) => {
+            this.result = new Promise(resolve => {
                 this.result_resolver = resolve;
-                this.content.button("common-button-cancel", this.width * 0.4, this.height * 0.7, () => resolve(null),
-                    undefined, undefined, { center: true });
-                this.content.button("common-button-ok", this.width * 0.6, this.height * 0.7, () => resolve(input.getContent()),
-                    undefined, undefined, { center: true });
+                this.content.button("menu-button-small", this.width * 0.4, this.height * 0.7, () => resolve(null),
+                    undefined, undefined, { center: true, text: "Cancel", text_style: { color: "#9FC4D6", size: 22, shadow: true } });
+                this.content.button("menu-button-small", this.width * 0.6, this.height * 0.7, () => resolve(input.getContent()),
+                    undefined, undefined, { center: true, text: "OK", text_style: { color: "#9FC4D6", size: 22, shadow: true } });
             });
         }
 

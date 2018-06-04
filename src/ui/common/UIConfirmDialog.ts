@@ -9,12 +9,15 @@ module TK.SpaceTac.UI {
         constructor(view: BaseView, message: string) {
             super(view);
 
-            this.content.text(message, this.width * 0.5, this.height * 0.3, { color: "#90FEE3", size: 32 });
+            this.content.text(message, this.width * 0.5, this.height * 0.4, { color: "#9FC4D6", size: 32, shadow: true });
 
-            this.result = new Promise((resolve, reject) => {
+            this.result = new Promise(resolve => {
                 this.result_resolver = resolve;
-                this.content.button("common-button-cancel", this.width * 0.4, this.height * 0.6, () => resolve(false), undefined, undefined, { center: true });
-                this.content.button("common-button-ok", this.width * 0.6, this.height * 0.6, () => resolve(true), undefined, undefined, { center: true });
+
+                this.content.button("menu-button-small", this.width * 0.4, this.height * 0.6, () => resolve(false),
+                    undefined, undefined, { center: true, text: "Cancel", text_style: { color: "#9FC4D6", size: 22, shadow: true } });
+                this.content.button("menu-button-small", this.width * 0.6, this.height * 0.6, () => resolve(true),
+                    undefined, undefined, { center: true, text: "OK", text_style: { color: "#9FC4D6", size: 22, shadow: true } });
             });
         }
 
