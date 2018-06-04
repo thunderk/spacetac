@@ -9,22 +9,22 @@ module TK.SpaceTac.UI.Specs {
             let ship = new Ship();
             let action = new BaseAction("something");
             let icon = new ActionIcon(bar, ship, action, 0);
-            check.same(icon.power_bg.visible, false, "initial state");
+            check.same(icon.power_container.visible, false, "initial state");
 
             icon.refresh();
-            check.same(icon.power_bg.visible, false, "no change");
+            check.same(icon.power_container.visible, false, "no change");
 
             let cost = 3;
             check.patch(action, "getPowerUsage", () => cost);
             icon.refresh();
             check.in("power cost = 3", check => {
-                check.equals(icon.power_bg.visible, true);
+                check.equals(icon.power_container.visible, true);
                 check.equals(icon.power_text.text, "3\n-");
             });
             cost = -2;
             icon.refresh();
             check.in("power cost = -2", check => {
-                check.equals(icon.power_bg.visible, true);
+                check.equals(icon.power_container.visible, true);
                 check.equals(icon.power_text.text, "2\n+");
             });
         })

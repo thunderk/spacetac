@@ -52,9 +52,6 @@ module TK.SpaceTac.UI {
             if (this.required >= AssetLoadingRange.MENU && AssetLoading.loaded < AssetLoadingRange.MENU) {
                 console.log("Loading menu assets");
                 this.load.pack("stage1", `assets/pack1.json?t=${Date.now()}`);
-
-                // TODO pack
-                this.loadSheet("common/particles.png", 32);
             }
 
             if (this.required >= AssetLoadingRange.BATTLE && AssetLoading.loaded < AssetLoadingRange.BATTLE) {

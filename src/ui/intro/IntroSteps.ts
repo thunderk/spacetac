@@ -81,6 +81,7 @@ module TK.SpaceTac.UI {
                 let mheight = this.view.getMidHeight();
 
                 let builder = new UIBuilder(this.view, layer);
+                let random = RandomGenerator.global;
 
                 let galaxy = builder.container("galaxy", 0, 0, false);
                 galaxy.setPosition(mwidth, mheight);
@@ -93,28 +94,25 @@ module TK.SpaceTac.UI {
                     let back2 = builder.image("intro-galaxy2", 0, 0, true);
                     back2.setScale(1.5);
                     animations.addAnimation(back2, { rotation: Math.PI * 2 }, 300000, undefined, undefined, Infinity);
-                });
 
-                let random = RandomGenerator.global;
-                range(200).forEach(i => {
-                    let distance = (0.3 + random.random() * 0.7) * mheight;
-                    let angle = random.random() * Math.PI * 2;
-                    let power = 0.4 + random.random() * 0.6;
+                    range(200).forEach(() => {
+                        let distance = (0.3 + random.random() * 0.7) * mheight;
+                        let angle = random.random() * Math.PI * 2;
+                        let power = 0.4 + random.random() * 0.6;
 
-                    let star = this.view.add.image(distance * Math.cos(angle), distance * Math.sin(angle),
-                        "common-particles", 16);
-                    star.setScale(0.15 + random.random() * 0.2);
-                    star.setAlpha(power * 0.5);
-                    this.view.tweens.add({
-                        targets: star,
-                        alpha: star.alpha + 0.5,
-                        duration: 200 + random.random() * 500,
-                        delay: 1000 + random.random() * 3000,
-                        yoyo: true,
-                        loop: Infinity,
-                        loopDelay: 2000 + random.random() * 5000
+                        let star = builder.image("intro-star", distance * Math.cos(angle), distance * Math.sin(angle), true);
+                        star.setScale(0.15 + random.random() * 0.2);
+                        star.setAlpha(power * 0.5);
+                        this.view.tweens.add({
+                            targets: star,
+                            alpha: star.alpha + 0.5,
+                            duration: 200 + random.random() * 500,
+                            delay: 1000 + random.random() * 3000,
+                            yoyo: true,
+                            loop: Infinity,
+                            loopDelay: 2000 + random.random() * 5000
+                        });
                     });
-                    galaxy.add(star);
                 });
             }
         }
@@ -125,26 +123,15 @@ module TK.SpaceTac.UI {
         protected exitftl(): Function {
             return () => {
                 let layer = this.getLayer(1);
+                let builder = new UIBuilder(this.view, layer);
 
-                let builder = new ParticleBuilder(this.view);
-                let fleet = builder.build([
-                    new ParticleConfig(ParticleShape.TRAIL, ParticleColor.BLUEISH, 0.8, 1, 200),
-                    new ParticleConfig(ParticleShape.FLARE, ParticleColor.CYAN, 10, 0.2, -45)
-                ]);
-                fleet.setPosition(this.view.getMidWidth() + 1500, this.view.getMidHeight() - 750);
+                let fleet = builder.image("intro-fleet", this.view.getMidWidth() + 1500, this.view.getMidHeight() - 750, true);
                 this.view.animations.addAnimation(fleet, { x: this.view.getMidWidth(), y: this.view.getMidHeight() }, 5000, "Circ.easeOut");
                 this.view.animations.addAnimation(fleet, { alpha: 0, scaleX: 1.5, scaleY: 1.5 }, 500, "Cubic.easeOut", 3500);
 
-                let flash = this.view.add.container(this.view.getMidWidth() + 60, this.view.getMidHeight() - 30);
+                let flash = builder.image("intro-flash", this.view.getMidWidth() + 60, this.view.getMidHeight() - 30, true);
                 flash.setAlpha(0);
                 flash.setScale(0.1);
-                new UIBuilder(this.view).in(flash, builder => {
-                    let sub = this.view.add.image(0, 0, "common-particles", 15);
-                    flash.add(sub);
-                    sub = this.view.add.image(0, 0, "common-particles", 0);
-                    sub.setScale(0.5);
-                    flash.add(sub);
-                });
                 this.view.animations.addAnimation(flash, { alpha: 0.7, scaleX: 2.5, scaleY: 2.5 }, 300, "Quad.easeOut", 3500, undefined, true);
             }
         }
