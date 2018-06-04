@@ -73,7 +73,7 @@ module TK.SpaceTac.UI {
             // HSP display
             this.hsp = builder.container("hsp", 0, 34);
             builder.in(this.hsp).image("battle-hud-hsp-background", 0, 0, true);
-            this.power_text = builder.in(this.hsp).text(`${ship.getValue("power")}`, -42, 2,
+            this.power_text = builder.in(this.hsp).text(`${ship.getValue("power")}`, -42, 0,
                 { size: 13, color: "#ffdd4b", bold: true, shadow: true, center: true });
             this.life_hull = builder.in(this.hsp).container("hull");
             this.life_shield = builder.in(this.hsp).container("shield");
@@ -348,12 +348,12 @@ module TK.SpaceTac.UI {
 
             let text = builder.text(message, 0, 20 * this.effects_messages.length, {
                 color: beneficial ? "#afe9c6" : "#e9afaf"
-            })
+            });
 
             let arena = this.battleview.arena.getBoundaries();
             this.effects_messages.setPosition(
                 (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects_messages.width) : (-this.effects_messages.width * 0.5)),
-                (this.ship.arena_y < arena.height * 0.9) ? 50 : (-50 - this.effects_messages.height)
+                (this.ship.arena_y < arena.height * 0.9) ? 60 : (-60 - this.effects_messages.height)
             );
 
             this.effects_messages_toggle.manipulate("added")(1400);

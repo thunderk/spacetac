@@ -9,23 +9,23 @@ module TK.SpaceTac.UI.Specs {
             let ship = new Ship();
             let action = new BaseAction("something");
             let icon = new ActionIcon(bar, ship, action, 0);
-            check.same(icon.img_power.visible, false, "initial state");
+            check.same(icon.power_bg.visible, false, "initial state");
 
             icon.refresh();
-            check.same(icon.img_power.visible, false, "no change");
+            check.same(icon.power_bg.visible, false, "no change");
 
             let cost = 3;
             check.patch(action, "getPowerUsage", () => cost);
             icon.refresh();
             check.in("power cost = 3", check => {
-                check.equals(icon.img_power.visible, true);
-                check.equals(icon.text_power.text, "3\n-");
+                check.equals(icon.power_bg.visible, true);
+                check.equals(icon.power_text.text, "3\n-");
             });
             cost = -2;
             icon.refresh();
             check.in("power cost = -2", check => {
-                check.equals(icon.img_power.visible, true);
-                check.equals(icon.text_power.text, "2\n+");
+                check.equals(icon.power_bg.visible, true);
+                check.equals(icon.power_text.text, "2\n+");
             });
         })
 
@@ -37,33 +37,33 @@ module TK.SpaceTac.UI.Specs {
             let icon = new ActionIcon(bar, ship, action, 0);
 
             check.equals(icon.container.name, "battle-actionbar-frame-enabled", "5/5");
-            check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "5/5");
-            check.same(icon.img_power.visible, true, "5/5");
+            check.equals(icon.power_bg.name, "battle-actionbar-consumption-enabled", "5/5");
+            check.same(icon.power_bg.visible, true, "5/5");
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "5/5");
 
             icon.refresh(null, 1);
             check.equals(icon.container.name, "battle-actionbar-frame-enabled", "4/5");
-            check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "4/5");
-            check.same(icon.img_power.visible, true, "4/5");
+            check.equals(icon.power_bg.name, "battle-actionbar-consumption-enabled", "4/5");
+            check.same(icon.power_bg.visible, true, "4/5");
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "4/5");
 
             icon.refresh(null, 4);
             check.equals(icon.container.name, "battle-actionbar-frame-fading", "1/5");
-            check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "1/5");
-            check.same(icon.img_power.visible, true, "1/5");
+            check.equals(icon.power_bg.name, "battle-actionbar-consumption-enabled", "1/5");
+            check.same(icon.power_bg.visible, true, "1/5");
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "1/5");
 
             ship.setValue("power", 2);
             icon.refresh();
             check.equals(icon.container.name, "battle-actionbar-frame-disabled", "2/2");
-            check.equals(icon.img_power.name, "battle-actionbar-consumption-disabled", "2/2");
-            check.same(icon.img_power.visible, true, "2/2");
+            check.equals(icon.power_bg.name, "battle-actionbar-consumption-disabled", "2/2");
+            check.same(icon.power_bg.visible, true, "2/2");
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-disabled", "2/2");
 
             icon.refresh(null, 6);
             check.equals(icon.container.name, "battle-actionbar-frame-disabled", "0/2");
-            check.equals(icon.img_power.name, "battle-actionbar-consumption-disabled", "0/2");
-            check.same(icon.img_power.visible, true, "0/2");
+            check.equals(icon.power_bg.name, "battle-actionbar-consumption-disabled", "0/2");
+            check.same(icon.power_bg.visible, true, "0/2");
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-disabled", "0/2");
         })
 
@@ -76,14 +76,14 @@ module TK.SpaceTac.UI.Specs {
             let icon = new ActionIcon(bar, ship, action, 0);
 
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-enabled", "initial");
-            check.equals(icon.img_power.name, "battle-actionbar-consumption-enabled", "initial");
+            check.equals(icon.power_bg.name, "battle-actionbar-consumption-enabled", "initial");
             check.equals(icon.img_cooldown.name, "battle-actionbar-sticky-untoggled", "initial");
             check.same(icon.img_cooldown.visible, true, "initial");
 
             ship.actions.toggle(action, true);
             icon.refresh();
             check.equals(icon.img_bottom.name, "battle-actionbar-bottom-toggled", "initial");
-            check.equals(icon.img_power.name, "battle-actionbar-consumption-toggled", "initial");
+            check.equals(icon.power_bg.name, "battle-actionbar-consumption-toggled", "initial");
             check.equals(icon.img_cooldown.name, "battle-actionbar-sticky-toggled", "initial");
             check.same(icon.img_cooldown.visible, true, "initial");
         })

@@ -107,7 +107,7 @@ module TK.SpaceTac.UI {
                     this.hover_mask = builder.image(hover_name, 0, 0, options.center);
                     this.hover_mask.setVisible(false);
                     this.hover_bottom = bool(options.hover_bottom);
-                    if (this.hover_bottom && !this.on_bottom) {
+                    if (this.hover_bottom && this.on_mask && !this.on_bottom) {
                         this.moveDown(this.hover_mask);
                     }
                 }

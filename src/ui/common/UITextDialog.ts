@@ -18,8 +18,10 @@ module TK.SpaceTac.UI {
 
             this.result = new Promise((resolve, reject) => {
                 this.result_resolver = resolve;
-                this.content.button("common-button-cancel", this.width * 0.4, this.height * 0.7, () => resolve(null));
-                this.content.button("common-button-ok", this.width * 0.6, this.height * 0.7, () => resolve(input.getContent()));
+                this.content.button("common-button-cancel", this.width * 0.4, this.height * 0.7, () => resolve(null),
+                    undefined, undefined, { center: true });
+                this.content.button("common-button-ok", this.width * 0.6, this.height * 0.7, () => resolve(input.getContent()),
+                    undefined, undefined, { center: true });
             });
         }
 
