@@ -125,9 +125,9 @@ module TK.SpaceTac {
          * Change the active scene
          */
         goToScene(name: string): void {
-            this.scene.scenes.forEach(scene => {
-                if (this.scene.isActive(scene)) {
-                    scene.shutdown();
+            keys(this.scene.keys).forEach(key => {
+                if (this.scene.isActive(key) || this.scene.isVisible(key)) {
+                    this.scene.stop(key);
                 }
             });
             this.scene.start(name);
