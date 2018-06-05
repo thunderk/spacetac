@@ -167,21 +167,29 @@ module TK.SpaceTac.UI {
 
             if (radius) {
                 if (angle) {
-                    area.lineStyle(2, color, 0.6);
-                    area.fillStyle(color, 0.2);
-                    area.arc(0, 0, radius, angle, -angle, true);
-
-                    area.lineStyle(1, color, 0.3);
-                    area.fillStyle(color, 0.1);
-                    area.arc(0, 0, radius * 0.95, angle * 0.95, -angle * 0.95, true);
+                    area.addCircleArc({
+                        radius: radius,
+                        angle: { start: -angle, span: angle * 2 },
+                        fill: { color: color, alpha: 0.2 },
+                        border: { color: color, alpha: 0.6, width: 2 },
+                    });
+                    area.addCircleArc({
+                        radius: radius * 0.95,
+                        angle: { start: -angle * 0.95, span: angle * 1.9 },
+                        fill: { color: color, alpha: 0.1 },
+                        border: { color: color, alpha: 0.3, width: 1 },
+                    });
                 } else {
-                    area.lineStyle(2, color, 0.6);
-                    area.fillStyle(color, 0.2);
-                    area.fillCircle(0, 0, radius);
-
-                    area.lineStyle(1, color, 0.3);
-                    area.fillStyle(color, 0.1);
-                    area.fillCircle(0, 0, radius * 0.95);
+                    area.addCircle({
+                        radius: radius,
+                        fill: { color: color, alpha: 0.2 },
+                        border: { color: color, alpha: 0.6, width: 2 },
+                    });
+                    area.addCircle({
+                        radius: radius * 0.95,
+                        fill: { color: color, alpha: 0.1 },
+                        border: { color: color, alpha: 0.3, width: 1 },
+                    });
                 }
             }
         }

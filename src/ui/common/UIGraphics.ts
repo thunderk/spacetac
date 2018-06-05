@@ -1,4 +1,15 @@
 module TK.SpaceTac.UI {
+    export interface UIGraphicsCircleOptions {
+        center?: { x: number, y: number }
+        radius: number
+        fill?: { color: number, alpha?: number }
+        border?: { color: number, width?: number, alpha?: number }
+    }
+
+    export interface UIGraphicsCirclePortionOptions extends UIGraphicsCircleOptions {
+        angle: { start: number, span: number }
+    }
+
     /**
      * UI component that supports drawing simple shapes (circles, lines...)
      */
@@ -21,6 +32,44 @@ module TK.SpaceTac.UI {
             if (border_width && border_color) {
                 this.lineStyle(border_width, border_color, alpha);
                 this.strokeRectShape(rect);
+            }
+        }
+
+        /**
+         * Add a portion of circle
+         */
+        addCircleArc(options: UIGraphicsCirclePortionOptions): void {
+            let x = options.center ? options.center.x : 0;
+            let y = options.center ? options.center.y : 0;
+
+            if (options.fill) {
+                this.fillStyle(options.fill.color, options.fill.alpha);
+                this.slice(x, y, options.radius, options.angle.start, options.angle.start + options.angle.span, false);
+                this.fillPath();
+            }
+
+            if (options.border) {
+                this.lineStyle(options.border.width || 1, options.border.color, options.border.alpha);
+                this.slice(x, y, options.radius, options.angle.start, options.angle.start + options.angle.span, false);
+                this.strokePath();
+            }
+        }
+
+        /**
+         * Add a full circle
+         */
+        addCircle(options: UIGraphicsCircleOptions): void {
+            let x = options.center ? options.center.x : 0;
+            let y = options.center ? options.center.y : 0;
+
+            if (options.fill) {
+                this.fillStyle(options.fill.color, options.fill.alpha);
+                this.fillCircle(x, y, options.radius);
+            }
+
+            if (options.border) {
+                this.lineStyle(options.border.width || 1, options.border.color, options.border.alpha);
+                this.strokeCircle(x, y, options.radius);
             }
         }
     }

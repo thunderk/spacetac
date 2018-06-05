@@ -92,15 +92,14 @@ module TK.SpaceTac.UI {
         /**
          * Get the function that will be called to start the visual effect
          */
-        getEffectForWeapon(weapon: string, action: BaseAction | null): () => number {
+        getEffectForWeapon(weapon: string, action: TriggerAction): () => number {
             switch (weapon) {
                 case "gatlinggun":
                     return () => this.gunEffect();
                 case "prokhorovlaser":
-                    let trigger = <TriggerAction>nn(action);
                     let angle = arenaAngle(this.source, this.target);
-                    let dangle = radians(trigger.angle) * 0.5;
-                    return () => this.angularLaser(this.source, trigger.range, angle - dangle, angle + dangle);
+                    let dangle = radians(action.angle) * 0.5;
+                    return () => this.angularLaser(this.source, action.range, angle - dangle, angle + dangle);
                 default:
                     return () => this.defaultEffect();
             }
@@ -198,7 +197,8 @@ module TK.SpaceTac.UI {
             laser.setOrigin(0, 0.5);
             laser.setRotation(start_angle);
             laser.setScale(radius / laser.width);
-            this.view.animations.addAnimation(laser, { rotation: end_angle }, duration).then(() => laser.destroy());
+            let dest_angle = laser.rotation + angularDifference(laser.rotation, end_angle);
+            this.view.animations.addAnimation(laser, { rotation: dest_angle }, duration).then(() => laser.destroy());
 
             return duration;
         }
