@@ -158,7 +158,7 @@ module TK.SpaceTac.UI {
                                 this.updateShield(this.ship.getValue("shield"));
                             }
                         } else if (diff.code == "power") {
-                            this.power_text.text = `${this.ship.getValue("power")}`;
+                            this.power_text.setText(`${this.ship.getValue("power")}`);
                             if (animate) {
                                 await this.battleview.animations.blink(this.power_text);
                             }
@@ -378,9 +378,9 @@ module TK.SpaceTac.UI {
         updatePlayOrder(): void {
             let play_order = this.battleview.battle.getPlayOrder(this.ship);
             if (play_order == 0) {
-                this.play_order.text = "-";
+                this.play_order.setText("-");
             } else {
-                this.play_order.text = play_order.toString();
+                this.play_order.setText(play_order.toString());
             }
         }
 
