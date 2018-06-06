@@ -5,6 +5,7 @@ module TK.SpaceTac.UI {
     export class StarSystemDisplay extends UIContainer {
         view: UniverseMapView
         builder: UIBuilder
+        background: UIImage
         circles: UIContainer
         starsystem: Star
         player: Player
@@ -18,8 +19,8 @@ module TK.SpaceTac.UI {
             this.view = parent;
             this.builder = new UIBuilder(parent, this);
 
-            let base = this.builder.image("map-starsystem-background", 0, 0, true);
-            this.setScale(starsystem.radius * 2 / base.width);
+            this.background = this.builder.image("map-starsystem-background", 0, 0, true);
+            this.setScale(starsystem.radius * 2 / this.background.width);
 
             this.starsystem = starsystem;
             this.player = parent.player;
@@ -108,7 +109,7 @@ module TK.SpaceTac.UI {
             // LOD
             let detailed = focus && level == 2;
             this.list.filter(child => child !== this.label).forEach(child => {
-                if (child !== this.label && (child instanceof UIButton || child instanceof UIImage)) {
+                if (child !== this.label && child !== this.background && (child instanceof UIButton || child instanceof UIImage)) {
                     this.view.animations.setVisible(child, detailed, 300);
                 }
             });

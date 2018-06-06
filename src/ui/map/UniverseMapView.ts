@@ -191,7 +191,7 @@ module TK.SpaceTac.UI {
             this.starlinks.forEach(linkgraphics => {
                 let link = linkgraphics.data.get("link");
                 if (link instanceof StarLink) {
-                    linkgraphics.visible = this.player.hasVisitedSystem(link.first) || this.player.hasVisitedSystem(link.second);
+                    linkgraphics.setVisible(this.player.hasVisitedSystem(link.first) || this.player.hasVisitedSystem(link.second));
                 }
             })
 
@@ -252,9 +252,9 @@ module TK.SpaceTac.UI {
          */
         setLinksAlpha(alpha: number, duration = 500) {
             if (duration) {
-                this.animations.addAnimation(this.starlinks_group, { alpha: alpha }, duration * Math.abs(this.starlinks_group.alpha - alpha));
+                this.animations.addAnimation(this.starlinks_group, { alpha: alpha }, duration, "Cubic.easeInOut");
             } else {
-                this.starlinks_group.alpha = alpha;
+                this.starlinks_group.setAlpha(alpha);
             }
         }
 
@@ -291,8 +291,8 @@ module TK.SpaceTac.UI {
                 let dest_location = location.jump_dest;
                 let dest_star = dest_location.star;
                 this.player_fleet.moveToLocation(dest_location, 3, duration => {
-                    this.timer.schedule(duration / 2, () => this.updateInfo(dest_star, false));
-                    this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, "Cubic.Out");
+                    this.timer.schedule(duration / 3, () => this.updateInfo(dest_star, false));
+                    this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, "Cubic.easeOut");
                 }, () => {
                     this.setInteractionEnabled(true);
                     this.refresh();
