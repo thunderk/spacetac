@@ -6,7 +6,7 @@ module TK.SpaceTac.UI {
         /**
          * Fill the tooltip
          */
-        static fill(filler: TooltipBuilder, ship: Ship, action: BaseAction, position: number) {
+        static fill(filler: TooltipBuilder, ship: Ship, action: BaseAction, position?: number): boolean {
             let builder = filler.styled({ size: 20 });
 
             let icon = builder.image(`action-${action.code}`);
@@ -49,17 +49,21 @@ module TK.SpaceTac.UI {
                 builder.text(description, 30, 170, { size: 16 });
             }
 
-            let shortcut = "";
-            if (action instanceof EndTurnAction) {
-                shortcut = "[ space ]";
-            } else if (position == 9) {
-                shortcut = "[ 0 ]";
-            } else if (position >= 0 && position < 9) {
-                shortcut = `[ ${position + 1} ]`;
+            if (typeof position != "undefined") {
+                let shortcut = "";
+                if (action instanceof EndTurnAction) {
+                    shortcut = "[ space ]";
+                } else if (position == 9) {
+                    shortcut = "[ 0 ]";
+                } else if (position >= 0 && position < 9) {
+                    shortcut = `[ ${position + 1} ]`;
+                }
+                if (shortcut) {
+                    builder.text(shortcut, 150, 120, { color: "#aaaaaa", size: 12 });
+                }
             }
-            if (shortcut) {
-                builder.text(shortcut, 150, 120, { color: "#aaaaaa", size: 12 });
-            }
+
+            return true;
         }
     }
 }

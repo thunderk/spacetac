@@ -34,7 +34,7 @@ Map/story
 Character sheet
 ---------------
 
-* Improve action and attribute tooltips
+* Improve attribute tooltips
 * Implement sliders for personality traits
 * Center the portraits when there are less than 5
 

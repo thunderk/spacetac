@@ -306,8 +306,7 @@ module TK.SpaceTac.UI {
                 builder.in(builder.container("items"), builder => {
                     let actions = ship.actions.listAll().filter(action => !(action instanceof EndTurnAction));
                     actions.forEach(action => {
-                        let button = builder.button(`action-${action.code}`, 24, 0, undefined,
-                            action.getEffectsDescription());
+                        let button = builder.button(`action-${action.code}`, 24, 0, undefined, filler => ActionTooltip.fill(filler, ship, action));
                         button.setScale(0.375);
                     });
                     builder.distribute("y", 40, 688);
