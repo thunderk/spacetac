@@ -28,6 +28,7 @@ module TK.SpaceTac.UI {
         toggle_hsp: Toggle
 
         // Play order
+        play_order_container: UIContainer
         play_order: UIText
         toggle_play_order: Toggle
 
@@ -81,9 +82,12 @@ module TK.SpaceTac.UI {
             this.toggle_hsp = this.battleview.animations.newVisibilityToggle(this.hsp, 200, false);
 
             // Play order display
-            let play_order = builder.image("battle-hud-ship-play-order", -44, 0, true)
-            this.play_order = builder.in(play_order).text("", -2, 3, { size: 12, bold: true, color: "#d1d1d1", shadow: true, center: true });
-            this.toggle_play_order = this.battleview.animations.newVisibilityToggle(play_order, 200, false);
+            this.play_order_container = builder.container("play_order", -44, 0);
+            builder.in(this.play_order_container).image("battle-hud-ship-play-order", 0, 0, true);
+            this.play_order = builder.in(this.play_order_container).text("", -2, 1, {
+                size: 12, bold: true, color: "#d1d1d1", shadow: true, center: true
+            });
+            this.toggle_play_order = this.battleview.animations.newVisibilityToggle(this.play_order_container, 200, false);
 
             // Effects display
             this.active_effects_display = builder.container("active-effects", 0, -44);
