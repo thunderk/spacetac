@@ -38,7 +38,7 @@ module TK.SpaceTac.UI {
 
                 location_sprite = this.builder.button(`map-location-${loctype}`, location.x / this.scaleX, location.y / this.scaleY,
                     () => this.view.moveToLocation(location),
-                    (filler: TooltipBuilder) => {
+                    () => {
                         let visited = this.player.hasVisitedLocation(location);
                         let shop = (visited && !location.encounter && location.shop) ? " (dockyard present)" : "";
 
