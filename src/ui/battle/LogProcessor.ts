@@ -225,7 +225,8 @@ module TK.SpaceTac.UI {
                     return {
                         foreground: async () => {
                             if (reaction instanceof PersonalityReactionConversation) {
-                                let conversation = UIConversation.newFromPieces(this.view, reaction.messages);
+                                let builder = new UIBuilder(this.view, this.view.layer_overlay);
+                                let conversation = UIConversation.newFromPieces(builder, reaction.messages);
                                 await conversation.waitEnd();
                             } else {
                                 console.warn("[LogProcessor] Unknown personality reaction type", reaction);

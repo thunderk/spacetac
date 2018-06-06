@@ -68,7 +68,7 @@ module TK.SpaceTac.UI {
         /**
          * Draw a background
          */
-        drawBackground(fill: number, border?: number, border_width = 0, alpha = 1, mouse_capture?: Function) {
+        drawBackground(fill: number, border?: number, border_width = 0, alpha = 1) {
             if (this.background) {
                 this.background.destroy();
             }
@@ -76,11 +76,6 @@ module TK.SpaceTac.UI {
             let rect = new Phaser.Geom.Rectangle(0, 0, this.width, this.height);
             this.background = this.addInternalChild(new UIGraphics(this.view, "background"));
             this.background.addRectangle(rect, fill, border_width, border, alpha);
-
-            if (mouse_capture) {
-                this.background.setInteractive(rect, Phaser.Geom.Rectangle.Contains);
-                this.background.on("pointerup", () => mouse_capture());
-            }
         }
 
         /**

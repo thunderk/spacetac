@@ -116,8 +116,7 @@ module TK.SpaceTac.UI {
             this.character_sheet = new CharacterSheet(this, CharacterSheetMode.EDITION);
             this.character_sheet.moveToLayer(this.layer_overlay);
 
-            this.conversation = new MissionConversationDisplay(this);
-            this.conversation.moveToLayer(this.layer_overlay);
+            this.conversation = new MissionConversationDisplay(builder.in(this.layer_overlay));
 
             this.audio.startMusic("spring-thaw");
 

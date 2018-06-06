@@ -152,9 +152,10 @@ module TK.SpaceTac.UI {
             return () => {
                 let style = new UIConversationStyle();
                 style.center = true;
-                let display = new UIConversationMessage(this.view, 900, 200, message, style);
-                display.setPositionInsideParent(0.5, 0.9);
-                display.moveToLayer(this.getLayer(layer, clear));
+                let parent = this.getLayer(layer, clear);
+                let builder = new UIBuilder(this.view, parent);
+                let display = new UIConversationMessage(builder, 900, 200, message, style);
+                display.positionRelative(0.5, 0.9);
                 display.setVisible(false);
                 display.setVisible(true, 500);
             }

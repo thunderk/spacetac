@@ -27,5 +27,17 @@ module TK.SpaceTac.UI {
             output.setTo(result.x, result.y, result.width, result.height);
             return output;
         }
+
+        /**
+         * Overload of setVisible, with fading support
+         */
+        setVisible(visible: boolean, duration = 0): this {
+            if (duration) {
+                (<BaseView>this.scene).animations.setVisible(this, visible, duration);
+            } else {
+                super.setVisible(visible);
+            }
+            return this;
+        }
     }
 }

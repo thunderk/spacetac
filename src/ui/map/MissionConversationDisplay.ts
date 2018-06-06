@@ -8,8 +8,8 @@ module TK.SpaceTac.UI {
         dialog: MissionPartConversation | null = null
         on_ended: Function | null = null
 
-        constructor(parent: BaseView) {
-            super(parent, () => true);
+        constructor(builder: UIBuilder) {
+            super(builder, () => true);
         }
 
         /**

@@ -227,6 +227,15 @@ module TK.SpaceTac.UI {
         }
 
         /**
+         * Add a full-view capturing overlay
+         */
+        overlay(options: UIOverlayOptions): UIOverlay {
+            let result = new UIOverlay(this.view, options);
+            this.add(result);
+            return result;
+        }
+
+        /**
          * Change the content of an component
          * 
          * If the component is a text, its content will be changed.

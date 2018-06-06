@@ -39,64 +39,98 @@ module TK.SpaceTac.UI {
     /**
      * Rectangle to display a message that may appear progressively, as in conversations
      */
-    export class UIConversationMessage extends UIComponent {
-        constructor(parent: BaseView | UIComponent, width: number, height: number, message: string, style = new UIConversationStyle()) {
-            super(parent, width, height);
+    export class UIConversationMessage {
+        private container: UIContainer
 
-            this.drawBackground(style.background, style.border, style.border_width, style.alpha);
+        constructor(private builder: UIBuilder, private width: number, private height: number, message: string, style = new UIConversationStyle(), forward?: Function) {
+            this.container = builder.container("conversation-message");
 
-            let builder = this.builder.styled(style.text);
-            if (!style.center) {
-                builder = builder.styled({ center: false, vcenter: false });
-            }
-
-            let offset = 0;
-            if (style.image_size && style.image) {
-                offset = style.image_size + style.padding;
-                width -= offset;
-
-                let ioffset = style.padding + Math.floor(style.image_size / 2);
-                builder.image(style.image, ioffset, ioffset, true);
-
-                if (style.image_caption) {
-                    let text_size = Math.ceil(style.text.size ? style.text.size * 0.6 : 16);
-                    builder.text(style.image_caption, ioffset, style.padding + style.image_size + text_size, {
-                        size: text_size,
-                        center: true
-                    });
+            builder.styled(style.text).in(this.container, builder => {
+                if (!style.center) {
+                    builder = builder.styled({ center: false, vcenter: false });
                 }
-            }
 
-            let text = builder.text(message, offset + (style.center ? width / 2 : style.padding), style.center ? height / 2 : style.padding, {
-                width: width - style.padding * 2
+                builder.graphics("background").addRectangle({ x: 0, y: 0, width: width, height: height },
+                    style.background, style.border_width, style.border, style.alpha);
+
+                let offset = 0;
+                if (style.image_size && style.image) {
+                    offset = style.image_size + style.padding;
+                    width -= offset;
+
+                    let ioffset = style.padding + Math.floor(style.image_size / 2);
+                    builder.image(style.image, ioffset, ioffset, true);
+
+                    if (style.image_caption) {
+                        let text_size = Math.ceil(style.text.size ? style.text.size * 0.6 : 16);
+                        builder.text(style.image_caption, ioffset, style.padding + style.image_size + text_size, {
+                            size: text_size,
+                            center: true
+                        });
+                    }
+                }
+
+                let text = builder.text(message, offset + (style.center ? width / 2 : style.padding), style.center ? height / 2 : style.padding, {
+                    width: width - style.padding * 2
+                });
+
+                /*let i = 0;
+                let colorchar = () => {
+                    text.clearColors();
+                    if (i < message.length) {
+                        text.addColor("transparent", i);
+                        i++;
+                        this.view.timer.schedule(10, colorchar);
+                    }
+                }
+                colorchar();*/
+
+                if (forward) {
+                    builder.button("common-arrow", this.width - 30, this.height - 30, forward, "Next", undefined, { center: true });
+                }
             });
+        }
 
-            /*let i = 0;
-            let colorchar = () => {
-                text.clearColors();
-                if (i < message.length) {
-                    text.addColor("transparent", i);
-                    i++;
-                    this.view.timer.schedule(10, colorchar);
-                }
-            }
-            colorchar();*/
+        destroy() {
+            this.container.destroy();
+        }
+
+        positionRelative(relx: number, rely: number) {
+            let view = this.builder.view;
+            let rx = (view.getWidth() - this.width) * relx;
+            let ry = (view.getHeight() - this.height) * rely;
+            this.container.setPosition(Math.round(rx), Math.round(ry));
+        }
+
+        setVisible(visible: boolean, duration = 0): void {
+            this.container.setVisible(visible, duration);
         }
     }
 
     /**
      * Display of an active conversation (sequence of messages)
      */
-    export class UIConversation extends UIComponent {
+    export class UIConversation {
+        private view: BaseView
+        private builder: UIBuilder
+        private container: UIContainer
+        private overlay: UIOverlay
+        private message?: UIConversationMessage
         private step = -1
         private on_step: UIConversationCallback
         private ended = false
         private on_end = new Phaser.Events.EventEmitter()
 
-        constructor(parent: BaseView, on_step: UIConversationCallback) {
-            super(parent, parent.getWidth(), parent.getHeight());
+        constructor(builder: UIBuilder, on_step: UIConversationCallback) {
+            this.view = builder.view;
 
-            this.drawBackground(0x404450, undefined, undefined, 0.7, () => this.forward());
+            this.container = builder.container("conversation");
+            this.builder = builder.in(this.container);
+            this.overlay = this.builder.overlay({
+                color: 0x404450,
+                alpha: 0.7,
+                on_click: () => this.forward()
+            });
             this.setVisible(false);
 
             this.on_step = on_step;
@@ -104,13 +138,33 @@ module TK.SpaceTac.UI {
             this.forward();
         }
 
+        /**
+         * Clear the content of previous message, if any
+         */
+        clearContent(): void {
+            if (this.message) {
+                this.message.destroy();
+                this.message = undefined;
+            }
+        }
+
+        /**
+         * Set the global visibility
+         */
+        setVisible(visible: boolean, duration = 0): void {
+            this.container.setVisible(visible, duration);
+        }
+
+        /**
+         * Destroy the conversation handler
+         */
         destroy() {
             if (!this.ended) {
                 this.ended = true;
                 this.on_end.emit("done");
             }
 
-            super.destroy();
+            this.container.destroy();
         }
 
         /**
@@ -132,9 +186,8 @@ module TK.SpaceTac.UI {
         setCurrentMessage(style: UIConversationStyle, content: string, width: number, height: number, relx: number, rely: number): void {
             this.clearContent();
 
-            let message = new UIConversationMessage(this, width, height, content, style);
-            message.addButton(width - 60, height - 60, () => this.forward(), "common-arrow");
-            message.setPositionInsideParent(relx, rely);
+            this.message = new UIConversationMessage(this.builder, width, height, content, style, () => this.forward());
+            this.message.positionRelative(relx, rely);
 
             this.setVisible(true, 700);
         }
@@ -151,7 +204,7 @@ module TK.SpaceTac.UI {
             style.image_size = 256;
 
             let own = this.view.gameui.session.player.is(ship.fleet.player);
-            this.setCurrentMessage(style, content, 900, 300, own ? 0.1 : 0.9, own ? 0.2 : 0.8);
+            this.setCurrentMessage(style, content, 900, 310, own ? 0.1 : 0.9, own ? 0.2 : 0.8);
         }
 
         /**
@@ -167,8 +220,8 @@ module TK.SpaceTac.UI {
         /**
          * Convenience to create a conversation from a list of pieces
          */
-        static newFromPieces(view: BaseView, pieces: UIConversationPiece[]): UIConversation {
-            let result = new UIConversation(view, (conversation, step) => {
+        static newFromPieces(builder: UIBuilder, pieces: UIConversationPiece[]): UIConversation {
+            let result = new UIConversation(builder, (conversation, step) => {
                 if (step >= pieces.length) {
                     return false;
                 } else {
