@@ -134,20 +134,6 @@ module TK.SpaceTac.UI.Specs {
     }
 
     /**
-     * Check that a layer contains the given component at a given index
-     */
-    export function checkComponentInLayer(check: TestContext, layer: UIContainer, index: number, component: UIComponent) {
-        if (index >= layer.list.length) {
-            check.fail(`Not enough children in group ${layer.name} for ${component} at index ${index}`);
-        } else {
-            let child = layer.list[index];
-            if (child !== (<any>component).container) {
-                check.fail(`${component} is not at index ${index} in ${layer.name}`);
-            }
-        }
-    }
-
-    /**
      * Simulate a click on a button
      */
     export function testClick(button: UIButton): void {

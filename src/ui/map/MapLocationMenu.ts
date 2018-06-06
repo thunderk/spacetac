@@ -1,5 +1,3 @@
-/// <reference path="../common/UIComponent.ts" />
-
 module TK.SpaceTac.UI {
     /**
      * Menu to display selected map location, and associated actions

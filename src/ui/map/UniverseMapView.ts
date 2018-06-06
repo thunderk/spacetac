@@ -105,8 +105,7 @@ module TK.SpaceTac.UI {
             this.actions = new MapLocationMenu(this, this.layer_overlay, 30, 30);
 
             this.missions = new ActiveMissionsDisplay(this, this.player.missions, this.mission_markers);
-            this.missions.setPosition(20, 720);
-            this.missions.moveToLayer(this.layer_overlay);
+            this.missions.moveTo(this.layer_overlay, 20, 720);
 
             builder.in(this.layer_overlay, builder => {
                 this.zoom_in = builder.button("map-zoom-in", 1787, 54, () => this.setZoom(this.zoom + 1), "Zoom in");

@@ -1,21 +1,37 @@
-/// <reference path="../common/UIComponent.ts" />
+/// <reference path="../common/UIContainer.ts" />
 
 module TK.SpaceTac.UI {
     /**
      * Widget to display the active missions list
      */
-    export class ActiveMissionsDisplay extends UIComponent {
+    export class ActiveMissionsDisplay {
+        readonly container: UIContainer
+        private builder: UIBuilder
         private missions: ActiveMissions
         private hash: number
         private markers?: MissionLocationMarker
 
-        constructor(parent: BaseView, missions: ActiveMissions, markers?: MissionLocationMarker) {
-            super(parent, 520, 240);
+        constructor(view: BaseView, missions: ActiveMissions, markers?: MissionLocationMarker) {
+            let builder = new UIBuilder(view);
+            this.container = builder.container("active-missions");
+            this.builder = builder.in(this.container);
             this.missions = missions;
             this.hash = missions.getHash();
             this.markers = markers;
 
             this.update();
+        }
+
+        /**
+         * Move to a specific location inside a parent
+         */
+        moveTo(parent: UIContainer, x: number, y: number): void {
+            parent.add(this.container);
+            this.container.setPosition(x, y);
+        }
+
+        setVisible(visible: boolean, duration = 0): void {
+            this.container.setVisible(visible, duration);
         }
 
         /**
@@ -38,7 +54,7 @@ module TK.SpaceTac.UI {
          * Update the current missions list
          */
         private update() {
-            this.clearContent();
+            this.container.removeAll(true);
 
             let markers: [StarLocation | Star, string][] = [];
 
@@ -47,8 +63,14 @@ module TK.SpaceTac.UI {
             let offset = 245 - active.length * spacing;
             active.forEach((mission, idx) => {
                 let image = mission.main ? "map-mission-main" : "map-mission-standard";
-                this.addImage(35, offset + spacing * idx, image);
-                this.addText(90, offset + spacing * idx, mission.current_part.title, "#d2e1f3", 20, false, false, 430, true);
+                this.builder.image(image, 35, offset + spacing * idx, true);
+                this.builder.text(mission.current_part.title, 90, offset + spacing * idx, {
+                    color: "#d2e1f3",
+                    size: 20,
+                    width: 430,
+                    center: false,
+                    vcenter: true
+                });
 
                 let location = mission.current_part.getLocationHint();
                 if (location) {

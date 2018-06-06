@@ -1,5 +1,3 @@
-/// <reference path="UIComponent.ts" />
-
 module TK.SpaceTac.UI {
     export type UIConversationPiece = { interlocutor: Ship, message: string }
     export type UIConversationCallback = (conversation: UIConversation, step: number) => boolean
