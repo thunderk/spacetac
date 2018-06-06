@@ -60,10 +60,10 @@ module TK.SpaceTac.UI.Specs {
             check.equals(display.getIcon(), "action-testaction");
 
             upgrade.actions = [];
-            check.equals(display.getIcon(), "translucent");
+            check.equals(display.getIcon(), "common-transparent");
 
             upgrade.effects = [new DamageEffect(10)];
-            check.equals(display.getIcon(), "translucent");
+            check.equals(display.getIcon(), "common-transparent");
 
             upgrade.effects = [
                 new DamageEffect(10),

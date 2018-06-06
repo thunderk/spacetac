@@ -23,18 +23,29 @@ module TK.SpaceTac.UI {
 
             builder.configure(10, 6, this.battleview.arena.getBoundaries());
 
+            ShipTooltip.fillInfo(builder, ship, this.battleview.battle, this.battleview.player);
+
+            let sprite = this.battleview.arena.findShipSprite(ship);
+            if (sprite) {
+                this.container.show(UITools.getBounds(sprite.frame_owner));
+            }
+        }
+
+        static fillInfo(builder: TooltipBuilder, ship: Ship, battle?: Battle, player?: Player): boolean {
             let portrait_bg = builder.image("battle-tooltip-ship-portrait", 0, 0);
             builder.in(portrait_bg, builder => {
                 let portrait = builder.image(`ship-${ship.model.code}-portrait`, 1, 1);
                 portrait.setScale(0.75);
             });
 
-            let enemy = !this.battleview.player.is(ship.fleet.player);
+            let enemy = player && !player.is(ship.fleet.player);
             builder.text(ship.getName(), 230, 0, { color: enemy ? "#cc0d00" : "#ffffff", size: 22, bold: true });
 
             if (ship.alive) {
-                let turns = this.battleview.battle.getPlayOrder(ship);
-                builder.text((turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), 230, 36, { color: "#cccccc", size: 18 });
+                if (battle) {
+                    let turns = battle.getPlayOrder(ship);
+                    builder.text((turns == 0) ? "Playing" : ((turns == 1) ? "Plays next" : `Plays in ${turns} turns`), 230, 36, { color: "#cccccc", size: 18 });
+                }
 
                 ShipTooltip.addValue(builder, 0, "#eb4e4a", "attribute-hull_capacity", ship.getValue("hull"), ship.getAttribute("hull_capacity"));
                 ShipTooltip.addValue(builder, 1, "#2ad8dc", "attribute-shield_capacity", ship.getValue("shield"), ship.getAttribute("shield_capacity"));
@@ -65,10 +76,7 @@ module TK.SpaceTac.UI {
                     { color: "#a899db", size: 20, center: true, vcenter: true });
             }
 
-            let sprite = this.battleview.arena.findShipSprite(ship);
-            if (sprite) {
-                this.container.show(UITools.getBounds(sprite.frame_owner));
-            }
+            return true;
         }
 
         private static addValue(builder: UIBuilder, idx: number, color: string, icon: string, val: number, max?: number) {

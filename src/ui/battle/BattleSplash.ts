@@ -26,7 +26,9 @@ module TK.SpaceTac.UI {
 
                 this.fleet1.ships.forEach((ship, index) => {
                     let ship_card = builder.image("battle-splash-ship-card", -86 + index * 96, -72, true);
-                    let ship_portrait = builder.in(ship_card).image(`ship-${ship.model.code}-portrait`, 0, 0, true);
+                    let ship_portrait = builder.in(ship_card).button(`ship-${ship.model.code}-portrait`, 0, 0, undefined, filler => ShipTooltip.fillInfo(filler, ship), undefined, {
+                        center: true
+                    });
                     ship_portrait.setScale(0.3);
                 });
             });
@@ -41,7 +43,9 @@ module TK.SpaceTac.UI {
 
                 this.fleet2.ships.forEach((ship, index) => {
                     let ship_card = builder.image("battle-splash-ship-card", -86 + index * 96, -72, true);
-                    let ship_portrait = builder.in(ship_card).image(`ship-${ship.model.code}-portrait`, 0, 0, true);
+                    let ship_portrait = builder.in(ship_card).button(`ship-${ship.model.code}-portrait`, 0, 0, undefined, filler => ShipTooltip.fillInfo(filler, ship), undefined, {
+                        center: true
+                    });
                     ship_portrait.setAngle(180);
                     ship_portrait.setScale(0.3);
                 });
@@ -72,10 +76,16 @@ module TK.SpaceTac.UI {
         /**
          * Create an overlay, returns when it is clicked
          */
-        overlay(builder: UIBuilder): Promise<UIButton> {
+        overlay(builder: UIBuilder): Promise<void> {
             return new Promise(resolve => {
-                let overlay = builder.button("battle-overlay", this.view.getMidWidth(), this.view.getMidHeight(), () => resolve(overlay), undefined, undefined, { center: true });
-                overlay.setScale(this.view.getWidth() / overlay.width, this.view.getHeight() / overlay.height);
+                let overlay = builder.overlay({
+                    color: 0x000000,
+                    alpha: 0.5,
+                    on_click: () => {
+                        overlay.destroy();
+                        resolve();
+                    }
+                });
             });
         }
 
@@ -90,10 +100,7 @@ module TK.SpaceTac.UI {
             let components = this.components(builder.in(container), container);
 
             return Promise.all([
-                overlay.then(overlayobj => {
-                    container.visible = false;
-                    overlayobj.destroy();
-                }),
+                overlay.then(() => container.setVisible(false)),
                 components
             ]).then(() => {
                 container.destroy();

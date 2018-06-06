@@ -70,7 +70,7 @@ module TK.SpaceTac.UI {
             this.xhidden = -this.view.getWidth();
             this.container.x = this.xhidden;
 
-            this.image_portrait = this.builder.image("translucent", 435, 271, true);
+            this.image_portrait = this.builder.image("common-transparent", 435, 271, true);
 
             this.builder.image("character-entry", 24, 740);
 
@@ -223,7 +223,7 @@ module TK.SpaceTac.UI {
                 builder.in(builder.container("actions"), builder => {
                     let actions = ship.model.getActions(1, []);
                     actions.forEach(action => {
-                        let button = builder.button("translucent", 0, 66, undefined, action.getEffectsDescription());
+                        let button = builder.button("common-transparent", 0, 66, undefined, action.getEffectsDescription());
 
                         builder.in(button, builder => {
                             let icon = builder.image(`action-${action.code}`);

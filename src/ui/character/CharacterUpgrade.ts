@@ -105,10 +105,10 @@ module TK.SpaceTac.UI {
                 if (attr && (attr instanceof AttributeEffect || attr instanceof AttributeMultiplyEffect)) {
                     return `attribute-${attr.attrcode}`;
                 } else {
-                    return "translucent";
+                    return "common-transparent";
                 }
             } else {
-                return "translucent";
+                return "common-transparent";
             }
         }
     }

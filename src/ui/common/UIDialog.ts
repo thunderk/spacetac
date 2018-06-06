@@ -36,9 +36,10 @@ module TK.SpaceTac.UI {
          * Add an input-capturing overlay
          */
         addOverlay(layer: UIContainer): void {
-            let overlay = new UIBuilder(this.view, layer).image("translucent");
-            overlay.setInteractive();
-            overlay.setScale(this.view.getWidth() / overlay.width, this.view.getHeight() / overlay.height);
+            new UIBuilder(this.view, layer).overlay({
+                color: 0x888888,
+                alpha: 0.3
+            });
         }
 
         /**
