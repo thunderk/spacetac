@@ -10,6 +10,14 @@ module TK.SpaceTac.UI {
         angle: { start: number, span: number }
     }
 
+    export interface UIGraphicsLineOptions {
+        start: { x: number, y: number }
+        end: { x: number, y: number }
+        color: number,
+        alpha?: number,
+        width?: number
+    }
+
     /**
      * UI component that supports drawing simple shapes (circles, lines...)
      */
@@ -71,6 +79,18 @@ module TK.SpaceTac.UI {
                 this.lineStyle(options.border.width || 1, options.border.color, options.border.alpha);
                 this.strokeCircle(x, y, options.radius);
             }
+        }
+
+        /**
+         * Add a line
+         */
+        addLine(options: UIGraphicsLineOptions): void {
+            this.beginPath();
+            this.lineStyle(coalesce(options.width, 1), options.color, coalesce(options.alpha, 1));
+            this.moveTo(options.start.x, options.start.y);
+            this.lineTo(options.end.x, options.end.y);
+            this.closePath();
+            this.strokePath();
         }
     }
 }

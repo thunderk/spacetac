@@ -78,19 +78,21 @@ module TK.SpaceTac.UI {
          * Draw a vector, with line and gradation
          */
         drawVector(color: number, x1: number, y1: number, x2: number, y2: number, gradation = 0) {
-            let line = this.drawn_info;
-            line.lineStyle(6, color);
-            line.beginPath();
-            line.moveTo(x1, y1);
-            line.lineTo(x2, y2);
-            line.strokePath();
-            line.beginPath();
-            line.lineStyle(2, 0x000000, 0.6);
-            line.moveTo(x1, y1);
-            line.lineTo(x2, y2);
-            line.closePath();
-            line.strokePath();
-            line.visible = true;
+            let graphics = this.drawn_info;
+            graphics.addLine({
+                start: { x: x1, y: y1 },
+                end: { x: x2, y: y2 },
+                width: 6,
+                color: color
+            });
+            graphics.addLine({
+                start: { x: x1, y: y1 },
+                end: { x: x2, y: y2 },
+                width: 2,
+                color: 0,
+                alpha: 0.6
+            });
+            graphics.setVisible(true);
 
             if (gradation) {
                 let dx = x2 - x1;
@@ -99,10 +101,14 @@ module TK.SpaceTac.UI {
                 let angle = Math.atan2(dy, dx);
                 dx = Math.cos(angle);
                 dy = Math.sin(angle);
-                line.lineStyle(3, color);
+                graphics.lineStyle(3, color);
                 for (let d = gradation; d <= dist; d += gradation) {
-                    line.moveTo(x1 + dx * d + dy * 10, y1 + dy * d - dx * 10);
-                    line.lineTo(x1 + dx * d - dy * 10, y1 + dy * d + dx * 10);
+                    graphics.addLine({
+                        start: { x: x1 + dx * d + dy * 10, y: y1 + dy * d - dx * 10 },
+                        end: { x: x1 + dx * d - dy * 10, y: y1 + dy * d + dx * 10 },
+                        width: 3,
+                        color: color,
+                    });
                 }
             }
         }

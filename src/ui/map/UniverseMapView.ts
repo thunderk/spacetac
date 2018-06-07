@@ -79,11 +79,12 @@ module TK.SpaceTac.UI {
 
                 let result = builder.in(this.starlinks_group).graphics("starlink");
                 if (loc1 && loc2) {
-                    result.lineStyle(0.01, 0x6cc7ce);
-                    result.beginPath();
-                    result.moveTo(starlink.first.x - 0.5 + loc1.x, starlink.first.y - 0.5 + loc1.y);
-                    result.lineTo(starlink.second.x - 0.5 + loc2.x, starlink.second.y - 0.5 + loc2.y);
-                    result.strokePath();
+                    result.addLine({
+                        start: { x: starlink.first.x + loc1.x, y: starlink.first.y + loc1.y },
+                        end: { x: starlink.second.x + loc2.x, y: starlink.second.y + loc2.y },
+                        color: 0x6cc7ce,
+                        width: 0.01,
+                    });
                 }
                 result.setDataEnabled();
                 result.data.set("link", starlink);
