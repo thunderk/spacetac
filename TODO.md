@@ -23,13 +23,13 @@ Menu/settings/saves
 Map/story
 ---------
 
-* Add sound effects and more visual effects (jumps...)
 * Add factions and reputation
 * Allow to cancel secondary missions
 * Forbid to end up with more than 5 ships in the fleet because of escorts
 * Fix problems when several dialogs are active at the same time
 * Add a zoom level, to see the location only
 * Restore the progressive text effect
+* Improve performance when refreshing (and thus during jumps)
 
 Character sheet
 ---------------

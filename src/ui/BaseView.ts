@@ -75,14 +75,19 @@ module TK.SpaceTac.UI {
 
         create() {
             // Layers
-            this.layers = this.add.container(0, 0);
+            this.layers = new UIContainer(this);
+            this.add.existing(this.layers);
             this.layers.setName("View layers");
-            this.dialogs_layer = this.add.container(0, 0);
+            this.dialogs_layer = new UIContainer(this);
             this.dialogs_layer.setName("Dialogs layer");
-            this.tooltip_layer = this.add.container(0, 0);
+            this.add.existing(this.dialogs_layer);
+            this.tooltip_layer = new UIContainer(this);
             this.tooltip_layer.setName("Tooltip layer");
+            this.add.existing(this.tooltip_layer);
             this.tooltip = new Tooltip(this);
-            this.messages_layer = this.add.container(0, 0);
+            this.messages_layer = new UIContainer(this);
+            this.messages_layer.setName("Messages layer");
+            this.add.existing(this.messages_layer);
             this.messages = new Messages(this);
             this.dialogs_opened = [];
 

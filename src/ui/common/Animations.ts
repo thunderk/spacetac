@@ -22,11 +22,9 @@ module TK.SpaceTac.UI {
      * This is a wrapper around phaser's tweens.
      */
     export class Animations {
-        private tweens: Phaser.Tweens.TweenManager
         private immediate = false
 
-        constructor(tweens: Phaser.Tweens.TweenManager) {
-            this.tweens = tweens;
+        constructor(private tweens: Phaser.Tweens.TweenManager) {
         }
 
         /**
@@ -39,11 +37,14 @@ module TK.SpaceTac.UI {
         }
 
         /**
-         * Kill previous tweens from an object
+         * Kill previous tweens currently running on an object's properties
          */
-        killPrevious(obj: object): void {
-            // TODO Only updated properties
-            this.tweens.killTweensOf(obj);
+        killPrevious<T extends object>(obj: T, properties: Extract<keyof T, string>[]): void {
+            this.tweens.getTweensOf(obj).forEach(tween => {
+                if (tween.data && any(tween.data, data => bool(data.key) && contains(properties, data.key))) {
+                    tween.stop();
+                }
+            });
         }
 
         /**
@@ -70,7 +71,7 @@ module TK.SpaceTac.UI {
          * Display an object, with opacity transition
          */
         show(obj: IAnimationFadeable, duration = 1000, alpha = 1): void {
-            this.killPrevious(obj);
+            this.killPrevious(obj, ['alpha']);
 
             if (!obj.visible) {
                 obj.alpha = 0;
@@ -105,7 +106,7 @@ module TK.SpaceTac.UI {
          * Hide an object, with opacity transition
          */
         hide(obj: IAnimationFadeable, duration = 1000, alpha = 0): void {
-            this.killPrevious(obj);
+            this.killPrevious(obj, ['alpha']);
 
             if (obj.changeStateFrame) {
                 obj.changeStateFrame("Out");
@@ -155,8 +156,8 @@ module TK.SpaceTac.UI {
          * Add an asynchronous animation to an object.
          */
         addAnimation<T extends object>(obj: T, properties: Partial<T>, duration: number, ease = "Linear", delay = 0, loop = 1, yoyo = false): Promise<void> {
-            return new Promise((resolve, reject) => {
-                this.killPrevious(obj);
+            return new Promise(resolve => {
+                this.killPrevious(obj, keys(properties));
 
                 this.tweens.add(merge<object>({
                     targets: obj,
@@ -232,12 +233,12 @@ module TK.SpaceTac.UI {
          * Returns the animation duration.
          */
         moveInSpace(obj: Phaser.GameObjects.Components.Transform, x: number, y: number, angle: number, rotated_obj = obj): number {
+            this.killPrevious(obj, ["x", "y"]);
+
             if (x == obj.x && y == obj.y) {
-                this.killPrevious(obj);
                 return this.rotationTween(rotated_obj, angle, 0.5);
             } else {
-                this.killPrevious(obj);
-                this.killPrevious(rotated_obj);
+                this.killPrevious(rotated_obj, ["rotation"]);
                 let distance = Target.newFromLocation(obj.x, obj.y).getDistanceTo(Target.newFromLocation(x, y));
                 let duration = Math.sqrt(distance / 1000) * 3000;
                 let curve_force = distance * 0.4;

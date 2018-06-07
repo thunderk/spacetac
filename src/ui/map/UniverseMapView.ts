@@ -94,7 +94,7 @@ module TK.SpaceTac.UI {
             this.starsystems = this.universe.stars.map(star => new StarSystemDisplay(this, star));
             this.starsystems.forEach(starsystem => this.layer_universe.add(starsystem));
 
-            this.player_fleet = new FleetDisplay(this, this.player.fleet);
+            this.player_fleet = new FleetDisplay(this, this.player.fleet, this.universe, this.current_location);
             this.layer_universe.add(this.player_fleet);
 
             this.current_location = new CurrentLocationMarker(this, this.player_fleet);
@@ -290,7 +290,9 @@ module TK.SpaceTac.UI {
                 let dest_location = location.jump_dest;
                 let dest_star = dest_location.star;
                 this.player_fleet.moveToLocation(dest_location, 3, duration => {
-                    this.timer.schedule(duration / 3, () => this.updateInfo(dest_star, false));
+                    this.player_fleet.showJumpEffect(location.getDistanceTo(dest_location), duration);
+                    this.timer.schedule(duration * 0.3, () => this.updateInfo(dest_star, false));
+                    this.timer.schedule(duration * 0.7, () => this.player_fleet.showJumpEffect());
                     this.setCamera(dest_star.x, dest_star.y, dest_star.radius * 2, duration, "Cubic.easeOut");
                 }, () => {
                     this.setInteractionEnabled(true);

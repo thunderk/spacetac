@@ -1,18 +1,10 @@
 module TK.SpaceTac.UI.Specs {
     testing("WeaponEffect", test => {
         let testgame = setupBattleview(test);
-        let clock = test.clock();
-        let t = 0;
 
         function checkEmitters(step: string, expected: number) {
             test.check.same(testgame.view.arena.layer_weapon_effects.length, expected, `${step} - layer children`);
             //test.check.same(keys(testgame.view.particles.emitters).length, expected, `${step} - registered emitters`);
-        }
-
-        function fastForward(milliseconds: number) {
-            t += milliseconds;
-            clock.forward(milliseconds);
-            testgame.ui.headlessStep(t, milliseconds);
         }
 
         test.case("displays shield hit effect", check => {
@@ -25,7 +17,7 @@ module TK.SpaceTac.UI.Specs {
             let layer = battleview.arena.layer_weapon_effects;
             check.equals(layer.length, 1);
 
-            clock.forward(600);
+            testgame.clockForward(600);
             check.equals(layer.length, 2);
 
             let child = layer.list[0];
@@ -91,12 +83,12 @@ module TK.SpaceTac.UI.Specs {
 
             effect.gunEffect();
             checkEmitters("gun effect started", 1);
-            fastForward(6000);
+            testgame.clockForward(6000);
             checkEmitters("gun effect ended", 0);
 
             effect.hullImpactEffect({ x: 0, y: 0 }, { x: 50, y: 50 }, 1000, 2000);
             checkEmitters("hull effect started", 1);
-            fastForward(8500);
+            testgame.clockForward(8500);
             checkEmitters("hull effect ended", 0);
         });
 

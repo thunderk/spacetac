@@ -65,5 +65,21 @@ module TK.SpaceTac.UI.Specs {
             check.nears(points[2], 0);
             check.nears(points[3], Math.PI * 0.25);
         });
+
+        test.case("stops previous animations before starting a new one", check => {
+            let obj = { x: 0, y: 0 };
+            testgame.view.animations.addAnimation(obj, { x: 1 }, 1000);
+            testgame.clockForward(1);
+            testgame.clockForward(1);
+            check.equals(testgame.view.tweens.getAllTweens().length, 1);
+            testgame.view.animations.addAnimation(obj, { y: 1 }, 1000);
+            testgame.clockForward(1);
+            testgame.clockForward(1);
+            check.equals(testgame.view.tweens.getAllTweens().length, 2);
+            testgame.view.animations.addAnimation(obj, { x: 2 }, 1000);
+            testgame.clockForward(1);
+            testgame.clockForward(1);
+            check.equals(testgame.view.tweens.getAllTweens().length, 2);
+        });
     });
 }

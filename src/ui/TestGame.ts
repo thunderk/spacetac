@@ -2,22 +2,37 @@
 
 module TK.SpaceTac.UI.Specs {
     /**
-     * Class to hold references to test objects (used as singleton in "describe" blocks)
+     * Class to hold references to test objects (used as singleton in "testing" blocks)
      * 
-     * Attributes should only be accessed from inside corresponding "it" blocks (they are initialized by the setup).
+     * Attributes should only be accessed from inside corresponding "test.case" blocks (they are initialized by the setup).
      */
     export class TestGame<T extends Phaser.Scene> {
-        ui!: MainUI;
-        view!: T;
-        multistorage!: Multi.FakeRemoteStorage;
-        clock!: FakeClock;
+        check!: TestContext
+        ui!: MainUI
+        view!: T
+        multistorage!: Multi.FakeRemoteStorage
+        clock: FakeClock
+        time = 0
+
+        constructor(test: TestSuite) {
+            this.clock = test.clock();
+        }
+
+        /**
+         * Advance the time in the view and fake testing clock
+         */
+        clockForward(milliseconds: number) {
+            this.time += milliseconds;
+            this.clock.forward(milliseconds);
+            this.ui.headlessStep(this.time, milliseconds);
+        }
     }
 
     /**
      * Setup a headless test UI, with a single view started.
      */
     export function setupSingleView<T extends Phaser.Scene & { create: Function }>(test: TestSuite, buildView: () => [T, object]) {
-        let testgame = new TestGame<T>();
+        let testgame = new TestGame<T>(test);
 
         test.asetup(() => new Promise((resolve, reject) => {
             let check = new TestContext();  // TODO Should be taken from test suite
@@ -25,6 +40,7 @@ module TK.SpaceTac.UI.Specs {
             check.patch(console, "warn", null);
 
             testgame.ui = new MainUI(true);
+            testgame.check = check;
 
             let [scene, scenedata] = buildView();
 
@@ -131,6 +147,17 @@ module TK.SpaceTac.UI.Specs {
         if (check.instance(node, UIText, "node should be an UIText")) {
             check.equals(node.text, content);
         }
+    }
+
+    /**
+     * Check a simulation of a tweened property
+     */
+    export function checkTween<T, P extends keyof T>(game: TestGame<any>, obj: T, property: P, expected: number[]): void {
+        let tweendata = game.view.animations.simulate(obj, property, expected.length);
+        game.check.equals(tweendata.length, expected.length, "number of points");
+        expected.forEach((value, idx) => {
+            game.check.nears(tweendata[idx], value, undefined, `point ${idx}`);
+        });
     }
 
     /**

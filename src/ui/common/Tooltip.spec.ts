@@ -1,7 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("Tooltip", test => {
         let testgame = setupEmptyView(test);
-        let clock = test.clock();
 
         test.case("shows near the hovered button", check => {
             let button = new UIBuilder(testgame.view).button("fake");
@@ -18,7 +17,7 @@ module TK.SpaceTac.UI.Specs {
             button.emit("pointerover", { pointer: pointer });
             check.equals(container.visible, false);
 
-            clock.forward(1000);
+            testgame.clockForward(1000);
             container.update();
             check.equals(container.visible, true);
             check.equals(container.x, 113);

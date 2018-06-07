@@ -13,25 +13,23 @@ module TK.SpaceTac.UI {
      * Group to display a fleet
      */
     export class FleetDisplay extends UIContainer {
-        private map: UniverseMapView
-        private fleet: Fleet
         private ship_count = 0
+        private is_moving = false
 
-        constructor(parent: UniverseMapView, fleet: Fleet) {
-            super(parent);
-
-            this.map = parent;
-            this.fleet = fleet;
+        constructor(private map: BaseView, private fleet: Fleet, private universe: Universe, private location_marker?: CurrentLocationMarker, orbit = true) {
+            super(map);
 
             this.updateShipSprites();
 
-            let location = this.map.universe.getLocation(fleet.location);
+            let location = this.universe.getLocation(fleet.location);
             if (location) {
                 this.setPosition(location.star.x + location.x, location.star.y + location.y);
             }
             this.setScale(SCALING, SCALING);
 
-            this.loopOrbit();
+            if (orbit) {
+                this.loopOrbit();
+            }
         }
 
         /**
@@ -54,14 +52,14 @@ module TK.SpaceTac.UI {
         }
 
         get location(): StarLocation {
-            return this.map.universe.getLocation(this.fleet.location) || new StarLocation();
+            return this.universe.getLocation(this.fleet.location) || new StarLocation();
         }
 
         /**
          * Animate to a given position in orbit of its current star location
          */
-        goToOrbitPoint(angle: number, speed = 1, fullturns = 0, then: Function | null = null, ease = false) {
-            this.map.animations.killPrevious(this);
+        async goToOrbitPoint(angle: number, speed = 1, fullturns = 0, ease = false): Promise<void> {
+            this.map.animations.killPrevious<UIContainer>(this, ["angle"]);
             this.rotation %= PI2;
 
             let target = -angle;
@@ -70,33 +68,32 @@ module TK.SpaceTac.UI {
             }
             target -= PI2 * fullturns;
             let distance = Math.abs(target - this.rotation) / PI2;
-            let tween = this.map.animations.addAnimation<UIContainer>(this, { rotation: target }, 30000 * distance / speed, ease ? "Cubic.easeIn" : "Linear");
-            if (then) {
-                tween.then(() => then());
-            }
+            await this.map.animations.addAnimation<UIContainer>(this, { rotation: target }, 30000 * distance / speed, ease ? "Cubic.easeIn" : "Linear");
         }
 
         /**
          * Make the fleet loop in orbit
          */
         loopOrbit() {
-            this.goToOrbitPoint(this.rotation + PI2, 1, 0, () => {
-                this.loopOrbit();
-            });
+            if (!this.is_moving) {
+                this.goToOrbitPoint(this.rotation + PI2, 1, 0).then(() => this.loopOrbit());
+            }
         }
 
         /**
          * Make the fleet move to another location in the same system
          */
         moveToLocation(location: StarLocation, speed = 1, on_leave: ((duration: number) => any) | null = null, on_finished: Function | null = null) {
-            let fleet_location = this.map.universe.getLocation(this.fleet.location);
+            let fleet_location = this.universe.getLocation(this.fleet.location);
             if (fleet_location && this.fleet.move(location)) {
                 let dx = location.universe_x - fleet_location.universe_x;
                 let dy = location.universe_y - fleet_location.universe_y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
-                let angle = Math.atan2(dx, dy);
-                this.map.current_location.setFleetMoving(true);
-                this.goToOrbitPoint(angle - Math.PI / 2, 40, 1, () => {
+                let angle = Math.atan2(-dy, dx);
+                this.setMoving(true);
+                console.error(fleet_location, location, angle);
+                this.goToOrbitPoint(angle, 40, 1, true).then(() => {
+                    this.setRotation(-angle);
                     let duration = 10000 * distance / speed;
                     if (on_leave) {
                         on_leave(duration);
@@ -106,7 +103,7 @@ module TK.SpaceTac.UI {
                         if (this.fleet.battle) {
                             this.map.backToRouter();
                         } else {
-                            this.map.current_location.setFleetMoving(false);
+                            this.setMoving(false);
                             this.loopOrbit();
                         }
 
@@ -114,7 +111,33 @@ module TK.SpaceTac.UI {
                             on_finished();
                         }
                     });
-                }, true);
+                });
+            }
+        }
+
+        /**
+         * Display a jump flash effect
+         */
+        async showJumpEffect(lag = 0, duration = 0): Promise<void> {
+            this.map.audio.playOnce(lag ? "map-warp-out" : "map-warp-in");
+            let effect = this.getBuilder().image("map-jump-effect", 0, 150, true);
+            effect.setScale(0.01);
+            effect.setZ(-1);
+            if (lag && duration) {
+                this.map.animations.addAnimation(effect, { x: -lag / SCALING }, duration * 0.5, "Cubic.easeOut");
+            }
+            await this.map.animations.addAnimation(effect, { scaleX: 3, scaleY: 3 }, 100);
+            await this.map.animations.addAnimation(effect, { scaleX: 2, scaleY: 2, alpha: 0 }, 200);
+            effect.destroy();
+        }
+
+        /**
+         * Mark the fleet as moving
+         */
+        private setMoving(moving: boolean): void {
+            this.is_moving = moving;
+            if (this.location_marker) {
+                this.location_marker.setFleetMoving(moving);
             }
         }
     }

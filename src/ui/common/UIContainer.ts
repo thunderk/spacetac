@@ -4,6 +4,13 @@ module TK.SpaceTac.UI {
      */
     export class UIContainer extends Phaser.GameObjects.Container {
         /**
+         * Get a container to build UI components inside the container
+         */
+        getBuilder(): UIBuilder {
+            return new UIBuilder(<BaseView>this.scene, this);
+        }
+
+        /**
          * Fixed version that does not force (0, 0) to be in bounds
          */
         getBounds(output?: Phaser.Geom.Rectangle): Phaser.Geom.Rectangle {

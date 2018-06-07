@@ -2,7 +2,7 @@ module TK.SpaceTac.UI {
     /**
      * UI component to show a loader animation while waiting for something
      */
-    export class UIAwaiter extends Phaser.GameObjects.Container {
+    export class UIAwaiter extends UIContainer {
         constructor(view: BaseView, x: number, y: number, visible: boolean) {
             super(view, x, y);
             this.setName("awaiter");

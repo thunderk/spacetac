@@ -1,7 +1,6 @@
 module TK.SpaceTac.UI.Specs {
     testing("InputManager", test => {
         let testgame = setupEmptyView(test);
-        let clock = test.clock();
 
         test.case("handles hover and click on desktops and mobile targets", check => {
             let inputs = testgame.view.inputs;
@@ -46,7 +45,7 @@ module TK.SpaceTac.UI.Specs {
             [button, mocks] = newButton();
             check.in("Leaves on destroy", check => {
                 press(button);
-                clock.forward(150);
+                testgame.clockForward(150);
                 check.called(mocks.enter, 1);
                 check.called(mocks.leave, 0);
                 check.called(mocks.click, 0);
@@ -65,7 +64,7 @@ module TK.SpaceTac.UI.Specs {
                 let [button1, funcs1] = newButton();
                 let [button2, funcs2] = newButton();
                 enter(button1);
-                clock.forward(150);
+                testgame.clockForward(150);
                 check.called(funcs1.enter, 1);
                 check.called(funcs1.leave, 0);
                 check.called(funcs1.click, 0);
@@ -76,7 +75,7 @@ module TK.SpaceTac.UI.Specs {
                 check.called(funcs2.enter, 0);
                 check.called(funcs2.leave, 0);
                 check.called(funcs2.click, 0);
-                clock.forward(150);
+                testgame.clockForward(150);
                 check.called(funcs1.enter, 0);
                 check.called(funcs1.leave, 0);
                 check.called(funcs1.click, 0);
@@ -88,7 +87,7 @@ module TK.SpaceTac.UI.Specs {
             [button, mocks] = newButton();
             check.in("Hold to hover on mobile", check => {
                 button.emit("pointerdown", pointer);
-                clock.forward(150);
+                testgame.clockForward(150);
                 check.called(mocks.enter, 1);
                 check.called(mocks.leave, 0);
                 check.called(mocks.click, 0);
