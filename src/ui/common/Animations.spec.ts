@@ -57,8 +57,7 @@ module TK.SpaceTac.UI.Specs {
         test.case("animates rotation", check => {
             let obj = new UIBuilder(testgame.view).image("test");
             obj.setRotation(-Math.PI * 2.5);
-            let result = testgame.view.animations.rotationTween(obj, Math.PI * 0.25, 1, "Linear");
-            check.equals(result, 750);
+            testgame.view.animations.rotationTween(obj, Math.PI * 0.25, 1, "Linear");
             let points = testgame.view.animations.simulate(obj, "rotation", 4);
             check.nears(points[0], -Math.PI * 0.5);
             check.nears(points[1], -Math.PI * 0.25);

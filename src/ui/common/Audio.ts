@@ -36,7 +36,12 @@ module TK.SpaceTac.UI {
         /**
          * Play a single sound effect (fire-and-forget)
          */
-        playOnce(key: string): void {
+        playOnce(key: string, speed = 1): void {
+            if (speed != 1) {
+                // TODO
+                return;
+            }
+
             let manager = this.getManager();
             if (manager) {
                 if (this.hasCache(key)) {

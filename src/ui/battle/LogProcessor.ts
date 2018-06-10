@@ -155,15 +155,14 @@ module TK.SpaceTac.UI {
                 let ship = this.view.battle.playing_ship;
                 if (ship) {
                     let result = callback(ship);
-                    let timer = new Timer(true);
                     if (result.foreground) {
-                        let promise = result.foreground(false, timer);
+                        let promise = result.foreground(0);
                         if (result.background) {
                             let next = result.background;
-                            promise.then(() => next(false, timer));
+                            promise.then(() => next(0));
                         }
                     } else if (result.background) {
-                        result.background(false, timer);
+                        result.background(0);
                     }
                 }
             }
@@ -176,7 +175,7 @@ module TK.SpaceTac.UI {
             if (this.debug) {
                 console.log("Battle diff", diff);
             }
-            let timer = timed ? this.view.timer : new Timer(true);
+            let speed = timed ? 1 : 0;
 
             // TODO add priority to sort the delegates
             let delegates = this.subscriber.map(subscriber => subscriber(diff));
@@ -189,11 +188,11 @@ module TK.SpaceTac.UI {
                     this.background_promises = [];
                 }
 
-                let promises = foregrounds.map(foreground => foreground(timed, timer));
+                let promises = foregrounds.map(foreground => foreground(speed));
                 await Promise.all(promises);
             }
 
-            let promises = backgrounds.map(background => background(timed, timed ? this.view.timer : new Timer(true)));
+            let promises = backgrounds.map(background => background(speed));
             this.background_promises = this.background_promises.concat(promises);
         }
 
@@ -263,9 +262,9 @@ module TK.SpaceTac.UI {
                     if (action && action instanceof TriggerAction) {
                         let effect = new WeaponEffect(this.view.arena, ship, diff.target, action);
                         return {
-                            foreground: async (animate, timer) => {
-                                if (animate) {
-                                    await this.view.timer.sleep(effect.start())
+                            foreground: async (speed: number) => {
+                                if (speed) {
+                                    await effect.start(speed);
                                 }
                             }
                         }
@@ -286,14 +285,14 @@ module TK.SpaceTac.UI {
                 if (ship) {
                     let dead_ship = ship;
                     return {
-                        foreground: async (animate) => {
+                        foreground: async (speed: number) => {
                             if (dead_ship.is(this.view.ship_hovered)) {
                                 this.view.setShipHovered(null);
                             }
                             this.view.arena.markAsDead(dead_ship);
                             this.view.ship_list.refresh();
-                            if (animate) {
-                                await this.view.timer.sleep(2000);
+                            if (speed) {
+                                await this.view.timer.sleep(2000 / speed);
                             }
                         }
                     }
@@ -324,8 +323,8 @@ module TK.SpaceTac.UI {
      * *background* is started when no other foreground delegate is working or pending
      */
     export type LogProcessorDelegate = {
-        foreground?: (animate: boolean, timer: Timer) => Promise<void>,
-        background?: (animate: boolean, timer: Timer) => Promise<void>,
+        foreground?: (speed: number) => Promise<void>,
+        background?: (speed: number) => Promise<void>,
     }
 
     /**

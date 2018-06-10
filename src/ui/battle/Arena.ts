@@ -67,7 +67,7 @@ module TK.SpaceTac.UI {
 
             this.range_hint.setLayer(this.layer_hints);
             this.addShipSprites();
-            view.battle.drones.list().forEach(drone => this.addDrone(drone, false));
+            view.battle.drones.list().forEach(drone => this.addDrone(drone, 0));
 
             view.log_processor.register(diff => this.checkDroneDeployed(diff));
             view.log_processor.register(diff => this.checkDroneRecalled(diff));
@@ -218,10 +218,8 @@ module TK.SpaceTac.UI {
 
         /**
          * Spawn a new drone
-         * 
-         * Return the duration of deploy animation
          */
-        addDrone(drone: Drone, animate = true): number {
+        async addDrone(drone: Drone, speed = 1): Promise<void> {
             if (!this.findDrone(drone)) {
                 let sprite = new ArenaDrone(this.view, drone);
                 let owner = this.view.battle.getShip(drone.owner) || new Ship();
@@ -229,39 +227,32 @@ module TK.SpaceTac.UI {
                 this.layer_drones.add(sprite);
                 this.drone_sprites.push(sprite);
 
-                if (animate) {
+                if (speed) {
                     sprite.radius.setAlpha(0);
                     sprite.setPosition(owner.arena_x, owner.arena_y);
                     sprite.sprite.setRotation(owner.arena_angle);
-                    let move_duration = this.view.animations.moveInSpace(sprite, drone.x, drone.y, angle, sprite.sprite);
-                    this.view.animations.addAnimation(sprite.radius, { alpha: 1 }, 500, "Cubic.easeIn", move_duration);
-
-                    return move_duration + 500;
+                    await this.view.animations.moveInSpace(sprite, drone.x, drone.y, angle, sprite.sprite, speed);
+                    await this.view.animations.addAnimation(sprite.radius, { alpha: 1 }, 500 / speed, "Cubic.easeIn");
                 } else {
                     sprite.setPosition(drone.x, drone.y);
                     sprite.setRotation(angle);
-                    return 0;
                 }
 
             } else {
                 console.error("Drone added twice to arena", drone);
-                return 0;
             }
         }
 
         /**
          * Remove a destroyed drone
-         * 
-         * Return the duration of deploy animation
          */
-        removeDrone(drone: Drone): number {
+        async removeDrone(drone: Drone, speed = 1): Promise<void> {
             let sprite = this.findDrone(drone);
             if (sprite) {
                 remove(this.drone_sprites, sprite);
                 return sprite.setDestroyed();
             } else {
                 console.error("Drone not found in arena for removal", drone);
-                return 0;
             }
         }
 
@@ -290,14 +281,11 @@ module TK.SpaceTac.UI {
         private checkDroneDeployed(diff: BaseBattleDiff): LogProcessorDelegate {
             if (diff instanceof DroneDeployedDiff) {
                 return {
-                    foreground: async (animate) => {
-                        let duration = this.addDrone(diff.drone, animate);
-                        if (duration) {
+                    foreground: async (speed: number) => {
+                        if (speed) {
                             this.view.gameui.audio.playOnce("battle-drone-deploy");
-                            if (animate) {
-                                await this.view.timer.sleep(duration);
-                            }
                         }
+                        await this.addDrone(diff.drone, speed);
                     }
                 }
             } else {
@@ -311,12 +299,11 @@ module TK.SpaceTac.UI {
         private checkDroneRecalled(diff: BaseBattleDiff): LogProcessorDelegate {
             if (diff instanceof DroneRecalledDiff) {
                 return {
-                    foreground: async () => {
-                        let duration = this.removeDrone(diff.drone);
-                        if (duration) {
+                    foreground: async (speed: number) => {
+                        if (speed) {
                             this.view.gameui.audio.playOnce("battle-drone-destroy");
-                            await this.view.timer.sleep(duration);
                         }
+                        await this.removeDrone(diff.drone, speed);
                     }
                 }
             } else {

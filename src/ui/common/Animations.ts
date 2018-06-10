@@ -17,6 +17,16 @@ module TK.SpaceTac.UI {
     }
 
     /**
+     * Configuration object for blink animations
+     */
+    interface AnimationBlinkOptions {
+        alpha_on?: number
+        alpha_off?: number
+        times?: number
+        speed?: number
+    }
+
+    /**
      * Manager of all animations.
      * 
      * This is a wrapper around phaser's tweens.
@@ -177,13 +187,23 @@ module TK.SpaceTac.UI {
         /**
          * Catch the player eye with a blink effect
          */
-        async blink(obj: any, alpha_on = 1, alpha_off = 0.3, times = 3): Promise<void> {
+        async blink(obj: { alpha: number }, config: AnimationBlinkOptions = {}): Promise<void> {
+            let speed = coalesce(config.speed, 1);
+            let alpha_on = coalesce(config.alpha_on, 1);
+
+            if (!speed) {
+                obj.alpha = alpha_on;
+            }
+
+            let alpha_off = coalesce(config.alpha_off, 0.3);
+            let times = coalesce(config.times, 3);
+
             if (obj.alpha != alpha_on) {
-                await this.addAnimation(obj, { alpha: alpha_on }, 150);
+                await this.addAnimation(obj, { alpha: alpha_on }, 150 / speed);
             }
             for (let i = 0; i < times; i++) {
-                await this.addAnimation(obj, { alpha: alpha_off }, 150);
-                await this.addAnimation(obj, { alpha: alpha_on }, 150);
+                await this.addAnimation(obj, { alpha: alpha_off }, 150 / speed);
+                await this.addAnimation(obj, { alpha: alpha_on }, 150 / speed);
             }
         }
 
@@ -194,7 +214,7 @@ module TK.SpaceTac.UI {
          * 
          * Returns the duration
          */
-        rotationTween(obj: Phaser.GameObjects.Components.Transform, dest: number, speed = 1, easing = "Cubic.easeInOut"): number {
+        rotationTween(obj: Phaser.GameObjects.Components.Transform, dest: number, speed = 1, easing = "Cubic.easeInOut"): Promise<void> {
             // Immediately change the object's current rotation to be in range (-pi,pi)
             let value = UITools.normalizeAngle(obj.rotation);
             obj.setRotation(value);
@@ -210,9 +230,7 @@ module TK.SpaceTac.UI {
             let duration = distance * 1000 / speed;
 
             // Tween
-            this.addAnimation(obj, { rotation: dest }, duration, easing);
-
-            return duration;
+            return this.addAnimation(obj, { rotation: dest }, duration, easing);
         }
 
         /**
@@ -220,11 +238,10 @@ module TK.SpaceTac.UI {
          * 
          * Returns the animation duration.
          */
-        moveTo(obj: Phaser.GameObjects.Components.Transform, x: number, y: number, angle: number, rotated_obj = obj, ease = true): number {
-            let duration_rot = this.rotationTween(rotated_obj, angle, 0.5);
+        moveTo(obj: Phaser.GameObjects.Components.Transform, x: number, y: number, angle: number, rotated_obj = obj, speed = 1, ease = true): Promise<void> {
+            let duration_rot = this.rotationTween(rotated_obj, angle, 0.5 * speed);
             let duration_pos = arenaDistance(obj, { x: x, y: y }) * 2;
-            this.addAnimation(obj, { x: x, y: y }, duration_pos, ease ? "Quad.easeInOut" : "Linear");
-            return Math.max(duration_rot, duration_pos);
+            return this.addAnimation(obj, { x: x, y: y }, duration_pos / speed, ease ? "Quad.easeInOut" : "Linear");
         }
 
         /**
@@ -232,39 +249,41 @@ module TK.SpaceTac.UI {
          * 
          * Returns the animation duration.
          */
-        moveInSpace(obj: Phaser.GameObjects.Components.Transform, x: number, y: number, angle: number, rotated_obj = obj): number {
+        moveInSpace(obj: Phaser.GameObjects.Components.Transform, x: number, y: number, angle: number, rotated_obj = obj, speed = 1): Promise<void> {
             this.killPrevious(obj, ["x", "y"]);
 
             if (x == obj.x && y == obj.y) {
-                return this.rotationTween(rotated_obj, angle, 0.5);
+                return this.rotationTween(rotated_obj, angle, 0.5 * speed);
             } else {
                 this.killPrevious(rotated_obj, ["rotation"]);
                 let distance = Target.newFromLocation(obj.x, obj.y).getDistanceTo(Target.newFromLocation(x, y));
-                let duration = Math.sqrt(distance / 1000) * 3000;
+                let duration = Math.sqrt(distance / 1000) * 3000 / speed;
                 let curve_force = distance * 0.4;
                 let prevx = obj.x;
                 let prevy = obj.y;
                 let xpts = [obj.x, obj.x + Math.cos(rotated_obj.rotation) * curve_force, x - Math.cos(angle) * curve_force, x];
                 let ypts = [obj.y, obj.y + Math.sin(rotated_obj.rotation) * curve_force, y - Math.sin(angle) * curve_force, y];
                 let fobj = { t: 0 };
-                this.tweens.add({
-                    targets: [fobj],
-                    t: 1,
-                    duration: duration,
-                    ease: "Sine.easeInOut",
-                    onUpdate: () => {
-                        obj.setPosition(
-                            Phaser.Math.Interpolation.CubicBezier(fobj.t, xpts[0], xpts[1], xpts[2], xpts[3]),
-                            Phaser.Math.Interpolation.CubicBezier(fobj.t, ypts[0], ypts[1], ypts[2], ypts[3]),
-                        )
-                        if (prevx != obj.x || prevy != obj.y) {
-                            rotated_obj.setRotation(Math.atan2(obj.y - prevy, obj.x - prevx));
+                return new Promise(resolve => {
+                    this.tweens.add({
+                        targets: [fobj],
+                        t: 1,
+                        duration: duration,
+                        ease: "Sine.easeInOut",
+                        onComplete: resolve,
+                        onUpdate: () => {
+                            obj.setPosition(
+                                Phaser.Math.Interpolation.CubicBezier(fobj.t, xpts[0], xpts[1], xpts[2], xpts[3]),
+                                Phaser.Math.Interpolation.CubicBezier(fobj.t, ypts[0], ypts[1], ypts[2], ypts[3]),
+                            )
+                            if (prevx != obj.x || prevy != obj.y) {
+                                rotated_obj.setRotation(Math.atan2(obj.y - prevy, obj.x - prevx));
+                            }
+                            prevx = obj.x;
+                            prevy = obj.y;
                         }
-                        prevx = obj.x;
-                        prevy = obj.y;
-                    }
-                })
-                return duration;
+                    })
+                });
             }
         }
     }

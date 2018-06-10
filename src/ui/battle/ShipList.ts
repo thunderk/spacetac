@@ -62,7 +62,7 @@ module TK.SpaceTac.UI {
         setShipsFromBattle(battle: Battle, animate = true): void {
             this.clearAll();
             iforeach(battle.iships(true), ship => this.addShip(ship));
-            this.refresh(animate);
+            this.refresh(animate ? 1 : 0);
         }
 
         /**
@@ -71,8 +71,8 @@ module TK.SpaceTac.UI {
         bindToLog(log: LogProcessor): void {
             log.watchForShipChange(ship => {
                 return {
-                    foreground: async (animate) => {
-                        this.refresh(animate)
+                    foreground: async (speed: number) => {
+                        this.refresh(speed);
                     }
                 }
             });
@@ -114,7 +114,8 @@ module TK.SpaceTac.UI {
         /**
          * Update the locations of all items
          */
-        refresh(animate = true): void {
+        refresh(speed = 1): void {
+            let duration = speed ? 1000 / speed : 0;
             this.items.forEach(item => {
                 if (item.ship.alive) {
                     let position = this.battle.getPlayOrder(item.ship);
@@ -122,16 +123,16 @@ module TK.SpaceTac.UI {
                         item.visible = false;
                     } else {
                         if (position == 0) {
-                            item.moveAt(-14, 962, animate ? 1000 : 0);
+                            item.moveAt(-14, 962, duration);
                         } else {
-                            item.moveAt(2, 942 - position * 99, animate ? 1000 : 0);
+                            item.moveAt(2, 942 - position * 99, duration);
                         }
                         item.visible = true;
                         item.setZ(99 - position);
                     }
                 } else {
                     item.setZ(100);
-                    item.moveAt(200, item.y, animate ? 1000 : 0);
+                    item.moveAt(200, item.y, duration);
                 }
             });
         }

@@ -12,22 +12,19 @@ module TK.SpaceTac.UI.Specs {
             battleview.timer = new Timer();
 
             let effect = new WeaponEffect(battleview.arena, new Ship(), new Target(0, 0), new TriggerAction("weapon"));
-            effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 500, 3000, true);
+            effect.shieldImpactEffect({ x: 10, y: 10 }, { x: 20, y: 15 }, 1, true);
 
             let layer = battleview.arena.layer_weapon_effects;
-            check.equals(layer.length, 1);
-
-            testgame.clockForward(600);
             check.equals(layer.length, 2);
 
-            let child = layer.list[0];
-            if (check.instance(child, UIImage, "first child is an image")) {
+            check.instance(layer.list[0], Phaser.GameObjects.Particles.ParticleEmitterManager, "first child is an emitter");
+
+            let child = layer.list[1];
+            if (check.instance(child, UIImage, "second child is an image")) {
                 check.nears(child.rotation, -2.677945044588987, 10);
                 check.equals(child.x, 20, "x");
                 check.equals(child.y, 15, "y");
             }
-
-            check.instance(layer.list[1], Phaser.GameObjects.Particles.ParticleEmitterManager, "second child is an emitter");
         });
 
         test.case("displays gatling gun effect", check => {
@@ -36,14 +33,14 @@ module TK.SpaceTac.UI.Specs {
 
             let ship = nn(battleview.battle.playing_ship);
             let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromShip(ship), new TriggerAction("weapon"));
-            effect.gunEffect();
+            effect.bulletsExecutor(1);
 
             let layer = battleview.arena.layer_weapon_effects;
             check.equals(layer.length, 1);
             check.instance(layer.list[0], Phaser.GameObjects.Particles.ParticleEmitterManager, "first child is an emitter");
         });
 
-        test.case("displays shield and hull effect on impacted ships", check => {
+        test.acase("displays shield and hull effect on impacted ships", async check => {
             let battleview = testgame.view;
             battleview.timer = new Timer();
 
@@ -55,22 +52,27 @@ module TK.SpaceTac.UI.Specs {
 
             let dest = new Ship();
             let effect = new WeaponEffect(battleview.arena, dest, Target.newFromShip(dest), weapon);
-            check.patch(effect, "getEffectForWeapon", () => (() => 100));
+            check.patch(effect, "getEffectForWeapon", () => {
+                return {
+                    execution: () => Promise.resolve(),
+                    delay: () => 0
+                };
+            });
 
             let mock_shield_impact = check.patch(effect, "shieldImpactEffect", null);
             let mock_hull_impact = check.patch(effect, "hullImpactEffect", null);
 
             ship.setValue("shield", 0);
-            effect.start();
+            await effect.start(1);
             check.called(mock_shield_impact, 0);
             check.called(mock_hull_impact, [
-                [Target.newFromShip(dest), ship.location, 40, 400]
+                [Target.newFromShip(dest), ship.location, 1]
             ]);
 
             ship.setValue("shield", 10);
-            effect.start();
+            await effect.start(2);
             check.called(mock_shield_impact, [
-                [Target.newFromShip(dest), ship.location, 40, 800, false]
+                [Target.newFromShip(dest), ship.location, 2, false]
             ]);
             check.called(mock_hull_impact, 0);
         });
@@ -81,12 +83,12 @@ module TK.SpaceTac.UI.Specs {
 
             let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(50, 50), new TriggerAction("weapon"));
 
-            effect.gunEffect();
+            effect.bulletsExecutor(1);
             checkEmitters("gun effect started", 1);
             testgame.clockForward(6000);
             checkEmitters("gun effect ended", 0);
 
-            effect.hullImpactEffect({ x: 0, y: 0 }, { x: 50, y: 50 }, 1000, 2000);
+            effect.hullImpactEffect({ x: 0, y: 0 }, { x: 50, y: 50 }, 1);
             checkEmitters("hull effect started", 1);
             testgame.clockForward(8500);
             checkEmitters("hull effect ended", 0);
@@ -97,9 +99,10 @@ module TK.SpaceTac.UI.Specs {
             battleview.timer = new Timer();
 
             let effect = new WeaponEffect(battleview.arena, new Ship(), Target.newFromLocation(31, 49), new TriggerAction("weapon"));
-
-            let result = effect.angularLaser({ x: 20, y: 30 }, 300, Math.PI / 4, -Math.PI / 2, 5);
-            check.equals(result, 200);
+            effect.source = { x: 20, y: 30 };
+            effect.action.angle = 90;
+            effect.action.range = 300;
+            effect.laserExecutor(5);
 
             let layer = battleview.arena.layer_weapon_effects;
             check.equals(layer.length, 1);
@@ -109,14 +112,13 @@ module TK.SpaceTac.UI.Specs {
                 //check.equals(image.width, 300);
                 check.equals(image.x, 20);
                 check.equals(image.y, 30);
-                check.nears(image.rotation, Math.PI / 4);
-            }
+                check.nears(image.rotation, 0.2606023917473408);
 
-            let values = battleview.animations.simulate(image, "rotation", 4);
-            check.nears(values[0], Math.PI / 4);
-            check.nears(values[1], 0);
-            check.nears(values[2], -Math.PI / 4);
-            check.nears(values[3], -Math.PI / 2);
+                checkTween(testgame, image, "rotation", [
+                    0.2606023917473408,
+                    1.8313987185422373,
+                ]);
+            }
         });
     });
 }

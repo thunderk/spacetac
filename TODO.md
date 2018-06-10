@@ -59,7 +59,6 @@ Battle
 * Add targetting shortcuts for "previous target", "next enemy" and "next ally"
 * Area targetting should include the hotkeyed ship at best (apply exclusion and power limit), not necessarily center on it
 * Add shortcut to perform only the "move" part of a move+fire simulation
-* Fix delay of shield/hull impact effects (should depend on weapon animation, and ship location)
 * Add a turn count marker in the ship list
 * BattleChecks should be done proactively when all diffs have been simulated by an action, in addition to reactively after applying
 

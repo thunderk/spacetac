@@ -104,9 +104,9 @@ module TK.SpaceTac.UI {
             // Set location
             if (this.battleview.battle.cycle == 1 && this.battleview.battle.play_index == 0 && ship.alive && this.battleview.player.is(ship.fleet.player)) {
                 this.setPosition(ship.arena_x - 500 * Math.cos(ship.arena_angle), ship.arena_y - 500 * Math.sin(ship.arena_angle));
-                this.moveToArenaLocation(ship.arena_x, ship.arena_y, ship.arena_angle);
+                this.moveToArenaLocation(ship.arena_x, ship.arena_y, ship.arena_angle, 1);
             } else {
-                this.moveToArenaLocation(ship.arena_x, ship.arena_y, ship.arena_angle, false);
+                this.moveToArenaLocation(ship.arena_x, ship.arena_y, ship.arena_angle, 0);
             }
 
             // Log processing
@@ -132,86 +132,88 @@ module TK.SpaceTac.UI {
          * Process a ship diff
          */
         private processShipDiff(diff: BaseBattleShipDiff): LogProcessorDelegate {
+            let timer = this.battleview.timer;
+
             if (diff instanceof ShipEffectAddedDiff || diff instanceof ShipEffectRemovedDiff) {
                 return {
                     background: async () => this.updateActiveEffects()
                 }
             } else if (diff instanceof ShipValueDiff) {
                 return {
-                    background: async (animate, timer) => {
-                        if (animate) {
+                    background: async (speed: number) => {
+                        if (speed) {
                             this.toggle_hsp.manipulate("value")(true);
                         }
 
                         if (diff.code == "hull") {
-                            if (animate) {
+                            if (speed) {
                                 this.updateHull(this.ship.getValue("hull") - diff.diff, diff.diff);
-                                await timer.sleep(1000);
+                                await timer.sleep(1000 / speed);
                                 this.updateHull(this.ship.getValue("hull"));
-                                await timer.sleep(500);
+                                await timer.sleep(500 / speed);
                             } else {
                                 this.updateHull(this.ship.getValue("hull"));
                             }
                         } else if (diff.code == "shield") {
-                            if (animate) {
+                            if (speed) {
                                 this.updateShield(this.ship.getValue("shield") - diff.diff, diff.diff);
-                                await timer.sleep(1000);
+                                await timer.sleep(1000 / speed);
                                 this.updateShield(this.ship.getValue("shield"));
-                                await timer.sleep(500);
+                                await timer.sleep(500 / speed);
                             } else {
                                 this.updateShield(this.ship.getValue("shield"));
                             }
                         } else if (diff.code == "power") {
                             this.power_text.setText(`${this.ship.getValue("power")}`);
-                            if (animate) {
-                                await this.battleview.animations.blink(this.power_text);
+                            if (speed) {
+                                await this.battleview.animations.blink(this.power_text, { speed: speed });
                             }
                         }
 
-                        if (animate) {
-                            await timer.sleep(500);
+                        if (speed) {
+                            await timer.sleep(500 / speed);
                             this.toggle_hsp.manipulate("value")(false);
                         }
                     }
                 }
             } else if (diff instanceof ShipAttributeDiff) {
                 return {
-                    background: async (animate, timer) => {
-                        if (animate) {
-                            this.displayAttributeChanged(diff);
+                    background: async (speed: number) => {
+                        if (speed) {
+                            this.displayAttributeChanged(diff, speed);
                             if (diff.code == "evasion") {
                                 // TODO diff
                                 this.updateEvasion(this.ship.getAttribute("evasion"));
-                                this.toggle_hsp.manipulate("attribute")(2000);
+                                this.toggle_hsp.manipulate("attribute")(2000 / speed);
                             }
-                            await timer.sleep(2000);
+                            await timer.sleep(2000 / speed);
                         }
                     }
                 }
             } else if (diff instanceof ShipDamageDiff) {
                 return {
-                    background: async (animate, timer) => {
-                        if (animate) {
-                            await this.displayEffect(`${diff.theoretical} damage`, false);
-                            await timer.sleep(1000);
+                    background: async (speed: number) => {
+                        if (speed) {
+                            await this.displayEffect(`${diff.theoretical} damage`, false, speed);
+                            await timer.sleep(1000 / speed);
                         }
                     }
                 }
             } else if (diff instanceof ShipActionToggleDiff) {
                 return {
-                    foreground: async (animate, timer) => {
+                    foreground: async (speed: number) => {
                         let action = this.ship.actions.getById(diff.action);
                         if (action) {
-                            if (animate) {
+                            if (speed) {
                                 if (diff.activated) {
-                                    await this.displayEffect(`${action.name} ON`, true);
+                                    await this.displayEffect(`${action.name} ON`, true, speed);
                                 } else {
-                                    await this.displayEffect(`${action.name} OFF`, false);
+                                    await this.displayEffect(`${action.name} OFF`, false, speed);
                                 }
                             }
 
                             this.updateEffectsRadius();
-                            await timer.sleep(500);
+                            await timer.sleep(500 / speed);
                         }
                     }
                 }
@@ -220,20 +222,20 @@ module TK.SpaceTac.UI {
                 if (action) {
                     if (action instanceof EndTurnAction) {
                         return {
-                            foreground: async (animate, timer) => {
-                                if (animate) {
-                                    await this.displayEffect("End turn", true);
-                                    await timer.sleep(500);
+                            foreground: async (speed: number) => {
+                                if (speed) {
+                                    await this.displayEffect("End turn", true, speed);
+                                    await timer.sleep(500 / speed);
                                 }
                             }
                         }
                     } else if (!(action instanceof ToggleAction)) {
                         let action_name = action.name;
                         return {
-                            foreground: async (animate, timer) => {
-                                if (animate) {
-                                    await this.displayEffect(action_name, true);
-                                    await timer.sleep(300);
+                            foreground: async (speed: number) => {
+                                if (speed) {
+                                    await this.displayEffect(action_name, true, speed);
+                                    await timer.sleep(300 / speed);
                                 }
                             }
                         }
@@ -244,11 +246,12 @@ module TK.SpaceTac.UI {
                     return {};
                 }
             } else if (diff instanceof ShipMoveDiff) {
-                let func = async (animate: boolean, timer: Timer) => {
-                    this.moveToArenaLocation(diff.start.x, diff.start.y, diff.start.angle, false);
-                    let duration = this.moveToArenaLocation(diff.end.x, diff.end.y, diff.end.angle, animate, !!diff.engine);
-                    if (duration && animate) {
-                        await timer.sleep(duration);
+                let func = async (speed: number) => {
+                    if (speed) {
+                        await this.moveToArenaLocation(diff.start.x, diff.start.y, diff.start.angle, 0);
+                        await this.moveToArenaLocation(diff.end.x, diff.end.y, diff.end.angle, speed, !!diff.engine);
+                    } else {
+                        await this.moveToArenaLocation(diff.end.x, diff.end.y, diff.end.angle, 0);
                     }
                 };
                 if (diff.engine) {
@@ -259,10 +262,10 @@ module TK.SpaceTac.UI {
             } else if (diff instanceof VigilanceAppliedDiff) {
                 let action = this.ship.actions.getById(diff.action);
                 return {
-                    foreground: async (animate, timer) => {
-                        if (animate && action) {
-                            await this.displayEffect(`${action.name} (vigilance)`, true);
-                            await timer.sleep(300);
+                    foreground: async (speed: number) => {
+                        if (speed && action) {
+                            await this.displayEffect(`${action.name} (vigilance)`, true, speed);
+                            await timer.sleep(300 / speed);
                         }
                     }
                 }
@@ -315,7 +318,7 @@ module TK.SpaceTac.UI {
                 //this.displayEffect("stasis", false);
                 this.stasis.visible = true;
                 this.stasis.alpha = 0;
-                this.battleview.animations.blink(this.stasis, 0.9, 0.7);
+                this.battleview.animations.blink(this.stasis, { alpha_on: 0.9, alpha_off: 0.7 });
             } else {
                 this.stasis.visible = false;
             }
@@ -327,30 +330,31 @@ module TK.SpaceTac.UI {
          * 
          * Return the duration of animation
          */
-        moveToArenaLocation(x: number, y: number, facing_angle: number, animate = true, engine = true): number {
-            if (animate) {
+        async moveToArenaLocation(x: number, y: number, facing_angle: number, speed = 1, engine = true): Promise<void> {
+            if (speed) {
                 let animation = bound(this.arena.view.animations, engine ? "moveInSpace" : "moveTo");
-                let duration = animation(this, x, y, facing_angle, this.sprite);
-                return duration;
+                await animation(this, x, y, facing_angle, this.sprite, speed);
             } else {
                 this.x = x;
                 this.y = y;
                 this.sprite.rotation = facing_angle;
-                return 0;
             }
         }
 
         /**
          * Briefly show an effect on this ship
          */
-        async displayEffect(message: string, beneficial: boolean) {
+        async displayEffect(message: string, beneficial: boolean, speed: number) {
             if (!this.effects_messages.visible) {
                 this.effects_messages.removeAll(true);
             }
 
-            let builder = new UIBuilder(this.arena.view, this.effects_messages);
+            if (!speed) {
+                return;
+            }
 
-            let text = builder.text(message, 0, 20 * this.effects_messages.length, {
+            let builder = new UIBuilder(this.arena.view, this.effects_messages);
+            builder.text(message, 0, 20 * this.effects_messages.length, {
                 color: beneficial ? "#afe9c6" : "#e9afaf"
             });
 
@@ -360,19 +364,19 @@ module TK.SpaceTac.UI {
                 (this.ship.arena_y < arena.height * 0.9) ? 60 : (-60 - this.effects_messages.height)
             );
 
-            this.effects_messages_toggle.manipulate("added")(1400);
-            await this.battleview.timer.sleep(1500);
+            this.effects_messages_toggle.manipulate("added")(1400 / speed);
+            await this.battleview.timer.sleep(1500 / speed);
         }
 
         /**
          * Display interesting changes in ship attributes
          */
-        displayAttributeChanged(event: ShipAttributeDiff) {
+        displayAttributeChanged(event: ShipAttributeDiff, speed = 1) {
             // TODO show final diff, not just cumulative one
             let diff = (event.added.cumulative || 0) - (event.removed.cumulative || 0);
             if (diff) {
                 let name = SHIP_VALUES_NAMES[event.code];
-                this.displayEffect(`${name} ${diff < 0 ? "-" : "+"}${Math.abs(diff)}`, diff >= 0);
+                this.displayEffect(`${name} ${diff < 0 ? "-" : "+"}${Math.abs(diff)}`, diff >= 0, speed);
             }
         }
 
