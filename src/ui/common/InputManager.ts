@@ -210,7 +210,7 @@ module TK.SpaceTac.UI {
                 enternext = Timer.global.schedule(hovertime, effectiveenter);
             });
 
-            obj.on("pointerout", (pointer: Phaser.Input.Pointer) => {
+            obj.on("pointerout", () => {
                 if (destroyed) return;
 
                 if (this.hovered === obj) {
@@ -222,7 +222,7 @@ module TK.SpaceTac.UI {
             });
 
             obj.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-                if (destroyed) return;
+                if (destroyed || pointer.buttons != 1) return;
 
                 if (UITools.isVisible(obj)) {
                     holdstart = Timer.nowMs();
@@ -235,8 +235,8 @@ module TK.SpaceTac.UI {
                 }
             });
 
-            obj.on("pointerup", (event: Phaser.Input.Pointer) => {
-                if (destroyed) return;
+            obj.on("pointerup", (pointer: Phaser.Input.Pointer) => {
+                if (destroyed || pointer.buttons != 1) return;
 
                 if (!cursorinside) {
                     effectiveleave();

@@ -99,8 +99,10 @@ module TK.SpaceTac.UI {
 
             // Capture clicks on background
             background.setInteractive();
-            background.on("pointerup", () => {
-                this.callbacks_click.forEach(callback => callback());
+            background.on("pointerup", (pointer: Phaser.Input.Pointer) => {
+                if (pointer.buttons == 1) {
+                    this.callbacks_click.forEach(callback => callback());
+                }
             });
             background.on("pointerout", () => {
                 this.callbacks_hover.forEach(callback => callback(null, null));
@@ -250,7 +252,7 @@ module TK.SpaceTac.UI {
             let sprite = this.findDrone(drone);
             if (sprite) {
                 remove(this.drone_sprites, sprite);
-                return sprite.setDestroyed();
+                return sprite.setDestroyed(speed);
             } else {
                 console.error("Drone not found in arena for removal", drone);
             }

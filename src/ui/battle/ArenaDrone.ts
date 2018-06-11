@@ -59,9 +59,11 @@ module TK.SpaceTac.UI {
          * 
          * Return the animation duration
          */
-        async setDestroyed(): Promise<void> {
-            this.view.animations.addAnimation<UIContainer>(this, { alpha: 0.3 }, 300, undefined, 200);
-            await this.view.animations.addAnimation(this.radius, { scaleX: 0, scaleY: 0 }, 500);
+        async setDestroyed(speed = 1): Promise<void> {
+            if (speed) {
+                this.view.animations.addAnimation<UIContainer>(this, { alpha: 0.3 }, 300 / speed, undefined, 200 / speed);
+                await this.view.animations.addAnimation(this.radius, { scaleX: 0, scaleY: 0 }, 500 / speed);
+            }
             this.destroy();
         }
 
