@@ -72,8 +72,8 @@ module TK.SpaceTac.UI {
 
                 builder.text(ship.model.getDescription(), 0, iy + 4, { size: 14, color: "#999999", width: 540 });
             } else {
-                builder.text("Emergency Stasis Protocol\nship disabled", 140, 36,
-                    { color: "#a899db", size: 20, center: true, vcenter: true });
+                builder.text("Emergency Stasis Protocol\nship disabled", 230, 36,
+                    { color: "#a899db", size: 20, center: false, vcenter: false });
             }
 
             return true;

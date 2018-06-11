@@ -135,8 +135,14 @@ module TK.SpaceTac.UI {
             this.inputs.bind("Escape", "Cancel action", () => this.action_bar.actionEnded());
             range(10).forEach(i => this.inputs.bind(`Numpad${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
             range(10).forEach(i => this.inputs.bind(`Digit${i % 10}`, `Action/target ${i}`, () => this.numberPressed(i)));
-            this.inputs.bindCheat("w", "Win current battle", () => nn(this.player.getCheats()).win());
-            this.inputs.bindCheat("x", "Lose current battle", () => nn(this.player.getCheats()).lose());
+            this.inputs.bindCheat("w", "Win current battle", () => {
+                nn(this.player.getCheats()).win();
+                this.log_processor.fastForward();
+            });
+            this.inputs.bindCheat("x", "Lose current battle", () => {
+                nn(this.player.getCheats()).lose();
+                this.log_processor.fastForward();
+            });
             this.inputs.bindCheat("a", "Use AI to play", () => this.playAI());
 
             // "Battle" animation, then start processing the log
@@ -287,6 +293,8 @@ module TK.SpaceTac.UI {
             } else if (this.ship_hovered && this.player.is(this.ship_hovered.fleet.player) && this.interacting) {
                 this.character_sheet.show(this.ship_hovered);
                 this.setShipHovered(null);
+            } else {
+                this.log_processor.fastForward();
             }
         }
 

@@ -115,7 +115,7 @@ module TK.SpaceTac.UI {
          * Update the locations of all items
          */
         refresh(speed = 1): void {
-            let duration = speed ? 1000 / speed : 0;
+            let duration = speed ? (1000 / speed) : 0;
             this.items.forEach(item => {
                 if (item.ship.alive) {
                     let position = this.battle.getPlayOrder(item.ship);

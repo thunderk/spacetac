@@ -8,6 +8,7 @@ Phaser 3 migration
 * Fit the game in window size
 * Fix top-right messages positions
 * Fix valuebar requiring to be in root display list
+* Fix tactical mode button not working
 * Restore unit tests about boundaries (in UITools)
 
 Menu/settings/saves
@@ -50,7 +51,6 @@ Battle
 * Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat
 * Add an hexagonal grid (optional, may be enforced only on mobile) and work in units of this grid
 * Add engine trail effect, and sound
-* Allow to skip animations, and allow no animation mode
 * Find incentives to move from starting position (permanent drones or anomalies?)
 * Mark targetting in error when target is refused by the action (there is already an arrow for this)
 * Allow to undo last moves

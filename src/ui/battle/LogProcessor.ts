@@ -17,6 +17,10 @@ module TK.SpaceTac.UI {
         // Background delegates promises
         private background_promises: Promise<void>[] = []
 
+        // Speed control
+        private speed = 1
+        private temp_speed?: number
+
         // Debug indicators
         private debug = false
         private ai_disabled = false
@@ -57,6 +61,10 @@ module TK.SpaceTac.UI {
                     }
 
                     await this.processBattleDiff(diff);
+
+                    if (this.log.atEnd()) {
+                        this.temp_speed = undefined;
+                    }
                 });
 
                 this.transferControl();
@@ -74,6 +82,15 @@ module TK.SpaceTac.UI {
                 while (diff = this.log.forward()) {
                     this.processBattleDiff(diff, false);
                 }
+            }
+        }
+
+        /**
+         * Fast forward to the end of log, then resume normal speed
+         */
+        fastForward(speed = 3): void {
+            if (!this.log.atEnd()) {
+                this.temp_speed = speed;
             }
         }
 
@@ -175,7 +192,7 @@ module TK.SpaceTac.UI {
             if (this.debug) {
                 console.log("Battle diff", diff);
             }
-            let speed = timed ? 1 : 0;
+            let speed = timed ? (typeof this.temp_speed == "undefined" ? this.speed : this.temp_speed) : 0;
 
             // TODO add priority to sort the delegates
             let delegates = this.subscriber.map(subscriber => subscriber(diff));
