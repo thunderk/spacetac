@@ -129,7 +129,7 @@ module TK.SpaceTac.UI {
             this.audio.startMusic("mechanolith", 0.2);
 
             // Key mapping
-            this.inputs.bind("t", "Show tactical view", () => this.toggle_tactical_mode.manipulate("keyboard")(3000));
+            this.inputs.bind("t", "Show tactical view", () => this.ship_list.info_button.toggle());
             this.inputs.bind("Enter", "Validate action", () => this.validationPressed());
             this.inputs.bind(" ", "Validate action", () => this.validationPressed());
             this.inputs.bind("Escape", "Cancel action", () => this.action_bar.actionEnded());

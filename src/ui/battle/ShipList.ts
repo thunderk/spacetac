@@ -43,7 +43,7 @@ module TK.SpaceTac.UI {
             this.hovered = null;
 
             // FIXME
-            this.info_button = builder.button("battle-shiplist-info-button", 0, 0, () => null, "Tactical display", on => tactical_mode.manipulate("shiplist")(on));
+            this.info_button = builder.button("battle-shiplist-info-button", 0, 0, undefined, "Tactical display", on => tactical_mode.manipulate("shiplist")(on));
 
             this.setShipsFromBattle(battle);
         }

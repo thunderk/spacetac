@@ -110,6 +110,11 @@ module TK.SpaceTac.UI.Specs {
 
             button2.toggle(true, UIButtonUnicity.EXCLUSIVE_MIN);
             verify("toggle off unicity min", false, true, false, 0, 0, 0);
+
+            button1.toggle();
+            verify("toggle auto on", true, true, false, 1, 0, 0);
+            button1.toggle();
+            verify("toggle auto off", false, true, false, 1, 0, 0);
         });
     });
 }

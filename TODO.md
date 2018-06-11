@@ -8,7 +8,6 @@ Phaser 3 migration
 * Fit the game in window size
 * Fix top-right messages positions
 * Fix valuebar requiring to be in root display list
-* Fix tactical mode button not working
 * Restore unit tests about boundaries (in UITools)
 
 Menu/settings/saves

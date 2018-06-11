@@ -192,7 +192,11 @@ module TK.SpaceTac.UI {
          * 
          * Returns the final state of this button
          */
-        toggle(on: boolean, unicity?: UIButtonUnicity): boolean {
+        toggle(on?: boolean, unicity?: UIButtonUnicity): boolean {
+            if (typeof on == "undefined") {
+                on = !this.state_on;
+            }
+
             if (on && unicity && this.parentContainer) {
                 this.parentContainer.list.forEach(child => {
                     if (child instanceof UIButton && child != this) {
