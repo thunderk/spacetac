@@ -285,7 +285,7 @@ module TK.SpaceTac.UI {
                 return {
                     foreground: async (speed: number) => {
                         if (speed) {
-                            this.view.gameui.audio.playOnce("battle-drone-deploy");
+                            this.view.audio.playOnce("battle-drone-deploy");
                         }
                         await this.addDrone(diff.drone, speed);
                     }
@@ -303,7 +303,7 @@ module TK.SpaceTac.UI {
                 return {
                     foreground: async (speed: number) => {
                         if (speed) {
-                            this.view.gameui.audio.playOnce("battle-drone-destroy");
+                            this.view.audio.playOnce("battle-drone-destroy");
                         }
                         await this.removeDrone(diff.drone, speed);
                     }
