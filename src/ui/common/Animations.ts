@@ -166,9 +166,14 @@ module TK.SpaceTac.UI {
          * Add an asynchronous animation to an object.
          */
         addAnimation<T extends object>(obj: T, properties: Partial<T>, duration: number, ease = "Linear", delay = 0, loop = 1, yoyo = false): Promise<void> {
-            return new Promise(resolve => {
-                this.killPrevious(obj, keys(properties));
+            this.killPrevious(obj, keys(properties));
 
+            if (!duration) {
+                copyfields(properties, obj);
+                return Promise.resolve();
+            }
+
+            return new Promise(resolve => {
                 this.tweens.add(merge<object>({
                     targets: obj,
                     ease: ease,
@@ -239,9 +244,12 @@ module TK.SpaceTac.UI {
          * Returns the animation duration.
          */
         moveTo(obj: Phaser.GameObjects.Components.Transform, x: number, y: number, angle: number, rotated_obj = obj, speed = 1, ease = true): Promise<void> {
-            let duration_rot = this.rotationTween(rotated_obj, angle, 0.5 * speed);
-            let duration_pos = arenaDistance(obj, { x: x, y: y }) * 2;
-            return this.addAnimation(obj, { x: x, y: y }, duration_pos / speed, ease ? "Quad.easeInOut" : "Linear");
+            let duration = arenaDistance(obj, { x: x, y: y }) * 2 / speed;
+
+            return Promise.all([
+                this.rotationTween(rotated_obj, angle, speed * 0.5, ease ? "Cubic.easeInOut" : "Linear"),
+                this.addAnimation(obj, { x: x, y: y }, duration, ease ? "Quad.easeInOut" : "Linear"),
+            ]).then(nop);
         }
 
         /**
@@ -253,7 +261,8 @@ module TK.SpaceTac.UI {
             this.killPrevious(obj, ["x", "y"]);
 
             if (x == obj.x && y == obj.y) {
-                return this.rotationTween(rotated_obj, angle, 0.5 * speed);
+                let distance = Math.abs(angularDifference(rotated_obj.rotation, angle));
+                return this.rotationTween(rotated_obj, angle, distance * 500 / speed);
             } else {
                 this.killPrevious(rotated_obj, ["rotation"]);
                 let distance = Target.newFromLocation(obj.x, obj.y).getDistanceTo(Target.newFromLocation(x, y));

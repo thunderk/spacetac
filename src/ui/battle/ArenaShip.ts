@@ -60,16 +60,16 @@ module TK.SpaceTac.UI {
             this.frame_owner = builder.image(this.enemy ? "battle-hud-ship-enemy" : "battle-hud-ship-own", 0, 0, true);
             this.setPlaying(false);
             this.frame_hover = builder.image("battle-hud-ship-hover", 0, 0, true);
-            this.frame_hover.visible = false;
+            this.frame_hover.setVisible(false);
 
             // Add ship sprite
             this.sprite = builder.image(`ship-${ship.model.code}-sprite`, 0, 0, true);
-            this.sprite.rotation = ship.arena_angle;
+            this.sprite.setRotation(ship.arena_angle);
 
             // Add stasis effect
             this.stasis = builder.image("battle-hud-ship-stasis", 0, 0, true);
-            this.stasis.alpha = 0.9;
-            this.stasis.visible = !ship.alive;
+            this.stasis.setAlpha(0.9);
+            this.stasis.setVisible(!ship.alive);
 
             // HSP display
             this.hsp = builder.container("hsp", 0, 34);
@@ -332,12 +332,14 @@ module TK.SpaceTac.UI {
          */
         async moveToArenaLocation(x: number, y: number, facing_angle: number, speed = 1, engine = true): Promise<void> {
             if (speed) {
-                let animation = bound(this.arena.view.animations, engine ? "moveInSpace" : "moveTo");
-                await animation(this, x, y, facing_angle, this.sprite, speed);
+                if (engine) {
+                    await this.arena.view.animations.moveInSpace(this, x, y, facing_angle, this.sprite, speed);
+                } else {
+                    await this.arena.view.animations.moveTo(this, x, y, facing_angle, this.sprite, speed);
+                }
             } else {
-                this.x = x;
-                this.y = y;
-                this.sprite.rotation = facing_angle;
+                this.setPosition(x, y);
+                this.sprite.setRotation(facing_angle);
             }
         }
 

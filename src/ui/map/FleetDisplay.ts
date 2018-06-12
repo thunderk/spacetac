@@ -91,7 +91,6 @@ module TK.SpaceTac.UI {
                 let distance = Math.sqrt(dx * dx + dy * dy);
                 let angle = Math.atan2(-dy, dx);
                 this.setMoving(true);
-                console.error(fleet_location, location, angle);
                 this.goToOrbitPoint(angle, 40, 1, true).then(() => {
                     this.setRotation(-angle);
                     let duration = 10000 * distance / speed;
