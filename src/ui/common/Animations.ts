@@ -232,7 +232,7 @@ module TK.SpaceTac.UI {
                 dest -= 2 * Math.PI;
             }
             let distance = Math.abs(UITools.normalizeAngle(dest - value)) / Math.PI;
-            let duration = distance * 1000 / speed;
+            let duration = distance * 2000 / speed;
 
             // Tween
             return this.addAnimation(obj, { rotation: dest }, duration, easing);
@@ -247,7 +247,7 @@ module TK.SpaceTac.UI {
             let duration = arenaDistance(obj, { x: x, y: y }) * 2 / speed;
 
             return Promise.all([
-                this.rotationTween(rotated_obj, angle, speed * 0.5, ease ? "Cubic.easeInOut" : "Linear"),
+                this.rotationTween(rotated_obj, angle, speed, ease ? "Cubic.easeInOut" : "Linear"),
                 this.addAnimation(obj, { x: x, y: y }, duration, ease ? "Quad.easeInOut" : "Linear"),
             ]).then(nop);
         }
@@ -262,7 +262,7 @@ module TK.SpaceTac.UI {
 
             if (x == obj.x && y == obj.y) {
                 let distance = Math.abs(angularDifference(rotated_obj.rotation, angle));
-                return this.rotationTween(rotated_obj, angle, distance * 500 / speed);
+                return this.rotationTween(rotated_obj, angle, speed);
             } else {
                 this.killPrevious(rotated_obj, ["rotation"]);
                 let distance = Target.newFromLocation(obj.x, obj.y).getDistanceTo(Target.newFromLocation(x, y));
