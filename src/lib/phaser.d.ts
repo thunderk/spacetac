@@ -391,6 +391,10 @@ declare type GameConfig = {
     /**
      * [description]
      */
+    "input.activePointers"?: integer;
+    /**
+     * [description]
+     */
     "input.touch.target"?: any;
     /**
      * [description]
@@ -1041,35 +1045,35 @@ declare type ContentLoadedCallback = ()=>void;
 
 declare type DisplayCallbackConfig = {
     /**
-     * [description]
+     * The tint of the character being rendered.
      */
     tint: Object;
     /**
-     * [description]
+     * The index of the character being rendered.
      */
     index: number;
     /**
-     * [description]
+     * The character code of the character being rendered.
      */
     charCode: number;
     /**
-     * [description]
+     * The x position of the character being rendered.
      */
     x: number;
     /**
-     * [description]
+     * The y position of the character being rendered.
      */
     y: number;
     /**
-     * [description]
+     * The scale of the character being rendered.
      */
     scale: number;
     /**
-     * [description]
+     * The rotation of the character being rendered.
      */
     rotation: number;
     /**
-     * [description]
+     * Custom data stored with the character being rendered.
      */
     data: any;
 };
@@ -1078,77 +1082,159 @@ declare type DisplayCallback = (display: DisplayCallbackConfig)=>void;
 
 declare type BitmapTextConfig = GameObjectConfig & {
     /**
-     * [description]
+     * The key of the font to use from the BitmapFont cache.
      */
     font?: string;
     /**
-     * [description]
+     * The string, or array of strings, to be set as the content of this Bitmap Text.
      */
     text?: string;
     /**
-     * [description]
+     * The font size to set.
      */
     size?: number | false;
-    /**
-     * [description]
-     */
-    align?: string;
 };
 
-declare type TextBounds = {
+declare type BitmapTextSize = {
     /**
-     * [description]
+     * The position and size of the BitmapText, taking into account the position and scale of the Game Object.
      */
-    local: object;
+    global: GlobalBitmapTextSize;
     /**
-     * [description]
+     * The position and size of the BitmapText, taking just the font size into account.
      */
-    "local.x": number;
+    local: LocalBitmapTextSize;
+};
+
+/**
+ * The position and size of the Bitmap Text in global space, taking into account the Game Object's scale and world position.
+ */
+declare type GlobalBitmapTextSize = {
     /**
-     * [description]
+     * The x position of the BitmapText, taking into account the x position and scale of the Game Object.
      */
-    "local.y": number;
+    x: number;
     /**
-     * [description]
+     * The y position of the BitmapText, taking into account the y position and scale of the Game Object.
      */
-    "local.width": number;
+    y: number;
     /**
-     * [description]
+     * The width of the BitmapText, taking into account the x scale of the Game Object.
      */
-    "local.height": number;
+    width: number;
     /**
-     * [description]
+     * The height of the BitmapText, taking into account the y scale of the Game Object.
      */
-    global: object;
+    height: number;
+};
+
+/**
+ * The position and size of the Bitmap Text in local space, taking just the font size into account.
+ */
+declare type LocalBitmapTextSize = {
     /**
-     * [description]
+     * The x position of the BitmapText.
      */
-    "global.x": number;
+    x: number;
     /**
-     * [description]
+     * The y position of the BitmapText.
      */
-    "global.y": number;
+    y: number;
     /**
-     * [description]
+     * The width of the BitmapText.
      */
-    "global.width": number;
+    width: number;
     /**
-     * [description]
+     * The height of the BitmapText.
      */
-    "global.height": number;
+    height: number;
+};
+
+/**
+ * The font data for an individual character of a Bitmap Font.
+ * 
+ * Describes the character's position, size, offset and kerning.
+ */
+declare type BitmapFontCharacterData = {
+    /**
+     * The x position of the character.
+     */
+    x: number;
+    /**
+     * The y position of the character.
+     */
+    y: number;
+    /**
+     * The width of the character.
+     */
+    width: number;
+    /**
+     * The height of the character.
+     */
+    height: number;
+    /**
+     * The center x position of the character.
+     */
+    centerX: number;
+    /**
+     * The center y position of the character.
+     */
+    centerY: number;
+    /**
+     * The x offset of the character.
+     */
+    xOffset: number;
+    /**
+     * The y offset of the character.
+     */
+    yOffset: number;
+    /**
+     * Extra data for the character.
+     */
+    data: object;
+    /**
+     * Kerning values, keyed by character code.
+     */
+    kerning: {[key: string]: number};
+};
+
+/**
+ * Bitmap Font data that can be used by a BitmapText Game Object.
+ */
+declare type BitmapFontData = {
+    /**
+     * The name of the font.
+     */
+    font: string;
+    /**
+     * The size of the font.
+     */
+    size: number;
+    /**
+     * The line height of the font.
+     */
+    lineHeight: number;
+    /**
+     * Whether this font is a retro font (monospace).
+     */
+    retroFont: boolean;
+    /**
+     * The character data of the font, keyed by character code. Each character datum includes a position, size, offset and more.
+     */
+    chars: {[key: number]:  BitmapFontCharacterData};
 };
 
 declare type JSONBitmapText = JSONGameObject & {
     /**
-     * [description]
+     * The name of the font.
      */
     font: string;
     /**
-     * [description]
+     * The text that this Bitmap Text displays.
      */
     text: string;
     /**
-     * [description]
+     * The size of the font.
      */
     fontSize: number;
     /**
@@ -1313,63 +1399,63 @@ declare namespace Phaser.GameObjects.Blitter {
 
 declare type GameObjectConfig = {
     /**
-     * [description]
+     * The x position of the Game Object.
      */
     x?: number;
     /**
-     * [description]
+     * The y position of the Game Object.
      */
     y?: number;
     /**
-     * [description]
+     * The depth of the GameObject.
      */
     depth?: number;
     /**
-     * [description]
+     * The horizontally flipped state of the Game Object.
      */
     flipX?: boolean;
     /**
-     * [description]
+     * The vertically flipped state of the Game Object.
      */
     flipY?: boolean;
     /**
-     * [description]
+     * The scale of the GameObject.
      */
     scale?: number | object;
     /**
-     * [description]
+     * The scroll factor of the GameObject.
      */
     scrollFactor?: number | object;
     /**
-     * [description]
+     * The rotation angle of the Game Object, in radians.
      */
     rotation?: number;
     /**
-     * [description]
+     * The rotation angle of the Game Object, in degrees.
      */
     angle?: number;
     /**
-     * [description]
+     * The alpha (opacity) of the Game Object.
      */
     alpha?: number;
     /**
-     * [description]
+     * The origin of the Game Object.
      */
     origin?: number | object;
     /**
-     * [description]
+     * The scale mode of the GameObject.
      */
     scaleMode?: number;
     /**
-     * [description]
+     * The blend mode of the GameObject.
      */
     blendMode?: number;
     /**
-     * [description]
+     * The visible state of the Game Object.
      */
     visible?: boolean;
     /**
-     * [description]
+     * Add the GameObject to the scene.
      */
     add?: boolean;
 };
@@ -1464,6 +1550,66 @@ declare namespace Phaser.GameObjects.Graphics {
     }
 
 }
+
+/**
+ * Graphics line style (or stroke style) settings.
+ */
+declare type GraphicsLineStyle = {
+    /**
+     * The stroke width.
+     */
+    width: number;
+    /**
+     * The stroke color.
+     */
+    color: number;
+    /**
+     * The stroke alpha.
+     */
+    alpha: number;
+};
+
+/**
+ * Graphics fill style settings.
+ */
+declare type GraphicsFillStyle = {
+    /**
+     * The fill color.
+     */
+    color: number;
+    /**
+     * The fill alpha.
+     */
+    alpha: number;
+};
+
+/**
+ * Graphics style settings.
+ */
+declare type GraphicsStyles = {
+    /**
+     * The style applied to shape outlines.
+     */
+    lineStyle: GraphicsLineStyle;
+    /**
+     * The style applied to shape areas.
+     */
+    fillStyle: GraphicsFillStyle;
+};
+
+/**
+ * Options for the Graphics game Object.
+ */
+declare type GraphicsOptions = GraphicsStyles & {
+    /**
+     * The x coordinate of the Graphics.
+     */
+    x: number;
+    /**
+     * The y coordinate of the Graphics.
+     */
+    y: number;
+};
 
 declare type GroupCallback = (item: Phaser.GameObjects.GameObject)=>void;
 
@@ -2135,19 +2281,19 @@ declare type PathConfig = {
 
 declare type RenderTextureConfig = {
     /**
-     * [description]
+     * The x coordinate of the RenderTexture's position.
      */
     x?: number;
     /**
-     * [description]
+     * The y coordinate of the RenderTexture's position.
      */
     y?: number;
     /**
-     * [description]
+     * The width of the RenderTexture.
      */
     width?: number;
     /**
-     * [description]
+     * The height of the RenderTexture.
      */
     height?: number;
 };
@@ -2469,27 +2615,27 @@ declare namespace Phaser.GameObjects.Text {
 
 declare type TileSprite = GameObjectConfig & {
     /**
-     * [description]
+     * The x coordinate of the Tile Sprite.
      */
     x?: number;
     /**
-     * [description]
+     * The y coordinate of the Tile Sprite.
      */
     y?: number;
     /**
-     * [description]
+     * The width of the Tile Sprite.
      */
     width?: number;
     /**
-     * [description]
+     * The height of the Tile Sprite.
      */
     height?: number;
     /**
-     * [description]
+     * The key of the Texture this Tile Sprite will use to render with, as stored in the Texture Manager.
      */
     key?: string;
     /**
-     * [description]
+     * An optional frame from the Texture this Tile Sprite is rendering with.
      */
     frame?: string;
 };
@@ -2500,39 +2646,84 @@ declare type HitAreaCallback = (hitArea: any, x: number, y: number, gameObject: 
 
 declare type Pad = {
     /**
-     * [description]
+     * The ID of the Gamepad.
      */
     id: string;
     /**
-     * [description]
+     * The index of the Gamepad.
      */
     index: integer;
 };
 
-declare type GamepadHandler = ()=>void;
+declare type InputPluginContainer = {
+    /**
+     * The unique name of this plugin in the input plugin cache.
+     */
+    key: string;
+    /**
+     * The plugin to be stored. Should be the source object, not instantiated.
+     */
+    plugin: Function;
+    /**
+     * If this plugin is to be injected into the Input Plugin, this is the property key map used.
+     */
+    mapping?: string;
+};
+
+declare namespace Phaser.Input.InputPluginCache {
+    /**
+     * Static method called directly by the Core internal Plugins.
+     * Key is a reference used to get the plugin from the plugins object (i.e. InputPlugin)
+     * Plugin is the object to instantiate to create the plugin
+     * Mapping is what the plugin is injected into the Scene.Systems as (i.e. input)
+     * @param key A reference used to get this plugin from the plugin cache.
+     * @param plugin The plugin to be stored. Should be the core object, not instantiated.
+     * @param mapping If this plugin is to be injected into the Input Plugin, this is the property key used.
+     * @param settingsKey The key in the Scene Settings to check to see if this plugin should install or not.
+     * @param configKey The key in the Game Config to check to see if this plugin should install or not.
+     */
+    function register(key: string, plugin: Function, mapping: string, settingsKey: string, configKey: string): void;
+
+    /**
+     * Returns the input plugin object from the cache based on the given key.
+     * @param key The key of the input plugin to get.
+     */
+    function getCore(key: string): InputPluginContainer;
+
+    /**
+     * Installs all of the registered Input Plugins into the given target.
+     * @param target The target InputPlugin to install the plugins into.
+     */
+    function install(target: Phaser.Input.InputPlugin): void;
+
+    /**
+     * Removes an input plugin based on the given key.
+     * @param key The key of the input plugin to remove.
+     */
+    function remove(key: string): void;
+
+}
 
 declare type KeyboardKeydownCallback = (event: KeyboardEvent)=>void;
 
 declare type KeyComboConfig = {
     /**
-     * [description]
+     * If they press the wrong key do we reset the combo?
      */
     resetOnWrongKey?: boolean;
     /**
-     * [description]
+     * The max delay in ms between each key press. Above this the combo is reset. 0 means disabled.
      */
     maxKeyDelay?: number;
     /**
-     * [description]
+     * If previously matched and they press the first key of the combo again, will it reset?
      */
     resetOnMatch?: boolean;
     /**
-     * [description]
+     * If the combo matches, will it delete itself?
      */
     deleteOnMatch?: boolean;
 };
-
-declare type KeyboardHandler = ()=>void;
 
 declare type CursorKeys = {
     /**
@@ -2560,10 +2751,6 @@ declare type CursorKeys = {
      */
     shift?: Phaser.Input.Keyboard.Key;
 };
-
-declare type MouseHandler = ()=>void;
-
-declare type TouchHandler = (event: TouchEvent)=>void;
 
 declare type FileConfig = {
     /**
@@ -2672,15 +2859,15 @@ declare type XHRSettingsObject = {
 
 declare type SinCosTable = {
     /**
-     * [description]
+     * The sine value.
      */
     sin: number;
     /**
-     * [description]
+     * The cosine value.
      */
     cos: number;
     /**
-     * [description]
+     * The length.
      */
     length: number;
 };
@@ -3430,8 +3617,8 @@ declare namespace Phaser {
             getFrameByProgress(value: number): Phaser.Animations.AnimationFrame;
 
             /**
-             * [description]
-             * @param component [description]
+             * Advance the animation frame.
+             * @param component The Animation Component to advance.
              */
             nextFrame(component: Phaser.GameObjects.Components.Animation): void;
 
@@ -3860,6 +4047,12 @@ declare namespace Phaser {
         readonly hasFocus: boolean;
 
         /**
+         * Is the mouse pointer currently over the game canvas or not?
+         * This is modified by the VisibilityHandler.
+         */
+        readonly isOver: boolean;
+
+        /**
          * This method is called automatically when the DOM is ready. It is responsible for creating the renderer,
          * displaying the Debug Header, adding the game canvas to the DOM and emitting the 'boot' event.
          * It listens for a 'ready' event from the base systems and once received it will call `Game.start`.
@@ -4069,7 +4262,17 @@ declare namespace Phaser {
             /**
              * [description]
              */
+            readonly inputActivePointers: integer;
+
+            /**
+             * [description]
+             */
             readonly inputGamepad: boolean;
+
+            /**
+             * [description]
+             */
+            readonly inputGamepadEventTarget: any;
 
             /**
              * [description]
@@ -4380,7 +4583,7 @@ declare namespace Phaser {
             /**
              * [description]
              */
-            deltaHistory: any[];
+            deltaHistory: integer[];
 
             /**
              * [description]
@@ -4437,7 +4640,7 @@ declare namespace Phaser {
              * You generally should never call this method directly.
              * @param time The current time. Either a High Resolution Timer value if it comes from Request Animation Frame, or Date.now if using SetTimeout.
              */
-            step(time: integer): void;
+            step(time: number): void;
 
             /**
              * Manually calls TimeStep.step, passing in the performance.now value to it.
@@ -4707,6 +4910,14 @@ declare namespace Phaser {
                  * Should this camera round its pixel values to integers?
                  */
                 roundPixels: boolean;
+
+                /**
+                 * Is this Camera visible or not?
+                 * 
+                 * A visible camera will render and perform input tests.
+                 * An invisible camera will not render anything and will skip input tests.
+                 */
+                visible: boolean;
 
                 /**
                  * Is this Camera using a bounds to restrict scrolling movement?
@@ -5070,6 +5281,14 @@ declare namespace Phaser {
                 setZoom(value?: number): Phaser.Cameras.Scene2D.Camera;
 
                 /**
+                 * Sets the visibility of this Camera.
+                 * 
+                 * An invisible Camera will skip rendering and input tests of everything it can see.
+                 * @param value The visible state of the Camera.
+                 */
+                setVisible(value: boolean): this;
+
+                /**
                  * Sets the Camera to follow a Game Object.
                  * 
                  * When enabled the Camera will automatically adjust its scroll position to keep the target Game Object
@@ -5121,6 +5340,16 @@ declare namespace Phaser {
                  * cameras are stored in a pool, ready for recycling later, and calling this directly will prevent that.
                  */
                 destroy(): void;
+
+                /**
+                 * The x position of the center of the Camera's viewport, relative to the top-left of the game canvas.
+                 */
+                readonly centerX: number;
+
+                /**
+                 * The y position of the center of the Camera's viewport, relative to the top-left of the game canvas.
+                 */
+                readonly centerY: number;
 
             }
 
@@ -5199,10 +5428,12 @@ declare namespace Phaser {
                 getCamera(name: string): Phaser.Cameras.Scene2D.Camera;
 
                 /**
-                 * [description]
-                 * @param pointer [description]
+                 * Returns an array of all cameras below the given Pointer.
+                 * 
+                 * The first camera in the array is the top-most camera in the camera list.
+                 * @param pointer The Pointer to check against.
                  */
-                getCameraBelowPointer(pointer: Phaser.Input.Pointer): Phaser.Cameras.Scene2D.Camera;
+                getCamerasBelowPointer(pointer: Phaser.Input.Pointer): Phaser.Cameras.Scene2D.Camera[];
 
                 /**
                  * [description]
@@ -5617,18 +5848,6 @@ declare namespace Phaser {
                 destroy(): void;
 
             }
-
-            /**
-             * This alias will be removed in a future version.
-             * Use `FixedKeyControl` instead.
-             */
-            var Fixed: any;
-
-            /**
-             * This alias will be removed in a future version.
-             * Use `SmoothedKeyControl` instead.
-             */
-            var Smoothed: any;
 
             /**
              * [description]
@@ -7192,80 +7411,156 @@ declare namespace Phaser {
             list: {[key: string]:  any};
 
             /**
-             * Whether setting data is blocked for this DataManager.
+             * The public values list. You can use this to access anything you have stored
+             * in this Data Manager. For example, if you set a value called `gold` you can
+             * access it via:
              * 
-             * Used temporarily to allow 'changedata' event listeners to prevent
-             * specific data from being set.
+             * ```javascript
+             * this.data.values.gold;
+             * ```
+             * 
+             * You can also modify it directly:
+             * 
+             * ```javascript
+             * this.data.values.gold += 1000;
+             * ```
+             * 
+             * Doing so will emit a `setdata` event from the parent of this Data Manager.
              */
-            blockSet: boolean;
+            values: {[key: string]:  any};
 
             /**
              * Retrieves the value for the given key, or undefined if it doesn't exist.
-             * @param key The key of the value to retrieve.
+             * 
+             * You can also access values via the `values` object. For example, if you had a key called `gold` you can do either:
+             * 
+             * ```javascript
+             * this.data.get('gold');
+             * ```
+             * 
+             * Or access the value directly:
+             * 
+             * ```javascript
+             * this.data.values.gold;
+             * ```
+             * 
+             * You can also pass in an array of keys, in which case an array of values will be returned:
+             * 
+             * ```javascript
+             * this.data.get([ 'gold', 'armor', 'health' ]);
+             * ```
+             * 
+             * This approach is useful for destructuring arrays in ES6.
+             * @param key The key of the value to retrieve, or an array of keys.
              */
-            get(key: string): any;
+            get(key: string | string[]): any;
 
             /**
-             * Retrieves all data values.
+             * Retrieves all data values in a new object.
              */
             getAll(): {[key: string]:  any};
 
             /**
-             * Queries the DataManager for the values of keys matching the given search string.
-             * @param search The search string.
+             * Queries the DataManager for the values of keys matching the given regular expression.
+             * @param search A regular expression object. If a non-RegExp object obj is passed, it is implicitly converted to a RegExp by using new RegExp(obj).
              */
-            query(search: string): {[key: string]:  any};
+            query(search: RegExp): {[key: string]:  any};
 
             /**
-             * Sets the value for the given key.
+             * Sets a value for the given key. If the key doesn't already exist in the Data Manager then it is created.
              * 
-             * Emits the 'changedata' and 'setdata' events.
-             * @param key The key to set the value for.
-             * @param data The value to set.
+             * ```javascript
+             * data.set('name', 'Red Gem Stone');
+             * ```
+             * 
+             * You can also pass in an object of key value pairs as the first argument:
+             * 
+             * ```javascript
+             * data.set({ name: 'Red Gem Stone', level: 2, owner: 'Link', gold: 50 });
+             * ```
+             * 
+             * To get a value back again you can call `get`:
+             * 
+             * ```javascript
+             * data.get('gold');
+             * ```
+             * 
+             * Or you can access the value directly via the `values` property, where it works like any other variable:
+             * 
+             * ```javascript
+             * data.values.gold += 50;
+             * ```
+             * 
+             * When the value is first set, a `setdata` event is emitted.
+             * 
+             * If the key already exists, a `changedata` event is emitted instead, along an event named after the key.
+             * For example, if you updated an existing key called `PlayerLives` then it would emit the event `changedata_PlayerLives`.
+             * These events will be emitted regardless if you use this method to set the value, or the direct `values` setter.
+             * 
+             * Please note that the data keys are case-sensitive and must be valid JavaScript Object property strings.
+             * This means the keys `gold` and `Gold` are treated as two unique values within the Data Manager.
+             * @param key The key to set the value for. Or an object or key value pairs. If an object the `data` argument is ignored.
+             * @param data The value to set for the given key. If an object is provided as the key this argument is ignored.
              */
-            set(key: string, data: any): Phaser.Data.DataManager;
+            set(key: string | object, data: any): Phaser.Data.DataManager;
 
             /**
-             * Passes all data entries to the given callback. Stores the result of the callback.
+             * Passes all data entries to the given callback.
              * @param callback The function to call.
-             * @param scope Value to use as `this` when executing callback.
+             * @param context Value to use as `this` when executing callback.
              * @param args Additional arguments that will be passed to the callback, after the game object, key, and data.
              */
-            each(callback: DataEachCallback, scope?: any, ...args: any[]): Phaser.Data.DataManager;
+            each(callback: DataEachCallback, context?: any, ...args: any[]): Phaser.Data.DataManager;
 
             /**
-             * Merge the given data object into this DataManager's data object.
+             * Merge the given object of key value pairs into this DataManager.
+             * 
+             * Any newly created values will emit a `setdata` event. Any updated values (see the `overwrite` argument)
+             * will emit a `changedata` event.
              * @param data The data to merge.
-             * @param overwrite Whether to overwrite existing data. Defaults to true.
+             * @param overwrite Whether to overwrite existing data. Defaults to true. Default true.
              */
-            merge(data: {[key: string]:  any}, overwrite: boolean): Phaser.Data.DataManager;
+            merge(data: {[key: string]:  any}, overwrite?: boolean): Phaser.Data.DataManager;
 
             /**
              * Remove the value for the given key.
-             * @param key The key to remove
+             * 
+             * If the key is found in this Data Manager it is removed from the internal lists and a
+             * `removedata` event is emitted.
+             * 
+             * You can also pass in an array of keys, in which case all keys in the array will be removed:
+             * 
+             * ```javascript
+             * this.data.remove([ 'gold', 'armor', 'health' ]);
+             * ```
+             * @param key The key to remove, or an array of keys to remove.
              */
-            remove(key: string): Phaser.Data.DataManager;
+            remove(key: string | string[]): Phaser.Data.DataManager;
 
             /**
-             * Retrieves the data associated with the given 'key', deletes it from this Data store, then returns it.
+             * Retrieves the data associated with the given 'key', deletes it from this Data Manager, then returns it.
              * @param key The key of the value to retrieve and delete.
              */
             pop(key: string): any;
 
             /**
-             * Determines whether the given key is set in this Data store.
+             * Determines whether the given key is set in this Data Manager.
+             * 
+             * Please note that the keys are case-sensitive and must be valid JavaScript Object property strings.
+             * This means the keys `gold` and `Gold` are treated as two unique values within the Data Manager.
              * @param key The key to check.
              */
             has(key: string): boolean;
 
             /**
-             * Freeze or unfreeze this Data store, to allow or prevent setting its values.
-             * @param value Whether to freeze the Data store.
+             * Freeze or unfreeze this Data Manager. A frozen Data Manager will block all attempts
+             * to create new values or update existing ones.
+             * @param value Whether to freeze or unfreeze the Data Manager.
              */
             setFreeze(value: boolean): Phaser.Data.DataManager;
 
             /**
-             * Delete all data in this Data store and unfreeze it.
+             * Delete all data in this Data Manager and unfreeze it.
              */
             reset(): Phaser.Data.DataManager;
 
@@ -7275,12 +7570,13 @@ declare namespace Phaser {
             destroy(): void;
 
             /**
-             * Freeze this Data component, so no values can be set.
+             * Gets or sets the frozen state of this Data Manager.
+             * A frozen Data Manager will block all attempts to create new values or update existing ones.
              */
             freeze: boolean;
 
             /**
-             * Return the total number of entries in this Data component.
+             * Return the total number of entries in this Data Manager.
              */
             count: integer;
 
@@ -8402,7 +8698,7 @@ declare namespace Phaser {
              * @param s The saturation, in the range 0 - 1. Default 1.
              * @param v The value, in the range 0 - 1. Default 1.
              */
-            static HSVColorWheel(s?: number, v?: number): any[];
+            static HSVColorWheel(s?: number, v?: number): ColorObject[];
 
             /**
              * Converts an HSV (hue, saturation and value) color value to RGB.
@@ -8843,29 +9139,29 @@ declare namespace Phaser {
              * @param scene The Scene to which this Game Object belongs. It can only belong to one Scene at any given time.
              * @param x The x coordinate of this Game Object in world space.
              * @param y The y coordinate of this Game Object in world space.
-             * @param font [description]
-             * @param text [description]
-             * @param size [description]
+             * @param font The key of the font to use from the Bitmap Font cache.
+             * @param text The string, or array of strings, to be set as the content of this Bitmap Text.
+             * @param size The font size of this Bitmap Text.
              */
             constructor(scene: Phaser.Scene, x: number, y: number, font: string, text?: string | string[], size?: number);
 
             /**
-             * [description]
+             * The key of the Bitmap Font used by this Bitmap Text.
              */
             font: string;
 
             /**
-             * [description]
+             * The data of the Bitmap Font used by this Bitmap Text.
              */
-            fontData: object;
+            fontData: BitmapFontData;
 
             /**
-             * [description]
+             * The text that this Bitmap Text object displays.
              */
             text: string;
 
             /**
-             * [description]
+             * The font size of this Bitmap Text.
              */
             fontSize: number;
 
@@ -8876,91 +9172,107 @@ declare namespace Phaser {
             letterSpacing: number;
 
             /**
-             * [description]
+             * The horizontal scroll position of the Bitmap Text.
              */
             scrollX: number;
 
             /**
-             * [description]
+             * The vertical scroll position of the Bitmap Text.
              */
             scrollY: number;
 
             /**
-             * [description]
+             * The crop width of the Bitmap Text.
              */
             cropWidth: number;
 
             /**
-             * [description]
+             * The crop height of the Bitmap Text.
              */
             cropHeight: number;
 
             /**
-             * [description]
+             * A callback that alters how each character of the Bitmap Text is rendered.
              */
             "displayCallback;": DisplayCallback;
 
             /**
-             * [description]
-             * @param width [description]
-             * @param height [description]
+             * Set the crop size of this Bitmap Text.
+             * @param width The width of the crop.
+             * @param height The height of the crop.
              */
             setSize(width: number, height: number): Phaser.GameObjects.DynamicBitmapText;
 
             /**
-             * [description]
-             * @param callback [description]
+             * Set a callback that alters how each character of the Bitmap Text is rendered.
+             * 
+             * The callback receives a {@link DisplayCallbackConfig} object that contains information about the character that's
+             * about to be rendered.
+             * 
+             * It should return an object with `x`, `y`, `scale` and `rotation` properties that will be used instead of the
+             * usual values when rendering.
+             * @param callback The display callback to set.
              */
             setDisplayCallback(callback: DisplayCallback): Phaser.GameObjects.DynamicBitmapText;
 
             /**
-             * [description]
-             * @param size [description]
+             * Set the font size of this Bitmap Text.
+             * @param size The font size to set.
              */
             setFontSize(size: number): Phaser.GameObjects.DynamicBitmapText;
 
             /**
-             * [description]
+             * Set the content of this BitmapText.
+             * 
+             * An array of strings will be converted multi-line text.
              * @param value The string, or array of strings, to be set as the content of this BitmapText.
              */
             setText(value: string | string[]): Phaser.GameObjects.DynamicBitmapText;
 
             /**
-             * [description]
-             * @param value [description]
+             * Set the horizontal scroll position of this Bitmap Text.
+             * @param value The horizontal scroll position to set.
              */
             setScrollX(value: number): Phaser.GameObjects.DynamicBitmapText;
 
             /**
-             * [description]
-             * @param value [description]
+             * Set the vertical scroll position of this Bitmap Text.
+             * @param value The vertical scroll position to set.
              */
             setScrollY(value: number): Phaser.GameObjects.DynamicBitmapText;
 
             /**
-             * [description]
-             * @param round [description]
+             * Calculate the bounds of this Bitmap Text.
+             * 
+             * An object is returned that contains the position, width and height of the Bitmap Text in local and global
+             * contexts.
+             * 
+             * Local size is based on just the font size and a [0, 0] position.
+             * 
+             * Global size takes into account the Game Object's scale and world position.
+             * @param round Whether to round the results to the nearest integer.
              */
-            getTextBounds(round: boolean): TextBounds;
+            getTextBounds(round?: boolean): BitmapTextSize;
 
             /**
-             * [description]
+             * The width of this Bitmap Text.
              */
-            width: number;
+            readonly width: number;
 
             /**
-             * [description]
+             * The height of this Bitmap Text.
              */
-            height: number;
+            readonly height: number;
 
             /**
-             * [description]
+             * Build a JSON representation of this Bitmap Text.
              */
             toJSON(): JSONBitmapText;
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -9192,12 +9504,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -9551,11 +9863,11 @@ declare namespace Phaser {
              * @param scene A reference to the Phaser Scene.
              * @param config The font configuration object.
              */
-            function Parse(scene: Phaser.Scene, config: Phaser.GameObjects.RetroFont.Config): void;
+            function Parse(scene: Phaser.Scene, config: Phaser.GameObjects.RetroFont.Config): object;
 
             type Config = {
                 /**
-                 * [description]
+                 * The key of the image containing the font.
                  */
                 image: string;
                 /**
@@ -9603,41 +9915,42 @@ declare namespace Phaser {
              * @param scene The Scene to which this Game Object belongs. It can only belong to one Scene at any given time.
              * @param x The x coordinate of this Game Object in world space.
              * @param y The y coordinate of this Game Object in world space.
-             * @param font [description]
-             * @param text [description]
-             * @param size [description]
+             * @param font The key of the font to use from the Bitmap Font cache.
+             * @param text The string, or array of strings, to be set as the content of this Bitmap Text.
+             * @param size The font size of this Bitmap Text.
              */
             constructor(scene: Phaser.Scene, x: number, y: number, font: string, text?: string | string[], size?: number);
 
             /**
-             * [description]
+             * The key of the Bitmap Font used by this Bitmap Text.
              */
             font: string;
 
             /**
-             * [description]
+             * The data of the Bitmap Font used by this Bitmap Text.
              */
-            fontData: object;
+            fontData: BitmapFontData;
 
             /**
-             * [description]
+             * The text that this Bitmap Text object displays.
              */
             text: string;
 
             /**
-             * [description]
+             * The font size of this Bitmap Text.
              */
             fontSize: number;
 
             /**
-             * Adds/Removes spacing between characters
-             * Can be a negative or positive number
+             * Adds/Removes spacing between characters.
+             * 
+             * Can be a negative or positive number.
              */
             letterSpacing: number;
 
             /**
-             * [description]
-             * @param size [description]
+             * Set the font size of this Bitmap Text.
+             * @param size The font size to set.
              */
             setFontSize(size: number): Phaser.GameObjects.BitmapText;
 
@@ -9650,35 +9963,45 @@ declare namespace Phaser {
             setLetterSpacing(spacing?: number): Phaser.GameObjects.BitmapText;
 
             /**
-             * [description]
+             * Set the content of this BitmapText.
+             * 
+             * An array of strings will be converted multi-line text.
              * @param value The string, or array of strings, to be set as the content of this BitmapText.
              */
             setText(value: string | string[]): Phaser.GameObjects.BitmapText;
 
             /**
-             * [description]
-             * @param round [description]
+             * Calculate the bounds of this Bitmap Text.
+             * 
+             * An object is returned that contains the position, width and height of the Bitmap Text in local and global
+             * contexts.
+             * 
+             * Local size is based on just the font size and a [0, 0] position.
+             * 
+             * Global size takes into account the Game Object's scale and world position.
+             * @param round Whether to round the results to the nearest integer.
              */
-            getTextBounds(round: boolean): TextBounds;
+            getTextBounds(round?: boolean): BitmapTextSize;
 
             /**
-             * [description]
+             * The width of this Bitmap Text.
              */
-            width: number;
+            readonly width: number;
 
             /**
-             * [description]
+             * The height of this bitmap text.
              */
-            height: number;
+            readonly height: number;
 
             /**
-             * [description]
+             * Build a JSON representation of this Bitmap Text.
              */
             toJSON(): JSONBitmapText;
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -9910,12 +10233,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -10317,7 +10640,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -10491,12 +10815,12 @@ declare namespace Phaser {
             createGeometryMask(graphics?: Phaser.GameObjects.Graphics): Phaser.Display.Masks.GeometryMask;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -10802,16 +11126,16 @@ declare namespace Phaser {
 
         /**
          * Builds a Game Object using the provided configuration object.
-         * @param scene [description]
-         * @param gameObject [description]
-         * @param config [description]
+         * @param scene A reference to the Scene.
+         * @param gameObject The initial GameObject.
+         * @param config The config to build the GameObject with.
          */
         function BuildGameObject(scene: Phaser.Scene, gameObject: Phaser.GameObjects.GameObject, config: GameObjectConfig): Phaser.GameObjects.GameObject;
 
         /**
          * Adds an Animation component to a Sprite and populates it based on the given config.
-         * @param sprite [description]
-         * @param config [description]
+         * @param sprite The sprite to add an Animation component to.
+         * @param config The animation config.
          */
         function BuildGameObjectAnimation(sprite: Phaser.GameObjects.Sprite, config: object): Phaser.GameObjects.Sprite;
 
@@ -10823,7 +11147,8 @@ declare namespace Phaser {
             interface Alpha {
                 /**
                  * Clears all alpha values associated with this Game Object.
-                 * Immediately sets the alpha levels back to 1 (fully opaque)
+                 * 
+                 * Immediately sets the alpha levels back to 1 (fully opaque).
                  */
                 clearAlpha(): this;
                 /**
@@ -10948,8 +11273,8 @@ declare namespace Phaser {
                 getCurrentKey(): string;
                 /**
                  * Internal method used to load an animation into this component.
-                 * @param key [description]
-                 * @param startFrame [description] Default 0.
+                 * @param key The key of the animation to load.
+                 * @param startFrame The start frame of the animation to load. Default 0.
                  */
                 load(key: string, startFrame?: integer): Phaser.GameObjects.GameObject;
                 /**
@@ -10984,14 +11309,15 @@ declare namespace Phaser {
                 /**
                  * Takes a value between 0 and 1 and uses it to set how far this animation is through playback.
                  * Does not factor in repeats or yoyos, but does handle playing forwards or backwards.
-                 * @param value [description] Default 0.
+                 * @param value The progress value, between 0 and 1. Default 0.
                  */
                 setProgress(value?: number): Phaser.GameObjects.GameObject;
                 /**
-                 * [description]
-                 * @param event [description]
+                 * Handle the removal of an animation from the Animation Manager.
+                 * @param key The key of the removed Animation.
+                 * @param animation The removed Animation.
                  */
-                remove(event?: Phaser.Animations.Animation): void;
+                remove(key?: string, animation?: Phaser.Animations.Animation): void;
                 /**
                  * Gets the number of times that the animation will repeat
                  * after its first iteration. For example, if returns 1, the animation will
@@ -11004,7 +11330,7 @@ declare namespace Phaser {
                  * after its first iteration. For example, if repeat is 1, the animation will
                  * play a total of twice (the initial play plus 1 repeat).
                  * To repeat indefinitely, use -1. repeat should always be an integer.
-                 * @param value [description]
+                 * @param value The number of times that the animation should repeat.
                  */
                 setRepeat(value: integer): Phaser.GameObjects.GameObject;
                 /**
@@ -11021,7 +11347,7 @@ declare namespace Phaser {
                 setRepeatDelay(value: number): Phaser.GameObjects.GameObject;
                 /**
                  * Restarts the current animation from its beginning, optionally including its delay value.
-                 * @param includeDelay [description] Default false.
+                 * @param includeDelay Whether to include the delay value of the animation when restarting. Default false.
                  */
                 restart(includeDelay?: boolean): Phaser.GameObjects.GameObject;
                 /**
@@ -11059,10 +11385,10 @@ declare namespace Phaser {
                 getTotalFrames(): integer;
                 /**
                  * The internal update loop for the Animation Component.
-                 * @param timestamp [description]
+                 * @param time The current timestamp.
                  * @param delta The delta time, in ms, elapsed since the last frame.
                  */
-                update(timestamp: number, delta: number): void;
+                update(time: number, delta: number): void;
                 /**
                  * Sets the given Animation Frame as being the current frame
                  * and applies it to the parent Game Object, adjusting its size and origin as needed.
@@ -11081,7 +11407,9 @@ declare namespace Phaser {
                  */
                 getYoyo(): boolean;
                 /**
-                 * [description]
+                 * Destroy this Animation component.
+                 * 
+                 * Unregisters event listeners and cleans up its references.
                  */
                 destroy(): void;
             }
@@ -11478,11 +11806,11 @@ declare namespace Phaser {
              */
             interface Pipeline {
                 /**
-                 * [description]
+                 * The initial WebGL pipeline of this Game Object.
                  */
                 defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
                 /**
-                 * [description]
+                 * The current WebGL pipeline of this Game Object.
                  */
                 pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
                 /**
@@ -11693,8 +12021,10 @@ declare namespace Phaser {
             }
 
             /**
-             * [description]
-             * @param gameObject [description]
+             * Build a JSON representation of the given Game Object.
+             * 
+             * This is typically extended further by Game Object specific implementations.
+             * @param gameObject The Game Object to export as JSON.
              */
             function ToJSON(gameObject: Phaser.GameObjects.GameObject): JSONGameObject;
 
@@ -12239,8 +12569,8 @@ declare namespace Phaser {
              * For example: `count('visible', true)` would count all the elements that have their visible property set.
              * 
              * You can optionally limit the operation to the `startIndex` - `endIndex` range.
-             * @param property [description]
-             * @param value [description]
+             * @param property The property to check.
+             * @param value The value to check.
              * @param startIndex An optional start index to search from. Default 0.
              * @param endIndex An optional end index to search up to (but not included) Default Container.length.
              */
@@ -12435,7 +12765,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -12833,27 +13164,31 @@ declare namespace Phaser {
         }
 
         /**
-         * [description]
+         * The Display List plugin.
+         * 
+         * Display Lists belong to a Scene and maintain the list of Game Objects to render every frame.
+         * 
+         * Some of these Game Objects may also be part of the Scene's [Update List]{@link Phaser.GameObjects.UpdateList}, for updating.
          */
         class DisplayList extends Phaser.Structs.List<Phaser.GameObjects.GameObject> {
             /**
              * 
-             * @param scene [description]
+             * @param scene The Scene that this Display List belongs to.
              */
             constructor(scene: Phaser.Scene);
 
             /**
-             * [description]
+             * The flag the determines whether Game Objects should be sorted when `depthSort()` is called.
              */
             sortChildrenFlag: boolean;
 
             /**
-             * [description]
+             * The Scene that this Display List belongs to.
              */
             scene: Phaser.Scene;
 
             /**
-             * [description]
+             * The Scene's Systems.
              */
             systems: Phaser.Scenes.Systems;
 
@@ -12868,22 +13203,24 @@ declare namespace Phaser {
             depthSort(): void;
 
             /**
-             * [description]
-             * @param childA [description]
-             * @param childB [description]
+             * Compare the depth of two Game Objects.
+             * @param childA The first Game Object.
+             * @param childB The second Game Object.
              */
             sortByDepth(childA: Phaser.GameObjects.GameObject, childB: Phaser.GameObjects.GameObject): integer;
 
             /**
-             * Given an array of Game Objects, sort the array and return it,
-             * so that the objects are in index order with the lowest at the bottom.
-             * @param gameObjects [description]
+             * Given an array of Game Objects, sort the array and return it, so that
+             * the objects are in index order with the lowest at the bottom.
+             * @param gameObjects The array of Game Objects to sort.
              */
             sortGameObjects(gameObjects: Phaser.GameObjects.GameObject[]): any[];
 
             /**
+             * Get the top-most Game Object in the given array of Game Objects, after sorting it.
+             * 
              * Note that the given array is sorted in place, even though it isn't returned directly it will still be updated.
-             * @param gameObjects [description]
+             * @param gameObjects The array of Game Objects.
              */
             getTopGameObject(gameObjects: Phaser.GameObjects.GameObject[]): Phaser.GameObjects.GameObject;
 
@@ -12992,31 +13329,96 @@ declare namespace Phaser {
             setName(value: string): Phaser.GameObjects.GameObject;
 
             /**
-             * Adds a DataManager to this object.
+             * Adds a Data Manager component to this Game Object.
              */
             setDataEnabled(): Phaser.GameObjects.GameObject;
 
             /**
-             * This is a quick chainable alias to the `DataProxy.set` method.
-             * It allows you to set a key and value in this Game Objects data store.
-             * @param key The key of the property to be stored.
-             * @param value The value to store with the key. Can be a string, number, array or object.
+             * Allows you to store a key value pair within this Game Objects Data Manager.
+             * 
+             * If the Game Object has not been enabled for data (via `setDataEnabled`) then it will be enabled
+             * before setting the value.
+             * 
+             * If the key doesn't already exist in the Data Manager then it is created.
+             * 
+             * ```javascript
+             * sprite.setData('name', 'Red Gem Stone');
+             * ```
+             * 
+             * You can also pass in an object of key value pairs as the first argument:
+             * 
+             * ```javascript
+             * sprite.setData({ name: 'Red Gem Stone', level: 2, owner: 'Link', gold: 50 });
+             * ```
+             * 
+             * To get a value back again you can call `getData`:
+             * 
+             * ```javascript
+             * sprite.getData('gold');
+             * ```
+             * 
+             * Or you can access the value directly via the `values` property, where it works like any other variable:
+             * 
+             * ```javascript
+             * sprite.data.values.gold += 50;
+             * ```
+             * 
+             * When the value is first set, a `setdata` event is emitted from this Game Object.
+             * 
+             * If the key already exists, a `changedata` event is emitted instead, along an event named after the key.
+             * For example, if you updated an existing key called `PlayerLives` then it would emit the event `changedata_PlayerLives`.
+             * These events will be emitted regardless if you use this method to set the value, or the direct `values` setter.
+             * 
+             * Please note that the data keys are case-sensitive and must be valid JavaScript Object property strings.
+             * This means the keys `gold` and `Gold` are treated as two unique values within the Data Manager.
+             * @param key The key to set the value for. Or an object or key value pairs. If an object the `data` argument is ignored.
+             * @param data The value to set for the given key. If an object is provided as the key this argument is ignored.
              */
-            setData(key: string, value: any): Phaser.GameObjects.GameObject;
+            setData(key: string | object, data: any): this;
 
             /**
-             * This is a quick alias to the `DataProxy.get` method to remain consistent with `setData`.
-             * @param key The key of the property to be retrieved.
+             * Retrieves the value for the given key in this Game Objects Data Manager, or undefined if it doesn't exist.
+             * 
+             * You can also access values via the `values` object. For example, if you had a key called `gold` you can do either:
+             * 
+             * ```javascript
+             * sprite.getData('gold');
+             * ```
+             * 
+             * Or access the value directly:
+             * 
+             * ```javascript
+             * sprite.data.values.gold;
+             * ```
+             * 
+             * You can also pass in an array of keys, in which case an array of values will be returned:
+             * 
+             * ```javascript
+             * sprite.getData([ 'gold', 'armor', 'health' ]);
+             * ```
+             * 
+             * This approach is useful for destructuring arrays in ES6.
+             * @param key The key of the value to retrieve, or an array of keys.
              */
-            getData(key: string): any;
+            getData(key: string | string[]): any;
 
             /**
              * Pass this Game Object to the Input Manager to enable it for Input.
-             * @param shape A geometric shape that defines the hit area for the Game Object. If not specified a Rectangle will be used.
+             * 
+             * Input works by using hit areas, these are nearly always geometric shapes, such as rectangles or circles, that act as the hit area
+             * for the Game Object. However, you can provide your own hit area shape and callback, should you wish to handle some more advanced
+             * input detection.
+             * 
+             * If no arguments are provided it will try and create a rectangle hit area based on the texture frame the Game Object is using. If
+             * this isn't a texture-bound object, such as a Graphics or BitmapText object, this will fail, and you'll need to provide a specific
+             * shape for it to use.
+             * 
+             * You can also provide an Input Configuration Object as the only argument to this method.
+             * @param shape Either an input configuration object, or a geometric shape that defines the hit area for the Game Object. If not specified a Rectangle will be used.
              * @param callback A callback to be invoked when the Game Object is interacted with. If you provide a shape you must also provide a callback.
              * @param dropZone Should this Game Object be treated as a drop zone target? Default false.
              */
-            setInteractive(shape?: any, callback?: HitAreaCallback, dropZone?: boolean): Phaser.GameObjects.GameObject;
+            setInteractive(shape?: Phaser.Input.InputConfiguration | any, callback?: HitAreaCallback, dropZone?: boolean): Phaser.GameObjects.GameObject;
 
             /**
              * If this Game Object has previously been enabled for input, this will disable it.
@@ -13314,9 +13716,9 @@ declare namespace Phaser {
              * Note: This method will only be available if the Dynamic Bitmap Text Game Object has been built into Phaser.
              * @param x The x position of the Game Object.
              * @param y The y position of the Game Object.
-             * @param font [description]
-             * @param text [description]
-             * @param size [description]
+             * @param font The key of the font to use from the BitmapFont cache.
+             * @param text The string, or array of strings, to be set as the content of this Bitmap Text.
+             * @param size The font size to set.
              */
             dynamicBitmapText(x: number, y: number, font: string, text?: string | string[], size?: number): Phaser.GameObjects.DynamicBitmapText;
 
@@ -13326,9 +13728,9 @@ declare namespace Phaser {
              * Note: This method will only be available if the Bitmap Text Game Object has been built into Phaser.
              * @param x The x position of the Game Object.
              * @param y The y position of the Game Object.
-             * @param font [description]
-             * @param text [description]
-             * @param size [description]
+             * @param font The key of the font to use from the BitmapFont cache.
+             * @param text The string, or array of strings, to be set as the content of this Bitmap Text.
+             * @param size The font size to set.
              */
             bitmapText(x: number, y: number, font: string, text?: string | string[], size?: number): Phaser.GameObjects.BitmapText;
 
@@ -13386,9 +13788,9 @@ declare namespace Phaser {
              * Creates a new Graphics Game Object and adds it to the Scene.
              * 
              * Note: This method will only be available if the Graphics Game Object has been built into Phaser.
-             * @param config [description]
+             * @param config The Graphics configuration.
              */
-            graphics(config?: object): Phaser.GameObjects.Graphics;
+            graphics(config?: GraphicsOptions): Phaser.GameObjects.Graphics;
 
             /**
              * Creates a new Group Game Object and adds it to the Scene.
@@ -13563,230 +13965,273 @@ declare namespace Phaser {
         }
 
         /**
-         * [description]
+         * A Graphics object is a way to draw primitive shapes to you game. Primitives include forms of geometry, such as
+         * Rectangles, Circles, and Polygons. They also include lines, arcs and curves. When you initially create a Graphics
+         * object it will be empty.
+         * 
+         * To draw to it you must first specify a line style or fill style (or both), draw shapes using paths, and finally
+         * fill or stroke them. For example:
+         * 
+         * ```javascript
+         * graphics.lineStyle(5, 0xFF00FF, 1.0);
+         * graphics.beginPath();
+         * graphics.moveTo(100, 100);
+         * graphics.lineTo(200, 200);
+         * graphics.closePath();
+         * graphics.strokePath();
+         * ```
+         * 
+         * There are also many helpful methods that draw and fill/stroke common shapes for you.
+         * 
+         * ```javascript
+         * graphics.lineStyle(5, 0xFF00FF, 1.0);
+         * graphics.fillStyle(0xFFFFFF, 1.0);
+         * graphics.fillRect(50, 50, 400, 200);
+         * graphics.strokeRect(50, 50, 400, 200);
+         * ```
+         * 
+         * When a Graphics object is rendered it will render differently based on if the game is running under Canvas or WebGL.
+         * Under Canvas it will use the HTML Canvas context drawing operations to draw the path.
+         * Under WebGL the graphics data is decomposed into polygons. Both of these are expensive processes, especially with
+         * complex shapes.
+         * 
+         * If your Graphics object doesn't change much (or at all) once you've drawn your shape to it, then you will help
+         * performance by calling {@link Phaser.GameObjects.Graphics#generateTexture}. This will 'bake' the Graphics object into
+         * a Texture, and return it. You can then use this Texture for Sprites or other display objects. If your Graphics object
+         * updates frequently then you should avoid doing this, as it will constantly generate new textures, which will consume
+         * memory.
+         * 
+         * As you can tell, Graphics objects are a bit of a trade-off. While they are extremely useful, you need to be careful
+         * in their complexity and quantity of them in your game.
          */
         class Graphics extends Phaser.GameObjects.GameObject implements Phaser.GameObjects.Components.Alpha, Phaser.GameObjects.Components.BlendMode, Phaser.GameObjects.Components.Depth, Phaser.GameObjects.Components.Mask, Phaser.GameObjects.Components.Pipeline, Phaser.GameObjects.Components.Transform, Phaser.GameObjects.Components.Visible, Phaser.GameObjects.Components.ScrollFactor {
             /**
              * 
-             * @param scene [description]
-             * @param options [description]
+             * @param scene The Scene to which this Graphics object belongs.
+             * @param options Options that set the position and default style of this Graphics object.
              */
-            constructor(scene: Phaser.Scene, options: object);
+            constructor(scene: Phaser.Scene, options?: Partial<GraphicsOptions>);
 
             /**
-             * [description]
+             * The horizontal display origin of the Graphics.
              */
             displayOriginX: number;
 
             /**
-             * [description]
+             * The vertical display origin of the Graphics.
              */
             displayOriginY: number;
 
             /**
-             * [description]
+             * The array of commands used to render the Graphics.
              */
             commandBuffer: any[];
 
             /**
-             * [description]
+             * The default fill color for shapes rendered by this Graphics object.
              */
             defaultFillColor: number;
 
             /**
-             * [description]
+             * The default fill alpha for shapes rendered by this Graphics object.
              */
             defaultFillAlpha: number;
 
             /**
-             * [description]
+             * The default stroke width for shapes rendered by this Graphics object.
              */
             defaultStrokeWidth: number;
 
             /**
-             * [description]
+             * The default stroke color for shapes rendered by this Graphics object.
              */
             defaultStrokeColor: number;
 
             /**
-             * [description]
+             * The default stroke alpha for shapes rendered by this Graphics object.
              */
             defaultStrokeAlpha: number;
 
             /**
-             * [description]
-             * @param options [description]
+             * Set the default style settings for this Graphics object.
+             * @param options The styles to set as defaults.
              */
-            setDefaultStyles(options: object): Phaser.GameObjects.Graphics;
+            setDefaultStyles(options: GraphicsStyles): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param lineWidth [description]
-             * @param color [description]
-             * @param alpha [description] Default 1.
+             * Set the current line style.
+             * @param lineWidth The stroke width.
+             * @param color The stroke color.
+             * @param alpha The stroke alpha. Default 1.
              */
             lineStyle(lineWidth: number, color: number, alpha?: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param color [description]
-             * @param alpha [description] Default 1.
+             * Set the current fill style.
+             * @param color The fill color.
+             * @param alpha The fill alpha. Default 1.
              */
             fillStyle(color: number, alpha?: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
+             * Start a new shape path.
              */
             beginPath(): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
+             * Close the current path.
              */
             closePath(): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
+             * Fill the current path.
              */
             fillPath(): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
+             * Stroke the current path.
              */
             strokePath(): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param circle [description]
+             * Fill the given circle.
+             * @param circle The circle to fill.
              */
             fillCircleShape(circle: Phaser.Geom.Circle): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param circle [description]
+             * Stroke the given circle.
+             * @param circle The circle to stroke.
              */
             strokeCircleShape(circle: Phaser.Geom.Circle): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
-             * @param radius [description]
+             * Fill a circle with the given position and radius.
+             * @param x The x coordinate of the center of the circle.
+             * @param y The y coordinate of the center of the circle.
+             * @param radius The radius of the circle.
              */
             fillCircle(x: number, y: number, radius: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
-             * @param radius [description]
+             * Stroke a circle with the given position and radius.
+             * @param x The x coordinate of the center of the circle.
+             * @param y The y coordinate of the center of the circle.
+             * @param radius The radius of the circle.
              */
             strokeCircle(x: number, y: number, radius: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param rect [description]
+             * Fill the given rectangle.
+             * @param rect The rectangle to fill.
              */
             fillRectShape(rect: Phaser.Geom.Rectangle): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param rect [description]
+             * Stroke the given rectangle.
+             * @param rect The rectangle to stroke.
              */
             strokeRectShape(rect: Phaser.Geom.Rectangle): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
-             * @param width [description]
-             * @param height [description]
+             * Fill a rectangle with the given position and size.
+             * @param x The x coordinate of the top-left of the rectangle.
+             * @param y The y coordinate of the top-left of the rectangle.
+             * @param width The width of the rectangle.
+             * @param height The height of the rectangle.
              */
             fillRect(x: number, y: number, width: number, height: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
-             * @param width [description]
-             * @param height [description]
+             * Stroke a rectangle with the given position and size.
+             * @param x The x coordinate of the top-left of the rectangle.
+             * @param y The y coordinate of the top-left of the rectangle.
+             * @param width The width of the rectangle.
+             * @param height The height of the rectangle.
              */
             strokeRect(x: number, y: number, width: number, height: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param point [description]
-             * @param size [description] Default 1.
+             * Fill the given point.
+             * 
+             * Draws a square at the given position, 1 pixel in size by default.
+             * @param point The point to fill.
+             * @param size The size of the square to draw. Default 1.
              */
             fillPointShape(point: Phaser.Geom.Point | Phaser.Math.Vector2 | object, size?: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
-             * @param size [description] Default 1.
+             * Fill a point at the given position.
+             * 
+             * Draws a square at the given position, 1 pixel in size by default.
+             * @param x The x coordinate of the point.
+             * @param y The y coordinate of the point.
+             * @param size The size of the square to draw. Default 1.
              */
             fillPoint(x: number, y: number, size?: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param triangle [description]
+             * Fill the given triangle.
+             * @param triangle The triangle to fill.
              */
             fillTriangleShape(triangle: Phaser.Geom.Triangle): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param triangle [description]
+             * Stroke the given triangle.
+             * @param triangle The triangle to stroke.
              */
             strokeTriangleShape(triangle: Phaser.Geom.Triangle): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x0 [description]
-             * @param y0 [description]
-             * @param x1 [description]
-             * @param y1 [description]
-             * @param x2 [description]
-             * @param y2 [description]
+             * Fill a triangle with the given points.
+             * @param x0 The x coordinate of the first point.
+             * @param y0 The y coordinate of the first point.
+             * @param x1 The x coordinate of the second point.
+             * @param y1 The y coordinate of the second point.
+             * @param x2 The x coordinate of the third point.
+             * @param y2 The y coordinate of the third point.
              */
             fillTriangle(x0: number, y0: number, x1: number, y1: number, x2: number, y2: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x0 [description]
-             * @param y0 [description]
-             * @param x1 [description]
-             * @param y1 [description]
-             * @param x2 [description]
-             * @param y2 [description]
+             * Stroke a triangle with the given points.
+             * @param x0 The x coordinate of the first point.
+             * @param y0 The y coordinate of the first point.
+             * @param x1 The x coordinate of the second point.
+             * @param y1 The y coordinate of the second point.
+             * @param x2 The x coordinate of the third point.
+             * @param y2 The y coordinate of the third point.
              */
             strokeTriangle(x0: number, y0: number, x1: number, y1: number, x2: number, y2: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param line [description]
+             * Draw the given line.
+             * @param line The line to stroke.
              */
             strokeLineShape(line: Phaser.Geom.Line): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x1 [description]
-             * @param y1 [description]
-             * @param x2 [description]
-             * @param y2 [description]
+             * Draw a line between the given points.
+             * @param x1 The x coordinate of the start point of the line.
+             * @param y1 The y coordinate of the start point of the line.
+             * @param x2 The x coordinate of the end point of the line.
+             * @param y2 The y coordinate of the end point of the line.
              */
             lineBetween(x1: number, y1: number, x2: number, y2: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
+             * Draw a line from the current drawing position to the given position.
+             * 
+             * Moves the current drawing position to the given position.
+             * @param x The x coordinate to draw the line to.
+             * @param y The y coordinate to draw the line to.
              */
             lineTo(x: number, y: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
+             * Move the current drawing position to the given position.
+             * @param x The x coordinate to move to.
+             * @param y The y coordinate to move to.
              */
             moveTo(x: number, y: number): Phaser.GameObjects.Graphics;
 
@@ -13809,65 +14254,74 @@ declare namespace Phaser {
             moveFxTo(x: number, y: number, width: number, rgb: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param points [description]
-             * @param autoClose [description] Default false.
-             * @param endIndex [description]
+             * Stroke the shape represented by the given array of points.
+             * 
+             * Pass `true` to `autoClose` to close the shape automatically.
+             * @param points The points to stroke.
+             * @param autoClose When `true`, the shape is closed by joining the last point to the first point. Default false.
+             * @param endIndex The index of `points` to stop drawing at. Defaults to `points.length`.
              */
             strokePoints(points: any[] | Phaser.Geom.Point[], autoClose?: boolean, endIndex?: integer): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param points [description]
-             * @param autoClose [description] Default false.
-             * @param endIndex [description]
+             * Fill the shape represented by the given array of points.
+             * 
+             * Pass `true` to `autoClose` to close the shape automatically.
+             * @param points The points to fill.
+             * @param autoClose Whether to automatically close the polygon. Default false.
+             * @param endIndex The index of `points` to stop at. Defaults to `points.length`.
              */
             fillPoints(points: any[] | Phaser.Geom.Point[], autoClose?: boolean, endIndex?: integer): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param ellipse [description]
-             * @param smoothness [description] Default 32.
+             * Stroke the given ellipse.
+             * @param ellipse The ellipse to stroke.
+             * @param smoothness The number of points to draw the ellipse with. Default 32.
              */
             strokeEllipseShape(ellipse: Phaser.Geom.Ellipse, smoothness?: integer): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
-             * @param width [description]
-             * @param height [description]
-             * @param smoothness [description] Default 32.
+             * Stroke an ellipse with the given position and size.
+             * @param x The x coordinate of the center of the ellipse.
+             * @param y The y coordinate of the center of the ellipse.
+             * @param width The width of the ellipse.
+             * @param height The height of the ellipse.
+             * @param smoothness The number of points to draw the ellipse with. Default 32.
              */
             strokeEllipse(x: number, y: number, width: number, height: number, smoothness?: integer): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param ellipse [description]
-             * @param smoothness [description] Default 32.
+             * Fill the given ellipse.
+             * @param ellipse The ellipse to fill.
+             * @param smoothness The number of points to draw the ellipse with. Default 32.
              */
             fillEllipseShape(ellipse: Phaser.Geom.Ellipse, smoothness?: integer): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
-             * @param width [description]
-             * @param height [description]
-             * @param smoothness [description] Default 32.
+             * Fill an ellipse with the given position and size.
+             * @param x The x coordinate of the center of the ellipse.
+             * @param y The y coordinate of the center of the ellipse.
+             * @param width The width of the ellipse.
+             * @param height The height of the ellipse.
+             * @param smoothness The number of points to draw the ellipse with. Default 32.
              */
             fillEllipse(x: number, y: number, width: number, height: number, smoothness?: integer): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
-             * @param radius [description]
-             * @param startAngle [description]
-             * @param endAngle [description]
-             * @param anticlockwise [description]
+             * Draw an arc.
+             * 
+             * This method can be used to create circles, or parts of circles.
+             * 
+             * Call {@link Phaser.GameObjects.Graphics#fillPath} or {@link Phaser.GameObjects.Graphics#strokePath} after calling
+             * this method to draw the arc.
+             * @param x The x coordinate of the center of the circle.
+             * @param y The y coordinate of the center of the circle.
+             * @param radius The radius of the circle.
+             * @param startAngle The starting angle, in radians.
+             * @param endAngle The ending angle, in radians.
+             * @param anticlockwise Whether the drawing should be anticlockwise or clockwise. Default false.
              */
-            arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise: boolean): Phaser.GameObjects.Graphics;
+            arc(x: number, y: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): Phaser.GameObjects.Graphics;
 
             /**
              * Creates a pie-chart slice shape centered at `x`, `y` with the given radius.
@@ -13898,39 +14352,41 @@ declare namespace Phaser {
             restore(): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
+             * Translate the graphics.
+             * @param x The horizontal translation to apply.
+             * @param y The vertical translation to apply.
              */
             translate(x: number, y: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param x [description]
-             * @param y [description]
+             * Scale the graphics.
+             * @param x The horizontal scale to apply.
+             * @param y The vertical scale to apply.
              */
             scale(x: number, y: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
-             * @param radians [description]
+             * Rotate the graphics.
+             * @param radians The rotation angle, in radians.
              */
             rotate(radians: number): Phaser.GameObjects.Graphics;
 
             /**
-             * [description]
+             * Clear the command buffer and reset the fill style and line style to their defaults.
              */
             clear(): Phaser.GameObjects.Graphics;
 
             /**
-             * If key is a string it'll generate a new texture using it and add it into the
+             * Generate a texture from this Graphics object.
+             * 
+             * If `key` is a string it'll generate a new texture using it and add it into the
              * Texture Manager (assuming no key conflict happens).
              * 
-             * If key is a Canvas it will draw the texture to that canvas context. Note that it will NOT
+             * If `key` is a Canvas it will draw the texture to that canvas context. Note that it will NOT
              * automatically upload it to the GPU in WebGL mode.
-             * @param key [description]
-             * @param width [description]
-             * @param height [description]
+             * @param key The key to store the texture with in the Texture Manager, or a Canvas to draw to.
+             * @param width The width of the graphics to generate.
+             * @param height The height of the graphics to generate.
              */
             generateTexture(key: string | HTMLCanvasElement, width?: integer, height?: integer): Phaser.GameObjects.Graphics;
 
@@ -13946,7 +14402,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -14120,12 +14577,12 @@ declare namespace Phaser {
             createGeometryMask(graphics?: Phaser.GameObjects.Graphics): Phaser.Display.Masks.GeometryMask;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -14705,7 +15162,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -15031,12 +15489,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -15385,7 +15843,9 @@ declare namespace Phaser {
         }
 
         /**
-         * [description]
+         * A 2D point light.
+         * 
+         * Add these to a scene using the ForwardDiffuseLightPipeline for lighting effects, or just to represent a point light.
          */
         class Light {
             /**
@@ -15393,60 +15853,63 @@ declare namespace Phaser {
              * @param x The horizontal position of the light.
              * @param y The vertical position of the light.
              * @param radius The radius of the light.
-             * @param r The red color. A value between 0 and 1.
-             * @param g The green color. A value between 0 and 1.
-             * @param b The blue color. A value between 0 and 1.
+             * @param r The red color of the light. A value between 0 and 1.
+             * @param g The green color of the light. A value between 0 and 1.
+             * @param b The blue color of the light. A value between 0 and 1.
              * @param intensity The intensity of the light.
              */
             constructor(x: number, y: number, radius: number, r: number, g: number, b: number, intensity: number);
 
             /**
-             * [description]
+             * The horizontal position of the light.
              */
             x: number;
 
             /**
-             * [description]
+             * The vertical position of the light.
              */
             y: number;
 
             /**
-             * [description]
+             * The radius of the light.
              */
             radius: number;
 
             /**
-             * [description]
+             * The red color of the light. A value between 0 and 1.
              */
             r: number;
 
             /**
-             * [description]
+             * The green color of the light. A value between 0 and 1.
              */
             g: number;
 
             /**
-             * [description]
+             * The blue color of the light. A value between 0 and 1.
              */
             b: number;
 
             /**
-             * [description]
+             * The intensity of the light.
              */
             intensity: number;
 
             /**
-             * [description]
+             * The horizontal scroll factor of the light.
              */
             scrollFactorX: number;
 
             /**
-             * [description]
+             * The vertical scroll factor of the light.
              */
             scrollFactorY: number;
 
             /**
-             * [description]
+             * Set the properties of the light.
+             * 
+             * Sets both horizontal and vertical scroll factor to 1. Use {@link Phaser.GameObjects.Light#setScrollFactor} to set
+             * the scroll factor.
              * @param x The horizontal position of the light.
              * @param y The vertical position of the light.
              * @param radius The radius of the light.
@@ -15458,34 +15921,34 @@ declare namespace Phaser {
             set(x: number, y: number, radius: number, r: number, g: number, b: number, intensity: number): Phaser.GameObjects.Light;
 
             /**
-             * [description]
+             * Set the scroll factor of the light.
              * @param x The horizontal scroll factor of the light.
              * @param y The vertical scroll factor of the light.
              */
             setScrollFactor(x: number, y: number): Phaser.GameObjects.Light;
 
             /**
-             * [description]
+             * Set the color of the light from a single integer RGB value.
              * @param rgb [description]
              */
             setColor(rgb: number): Phaser.GameObjects.Light;
 
             /**
-             * [description]
-             * @param intensity [description]
+             * Set the intensity of the light.
+             * @param intensity The intensity of the light.
              */
             setIntensity(intensity: number): Phaser.GameObjects.Light;
 
             /**
-             * [description]
+             * Set the position of the light.
              * @param x The horizontal position of the light.
              * @param y The vertical position of the light.
              */
             setPosition(x: number, y: number): Phaser.GameObjects.Light;
 
             /**
-             * [description]
-             * @param radius [description]
+             * Set the radius of the light.
+             * @param radius The radius of the light.
              */
             setRadius(radius: number): Phaser.GameObjects.Light;
 
@@ -15637,28 +16100,29 @@ declare namespace Phaser {
             constructor(scene: Phaser.Scene, x: number, y: number, vertices: number[], uv: number[], colors: number[], alphas: number[], texture: string, frame?: string | integer);
 
             /**
-             * [description]
+             * An array containing the vertices data for this Mesh.
              */
             vertices: Float32Array;
 
             /**
-             * [description]
+             * An array containing the uv data for this Mesh.
              */
             uv: Float32Array;
 
             /**
-             * [description]
+             * An array containing the color data for this Mesh.
              */
             colors: Uint32Array;
 
             /**
-             * [description]
+             * An array containing the alpha data for this Mesh.
              */
             alphas: Float32Array;
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -15984,12 +16448,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -17848,7 +18312,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -18174,12 +18639,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -18539,7 +19004,7 @@ declare namespace Phaser {
         class Quad extends Phaser.GameObjects.Mesh {
             /**
              * 
-             * @param scene [description]
+             * @param scene The Scene to which this Quad belongs.
              * @param x The horizontal position of this Game Object in the world.
              * @param y The vertical position of this Game Object in the world.
              * @param texture The key of the Texture this Game Object will use to render with, as stored in the Texture Manager.
@@ -18677,7 +19142,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -19003,12 +19469,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -19332,26 +19798,57 @@ declare namespace Phaser {
             renderer: Phaser.Renderer.Canvas.CanvasRenderer | Phaser.Renderer.WebGL.WebGLRenderer;
 
             /**
-             * [description]
+             * The tint of the Render Texture when rendered.
              */
             globalTint: number;
 
             /**
-             * [description]
+             * The alpha of the Render Texture when rendered.
              */
             globalAlpha: number;
 
             /**
-             * [description]
-             * @param tint [description]
+             * The HTML Canvas Element that the Render Texture is drawing to.
+             * This is only set if Phaser is running with the Canvas Renderer.
              */
-            setGlobalTint(tint: integer): Phaser.GameObjects.RenderTexture;
+            canvas: HTMLCanvasElement;
 
             /**
-             * [description]
-             * @param alpha [description]
+             * A reference to the Rendering Context belonging to the Canvas Element this Render Texture is drawing to.
+             * This is only set if Phaser is running with the Canvas Renderer.
              */
-            setGlobalAlpha(alpha: number): Phaser.GameObjects.RenderTexture;
+            context: CanvasRenderingContext2D;
+
+            /**
+             * A reference to the GL Frame Buffer this Render Texture is drawing to.
+             * This is only set if Phaser is running with the WebGL Renderer.
+             */
+            framebuffer: WebGLFramebuffer;
+
+            /**
+             * Resizes the Render Texture to the new dimensions given.
+             * 
+             * In WebGL it will destroy and then re-create the frame buffer being used by the Render Texture.
+             * In Canvas it will resize the underlying canvas element.
+             * Both approaches will erase everything currently drawn to the Render Texture.
+             * 
+             * If the dimensions given are the same as those already being used, calling this method will do nothing.
+             * @param width The new width of the Render Texture.
+             * @param height The new height of the Render Texture. If not specified, will be set the same as the `width`.
+             */
+            resize(width: number, height?: number): this;
+
+            /**
+             * Set the tint to use when rendering this Render Texture.
+             * @param tint The tint value.
+             */
+            setGlobalTint(tint: integer): this;
+
+            /**
+             * Set the alpha to use when rendering this Render Texture.
+             * @param alpha The alpha value.
+             */
+            setGlobalAlpha(alpha: number): this;
 
             /**
              * Internal destroy handler, called as part of the destroy process.
@@ -19360,7 +19857,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -19785,12 +20283,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -20084,33 +20582,34 @@ declare namespace Phaser {
             constructor(scene: Phaser.Scene, x: number, y: number, texture: string, frame?: string | integer);
 
             /**
-             * [description]
+             * The Animation Controller of this Sprite.
              */
             anims: Phaser.GameObjects.Components.Animation;
 
             /**
-             * [description]
-             * @param time [description]
-             * @param delta [description]
+             * Update this Sprite's animations.
+             * @param time The current timestamp.
+             * @param delta The delta time, in ms, elapsed since the last frame.
              */
             protected preUpdate(time: number, delta: number): void;
 
             /**
-             * [description]
-             * @param key [description]
-             * @param ignoreIfPlaying [description] Default false.
-             * @param startFrame [description] Default 0.
+             * Start playing the given animation.
+             * @param key The string-based key of the animation to play.
+             * @param ignoreIfPlaying If an animation is already playing then ignore this call. Default false.
+             * @param startFrame Optionally start the animation playing from this frame index. Default 0.
              */
             play(key: string, ignoreIfPlaying?: boolean, startFrame?: integer): Phaser.GameObjects.Sprite;
 
             /**
-             * [description]
+             * Build a JSON representation of this Sprite.
              */
             toJSON(): JSONGameObject;
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -20436,12 +20935,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -21176,7 +21675,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -21529,12 +22029,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -21822,27 +22322,29 @@ declare namespace Phaser {
             constructor(scene: Phaser.Scene, x: number, y: number, width: number, height: number, texture: string, frame?: string | integer);
 
             /**
-             * [description]
+             * The horizontal scroll position of the Tile Sprite.
              */
             tilePositionX: number;
 
             /**
-             * [description]
+             * The vertical scroll position of the Tile Sprite.
              */
             tilePositionY: number;
 
             /**
-             * [description]
+             * Whether the Tile Sprite has changed in some way, requiring an re-render of its tile texture.
+             * 
+             * Such changes include the texture frame and scroll position of the Tile Sprite.
              */
             dirty: boolean;
 
             /**
-             * [description]
+             * The texture that the Tile Sprite is rendered to, which is then rendered to a Scene.
              */
             tileTexture: WebGLTexture;
 
             /**
-             * [description]
+             * The renderer in use by this Tile Sprite.
              */
             renderer: Phaser.Renderer.Canvas.CanvasRenderer | Phaser.Renderer.WebGL.WebGLRenderer;
 
@@ -21879,7 +22381,7 @@ declare namespace Phaser {
             setTilePosition(x?: number, y?: number): Phaser.GameObjects.TileSprite;
 
             /**
-             * [description]
+             * Render the tile texture if it is dirty, or if the frame has changed.
              */
             updateTileTexture(): void;
 
@@ -21890,7 +22392,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -22216,12 +22719,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -22570,53 +23073,59 @@ declare namespace Phaser {
         }
 
         /**
-         * [description]
+         * The Update List plugin.
+         * 
+         * Update Lists belong to a Scene and maintain the list Game Objects to be updated every frame.
+         * 
+         * Some or all of these Game Objects may also be part of the Scene's [Display List]{@link Phaser.GameObjects.DisplayList}, for Rendering.
          */
         class UpdateList {
             /**
              * 
-             * @param scene [description]
+             * @param scene The Scene that the Update List belongs to.
              */
             constructor(scene: Phaser.Scene);
 
             /**
-             * [description]
+             * The Scene that the Update List belongs to.
              */
             scene: Phaser.Scene;
 
             /**
-             * [description]
+             * The Scene's Systems.
              */
             systems: Phaser.Scenes.Systems;
 
             /**
-             * [description]
-             * @param child [description]
+             * Add a Game Object to the Update List.
+             * @param child The Game Object to add.
              */
             add(child: Phaser.GameObjects.GameObject): Phaser.GameObjects.GameObject;
 
             /**
-             * [description]
-             * @param time [description]
-             * @param delta [description]
+             * The pre-update step.
+             * 
+             * Handles Game Objects that are pending insertion to and removal from the list.
              */
-            preUpdate(time: number, delta: number): void;
+            preUpdate(): void;
 
             /**
-             * [description]
-             * @param time [description]
-             * @param delta [description]
+             * The update step.
+             * 
+             * Pre-updates every active Game Object in the list.
+             * @param time The current timestamp.
+             * @param delta The delta time elapsed since the last frame.
              */
             update(time: number, delta: number): void;
 
             /**
-             * [description]
-             * @param child [description]
+             * Remove a Game Object from the list.
+             * @param child The Game Object to remove from the list.
              */
             remove(child: Phaser.GameObjects.GameObject): Phaser.GameObjects.GameObject;
 
             /**
-             * [description]
+             * Remove all Game Objects from the list.
              */
             removeAll(): Phaser.GameObjects.UpdateList;
 
@@ -22631,6 +23140,11 @@ declare namespace Phaser {
              * We need to shutdown and then kill off all external references.
              */
             destroy(): void;
+
+            /**
+             * The length of the list.
+             */
+            readonly length: integer;
 
         }
 
@@ -24389,6 +24903,15 @@ declare namespace Phaser {
             static Random<O extends Phaser.Geom.Point>(rect: Phaser.Geom.Rectangle, out: O): O;
 
             /**
+             * Calculates a random point that lies within the `outer` Rectangle, but outside of the `inner` Rectangle.
+             * The inner Rectangle must be fully contained within the outer rectangle.
+             * @param outer The outer Rectangle to get the random point within.
+             * @param inner The inner Rectangle to exclude from the returned point.
+             * @param out A Point, or Point-like object to store the result in. If not specified, a new Point will be created.
+             */
+            static RandomOutside<O extends Phaser.Geom.Point>(outer: Phaser.Geom.Rectangle, inner: Phaser.Geom.Rectangle, out?: O): O;
+
+            /**
              * [description]
              */
             x: number;
@@ -24857,101 +25380,154 @@ declare namespace Phaser {
     }
 
     namespace Input {
+        /**
+         * The mouse pointer is being held down.
+         */
+        var MOUSE_DOWN: integer;
+
+        /**
+         * The mouse pointer is being moved.
+         */
+        var MOUSE_MOVE: integer;
+
+        /**
+         * The mouse pointer is released.
+         */
+        var MOUSE_UP: integer;
+
+        /**
+         * A touch pointer has been started.
+         */
+        var TOUCH_START: integer;
+
+        /**
+         * A touch pointer has been started.
+         */
+        var TOUCH_MOVE: integer;
+
+        /**
+         * A touch pointer has been started.
+         */
+        var TOUCH_END: integer;
+
+        /**
+         * The pointer lock has changed.
+         */
+        var POINTER_LOCK_CHANGE: integer;
+
         type InteractiveObject = {
             /**
-             * [description]
+             * The Game Object to which this Interactive Object is bound.
              */
             gameObject: Phaser.GameObjects.GameObject;
             /**
-             * [description]
+             * Is this Interactive Object currently enabled for input events?
              */
             enabled: boolean;
             /**
-             * [description]
+             * Is this Interactive Object draggable? Enable with `InputPlugin.setDraggable`.
              */
             draggable: boolean;
             /**
-             * [description]
+             * Is this Interactive Object a drag-targets drop zone? Set when the object is created.
              */
             dropZone: boolean;
             /**
-             * [description]
+             * Should this Interactive Object change the cursor (via css) when over? (desktop only)
+             */
+            cursor: boolean | string;
+            /**
+             * An optional drop target for a draggable Interactive Object.
              */
             target: Phaser.GameObjects.GameObject;
             /**
-             * [description]
+             * The most recent Camera to be tested against this Interactive Object.
              */
             camera: Phaser.Cameras.Scene2D.Camera;
             /**
-             * [description]
+             * The hit area for this Interactive Object. Typically a geometry shape, like a Rectangle or Circle.
              */
             hitArea: any;
             /**
-             * [description]
+             * The 'contains' check callback that the hit area shape will use for all hit tests.
              */
             hitAreaCallback: HitAreaCallback;
             /**
-             * [description]
+             * The x coordinate that the Pointer interacted with this object on, relative to the Game Object's top-left position.
              */
             localX: number;
             /**
-             * [description]
+             * The y coordinate that the Pointer interacted with this object on, relative to the Game Object's top-left position.
              */
             localY: number;
             /**
-             * [description]
+             * The current drag state of this Interactive Object. 0 = Not being dragged, 1 = being checked for drag, or 2 = being actively dragged.
              */
             dragState: 0 | 1 | 2;
             /**
-             * [description]
+             * The x coordinate that the Pointer started dragging this Interactive Object from.
              */
             dragStartX: number;
             /**
-             * [description]
+             * The y coordinate that the Pointer started dragging this Interactive Object from.
              */
             dragStartY: number;
             /**
-             * [description]
+             * The x coordinate that this Interactive Object is currently being dragged to.
              */
             dragX: number;
             /**
-             * [description]
+             * The y coordinate that this Interactive Object is currently being dragged to.
              */
             dragY: number;
         };
 
         /**
-         * [description]
-         * @param gameObject [description]
-         * @param hitArea [description]
-         * @param hitAreaCallback [description]
+         * Creates a new Interactive Object.
+         * 
+         * This is called automatically by the Input Manager when you enable a Game Object for input.
+         * 
+         * The resulting Interactive Object is mapped to the Game Object's `input` property.
+         * @param gameObject The Game Object to which this Interactive Object is bound.
+         * @param hitArea The hit area for this Interactive Object. Typically a geometry shape, like a Rectangle or Circle.
+         * @param hitAreaCallback The 'contains' check callback that the hit area shape will use for all hit tests.
          */
         function CreateInteractiveObject(gameObject: Phaser.GameObjects.GameObject, hitArea: any, hitAreaCallback: HitAreaCallback): Phaser.Input.InteractiveObject;
 
+        /**
+         * Creates a new Pixel Perfect Handler function.
+         * 
+         * Access via `InputPlugin.makePixelPerfect` rather than calling it directly.
+         * @param textureManager A reference to the Texture Manager.
+         * @param alphaTolerance The alpha level that the pixel should be above to be included as a successful interaction.
+         */
+        function CreatePixelPerfectHandler(textureManager: Phaser.Textures.TextureManager, alphaTolerance: integer): Function;
+
         namespace Gamepad {
             /**
-             * [description]
+             * Contains information about a specific Gamepad Axis.
+             * Axis objects are created automatically by the Gamepad as they are needed.
              */
             class Axis {
                 /**
                  * 
-                 * @param pad [description]
-                 * @param index [description]
+                 * @param pad A reference to the Gamepad that this Axis belongs to.
+                 * @param index The index of this Axis.
                  */
                 constructor(pad: Phaser.Input.Gamepad.Gamepad, index: integer);
 
                 /**
-                 * [description]
+                 * A reference to the Gamepad that this Axis belongs to.
                  */
                 pad: Phaser.Input.Gamepad.Gamepad;
 
                 /**
-                 * [description]
+                 * An event emitter to use to emit the axis events.
                  */
                 events: Phaser.Events.EventEmitter;
 
                 /**
-                 * [description]
+                 * The index of this Axis.
                  */
                 index: integer;
 
@@ -24967,41 +25543,41 @@ declare namespace Phaser {
                 threshold: number;
 
                 /**
-                 * [description]
-                 * @param value [description]
-                 */
-                update(value: number): void;
-
-                /**
-                 * Applies threshold to the value and returns it.
+                 * Applies the `threshold` value to the axis and returns it.
                  */
                 getValue(): number;
+
+                /**
+                 * Destroys this Axis instance and releases external references it holds.
+                 */
+                destroy(): void;
 
             }
 
             /**
-             * [description]
+             * Contains information about a specific button on a Gamepad.
+             * Button objects are created automatically by the Gamepad as they are needed.
              */
             class Button {
                 /**
                  * 
-                 * @param pad [description]
-                 * @param index [description]
+                 * @param pad A reference to the Gamepad that this Button belongs to.
+                 * @param index The index of this Button.
                  */
                 constructor(pad: Phaser.Input.Gamepad.Gamepad, index: integer);
 
                 /**
-                 * [description]
+                 * A reference to the Gamepad that this Button belongs to.
                  */
                 pad: Phaser.Input.Gamepad.Gamepad;
 
                 /**
-                 * [description]
+                 * An event emitter to use to emit the button events.
                  */
                 events: Phaser.Events.EventEmitter;
 
                 /**
-                 * [description]
+                 * The index of this Button.
                  */
                 index: integer;
 
@@ -25011,7 +25587,8 @@ declare namespace Phaser {
                 value: number;
 
                 /**
-                 * Can be set for Analogue buttons to enable a 'pressure' threshold before considered as 'pressed'.
+                 * Can be set for analogue buttons to enable a 'pressure' threshold,
+                 * before a button is considered as being 'pressed'.
                  */
                 threshold: number;
 
@@ -25021,10 +25598,9 @@ declare namespace Phaser {
                 pressed: boolean;
 
                 /**
-                 * [description]
-                 * @param data [description]
+                 * Destroys this Button instance and releases external references it holds.
                  */
-                update(data: GamepadButton): void;
+                destroy(): void;
 
             }
 
@@ -25049,237 +25625,485 @@ declare namespace Phaser {
             }
 
             /**
-             * [description]
+             * A single Gamepad.
+             * 
+             * These are created, updated and managed by the Gamepad Plugin.
              */
-            class Gamepad {
+            class Gamepad extends Phaser.Events.EventEmitter {
                 /**
                  * 
-                 * @param manager [description]
-                 * @param id [description]
-                 * @param index [description]
+                 * @param manager A reference to the Gamepad Plugin.
+                 * @param pad The Gamepad object, as extracted from GamepadEvent.
                  */
-                constructor(manager: Phaser.Input.Gamepad.GamepadManager, id: string, index: number);
+                constructor(manager: Phaser.Input.Gamepad.GamepadPlugin, pad: Pad);
 
                 /**
-                 * [description]
+                 * A reference to the Gamepad Plugin.
                  */
-                manager: Phaser.Input.Gamepad.GamepadManager;
+                manager: Phaser.Input.Gamepad.GamepadPlugin;
 
                 /**
-                 * [description]
+                 * A reference to the native Gamepad object that is connected to the browser.
+                 */
+                pad: any;
+
+                /**
+                 * A string containing some information about the controller.
+                 * 
+                 * This is not strictly specified, but in Firefox it will contain three pieces of information
+                 * separated by dashes (-): two 4-digit hexadecimal strings containing the USB vendor and
+                 * product id of the controller, and the name of the controller as provided by the driver.
+                 * In Chrome it will contain the name of the controller as provided by the driver,
+                 * followed by vendor and product 4-digit hexadecimal strings.
                  */
                 id: string;
 
                 /**
-                 * [description]
+                 * An integer that is unique for each Gamepad currently connected to the system.
+                 * This can be used to distinguish multiple controllers.
+                 * Note that disconnecting a device and then connecting a new device may reuse the previous index.
                  */
                 index: number;
 
                 /**
-                 * [description]
-                 */
-                connected: boolean;
-
-                /**
-                 * [description]
-                 */
-                timestamp: number;
-
-                /**
-                 * [description]
+                 * An array of Gamepad Button objects, corresponding to the different buttons available on the Gamepad.
                  */
                 buttons: Phaser.Input.Gamepad.Button[];
 
                 /**
-                 * [description]
+                 * An array of Gamepad Axis objects, corresponding to the different axes available on the Gamepad, if any.
                  */
                 axes: Phaser.Input.Gamepad.Axis[];
 
                 /**
-                 * [description]
-                 * @param data [description]
+                 * The Gamepad's Haptic Actuator (Vibration / Rumble support).
+                 * This is highly experimental and only set if both present on the device,
+                 * and exposed by both the hardware and browser.
                  */
-                update(data: Gamepad): void;
+                vibration: GamepadHapticActuator;
 
-            }
-
-            /**
-             * [description]
-             */
-            class GamepadManager extends Phaser.Events.EventEmitter {
                 /**
+                 * A Vector2 containing the most recent values from the Gamepad's left axis stick.
+                 * This is updated automatically as part of the Gamepad.update cycle.
+                 * The H Axis is mapped to the `Vector2.x` property, and the V Axis to the `Vector2.y` property.
+                 * The values are based on the Axis thresholds.
+                 * If the Gamepad does not have a left axis stick, the values will always be zero.
+                 */
+                leftStick: Phaser.Math.Vector2;
+
+                /**
+                 * A Vector2 containing the most recent values from the Gamepad's right axis stick.
+                 * This is updated automatically as part of the Gamepad.update cycle.
+                 * The H Axis is mapped to the `Vector2.x` property, and the V Axis to the `Vector2.y` property.
+                 * The values are based on the Axis thresholds.
+                 * If the Gamepad does not have a right axis stick, the values will always be zero.
+                 */
+                rightStick: Phaser.Math.Vector2;
+
+                /**
+                 * Gets the total number of axis this Gamepad claims to support.
+                 */
+                getAxisTotal(): integer;
+
+                /**
+                 * Gets the value of an axis based on the given index.
+                 * The index must be valid within the range of axes supported by this Gamepad.
+                 * The return value will be a float between 0 and 1.
+                 * @param index The index of the axes to get the value for.
+                 */
+                getAxisValue(index: integer): number;
+
+                /**
+                 * Sets the threshold value of all axis on this Gamepad.
+                 * The value is a float between 0 and 1 and is the amount below which the axis is considered as not having been moved.
+                 * @param value A value between 0 and 1.
+                 */
+                setAxisThreshold(value: number): void;
+
+                /**
+                 * Gets the total number of buttons this Gamepad claims to have.
+                 */
+                getButtonTotal(): integer;
+
+                /**
+                 * Gets the value of a button based on the given index.
+                 * The index must be valid within the range of buttons supported by this Gamepad.
                  * 
-                 * @param inputManager [description]
+                 * The return value will be either 0 or 1 for an analogue button, or a float between 0 and 1
+                 * for a pressure-sensitive digital button, such as the shoulder buttons on a Dual Shock.
+                 * @param index The index of the button to get the value for.
                  */
-                constructor(inputManager: Phaser.Input.InputManager);
+                getButtonValue(index: integer): number;
 
                 /**
-                 * [description]
+                 * Returns if the button is pressed down or not.
+                 * The index must be valid within the range of buttons supported by this Gamepad.
+                 * @param index The index of the button to get the value for.
                  */
-                manager: Phaser.Input.InputManager;
+                isButtonDown(index: integer): boolean;
 
                 /**
-                 * [description]
-                 */
-                enabled: boolean;
-
-                /**
-                 * [description]
-                 */
-                target: object;
-
-                /**
-                 * [description]
-                 */
-                handler: GamepadHandler;
-
-                /**
-                 * [description]
-                 */
-                gamepads: Phaser.Input.Gamepad.Gamepad[];
-
-                /**
-                 * Standard FIFO queue.
-                 */
-                queue: GamepadEvent[];
-
-                /**
-                 * [description]
-                 */
-                boot(): void;
-
-                /**
-                 * [description]
-                 */
-                startListeners(): void;
-
-                /**
-                 * [description]
-                 */
-                stopListeners(): void;
-
-                /**
-                 * [description]
-                 */
-                disconnectAll(): void;
-
-                /**
-                 * [description]
-                 * @param pad [description]
-                 */
-                addPad(pad: Pad): Phaser.Input.Gamepad.Gamepad;
-
-                /**
-                 * [description]
-                 * @param index [description]
-                 * @param pad [description]
-                 */
-                removePad(index: number, pad: Pad): void;
-
-                /**
-                 * [description]
-                 * @param pads [description]
-                 */
-                refreshPads(pads: Pad[]): void;
-
-                /**
-                 * [description]
-                 */
-                getAll(): Phaser.Input.Gamepad.Gamepad[];
-
-                /**
-                 * [description]
-                 * @param index [description]
-                 */
-                getPad(index: number): Phaser.Input.Gamepad.Gamepad;
-
-                /**
-                 * [description]
-                 */
-                update(): void;
-
-                /**
-                 * [description]
+                 * Destroys this Gamepad instance, its buttons and axes, and releases external references it holds.
                  */
                 destroy(): void;
 
                 /**
+                 * Is this Gamepad currently connected or not?
+                 */
+                connected: boolean;
+
+                /**
+                 * A timestamp containing the most recent time this Gamepad was updated.
+                 */
+                timestamp: number;
+
+                /**
+                 * Is the Gamepad's Left button being pressed?
+                 * If the Gamepad doesn't have this button it will always return false.
+                 * This is the d-pad left button under standard Gamepad mapping.
+                 */
+                left: boolean;
+
+                /**
+                 * Is the Gamepad's Right button being pressed?
+                 * If the Gamepad doesn't have this button it will always return false.
+                 * This is the d-pad right button under standard Gamepad mapping.
+                 */
+                right: boolean;
+
+                /**
+                 * Is the Gamepad's Up button being pressed?
+                 * If the Gamepad doesn't have this button it will always return false.
+                 * This is the d-pad up button under standard Gamepad mapping.
+                 */
+                up: boolean;
+
+                /**
+                 * Is the Gamepad's Down button being pressed?
+                 * If the Gamepad doesn't have this button it will always return false.
+                 * This is the d-pad down button under standard Gamepad mapping.
+                 */
+                down: boolean;
+
+                /**
+                 * Is the Gamepad's bottom button in the right button cluster being pressed?
+                 * If the Gamepad doesn't have this button it will always return false.
+                 * On a Dual Shock controller it's the X button.
+                 * On an XBox controller it's the A button.
+                 */
+                A: boolean;
+
+                /**
+                 * Is the Gamepad's top button in the right button cluster being pressed?
+                 * If the Gamepad doesn't have this button it will always return false.
+                 * On a Dual Shock controller it's the Triangle button.
+                 * On an XBox controller it's the Y button.
+                 */
+                Y: boolean;
+
+                /**
+                 * Is the Gamepad's left button in the right button cluster being pressed?
+                 * If the Gamepad doesn't have this button it will always return false.
+                 * On a Dual Shock controller it's the Square button.
+                 * On an XBox controller it's the X button.
+                 */
+                X: boolean;
+
+                /**
+                 * Is the Gamepad's right button in the right button cluster being pressed?
+                 * If the Gamepad doesn't have this button it will always return false.
+                 * On a Dual Shock controller it's the Circle button.
+                 * On an XBox controller it's the B button.
+                 */
+                B: boolean;
+
+                /**
+                 * Returns the value of the Gamepad's top left shoulder button.
+                 * If the Gamepad doesn't have this button it will always return zero.
+                 * The value is a float between 0 and 1, corresponding to how depressed the button is.
+                 * On a Dual Shock controller it's the L1 button.
+                 * On an XBox controller it's the LB button.
+                 */
+                L1: number;
+
+                /**
+                 * Returns the value of the Gamepad's bottom left shoulder button.
+                 * If the Gamepad doesn't have this button it will always return zero.
+                 * The value is a float between 0 and 1, corresponding to how depressed the button is.
+                 * On a Dual Shock controller it's the L2 button.
+                 * On an XBox controller it's the LT button.
+                 */
+                L2: number;
+
+                /**
+                 * Returns the value of the Gamepad's top right shoulder button.
+                 * If the Gamepad doesn't have this button it will always return zero.
+                 * The value is a float between 0 and 1, corresponding to how depressed the button is.
+                 * On a Dual Shock controller it's the R1 button.
+                 * On an XBox controller it's the RB button.
+                 */
+                R1: number;
+
+                /**
+                 * Returns the value of the Gamepad's bottom right shoulder button.
+                 * If the Gamepad doesn't have this button it will always return zero.
+                 * The value is a float between 0 and 1, corresponding to how depressed the button is.
+                 * On a Dual Shock controller it's the R2 button.
+                 * On an XBox controller it's the RT button.
+                 */
+                R2: number;
+
+            }
+
+            /**
+             * The Gamepad Plugin is an input plugin that belongs to the Scene-owned Input system.
+             * 
+             * Its role is to listen for native DOM Gamepad Events and then process them.
+             * 
+             * You do not need to create this class directly, the Input system will create an instance of it automatically.
+             * 
+             * You can access it from within a Scene using `this.input.gamepad`.
+             * 
+             * To listen for a gamepad being connected:
+             * 
+             * ```javascript
+             * this.input.gamepad.once('connected', function (pad) {
+             *     //   'pad' is a reference to the gamepad that was just connected
+             * });
+             * ```
+             * 
+             * Note that the browser may require you to press a button on a gamepad before it will allow you to access it,
+             * this is for security reasons. However, it may also trust the page already, in which case you won't get the
+             * 'connected' event and instead should check `GamepadPlugin.total` to see if it thinks there are any gamepads
+             * already connected.
+             * 
+             * Once you have received the connected event, or polled the gamepads and found them enabled, you can access
+             * them via the built-in properties `GamepadPlugin.pad1` to `pad4`, for up to 4 game pads. With a reference
+             * to the gamepads you can poll its buttons and axis sticks. See the properties and methods available on
+             * the `Gamepad` class for more details.
+             * 
+             * For more information about Gamepad support in browsers see the following resources:
+             * 
+             * https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API
+             * https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API/Using_the_Gamepad_API
+             * https://www.smashingmagazine.com/2015/11/gamepad-api-in-web-games/
+             * http://html5gamepad.com/
+             */
+            class GamepadPlugin extends Phaser.Events.EventEmitter {
+                /**
+                 * 
+                 * @param sceneInputPlugin A reference to the Scene Input Plugin that the KeyboardPlugin belongs to.
+                 */
+                constructor(sceneInputPlugin: Phaser.Input.InputPlugin);
+
+                /**
+                 * A reference to the Scene that this Input Plugin is responsible for.
+                 */
+                scene: Phaser.Scene;
+
+                /**
+                 * A reference to the Scene Systems Settings.
+                 */
+                settings: Phaser.Scenes.Settings.Object;
+
+                /**
+                 * A reference to the Scene Input Plugin that created this Keyboard Plugin.
+                 */
+                sceneInputPlugin: Phaser.Input.InputPlugin;
+
+                /**
+                 * A boolean that controls if the Gamepad Manager is enabled or not.
+                 * Can be toggled on the fly.
+                 */
+                enabled: boolean;
+
+                /**
+                 * The Gamepad Event target, as defined in the Game Config.
+                 * Typically the browser window, but can be any interactive DOM element.
+                 */
+                target: any;
+
+                /**
+                 * An array of the connected Gamepads.
+                 */
+                gamepads: Phaser.Input.Gamepad.Gamepad[];
+
+                /**
+                 * Checks to see if both this plugin and the Scene to which it belongs is active.
+                 */
+                isActive(): boolean;
+
+                /**
+                 * Disconnects all current Gamepads.
+                 */
+                disconnectAll(): void;
+
+                /**
+                 * Returns an array of all currently connected Gamepads.
+                 */
+                getAll(): Phaser.Input.Gamepad.Gamepad[];
+
+                /**
+                 * Looks-up a single Gamepad based on the given index value.
+                 * @param index The index of the Gamepad to get.
+                 */
+                getPad(index: number): Phaser.Input.Gamepad.Gamepad;
+
+                /**
                  * The total number of connected game pads.
                  */
-                total: number;
+                total: integer;
+
+                /**
+                 * A reference to the first connected Gamepad.
+                 * 
+                 * This will be undefined if either no pads are connected, or the browser
+                 * has not yet issued a gamepadconnect, which can happen even if a Gamepad
+                 * is plugged in, but hasn't yet had any buttons pressed on it.
+                 */
+                pad1: Phaser.Input.Gamepad.Gamepad;
+
+                /**
+                 * A reference to the second connected Gamepad.
+                 * 
+                 * This will be undefined if either no pads are connected, or the browser
+                 * has not yet issued a gamepadconnect, which can happen even if a Gamepad
+                 * is plugged in, but hasn't yet had any buttons pressed on it.
+                 */
+                pad2: Phaser.Input.Gamepad.Gamepad;
+
+                /**
+                 * A reference to the third connected Gamepad.
+                 * 
+                 * This will be undefined if either no pads are connected, or the browser
+                 * has not yet issued a gamepadconnect, which can happen even if a Gamepad
+                 * is plugged in, but hasn't yet had any buttons pressed on it.
+                 */
+                pad3: Phaser.Input.Gamepad.Gamepad;
+
+                /**
+                 * A reference to the fourth connected Gamepad.
+                 * 
+                 * This will be undefined if either no pads are connected, or the browser
+                 * has not yet issued a gamepadconnect, which can happen even if a Gamepad
+                 * is plugged in, but hasn't yet had any buttons pressed on it.
+                 */
+                pad4: Phaser.Input.Gamepad.Gamepad;
 
             }
 
         }
 
         /**
-         * [description]
+         * The Input Manager is responsible for handling the pointer related systems in a single Phaser Game instance.
+         * 
+         * Based on the Game Config it will create handlers for mouse and touch support.
+         * 
+         * Keyboard and Gamepad are plugins, handled directly by the InputPlugin class.
+         * 
+         * It then manages the event queue, pointer creation and general hit test related operations.
+         * 
+         * You rarely need to interact with the Input Manager directly, and as such, all of its properties and methods
+         * should be considered private. Instead, you should use the Input Plugin, which is a Scene level system, responsible
+         * for dealing with all input events for a Scene.
          */
         class InputManager {
             /**
              * 
-             * @param game [description]
-             * @param config [description]
+             * @param game The Game instance that owns the Input Manager.
+             * @param config The Input Configuration object, as set in the Game Config.
              */
             constructor(game: Phaser.Game, config: object);
 
             /**
-             * [description]
+             * The Game instance that owns the Input Manager.
+             * A Game only maintains on instance of the Input Manager at any time.
              */
-            game: Phaser.Game;
+            readonly game: Phaser.Game;
 
             /**
-             * [description]
+             * The Canvas that is used for all DOM event input listeners.
              */
             canvas: HTMLCanvasElement;
 
             /**
-             * [description]
+             * The Input Configuration object, as set in the Game Config.
              */
             config: object;
 
             /**
-             * [description]
+             * If set, the Input Manager will run its update loop every frame.
              */
             enabled: boolean;
 
             /**
-             * [description]
+             * The Event Emitter instance that the Input Manager uses to emit events from.
              */
             events: Phaser.Events.EventEmitter;
 
             /**
-             * Standard FIFO queue.
+             * A standard FIFO queue for the native DOM events waiting to be handled by the Input Manager.
              */
             queue: any[];
 
             /**
-             * [description]
+             * The default CSS cursor to be used when interacting with your game.
+             * 
+             * See the `setDefaultCursor` method for more details.
              */
-            keyboard: Phaser.Input.Keyboard.KeyboardManager;
+            defaultCursor: string;
 
             /**
-             * [description]
+             * A reference to the Mouse Manager class, if enabled via the `input.mouse` Game Config property.
              */
             mouse: Phaser.Input.Mouse.MouseManager;
 
             /**
-             * [description]
+             * A reference to the Touch Manager class, if enabled via the `input.touch` Game Config property.
              */
             touch: Phaser.Input.Touch.TouchManager;
 
             /**
-             * [description]
+             * An array of Pointers that have been added to the game.
+             * The first entry is reserved for the Mouse Pointer, the rest are Touch Pointers.
+             * 
+             * By default there is 1 touch pointer enabled. If you need more use the `addPointer` method to start them,
+             * or set the `input.activePointers` property in the Game Config.
              */
-            gamepad: Phaser.Input.Gamepad.GamepadManager;
+            pointers: Phaser.Input.Pointer[];
 
             /**
-             * [description]
+             * The number of touch objects activated and being processed each update.
+             * 
+             * You can change this by either calling `addPointer` at run-time, or by
+             * setting the `input.activePointers` property in the Game Config.
+             */
+            readonly pointersTotal: integer;
+
+            /**
+             * The mouse has its own unique Pointer object, which you can reference directly if making a _desktop specific game_.
+             * If you are supporting both desktop and touch devices then do not use this property, instead use `activePointer`
+             * which will always map to the most recently interacted pointer.
+             */
+            mousePointer: Phaser.Input.Pointer;
+
+            /**
+             * The most recently active Pointer object.
+             * 
+             * If you've only 1 Pointer in your game then this will accurately be either the first finger touched, or the mouse.
+             * 
+             * If your game doesn't need to support multi-touch then you can safely use this property in all of your game
+             * code and it will adapt to be either the mouse or the touch, based on device.
              */
             activePointer: Phaser.Input.Pointer;
 
             /**
-             * [description]
+             * Reset every frame. Set to `true` if any of the Pointers are dirty this frame.
+             */
+            dirty: boolean;
+
+            /**
+             * The Scale factor being applied to input coordinates.
              */
             scale: Object;
 
@@ -25292,12 +26116,13 @@ declare namespace Phaser {
             globalTopOnly: boolean;
 
             /**
-             * [description]
+             * An internal flag that controls if the Input Manager will ignore or process native DOM events this frame.
+             * Set via the InputPlugin.stopPropagation method.
              */
             ignoreEvents: boolean;
 
             /**
-             * [description]
+             * The bounds of the Input Manager, used for pointer hit test calculations.
              */
             bounds: Phaser.Geom.Rectangle;
 
@@ -25305,271 +26130,452 @@ declare namespace Phaser {
              * The Boot handler is called by Phaser.Game when it first starts up.
              * The renderer is available by now.
              */
-            boot(): void;
+            protected boot(): void;
 
             /**
-             * [description]
+             * Updates the Input Manager bounds rectangle to match the bounding client rectangle of the
+             * canvas element being used to track input events.
              */
             updateBounds(): void;
 
             /**
-             * [description]
+             * Resizes the Input Manager internal values, including the bounds and scale factor.
              */
             resize(): void;
 
             /**
-             * [description]
-             * @param time [description]
+             * Tells the Input system to set a custom cursor.
+             * 
+             * This cursor will be the default cursor used when interacting with the game canvas.
+             * 
+             * If an Interactive Object also sets a custom cursor, this is the cursor that is reset after its use.
+             * 
+             * Any valid CSS cursor value is allowed, including paths to image files, i.e.:
+             * 
+             * ```javascript
+             * this.input.setDefaultCursor('url(assets/cursors/sword.cur), pointer');
+             * ```
+             * 
+             * Please read about the differences between browsers when it comes to the file formats and sizes they support:
+             * 
+             * https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
+             * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_User_Interface/Using_URL_values_for_the_cursor_property
+             * 
+             * It's up to you to pick a suitable cursor format that works across the range of browsers you need to support.
+             * @param cursor The CSS to be used when setting the default cursor.
              */
-            update(time: number): void;
+            setDefaultCursor(cursor: string): void;
 
             /**
-             * Will always return an array.
-             * Array contains matching Interactive Objects.
-             * Array will be empty if no objects were matched.
-             * x/y = pointer x/y (un-translated)
-             * @param x [description]
-             * @param y [description]
-             * @param gameObjects [description]
-             * @param camera [description]
-             * @param output [description]
+             * Adds new Pointer objects to the Input Manager.
+             * 
+             * By default Phaser creates 2 pointer objects: `mousePointer` and `pointer1`.
+             * 
+             * You can create more either by calling this method, or by setting the `input.activePointers` property
+             * in the Game Config, up to a maximum of 10 pointers.
+             * 
+             * The first 10 pointers are available via the `InputPlugin.pointerX` properties, once they have been added
+             * via this method.
+             * @param quantity The number of new Pointers to create. A maximum of 10 is allowed in total. Default 1.
              */
-            hitTest(x: number, y: number, gameObjects: any[], camera: Phaser.Cameras.Scene2D.Camera, output: any[]): any[];
+            addPointer(quantity?: integer): Phaser.Input.Pointer[];
 
             /**
-             * x/y MUST be translated before being passed to this function,
-             * unless the gameObject is guaranteed to not be rotated or scaled in any way.
-             * @param gameObject [description]
-             * @param x [description]
-             * @param y [description]
+             * Adds a callback to be invoked whenever the native DOM `mouseup` or `touchend` events are received.
+             * By setting the `isOnce` argument you can control if the callback is called once,
+             * or every time the DOM event occurs.
+             * 
+             * Callbacks passed to this method are invoked _immediately_ when the DOM event happens,
+             * within the scope of the DOM event handler. Therefore, they are considered as 'native'
+             * from the perspective of the browser. This means they can be used for tasks such as
+             * opening new browser windows, or anything which explicitly requires user input to activate.
+             * However, as a result of this, they come with their own risks, and as such should not be used
+             * for general game input, but instead be reserved for special circumstances.
+             * 
+             * If all you're trying to do is execute a callback when a pointer is released, then
+             * please use the internal Input event system instead.
+             * 
+             * Please understand that these callbacks are invoked when the browser feels like doing so,
+             * which may be entirely out of the normal flow of the Phaser Game Loop. Therefore, you should absolutely keep
+             * Phaser related operations to a minimum in these callbacks. For example, don't destroy Game Objects,
+             * change Scenes or manipulate internal systems, otherwise you run a very real risk of creating
+             * heisenbugs (https://en.wikipedia.org/wiki/Heisenbug) that prove a challenge to reproduce, never mind
+             * solve.
+             * @param callback The callback to be invoked on this dom event.
+             * @param isOnce `true` if the callback will only be invoked once, `false` to call every time this event happens. Default true.
+             */
+            addUpCallback(callback: Function, isOnce?: boolean): this;
+
+            /**
+             * Adds a callback to be invoked whenever the native DOM `mousedown` or `touchstart` events are received.
+             * By setting the `isOnce` argument you can control if the callback is called once,
+             * or every time the DOM event occurs.
+             * 
+             * Callbacks passed to this method are invoked _immediately_ when the DOM event happens,
+             * within the scope of the DOM event handler. Therefore, they are considered as 'native'
+             * from the perspective of the browser. This means they can be used for tasks such as
+             * opening new browser windows, or anything which explicitly requires user input to activate.
+             * However, as a result of this, they come with their own risks, and as such should not be used
+             * for general game input, but instead be reserved for special circumstances.
+             * 
+             * If all you're trying to do is execute a callback when a pointer is down, then
+             * please use the internal Input event system instead.
+             * 
+             * Please understand that these callbacks are invoked when the browser feels like doing so,
+             * which may be entirely out of the normal flow of the Phaser Game Loop. Therefore, you should absolutely keep
+             * Phaser related operations to a minimum in these callbacks. For example, don't destroy Game Objects,
+             * change Scenes or manipulate internal systems, otherwise you run a very real risk of creating
+             * heisenbugs (https://en.wikipedia.org/wiki/Heisenbug) that prove a challenge to reproduce, never mind
+             * solve.
+             * @param callback The callback to be invoked on this dom event.
+             * @param isOnce `true` if the callback will only be invoked once, `false` to call every time this event happens. Default true.
+             */
+            addDownCallback(callback: Function, isOnce?: boolean): this;
+
+            /**
+             * Adds a callback to be invoked whenever the native DOM `mousemove` or `touchmove` events are received.
+             * By setting the `isOnce` argument you can control if the callback is called once,
+             * or every time the DOM event occurs.
+             * 
+             * Callbacks passed to this method are invoked _immediately_ when the DOM event happens,
+             * within the scope of the DOM event handler. Therefore, they are considered as 'native'
+             * from the perspective of the browser. This means they can be used for tasks such as
+             * opening new browser windows, or anything which explicitly requires user input to activate.
+             * However, as a result of this, they come with their own risks, and as such should not be used
+             * for general game input, but instead be reserved for special circumstances.
+             * 
+             * If all you're trying to do is execute a callback when a pointer is moved, then
+             * please use the internal Input event system instead.
+             * 
+             * Please understand that these callbacks are invoked when the browser feels like doing so,
+             * which may be entirely out of the normal flow of the Phaser Game Loop. Therefore, you should absolutely keep
+             * Phaser related operations to a minimum in these callbacks. For example, don't destroy Game Objects,
+             * change Scenes or manipulate internal systems, otherwise you run a very real risk of creating
+             * heisenbugs (https://en.wikipedia.org/wiki/Heisenbug) that prove a challenge to reproduce, never mind
+             * solve.
+             * @param callback The callback to be invoked on this dom event.
+             * @param isOnce `true` if the callback will only be invoked once, `false` to call every time this event happens. Default false.
+             */
+            addMoveCallback(callback: Function, isOnce?: boolean): this;
+
+            /**
+             * Performs a hit test using the given Pointer and camera, against an array of interactive Game Objects.
+             * 
+             * The Game Objects are culled against the camera, and then the coordinates are translated into the local camera space
+             * and used to determine if they fall within the remaining Game Objects hit areas or not.
+             * 
+             * If nothing is matched an empty array is returned.
+             * 
+             * This method is called automatically by InputPlugin.hitTestPointer and doesn't usually need to be invoked directly.
+             * @param pointer The Pointer to test against.
+             * @param gameObjects An array of interactive Game Objects to check.
+             * @param camera The Camera which is being tested against.
+             * @param output An array to store the results in. If not given, a new empty array is created.
+             */
+            hitTest(pointer: Phaser.Input.Pointer, gameObjects: any[], camera: Phaser.Cameras.Scene2D.Camera, output?: any[]): any[];
+
+            /**
+             * Checks if the given x and y coordinate are within the hit area of the Game Object.
+             * 
+             * This method assumes that the coordinate values have already been translated into the space of the Game Object.
+             * 
+             * If the coordinates are within the hit area they are set into the Game Objects Input `localX` and `localY` properties.
+             * @param gameObject The interactive Game Object to check against.
+             * @param x The translated x coordinate for the hit test.
+             * @param y The translated y coordinate for the hit test.
              */
             pointWithinHitArea(gameObject: Phaser.GameObjects.GameObject, x: number, y: number): boolean;
 
             /**
-             * x/y MUST be translated before being passed to this function,
-             * unless the gameObject is guaranteed to not be rotated or scaled in any way.
-             * @param object [description]
-             * @param x [description]
-             * @param y [description]
+             * Checks if the given x and y coordinate are within the hit area of the Interactive Object.
+             * 
+             * This method assumes that the coordinate values have already been translated into the space of the Interactive Object.
+             * 
+             * If the coordinates are within the hit area they are set into the Interactive Objects Input `localX` and `localY` properties.
+             * @param object The Interactive Object to check against.
+             * @param x The translated x coordinate for the hit test.
+             * @param y The translated y coordinate for the hit test.
              */
             pointWithinInteractiveObject(object: Phaser.Input.InteractiveObject, x: number, y: number): boolean;
 
             /**
-             * [description]
-             * @param pageX [description]
+             * Transforms the pageX and pageY values of a Pointer into the scaled coordinate space of the Input Manager.
+             * @param pointer The Pointer to transform the values for.
+             */
+            transformPointer(pointer: Phaser.Input.Pointer): number;
+
+            /**
+             * Transforms the pageX value into the scaled coordinate space of the Input Manager.
+             * @param pageX The DOM pageX value.
              */
             transformX(pageX: number): number;
 
             /**
-             * [description]
-             * @param pageY [description]
+             * Transforms the pageY value into the scaled coordinate space of the Input Manager.
+             * @param pageY The DOM pageY value.
              */
             transformY(pageY: number): number;
 
             /**
-             * [description]
+             * Returns the left offset of the Input bounds.
              */
             getOffsetX(): number;
 
             /**
-             * [description]
+             * Returns the top offset of the Input bounds.
              */
             getOffsetY(): number;
 
             /**
-             * [description]
+             * Returns the horizontal Input Scale value.
              */
             getScaleX(): number;
 
             /**
-             * [description]
+             * Returns the vertical Input Scale value.
              */
             getScaleY(): number;
 
             /**
-             * [description]
+             * Destroys the Input Manager and all of its systems.
+             * 
+             * There is no way to recover from doing this.
              */
             destroy(): void;
 
         }
 
         /**
-         * [description]
+         * The Input Plugin belongs to a Scene and handles all input related events and operations for it.
+         * 
+         * You can access it from within a Scene using `this.input`.
+         * 
+         * It emits events directly. For example, you can do:
+         * 
+         * ```javascript
+         * this.input.on('pointerdown', callback, context);
+         * ```
+         * 
+         * To listen for a pointer down event anywhere on the game canvas.
+         * 
+         * Game Objects can be enabled for input by calling their `setInteractive` method. After which they
+         * will directly emit input events:
+         * 
+         * ```javascript
+         * var sprite = this.add.sprite(x, y, texture);
+         * sprite.setInteractive();
+         * sprite.on('pointerdown', callback, context);
+         * ```
+         * 
+         * Please see the Input examples and tutorials for more information.
          */
         class InputPlugin extends Phaser.Events.EventEmitter {
             /**
              * 
-             * @param scene The Scene that owns this plugin.
+             * @param scene A reference to the Scene that this Input Plugin is responsible for.
              */
             constructor(scene: Phaser.Scene);
 
             /**
-             * The Scene that owns this plugin.
+             * An instance of the Gamepad Plugin class, if enabled via the `input.gamepad` Scene or Game Config property.
+             * Use this to create access Gamepads connected to the browser and respond to gamepad buttons.
+             */
+            gamepad: Phaser.Input.Gamepad.GamepadPlugin;
+
+            /**
+             * A reference to the Scene that this Input Plugin is responsible for.
              */
             scene: Phaser.Scene;
 
             /**
-             * [description]
+             * A reference to the Scene Systems class.
              */
             systems: Phaser.Scenes.Systems;
 
             /**
-             * [description]
+             * A reference to the Scene Systems Settings.
              */
             settings: Phaser.Scenes.Settings.Object;
 
             /**
-             * [description]
+             * A reference to the Game Input Manager.
              */
             manager: Phaser.Input.InputManager;
 
             /**
-             * [description]
+             * If set, the Input Plugin will run its update loop every frame.
              */
             enabled: boolean;
 
             /**
-             * A reference to this.scene.sys.displayList (set in boot)
+             * A reference to the Scene Display List. This property is set during the `boot` method.
              */
             displayList: Phaser.GameObjects.DisplayList;
 
             /**
-             * A reference to the this.scene.sys.cameras (set in boot)
+             * A reference to the Scene Cameras Manager. This property is set during the `boot` method.
              */
-            cameras: null;
+            cameras: Phaser.Cameras.Scene2D.CameraManager;
 
             /**
-             * [description]
-             */
-            keyboard: Phaser.Input.Keyboard.KeyboardManager;
-
-            /**
-             * [description]
+             * A reference to the Mouse Manager.
+             * 
+             * This property is only set if Mouse support has been enabled in your Game Configuration file.
+             * 
+             * If you just wish to get access to the mouse pointer, use the `mousePointer` property instead.
              */
             mouse: Phaser.Input.Mouse.MouseManager;
 
             /**
-             * [description]
-             */
-            gamepad: Phaser.Input.Gamepad.GamepadManager;
-
-            /**
-             * Only fire callbacks and events on the top-most Game Object in the display list (emulating DOM behavior)
-             * and ignore any GOs below it, or call them all?
+             * When set to `true` (the default) the Input Plugin will emulate DOM behavior by only emitting events from
+             * the top-most Game Objects in the Display List.
+             * 
+             * If set to `false` it will emit events from all Game Objects below a Pointer, not just the top one.
              */
             topOnly: boolean;
 
             /**
-             * How often should the pointer input be checked?
-             * Time given in ms
-             * Pointer will *always* be checked if it has been moved by the user.
-             * This controls how often it will be polled if it hasn't been moved.
+             * How often should the Pointers be checked?
+             * 
+             * The value is a time, given in ms, and is the time that must have elapsed between game steps before
+             * the Pointers will be polled again. When a pointer is polled it runs a hit test to see which Game
+             * Objects are currently below it, or being interacted with it.
+             * 
+             * Pointers will *always* be checked if they have been moved by the user, or press or released.
+             * 
+             * This property only controls how often they will be polled if they have not been updated.
+             * You should set this if you want to have Game Objects constantly check against the pointers, even
+             * if the pointer didn't move itself.
+             * 
              * Set to 0 to poll constantly. Set to -1 to only poll on user movement.
              */
             pollRate: integer;
 
             /**
-             * The distance, in pixels, the pointer has to move while being held down, before it thinks it is being dragged.
+             * The distance, in pixels, a pointer has to move while being held down, before it thinks it is being dragged.
              */
             dragDistanceThreshold: number;
 
             /**
-             * The amount of time, in ms, the pointer has to be held down before it thinks it is dragging.
+             * The amount of time, in ms, a pointer has to be held down before it thinks it is dragging.
              */
             dragTimeThreshold: number;
 
             /**
-             * [description]
+             * Checks to see if both this plugin and the Scene to which it belongs is active.
              */
-            preUpdate(): void;
+            isActive(): boolean;
 
             /**
-             * [description]
-             * @param gameObject [description]
+             * Clears a Game Object so it no longer has an Interactive Object associated with it.
+             * The Game Object is then queued for removal from the Input Plugin on the next update.
+             * @param gameObject The Game Object that will have its Interactive Object removed.
              */
             clear(gameObject: Phaser.GameObjects.GameObject): Phaser.GameObjects.GameObject;
 
             /**
-             * [description]
-             * @param gameObject [description]
+             * Disables Input on a single Game Object.
+             * 
+             * An input disabled Game Object still retains its Interactive Object component and can be re-enabled
+             * at any time, by passing it to `InputPlugin.enable`.
+             * @param gameObject The Game Object to have its input system disabled.
              */
             disable(gameObject: Phaser.GameObjects.GameObject): void;
 
             /**
-             * [description]
-             * @param gameObject [description]
-             * @param shape [description]
-             * @param callback [description]
-             * @param dropZone [description] Default false.
+             * Enable a Game Object for interaction.
+             * 
+             * If the Game Object already has an Interactive Object component, it is enabled and returned.
+             * 
+             * Otherwise, a new Interactive Object component is created and assigned to the Game Object's `input` property.
+             * 
+             * Input works by using hit areas, these are nearly always geometric shapes, such as rectangles or circles, that act as the hit area
+             * for the Game Object. However, you can provide your own hit area shape and callback, should you wish to handle some more advanced
+             * input detection.
+             * 
+             * If no arguments are provided it will try and create a rectangle hit area based on the texture frame the Game Object is using. If
+             * this isn't a texture-bound object, such as a Graphics or BitmapText object, this will fail, and you'll need to provide a specific
+             * shape for it to use.
+             * 
+             * You can also provide an Input Configuration Object as the only argument to this method.
+             * @param gameObject The Game Object to be enabled for input.
+             * @param shape Either an input configuration object, or a geometric shape that defines the hit area for the Game Object. If not specified a Rectangle will be used.
+             * @param callback The 'contains' function to invoke to check if the pointer is within the hit area.
+             * @param dropZone Is this Game Object a drop zone or not? Default false.
              */
-            enable(gameObject: Phaser.GameObjects.GameObject, shape: object, callback: HitAreaCallback, dropZone?: boolean): Phaser.Input.InputPlugin;
+            enable(gameObject: Phaser.GameObjects.GameObject, shape?: Phaser.Input.InputConfiguration | any, callback?: HitAreaCallback, dropZone?: boolean): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
-             * @param pointer [description]
+             * Takes the given Pointer and performs a hit test against it, to see which interactive Game Objects
+             * it is currently above.
+             * 
+             * The hit test is performed against which-ever Camera the Pointer is over. If it is over multiple
+             * cameras, it starts checking the camera at the top of the camera list, and if nothing is found, iterates down the list.
+             * @param pointer The Pointer to check against the Game Objects.
              */
-            hitTestPointer(pointer: Phaser.Input.Pointer): any[];
+            hitTestPointer(pointer: Phaser.Input.Pointer): Phaser.GameObjects.GameObject[];
 
             /**
-             * [description]
-             * @param pointer The Pointer to check for events against.
-             */
-            processDownEvents(pointer: Phaser.Input.Pointer): integer;
-
-            /**
-             * [description]
-             * @param pointer [description]
-             * @param time [description]
-             */
-            processDragEvents(pointer: number, time: number): integer;
-
-            /**
-             * [description]
-             * @param pointer The pointer to check for events against.
-             */
-            processMoveEvents(pointer: Phaser.Input.Pointer): integer;
-
-            /**
-             * [description]
-             * @param pointer [description]
-             */
-            processOverOutEvents(pointer: Phaser.Input.Pointer): integer;
-
-            /**
-             * [description]
-             * @param pointer [description]
-             */
-            processUpEvents(pointer: Phaser.Input.Pointer): void;
-
-            /**
-             * Queues a Game Object for insertion into this Input Manager on the next update.
-             * @param child The Game Object to add.
-             */
-            queueForInsertion(child: Phaser.GameObjects.GameObject): Phaser.Input.InputPlugin;
-
-            /**
-             * Queues a Game Object for removal from this Input Manager on the next update.
-             * @param child The Game Object to remove.
-             */
-            queueForRemoval(child: Phaser.GameObjects.GameObject): Phaser.Input.InputPlugin;
-
-            /**
-             * [description]
+             * Sets the draggable state of the given array of Game Objects.
+             * 
+             * They can either be set to be draggable, or can have their draggable state removed by passing `false`.
+             * 
+             * A Game Object will not fire drag events unless it has been specifically enabled for drag.
              * @param gameObjects An array of Game Objects to change the draggable state on.
              * @param value Set to `true` if the Game Objects should be made draggable, `false` if they should be unset. Default true.
              */
             setDraggable(gameObjects: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], value?: boolean): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
-             * @param gameObjects An array of Game Objects to set the hit area on.
-             * @param shape The shape or object to check if the pointer is within for hit area checks.
-             * @param callback The 'contains' function to invoke to check if the pointer is within the hit area.
+             * Creates a function that can be passed to `setInteractive`, `enable` or `setHitArea` that will handle
+             * pixel-perfect input detection on an Image or Sprite based Game Object, or any custom class that extends them.
+             * 
+             * The following will create a sprite that is clickable on any pixel that has an alpha value >= 1.
+             * 
+             * ```javascript
+             * this.add.sprite(x, y, key).setInteractive(this.input.makePixelPerfect());
+             * ```
+             * 
+             * The following will create a sprite that is clickable on any pixel that has an alpha value >= 150.
+             * 
+             * ```javascript
+             * this.add.sprite(x, y, key).setInteractive(this.input.makePixelPerfect(150));
+             * ```
+             * 
+             * Once you have made an Interactive Object pixel perfect it impacts all input related events for it: down, up,
+             * dragstart, drag, etc.
+             * 
+             * As a pointer interacts with the Game Object it will constantly poll the texture, extracting a single pixel from
+             * the given coordinates and checking its color values. This is an expensive process, so should only be enabled on
+             * Game Objects that really need it.
+             * 
+             * You cannot make non-texture based Game Objects pixel perfect. So this will not work on Graphics, BitmapText,
+             * Render Textures, Text, Tilemaps, Containers or Particles.
+             * @param alphaTolerance The alpha level that the pixel should be above to be included as a successful interaction. Default 1.
              */
-            setHitArea(gameObjects: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], shape?: object, callback?: HitAreaCallback): Phaser.Input.InputPlugin;
+            makePixelPerfect(alphaTolerance?: integer): Function;
 
             /**
-             * [description]
+             * Sets the hit area for the given array of Game Objects.
+             * 
+             * A hit area is typically one of the geometric shapes Phaser provides, such as a `Phaser.Geom.Rectangle`
+             * or `Phaser.Geom.Circle`. However, it can be any object as long as it works with the provided callback.
+             * 
+             * If no hit area is provided a Rectangle is created based on the size of the Game Object, if possible
+             * to calculate.
+             * 
+             * The hit area callback is the function that takes an `x` and `y` coordinate and returns a boolean if
+             * those values fall within the area of the shape or not. All of the Phaser geometry objects provide this,
+             * such as `Phaser.Geom.Rectangle.Contains`.
+             * @param gameObjects An array of Game Objects to set the hit area on.
+             * @param shape Either an input configuration object, or a geometric shape that defines the hit area for the Game Object. If not specified a Rectangle will be used.
+             * @param callback The 'contains' function to invoke to check if the pointer is within the hit area.
+             */
+            setHitArea(gameObjects: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], shape?: Phaser.Input.InputConfiguration | any, callback?: HitAreaCallback): Phaser.Input.InputPlugin;
+
+            /**
+             * Sets the hit area for an array of Game Objects to be a `Phaser.Geom.Circle` shape, using
+             * the given coordinates and radius to control its position and size.
              * @param gameObjects An array of Game Objects to set as having a circle hit area.
              * @param x The center of the circle.
              * @param y The center of the circle.
@@ -25579,7 +26585,8 @@ declare namespace Phaser {
             setHitAreaCircle(gameObjects: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], x: number, y: number, radius: number, callback?: HitAreaCallback): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
+             * Sets the hit area for an array of Game Objects to be a `Phaser.Geom.Ellipse` shape, using
+             * the given coordinates and dimensions to control its position and size.
              * @param gameObjects An array of Game Objects to set as having an ellipse hit area.
              * @param x The center of the ellipse.
              * @param y The center of the ellipse.
@@ -25590,14 +26597,16 @@ declare namespace Phaser {
             setHitAreaEllipse(gameObjects: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], x: number, y: number, width: number, height: number, callback?: HitAreaCallback): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
+             * Sets the hit area for an array of Game Objects to be a `Phaser.Geom.Rectangle` shape, using
+             * the Game Objects texture frame to define the position and size of the hit area.
              * @param gameObjects An array of Game Objects to set as having an ellipse hit area.
              * @param callback The hit area callback. If undefined it uses Rectangle.Contains.
              */
             setHitAreaFromTexture(gameObjects: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], callback?: HitAreaCallback): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
+             * Sets the hit area for an array of Game Objects to be a `Phaser.Geom.Rectangle` shape, using
+             * the given coordinates and dimensions to control its position and size.
              * @param gameObjects An array of Game Objects to set as having a rectangular hit area.
              * @param x The top-left of the rectangle.
              * @param y The top-left of the rectangle.
@@ -25608,7 +26617,8 @@ declare namespace Phaser {
             setHitAreaRectangle(gameObjects: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], x: number, y: number, width: number, height: number, callback?: HitAreaCallback): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
+             * Sets the hit area for an array of Game Objects to be a `Phaser.Geom.Triangle` shape, using
+             * the given coordinates to control the position of its points.
              * @param gameObjects An array of Game Objects to set as having a  triangular hit area.
              * @param x1 The x coordinate of the first point of the triangle.
              * @param y1 The y coordinate of the first point of the triangle.
@@ -25621,64 +26631,176 @@ declare namespace Phaser {
             setHitAreaTriangle(gameObjects: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[], x1: number, y1: number, x2: number, y2: number, x3: number, y3: number, callback?: HitAreaCallback): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
+             * Sets the Pointers to always poll.
+             * 
+             * When a pointer is polled it runs a hit test to see which Game Objects are currently below it,
+             * or being interacted with it, regardless if the Pointer has actually moved or not.
+             * 
+             * You should enable this if you want objects in your game to fire over / out events, and the objects
+             * are constantly moving, but the pointer may not have. Polling every frame has additional computation
+             * costs, especially if there are a large number of interactive objects in your game.
              */
             setPollAlways(): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
+             * Sets the Pointers to only poll when they are moved or updated.
+             * 
+             * When a pointer is polled it runs a hit test to see which Game Objects are currently below it,
+             * or being interacted with it.
              */
             setPollOnMove(): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
-             * @param value [description]
+             * Sets the poll rate value. This is the amount of time that should have elapsed before a pointer
+             * will be polled again. See the `setPollAlways` and `setPollOnMove` methods.
+             * @param value The amount of time, in ms, that should elapsed before re-polling the pointers.
              */
             setPollRate(value: number): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
-             * @param value [description]
+             * When set to `true` the global Input Manager will emulate DOM behavior by only emitting events from
+             * the top-most Game Objects in the Display List.
+             * 
+             * If set to `false` it will emit events from all Game Objects below a Pointer, not just the top one.
+             * @param value `true` to only include the top-most Game Object, or `false` to include all Game Objects in a hit test.
              */
             setGlobalTopOnly(value: boolean): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
-             * @param value [description]
+             * When set to `true` this Input Plugin will emulate DOM behavior by only emitting events from
+             * the top-most Game Objects in the Display List.
+             * 
+             * If set to `false` it will emit events from all Game Objects below a Pointer, not just the top one.
+             * @param value `true` to only include the top-most Game Object, or `false` to include all Game Objects in a hit test.
              */
             setTopOnly(value: boolean): Phaser.Input.InputPlugin;
 
             /**
-             * Given an array of Game Objects, sort the array and return it,
-             * so that the objects are in index order with the lowest at the bottom.
-             * @param gameObjects [description]
+             * Given an array of Game Objects, sort the array and return it, so that the objects are in depth index order
+             * with the lowest at the bottom.
+             * @param gameObjects An array of Game Objects to be sorted.
              */
             sortGameObjects(gameObjects: Phaser.GameObjects.GameObject[]): Phaser.GameObjects.GameObject[];
 
             /**
-             * Return the child lowest down the display list (with the smallest index)
-             * Will iterate through all parent containers, if present.
-             * @param childA The first Game Object to compare.
-             * @param childB The second Game Object to compare.
-             */
-            sortHandlerGO(childA: Phaser.GameObjects.GameObject, childB: Phaser.GameObjects.GameObject): integer;
-
-            /**
-             * [description]
+             * Causes the Input Manager to stop emitting any events for the remainder of this game step.
              */
             stopPropagation(): Phaser.Input.InputPlugin;
 
             /**
-             * [description]
-             * @param time [description]
-             * @param delta [description]
+             * Adds a callback to be invoked whenever the native DOM `mouseup` or `touchend` events are received.
+             * By setting the `isOnce` argument you can control if the callback is called once,
+             * or every time the DOM event occurs.
+             * 
+             * Callbacks passed to this method are invoked _immediately_ when the DOM event happens,
+             * within the scope of the DOM event handler. Therefore, they are considered as 'native'
+             * from the perspective of the browser. This means they can be used for tasks such as
+             * opening new browser windows, or anything which explicitly requires user input to activate.
+             * However, as a result of this, they come with their own risks, and as such should not be used
+             * for general game input, but instead be reserved for special circumstances.
+             * 
+             * If all you're trying to do is execute a callback when a pointer is released, then
+             * please use the internal Input event system instead.
+             * 
+             * Please understand that these callbacks are invoked when the browser feels like doing so,
+             * which may be entirely out of the normal flow of the Phaser Game Loop. Therefore, you should absolutely keep
+             * Phaser related operations to a minimum in these callbacks. For example, don't destroy Game Objects,
+             * change Scenes or manipulate internal systems, otherwise you run a very real risk of creating
+             * heisenbugs (https://en.wikipedia.org/wiki/Heisenbug) that prove a challenge to reproduce, never mind
+             * solve.
+             * @param callback The callback to be invoked on this DOM event.
+             * @param isOnce `true` if the callback will only be invoked once, `false` to call every time this event happens. Default true.
              */
-            update(time: number, delta: number): void;
+            addUpCallback(callback: Function, isOnce?: boolean): this;
 
             /**
-             * The current active input Pointer.
+             * Adds a callback to be invoked whenever the native DOM `mousedown` or `touchstart` events are received.
+             * By setting the `isOnce` argument you can control if the callback is called once,
+             * or every time the DOM event occurs.
+             * 
+             * Callbacks passed to this method are invoked _immediately_ when the DOM event happens,
+             * within the scope of the DOM event handler. Therefore, they are considered as 'native'
+             * from the perspective of the browser. This means they can be used for tasks such as
+             * opening new browser windows, or anything which explicitly requires user input to activate.
+             * However, as a result of this, they come with their own risks, and as such should not be used
+             * for general game input, but instead be reserved for special circumstances.
+             * 
+             * If all you're trying to do is execute a callback when a pointer is down, then
+             * please use the internal Input event system instead.
+             * 
+             * Please understand that these callbacks are invoked when the browser feels like doing so,
+             * which may be entirely out of the normal flow of the Phaser Game Loop. Therefore, you should absolutely keep
+             * Phaser related operations to a minimum in these callbacks. For example, don't destroy Game Objects,
+             * change Scenes or manipulate internal systems, otherwise you run a very real risk of creating
+             * heisenbugs (https://en.wikipedia.org/wiki/Heisenbug) that prove a challenge to reproduce, never mind
+             * solve.
+             * @param callback The callback to be invoked on this dom event.
+             * @param isOnce `true` if the callback will only be invoked once, `false` to call every time this event happens. Default true.
              */
-            readonly activePointer: Phaser.Input.Pointer;
+            addDownCallback(callback: Function, isOnce?: boolean): this;
+
+            /**
+             * Adds a callback to be invoked whenever the native DOM `mousemove` or `touchmove` events are received.
+             * By setting the `isOnce` argument you can control if the callback is called once,
+             * or every time the DOM event occurs.
+             * 
+             * Callbacks passed to this method are invoked _immediately_ when the DOM event happens,
+             * within the scope of the DOM event handler. Therefore, they are considered as 'native'
+             * from the perspective of the browser. This means they can be used for tasks such as
+             * opening new browser windows, or anything which explicitly requires user input to activate.
+             * However, as a result of this, they come with their own risks, and as such should not be used
+             * for general game input, but instead be reserved for special circumstances.
+             * 
+             * If all you're trying to do is execute a callback when a pointer is moved, then
+             * please use the internal Input event system instead.
+             * 
+             * Please understand that these callbacks are invoked when the browser feels like doing so,
+             * which may be entirely out of the normal flow of the Phaser Game Loop. Therefore, you should absolutely keep
+             * Phaser related operations to a minimum in these callbacks. For example, don't destroy Game Objects,
+             * change Scenes or manipulate internal systems, otherwise you run a very real risk of creating
+             * heisenbugs (https://en.wikipedia.org/wiki/Heisenbug) that prove a challenge to reproduce, never mind
+             * solve.
+             * @param callback The callback to be invoked on this dom event.
+             * @param isOnce `true` if the callback will only be invoked once, `false` to call every time this event happens. Default false.
+             */
+            addMoveCallback(callback: Function, isOnce?: boolean): this;
+
+            /**
+             * Adds new Pointer objects to the Input Manager.
+             * 
+             * By default Phaser creates 2 pointer objects: `mousePointer` and `pointer1`.
+             * 
+             * You can create more either by calling this method, or by setting the `input.activePointers` property
+             * in the Game Config, up to a maximum of 10 pointers.
+             * 
+             * The first 10 pointers are available via the `InputPlugin.pointerX` properties, once they have been added
+             * via this method.
+             * @param quantity The number of new Pointers to create. A maximum of 10 is allowed in total. Default 1.
+             */
+            addPointer(quantity?: integer): Phaser.Input.Pointer[];
+
+            /**
+             * Tells the Input system to set a custom cursor.
+             * 
+             * This cursor will be the default cursor used when interacting with the game canvas.
+             * 
+             * If an Interactive Object also sets a custom cursor, this is the cursor that is reset after its use.
+             * 
+             * Any valid CSS cursor value is allowed, including paths to image files, i.e.:
+             * 
+             * ```javascript
+             * this.input.setDefaultCursor('url(assets/cursors/sword.cur), pointer');
+             * ```
+             * 
+             * Please read about the differences between browsers when it comes to the file formats and sizes they support:
+             * 
+             * https://developer.mozilla.org/en-US/docs/Web/CSS/cursor
+             * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_User_Interface/Using_URL_values_for_the_cursor_property
+             * 
+             * It's up to you to pick a suitable cursor format that works across the range of browsers you need to support.
+             * @param cursor The CSS to be used when setting the default cursor.
+             */
+            setDefaultCursor(cursor: string): Phaser.Input.InputPlugin;
 
             /**
              * The x coordinates of the ActivePointer based on the first camera in the camera list.
@@ -25692,47 +26814,170 @@ declare namespace Phaser {
              */
             readonly y: number;
 
+            /**
+             * The mouse has its own unique Pointer object, which you can reference directly if making a _desktop specific game_.
+             * If you are supporting both desktop and touch devices then do not use this property, instead use `activePointer`
+             * which will always map to the most recently interacted pointer.
+             */
+            readonly mousePointer: Phaser.Input.Pointer;
+
+            /**
+             * The current active input Pointer.
+             */
+            readonly activePointer: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer1: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer2: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer3: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer4: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer5: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer6: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer7: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer8: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer9: Phaser.Input.Pointer;
+
+            /**
+             * A touch-based Pointer object.
+             * This will be `undefined` by default unless you add a new Pointer using `addPointer`.
+             */
+            readonly pointer10: Phaser.Input.Pointer;
+
+            /**
+             * An instance of the Keyboard Plugin class, if enabled via the `input.keyboard` Scene or Game Config property.
+             * Use this to create Key objects and listen for keyboard specific events.
+             */
+            keyboard: Phaser.Input.Keyboard.KeyboardPlugin;
+
         }
+
+        type InputConfiguration = {
+            /**
+             * The object / shape to use as the Hit Area. If not given it will try to create a Rectangle based on the texture frame.
+             */
+            hitArea?: any;
+            /**
+             * The callback that determines if the pointer is within the Hit Area shape or not.
+             */
+            hitAreaCallback?: Function;
+            /**
+             * If `true` the Interactive Object will be set to be draggable and emit drag events.
+             */
+            draggable?: boolean;
+            /**
+             * If `true` the Interactive Object will be set to be a drop zone for draggable objects.
+             */
+            dropZone?: boolean;
+            /**
+             * If `true` the Interactive Object will set the `pointer` hand cursor when a pointer is over it. This is a short-cut for setting `cursor: 'pointer'`.
+             */
+            useHandCursor?: boolean;
+            /**
+             * The CSS string to be used when the cursor is over this Interactive Object.
+             */
+            cursor?: string;
+            /**
+             * If `true` the a pixel perfect function will be set for the hit area callback. Only works with texture based Game Objects.
+             */
+            pixelPerfect?: boolean;
+            /**
+             * If `pixelPerfect` is set, this is the alpha tolerance threshold value used in the callback.
+             */
+            alphaTolerance?: integer;
+        };
 
         namespace Keyboard {
             /**
-             * [description]
+             * A KeyCombo will listen for a specific string of keys from the Keyboard, and when it receives them
+             * it will emit a `keycombomatch` event from the Keyboard Manager.
              * 
-             * `keys` argument can be:
+             * The keys to be listened for can be defined as:
              * 
-             * A string (ATARI)
+             * A string (i.e. 'ATARI')
              * An array of either integers (key codes) or strings, or a mixture of both
              * An array of objects (such as Key objects) with a public 'keyCode' property
+             * 
+             * For example, to listen for the Konami code (up, up, up, down, down, down, left, left, left, right, right, right)
+             * you could pass the following array of key codes:
+             * 
+             * ```javascript
+             * this.input.keyboard.createCombo([ 38, 38, 38, 40, 40, 40, 37, 37, 37, 39, 39, 39 ], { resetOnMatch: true });
+             * 
+             * this.input.keyboard.on('keycombomatch', function (event) {
+             *     console.log('Konami Code entered!');
+             * });
+             * ```
+             * 
+             * Or, to listen for the user entering the word PHASER:
+             * 
+             * ```javascript
+             * this.input.keyboard.createCombo('PHASER');
+             * ```
              */
             class KeyCombo {
                 /**
                  * 
-                 * @param keyboardManager [description]
-                 * @param keys [description]
-                 * @param config [description]
+                 * @param keyboardPlugin A reference to the Keyboard Plugin.
+                 * @param keys The keys that comprise this combo.
+                 * @param config A Key Combo configuration object.
                  */
-                constructor(keyboardManager: Phaser.Input.Keyboard.KeyboardManager, keys: string | integer[] | object[], config?: KeyComboConfig);
+                constructor(keyboardPlugin: Phaser.Input.Keyboard.KeyboardPlugin, keys: string | integer[] | object[], config?: KeyComboConfig);
 
                 /**
-                 * Used internally by the KeyCombo class.
-                 * Return `true` if it reached the end of the combo, `false` if not.
-                 * @param event [description]
-                 * @param combo [description]
+                 * A reference to the Keyboard Manager
                  */
-                static AdvanceKeyCombo(event: KeyboardEvent, combo: Phaser.Input.Keyboard.KeyCombo): boolean;
+                manager: Phaser.Input.Keyboard.KeyboardPlugin;
 
                 /**
-                 * [description]
-                 */
-                manager: Phaser.Input.Keyboard.KeyboardManager;
-
-                /**
-                 * [description]
+                 * A flag that controls if this Key Combo is actively processing keys or not.
                  */
                 enabled: boolean;
 
                 /**
-                 * [description]
+                 * An array of the keycodes that comprise this combo.
                  */
                 keyCodes: any[];
 
@@ -25744,7 +26989,7 @@ declare namespace Phaser {
                 /**
                  * The current index of the key being waited for in the 'keys' string.
                  */
-                index: number;
+                index: integer;
 
                 /**
                  * The length of this combo (in keycodes)
@@ -25777,7 +27022,7 @@ declare namespace Phaser {
                 maxKeyDelay: integer;
 
                 /**
-                 * If previously matched and they press Key 1 again, will it reset?
+                 * If previously matched and they press the first key of the combo again, will it reset?
                  */
                 resetOnMatch: boolean;
 
@@ -25787,106 +27032,97 @@ declare namespace Phaser {
                 deleteOnMatch: boolean;
 
                 /**
-                 * [description]
-                 */
-                onKeyDown: KeyboardKeydownCallback;
-
-                /**
                  * How far complete is this combo? A value between 0 and 1.
                  */
                 readonly progress: number;
 
                 /**
-                 * [description]
+                 * Destroys this Key Combo and all of its references.
                  */
                 destroy(): void;
-
-                /**
-                 * Used internally by the KeyCombo class.
-                 * @param event [description]
-                 * @param combo [description]
-                 */
-                static ProcessKeyCombo(event: KeyboardEvent, combo: Phaser.Input.Keyboard.KeyCombo): boolean;
-
-                /**
-                 * Used internally by the KeyCombo class.
-                 * @param combo The KeyCombo to reset.
-                 */
-                static ResetKeyCombo(combo: Phaser.Input.Keyboard.KeyCombo): Phaser.Input.Keyboard.KeyCombo;
 
             }
 
             /**
-             * The Keyboard class monitors keyboard input and dispatches keyboard events.
+             * The Keyboard Plugin is an input plugin that belongs to the Scene-owned Input system.
              * 
-             * _Note_: many keyboards are unable to process certain combinations of keys due to hardware limitations known as ghosting.
+             * Its role is to listen for native DOM Keyboard Events and then process them.
+             * 
+             * You do not need to create this class directly, the Input system will create an instance of it automatically.
+             * 
+             * You can access it from within a Scene using `this.input.keyboard`. For example, you can do:
+             * 
+             * ```javascript
+             * this.input.keyboard.on('keydown', callback, context);
+             * ```
+             * 
+             * Or, to listen for a specific key:
+             * 
+             * ```javascript
+             * this.input.keyboard.on('keydown_A', callback, context);
+             * ```
+             * 
+             * You can also create Key objects, which you can then poll in your game loop:
+             * 
+             * ```javascript
+             * var spaceBar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+             * ```
+             * 
+             * _Note_: Many keyboards are unable to process certain combinations of keys due to hardware limitations known as ghosting.
              * See http://www.html5gamedevs.com/topic/4876-impossible-to-use-more-than-2-keyboard-input-buttons-at-the-same-time/ for more details.
              * 
              * Also please be aware that certain browser extensions can disable or override Phaser keyboard handling.
-             * For example the Chrome extension vimium is known to disable Phaser from using the D key. And there are others.
-             * So please check your extensions before opening Phaser issues.
+             * For example the Chrome extension vimium is known to disable Phaser from using the D key, while EverNote disables the backtick key.
+             * And there are others. So, please check your extensions before opening Phaser issues about keys that don't work.
              */
-            class KeyboardManager extends Phaser.Events.EventEmitter {
+            class KeyboardPlugin extends Phaser.Events.EventEmitter {
                 /**
                  * 
-                 * @param inputManager [description]
+                 * @param sceneInputPlugin A reference to the Scene Input Plugin that the KeyboardPlugin belongs to.
                  */
-                constructor(inputManager: Phaser.Input.InputManager);
+                constructor(sceneInputPlugin: Phaser.Input.InputPlugin);
 
                 /**
-                 * [description]
+                 * A reference to the Scene that this Input Plugin is responsible for.
                  */
-                manager: Phaser.Input.InputManager;
+                scene: Phaser.Scene;
 
                 /**
-                 * [description]
+                 * A reference to the Scene Systems Settings.
+                 */
+                settings: Phaser.Scenes.Settings.Object;
+
+                /**
+                 * A reference to the Scene Input Plugin that created this Keyboard Plugin.
+                 */
+                sceneInputPlugin: Phaser.Input.InputPlugin;
+
+                /**
+                 * A boolean that controls if the Keyboard Plugin is enabled or not.
+                 * Can be toggled on the fly.
                  */
                 enabled: boolean;
 
                 /**
-                 * [description]
+                 * The Keyboard Event target, as defined in the Scene or Game Config.
+                 * Typically the browser window, but can be any interactive DOM element.
                  */
-                target: object;
+                target: any;
 
                 /**
-                 * [description]
+                 * An array of Key objects to process.
                  */
                 keys: Phaser.Input.Keyboard.Key[];
 
                 /**
-                 * [description]
+                 * An array of KeyCombo objects to process.
                  */
                 combos: Phaser.Input.Keyboard.KeyCombo[];
 
                 /**
-                 * [description]
+                 * Checks to see if both this plugin and the Scene to which it belongs is active.
                  */
-                captures: any[];
-
-                /**
-                 * [description]
-                 */
-                queue: KeyboardEvent[];
-
-                /**
-                 * [description]
-                 */
-                handler: KeyboardHandler;
-
-                /**
-                 * The Boot handler is called by Phaser.Game when it first starts up.
-                 */
-                boot(): void;
-
-                /**
-                 * [description]
-                 */
-                startListeners(): void;
-
-                /**
-                 * [description]
-                 */
-                stopListeners(): void;
+                isActive(): boolean;
 
                 /**
                  * Creates and returns an object containing 4 hotkeys for Up, Down, Left and Right, and also Space Bar and shift.
@@ -25896,87 +27132,107 @@ declare namespace Phaser {
                 /**
                  * A practical way to create an object containing user selected hotkeys.
                  * 
-                 * For example,
+                 * For example:
                  * 
-                 *     addKeys({ 'up': Phaser.Input.Keyboard.KeyCodes.W, 'down': Phaser.Input.Keyboard.KeyCodes.S });
+                 * ```javascript
+                 * this.input.keyboard.addKeys({ 'up': Phaser.Input.Keyboard.KeyCodes.W, 'down': Phaser.Input.Keyboard.KeyCodes.S });
+                 * ```
                  * 
-                 * would return an object containing properties (`up` and `down`) referring to {@link Phaser.Input.Keyboard.Key} objects.
-                 * @param keys [description]
+                 * would return an object containing the properties (`up` and `down`) mapped to W and S {@link Phaser.Input.Keyboard.Key} objects.
+                 * 
+                 * You can also pass in a comma-separated string:
+                 * 
+                 * ```javascript
+                 * this.input.keyboard.addKeys('W,S,A,D');
+                 * ```
+                 * 
+                 * Which will return an object with the properties W, S, A and D mapped to the relevant Key objects.
+                 * 
+                 * To use non-alpha numeric keys, use a string, such as 'UP', 'SPACE' or 'LEFT'.
+                 * @param keys An object containing Key Codes, or a comma-separated string.
                  */
-                addKeys(keys: object): object;
+                addKeys(keys: object | string): object;
 
                 /**
-                 * If you need more fine-grained control over a Key you can create a new Phaser.Key object via this method.
-                 * The Key object can then be polled, have events attached to it, etc.
-                 * @param keyCode [description]
+                 * Adds a Key object to this Keyboard Plugin.
+                 * 
+                 * The given argument can be either an existing Key object, a string, such as `A` or `SPACE`, or a key code value.
+                 * 
+                 * If a Key object is given, and one already exists matching the same key code, the existing one is replaced with the new one.
+                 * @param key Either a Key object, a string, such as `A` or `SPACE`, or a key code value.
                  */
-                addKey(keyCode: string | integer): Phaser.Input.Keyboard.Key;
+                addKey(key: Phaser.Input.Keyboard.Key | string | integer): Phaser.Input.Keyboard.Key;
 
                 /**
-                 * Removes a Key object from the Keyboard manager.
-                 * @param keyCode [description]
+                 * Removes a Key object from this Keyboard Plugin.
+                 * 
+                 * The given argument can be either a Key object, a string, such as `A` or `SPACE`, or a key code value.
+                 * @param key Either a Key object, a string, such as `A` or `SPACE`, or a key code value.
                  */
-                removeKey(keyCode: string | integer): void;
+                removeKey(key: Phaser.Input.Keyboard.Key | string | integer): void;
 
                 /**
-                 * [description]
-                 * @param keyCodes [description]
+                 * Creates a new KeyCombo.
+                 * 
+                 * A KeyCombo will listen for a specific string of keys from the Keyboard, and when it receives them
+                 * it will emit a `keycombomatch` event from this Keyboard Plugin.
+                 * 
+                 * The keys to be listened for can be defined as:
+                 * 
+                 * A string (i.e. 'ATARI')
+                 * An array of either integers (key codes) or strings, or a mixture of both
+                 * An array of objects (such as Key objects) with a public 'keyCode' property
+                 * 
+                 * For example, to listen for the Konami code (up, up, up, down, down, down, left, left, left, right, right, right)
+                 * you could pass the following array of key codes:
+                 * 
+                 * ```javascript
+                 * this.input.keyboard.createCombo([ 38, 38, 38, 40, 40, 40, 37, 37, 37, 39, 39, 39 ], { resetOnMatch: true });
+                 * 
+                 * this.input.keyboard.on('keycombomatch', function (event) {
+                 *     console.log('Konami Code entered!');
+                 * });
+                 * ```
+                 * 
+                 * Or, to listen for the user entering the word PHASER:
+                 * 
+                 * ```javascript
+                 * this.input.keyboard.createCombo('PHASER');
+                 * ```
+                 * @param keys The keys that comprise this combo.
+                 * @param config A Key Combo configuration object.
                  */
-                addKeyCapture(keyCodes: string | integer | string[] | integer[]): void;
-
-                /**
-                 * [description]
-                 * @param keyCodes [description]
-                 */
-                removeKeyCapture(keyCodes: string | integer | string[] | integer[]): void;
-
-                /**
-                 * [description]
-                 * @param keys [description]
-                 * @param config [description]
-                 */
-                createCombo(keys: string | integer[] | object[], config: KeyComboConfig): Phaser.Input.Keyboard.KeyCombo;
-
-                /**
-                 * [description]
-                 */
-                update(): void;
-
-                /**
-                 * [description]
-                 */
-                shutdown(): void;
-
-                /**
-                 * [description]
-                 */
-                destroy(): void;
+                createCombo(keys: string | integer[] | object[], config?: KeyComboConfig): Phaser.Input.Keyboard.KeyCombo;
 
             }
 
             /**
              * Returns `true` if the Key was pressed down within the `duration` value given, or `false` if it either isn't down,
              * or was pressed down longer ago than then given duration.
-             * @param key [description]
-             * @param duration [description] Default 50.
+             * @param key The Key object to test.
+             * @param duration The duration, in ms, within which the key must have been pressed down. Default 50.
              */
             function DownDuration(key: Phaser.Input.Keyboard.Key, duration?: integer): boolean;
 
             /**
              * The justDown value allows you to test if this Key has just been pressed down or not.
+             * 
              * When you check this value it will return `true` if the Key is down, otherwise `false`.
+             * 
              * You can only call justDown once per key press. It will only return `true` once, until the Key is released and pressed down again.
-             * This allows you to use it in situations where you want to check if this key is down without using a Signal, such as in a core game loop.
-             * @param key [description]
+             * This allows you to use it in situations where you want to check if this key is down without using an event, such as in a core game loop.
+             * @param key The Key to check to see if it's just down or not.
              */
             function JustDown(key: Phaser.Input.Keyboard.Key): boolean;
 
             /**
              * The justUp value allows you to test if this Key has just been released or not.
+             * 
              * When you check this value it will return `true` if the Key is up, otherwise `false`.
-             * You can only call justUp once per key release. It will only return `true` once, until the Key is pressed down and released again.
-             * This allows you to use it in situations where you want to check if this key is up without using a Signal, such as in a core game loop.
-             * @param key [description]
+             * 
+             * You can only call JustUp once per key release. It will only return `true` once, until the Key is pressed down and released again.
+             * This allows you to use it in situations where you want to check if this key is up without using an event, such as in a core game loop.
+             * @param key The Key to check to see if it's just up or not.
              */
             function JustUp(key: Phaser.Input.Keyboard.Key): boolean;
 
@@ -26167,24 +27423,10 @@ declare namespace Phaser {
             }
 
             /**
-             * Used internally by the KeyboardManager.
-             * @param key [description]
-             * @param event [description]
-             */
-            function ProcessKeyDown(key: Phaser.Input.Keyboard.Key, event: KeyboardEvent): Phaser.Input.Keyboard.Key;
-
-            /**
-             * Used internally by the KeyboardManager.
-             * @param key [description]
-             * @param event [description]
-             */
-            function ProcessKeyUp(key: Phaser.Input.Keyboard.Key, event: KeyboardEvent): Phaser.Input.Keyboard.Key;
-
-            /**
              * Returns `true` if the Key was released within the `duration` value given, or `false` if it either isn't up,
              * or was released longer ago than then given duration.
-             * @param key [description]
-             * @param duration [description] Default 50.
+             * @param key The Key object to test.
+             * @param duration The duration, in ms, within which the key must have been released. Default 50.
              */
             function UpDuration(key: Phaser.Input.Keyboard.Key, duration?: integer): boolean;
 
@@ -26192,17 +27434,21 @@ declare namespace Phaser {
 
         namespace Mouse {
             /**
-             * [description]
+             * The Mouse Manager is a helper class that belongs to the Input Manager.
+             * 
+             * Its role is to listen for native DOM Mouse Events and then pass them onto the Input Manager for further processing.
+             * 
+             * You do not need to create this class directly, the Input Manager will create an instance of it automatically.
              */
             class MouseManager {
                 /**
                  * 
-                 * @param inputManager [description]
+                 * @param inputManager A reference to the Input Manager.
                  */
                 constructor(inputManager: Phaser.Input.InputManager);
 
                 /**
-                 * [description]
+                 * A reference to the Input Manager.
                  */
                 manager: Phaser.Input.InputManager;
 
@@ -26212,19 +27458,16 @@ declare namespace Phaser {
                 capture: boolean;
 
                 /**
-                 * [description]
+                 * A boolean that controls if the Mouse Manager is enabled or not.
+                 * Can be toggled on the fly.
                  */
                 enabled: boolean;
 
                 /**
-                 * [description]
+                 * The Touch Event target, as defined in the Game Config.
+                 * Typically the canvas to which the game is rendering, but can be any interactive DOM element.
                  */
-                target: null;
-
-                /**
-                 * [description]
-                 */
-                handler: MouseHandler;
+                target: any;
 
                 /**
                  * If the mouse has been pointer locked successfully this will be set to true.
@@ -26232,12 +27475,12 @@ declare namespace Phaser {
                 locked: boolean;
 
                 /**
-                 * [description]
-                 */
-                boot(): void;
-
-                /**
-                 * [description]
+                 * Attempts to disable the context menu from appearing if you right-click on the browser.
+                 * 
+                 * Works by listening for the `contextmenu` event and prevent defaulting it.
+                 * 
+                 * Use this if you need to enable right-button mouse support in your game, and the browser
+                 * menu keeps getting in the way.
                  */
                 disableContextMenu(): Phaser.Input.Mouse.MouseManager;
 
@@ -26259,7 +27502,7 @@ declare namespace Phaser {
                  * Internal pointerLockChange handler.
                  * @param event The native event from the browser.
                  */
-                pointerLockChange(event: MouseHandler): void;
+                pointerLockChange(event: MouseEvent): void;
 
                 /**
                  * If the browser supports pointer lock, this will request that the pointer lock is released. If
@@ -26269,17 +27512,37 @@ declare namespace Phaser {
                 releasePointerLock(): void;
 
                 /**
-                 * [description]
+                 * The Mouse Move Event Handler.
+                 * @param event The native DOM Mouse Move Event.
+                 */
+                onMouseMove(event: MouseEvent): void;
+
+                /**
+                 * The Mouse Down Event Handler.
+                 * @param event The native DOM Mouse Down Event.
+                 */
+                onMouseDown(event: MouseEvent): void;
+
+                /**
+                 * The Mouse Up Event Handler.
+                 * @param event The native DOM Mouse Up Event.
+                 */
+                onMouseUp(event: MouseEvent): void;
+
+                /**
+                 * Starts the Mouse Event listeners running.
+                 * This is called automatically and does not need to be manually invoked.
                  */
                 startListeners(): void;
 
                 /**
-                 * [description]
+                 * Stops the Mouse Event listeners.
+                 * This is called automatically and does not need to be manually invoked.
                  */
                 stopListeners(): void;
 
                 /**
-                 * [description]
+                 * Destroys this Mouse Manager instance.
                  */
                 destroy(): void;
 
@@ -26288,33 +27551,45 @@ declare namespace Phaser {
         }
 
         /**
-         * [description]
+         * A Pointer object encapsulates both mouse and touch input within Phaser.
+         * 
+         * By default, Phaser will create 2 pointers for your game to use. If you require more, i.e. for a multi-touch
+         * game, then use the `InputPlugin.addPointer` method to do so, rather than instantiating this class directly,
+         * otherwise it won't be managed by the input system.
+         * 
+         * You can reference the current active pointer via `InputPlugin.activePointer`. You can also use the properties
+         * `InputPlugin.pointer1` through to `pointer10`, for each pointer you have enabled in your game.
+         * 
+         * The properties of this object are set by the Input Plugin during processing. This object is then sent in all
+         * input related events that the Input Plugin emits, so you can reference properties from it directly in your
+         * callbacks.
          */
         class Pointer {
             /**
              * 
-             * @param manager [description]
-             * @param id [description]
+             * @param manager A reference to the Input Manager.
+             * @param id The internal ID of this Pointer.
              */
             constructor(manager: Phaser.Input.InputManager, id: integer);
 
             /**
-             * [description]
+             * A reference to the Input Manager.
              */
             manager: Phaser.Input.InputManager;
 
             /**
-             * [description]
+             * The internal ID of this Pointer.
              */
-            id: integer;
+            readonly id: integer;
 
             /**
-             * [description]
+             * The most recent native DOM Event this Pointer has processed.
              */
-            event: null;
+            event: TouchEvent | MouseEvent;
 
             /**
              * The camera the Pointer interacted with during its last update.
+             * 
              * A Pointer can only ever interact with one camera at once, which will be the top-most camera
              * in the list should multiple cameras be positioned on-top of each other.
              */
@@ -26327,13 +27602,26 @@ declare namespace Phaser {
              * 4: Wheel button or middle button
              * 8: 4th button (typically the "Browser Back" button)
              * 16: 5th button (typically the "Browser Forward" button)
+             * 
+             * For a mouse configured for left-handed use, the button actions are reversed.
+             * In this case, the values are read from right to left.
              */
-            buttons: number;
+            buttons: integer;
 
             /**
-             * [description]
+             * The position of the Pointer in screen space.
              */
             position: Phaser.Math.Vector2;
+
+            /**
+             * The x position of this Pointer, translated into the coordinate space of the most recent Camera it interacted with.
+             */
+            worldX: number;
+
+            /**
+             * The y position of this Pointer, translated into the coordinate space of the most recent Camera it interacted with.
+             */
+            worldY: number;
 
             /**
              * X coordinate of the Pointer when Button 1 (left button), or Touch, was pressed, used for dragging objects.
@@ -26385,22 +27673,22 @@ declare namespace Phaser {
             isDown: boolean;
 
             /**
-             * [description]
+             * A dirty flag for this Pointer, used internally by the Input Plugin.
              */
             dirty: boolean;
 
             /**
-             * [description]
+             * Is this Pointer considered as being "just down" or not?
              */
             justDown: boolean;
 
             /**
-             * [description]
+             * Is this Pointer considered as being "just up" or not?
              */
             justUp: boolean;
 
             /**
-             * [description]
+             * Is this Pointer considered as being "just moved" or not?
              */
             justMoved: boolean;
 
@@ -26420,119 +27708,98 @@ declare namespace Phaser {
             movementY: number;
 
             /**
-             * [description]
-             * @param camera [description]
-             * @param output [description]
+             * The identifier property of the Pointer as set by the DOM event when this Pointer is started.
+             */
+            identifier: number;
+
+            /**
+             * The pointerId property of the Pointer as set by the DOM event when this Pointer is started.
+             * The browser can and will recycle this value.
+             */
+            pointerId: number;
+
+            /**
+             * An active Pointer is one that is currently pressed down on the display.
+             * A Mouse is always considered as active.
+             */
+            active: boolean;
+
+            /**
+             * Takes a Camera and returns a Vector2 containing the translated position of this Pointer
+             * within that Camera. This can be used to convert this Pointers position into camera space.
+             * @param camera The Camera to use for the translation.
+             * @param output A Vector2-like object in which to store the translated position.
              */
             positionToCamera(camera: Phaser.Cameras.Scene2D.Camera, output?: Phaser.Math.Vector2 | object): Phaser.Math.Vector2 | object;
 
             /**
-             * [description]
-             */
-            x: number;
-
-            /**
-             * [description]
-             */
-            y: number;
-
-            /**
-             * [description]
-             */
-            reset(): void;
-
-            /**
-             * [description]
-             * @param event [description]
-             * @param time The current timestamp as generated by the Request Animation Frame or SetTimeout.
-             */
-            touchmove(event: TouchEvent, time: integer): void;
-
-            /**
-             * [description]
-             * @param event [description]
-             * @param time The current timestamp as generated by the Request Animation Frame or SetTimeout.
-             */
-            move(event: MouseEvent, time: integer): void;
-
-            /**
-             * [description]
-             * @param event [description]
-             * @param time The current timestamp as generated by the Request Animation Frame or SetTimeout.
-             */
-            down(event: MouseEvent, time: integer): void;
-
-            /**
-             * [description]
-             * @param event [description]
-             * @param time The current timestamp as generated by the Request Animation Frame or SetTimeout.
-             */
-            touchstart(event: TouchEvent, time: integer): void;
-
-            /**
-             * [description]
-             * @param event [description]
-             * @param time The current timestamp as generated by the Request Animation Frame or SetTimeout.
-             */
-            up(event: MouseEvent, time: integer): void;
-
-            /**
-             * [description]
-             * @param event [description]
-             * @param time The current timestamp as generated by the Request Animation Frame or SetTimeout.
-             */
-            touchend(event: TouchEvent, time: integer): void;
-
-            /**
-             * [description]
+             * Checks to see if any buttons are being held down on this Pointer.
              */
             noButtonDown(): boolean;
 
             /**
-             * [description]
+             * Checks to see if the left button is being held down on this Pointer.
              */
             leftButtonDown(): boolean;
 
             /**
-             * [description]
+             * Checks to see if the right button is being held down on this Pointer.
              */
             rightButtonDown(): boolean;
 
             /**
-             * [description]
+             * Checks to see if the middle button is being held down on this Pointer.
              */
             middleButtonDown(): boolean;
 
             /**
-             * [description]
+             * Checks to see if the back button is being held down on this Pointer.
              */
             backButtonDown(): boolean;
 
             /**
-             * [description]
+             * Checks to see if the forward button is being held down on this Pointer.
              */
             forwardButtonDown(): boolean;
 
             /**
-             * [description]
+             * Destroys this Pointer instance and resets its external references.
              */
             destroy(): void;
+
+            /**
+             * The x position of this Pointer.
+             * The value is in screen space.
+             * See `worldX` to get a camera converted position.
+             */
+            x: number;
+
+            /**
+             * The y position of this Pointer.
+             * The value is in screen space.
+             * See `worldY` to get a camera converted position.
+             */
+            y: number;
 
         }
 
         namespace Touch {
             /**
-             * [description]
+             * The Touch Manager is a helper class that belongs to the Input Manager.
+             * 
+             * Its role is to listen for native DOM Touch Events and then pass them onto the Input Manager for further processing.
+             * 
+             * You do not need to create this class directly, the Input Manager will create an instance of it automatically.
              */
             class TouchManager {
                 /**
                  * 
-                 * @param inputManager [description]
+                 * @param inputManager A reference to the Input Manager.
                  */
                 constructor(inputManager: Phaser.Input.InputManager);
 
                 /**
-                 * [description]
+                 * A reference to the Input Manager.
                  */
                 manager: Phaser.Input.InputManager;
 
@@ -26542,37 +27809,49 @@ declare namespace Phaser {
                 capture: boolean;
 
                 /**
-                 * [description]
+                 * A boolean that controls if the Touch Manager is enabled or not.
+                 * Can be toggled on the fly.
                  */
                 enabled: boolean;
 
                 /**
-                 * [description]
+                 * The Touch Event target, as defined in the Game Config.
+                 * Typically the canvas to which the game is rendering, but can be any interactive DOM element.
                  */
-                target: null;
+                target: any;
 
                 /**
-                 * [description]
+                 * The Touch Start Event Handler.
+                 * @param event The native DOM Touch Start Event.
                  */
-                handler: TouchHandler;
+                onTouchStart(event: TouchEvent): void;
 
                 /**
-                 * [description]
+                 * The Touch Move Event Handler.
+                 * @param event The native DOM Touch Move Event.
                  */
-                boot(): void;
+                onTouchMove(event: TouchEvent): void;
 
                 /**
-                 * [description]
+                 * The Touch End Event Handler.
+                 * @param event The native DOM Touch End Event.
+                 */
+                onTouchEnd(event: TouchEvent): void;
+
+                /**
+                 * Starts the Touch Event listeners running.
+                 * This is called automatically and does not need to be manually invoked.
                  */
                 startListeners(): void;
 
                 /**
-                 * [description]
+                 * Stops the Touch Event listeners.
+                 * This is called automatically and does not need to be manually invoked.
                  */
                 stopListeners(): void;
 
                 /**
-                 * [description]
+                 * Destroys this Touch Manager instance.
                  */
                 destroy(): void;
 
@@ -30263,6 +31542,11 @@ declare namespace Phaser {
             updateProgress(): void;
 
             /**
+             * Called automatically during the load process.
+             */
+            update(): void;
+
+            /**
              * An internal method called automatically by the XHRLoader belong to a File.
              * 
              * This method will remove the given file from the inflight Set and update the load progress.
@@ -30277,7 +31561,7 @@ declare namespace Phaser {
              * 
              * If the process was successful, and the File isn't part of a MultiFile, its `addToCache` method is called.
              * 
-             * It this then removed from the queue. If there are more files to load, `checkLoadQueue` is called, otherwise `loadComplete` is.
+             * It this then removed from the queue. If there are no more files to load `loadComplete` is called.
              * @param file The file that has finished processing.
              */
             fileProcessComplete(file: Phaser.Loader.File): void;
@@ -30668,21 +31952,21 @@ declare namespace Phaser {
                 /**
                  * Back ease-in.
                  * @param v The value to be tweened.
-                 * @param overshoot [description] Default 1.70158.
+                 * @param overshoot The overshoot amount. Default 1.70158.
                  */
                 function In(v: number, overshoot?: number): number;
 
                 /**
                  * Back ease-in/out.
                  * @param v The value to be tweened.
-                 * @param overshoot [description] Default 1.70158.
+                 * @param overshoot The overshoot amount. Default 1.70158.
                  */
                 function InOut(v: number, overshoot?: number): number;
 
                 /**
                  * Back ease-out.
                  * @param v The value to be tweened.
-                 * @param overshoot [description] Default 1.70158.
+                 * @param overshoot The overshoot amount. Default 1.70158.
                  */
                 function Out(v: number, overshoot?: number): number;
 
@@ -30755,7 +32039,7 @@ declare namespace Phaser {
                 /**
                  * Elastic ease-in.
                  * @param v The value to be tweened.
-                 * @param amplitude [description] Default 0.1.
+                 * @param amplitude The amplitude of the elastic ease. Default 0.1.
                  * @param period [description] Default 0.1.
                  */
                 function In(v: number, amplitude?: number, period?: number): number;
@@ -30763,7 +32047,7 @@ declare namespace Phaser {
                 /**
                  * Elastic ease-in/out.
                  * @param v The value to be tweened.
-                 * @param amplitude [description] Default 0.1.
+                 * @param amplitude The amplitude of the elastic ease. Default 0.1.
                  * @param period [description] Default 0.1.
                  */
                 function InOut(v: number, amplitude?: number, period?: number): number;
@@ -30771,7 +32055,7 @@ declare namespace Phaser {
                 /**
                  * Elastic ease-out.
                  * @param v The value to be tweened.
-                 * @param amplitude [description] Default 0.1.
+                 * @param amplitude The amplitude of the elastic ease. Default 0.1.
                  * @param period [description] Default 0.1.
                  */
                 function Out(v: number, amplitude?: number, period?: number): number;
@@ -30896,7 +32180,7 @@ declare namespace Phaser {
                 /**
                  * Stepped easing.
                  * @param v The value to be tweened.
-                 * @param steps [description] Default 1.
+                 * @param steps The number of steps in the ease. Default 1.
                  */
                 function Stepped(v: number, steps?: number): number;
 
@@ -31130,7 +32414,7 @@ declare namespace Phaser {
             invert(): Phaser.Math.Matrix3;
 
             /**
-             * [description]
+             * Calculate the adjoint, or adjugate, of this Matrix.
              */
             adjoint(): Phaser.Math.Matrix3;
 
@@ -31256,7 +32540,7 @@ declare namespace Phaser {
             invert(): Phaser.Math.Matrix4;
 
             /**
-             * [description]
+             * Calculate the adjoint, or adjugate, of this Matrix.
              */
             adjoint(): Phaser.Math.Matrix4;
 
@@ -31292,9 +32576,9 @@ declare namespace Phaser {
             scale(v: Phaser.Math.Vector3 | Phaser.Math.Vector4): Phaser.Math.Matrix4;
 
             /**
-             * [description]
-             * @param axis [description]
-             * @param angle The angle of rotation in radians.
+             * Derive a rotation matrix around the given axis.
+             * @param axis The rotation axis.
+             * @param angle The rotation angle in radians.
              */
             makeRotationAxis(axis: Phaser.Math.Vector3 | Phaser.Math.Vector4, angle: number): Phaser.Math.Matrix4;
 
@@ -31456,15 +32740,15 @@ declare namespace Phaser {
         }
 
         /**
-         * [description]
+         * A quaternion.
          */
         class Quaternion {
             /**
              * 
-             * @param x [description]
-             * @param y [description]
-             * @param z [description]
-             * @param w [description]
+             * @param x The x component.
+             * @param y The y component.
+             * @param z The z component.
+             * @param w The w component.
              */
             constructor(x?: number, y?: number, z?: number, w?: number);
 
@@ -31489,63 +32773,63 @@ declare namespace Phaser {
             w: number;
 
             /**
-             * [description]
-             * @param src [description]
+             * Copy the components of a given Quaternion or Vector into this Quaternion.
+             * @param src The Quaternion or Vector to copy the components from.
              */
             copy(src: Phaser.Math.Quaternion | Phaser.Math.Vector4): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param x [description] Default 0.
-             * @param y [description] Default 0.
-             * @param z [description] Default 0.
-             * @param w [description] Default 0.
+             * Set the components of this Quaternion.
+             * @param x The x component, or an object containing x, y, z, and w components. Default 0.
+             * @param y The y component. Default 0.
+             * @param z The z component. Default 0.
+             * @param w The w component. Default 0.
              */
             set(x?: number | object, y?: number, z?: number, w?: number): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param v [description]
+             * Add a given Quaternion or Vector to this Quaternion. Addition is component-wise.
+             * @param v The Quaternion or Vector to add to this Quaternion.
              */
             add(v: Phaser.Math.Quaternion | Phaser.Math.Vector4): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param v [description]
+             * Subtract a given Quaternion or Vector from this Quaternion. Subtraction is component-wise.
+             * @param v The Quaternion or Vector to subtract from this Quaternion.
              */
             subtract(v: Phaser.Math.Quaternion | Phaser.Math.Vector4): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param scale [description]
+             * Scale this Quaternion by the given value.
+             * @param scale The value to scale this Quaternion by.
              */
             scale(scale: number): Phaser.Math.Quaternion;
 
             /**
-             * [description]
+             * Calculate the length of this Quaternion.
              */
             length(): number;
 
             /**
-             * [description]
+             * Calculate the length of this Quaternion squared.
              */
             lengthSq(): number;
 
             /**
-             * [description]
+             * Normalize this Quaternion.
              */
             normalize(): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param v [description]
+             * Calculate the dot product of this Quaternion and the given Quaternion or Vector.
+             * @param v The Quaternion or Vector to dot product with this Quaternion.
              */
             dot(v: Phaser.Math.Quaternion | Phaser.Math.Vector4): number;
 
             /**
-             * [description]
-             * @param v [description]
-             * @param t [description] Default 0.
+             * Linearly interpolate this Quaternion towards the given Quaternion or Vector.
+             * @param v The Quaternion or Vector to interpolate towards.
+             * @param t The percentage of interpolation. Default 0.
              */
             lerp(v: Phaser.Math.Quaternion | Phaser.Math.Vector4, t?: number): Phaser.Math.Quaternion;
 
@@ -31557,74 +32841,78 @@ declare namespace Phaser {
             rotationTo(a: Phaser.Math.Vector3, b: Phaser.Math.Vector3): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param view [description]
-             * @param right [description]
-             * @param up [description]
+             * Set the axes of this Quaternion.
+             * @param view The view axis.
+             * @param right The right axis.
+             * @param up The upwards axis.
              */
             setAxes(view: Phaser.Math.Vector3, right: Phaser.Math.Vector3, up: Phaser.Math.Vector3): Phaser.Math.Quaternion;
 
             /**
-             * [description]
+             * Reset this Matrix to an identity (default) Quaternion.
              */
             identity(): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param axis [description]
-             * @param rad [description]
+             * Set the axis angle of this Quaternion.
+             * @param axis The axis.
+             * @param rad The angle in radians.
              */
             setAxisAngle(axis: Phaser.Math.Vector3, rad: number): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param b [description]
+             * Multiply this Quaternion by the given Quaternion or Vector.
+             * @param b The Quaternion or Vector to multiply this Quaternion by.
              */
             multiply(b: Phaser.Math.Quaternion | Phaser.Math.Vector4): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param b [description]
-             * @param t [description]
+             * Smoothly linearly interpolate this Quaternion towards the given Quaternion or Vector.
+             * @param b The Quaternion or Vector to interpolate towards.
+             * @param t The percentage of interpolation.
              */
             slerp(b: Phaser.Math.Quaternion | Phaser.Math.Vector4, t: number): Phaser.Math.Quaternion;
 
             /**
-             * [description]
+             * Invert this Quaternion.
              */
             invert(): Phaser.Math.Quaternion;
 
             /**
-             * [description]
+             * Convert this Quaternion into its conjugate.
+             * 
+             * Sets the x, y and z components.
              */
             conjugate(): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param rad [description]
+             * Rotate this Quaternion on the X axis.
+             * @param rad The rotation angle in radians.
              */
             rotateX(rad: number): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param rad [description]
+             * Rotate this Quaternion on the Y axis.
+             * @param rad The rotation angle in radians.
              */
             rotateY(rad: number): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param rad [description]
+             * Rotate this Quaternion on the Z axis.
+             * @param rad The rotation angle in radians.
              */
             rotateZ(rad: number): Phaser.Math.Quaternion;
 
             /**
-             * [description]
+             * Create a unit (or rotation) Quaternion from its x, y, and z components.
+             * 
+             * Sets the w component.
              */
             calculateW(): Phaser.Math.Quaternion;
 
             /**
-             * [description]
-             * @param mat [description]
+             * Convert the given Matrix into this Quaternion.
+             * @param mat The Matrix to convert from.
              */
             fromMat3(mat: Phaser.Math.Matrix3): Phaser.Math.Quaternion;
 
@@ -31847,13 +33135,13 @@ declare namespace Phaser {
         function RoundTo(value: number, place?: integer, base?: integer): number;
 
         /**
-         * [description]
-         * @param length [description]
-         * @param sinAmp [description]
-         * @param cosAmp [description]
-         * @param frequency [description]
+         * Generate a series of sine and cosine values.
+         * @param length The number of values to generate.
+         * @param sinAmp The sine value amplitude. Default 1.
+         * @param cosAmp The cosine value amplitude. Default 1.
+         * @param frequency The frequency of the values. Default 1.
          */
-        function SinCosTableGenerator(length: number, sinAmp: number, cosAmp: number, frequency: number): SinCosTable;
+        function SinCosTableGenerator(length: number, sinAmp?: number, cosAmp?: number, frequency?: number): SinCosTable;
 
         /**
          * Calculate a smoother interpolation percentage of `x` between `min` and `max`.
@@ -31938,8 +33226,8 @@ declare namespace Phaser {
         class Vector2 {
             /**
              * 
-             * @param x The x component of this Vector.
-             * @param y The y component of this Vector.
+             * @param x The x component.
+             * @param y The y component.
              */
             constructor(x?: number, y?: number);
 
@@ -32130,9 +33418,9 @@ declare namespace Phaser {
         class Vector3 {
             /**
              * 
-             * @param x The x component of this Vector.
-             * @param y The y component of this Vector.
-             * @param z The z component of this Vector.
+             * @param x The x component.
+             * @param y The y component.
+             * @param z The z component.
              */
             constructor(x?: number, y?: number, z?: number);
 
@@ -32341,10 +33629,10 @@ declare namespace Phaser {
         class Vector4 {
             /**
              * 
-             * @param x The x component of this Vector.
-             * @param y The y component of this Vector.
-             * @param z The z component of this Vector.
-             * @param w The w component of this Vector.
+             * @param x The x component.
+             * @param y The y component.
+             * @param z The z component.
+             * @param w The w component.
              */
             constructor(x?: number, y?: number, z?: number, w?: number);
 
@@ -32539,7 +33827,8 @@ declare namespace Phaser {
 
                 /**
                  * Clears all alpha values associated with this Game Object.
-                 * Immediately sets the alpha levels back to 1 (fully opaque)
+                 * 
+                 * Immediately sets the alpha levels back to 1 (fully opaque).
                  */
                 clearAlpha(): this;
 
@@ -32865,12 +34154,12 @@ declare namespace Phaser {
                 updateDisplayOrigin(): this;
 
                 /**
-                 * [description]
+                 * The initial WebGL pipeline of this Game Object.
                  */
                 defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
                 /**
-                 * [description]
+                 * The current WebGL pipeline of this Game Object.
                  */
                 pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -33325,6 +34614,12 @@ declare namespace Phaser {
                  * @param value [description]
                  */
                 setDragY(value: number): this;
+
+                /**
+                 * [description]
+                 * @param value `true` to use damping for deceleration, or `false` to use linear deceleration.
+                 */
+                setDamping(value: boolean): this;
 
                 /**
                  * [description]
@@ -33660,7 +34955,8 @@ declare namespace Phaser {
 
                 /**
                  * Clears all alpha values associated with this Game Object.
-                 * Immediately sets the alpha levels back to 1 (fully opaque)
+                 * 
+                 * Immediately sets the alpha levels back to 1 (fully opaque).
                  */
                 clearAlpha(): this;
 
@@ -33986,12 +35282,12 @@ declare namespace Phaser {
                 updateDisplayOrigin(): this;
 
                 /**
-                 * [description]
+                 * The initial WebGL pipeline of this Game Object.
                  */
                 defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
                 /**
-                 * [description]
+                 * The current WebGL pipeline of this Game Object.
                  */
                 pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -34449,6 +35745,12 @@ declare namespace Phaser {
 
                 /**
                  * [description]
+                 * @param value `true` to use damping for deceleration, or `false` to use linear deceleration.
+                 */
+                setDamping(value: boolean): this;
+
+                /**
+                 * [description]
                  * @param reset [description]
                  * @param x [description]
                  * @param y [description]
@@ -34757,7 +36059,8 @@ declare namespace Phaser {
                 onOverlap: boolean;
 
                 /**
-                 * The Body's absolute maximum velocity, in pixels per second.
+                 * The Body's absolute maximum velocity.
+                 * 
                  * This limits the Body's rate of movement but not its `velocity` values (which can still exceed `maxVelocity`).
                  */
                 maxVelocity: Phaser.Math.Vector2;
@@ -34767,6 +36070,19 @@ declare namespace Phaser {
                  * The default value (1, 0) moves the riding body horizontally in equal proportion and vertically not at all.
                  */
                 friction: Phaser.Math.Vector2;
+
+                /**
+                 * If this Body is using `drag` for deceleration this property controls how the drag is applied.
+                 * If set to `true` drag will use a damping effect rather than a linear approach. If you are
+                 * creating a game where the Body moves freely at any angle (i.e. like the way the ship moves in
+                 * the game Asteroids) then you will get a far smoother and more visually correct deceleration
+                 * by using damping, avoiding the axis-drift that is prone with linear deceleration.
+                 * 
+                 * If you enable this property then you should use far smaller `drag` values than with linear, as
+                 * they are used as a multiplier on the velocity. Values such as 0.95 will give a nice slow
+                 * deceleration, where-as smaller values, such as 0.5 will stop an object almost immediately.
+                 */
+                useDamping: boolean;
 
                 /**
                  * The rate of change of this Body's rotation, in degrees per second.
@@ -34876,11 +36192,6 @@ declare namespace Phaser {
                 blocked: ArcadeBodyCollision;
 
                 /**
-                 * Whether this Body is in its `update` phase.
-                 */
-                dirty: boolean;
-
-                /**
                  * Whether to automatically synchronize this Body's dimensions to the dimensions of its Game Object's visual bounds.
                  */
                 syncBounds: boolean;
@@ -34918,8 +36229,9 @@ declare namespace Phaser {
 
                 /**
                  * Feeds the Body results back into the parent Game Object.
+                 * @param resetDelta Reset the delta properties?
                  */
-                postUpdate(): void;
+                postUpdate(resetDelta: boolean): void;
 
                 /**
                  * Checks for collisions between this Body and the world boundary and separates them.
@@ -34992,25 +36304,24 @@ declare namespace Phaser {
                 onWall(): boolean;
 
                 /**
-                 * The absolute (nonnegative) change in this Body's horizontal position from the previous step.
-                 * This value is set only during the Body's `dirty` (update) phase.
+                 * The absolute (non-negative) change in this Body's horizontal position from the previous step.
                  */
                 deltaAbsX(): number;
 
                 /**
-                 * The absolute (nonnegative) change in this Body's horizontal position from the previous step.
-                 * This value is set only during the Body's `dirty` (update) phase.
+                 * The absolute (non-negative) change in this Body's vertical position from the previous step.
                  */
                 deltaAbsY(): number;
 
                 /**
                  * The change in this Body's horizontal position from the previous step.
-                 * This value is set only during the Body's `dirty` (update) phase.
+                 * This value is set during the Body's update phase.
                  */
                 deltaX(): number;
 
                 /**
                  * The change in this Body's vertical position from the previous step.
+                 * This value is set during the Body's update phase.
                  */
                 deltaY(): number;
 
@@ -35044,9 +36355,9 @@ declare namespace Phaser {
                 /**
                  * Sets the Body's velocity.
                  * @param x The horizontal velocity, in pixels per second.
-                 * @param y The vertical velocity, in pixels per second.
+                 * @param y The vertical velocity, in pixels per second. Default x.
                  */
-                setVelocity(x: number, y: number): Phaser.Physics.Arcade.Body;
+                setVelocity(x: number, y?: number): Phaser.Physics.Arcade.Body;
 
                 /**
                  * Sets the Body's horizontal velocity.
@@ -35059,6 +36370,13 @@ declare namespace Phaser {
                  * @param value The velocity, in pixels per second.
                  */
                 setVelocityY(value: number): Phaser.Physics.Arcade.Body;
+
+                /**
+                 * Sets the Body's maximum velocity.
+                 * @param x The horizontal velocity, in pixels per second.
+                 * @param y The vertical velocity, in pixels per second. Default x.
+                 */
+                setMaxVelocity(x: number, y?: number): Phaser.Physics.Arcade.Body;
 
                 /**
                  * Sets the Body's bounce.
@@ -35249,7 +36567,7 @@ declare namespace Phaser {
                  * @param processCallback The callback to invoke when the two objects collide. Must return a boolean.
                  * @param callbackContext The scope in which to call the callbacks.
                  */
-                constructor(world: Phaser.Physics.Arcade.World, overlapOnly: boolean, object1: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], object2: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], collideCallback: ArcadePhysicsCallback, processCallback: ArcadePhysicsCallback, callbackContext: object);
+                constructor(world: Phaser.Physics.Arcade.World, overlapOnly: boolean, object1: ArcadeColliderType, object2: ArcadeColliderType, collideCallback: ArcadePhysicsCallback, processCallback: ArcadePhysicsCallback, callbackContext: any);
 
                 /**
                  * [description]
@@ -35274,12 +36592,12 @@ declare namespace Phaser {
                 /**
                  * [description]
                  */
-                object1: Phaser.Physics.Arcade.Body;
+                object1: ArcadeColliderType;
 
                 /**
                  * [description]
                  */
-                object2: Phaser.Physics.Arcade.Body;
+                object2: ArcadeColliderType;
 
                 /**
                  * [description]
@@ -35435,6 +36753,11 @@ declare namespace Phaser {
                      * @param value [description]
                      */
                     setDragY(value: number): this;
+                    /**
+                     * [description]
+                     * @param value `true` to use damping for deceleration, or `false` to use linear deceleration.
+                     */
+                    setDamping(value: boolean): this;
                 }
 
                 /**
@@ -36296,13 +37619,17 @@ declare namespace Phaser {
             }
 
             /**
-             * [description]
+             * The Arcade Physics World.
+             * 
+             * The World is responsible for creating, managing, colliding and updating all of the bodies within it.
+             * 
+             * An instance of the World belongs to a Phaser.Scene and is accessed via the property `physics.world`.
              */
             class World extends Phaser.Events.EventEmitter {
                 /**
                  * 
-                 * @param scene [description]
-                 * @param config [description]
+                 * @param scene The Scene to which this World instance belongs.
+                 * @param config An Arcade Physics Configuration object.
                  */
                 constructor(scene: Phaser.Scene, config: ArcadeWorldConfig);
 
@@ -36347,6 +37674,27 @@ declare namespace Phaser {
                 checkCollision: CheckCollisionObject;
 
                 /**
+                 * The number of physics steps to be taken per second.
+                 * 
+                 * This property is read-only. Use the `setFPS` method to modify it at run-time.
+                 */
+                readonly fps: number;
+
+                /**
+                 * The number of steps that took place in the last frame.
+                 */
+                readonly stepsLastFrame: number;
+
+                /**
+                 * Scaling factor applied to the frame rate.
+                 * 
+                 * - 1.0 = normal speed
+                 * - 2.0 = half speed
+                 * - 0.5 = double speed
+                 */
+                timeScale: any;
+
+                /**
                  * The maximum absolute difference of a Body's per-step velocity and its overlap with another Body that will result in separation on *each axis*.
                  * Larger values favor separation.
                  * Smaller values favor no separation.
@@ -36388,9 +37736,31 @@ declare namespace Phaser {
                 defaults: ArcadeWorldDefaults;
 
                 /**
-                 * The maximum number of items per tree node.
+                 * The maximum number of items per node on the RTree.
+                 * 
+                 * This is ignored if `useTree` is `false`. If you have a large number of bodies in
+                 * your world then you may find search performance improves by increasing this value,
+                 * to allow more items per node and less node division.
                  */
                 maxEntries: integer;
+
+                /**
+                 * Should this Arcade Physics World use an RTree for Dynamic Physics bodies or not?
+                 * 
+                 * An RTree is a fast way of spatially sorting of all the moving bodies in the world.
+                 * However, at certain limits, the cost of clearing and inserting the bodies into the
+                 * tree every frame becomes more expensive than the search speed gains it provides.
+                 * 
+                 * If you have a large number of dynamic bodies in your world then it may be best to
+                 * disable the use of the RTree by setting this property to `true`.
+                 * The number it can cope with depends on browser and device, but a conservative estimate
+                 * of around 5,000 bodies should be considered the max before disabling it.
+                 * 
+                 * Note this only applies to dynamic bodies. Static bodies are always kept in an RTree,
+                 * because they don't have to be cleared every frame, so you benefit from the
+                 * massive search speeds all the time.
+                 */
+                useTree: boolean;
 
                 /**
                  * The spatial index of Dynamic Bodies.
@@ -36408,73 +37778,148 @@ declare namespace Phaser {
                 treeMinMax: ArcadeWorldTreeMinMax;
 
                 /**
-                 * Adds an Arcade Physics Body to a Game Object.
-                 * @param object [description]
+                 * Adds an Arcade Physics Body to a Game Object, an array of Game Objects, or the children of a Group.
+                 * 
+                 * The difference between this and the `enableBody` method is that you can pass arrays or Groups
+                 * to this method.
+                 * 
+                 * You can specify if the bodies are to be Dynamic or Static. A dynamic body can move via velocity and
+                 * acceleration. A static body remains fixed in place and as such is able to use an optimized search
+                 * tree, making it ideal for static elements such as level objects. You can still collide and overlap
+                 * with static bodies.
+                 * 
+                 * Normally, rather than calling this method directly, you'd use the helper methods available in the
+                 * Arcade Physics Factory, such as:
+                 * 
+                 * ```javascript
+                 * this.physics.add.image(x, y, textureKey);
+                 * this.physics.add.sprite(x, y, textureKey);
+                 * ```
+                 * 
+                 * Calling factory methods encapsulates the creation of a Game Object and the creation of its
+                 * body at the same time. If you are creating custom classes then you can pass them to this
+                 * method to have their bodies created.
+                 * @param object The object, or objects, on which to create the bodies.
                  * @param bodyType The type of Body to create. Either `DYNAMIC_BODY` or `STATIC_BODY`.
                  */
                 enable(object: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], bodyType?: integer): void;
 
                 /**
-                 * Helper for Phaser.Physics.Arcade.World#enable.
-                 * @param object [description]
+                 * Creates an Arcade Physics Body on a single Game Object.
+                 * 
+                 * If the Game Object already has a body, this method will simply add it back into the simulation.
+                 * 
+                 * You can specify if the body is Dynamic or Static. A dynamic body can move via velocity and
+                 * acceleration. A static body remains fixed in place and as such is able to use an optimized search
+                 * tree, making it ideal for static elements such as level objects. You can still collide and overlap
+                 * with static bodies.
+                 * 
+                 * Normally, rather than calling this method directly, you'd use the helper methods available in the
+                 * Arcade Physics Factory, such as:
+                 * 
+                 * ```javascript
+                 * this.physics.add.image(x, y, textureKey);
+                 * this.physics.add.sprite(x, y, textureKey);
+                 * ```
+                 * 
+                 * Calling factory methods encapsulates the creation of a Game Object and the creation of its
+                 * body at the same time. If you are creating custom classes then you can pass them to this
+                 * method to have their bodies created.
+                 * @param object The Game Object on which to create the body.
                  * @param bodyType The type of Body to create. Either `DYNAMIC_BODY` or `STATIC_BODY`.
                  */
                 enableBody(object: Phaser.GameObjects.GameObject, bodyType?: integer): Phaser.GameObjects.GameObject;
 
                 /**
-                 * Remove a Body from the simulation.
-                 * @param object [description]
+                 * Adds an existing Arcade Physics Body or StaticBody to the simulation.
+                 * 
+                 * The body is enabled and added to the local search trees.
+                 * @param body The Body to be added to the simulation.
                  */
-                remove(object: Phaser.Physics.Arcade.Body): void;
+                add(body: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody): Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody;
 
                 /**
-                 * Disables the Body of a Game Object, or the Bodies of several Game Objects.
-                 * @param object [description]
+                 * Disables the Arcade Physics Body of a Game Object, an array of Game Objects, or the children of a Group.
+                 * 
+                 * The difference between this and the `disableBody` method is that you can pass arrays or Groups
+                 * to this method.
+                 * 
+                 * The body itself is not deleted, it just has its `enable` property set to false, which
+                 * means you can re-enable it again at any point by passing it to enable `World.enable` or `World.add`.
+                 * @param object The object, or objects, on which to disable the bodies.
                  */
                 disable(object: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[]): void;
 
                 /**
-                 * Disables the Body of a Game Object.
-                 * @param object [description]
+                 * Disables an existing Arcade Physics Body or StaticBody and removes it from the simulation.
+                 * 
+                 * The body is disabled and removed from the local search trees.
+                 * 
+                 * The body itself is not deleted, it just has its `enable` property set to false, which
+                 * means you can re-enable it again at any point by passing it to enable `World.enable` or `World.add`.
+                 * @param body The Body to be disabled.
                  */
-                disableGameObjectBody(object: Phaser.GameObjects.GameObject): Phaser.GameObjects.GameObject;
+                disableBody(body: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody): void;
 
                 /**
-                 * Disables a Body.
-                 * A disabled Body is ignored by the simulation. It doesn't move or interact with other Bodies.
-                 * @param body [description]
+                 * Removes an existing Arcade Physics Body or StaticBody from the simulation.
+                 * 
+                 * The body is disabled and removed from the local search trees.
+                 * 
+                 * The body itself is not deleted, it just has its `enabled` property set to false, which
+                 * means you can re-enable it again at any point by passing it to enable `enable` or `add`.
+                 * @param body The body to be removed from the simulation.
                  */
-                disableBody(body: Phaser.Physics.Arcade.Body): void;
+                remove(body: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody): void;
 
                 /**
-                 * Creates the graphics object responsible for debug display.
+                 * Creates a Graphics Game Object that the world will use to render the debug display to.
+                 * 
+                 * This is called automatically when the World is instantiated if the `debug` config property
+                 * was set to `true`. However, you can call it at any point should you need to display the
+                 * debug Graphic from a fixed point.
+                 * 
+                 * You can control which objects are drawn to the Graphics object, and the colors they use,
+                 * by setting the debug properties in the physics config.
+                 * 
+                 * You should not typically use this in a production game. Use it to aid during debugging.
                  */
                 createDebugGraphic(): Phaser.GameObjects.Graphics;
 
                 /**
-                 * Sets the dimensions of the world boundary.
-                 * @param x [description]
-                 * @param y [description]
-                 * @param width [description]
-                 * @param height [description]
-                 * @param checkLeft [description]
-                 * @param checkRight [description]
-                 * @param checkUp [description]
-                 * @param checkDown [description]
+                 * Sets the position, size and properties of the World boundary.
+                 * 
+                 * The World boundary is an invisible rectangle that defines the edges of the World.
+                 * If a Body is set to collide with the world bounds then it will automatically stop
+                 * when it reaches any of the edges. You can optionally set which edges of the boundary
+                 * should be checked against.
+                 * @param x The top-left x coordinate of the boundary.
+                 * @param y The top-left y coordinate of the boundary.
+                 * @param width The width of the boundary.
+                 * @param height The height of the boundary.
+                 * @param checkLeft Should bodies check against the left edge of the boundary?
+                 * @param checkRight Should bodies check against the right edge of the boundary?
+                 * @param checkUp Should bodies check against the top edge of the boundary?
+                 * @param checkDown Should bodies check against the bottom edge of the boundary?
                  */
                 setBounds(x: number, y: number, width: number, height: number, checkLeft?: boolean, checkRight?: boolean, checkUp?: boolean, checkDown?: boolean): Phaser.Physics.Arcade.World;
 
                 /**
-                 * Enables or disables collisions on each boundary edge.
-                 * @param left [description] Default true.
-                 * @param right [description] Default true.
-                 * @param up [description] Default true.
-                 * @param down [description] Default true.
+                 * Enables or disables collisions on each edge of the World boundary.
+                 * @param left Should bodies check against the left edge of the boundary? Default true.
+                 * @param right Should bodies check against the right edge of the boundary? Default true.
+                 * @param up Should bodies check against the top edge of the boundary? Default true.
+                 * @param down Should bodies check against the bottom edge of the boundary? Default true.
                  */
                 setBoundsCollision(left?: boolean, right?: boolean, up?: boolean, down?: boolean): Phaser.Physics.Arcade.World;
 
                 /**
                  * Pauses the simulation.
+                 * 
+                 * A paused simulation does not update any existing bodies, or run any Colliders.
+                 * 
+                 * However, you can still enable and disable bodies within it, or manually run collide or overlap
+                 * checks.
                  */
                 pause(): Phaser.Physics.Arcade.World;
 
@@ -36484,37 +37929,83 @@ declare namespace Phaser {
                 resume(): Phaser.Physics.Arcade.World;
 
                 /**
-                 * Adds a collision processor, which runs automatically.
+                 * Creates a new Collider object and adds it to the simulation.
+                 * 
+                 * A Collider is a way to automatically perform collision checks between two objects,
+                 * calling the collide and process callbacks if they occur.
+                 * 
+                 * Colliders are run as part of the World update, after all of the Bodies have updated.
+                 * 
+                 * By creating a Collider you don't need then call `World.collide` in your `update` loop,
+                 * as it will be handled for you automatically.
                  * @param object1 The first object to check for collision.
                  * @param object2 The second object to check for collision.
                  * @param collideCallback The callback to invoke when the two objects collide.
                  * @param processCallback The callback to invoke when the two objects collide. Must return a boolean.
                  * @param callbackContext The scope in which to call the callbacks.
                  */
-                addCollider(object1: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], object2: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], collideCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any): Phaser.Physics.Arcade.Collider;
+                addCollider(object1: ArcadeColliderType, object2: ArcadeColliderType, collideCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any): Phaser.Physics.Arcade.Collider;
 
                 /**
-                 * Adds an overlap processor, which runs automatically.
+                 * Creates a new Overlap Collider object and adds it to the simulation.
+                 * 
+                 * A Collider is a way to automatically perform overlap checks between two objects,
+                 * calling the collide and process callbacks if they occur.
+                 * 
+                 * Colliders are run as part of the World update, after all of the Bodies have updated.
+                 * 
+                 * By creating a Collider you don't need then call `World.overlap` in your `update` loop,
+                 * as it will be handled for you automatically.
                  * @param object1 The first object to check for overlap.
                  * @param object2 The second object to check for overlap.
                  * @param collideCallback The callback to invoke when the two objects overlap.
                  * @param processCallback The callback to invoke when the two objects overlap. Must return a boolean.
                  * @param callbackContext The scope in which to call the callbacks.
                  */
-                addOverlap(object1: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], object2: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], collideCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any): Phaser.Physics.Arcade.Collider;
+                addOverlap(object1: ArcadeColliderType, object2: ArcadeColliderType, collideCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any): Phaser.Physics.Arcade.Collider;
 
                 /**
-                 * Removes a collision or overlap processor.
-                 * @param collider [description]
+                 * Removes a Collider from the simulation so it is no longer processed.
+                 * 
+                 * This method does not destroy the Collider. If you wish to add it back at a later stage you can call
+                 * `World.colliders.add(Collider)`.
+                 * 
+                 * If you no longer need the Collider you can call the `Collider.destroy` method instead, which will
+                 * automatically clear all of its references and then remove it from the World. If you call destroy on
+                 * a Collider you _don't_ need to pass it to this method too.
+                 * @param collider The Collider to remove from the simulation.
                  */
                 removeCollider(collider: Phaser.Physics.Arcade.Collider): Phaser.Physics.Arcade.World;
 
                 /**
-                 * Advances the simulation.
+                 * Sets the frame rate to run the simulation at.
+                 * 
+                 * The frame rate value is used to simulate a fixed update time step. This fixed
+                 * time step allows for a straightforward implementation of a deterministic game state.
+                 * 
+                 * This frame rate is independent of the frequency at which the game is rendering. The
+                 * higher you set the fps, the more physics simulation steps will occur per game step.
+                 * Conversely, the lower you set it, the less will take place.
+                 * 
+                 * You can optionally advance the simulation directly yourself by calling the `step` method.
+                 * @param framerate The frame rate to advance the simulation at.
+                 */
+                setFPS(framerate: integer): this;
+
+                /**
+                 * Advances the simulation based on the elapsed time and fps rate.
+                 * 
+                 * This is called automatically by your Scene and does not need to be invoked directly.
                  * @param time The current timestamp as generated by the Request Animation Frame or SetTimeout.
                  * @param delta The delta time, in ms, elapsed since the last frame.
                  */
-                update(time: number, delta: number): void;
+                protected update(time: number, delta: number): void;
+
+                /**
+                 * Advances the simulation by one step.
+                 * @param delta The delta time amount, in ms, by which to advance the simulation.
+                 */
+                step(delta: number): void;
 
                 /**
                  * Updates bodies, draws the debug display, and handles pending queue operations.
@@ -36523,51 +38014,55 @@ declare namespace Phaser {
 
                 /**
                  * Calculates a Body's velocity and updates its position.
-                 * @param body [description]
+                 * @param body The Body to be updated.
+                 * @param delta The delta value to be used in the motion calculations.
                  */
-                updateMotion(body: Phaser.Physics.Arcade.Body): void;
+                updateMotion(body: Phaser.Physics.Arcade.Body, delta: number): void;
+
+                /**
+                 * Calculates a Body's angular velocity.
+                 * @param body The Body to compute the velocity for.
+                 * @param delta The delta value to be used in the calculation.
+                 */
+                computeAngularVelocity(body: Phaser.Physics.Arcade.Body, delta: number): void;
 
                 /**
                  * Calculates a Body's per-axis velocity.
-                 * @param axis [description]
-                 * @param body [description]
-                 * @param velocity [description]
-                 * @param acceleration [description]
-                 * @param drag [description]
-                 * @param max [description]
+                 * @param body The Body to compute the velocity for.
+                 * @param delta The delta value to be used in the calculation.
                  */
-                computeVelocity(axis: integer, body: Phaser.Physics.Arcade.Body, velocity: number, acceleration: number, drag: number, max: number): number;
+                computeVelocity(body: Phaser.Physics.Arcade.Body, delta: number): void;
 
                 /**
-                 * Separates two Bodies, when at least one is rectangular.
-                 * @param body1 [description]
-                 * @param body2 [description]
-                 * @param processCallback [description]
-                 * @param callbackContext [description]
-                 * @param overlapOnly [description]
+                 * Separates two Bodies.
+                 * @param body1 The first Body to be separated.
+                 * @param body2 The second Body to be separated.
+                 * @param processCallback The process callback.
+                 * @param callbackContext The context in which to invoke the callback.
+                 * @param overlapOnly If this a collide or overlap check?
                  */
                 separate(body1: Phaser.Physics.Arcade.Body, body2: Phaser.Physics.Arcade.Body, processCallback?: ArcadePhysicsCallback, callbackContext?: any, overlapOnly?: boolean): boolean;
 
                 /**
                  * Separates two Bodies, when both are circular.
-                 * @param body1 [description]
-                 * @param body2 [description]
-                 * @param overlapOnly [description]
-                 * @param bias [description]
+                 * @param body1 The first Body to be separated.
+                 * @param body2 The second Body to be separated.
+                 * @param overlapOnly If this a collide or overlap check?
+                 * @param bias A small value added to the calculations.
                  */
-                separateCircle(body1: Phaser.Physics.Arcade.Body, body2: Phaser.Physics.Arcade.Body, overlapOnly: boolean, bias: number): boolean;
+                separateCircle(body1: Phaser.Physics.Arcade.Body, body2: Phaser.Physics.Arcade.Body, overlapOnly?: boolean, bias?: number): boolean;
 
                 /**
-                 * Tests of two bodies intersect (overlap).
-                 * @param body1 [description]
-                 * @param body2 [description]
+                 * Checks to see if two Bodies intersect at all.
+                 * @param body1 The first body to check.
+                 * @param body2 The second body to check.
                  */
                 intersects(body1: Phaser.Physics.Arcade.Body, body2: Phaser.Physics.Arcade.Body): boolean;
 
                 /**
                  * Tests if a circular Body intersects with another Body.
-                 * @param circle [description]
-                 * @param body [description]
+                 * @param circle The circular body to test.
+                 * @param body The rectangular body to test.
                  */
                 circleBodyIntersects(circle: Phaser.Physics.Arcade.Body, body: Phaser.Physics.Arcade.Body): boolean;
 
@@ -36579,17 +38074,32 @@ declare namespace Phaser {
                  * @param processCallback [description]
                  * @param callbackContext [description]
                  */
-                overlap(object1: Phaser.GameObjects.GameObject | Phaser.GameObjects.Group, object2: Phaser.GameObjects.GameObject | Phaser.GameObjects.Group, overlapCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any): boolean;
+                overlap(object1: ArcadeColliderType, object2?: ArcadeColliderType, overlapCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any): boolean;
 
                 /**
-                 * Tests if Game Objects overlap and separates them (if possible).
+                 * Performs a collision check and separation between the two physics enabled objects given, which can be single
+                 * Game Objects, arrays of Game Objects, Physics Groups, arrays of Physics Groups or normal Groups.
+                 * 
+                 * If you don't require separation then use {@link #overlap} instead.
+                 * 
+                 * If two Groups or arrays are passed, each member of one will be tested against each member of the other.
+                 * 
+                 * If one Group **only** is passed (as `object1`), each member of the Group will be collided against the other members.
+                 * 
+                 * Two callbacks can be provided. The `collideCallback` is invoked if a collision occurs and the two colliding
+                 * objects are passed to it.
+                 * 
+                 * Arcade Physics uses the Projection Method of collision resolution and separation. While it's fast and suitable
+                 * for 'arcade' style games it lacks stability when multiple objects are in close proximity or resting upon each other.
+                 * The separation that stops two objects penetrating may create a new penetration against a different object. If you
+                 * require a high level of stability please consider using an alternative physics system, such as Matter.js.
                  * @param object1 [description]
                  * @param object2 [description]
                  * @param collideCallback [description]
                  * @param processCallback [description]
                  * @param callbackContext [description]
                  */
-                collide(object1: Phaser.GameObjects.GameObject | Phaser.GameObjects.Group, object2: Phaser.GameObjects.GameObject | Phaser.GameObjects.Group, collideCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any): boolean;
+                collide(object1: ArcadeColliderType, object2?: ArcadeColliderType, collideCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any): boolean;
 
                 /**
                  * Helper for Phaser.Physics.Arcade.World#collide.
@@ -36600,7 +38110,7 @@ declare namespace Phaser {
                  * @param callbackContext [description]
                  * @param overlapOnly [description]
                  */
-                collideObjects(object1: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], object2: Phaser.GameObjects.GameObject | Phaser.GameObjects.GameObject[] | Phaser.GameObjects.Group | Phaser.GameObjects.Group[], collideCallback: ArcadePhysicsCallback, processCallback: ArcadePhysicsCallback, callbackContext: any, overlapOnly: boolean): boolean;
+                collideObjects(object1: ArcadeColliderType, object2?: ArcadeColliderType, collideCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any, overlapOnly?: boolean): boolean;
 
                 /**
                  * Helper for Phaser.Physics.Arcade.World#collide and Phaser.Physics.Arcade.World#overlap.
@@ -36611,7 +38121,7 @@ declare namespace Phaser {
                  * @param callbackContext [description]
                  * @param overlapOnly [description]
                  */
-                collideHandler(object1: Phaser.GameObjects.GameObject | Phaser.GameObjects.Group, object2: Phaser.GameObjects.GameObject | Phaser.GameObjects.Group, collideCallback: ArcadePhysicsCallback, processCallback: ArcadePhysicsCallback, callbackContext: any, overlapOnly: boolean): boolean;
+                collideHandler(object1: ArcadeColliderType, object2?: ArcadeColliderType, collideCallback?: ArcadePhysicsCallback, processCallback?: ArcadePhysicsCallback, callbackContext?: any, overlapOnly?: boolean): boolean;
 
                 /**
                  * Handler for Sprite vs. Sprite collisions.
@@ -36679,9 +38189,10 @@ declare namespace Phaser {
 
                 /**
                  * Wrap each object's coordinates within {@link Phaser.Physics.Arcade.World#bounds}.
+                 * @param objects An array of objects to be wrapped.
                  * @param padding An amount added to the boundary. Default 0.
                  */
-                wrapArray(arr: any[], padding?: number): void;
+                wrapArray(objects: any[], padding?: number): void;
 
                 /**
                  * Wrap an object's coordinates within {@link Phaser.Physics.Arcade.World#bounds}.
@@ -37772,7 +39283,8 @@ declare namespace Phaser {
 
                 /**
                  * Clears all alpha values associated with this Game Object.
-                 * Immediately sets the alpha levels back to 1 (fully opaque)
+                 * 
+                 * Immediately sets the alpha levels back to 1 (fully opaque).
                  */
                 clearAlpha(): this;
 
@@ -38098,12 +39610,12 @@ declare namespace Phaser {
                 updateDisplayOrigin(): this;
 
                 /**
-                 * [description]
+                 * The initial WebGL pipeline of this Game Object.
                  */
                 defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
                 /**
-                 * [description]
+                 * The current WebGL pipeline of this Game Object.
                  */
                 pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -38805,7 +40317,8 @@ declare namespace Phaser {
 
                 /**
                  * Clears all alpha values associated with this Game Object.
-                 * Immediately sets the alpha levels back to 1 (fully opaque)
+                 * 
+                 * Immediately sets the alpha levels back to 1 (fully opaque).
                  */
                 clearAlpha(): this;
 
@@ -39131,12 +40644,12 @@ declare namespace Phaser {
                 updateDisplayOrigin(): this;
 
                 /**
-                 * [description]
+                 * The initial WebGL pipeline of this Game Object.
                  */
                 defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
                 /**
-                 * [description]
+                 * The current WebGL pipeline of this Game Object.
                  */
                 pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -40360,6 +41873,10 @@ declare namespace Phaser {
                      * @param value [description]
                      */
                     setDensity(value: number): Phaser.GameObjects.GameObject;
+                    /**
+                     * The body's center of mass.
+                     */
+                    readonly centerOfMass: any;
                 }
 
                 /**
@@ -40853,7 +42370,8 @@ declare namespace Phaser {
 
                 /**
                  * Clears all alpha values associated with this Game Object.
-                 * Immediately sets the alpha levels back to 1 (fully opaque)
+                 * 
+                 * Immediately sets the alpha levels back to 1 (fully opaque).
                  */
                 clearAlpha(): this;
 
@@ -41179,12 +42697,12 @@ declare namespace Phaser {
                 updateDisplayOrigin(): this;
 
                 /**
-                 * [description]
+                 * The initial WebGL pipeline of this Game Object.
                  */
                 defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
                 /**
-                 * [description]
+                 * The current WebGL pipeline of this Game Object.
                  */
                 pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -41628,6 +43146,11 @@ declare namespace Phaser {
                  * @param value [description]
                  */
                 setDensity(value: number): Phaser.GameObjects.GameObject;
+
+                /**
+                 * The body's center of mass.
+                 */
+                readonly centerOfMass: any;
 
                 /**
                  * [description]
@@ -41883,7 +43406,8 @@ declare namespace Phaser {
 
                 /**
                  * Clears all alpha values associated with this Game Object.
-                 * Immediately sets the alpha levels back to 1 (fully opaque)
+                 * 
+                 * Immediately sets the alpha levels back to 1 (fully opaque).
                  */
                 clearAlpha(): this;
 
@@ -42209,12 +43733,12 @@ declare namespace Phaser {
                 updateDisplayOrigin(): this;
 
                 /**
-                 * [description]
+                 * The initial WebGL pipeline of this Game Object.
                  */
                 defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
                 /**
-                 * [description]
+                 * The current WebGL pipeline of this Game Object.
                  */
                 pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -42658,6 +44182,11 @@ declare namespace Phaser {
                  * @param value [description]
                  */
                 setDensity(value: number): Phaser.GameObjects.GameObject;
+
+                /**
+                 * The body's center of mass.
+                 */
+                readonly centerOfMass: any;
 
                 /**
                  * [description]
@@ -42931,6 +44460,11 @@ declare namespace Phaser {
                 setDensity(value: number): Phaser.GameObjects.GameObject;
 
                 /**
+                 * The body's center of mass.
+                 */
+                readonly centerOfMass: any;
+
+                /**
                  * [description]
                  * @param value [description]
                  */
@@ -42976,6 +44510,36 @@ declare namespace Phaser {
                  * [description]
                  */
                 isStatic(): boolean;
+
+            }
+
+            /**
+             * Use PhysicsEditorParser.parseBody() to build a Matter body object, based on a physics data file
+             * created and exported with PhysicsEditor (https://www.codeandweb.com/physicseditor).
+             */
+            namespace PhysicsEditorParser {
+                /**
+                 * Parses a body element exported by PhysicsEditor.
+                 * @param x x position.
+                 * @param y y position.
+                 * @param w width.
+                 * @param h height.
+                 * @param config body configuration and fixture (child body) definitions.
+                 */
+                function parseBody(x: number, y: number, w: number, h: number, config: object): object;
+
+                /**
+                 * Parses an element of the "fixtures" list exported by PhysicsEditor
+                 * @param fixtureConfig the fixture object to parse
+                 */
+                function parseFixture(fixtureConfig: object): object[];
+
+                /**
+                 * Parses the "vertices" lists exported by PhysicsEditor.
+                 * @param vertexSets The vertex lists to parse.
+                 * @param options Matter body options.
+                 */
+                function parseVertices(vertexSets: object, options: object): object[];
 
             }
 
@@ -43347,9 +44911,9 @@ declare namespace Phaser {
         class BasePlugin {
             /**
              * 
-             * @param game A reference to the Game instance this plugin is running under.
+             * @param pluginManager A reference to the Plugin Manager.
              */
-            constructor(game: Phaser.Game);
+            constructor(pluginManager: Phaser.Plugins.PluginManager);
 
             /**
              * A handy reference to the Plugin Manager that is responsible for this plugin.
@@ -43749,9 +45313,10 @@ declare namespace Phaser {
         class ScenePlugin extends Phaser.Plugins.BasePlugin {
             /**
              * 
-             * @param game A reference to the Scene that has installed this plugin.
+             * @param scene A reference to the Scene that has installed this plugin.
+             * @param pluginManager A reference to the Plugin Manager.
              */
-            constructor(game: Phaser.Game);
+            constructor(scene: Phaser.Scene, pluginManager: Phaser.Plugins.PluginManager);
 
             /**
              * A reference to the Scene that has installed this plugin.
@@ -44940,6 +46505,12 @@ declare namespace Phaser {
                 flushLocked: boolean;
 
                 /**
+                 * Indicates if the current pipeline is active or not for this frame only.
+                 * Reset in the onRender method.
+                 */
+                active: boolean;
+
+                /**
                  * Adds a description of vertex attribute to the pipeline
                  * @param name Name of the vertex attribute
                  * @param size Vertex component size
@@ -45912,6 +47483,19 @@ declare namespace Phaser {
             wake(key: string): Phaser.Scenes.SceneManager;
 
             /**
+             * Runs the given Scene, but does not change the state of this Scene.
+             * 
+             * If the given Scene is paused, it will resume it. If sleeping, it will wake it.
+             * If not running at all, it will be started.
+             * 
+             * Use this if you wish to open a modal Scene by calling `pause` on the current
+             * Scene, then `run` on the modal Scene.
+             * @param key The Scene to run.
+             * @param data A data object that will be passed to the Scene that is run _only if the Scene isn't asleep or paused_.
+             */
+            run(key: string, data?: object): Phaser.Scenes.SceneManager;
+
+            /**
              * Starts the given Scene.
              * @param key The Scene to start.
              * @param data Optional data object to pass to Scene.Settings and Scene.init.
@@ -46109,6 +47693,19 @@ declare namespace Phaser {
              * @param data The Scene data.
              */
             launch(key: string, data?: object): Phaser.Scenes.ScenePlugin;
+
+            /**
+             * Runs the given Scene, but does not change the state of this Scene.
+             * 
+             * If the given Scene is paused, it will resume it. If sleeping, it will wake it.
+             * If not running at all, it will be started.
+             * 
+             * Use this if you wish to open a modal Scene by calling `pause` on the current
+             * Scene, then `run` on the modal Scene.
+             * @param key The Scene to run.
+             * @param data A data object that will be passed to the Scene that is run _only if the Scene isn't asleep or paused_.
+             */
+            run(key: string, data?: object): Phaser.Scenes.ScenePlugin;
 
             /**
              * Pause the Scene - this stops the update step from happening but it still renders.
@@ -46499,8 +48096,8 @@ declare namespace Phaser {
             /**
              * A single game step. Called automatically by the Scene Manager as a result of a Request Animation
              * Frame or Set Timeout call to the main Game instance.
-             * @param time [description]
-             * @param delta [description]
+             * @param time The time value from the most recent Game step. Typically a high-resolution timer value, or Date.now().
+             * @param delta The delta value since the last frame. This is smoothed to avoid delta spikes by the TimeStep class.
              */
             step(time: number, delta: number): void;
 
@@ -48783,6 +50380,17 @@ declare namespace Phaser {
             getPixel(x: integer, y: integer, key: string, frame: string | integer): Phaser.Display.Color;
 
             /**
+             * Given a Texture and an `x` and `y` coordinate this method will return a value between 0 and 255
+             * corresponding to the alpha value of the pixel at that location in the Texture. If the coordinate
+             * is out of bounds it will return null.
+             * @param x The x coordinate of the pixel within the Texture.
+             * @param y The y coordinate of the pixel within the Texture.
+             * @param key The unique string-based key of the Texture.
+             * @param frame The string or index of the Frame.
+             */
+            getPixelAlpha(x: integer, y: integer, key: string, frame: string | integer): integer;
+
+            /**
              * Sets the given Game Objects `texture` and `frame` properties so that it uses
              * the Texture and Frame specified in the `key` and `frame` arguments to this method.
              * @param gameObject [description]
@@ -49513,7 +51121,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -49823,12 +51432,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -51051,7 +52660,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -51361,12 +52971,12 @@ declare namespace Phaser {
             updateDisplayOrigin(): this;
 
             /**
-             * [description]
+             * The initial WebGL pipeline of this Game Object.
              */
             defaultPipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
             /**
-             * [description]
+             * The current WebGL pipeline of this Game Object.
              */
             pipeline: Phaser.Renderer.WebGL.WebGLPipeline;
 
@@ -51926,7 +53536,8 @@ declare namespace Phaser {
 
             /**
              * Clears all alpha values associated with this Game Object.
-             * Immediately sets the alpha levels back to 1 (fully opaque)
+             * 
+             * Immediately sets the alpha levels back to 1 (fully opaque).
              */
             clearAlpha(): this;
 
@@ -55133,15 +56744,23 @@ declare type PhysicsGroupDefaults = {
 
 declare type ArcadeWorldConfig = {
     /**
+     * Sets {@link Phaser.Physics.Arcade.World#fps}.
+     */
+    fps?: number;
+    /**
+     * Sets {@link Phaser.Physics.Arcade.World#timeScale}.
+     */
+    timeScale?: number;
+    /**
      * Sets {@link Phaser.Physics.Arcade.World#gravity}.
      */
     gravity?: object;
     /**
-     * [description]
+     * The horizontal world gravity value.
      */
     "gravity.x"?: number;
     /**
-     * [description]
+     * The vertical world gravity value.
      */
     "gravity.y"?: number;
     /**
@@ -55165,19 +56784,19 @@ declare type ArcadeWorldConfig = {
      */
     checkCollision?: object;
     /**
-     * [description]
+     * Should bodies collide with the top of the world bounds?
      */
     "checkCollision.up"?: boolean;
     /**
-     * [description]
+     * Should bodies collide with the bottom of the world bounds?
      */
     "checkCollision.down"?: boolean;
     /**
-     * [description]
+     * Should bodies collide with the left of the world bounds?
      */
     "checkCollision.left"?: boolean;
     /**
-     * [description]
+     * Should bodies collide with the right of the world bounds?
      */
     "checkCollision.right"?: boolean;
     /**
@@ -55228,6 +56847,10 @@ declare type ArcadeWorldConfig = {
      * Sets {@link Phaser.Physics.Arcade.World#maxEntries}.
      */
     maxEntries?: number;
+    /**
+     * Sets {@link Phaser.Physics.Arcade.World#useTree}.
+     */
+    useTree?: boolean;
 };
 
 declare type CheckCollisionObject = {
@@ -55294,6 +56917,11 @@ declare type ArcadeWorldTreeMinMax = {
      */
     maxY: number;
 };
+
+/**
+ * An Arcade Physics Collider Type.
+ */
+declare type ArcadeColliderType = ()=>void;
 
 declare type BodyUpdateCallback = (body: Phaser.Physics.Impact.Body)=>void;
 

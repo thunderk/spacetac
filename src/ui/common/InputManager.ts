@@ -8,7 +8,6 @@ module TK.SpaceTac.UI {
         private debug = false
         private view: BaseView
         private game: MainUI
-        private input: Phaser.Input.InputManager
 
         private cheats_allowed: boolean
         private cheat: boolean
@@ -23,7 +22,6 @@ module TK.SpaceTac.UI {
         constructor(view: BaseView) {
             this.view = view;
             this.game = view.gameui;
-            this.input = view.input.manager;
             this.cheats_allowed = true;
             this.cheat = false;
 
@@ -49,7 +47,7 @@ module TK.SpaceTac.UI {
             });
 
             if (!this.game.headless) {
-                this.input.keyboard.on("keyup", (event: KeyboardEvent) => {
+                this.view.input.keyboard.on("keyup", (event: KeyboardEvent) => {
                     if (this.debug) {
                         console.log(event);
                     }
@@ -70,7 +68,7 @@ module TK.SpaceTac.UI {
          * Remove the bindings
          */
         destroy(): void {
-            this.input.keyboard.removeAllListeners("keyup");
+            this.view.input.keyboard.removeAllListeners("keyup");
         }
 
         /**
@@ -159,7 +157,10 @@ module TK.SpaceTac.UI {
                 let bounds = obj.getBounds();
                 bounds.x -= obj.x;
                 bounds.y -= obj.y;
-                obj.setInteractive(bounds, Phaser.Geom.Rectangle.Contains);
+                obj.setInteractive({
+                    hitArea: bounds,
+                    hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+                });
             }
 
             let prevententer = () => {
@@ -221,8 +222,8 @@ module TK.SpaceTac.UI {
                 effectiveleave();
             });
 
-            obj.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
-                if (destroyed || pointer.buttons != 1) return;
+            obj.on("pointerdown", (pointer?: Phaser.Input.Pointer) => {
+                if (destroyed || (pointer && pointer.buttons != 1)) return;
 
                 if (UITools.isVisible(obj)) {
                     holdstart = Timer.nowMs();
@@ -235,8 +236,8 @@ module TK.SpaceTac.UI {
                 }
             });
 
-            obj.on("pointerup", (pointer: Phaser.Input.Pointer) => {
-                if (destroyed || pointer.buttons != 1) return;
+            obj.on("pointerup", (pointer?: Phaser.Input.Pointer) => {
+                if (destroyed || (pointer && pointer.buttons != 1)) return;
 
                 if (!cursorinside) {
                     effectiveleave();

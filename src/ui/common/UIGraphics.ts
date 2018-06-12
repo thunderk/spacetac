@@ -23,7 +23,7 @@ module TK.SpaceTac.UI {
      */
     export class UIGraphics extends Phaser.GameObjects.Graphics {
         constructor(view: BaseView, name: string, visible = true, x = 0, y = 0) {
-            super(view, {});
+            super(view);
             this.setName(name);
             this.setVisible(visible);
             this.setPosition(x, y);

@@ -4,7 +4,6 @@ To-Do-list
 Phaser 3 migration
 ------------------
 
-* Pause the game when the window isn't focused (except in headless)
 * Fit the game in window size
 * Fix top-right messages positions
 * Fix valuebar requiring to be in root display list
@@ -109,6 +108,7 @@ Common UI
 Technical
 ---------
 
+* Pause timers when the game is paused (at least animation timers)
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile
 * Add cache for image texture lookup (getImageInfo)

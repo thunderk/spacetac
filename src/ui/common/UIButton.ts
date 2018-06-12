@@ -75,12 +75,16 @@ module TK.SpaceTac.UI {
             let interactive = bool(clickable || tooltip);
 
             if (interactive) {
-                this.setInteractive(new Phaser.Geom.Rectangle(
-                    options.center ? 0 : base.width / 2,
-                    options.center ? 0 : base.height / 2,
-                    base.width,
-                    base.height
-                ), (rect: Phaser.Geom.Rectangle, x: number, y: number) => Phaser.Geom.Rectangle.Contains(rect, x, y) && UITools.isVisible(this));
+                this.setInteractive({
+                    hitArea: new Phaser.Geom.Rectangle(
+                        options.center ? 0 : base.width / 2,
+                        options.center ? 0 : base.height / 2,
+                        base.width,
+                        base.height
+                    ),
+                    hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+                    useHandCursor: clickable
+                });
 
                 // On mask
                 if (onoffcallback) {

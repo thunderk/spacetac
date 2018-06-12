@@ -6,6 +6,7 @@ module TK.SpaceTac.UI.Specs {
             let inputs = testgame.view.inputs;
 
             let pointer = new Phaser.Input.Pointer(testgame.view.input.manager, 0);
+            pointer.buttons = 1;
             function newButton(): [UIImage, { enter: Mock<Function>, leave: Mock<Function>, click: Mock<Function> }] {
                 let button = new UIImage(testgame.view, 0, 0, "fake");
                 let mocks = {
@@ -94,6 +95,17 @@ module TK.SpaceTac.UI.Specs {
                 button.emit("pointerup", pointer);
                 check.called(mocks.enter, 0);
                 check.called(mocks.leave, 1);
+                check.called(mocks.click, 0);
+            });
+
+            [button, mocks] = newButton();
+            pointer.buttons = 2;
+            check.in("No right button", check => {
+                enter(button);
+                press(button);
+                release(button);
+                check.called(mocks.enter, 0);
+                check.called(mocks.leave, 0);
                 check.called(mocks.click, 0);
             });
         });

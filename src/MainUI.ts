@@ -53,6 +53,13 @@ module TK.SpaceTac {
             this.session_token = null;
 
             if (!headless) {
+                this.events.on("blur", () => {
+                    this.scene.scenes.forEach(scene => this.scene.pause(scene));
+                });
+                this.events.on("focus", () => {
+                    this.scene.scenes.forEach(scene => this.scene.resume(scene));
+                });
+
                 this.scene.add('boot', UI.Boot);
                 this.scene.add('loading', UI.AssetLoading);
                 this.scene.add('mainmenu', UI.MainMenu);

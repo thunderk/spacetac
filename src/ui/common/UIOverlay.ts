@@ -14,7 +14,10 @@ module TK.SpaceTac.UI {
 
             let rect = { x: 0, y: 0, width: view.getWidth(), height: view.getHeight() };
             this.addRectangle(rect, options.color, undefined, undefined, options.alpha);
-            this.setInteractive(rect, (rect: Phaser.Geom.Rectangle, x: number, y: number) => Phaser.Geom.Rectangle.Contains(rect, x, y) && UITools.isVisible(this));
+            this.setInteractive({
+                hitArea: rect,
+                hitAreaCallback: Phaser.Geom.Rectangle.Contains,
+            });
             this.on("pointerup", options.on_click || nop);
         }
     }
