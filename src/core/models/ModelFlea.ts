@@ -12,7 +12,7 @@ module TK.SpaceTac {
 
         getLevelUpgrades(level: number): ShipUpgrade[] {
             if (level == 1) {
-                let engine = new MoveAction("Engine", {
+                let engine = new MoveAction("Main Engine", {
                     distance_per_power: 420,
                 });
 
@@ -23,12 +23,19 @@ module TK.SpaceTac {
                 }, "powerdepleter");
                 depleter.configureCooldown(1, 1);
 
-                let gatling = new TriggerAction("Shield Basher", {
+                let shield_basher = new TriggerAction("Shield Basher", {
                     effects: [new DamageEffect(2, DamageEffectMode.SHIELD_ONLY, false)],
                     power: 3,
                     range: 300,
-                }, "submunitionmissile");
-                gatling.configureCooldown(2, 1);
+                }, "shieldbash");
+                shield_basher.configureCooldown(2, 1);
+
+                let engine_hijack = new TriggerAction("Engine Hijacking", {
+                    effects: [new StickyEffect(new PinnedEffect(), 2)],
+                    power: 2,
+                    range: 400,
+                }, "pin");
+                engine_hijack.configureCooldown(1, 2);
 
                 return [
                     {
@@ -42,16 +49,20 @@ module TK.SpaceTac {
                         ]
                     },
                     {
-                        code: "Main Engine",
+                        code: engine.name,
                         actions: [engine]
                     },
                     {
-                        code: "Power Depleter",
+                        code: depleter.name,
                         actions: [depleter]
                     },
                     {
-                        code: "Gatling Gun",
-                        actions: [gatling]
+                        code: shield_basher.name,
+                        actions: [shield_basher]
+                    },
+                    {
+                        code: engine_hijack.name,
+                        actions: [engine_hijack]
                     },
                 ];
             } else {

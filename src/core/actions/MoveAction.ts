@@ -67,6 +67,11 @@ module TK.SpaceTac {
                 return ActionUnavailability.VIGILANCE;
             }
 
+            // Check pinned status
+            if (any(ship.getEffects(), effect => effect instanceof PinnedEffect)) {
+                return ActionUnavailability.PINNED;
+            }
+
             return null;
         }
 

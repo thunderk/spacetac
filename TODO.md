@@ -75,7 +75,6 @@ Ships models and actions
 * Add damage on collisions (when two ships are moved to the same place)
 * Add hull points to drones and make them take area damage
 * Allow to customize effects based on whether a target is enemy, allied or self
-* Add anchored effect (cannot be moved)
 * Add a reflect damage effect
 * Add untargettable effect (can only be targetted with area effects)
 * Add damage modifier (to change the options of incoming damage or outgoing damage)

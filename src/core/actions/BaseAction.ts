@@ -48,7 +48,9 @@ module TK.SpaceTac {
         // Action is overheated
         OVERHEATED = "Overheated",
         // Vigilance is activated
-        VIGILANCE = "In vigilance"
+        VIGILANCE = "In vigilance",
+        // Ship is pinned
+        PINNED = "Pinned",
     }
 
     /**

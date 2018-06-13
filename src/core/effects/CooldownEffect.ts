@@ -34,7 +34,7 @@ module TK.SpaceTac {
         }
 
         getDescription(): string {
-            return `${this.cooling ? this.cooling : "Full"} cooling (${this.maxcount ? this.maxcount : "all"} equipment${this.maxcount != 1 ? "s" : ""})`;
+            return `${this.cooling ? this.cooling : "full"} cooling (${this.maxcount ? this.maxcount : "all"} equipment${this.maxcount != 1 ? "s" : ""})`;
         }
     }
 }

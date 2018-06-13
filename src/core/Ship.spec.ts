@@ -136,15 +136,15 @@ module TK.SpaceTac.Specs {
 
         test.case("lists active effects", check => {
             let ship = new Ship();
-            check.equals(imaterialize(ship.ieffects()), []);
+            check.equals(ship.getEffects(), []);
 
             let effect1 = new AttributeEffect("evasion", 4);
             check.patch(ship.model, "getEffects", () => [effect1]);
-            check.equals(imaterialize(ship.ieffects()), [effect1]);
+            check.equals(ship.getEffects(), [effect1]);
 
             let effect2 = new AttributeLimitEffect("evasion", 2);
             ship.active_effects.add(new StickyEffect(effect2, 4));
-            check.equals(imaterialize(ship.ieffects()), [effect1, effect2]);
+            check.equals(ship.getEffects(), [effect1, effect2]);
         });
 
         test.case("gets a textual description of an attribute", check => {

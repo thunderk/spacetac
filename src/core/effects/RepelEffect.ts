@@ -14,7 +14,7 @@ module TK.SpaceTac {
         }
 
         getOnDiffs(ship: Ship, source: Ship | Drone): BaseBattleDiff[] {
-            if (ship != source) {
+            if (ship != source && !any(ship.getEffects(), effect => effect instanceof PinnedEffect && effect.hard)) {
                 let angle = arenaAngle(source.location, ship.location);
                 let destination = new ArenaLocation(ship.arena_x + Math.cos(angle) * this.value, ship.arena_y + Math.sin(angle) * this.value);
                 let exclusions = ExclusionAreas.fromShip(ship);

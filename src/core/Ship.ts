@@ -331,7 +331,7 @@ module TK.SpaceTac {
             keys(this.attributes).forEach(attr => this.attributes[attr].reset());
 
             // Apply attribute effects
-            iforeach(this.ieffects(), effect => {
+            this.getEffects().forEach(effect => {
                 if (effect instanceof AttributeEffect) {
                     this.attributes[effect.attrcode].addModifier(effect.value);
                 } else if (effect instanceof AttributeMultiplyEffect) {
@@ -371,10 +371,9 @@ module TK.SpaceTac {
          * 
          * This combines the permanent effects from ship model, with sticky and area effects.
          */
-        ieffects(): Iterator<BaseEffect> {
-            return ichain(
-                iarray(this.getModelEffects()),
-                imap(this.active_effects.iterator(), effect => (effect instanceof StickyEffect) ? effect.base : effect)
+        getEffects(): BaseEffect[] {
+            return this.getModelEffects().concat(
+                this.active_effects.list().map(effect => (effect instanceof StickyEffect) ? effect.base : effect)
             );
         }
 

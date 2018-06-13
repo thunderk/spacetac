@@ -30,7 +30,7 @@ module TK.SpaceTac {
         })
 
         test.case("builds a textual description", check => {
-            check.equals(new CooldownEffect(0, 0).getDescription(), "Full cooling (all equipments)");
+            check.equals(new CooldownEffect(0, 0).getDescription(), "full cooling (all equipments)");
             check.equals(new CooldownEffect(1, 1).getDescription(), "1 cooling (1 equipment)");
             check.equals(new CooldownEffect(2, 2).getDescription(), "2 cooling (2 equipments)");
         })
