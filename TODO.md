@@ -43,7 +43,7 @@ Battle
 * Improve arena ships layering (sometimes information is displayed behind other sprites)
 * In the ship tooltip, show power cost, toggled and overheat states
 * Display shield (and its (dis)appearance)
-* Display estimated damage and displacement in targetting mode
+* Display estimated damage in targetting mode
 * Add a voluntary retreat option
 * Toggle bar/text display in power section of action bar
 * Show a cooldown indicator on move action icon, if the simulation would cause the engine to overheat

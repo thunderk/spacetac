@@ -187,5 +187,25 @@ module TK.SpaceTac {
 
             return result;
         }
+
+        /**
+         * Apply a move-fire simulation result, and predict the diffs it will apply on a battle
+         * 
+         * The original battle passed as parameter will be duplicated, and not altered
+         */
+        getExpectedDiffs(battle: Battle, simulation: MoveFireResult): BaseBattleDiff[] {
+            let sim_battle = duplicate(battle, TK.SpaceTac);
+            let sim_ship = nn(sim_battle.getShip(this.ship.id));
+            let results: BaseBattleDiff[] = [];
+            simulation.parts.forEach(part => {
+                let diffs = part.action.getDiffs(sim_ship, battle, part.target);
+                results = results.concat(diffs);
+                sim_battle.applyDiffs(diffs);
+
+                diffs = sim_battle.performChecks();
+                results = results.concat(diffs);
+            });
+            return results;
+        }
     }
 }

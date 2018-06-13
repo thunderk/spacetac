@@ -9,10 +9,10 @@ module TK.SpaceTac {
         draw: boolean
 
         // Victorious fleet
-        winner: Fleet | null
+        winner: RObjectId | null
 
         constructor(winner: Fleet | null) {
-            this.winner = winner;
+            this.winner = winner ? winner.id : null;
             this.draw = winner ? false : true;
         }
 
@@ -21,7 +21,7 @@ module TK.SpaceTac {
          */
         grantExperience(fleets: Fleet[]) {
             fleets.forEach(fleet => {
-                let winfactor = (fleet == this.winner) ? 0.03 : (this.draw ? 0.01 : 0.005);
+                let winfactor = (fleet.is(this.winner)) ? 0.03 : (this.draw ? 0.01 : 0.005);
                 let enemies = flatten(fleets.filter(f => f !== fleet).map(f => f.ships));
                 let difficulty = sum(enemies.map(enemy => 100 + enemy.level.getExperience()));
                 fleet.ships.forEach(ship => {

@@ -16,7 +16,7 @@ module TK.SpaceTac.UI {
 
         // Simulated result
         simulation = new MoveFireResult()
-        effects: BaseBattleDiff[] = []
+        simulated_diffs: BaseBattleDiff[] = []
 
         // Move and fire lines
         drawn_info: UIGraphics
@@ -26,6 +26,9 @@ module TK.SpaceTac.UI {
         // Impact area
         impact_area: UIGraphics
         impact_indicators: UIContainer
+
+        // Diffs display
+        diffs_move: UIGraphics
 
         // Collaborators to update
         actionbar: ActionBar
@@ -46,18 +49,16 @@ module TK.SpaceTac.UI {
             builder = builder.in(this.container);
 
             // Visual effects
-            this.impact_area = builder.graphics("impact-area");
-            this.impact_area.setVisible(false);
-            this.drawn_info = builder.graphics("lines");
-            this.drawn_info.setVisible(false);
+            this.impact_area = builder.graphics("impact-area", 0, 0, false);
+            this.diffs_move = builder.graphics("effects-move");
+            this.drawn_info = builder.graphics("lines", 0, 0, false);
             this.move_ghost = builder.image("common-transparent", 0, 0, true);
             this.move_ghost.setAlpha(0.8);
             this.move_ghost.setVisible(false);
             this.fire_arrow = builder.image("battle-hud-simulator-ok");
             this.fire_arrow.setOrigin(1, 0.5);
             this.fire_arrow.setVisible(false);
-            this.impact_indicators = builder.container("impact-indicators");
-            this.impact_indicators.setVisible(false);
+            this.impact_indicators = builder.container("impact-indicators", 0, 0, false);
         }
 
         /**
@@ -201,6 +202,25 @@ module TK.SpaceTac.UI {
         }
 
         /**
+         * Update information about simulated diffs
+         */
+        updateDiffsDisplay(): void {
+            this.diffs_move.clear();
+
+            this.simulated_diffs.forEach(diff => {
+                if (diff instanceof ShipMoveDiff) {
+                    this.diffs_move.addLine({
+                        start: diff.start,
+                        end: diff.end,
+                        width: 4,
+                        color: 0xFFFFFF,
+                        alpha: 0.5
+                    });
+                }
+            });
+        }
+
+        /**
          * Update visual effects to show the simulation of current action/target
          */
         update(): void {
@@ -259,6 +279,9 @@ module TK.SpaceTac.UI {
                     this.fire_arrow.visible = true;
                     this.impact_area.visible = false;
                 }
+
+                this.updateDiffsDisplay();
+
                 this.container.visible = true;
             } else {
                 this.container.visible = false;
@@ -305,16 +328,13 @@ module TK.SpaceTac.UI {
          */
         simulate(): void {
             if (this.ship && this.action && this.target) {
-                let ship = this.ship;
-                let simulator = new MoveFireSimulator(ship);
+                let battle = nn(this.ship.getBattle());
+                let simulator = new MoveFireSimulator(this.ship);
                 this.simulation = simulator.simulateAction(this.action, this.target, 1);
-
-                this.effects = flatten(this.simulation.parts.map(part =>
-                    part.action.getDiffs(ship, nn(ship.getBattle()), part.target)
-                ));
+                this.simulated_diffs = simulator.getExpectedDiffs(battle, this.simulation);
             } else {
                 this.simulation = new MoveFireResult();
-                this.effects = [];
+                this.simulated_diffs = [];
             }
         }
 

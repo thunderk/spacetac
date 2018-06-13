@@ -173,7 +173,7 @@ module TK.SpaceTac {
          * Resolves the encounter from a battle outcome
          */
         resolveEncounter(outcome: BattleOutcome) {
-            if (this.encounter && outcome.winner && outcome.winner != this.encounter) {
+            if (this.encounter && outcome.winner && !this.encounter.is(outcome.winner)) {
                 this.clearEncounter();
             }
         }

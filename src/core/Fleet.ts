@@ -2,7 +2,7 @@ module TK.SpaceTac {
     /**
      * A fleet of ships, all belonging to the same player
      */
-    export class Fleet {
+    export class Fleet extends RObject {
         // Fleet owner
         player: Player
 
@@ -26,6 +26,8 @@ module TK.SpaceTac {
 
         // Create a fleet, bound to a player
         constructor(player = new Player()) {
+            super();
+
             this.player = player;
             this.name = player ? player.name : "Fleet";
             this.ships = [];

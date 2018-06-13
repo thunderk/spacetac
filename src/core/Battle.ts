@@ -349,10 +349,12 @@ module TK.SpaceTac {
 
         /**
          * Perform all battle checks to ensure the state is consistent
+         * 
+         * Returns all applied diffs
          */
-        performChecks(): void {
+        performChecks(): BaseBattleDiff[] {
             let checks = new BattleChecks(this);
-            checks.apply();
+            return checks.apply();
         }
 
         /**

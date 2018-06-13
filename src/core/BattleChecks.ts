@@ -13,7 +13,8 @@ module TK.SpaceTac {
         /**
          * Apply all the checks
          */
-        apply(): void {
+        apply(): BaseBattleDiff[] {
+            let all: BaseBattleDiff[] = [];
             let diffs: BaseBattleDiff[];
             let loops = 0;
 
@@ -23,6 +24,7 @@ module TK.SpaceTac {
                 if (diffs.length > 0) {
                     //console.log("Battle checks diffs", diffs);
                     this.battle.applyDiffs(diffs);
+                    all = all.concat(diffs);
                 }
 
                 loops += 1;
@@ -31,6 +33,8 @@ module TK.SpaceTac {
                     break;
                 }
             } while (diffs.length > 0);
+
+            return all;
         }
 
         /**

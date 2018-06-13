@@ -62,7 +62,7 @@ module TK.SpaceTac.Specs {
             ship.setDead();
             battle.performChecks();
             check.equals(battle.ended, true);
-            check.notsame(nn(battle.outcome).winner, fleet);
+            check.notsame(nn(battle.outcome).winner, fleet.id);
         })
     })
 }

@@ -148,7 +148,7 @@ module TK.SpaceTac {
             let diff = battle.log.get(battle.log.count() - 1);
             if (diff instanceof EndBattleDiff) {
                 check.notequals(diff.outcome.winner, null);
-                check.same(diff.outcome.winner, fleet2);
+                check.same(diff.outcome.winner, fleet2.id);
             } else {
                 check.fail("Not an EndBattleDiff");
             }

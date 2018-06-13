@@ -172,5 +172,36 @@ module TK.SpaceTac.Specs {
             check.equals(result.need_move, true);
             check.equals(result.move_location, new Target(ship.arena_x + 6, ship.arena_y));
         });
+
+        test.case("simulates the results on a fake battle, to provide a list of expected diffs", check => {
+            let battle = TestTools.createBattle();
+            let ship = battle.fleets[0].ships[0];
+            let enemy = battle.fleets[1].ships[0];
+            ship.setArenaPosition(100, 100);
+            enemy.setArenaPosition(300, 100);
+            TestTools.setShipModel(ship, 1, 1, 3);
+            TestTools.setShipModel(enemy, 2, 1);
+            let engine = TestTools.addEngine(ship, 80);
+            let weapon = TestTools.addWeapon(ship, 5, 1, 150);
+            let simulator = new MoveFireSimulator(ship);
+            let result = simulator.simulateAction(weapon, Target.newFromShip(enemy), 5);
+            let diffs = simulator.getExpectedDiffs(nn(ship.getBattle()), result);
+            check.equals(diffs, [
+                new ShipActionUsedDiff(ship, engine, Target.newFromLocation(155, 100)),
+                new ShipValueDiff(ship, "power", -1),
+                new ShipMoveDiff(ship, ship.location, new ArenaLocationAngle(155, 100), engine),
+                new ShipActionUsedDiff(ship, weapon, Target.newFromShip(enemy)),
+                new ShipValueDiff(ship, "power", -1),
+                new ProjectileFiredDiff(ship, weapon, Target.newFromShip(enemy)),
+                new ShipDamageDiff(enemy, 2, 1, 0, 5),
+                new ShipValueDiff(enemy, "shield", -1),
+                new ShipValueDiff(enemy, "hull", -2),
+                new ShipDeathDiff(battle, enemy),
+                new EndBattleDiff(battle.fleets[0], 0)
+            ]);
+
+            check.equals(enemy.getValue("hull"), 2);
+            check.equals(enemy.getValue("hull"), 2);
+        });
     });
 }

@@ -17,7 +17,7 @@ module TK.SpaceTac.Specs {
                     },
                     check => {
                         check.equals(battle.ended, true, "battle is ended");
-                        check.same(nn(battle.outcome).winner, battle.fleets[1], "battle has an outcome");
+                        check.same(nn(battle.outcome).winner, battle.fleets[1].id, "battle has an outcome");
                     },
                 ]);
         });
