@@ -1,16 +1,5 @@
 module TK.SpaceTac {
     /**
-     * Iterator of a list of "random" arena coordinates, based on a grid
-     */
-    function scanArena(battle: Battle, cells = 10, random = RandomGenerator.global): Iterator<Target> {
-        return imap(irange(cells * cells), cellpos => {
-            let y = Math.floor(cellpos / cells);
-            let x = cellpos - y * cells;
-            return Target.newFromLocation((x + random.random()) * battle.width / cells, (y + random.random()) * battle.height / cells);
-        });
-    }
-
-    /**
      * Get a list of all playable actions (like the actionbar for player) for a ship
      */
     function getPlayableActions(ship: Ship): Iterator<BaseAction> {
@@ -56,6 +45,17 @@ module TK.SpaceTac {
      */
     export class TacticalAIHelpers {
         /**
+         * Iterator of a list of "random" arena coordinates, based on a grid
+         */
+        static scanArena(battle: Battle, cells = 10, random = RandomGenerator.global): Iterator<Target> {
+            return imap(irange(cells * cells), cellpos => {
+                let y = Math.floor(cellpos / cells);
+                let x = cellpos - y * cells;
+                return Target.newFromLocation((x + random.random()) * battle.width / cells, (y + random.random()) * battle.height / cells);
+            });
+        }
+
+        /**
          * Produce a turn end.
          */
         static produceEndTurn(ship: Ship, battle: Battle): TacticalProducer {
@@ -77,7 +77,7 @@ module TK.SpaceTac {
         static produceRandomMoves(ship: Ship, battle: Battle, cells = 10, iterations = 1, random = RandomGenerator.global): TacticalProducer {
             let engines = ifilter(getPlayableActions(ship), action => action instanceof MoveAction);
             return ichainit(imap(irange(iterations), iteration => {
-                let moves = icombine(engines, scanArena(battle, cells, random));
+                let moves = icombine(engines, TacticalAIHelpers.scanArena(battle, cells, random));
                 return imap(moves, ([engine, target]) => new Maneuver(ship, engine, target));
             }));
         }
@@ -101,7 +101,7 @@ module TK.SpaceTac {
          */
         static produceRandomBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             let weapons = ifilter(getPlayableActions(ship), action => action instanceof TriggerAction && action.blast > 0);
-            let candidates = ifilter(icombine(weapons, scanArena(battle)), ([weapon, location]) => (<TriggerAction>weapon).getEffects(ship, location).length > 0);
+            let candidates = ifilter(icombine(weapons, TacticalAIHelpers.scanArena(battle)), ([weapon, location]) => (<TriggerAction>weapon).getEffects(ship, location).length > 0);
             let result = imap(candidates, ([weapon, location]) => new Maneuver(ship, weapon, location));
             return result;
         }
@@ -114,12 +114,19 @@ module TK.SpaceTac {
         }
 
         /**
-         * Produce drone deployments.
+         * Produce toggle actions at random locations.
          */
-        static produceDroneDeployments(ship: Ship, battle: Battle): TacticalProducer {
-            let drones = ifilter(getPlayableActions(ship), action => action instanceof DeployDroneAction);
-            let grid = scanArena(battle);
-            return imap(icombine(grid, drones), ([target, drone]) => new Maneuver(ship, drone, target));
+        static produceToggleActions(ship: Ship, battle: Battle): TacticalProducer {
+            let toggles = ifilter(getPlayableActions(ship), action => action instanceof ToggleAction);
+
+            let self_toggles = ifilter(toggles, toggle => contains([ActionTargettingMode.SELF_CONFIRM, ActionTargettingMode.SELF], toggle.getTargettingMode(ship)));
+            let self_maneuvers = imap(self_toggles, toggle => new Maneuver(ship, toggle, Target.newFromShip(ship)));
+
+            let distant_toggles = ifilter(toggles, toggle => contains([ActionTargettingMode.SPACE, ActionTargettingMode.SURROUNDINGS], toggle.getTargettingMode(ship)));
+            let grid = TacticalAIHelpers.scanArena(battle);
+            let distant_maneuvers = imap(icombine(grid, distant_toggles), ([location, toggle]) => new Maneuver(ship, toggle, location));
+
+            return ichain(self_maneuvers, distant_maneuvers);
         }
 
         /**
@@ -222,6 +229,30 @@ module TK.SpaceTac {
             } else {
                 return 0;
             }
+        }
+
+        /**
+         * Evaluate the gain or loss of active effects
+         */
+        static evaluateActiveEffects(ship: Ship, battle: Battle, maneuver: Maneuver): number {
+            let result = 0;
+            maneuver.effects.forEach(effect => {
+                if (effect instanceof ShipEffectAddedDiff || effect instanceof ShipEffectRemovedDiff) {
+                    let target = battle.getShip(effect.ship_id);
+                    let enemy = target && !target.isPlayedBy(ship.getPlayer());
+                    let beneficial = effect.effect.isBeneficial();
+                    if (effect instanceof ShipEffectRemovedDiff) {
+                        beneficial = !beneficial;
+                    }
+                    // TODO Evaluate the "power" of the effect
+                    if ((beneficial && !enemy) || (!beneficial && enemy)) {
+                        result += 1;
+                    } else {
+                        result -= 1;
+                    }
+                }
+            });
+            return clamp(result / battle.ships.count(), -1, 1);
         }
     }
 }

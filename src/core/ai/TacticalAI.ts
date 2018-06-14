@@ -95,7 +95,7 @@ module TK.SpaceTac {
                 TacticalAIHelpers.produceEndTurn,
                 TacticalAIHelpers.produceDirectShots,
                 TacticalAIHelpers.produceBlastShots,
-                TacticalAIHelpers.produceDroneDeployments,
+                TacticalAIHelpers.produceToggleActions,
                 TacticalAIHelpers.produceRandomMoves,
             ]
             return producers.map(producer => producer(this.ship, this.ship.getBattle() || new Battle()));
@@ -116,6 +116,7 @@ module TK.SpaceTac {
                 scaled(TacticalAIHelpers.evaluateOverheat, 3),
                 scaled(TacticalAIHelpers.evaluateEnemyHealth, 5),
                 scaled(TacticalAIHelpers.evaluateAllyHealth, 20),
+                scaled(TacticalAIHelpers.evaluateActiveEffects, 3),
                 scaled(TacticalAIHelpers.evaluateClustering, 4),
                 scaled(TacticalAIHelpers.evaluatePosition, 0.5),
                 scaled(TacticalAIHelpers.evaluateIdling, 2),

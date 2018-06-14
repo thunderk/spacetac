@@ -20,8 +20,8 @@ module TK.SpaceTac {
         // Result of move-fire simulation
         simulation: MoveFireResult
 
-        // List of guessed effects of this maneuver
-        effects: BaseBattleDiff[]
+        // List of guessed effects of this maneuver (lazy property)
+        _effects?: BaseBattleDiff[]
 
         constructor(ship: Ship, action: BaseAction, target: Target, move_margin = 1) {
             this.ship = ship;
@@ -31,14 +31,18 @@ module TK.SpaceTac {
 
             let simulator = new MoveFireSimulator(this.ship);
             this.simulation = simulator.simulateAction(this.action, this.target, move_margin);
-
-            this.effects = flatten(this.simulation.parts.map(part =>
-                part.action.getDiffs(this.ship, this.battle, part.target)
-            ));
         }
 
         jasmineToString() {
             return `Use ${this.action.code} on ${this.target.jasmineToString()}`;
+        }
+
+        get effects(): BaseBattleDiff[] {
+            if (!this._effects) {
+                let simulator = new MoveFireSimulator(this.ship);
+                this._effects = simulator.getExpectedDiffs(this.battle, this.simulation);
+            }
+            return this._effects;
         }
 
         /**

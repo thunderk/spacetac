@@ -83,8 +83,10 @@ Artificial Intelligence
 -----------------------
 
 * If web worker is not responsive, or produces only errors, it should be disabled for the session
+* Prevent infinite loops of toggle/untoggle
 * Produce interesting "angle" areas
-* Evaluate active effects
+* Evaluate vigilance actions
+* Evaluate the "interest" of an active effect (e.g healing is better when harmed...)
 * Evaluators result should be more specific (final state evaluation, diff evaluation, confidence...)
 * Use a first batch of producers, and only if no "good" move has been found, go on with some infinite producers
 * Abandon fight if the AI judges there is no hope of victory

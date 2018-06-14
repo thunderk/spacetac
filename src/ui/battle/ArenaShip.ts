@@ -362,7 +362,7 @@ module TK.SpaceTac.UI {
 
             let arena = this.battleview.arena.getBoundaries();
             this.effects_messages.setPosition(
-                (this.ship.arena_x < 100) ? -35 : ((this.ship.arena_x > arena.width - 100) ? (35 - this.effects_messages.width) : (-this.effects_messages.width * 0.5)),
+                (this.ship.arena_x < 100) ? 0 : ((this.ship.arena_x > arena.width - 100) ? (-this.effects_messages.width) : (-this.effects_messages.width * 0.5)),
                 (this.ship.arena_y < arena.height * 0.9) ? 60 : (-60 - this.effects_messages.height)
             );
 

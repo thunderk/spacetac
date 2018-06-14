@@ -50,10 +50,8 @@ module TK.SpaceTac.Specs {
             let battle = new Battle();
             let ship = battle.fleets[0].addShip();
             let weapon = TestTools.addWeapon(ship, 50, 1, 1000, 105);
-
-            TestTools.setShipModel(ship, 100, 0, 10);
+            TestTools.setShipModel(ship, 100, 0, 10, 1, [weapon]);
             TestTools.setShipPlaying(battle, ship);
-            ship.actions.addCustom(weapon);
 
             let result = imaterialize(TacticalAIHelpers.produceInterestingBlastShots(ship, battle));
             check.equals(result.length, 0);
@@ -80,6 +78,31 @@ module TK.SpaceTac.Specs {
             check.equals(result, [
                 new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
                 new Maneuver(ship, weapon, Target.newFromLocation(600, 0)),
+            ]);
+        });
+
+        test.case("produces toggle/untoggle actions", check => {
+            let battle = new Battle();
+            let ship = battle.fleets[0].addShip();
+            let action1 = new DeployDroneAction("Drone");
+            let action2 = new ToggleAction("Toggle");
+            let action3 = new VigilanceAction("Vigilance", { radius: 150 });
+            TestTools.setShipModel(ship, 100, 0, 10, 1, [action1, action2, action3]);
+            TestTools.addEngine(ship, 1000);
+            TestTools.setShipPlaying(battle, ship);
+
+            check.patch(TacticalAIHelpers, "scanArena", () => iarray([
+                Target.newFromLocation(1, 0),
+                Target.newFromLocation(0, 1),
+            ]));
+
+            let result = imaterialize(TacticalAIHelpers.produceToggleActions(ship, battle));
+            check.equals(result, [
+                new Maneuver(ship, action2, Target.newFromShip(ship)),
+                new Maneuver(ship, action1, Target.newFromLocation(1, 0)),
+                new Maneuver(ship, action3, Target.newFromLocation(1, 0)),
+                new Maneuver(ship, action1, Target.newFromLocation(0, 1)),
+                new Maneuver(ship, action3, Target.newFromLocation(0, 1)),
             ]);
         });
 
@@ -247,6 +270,44 @@ module TK.SpaceTac.Specs {
             ship.actions.updateFromShip(ship);
             ship.actions.addCustom(weapon);
             check.equals(TacticalAIHelpers.evaluateOverheat(ship, battle, maneuver), 0);
+        });
+
+        test.case("evaluates active effects", check => {
+            let battle = TestTools.createBattle();
+            let ship = battle.fleets[0].ships[0];
+            let enemy = battle.fleets[1].ships[0];
+            TestTools.setShipModel(ship, 1, 0, 1);
+            TestTools.setShipModel(enemy, 5, 5);
+            let action = new TriggerAction("Test", { range: 100, power: 1 });
+            ship.actions.addCustom(action);
+
+            let maneuver = new Maneuver(ship, action, Target.newFromShip(enemy));
+            check.equals(TacticalAIHelpers.evaluateActiveEffects(ship, battle, maneuver), 0);
+
+            action.effects = [new StickyEffect(new DamageEffect(1), 1)];
+            maneuver = new Maneuver(ship, action, Target.newFromShip(enemy));
+            check.nears(TacticalAIHelpers.evaluateActiveEffects(ship, battle, maneuver), 0.5);
+
+            maneuver = new Maneuver(ship, action, Target.newFromShip(ship));
+            check.nears(TacticalAIHelpers.evaluateActiveEffects(ship, battle, maneuver), -0.5);
+
+            action.effects = [new StickyEffect(new CooldownEffect(1), 1)];
+            maneuver = new Maneuver(ship, action, Target.newFromShip(enemy));
+            check.nears(TacticalAIHelpers.evaluateActiveEffects(ship, battle, maneuver), -0.5);
+
+            maneuver = new Maneuver(ship, action, Target.newFromShip(ship));
+            check.nears(TacticalAIHelpers.evaluateActiveEffects(ship, battle, maneuver), 0.5);
+
+            battle.fleets[0].addShip();
+            check.nears(TacticalAIHelpers.evaluateActiveEffects(ship, battle, maneuver), 0.3333333333333333);
+
+            action.effects = [new StickyEffect(new CooldownEffect(1), 1), new StickyEffect(new CooldownEffect(1), 1)];
+            maneuver = new Maneuver(ship, action, Target.newFromShip(enemy));
+            check.nears(TacticalAIHelpers.evaluateActiveEffects(ship, battle, maneuver), -0.6666666666666666);
+
+            action.effects = range(10).map(() => new StickyEffect(new CooldownEffect(1), 1));
+            maneuver = new Maneuver(ship, action, Target.newFromShip(enemy));
+            check.nears(TacticalAIHelpers.evaluateActiveEffects(ship, battle, maneuver), -1);
         });
     });
 }
