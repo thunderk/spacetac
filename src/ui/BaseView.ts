@@ -62,6 +62,8 @@ module TK.SpaceTac.UI {
             this.audio = new Audio(this);
             this.debug = this.gameui.debug;
 
+            this.input.setDefaultCursor("url(cursors/standard.cur), pointer");
+
             this.events.once("shutdown", () => this.shutdown());
         }
 

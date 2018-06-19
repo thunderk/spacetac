@@ -83,7 +83,7 @@ module TK.SpaceTac.UI {
                         base.height
                     ),
                     hitAreaCallback: Phaser.Geom.Rectangle.Contains,
-                    useHandCursor: clickable
+                    cursor: "url(cursors/button.cur), pointer"
                 });
 
                 // On mask
