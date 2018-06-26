@@ -9,7 +9,7 @@ module TK.SpaceTac.UI {
         view: BattleView
 
         // Boundaries of the arena
-        boundaries: IBounded = { x: 0, y: 0, width: 1808, height: 948 }
+        private boundaries: IBounded = { x: 0, y: 0, width: 1808, height: 948 }
 
         // Hint for weapon or move range
         range_hint: RangeHint
@@ -114,7 +114,7 @@ module TK.SpaceTac.UI {
                     return;
                 }
 
-                let location = new ArenaLocation(pointer.x, pointer.y);
+                let location = new ArenaLocation(pointer.x / this.view.getScaling(), pointer.y / this.view.getScaling());
                 let ship = this.getShip(location);
                 this.callbacks_hover.forEach(callback => callback(location, ship));
             }, null);
@@ -273,8 +273,18 @@ module TK.SpaceTac.UI {
         /**
          * Get the boundaries of the arena on display
          */
-        getBoundaries(): IBounded {
-            return this.boundaries;
+        getBoundaries(scaled = false): IBounded {
+            if (scaled) {
+                let scaling = this.view.getScaling();
+                return {
+                    x: Math.ceil(this.boundaries.x * scaling),
+                    y: Math.ceil(this.boundaries.y * scaling),
+                    width: Math.floor(this.boundaries.width * scaling),
+                    height: Math.floor(this.boundaries.height * scaling),
+                }
+            } else {
+                return this.boundaries;
+            }
         }
 
         /**

@@ -20,7 +20,7 @@ module TK.SpaceTac.UI {
             UITools.drawBackground(this.text, this.background, 6);
 
             let bounds = UITools.getBounds(this);
-            this.setPosition(parent.view.getWidth() - bounds.width - 10, 10);
+            this.setPosition(parent.view.getX(1) - bounds.width - 25, 25);
             parent.view.timer.schedule(duration, () => this.hide());
         }
 
@@ -52,13 +52,11 @@ module TK.SpaceTac.UI {
          */
         addMessage(text: string, duration: number = 3000): void {
             let message = new Message(this, text, duration);
-            this.container.add(message);
-
             let bounds = UITools.getBounds(message);
-
             cfilter(this.container.list, Message).forEach(child => {
-                child.y += bounds.height + 5;
+                child.y += bounds.height + 15;
             });
+            this.container.add(message);
         }
     }
 }

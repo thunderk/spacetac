@@ -21,7 +21,7 @@ module TK.SpaceTac.UI {
 
             let builder = this.getBuilder();
 
-            builder.configure(10, 6, this.battleview.arena.getBoundaries());
+            builder.configure(10, 6, this.battleview.arena.getBoundaries(true));
 
             ShipTooltip.fillInfo(builder, ship, this.battleview.battle, this.battleview.player);
 

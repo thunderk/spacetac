@@ -39,16 +39,16 @@ module TK.SpaceTac.UI {
 
         // Get the size of display
         getWidth(): number {
-            return this.cameras.main.width;
+            return 1920;
         }
         getHeight(): number {
-            return this.cameras.main.height;
+            return 1080;
         }
         getMidWidth(): number {
-            return this.getWidth() / 2;
+            return 960;
         }
         getMidHeight(): number {
-            return this.getHeight() / 2;
+            return 540;
         }
 
         init(data: object) {
@@ -93,6 +93,8 @@ module TK.SpaceTac.UI {
             this.messages = new Messages(this);
             this.dialogs_opened = [];
 
+            this.resize();
+
             // Browser console variable (for debugging purpose)
             if (typeof window != "undefined") {
                 let session = this.gameui.session;
@@ -101,6 +103,20 @@ module TK.SpaceTac.UI {
                     (<any>window).player = session.player;
                     (<any>window).battle = session.player.getBattle();
                     (<any>window).view = this;
+                }
+            }
+        }
+
+        resize() {
+            if (this.gameui) {
+                if (this.layers) {
+                    this.layers.setScale(this.gameui.scaling);
+                }
+                if (this.dialogs_layer) {
+                    this.dialogs_layer.setScale(this.gameui.scaling);
+                }
+                if (this.cameras.main) {
+                    this.cameras.main.setViewport(0, 0, 1920 * this.gameui.scaling, 1080 * this.gameui.scaling);
                 }
             }
         }
@@ -132,6 +148,19 @@ module TK.SpaceTac.UI {
                 this.layers.add(layer);
                 return layer;
             }
+        }
+
+        /**
+         * Get proportional locations on screen
+         */
+        getScaling(): number {
+            return this.gameui.scaling;
+        }
+        getX(propx: number, scaled = true): number {
+            return propx * 1920 * (scaled ? this.getScaling() : 1);
+        }
+        getY(propy: number, scaled = true): number {
+            return propy * 1080 * (scaled ? this.getScaling() : 1);
         }
 
         /**

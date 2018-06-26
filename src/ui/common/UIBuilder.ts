@@ -148,6 +148,7 @@ module TK.SpaceTac.UI {
             });
             result.setFont(`${style.bold ? "bold " : ""}${style.size}pt SpaceTac`);
             result.setOrigin(style.center ? 0.5 : 0, style.vcenter ? 0.5 : 0);
+            result.setScaleMode(Phaser.ScaleModes.LINEAR);
             if (style.width) {
                 result.setWordWrapWidth(style.width);
             }

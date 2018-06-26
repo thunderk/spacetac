@@ -4,8 +4,6 @@ To-Do-list
 Phaser 3 migration
 ------------------
 
-* Fit the game in window size
-* Fix top-right messages positions
 * Fix valuebar requiring to be in root display list
 * Restore unit tests about boundaries (in UITools)
 

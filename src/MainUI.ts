@@ -38,13 +38,18 @@ module TK.SpaceTac {
         // Debug mode
         debug = false
 
+        // Current scaling
+        scaling = 1
+
         constructor(headless: boolean = false) {
             super({
                 width: 1920,
                 height: 1080,
                 type: headless ? Phaser.HEADLESS : Phaser.AUTO,
                 backgroundColor: '#000000',
-                parent: '-space-tac'
+                parent: '-space-tac',
+                disableContextMenu: true,
+                "render.autoResize": true,
             });
 
             this.storage = localStorage;
@@ -69,8 +74,25 @@ module TK.SpaceTac {
                 this.scene.add('creation', UI.FleetCreationView);
                 this.scene.add('universe', UI.UniverseMapView);
 
+                this.resizeToFitWindow();
+                window.addEventListener("resize", () => this.resizeToFitWindow());
+
                 this.goToScene('boot');
             }
+        }
+
+        resize(width: number, height: number, scaling?: number) {
+            super.resize(width, height);
+
+            this.scaling = scaling ? scaling : 1;
+            cfilter(this.scene.scenes, UI.BaseView).forEach(scene => scene.resize());
+        }
+
+        resizeToFitWindow() {
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            let scale = Math.min(width / 1920, height / 1080);
+            this.resize(1920 * scale, 1080 * scale, scale);
         }
 
         boot() {

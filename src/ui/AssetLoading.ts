@@ -33,9 +33,9 @@ module TK.SpaceTac.UI {
         }
 
         preload() {
-            let bg = this.add.image(643, 435, "preload-background");
+            let bg = this.add.image(this.getX(0.5) - 317, this.getY(0.5) - 105, "preload-background");
             bg.setOrigin(0);
-            let bar = this.add.image(643, 435, "preload-bar");
+            let bar = this.add.image(this.getX(0.5) - 317, this.getY(0.5) - 105, "preload-bar");
             bar.setOrigin(0);
             let mask = this.make.graphics({ x: bar.x, y: bar.y, add: false });
             mask.fillStyle(0xffffff);
@@ -46,7 +46,7 @@ module TK.SpaceTac.UI {
                 mask.fillRect(0, 0, value * bar.width, bar.height);
             });
 
-            let text = this.add.text(this.getMidWidth(), 466, "... Loading ...", { font: "normal 36pt SpaceTac", fill: "#dbeff9" });
+            let text = this.add.text(this.getX(0.5), this.getY(0.5) - 74, "... Loading ...", { font: "normal 36pt SpaceTac", fill: "#dbeff9" });
             text.setOrigin(0.5);
 
             if (this.required >= AssetLoadingRange.MENU && AssetLoading.loaded < AssetLoadingRange.MENU) {

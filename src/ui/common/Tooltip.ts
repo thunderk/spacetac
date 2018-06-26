@@ -43,7 +43,12 @@ module TK.SpaceTac.UI {
         }
 
         getBestPosition(item: IBounded, width: number, height: number): [number, number] {
-            let viewport = this.viewport || { x: 0, y: 0, width: this.view.getWidth(), height: this.view.getHeight() };
+            let viewport = this.viewport || {
+                x: this.view.getX(0),
+                y: this.view.getY(0),
+                width: this.view.getX(1) - this.view.getX(0),
+                height: this.view.getY(1) - this.view.getY(0)
+            };
             let candidates = [
                 this.tryPosition(viewport, { x: item.x + item.width / 2 - width / 2, y: item.y + item.height + this.margin, width: width, height: height }),
                 this.tryPosition(viewport, { x: item.x + item.width + this.margin, y: item.y + item.height / 2 - height / 2, width: width, height: height }),
