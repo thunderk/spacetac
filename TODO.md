@@ -4,6 +4,7 @@ To-Do-list
 Phaser 3 migration
 ------------------
 
+* Restore fullscreen mode (and add a fullscreen incentive before the menu)
 * Fix valuebar requiring to be in root display list
 * Restore unit tests about boundaries (in UITools)
 

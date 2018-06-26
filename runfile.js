@@ -177,13 +177,17 @@ async function optimize() {
 /**
  * Deploy to production
  */
-async function deploy(task) {
+async function deploy(task, experimental = false) {
     await build(true);
     await optimize();
+    await exec(`rsync -avz --delete ./out/ hosting.thunderk.net:/srv/website/spacetac${experimental ? "x" : ""}/`);
+}
 
-    let branch = await run('git rev-parse --abbrev-ref HEAD', { stdio: 'pipe', async: true });
-    let suffix = (branch == "master") ? "" : "x";
-    await exec(`rsync -avz --delete ./out/ hosting.thunderk.net:/srv/website/spacetac${suffix}/`);
+/**
+ * Deploy to production (experimental)
+ */
+async function deployx(task) {
+    await deploy(task, true);
 }
 
 /**
@@ -265,6 +269,7 @@ module.exports = {
     build: command(build),
     test: command(test),
     deploy: command(deploy),
+    deployx: command(deployx),
     serve: command(serve),
     continuous: command(continuous),
     ci: command(ci)

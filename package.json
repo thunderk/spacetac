@@ -8,7 +8,8 @@
     "test": "run ci",
     "start": "run continuous",
     "codecov": "remap-istanbul -i out/coverage/coverage.json -o out/coverage/mapped.json -t json && codecov -f out/coverage/mapped.json",
-    "deploy": "run deploy"
+    "deploy": "run deploy",
+    "deployx": "run deployx"
   },
   "repository": {
     "type": "git",
