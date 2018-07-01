@@ -201,11 +201,18 @@ module TK.SpaceTac.UI {
                     if (this.hovered === obj) {
                         return;
                     } else {
+                        if (this.debug) {
+                            console.log("Pointer force out", this.hovered);
+                        }
                         this.forceLeaveHovered();
                     }
                 }
                 this.hovered = obj;
                 this.hovered.data.set("pointer", pointer);
+
+                if (this.debug) {
+                    console.log("Pointer over", obj);
+                }
 
                 cursorinside = true;
                 enternext = Timer.global.schedule(hovertime, effectiveenter);
@@ -216,6 +223,9 @@ module TK.SpaceTac.UI {
 
                 if (this.hovered === obj) {
                     this.hovered = null;
+                    if (this.debug) {
+                        console.log("Pointer out", obj);
+                    }
                 }
 
                 cursorinside = false;

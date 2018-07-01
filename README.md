@@ -18,17 +18,17 @@
 
 The only hard dependency of the toolchain is Node.js (with npm).
 
-If Node.js is not installed on your system but Python3 is, you can use the following commands to (de)activate a virtual
-and local Node.js environment:
-
-    source activate_node  # From now on, "npm" command will be the one from virtual environment
-    deactivate_node       # This restores the environment as before the "source" command
-
 If you want to build on your computer, clone the repository, then run:
 
     npm install    # Install dependencies
     npm start      # Start development server, and open game in web browser
     npm test       # Run unit tests
+
+If Node.js is not installed on your system but Python3 is, you can use the following commands to (de)activate a virtual
+and local Node.js environment:
+
+    source activate_node  # From now on, "npm" command will be the one from virtual environment
+    deactivate_node       # This restores the environment as before the "source" command
 
 ## Credits
 

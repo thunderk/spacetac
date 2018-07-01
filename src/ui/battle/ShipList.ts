@@ -32,7 +32,8 @@ module TK.SpaceTac.UI {
             this.container = builder.container("shiplist", x, y);
 
             builder = builder.in(this.container);
-            builder.image("battle-shiplist-background", 0, 0);
+            let bg = builder.image("battle-shiplist-background", 0, 0);
+            bg.setInteractive();
 
             this.view = view;
             this.battle = battle;
@@ -42,7 +43,6 @@ module TK.SpaceTac.UI {
             this.items = [];
             this.hovered = null;
 
-            // FIXME
             this.info_button = builder.button("battle-shiplist-info-button", 0, 0, undefined, "Tactical display", on => tactical_mode.manipulate("shiplist")(on));
 
             this.setShipsFromBattle(battle);

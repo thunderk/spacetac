@@ -108,6 +108,7 @@ Common UI
 Technical
 ---------
 
+* Fix tooltips and input events on mobile
 * Pause timers when the game is paused (at least animation timers)
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile

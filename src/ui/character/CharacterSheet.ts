@@ -62,7 +62,6 @@ module TK.SpaceTac.UI {
 
             this.builder = builder.styled({ color: "#dce9f9", size: 16, shadow: true });
 
-
             if (!onclose) {
                 onclose = () => this.hide();
             }
