@@ -68,6 +68,7 @@ module TK.SpaceTac.UI {
 
             this.xhidden = -this.view.getWidth();
             this.container.x = this.xhidden;
+            this.container.setVisible(false);
 
             this.image_portrait = this.builder.image("common-transparent", 435, 271, true);
 
@@ -369,13 +370,9 @@ module TK.SpaceTac.UI {
                 this.view.audio.playOnce("ui-dialog-open");
             }
 
+            this.container.setVisible(true);
             if (animate) {
-                this.view.tweens.add({
-                    targets: this.container,
-                    x: this.xshown,
-                    duration: 400,
-                    easing: 'Circ.easeInOut'
-                });
+                this.view.animations.addAnimation(this.container, { x: this.xshown }, 400, "Circ.easeOut");
             } else {
                 this.container.x = this.xshown;
             }
@@ -384,19 +381,15 @@ module TK.SpaceTac.UI {
         /**
          * Hide the sheet
          */
-        hide(animate = true) {
+        async hide(animate = true) {
             this.view.audio.playOnce("ui-dialog-close");
 
             if (animate) {
-                this.view.tweens.add({
-                    targets: this.container,
-                    x: this.xhidden,
-                    duration: 400,
-                    ease: 'Circ.easeInOut'
-                });
+                await this.view.animations.addAnimation(this.container, { x: this.xhidden }, 400, "Circ.easeIn");
             } else {
                 this.container.x = this.xhidden;
             }
+            this.container.setVisible(false);
         }
 
         /**
