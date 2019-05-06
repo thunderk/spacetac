@@ -38,7 +38,7 @@ module TK.SpaceTac.UI.Specs {
             return component;
         }
 
-        function checktext(path: (number | string)[], attrs?: Partial<UIText>, style?: Partial<Phaser.GameObjects.Text.TextStyle>): UIText {
+        function checktext(path: (number | string)[], attrs?: Partial<UIText>, style?: Partial<Phaser.GameObjects.TextStyle>): UIText {
             let text = checkcomp(path, UIText, "", attrs);
 
             if (typeof style != "undefined") {
@@ -116,8 +116,8 @@ module TK.SpaceTac.UI.Specs {
             builder.clear();
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { size: 61 });
-            checktext(["View layers", "base", 0], undefined, { fontFamily: "16pt SpaceTac" });
-            checktext(["View layers", "base", 1], undefined, { fontFamily: "61pt SpaceTac" });
+            checktext(["View layers", "base", 0], undefined, { fontFamily: "SpaceTac", fontSize: "16pt" });
+            checktext(["View layers", "base", 1], undefined, { fontFamily: "SpaceTac", fontSize: "61pt" });
 
             builder.clear();
             builder.text("", 0, 0, {});
@@ -140,8 +140,8 @@ module TK.SpaceTac.UI.Specs {
             builder.clear();
             builder.text("", 0, 0, {});
             builder.text("", 0, 0, { bold: true });
-            checktext(["View layers", "base", 0], undefined, { fontFamily: "16pt SpaceTac" });
-            checktext(["View layers", "base", 1], undefined, { fontFamily: "bold 16pt SpaceTac" });
+            checktext(["View layers", "base", 0], undefined, { fontFamily: "SpaceTac", fontSize: "16pt", fontStyle: "" });
+            checktext(["View layers", "base", 1], undefined, { fontFamily: "SpaceTac", fontSize: "16pt", fontStyle: "bold" });
 
             builder.clear();
             builder.text("", 0, 0, {});
@@ -208,10 +208,10 @@ module TK.SpaceTac.UI.Specs {
             builder.text("t3");
             builder.text("t4", undefined, undefined, { bold: true });
 
-            checktext(["View layers", "base", 0], { text: "t1" }, { fontFamily: "16pt SpaceTac" });
-            checktext(["View layers", "base", 1], { text: "t2" }, { fontFamily: "bold 16pt SpaceTac" });
-            checktext(["View layers", "base", 2], { text: "t3" }, { fontFamily: "16pt SpaceTac" });
-            checktext(["View layers", "base", 3], { text: "t4" }, { fontFamily: "bold 16pt SpaceTac" });
+            checktext(["View layers", "base", 0], { text: "t1" }, { fontFamily: "SpaceTac", fontSize: "16pt", fontStyle: "" });
+            checktext(["View layers", "base", 1], { text: "t2" }, { fontFamily: "SpaceTac", fontSize: "16pt", fontStyle: "bold" });
+            checktext(["View layers", "base", 2], { text: "t3" }, { fontFamily: "SpaceTac", fontSize: "16pt", fontStyle: "" });
+            checktext(["View layers", "base", 3], { text: "t4" }, { fontFamily: "SpaceTac", fontSize: "16pt", fontStyle: "bold" });
         })
 
         test.case("allows to change text or image content", check => {

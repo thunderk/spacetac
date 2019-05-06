@@ -41,15 +41,18 @@ module TK.SpaceTac {
         // Current scaling
         scaling = 1
 
-        constructor(headless: boolean = false) {
+        constructor(private testmode = false) {
             super({
                 width: 1920,
                 height: 1080,
-                type: headless ? Phaser.HEADLESS : Phaser.AUTO,
+                type: Phaser.AUTO,  // cannot really use HEADLESS because of bugs
                 backgroundColor: '#000000',
                 parent: '-space-tac',
                 disableContextMenu: true,
-                "render.autoResize": true,
+                scale: {
+                    mode: Phaser.Scale.FIT,
+                    autoCenter: Phaser.Scale.CENTER_BOTH
+                },
             });
 
             this.storage = localStorage;
@@ -57,7 +60,7 @@ module TK.SpaceTac {
             this.session = new GameSession();
             this.session_token = null;
 
-            if (!headless) {
+            if (!testmode) {
                 this.events.on("blur", () => {
                     this.scene.scenes.forEach(scene => this.scene.pause(scene));
                 });
@@ -74,25 +77,8 @@ module TK.SpaceTac {
                 this.scene.add('creation', UI.FleetCreationView);
                 this.scene.add('universe', UI.UniverseMapView);
 
-                this.resizeToFitWindow();
-                window.addEventListener("resize", () => this.resizeToFitWindow());
-
                 this.goToScene('boot');
             }
-        }
-
-        resize(width: number, height: number, scaling?: number) {
-            super.resize(width, height);
-
-            this.scaling = scaling ? scaling : 1;
-            cfilter(this.scene.scenes, UI.BaseView).forEach(scene => scene.resize());
-        }
-
-        resizeToFitWindow() {
-            let width = window.innerWidth;
-            let height = window.innerHeight;
-            let scale = Math.min(width / 1920, height / 1080);
-            this.resize(1920 * scale, 1080 * scale, scale);
         }
 
         boot() {
@@ -100,8 +86,8 @@ module TK.SpaceTac {
             this.options = new UI.GameOptions(this);
         }
 
-        get headless(): boolean {
-            return this.config.renderType == Phaser.HEADLESS;
+        get isTesting(): boolean {
+            return this.testmode;
         }
 
         /**
@@ -124,7 +110,7 @@ module TK.SpaceTac {
             if (active) {
                 let scene = this.scene.getScene(active);
                 return (scene instanceof UI.BaseView) ? scene : null;
-            } else if (this.headless) {
+            } else if (this.isTesting) {
                 return this.scene.scenes[0];
             } else {
                 return null;
@@ -237,9 +223,7 @@ module TK.SpaceTac {
          * Check if the game is currently fullscreen
          */
         isFullscreen(): boolean {
-            // FIXME
-            return false;
-            //return this.scale.isFullScreen;
+            return this.scale.isFullscreen;
         }
 
         /**
@@ -248,15 +232,13 @@ module TK.SpaceTac {
          * Returns true if the result is fullscreen
          */
         toggleFullscreen(active: boolean | null = null): boolean {
-            // FIXME
-            /*if (active === false || (active !== true && this.isFullscreen())) {
-                this.scale.stopFullScreen();
+            if (active === false || (active !== true && this.isFullscreen())) {
+                this.scale.stopFullscreen();
                 return false;
             } else {
-                this.scale.startFullScreen(true);
+                this.scale.startFullscreen();
                 return true;
-            }*/
-            return false;
+            }
         }
     }
 }

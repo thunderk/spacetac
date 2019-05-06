@@ -54,7 +54,7 @@ module TK.SpaceTac.UI {
          * Start log processing
          */
         start() {
-            if (!this.view.gameui.headless) {
+            if (!this.view.gameui.isTesting) {
                 this.log.play(async diff => {
                     while (this.view.isPaused()) {
                         await this.view.timer.sleep(500);

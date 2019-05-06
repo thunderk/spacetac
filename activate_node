@@ -2,13 +2,15 @@
 # Usage:
 #  source activate_node
 
+vdir="./.venv"
+expected="10.15.3"
+
 if [ \! -f "./activate_node" ]
 then
     echo "Not in project directory"
     exit 1
 fi
 
-vdir="./.venv"
-test -x "${vdir}/bin/nodeenv" || ( virtualenv -p python3 "${vdir}" && "${vdir}/bin/pip" install --upgrade nodeenv )
-test -e "${vdir}/node/bin/activate" || "${vdir}/bin/nodeenv" --node=10.3.0 --force "${vdir}/node"
+test -x "${vdir}/bin/nodeenv" || ( python3 -m venv "${vdir}" && "${vdir}/bin/pip" install --upgrade nodeenv )
+test "$(${vdir}/node/bin/nodejs --version)" = "v${expected}" || "${vdir}/bin/nodeenv" --node=${expected} --force "${vdir}/node"
 source "${vdir}/node/bin/activate"

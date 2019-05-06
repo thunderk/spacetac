@@ -47,7 +47,7 @@ module TK.SpaceTac.UI.Specs {
             if (scene instanceof BaseView) {
                 testgame.multistorage = new Multi.FakeRemoteStorage();
                 let connection = new Multi.Connection(RandomGenerator.global.id(12), testgame.multistorage);
-                check.patch(scene, "getConnection", () => connection);
+                check.patch(scene as BaseView, "getConnection", () => connection);
             }
 
             let orig_create = bound(scene, "create");

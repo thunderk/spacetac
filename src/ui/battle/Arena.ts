@@ -92,6 +92,7 @@ module TK.SpaceTac.UI {
          */
         setupMouseCapture() {
             let view = this.view;
+            let button_down = false;
 
             let background = new UIBuilder(view, this.container).image("battle-arena-background");
             background.setName("mouse-capture");
@@ -99,8 +100,12 @@ module TK.SpaceTac.UI {
 
             // Capture clicks on background
             background.setInteractive();
+            background.on("pointerdown", (pointer: Phaser.Input.Pointer) => {
+                button_down = (pointer.buttons == 1);
+            });
             background.on("pointerup", (pointer: Phaser.Input.Pointer) => {
-                if (pointer.buttons == 1) {
+                if (button_down) {
+                    button_down = false;
                     this.callbacks_click.forEach(callback => callback());
                 }
             });

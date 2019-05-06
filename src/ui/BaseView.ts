@@ -55,7 +55,7 @@ module TK.SpaceTac.UI {
             console.log(`Starting scene ${classname(this)}`);
 
             this.gameui = <MainUI>this.sys.game;
-            this.timer = new Timer(this.gameui.headless);
+            this.timer = new Timer(this.gameui.isTesting);
             this.animations = new Animations(this.tweens);
             this.particles = new UIParticles(this);
             this.inputs = new InputManager(this);
@@ -93,8 +93,6 @@ module TK.SpaceTac.UI {
             this.messages = new Messages(this);
             this.dialogs_opened = [];
 
-            this.resize();
-
             // Browser console variable (for debugging purpose)
             if (typeof window != "undefined") {
                 let session = this.gameui.session;
@@ -103,20 +101,6 @@ module TK.SpaceTac.UI {
                     (<any>window).player = session.player;
                     (<any>window).battle = session.player.getBattle();
                     (<any>window).view = this;
-                }
-            }
-        }
-
-        resize() {
-            if (this.gameui) {
-                if (this.layers) {
-                    this.layers.setScale(this.gameui.scaling);
-                }
-                if (this.dialogs_layer) {
-                    this.dialogs_layer.setScale(this.gameui.scaling);
-                }
-                if (this.cameras.main) {
-                    this.cameras.main.setViewport(0, 0, 1920 * this.gameui.scaling, 1080 * this.gameui.scaling);
                 }
             }
         }

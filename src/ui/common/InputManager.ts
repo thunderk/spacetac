@@ -46,7 +46,7 @@ module TK.SpaceTac.UI {
                 }
             });
 
-            if (!this.game.headless) {
+            if (!this.game.isTesting) {
                 this.view.input.keyboard.on("keyup", (event: KeyboardEvent) => {
                     if (this.debug) {
                         console.log(event);
@@ -147,6 +147,7 @@ module TK.SpaceTac.UI {
             let enternext: Function | null = null;
             let entercalled = false;
             let cursorinside = false;
+            let leftbutton = false;
             let destroyed = false;
 
             obj.setDataEnabled();
@@ -234,6 +235,7 @@ module TK.SpaceTac.UI {
 
             obj.on("pointerdown", (pointer?: Phaser.Input.Pointer) => {
                 if (destroyed || (pointer && pointer.buttons != 1)) return;
+                leftbutton = true;
 
                 if (UITools.isVisible(obj)) {
                     holdstart = Timer.nowMs();
@@ -247,7 +249,8 @@ module TK.SpaceTac.UI {
             });
 
             obj.on("pointerup", (pointer?: Phaser.Input.Pointer) => {
-                if (destroyed || (pointer && pointer.buttons != 1)) return;
+                if (destroyed || !leftbutton) return;
+                leftbutton = false;
 
                 if (!cursorinside) {
                     effectiveleave();

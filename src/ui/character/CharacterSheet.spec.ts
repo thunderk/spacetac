@@ -25,7 +25,8 @@ module TK.SpaceTac.UI.Specs {
                 check.equals(sheet.text_name && sheet.text_name.text, "Ship 1");
 
                 let portrait = as(UIButton, sheet.group_portraits.getAt(1));
-                portrait.emit("pointerup");
+                portrait.emit("pointerdown", { buttons: 1 });
+                portrait.emit("pointerup", { buttons: 1 });
 
                 check.equals(sheet.text_name && sheet.text_name.text, "Ship 2");
             });

@@ -4,7 +4,6 @@ To-Do-list
 Phaser 3 migration
 ------------------
 
-* Restore fullscreen mode (and add a fullscreen incentive before the menu)
 * Fix valuebar requiring to be in root display list
 * Restore unit tests about boundaries (in UITools)
 
@@ -96,6 +95,7 @@ Artificial Intelligence
 Common UI
 ---------
 
+* Add a fullscreen incentive at game start
 * Fix calling setHoverClick several times on the same button not working as expected
 * Fix tooltip remaining when the hovered object is hidden by animations
 * If ProgressiveMessage animation performance is bad, show the text directly
@@ -108,6 +108,7 @@ Common UI
 Technical
 ---------
 
+* Use tk-serializer package (may need to switch to webpack)
 * Fix tooltips and input events on mobile
 * Pause timers when the game is paused (at least animation timers)
 * Pack sounds
