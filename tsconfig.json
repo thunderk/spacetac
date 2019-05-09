@@ -6,7 +6,7 @@
         "noImplicitReturns": true,
         "removeComments": false,
         "preserveConstEnums": true,
-        "out": "out/build.js",
+        "outFile": "out/build.js",
         "strict": true,
         "sourceMap": true,
         "lib": [
