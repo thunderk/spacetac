@@ -113,7 +113,7 @@ module TK.SpaceTac {
         /**
          * Return an iterator over all ships engaged in the battle
          */
-        iships(alive_only = false): Iterator<Ship> {
+        iships(alive_only = false): Iterable<Ship> {
             let result = ichainit(imap(iarray(this.fleets), fleet => iarray(fleet.ships)));
             return alive_only ? ifilter(result, ship => ship.alive) : result;
         }
@@ -121,14 +121,14 @@ module TK.SpaceTac {
         /**
          * Return an iterator over ships allies of (or owned by) a player
          */
-        iallies(ship: Ship, alive_only = false): Iterator<Ship> {
+        iallies(ship: Ship, alive_only = false): Iterable<Ship> {
             return ifilter(this.iships(alive_only), iship => iship.fleet.player.is(ship.fleet.player));
         }
 
         /**
          * Return an iterator over ships enemy of a player
          */
-        ienemies(ship: Ship, alive_only = false): Iterator<Ship> {
+        ienemies(ship: Ship, alive_only = false): Iterable<Ship> {
             return ifilter(this.iships(alive_only), iship => !iship.fleet.player.is(ship.fleet.player));
         }
 

@@ -2,7 +2,7 @@ module TK.SpaceTac {
     /**
      * Get a list of all playable actions (like the actionbar for player) for a ship
      */
-    function getPlayableActions(ship: Ship): Iterator<BaseAction> {
+    function getPlayableActions(ship: Ship): Iterable<BaseAction> {
         let actions = ship.actions.listAll();
         return ifilter(iarray(actions), action => !action.checkCannotBeApplied(ship));
     }
@@ -47,7 +47,7 @@ module TK.SpaceTac {
         /**
          * Iterator of a list of "random" arena coordinates, based on a grid
          */
-        static scanArena(battle: Battle, cells = 10, random = RandomGenerator.global): Iterator<Target> {
+        static scanArena(battle: Battle, cells = 10, random = RandomGenerator.global): Iterable<Target> {
             return imap(irange(cells * cells), cellpos => {
                 let y = Math.floor(cellpos / cells);
                 let x = cellpos - y * cells;
@@ -87,7 +87,7 @@ module TK.SpaceTac {
          */
         static produceInterestingBlastShots(ship: Ship, battle: Battle): TacticalProducer {
             // TODO Work with groups of 3, 4 ...
-            let weapons = <Iterator<TriggerAction>>ifilter(getPlayableActions(ship), action => action instanceof TriggerAction && action.blast > 0);
+            let weapons = ifilter(ifilterclass(getPlayableActions(ship), TriggerAction), action => action.blast > 0);
             let enemies = battle.ienemies(ship, true);
             // TODO This produces duplicates (x, y) and (y, x)
             let couples = ifilter(icombine(enemies, enemies), ([e1, e2]) => e1 != e2);

@@ -48,12 +48,14 @@ module TK.Specs {
         });
 
         test.case("checks for null value", check => {
-            let value: number | null = 5;
+            let value: number | null | undefined = 5;
             check.equals(nn(value), 5);
             value = 0;
             check.equals(nn(value), 0);
             value = null;
             check.throw(() => nn(value), "Null value");
+            value = undefined;
+            check.throw(() => nn(value), "Undefined value");
         });
 
         test.case("removes null values from arrays", check => {
@@ -271,7 +273,7 @@ module TK.Specs {
             check.equals(dict(items(obj)), obj);
         });
 
-        test.case("iterates an enum", check => {
+        test.case("gets an enum values", check => {
             enum Test {
                 ZERO,
                 ONE,
@@ -281,6 +283,10 @@ module TK.Specs {
             var result: any[] = [];
             iterenum(Test, item => result.push(item));
             check.equals(result, [0, 1, 2]);
+            check.equals(result, [Test.ZERO, Test.ONE, Test.TWO]);
+
+            check.equals(enumvalues(Test), [0, 1, 2]);
+            check.equals(enumvalues(Test), [Test.ZERO, Test.ONE, Test.TWO]);
         });
 
         test.case("create a dict from an array of couples", check => {

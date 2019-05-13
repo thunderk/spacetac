@@ -37,15 +37,14 @@ async function exec(command) {
  */
 async function ts(dist = false) {
     console.log("Building app...");
-    await exec(`tsc -p ${dist ? "./tsconfig.dist.json" : "."}`);
+    await exec(`tsc --project ${dist ? "./tsconfig.dist.json" : "."}`);
 }
 
 /**
  * Start watching for typescript changes
  */
 async function watch_ts() {
-    watch(["./src/**/*.ts", "package.json"], () => ts());
-    await forever();
+    await exec(`tsc --project . --watch --preserveWatchOutput`);
 }
 
 /**
@@ -171,7 +170,7 @@ async function build(dist = false) {
  */
 async function optimize() {
     // TODO do not overwrite dev build
-    await exec("uglifyjs out/build.dist.js --source-map --output out/build.js");
+    await exec("uglifyjs out/build.dist.js --source-map --ecma 6 --mangle --keep-classnames --compress --output out/build.js");
 }
 
 /**
@@ -201,7 +200,16 @@ async function karma() {
  * Run tests in karma (suppose is already built)
  */
 async function test(task) {
+    console.log("Running tests...");
     await karma();
+}
+
+/**
+ * Run tests in karma when the build changes
+ */
+async function watch_test(task) {
+    watch(["out/*.js", "out/*.html"], () => karma());
+    await forever();
 }
 
 /**
@@ -241,8 +249,17 @@ async function continuous() {
         serve(),
         watch_ts(),
         watch_data(),
-        watch_vendors()
+        watch_vendors(),
+        watch_test(),
     ]);
+}
+
+/**
+ * Sends code coverage to codecov service
+ */
+async function codecov() {
+    await exec("remap-istanbul -i out/coverage/coverage.json -o out/coverage/mapped.json -t json");
+    await exec("codecov -f out/coverage/mapped.json");
 }
 
 /**
@@ -268,9 +285,11 @@ module.exports = {
     watch_vendors: command(watch_vendors),
     build: command(build),
     test: command(test),
+    watch_test: command(watch_test),
     deploy: command(deploy),
     deployx: command(deployx),
     serve: command(serve),
     continuous: command(continuous),
-    ci: command(ci)
+    ci: command(ci),
+    codecov: command(codecov),
 }

@@ -11,10 +11,10 @@ if (typeof window != "undefined") {
         // In node, does not extend Phaser classes
         var handler = {
             get(target: any, name: any): any {
-                return new Proxy({}, handler);
+                return new Proxy(function () { }, handler);
             }
         }
-        global.Phaser = new Proxy({}, handler);
+        global.Phaser = new Proxy(function () { }, handler);
     }
 
     if (typeof module != "undefined") {
@@ -23,7 +23,9 @@ if (typeof window != "undefined") {
 }
 
 module TK.SpaceTac {
-    // Router between game views
+    /**
+     * Main class to bootstrap the whole game
+     */
     export class MainUI extends Phaser.Game {
         // Current game session
         session: GameSession
@@ -48,7 +50,7 @@ module TK.SpaceTac {
             super({
                 width: 1920,
                 height: 1080,
-                type: Phaser.AUTO,  // cannot really use HEADLESS because of bugs
+                type: testmode ? Phaser.CANVAS : Phaser.WEBGL,  // cannot really use HEADLESS because of bugs
                 backgroundColor: '#000000',
                 parent: '-space-tac',
                 disableContextMenu: true,

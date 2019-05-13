@@ -73,7 +73,7 @@ module TK.SpaceTac {
         /**
          * Get an iterator for scanning a circle
          */
-        scanCircle(x: number, y: number, radius: number, nr = 6, na = 30): Iterator<Target> {
+        scanCircle(x: number, y: number, radius: number, nr = 6, na = 30): Iterable<Target> {
             let rcount = nr ? 1 / (nr - 1) : 0;
             return ichainit(imap(istep(0, irepeat(rcount, nr - 1)), r => {
                 let angles = Math.max(1, Math.ceil(na * r));

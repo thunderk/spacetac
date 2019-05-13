@@ -4,9 +4,14 @@ module.exports = function (config) {
     basePath: '../..',
     frameworks: ['jasmine'],
     singleRun: true,
-    browsers: ['PhantomJS'],
-    reporters: ['dots', 'coverage'],
+    browsers: ['ChromeHeadless'],
+    colors: true,
+    reporters: ['spec', 'coverage'],
     logLevel: config.LOG_WARN,
+
+    client: {
+      captureConsole: false
+    },
 
     preprocessors: {
       'out/build.js': ['coverage']
@@ -20,11 +25,11 @@ module.exports = function (config) {
     },
 
     specReporter: {
-      showSpecTiming: true
+      showSpecTiming: true,
+      suppressPassed: true
     },
 
     files: [
-      'node_modules/babel-polyfill/dist/polyfill.js',
       'out/vendor/phaser/phaser.js',
       'out/vendor/parse/parse.min.js',
       'out/build.js'

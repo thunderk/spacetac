@@ -41,10 +41,10 @@ module TK {
         /**
          * Add an asynchronous setup step for each case of the suite
          */
-        asetup(body: () => Promise<void>, cleanup?: Function): void {
-            beforeEach((done) => body().then(done));
+        asetup(body: () => Promise<void>, cleanup?: () => Promise<void>): void {
+            beforeEach(async () => await body());
             if (cleanup) {
-                afterEach(() => cleanup());
+                afterEach(async () => await cleanup());
             }
         }
 

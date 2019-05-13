@@ -2,7 +2,7 @@
 /// <reference path="Maneuver.ts"/>
 module TK.SpaceTac {
 
-    export type TacticalProducer = Iterator<Maneuver>;
+    export type TacticalProducer = Iterable<Maneuver>;
     export type TacticalEvaluator = (maneuver: Maneuver) => number;
 
     /**
@@ -14,17 +14,23 @@ module TK.SpaceTac {
      */
     export class TacticalAI extends AbstractAI {
         private producers: TacticalProducer[] = []
+        private work: Iterator<Maneuver> = IATEND
         private evaluators: TacticalEvaluator[] = []
 
         private best: Maneuver | null = null
         private best_score = 0
+        private produced = 0
+        private evaluated = 0
 
         protected initWork(): void {
             this.best = null;
             this.best_score = -Infinity;
 
             this.producers = this.getDefaultProducers();
+            this.work = ialternate(this.producers)[Symbol.iterator]();
             this.evaluators = this.getDefaultEvaluators();
+            this.produced = 0;
+            this.evaluated = 0;
 
             if (this.debug) {
                 console.log("AI started", this.name, this.ship.name);
@@ -32,22 +38,18 @@ module TK.SpaceTac {
         }
 
         protected doWorkUnit(): boolean {
-            if (this.producers.length > 0 && this.getDuration() < 8000) {
-                // Produce a maneuver
-                let maneuver: Maneuver | null = null;
-                let producer = this.producers.shift();
-                if (producer) {
-                    [maneuver, producer] = producer();
-                }
+            let state = this.work.next();
 
-                if (maneuver && maneuver.isPossible()) {
-                    if (producer) {
-                        this.producers.push(producer);
-                    }
-
+            if (!state.done && this.getDuration() < 8000) {
+                let maneuver = state.value;
+                this.produced++;
+                if (maneuver.isPossible()) {
                     // Evaluate the maneuver
                     let score = this.evaluate(maneuver);
-                    //console.debug("AI evaluation", maneuver, score);
+                    this.evaluated++;
+                    if (this.debug) {
+                        console.debug("AI evaluation", maneuver, score);
+                    }
                     if ((Math.abs(score - this.best_score) < 0.0001 && this.random.bool()) || score > this.best_score) {
                         this.best = maneuver;
                         this.best_score = score;
@@ -56,6 +58,10 @@ module TK.SpaceTac {
 
                 return true;
             } else if (this.best) {
+                if (!state.done) {
+                    console.warn(`AI did not analyze every possible maneuver (${this.produced} produced, ${this.evaluated} evaluated)`);
+                }
+
                 // Choose the best maneuver so far
                 let best_maneuver = this.best;
                 if (this.debug) {

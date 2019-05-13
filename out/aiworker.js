@@ -1,9 +1,9 @@
 var handler = {
     get(target, name) {
-        return new Proxy({}, handler);
+        return new Proxy(function () { }, handler);
     }
 }
-var Phaser = new Proxy({}, handler);
+var Phaser = new Proxy(function () { }, handler);
 
 //var debug = console.log;
 var debug = function () { };

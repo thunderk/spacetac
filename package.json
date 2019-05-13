@@ -6,10 +6,7 @@
   "scripts": {
     "build": "run build",
     "test": "run ci",
-    "start": "run continuous",
-    "codecov": "remap-istanbul -i out/coverage/coverage.json -o out/coverage/mapped.json -t json && codecov -f out/coverage/mapped.json",
-    "deploy": "run deploy",
-    "deployx": "run deployx"
+    "start": "run continuous"
   },
   "repository": {
     "type": "git",
@@ -19,18 +16,18 @@
   "license": "MIT",
   "devDependencies": {
     "@types/jasmine": "^3.3.12",
-    "babel-polyfill": "6.26.0",
     "codecov": "^3.4.0",
     "gamefroot-texture-packer": "github:Gamefroot/Gamefroot-Texture-Packer#f3687111afc94f80ea8f2877c188fb8e2004e8ff",
     "glob": "^7.1.4",
     "glob-watcher": "^5.0.3",
     "jasmine": "^3.4.0",
     "karma": "^4.1.0",
+    "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.2",
     "karma-jasmine": "^2.0.1",
-    "karma-phantomjs-launcher": "1.0.4",
     "karma-spec-reporter": "^0.0.32",
     "live-server": "1.2.1",
+    "process-pool": "^0.3.5",
     "remap-istanbul": "^0.13.0",
     "runjs": "^4.4.2",
     "shelljs": "^0.8.3",
@@ -40,7 +37,6 @@
   "dependencies": {
     "jasmine-core": "^3.4.0",
     "parse": "^2.4.0",
-    "phaser": "^3.17.0",
-    "process-pool": "^0.3.5"
+    "phaser": "^3.17.0"
   }
 }

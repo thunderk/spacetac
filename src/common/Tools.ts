@@ -74,9 +74,11 @@ module TK {
     /**
      * Check if a value if null, throwing an exception if its the case
      */
-    export function nn<T>(value: T | null): T {
+    export function nn<T>(value: T | null | undefined): T {
         if (value === null) {
             throw new Error("Null value");
+        } else if (typeof value == "undefined") {
+            throw new Error("Undefined value");
         } else {
             return value;
         }
@@ -349,6 +351,15 @@ module TK {
                 callback(parsed);
             }
         }
+    }
+
+    /**
+     * Collect enum values.
+     */
+    export function enumvalues<T>(obj: T): number[] {
+        let result: number[] = [];
+        iterenum(obj, val => result.push(val));
+        return result;
     }
 
     /**

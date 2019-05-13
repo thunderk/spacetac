@@ -93,7 +93,7 @@ module TK {
         /**
          * Get all contained objects (iterator)
          */
-        iterator(): Iterator<T> {
+        iterator(): Iterable<T> {
             return iarray(this.list());
         }
     }

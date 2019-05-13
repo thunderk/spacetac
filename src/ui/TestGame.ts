@@ -59,7 +59,10 @@ module TK.SpaceTac.UI.Specs {
             testgame.ui.scene.add("test", scene, true, scenedata);
 
             testgame.view = scene;
-        }), () => testgame.ui.destroy(true));
+        }), () => new Promise((resolve) => {
+            testgame.ui.events.on("destroy", () => resolve());
+            testgame.ui.destroy(true);
+        }));
 
         return testgame;
     }

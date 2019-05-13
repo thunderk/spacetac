@@ -14,7 +14,7 @@
             "es6",
             "scripthost"
         ],
-        "target": "es5"
+        "target": "es6"
     },
     "include": [
         "src/**/*.ts"

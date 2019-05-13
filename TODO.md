@@ -4,7 +4,7 @@ To-Do-list
 Phaser 3 migration
 ------------------
 
-* Fix valuebar requiring to be in root display list
+* Fix valuebar requiring to be in root display list (use tile sprite?)
 * Restore unit tests about boundaries (in UITools)
 
 Menu/settings/saves
@@ -31,6 +31,7 @@ Map/story
 Character sheet
 ---------------
 
+* Fix action tooltips showing battle information ("not enough power"...)
 * Improve attribute tooltips
 * Implement sliders for personality traits
 * Center the portraits when there are less than 5
@@ -38,6 +39,7 @@ Character sheet
 Battle
 ------
 
+* Move animation should face the target (if any) at the end, not the direction
 * Improve arena ships layering (sometimes information is displayed behind other sprites)
 * In the ship tooltip, show power cost, toggled and overheat states
 * Display shield (and its (dis)appearance)
@@ -101,6 +103,7 @@ Common UI
 * If ProgressiveMessage animation performance is bad, show the text directly
 * Add caret/focus and configurable background to text input
 * Release keybord grabbing when UITextInput is hidden or loses focus
+* UI parents should only be containers, not images
 * Mobile: think UI layout so that fingers do not block the view (right and left handed)
 * Mobile: display tooltips larger and on the side of screen where the finger is not
 * Mobile: targetting in two times, using a draggable target indicator
@@ -109,7 +112,6 @@ Technical
 ---------
 
 * Use tk-serializer package (may need to switch to webpack)
-* Fix tooltips and input events on mobile
 * Pause timers when the game is paused (at least animation timers)
 * Pack sounds
 * Add toggles for shaders, automatically disable them if too slow, and initially disable them on mobile

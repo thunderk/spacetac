@@ -3,116 +3,134 @@
  * 
  * They allow to work on infinite streams of values, with limited memory consumption.
  * 
- * Functions in this file that do not return an Iterator are "materializing", meaning that they
+ * Functions in this file that do not return an Iterable are "materializing", meaning that they
  * may consume iterators up to the end, and will not work well on infinite iterators.
+ * 
+ * These iterators are guaranteed to be repeatable, meaning that calling Symbol.iterator on them will start over.
  */
 module TK {
     /**
-     * An iterator is a function without side effect, that returns the current value
-     * and an iterator over the next values.
+     * Empty iterator
      */
-    export type Iterator<T> = () => [T | null, Iterator<T>];
-
-    function _getIEND(): [null, Iterator<any>] {
-        return [null, _getIEND];
+    export const IATEND: Iterator<any> = {
+        next: function () {
+            return { done: true, value: undefined };
+        }
     }
 
     /**
-     * IEND is a return value for iterators, indicating end of iteration.
+     * Empty iterable
      */
-    export const IEND: [null, Iterator<any>] = [null, _getIEND];
+    export const IEMPTY: Iterable<any> = {
+        [Symbol.iterator]: () => IATEND
+    }
 
     /**
-     * Empty iterator, returning IEND
+     * Iterable constructor, from an initial value, and a step value
      */
-    export const IEMPTY = () => IEND;
+    export function irecur<T, S>(start: T, step: (a: T) => T | null): Iterable<T> {
+        return {
+            [Symbol.iterator]: function* () {
+                let val: T | null = start;
+                do {
+                    yield val;
+                    val = step(val);
+                } while (val !== null);
+            }
+        }
+    }
 
     /**
-     * Equivalent of Array.forEach for lazy iterators.
+     * Iterable constructor, from an array
+     * 
+     * The iterator will yield the next value each time it is called, then undefined when the array's end is reached.
+     */
+    export function iarray<T>(array: T[], offset = 0): Iterable<T> {
+        return {
+            [Symbol.iterator]: function () {
+                return array.slice(offset)[Symbol.iterator]();
+            }
+        }
+    }
+
+    /**
+     * Iterable constructor, from a single value
+     * 
+     * The value will be yielded only once, not repeated over.
+     */
+    export function isingle<T>(value: T): Iterable<T> {
+        return iarray([value]);
+    }
+
+    /**
+     * Iterable that repeats the same value.
+     */
+    export function irepeat<T>(value: T, count = -1): Iterable<T> {
+        return {
+            [Symbol.iterator]: function* () {
+                let n = count;
+                while (n != 0) {
+                    yield value;
+                    n--;
+                }
+            }
+        }
+    }
+
+    /**
+     * Equivalent of Array.forEach for all iterables.
      * 
      * If the callback returns *stopper*, the iteration is stopped.
      */
-    export function iforeach<T>(iterator: Iterator<T>, callback: (_: T) => any, stopper: any = null) {
-        let value: T | null;
-        [value, iterator] = iterator();
-        while (value !== null) {
-            let returned = callback(value);
-            if (returned === stopper) {
-                return;
-            }
-            [value, iterator] = iterator();
-        }
-    }
-
-    /**
-     * Get an iterator on an array
-     * 
-     * The iterator will yield the next value each time it is called, then null when the array's end is reached.
-     */
-    export function iarray<T>(array: T[], offset = 0): Iterator<T> {
-        return () => {
-            if (offset < array.length) {
-                return [array[offset], iarray(array, offset + 1)];
-            } else {
-                return IEND;
+    export function iforeach<T>(iterable: Iterable<T>, callback: (_: T) => any, stopper: any = null): void {
+        for (let value of iterable) {
+            if (callback(value) === stopper) {
+                break;
             }
         }
-    }
-
-    /**
-     * Get an iterator yielding a single value
-     */
-    export function isingle<T>(value: T): Iterator<T> {
-        return iarray([value]);
     }
 
     /**
      * Returns the first item passing a predicate
      */
-    export function ifirst<T>(iterator: Iterator<T>, predicate: (item: T) => boolean): T | null {
-        let result: T | null = null;
-        iforeach(iterator, item => {
-            if (predicate(item)) {
-                result = item;
-                return null;
-            } else {
-                return undefined;
+    export function ifirst<T>(iterable: Iterable<T>, predicate: (item: T) => boolean): T | null {
+        for (let value of iterable) {
+            if (predicate(value)) {
+                return value;
             }
-        });
-        return result;
+        }
+        return null;
     }
 
     /**
      * Returns the first non-null result of a value-yielding predicate, applied to each iterator element
      */
-    export function ifirstmap<T1, T2>(iterator: Iterator<T1>, predicate: (item: T1) => T2 | null): T2 | null {
-        let result: T2 | null = null;
-        iforeach(iterator, item => {
-            let mapped = predicate(item);
-            if (mapped) {
-                result = mapped;
-                return null;
-            } else {
-                return undefined;
+    export function ifirstmap<T1, T2>(iterable: Iterable<T1>, predicate: (item: T1) => T2 | null): T2 | null {
+        for (let value of iterable) {
+            let res = predicate(value);
+            if (res !== null) {
+                return res;
             }
-        });
-        return result;
+        }
+        return null;
     }
 
     /**
-     * Materialize an array from consuming an iterator
+     * Materialize an array from consuming an iterable
      * 
      * To avoid materializing infinite iterators (and bursting memory), the item count is limited to 1 million, and an
      * exception is thrown when this limit is reached.
      */
-    export function imaterialize<T>(iterator: Iterator<T>, limit = 1000000): T[] {
+    export function imaterialize<T>(iterable: Iterable<T>, limit = 1000000): T[] {
         let result: T[] = [];
-        iforeach(iterator, value => {
+
+        for (let value of iterable) {
             result.push(value);
             if (result.length >= limit) {
                 throw new Error("Length limit on iterator materialize");
             }
-        });
+        }
+
         return result;
     }
 
@@ -121,8 +139,18 @@ module TK {
      * 
      * If *count* is not specified, the iterator is infinite
      */
-    export function irange(count: number = -1, start = 0, step = 1): Iterator<number> {
-        return () => (count != 0) ? [start, irange(count - 1, start + step, step)] : IEND;
+    export function irange(count: number = -1, start = 0, step = 1): Iterable<number> {
+        return {
+            [Symbol.iterator]: function* () {
+                let i = start;
+                let n = count;
+                while (n != 0) {
+                    yield i;
+                    i += step;
+                    n--;
+                }
+            }
+        }
     }
 
     /**
@@ -132,93 +160,79 @@ module TK {
      * 
      * With no argument, istep() == irange()
      */
-    export function istep(start = 0, step = irepeat(1)): Iterator<number> {
-        return () => {
-            let [value, iterator] = step();
-            return [start, value === null ? IEMPTY : istep(start + value, iterator)];
+    export function istep(start = 0, step_iterable = irepeat(1)): Iterable<number> {
+        return {
+            [Symbol.iterator]: function* () {
+                let i = start;
+                yield i;
+                for (let step of step_iterable) {
+                    i += step;
+                    yield i;
+                }
+            }
         }
     }
 
     /**
      * Skip a given number of values from an iterator, discarding them.
      */
-    export function iskip<T>(iterator: Iterator<T>, count = 1): Iterator<T> {
-        let value: T | null;
-        while (count--) {
-            [value, iterator] = iterator();
+    export function iskip<T>(iterable: Iterable<T>, count = 1): Iterable<T> {
+        return {
+            [Symbol.iterator]: function () {
+                let iterator = iterable[Symbol.iterator]();
+                let n = count;
+                while (n-- > 0) {
+                    iterator.next();
+                }
+                return iterator;
+            }
         }
-        return iterator;
     }
 
     /**
      * Return the value at a given position in the iterator
      */
-    export function iat<T>(iterator: Iterator<T>, position: number): T | null {
+    export function iat<T>(iterable: Iterable<T>, position: number): T | null {
         if (position < 0) {
             return null;
         } else {
             if (position > 0) {
-                iterator = iskip(iterator, position);
+                iterable = iskip(iterable, position);
             }
-            return iterator()[0];
+            let iterator = iterable[Symbol.iterator]();
+            let state = iterator.next();
+            return state.done ? null : state.value;
         }
     }
 
     /**
-     * Chain an iterator of iterators.
+     * Chain an iterable of iterables.
      * 
      * This will yield values from the first yielded iterator, then the second one, and so on...
      */
-    export function ichainit<T>(iterators: Iterator<Iterator<T>>): Iterator<T> {
-        return function () {
-            let [iterators_head, iterators_tail] = iterators();
-            if (iterators_head == null) {
-                return IEND;
-            } else {
-                let [head, tail] = iterators_head();
-                while (head == null) {
-                    [iterators_head, iterators_tail] = iterators_tail();
-                    if (iterators_head == null) {
-                        break;
+    export function ichainit<T>(iterables: Iterable<Iterable<T>>): Iterable<T> {
+        return {
+            [Symbol.iterator]: function* () {
+                for (let iterable of iterables) {
+                    for (let value of iterable) {
+                        yield value;
                     }
-                    [head, tail] = iterators_head();
                 }
-                return [head, ichain(tail, ichainit(iterators_tail))];
             }
         }
     }
 
     /**
-     * Chain iterators.
+     * Chain iterables.
      * 
      * This will yield values from the first iterator, then the second one, and so on...
      */
-    export function ichain<T>(...iterators: Iterator<T>[]): Iterator<T> {
-        if (iterators.length == 0) {
+    export function ichain<T>(...iterables: Iterable<T>[]): Iterable<T> {
+        if (iterables.length == 0) {
             return IEMPTY;
         } else {
-            return ichainit(iarray(iterators));
+            return ichainit(iterables);
         }
-    }
-
-    /**
-     * Wrap an iterator, calling *onstart* when the first value of the wrapped iterator is yielded.
-     */
-    function ionstart<T>(iterator: Iterator<T>, onstart: Function): Iterator<T> {
-        return () => {
-            let [head, tail] = iterator();
-            if (head !== null) {
-                onstart();
-            }
-            return [head, tail];
-        }
-    }
-
-    /**
-     * Iterator that repeats the same value.
-     */
-    export function irepeat<T>(value: T, count = -1): Iterator<T> {
-        return iloop(iarray([value]), count);
     }
 
     /**
@@ -228,25 +242,36 @@ module TK {
      * 
      * onloop may be used to know when the iterator resets.
      */
-    export function iloop<T>(base: Iterator<T>, count = -1, onloop?: Function): Iterator<T> {
-        if (count == 0) {
-            return IEMPTY;
-        } else {
-            let next = onloop ? ionstart(base, onloop) : base;
-            return ichainit(() => [base, iarray([iloop(next, count - 1)])]);
+    export function iloop<T>(base: Iterable<T>, count = -1, onloop?: Function): Iterable<T> {
+        return {
+            [Symbol.iterator]: function* () {
+                let n = count;
+                let start = false;
+                while (n-- != 0) {
+                    for (let value of base) {
+                        if (start) {
+                            if (onloop) {
+                                onloop();
+                            }
+                            start = false;
+                        }
+                        yield value;
+                    }
+                    start = true;
+                }
+            }
         }
     }
 
     /**
      * Iterator version of "map".
      */
-    export function imap<T1, T2>(iterator: Iterator<T1>, mapfunc: (_: T1) => T2): Iterator<T2> {
-        return () => {
-            let [head, tail] = iterator();
-            if (head === null) {
-                return IEND;
-            } else {
-                return [mapfunc(head), imap(tail, mapfunc)];
+    export function imap<T1, T2>(iterable: Iterable<T1>, mapfunc: (_: T1) => T2): Iterable<T2> {
+        return {
+            [Symbol.iterator]: function* () {
+                for (let value of iterable) {
+                    yield mapfunc(value);
+                }
             }
         }
     }
@@ -254,76 +279,123 @@ module TK {
     /**
      * Iterator version of "reduce".
      */
-    export function ireduce<T>(iterator: Iterator<T>, reduce: (item1: T, item2: T) => T, init: T): T {
+    export function ireduce<T>(iterable: Iterable<T>, reduce: (item1: T, item2: T) => T, init: T): T {
         let result = init;
-        iforeach(iterator, item => {
-            result = reduce(result, item);
-        });
+        for (let value of iterable) {
+            result = reduce(result, value);
+        }
         return result;
     }
 
     /**
      * Iterator version of "filter".
      */
-    export function ifilter<T>(iterator: Iterator<T>, filterfunc: (_: T) => boolean): Iterator<T> {
-        return () => {
-            let [value, iter] = iterator();
-            while (value !== null && !filterfunc(value)) {
-                [value, iter] = iter();
+    export function ifilter<T>(iterable: Iterable<T>, filterfunc: (_: T) => boolean): Iterable<T> {
+        return {
+            [Symbol.iterator]: function* () {
+                for (let value of iterable) {
+                    if (filterfunc(value)) {
+                        yield value;
+                    }
+                }
             }
-            return [value, ifilter(iter, filterfunc)];
         }
     }
 
     /**
-     * Combine two iterators.
+     * Type filter, to return a list of instances of a given type
+     */
+    export function ifiltertype<T>(iterable: Iterable<any>, filter: (item: any) => item is T): Iterable<T> {
+        return ifilter(iterable, filter);
+    }
+
+    /**
+     * Class filter, to return a list of instances of a given type
+     */
+    export function ifilterclass<T>(iterable: Iterable<any>, classref: { new(...args: any[]): T }): Iterable<T> {
+        return ifilter(iterable, (item): item is T => item instanceof classref);
+    }
+
+    /**
+     * Combine two iterables.
      * 
      * This iterates through the second one several times, so if one iterator may be infinite, 
      * it should be the first one.
      */
-    export function icombine<T1, T2>(it1: Iterator<T1>, it2: Iterator<T2>): Iterator<[T1, T2]> {
+    export function icombine<T1, T2>(it1: Iterable<T1>, it2: Iterable<T2>): Iterable<[T1, T2]> {
         return ichainit(imap(it1, v1 => imap(it2, (v2): [T1, T2] => [v1, v2])));
     }
 
     /**
-     * Advance two iterators at the same time, yielding item pairs
+     * Advance through two iterables at the same time, yielding item pairs
      * 
      * Iteration will stop at the first of the two iterators that stops.
      */
-    export function izip<T1, T2>(it1: Iterator<T1>, it2: Iterator<T2>): Iterator<[T1, T2]> {
-        return () => {
-            let [val1, nit1] = it1();
-            let [val2, nit2] = it2();
-            if (val1 !== null && val2 !== null) {
-                return [[val1, val2], izip(nit1, nit2)];
-            } else {
-                return IEND;
+    export function izip<T1, T2>(it1: Iterable<T1>, it2: Iterable<T2>): Iterable<[T1, T2]> {
+        return {
+            [Symbol.iterator]: function* () {
+                let iterator1 = it1[Symbol.iterator]();
+                let iterator2 = it2[Symbol.iterator]();
+                let state1 = iterator1.next();
+                let state2 = iterator2.next();
+                while (!state1.done && !state2.done) {
+                    yield [state1.value, state2.value];
+                    state1 = iterator1.next();
+                    state2 = iterator2.next();
+                }
             }
         }
     }
 
     /**
-     * Advance two iterators at the same time, yielding item pairs (greedy version)
+     * Advance two iterables at the same time, yielding item pairs (greedy version)
      * 
-     * Iteration will stop when both iterators are consumed, returning partial couples (null in the peer) if needed.
+     * Iteration will stop when both iterators are consumed, returning partial couples (undefined in the peer) if needed.
      */
-    export function izipg<T1, T2>(it1: Iterator<T1>, it2: Iterator<T2>): Iterator<[T1 | null, T2 | null]> {
-        return () => {
-            let [val1, nit1] = it1();
-            let [val2, nit2] = it2();
-            if (val1 === null && val2 === null) {
-                return IEND;
-            } else {
-                return [[val1, val2], izipg(nit1, nit2)];
+    export function izipg<T1, T2>(it1: Iterable<T1>, it2: Iterable<T2>): Iterable<[T1 | undefined, T2 | undefined]> {
+        return {
+            [Symbol.iterator]: function* () {
+                let iterator1 = it1[Symbol.iterator]();
+                let iterator2 = it2[Symbol.iterator]();
+                let state1 = iterator1.next();
+                let state2 = iterator2.next();
+                while (!state1.done || !state2.done) {
+                    yield [state1.value, state2.value];
+                    state1 = iterator1.next();
+                    state2 = iterator2.next();
+                }
             }
         }
     }
 
     /**
-     * Partition in two iterators, one with values that pass the predicate, the other with values that don't
+     * Partition in two iterables, one with values that pass the predicate, the other with values that don't
      */
-    export function ipartition<T>(it: Iterator<T>, predicate: (item: T) => boolean): [Iterator<T>, Iterator<T>] {
-        return [ifilter(it, predicate), ifilter(it, x => !predicate(x))];
+    export function ipartition<T>(iterable: Iterable<T>, predicate: (item: T) => boolean): [Iterable<T>, Iterable<T>] {
+        return [ifilter(iterable, predicate), ifilter(iterable, x => !predicate(x))];
+    }
+
+    /**
+     * Alternate between several iterables (pick one from the first one, then one from the second...)
+     */
+    export function ialternate<T>(iterables: Iterable<T>[]): Iterable<T> {
+        return {
+            [Symbol.iterator]: function* () {
+                let iterators = iterables.map(iterable => iterable[Symbol.iterator]());
+                let done: boolean;
+                do {
+                    done = false;
+                    // TODO Remove "dried-out" iterators
+                    for (let iterator of iterators) {
+                        let state = iterator.next();
+                        if (!state.done) {
+                            done = true;
+                            yield state.value;
+                        }
+                    }
+                } while (done);
+            }
+        }
     }
 
     /**
@@ -335,29 +407,30 @@ module TK {
      * 
      * This function is O(n²)
      */
-    export function iunique<T>(it: Iterator<T>, limit = 1000000): Iterator<T> {
-        function internal(it: Iterator<T>, limit: number, done: T[]): Iterator<T> {
-            let [value, iterator] = it();
-            while (value !== null && contains(done, value)) {
-                [value, iterator] = iterator();
-            }
-            if (value === null) {
-                return IEMPTY;
-            } else if (limit <= 0) {
-                throw new Error("Unique count limit on iterator");
-            } else {
-                let head = value;
-                return () => [head, internal(it, limit - 1, done.concat([head]))];
+    export function iunique<T>(iterable: Iterable<T>, limit = 1000000): Iterable<T> {
+        return {
+            [Symbol.iterator]: function* () {
+                let done: T[] = [];
+                let n = limit;
+                for (let value of iterable) {
+                    if (!contains(done, value)) {
+                        if (n-- > 0) {
+                            done.push(value);
+                            yield value;
+                        } else {
+                            throw new Error("Unique count limit on iterator");
+                        }
+                    }
+                }
             }
         }
-        return internal(it, limit, []);
     }
 
     /**
      * Common reduce shortcuts
      */
-    export const isum = (iterator: Iterator<number>) => ireduce(iterator, (a, b) => a + b, 0);
-    export const icat = (iterator: Iterator<string>) => ireduce(iterator, (a, b) => a + b, "");
-    export const imin = (iterator: Iterator<number>) => ireduce(iterator, Math.min, Infinity);
-    export const imax = (iterator: Iterator<number>) => ireduce(iterator, Math.max, -Infinity);
+    export const isum = (iterable: Iterable<number>) => ireduce(iterable, (a, b) => a + b, 0);
+    export const icat = (iterable: Iterable<string>) => ireduce(iterable, (a, b) => a + b, "");
+    export const imin = (iterable: Iterable<number>) => ireduce(iterable, Math.min, Infinity);
+    export const imax = (iterable: Iterable<number>) => ireduce(iterable, Math.max, -Infinity);
 }
