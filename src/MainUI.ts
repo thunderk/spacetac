@@ -1,4 +1,4 @@
-/// <reference path="lib/phaser.d.ts"/>
+/// <reference path="../node_modules/phaser/types/phaser.d.ts"/>
 
 declare var global: any;
 declare var module: any;

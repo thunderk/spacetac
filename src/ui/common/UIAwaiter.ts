@@ -18,7 +18,7 @@ module TK.SpaceTac.UI {
                 quantity: 1,
                 scale: { start: 0.9, end: 1, ease: "Quad.easeOut" },
                 frequency: 200,
-                particleClass: FacingAlwaysParticle,
+                particleClass: <any>FacingAlwaysParticle,
                 emitZone: { type: 'edge', source: circle, quantity: 6 }
             });
         }

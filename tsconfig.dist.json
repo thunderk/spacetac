@@ -1,7 +1,7 @@
 {
     "extends": "./tsconfig",
     "compilerOptions": {
-        "out": "out/build.dist.js",
+        "outFile": "out/build.dist.js",
         "removeComments": true
     },
     "exclude": [

@@ -66,7 +66,7 @@ module TK.SpaceTac.UI {
             emitter.setFrequency(config.emitDuration / config.count, 1);
             emitter.setScale({ min: config.scale.min, max: config.scale.max });
             if (config.facing) {
-                emitter.particleClass = (config.facing == ParticleFacingMode.ALWAYS) ? FacingAlwaysParticle : FacingInitialParticle;
+                emitter.particleClass = <any>((config.facing == ParticleFacingMode.ALWAYS) ? FacingAlwaysParticle : FacingInitialParticle);
             }
             this.view.timer.schedule(config.emitDuration, () => emitter.on = false);
             this.view.timer.schedule(config.emitDuration + config.lifetime, () => manager.destroy());
