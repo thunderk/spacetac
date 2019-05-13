@@ -1,38 +1,39 @@
 // karma.conf.js
 module.exports = function (config) {
   config.set({
-    basePath: '../..',
+    basePath: '../../out',
     frameworks: ['jasmine'],
     singleRun: true,
     browsers: ['ChromeHeadless'],
     colors: true,
     reporters: ['spec', 'coverage'],
-    logLevel: config.LOG_WARN,
+    logLevel: config.LOG_ERROR,
 
     client: {
-      captureConsole: false
+      captureConsole: false,
     },
 
     preprocessors: {
-      'out/build.js': ['coverage']
+      'build.js': ['coverage']
     },
 
     coverageReporter: {
       type: 'json',
-      dir: 'out/coverage/',
+      dir: 'coverage',
       subdir: '.',
       file: 'coverage.json'
     },
 
     specReporter: {
       showSpecTiming: true,
-      suppressPassed: true
+      suppressPassed: true,
+      suppressErrorSummary: true
     },
 
     files: [
-      'out/vendor/phaser/phaser.js',
-      'out/vendor/parse/parse.min.js',
-      'out/build.js'
+      'vendor/phaser/phaser.js',
+      'vendor/parse/parse.min.js',
+      'build.js'
     ]
   })
 }

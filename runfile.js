@@ -229,7 +229,7 @@ async function serve() {
         host: '127.0.0.1',
         port: 8012,
         root: 'out',
-        ignore: 'coverage',
+        ignore: 'out/coverage',
         wait: 500
     });
     await new Promise(() => null);
