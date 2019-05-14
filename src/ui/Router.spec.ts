@@ -6,7 +6,7 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupSingleView(test, () => [new Router({}), {}]);
 
         test.case("loads correctly", check => {
-            check.instance(testgame.ui.getActiveScene(), Router, "active scene should be Router");
+            check.instance(testgame.ui.scene.scenes[0], Router, "active scene should be Router");
             // TODO test routing
         });
     });

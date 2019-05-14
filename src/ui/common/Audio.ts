@@ -8,29 +8,25 @@ module TK.SpaceTac.UI {
      * Utility functions to play sounds and musics
      */
     export class Audio {
-        private static SETTINGS = new AudioSettings();
+        private static SETTINGS = new AudioSettings()
         private music: Phaser.Sound.BaseSound | undefined
         private music_playing_volume = 1
 
-        constructor(private view: BaseView | null) {
+        constructor(private game: MainUI) {
         }
 
         /**
          * Check if the sound system is active, and return a manager to operate with it
          */
         private getManager(): Phaser.Sound.BaseSoundManager | null {
-            if (this.view) {
-                return this.view.sound;
-            } else {
-                return null;
-            }
+            return this.game.sound;
         }
 
         /**
          * Check if an audio key is present in cache
          */
         hasCache(key: string): boolean {
-            return this.view ? this.view.cache.audio.has(key) : false;
+            return this.game.cache.audio.has(key);
         }
 
         /**
@@ -123,7 +119,7 @@ module TK.SpaceTac.UI {
             let music = this.music;
             if (music) {
                 // TODO Set music volume
-                if (value) {
+                if (Audio.SETTINGS.music_volume) {
                     music.resume();
                 } else {
                     music.pause();

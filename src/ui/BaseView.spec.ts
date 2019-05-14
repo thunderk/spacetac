@@ -5,10 +5,12 @@ module TK.SpaceTac.UI.Specs {
         let testgame = setupEmptyView(test);
 
         test.case("initializes variables", check => {
-            let view = nn(testgame.ui.getActiveScene());
+            let view = testgame.view;
 
-            check.equals(view.messages instanceof Messages, true);
-            check.equals(view.inputs instanceof InputManager, true);
+            check.instance(view, BaseView, "view should be a BaseView");
+            check.instance(view.messages, Messages, "view.messages should be a Messages");
+            check.instance(view.inputs, InputManager, "view.inputs should be a InputManager");
+            check.instance(view.audio, Audio, "view.audio should be an Audio");
 
             check.equals(view.getWidth(), 1920);
             check.equals(view.getHeight(), 1080);

@@ -59,7 +59,7 @@ module TK.SpaceTac.UI {
             this.animations = new Animations(this.tweens);
             this.particles = new UIParticles(this);
             this.inputs = new InputManager(this);
-            this.audio = new Audio(this);
+            this.audio = this.gameui.audio;
             this.debug = this.gameui.debug;
 
             this.input.setDefaultCursor("url(cursors/standard.cur), pointer");

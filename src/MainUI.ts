@@ -29,8 +29,11 @@ module TK.SpaceTac {
         session: GameSession
         session_token: string | null
 
+        // Audio manager
+        audio = new UI.Audio(this)
+
         // Game options
-        options!: UI.GameOptions
+        options = new UI.GameOptions(this)
 
         // Storage used
         storage: Storage
@@ -81,40 +84,8 @@ module TK.SpaceTac {
             }
         }
 
-        boot() {
-            super.boot();
-            this.options = new UI.GameOptions(this);
-        }
-
         get isTesting(): boolean {
             return this.testmode;
-        }
-
-        /**
-         * Get the audio manager for current scene
-         */
-        get audio(): UI.Audio {
-            let scene = this.getActiveScene();
-            if (scene) {
-                return scene.audio;
-            } else {
-                return new UI.Audio(null);
-            }
-        }
-
-        /**
-         * Get the currently active scene
-         */
-        getActiveScene(): UI.BaseView | null {
-            let active = first(<string[]>keys(this.scene.scenes), key => this.scene.isActive(key));
-            if (active) {
-                let scene = this.scene.getScene(active);
-                return (scene instanceof UI.BaseView) ? scene : null;
-            } else if (this.isTesting) {
-                return this.scene.scenes[0];
-            } else {
-                return null;
-            }
         }
 
         /**
