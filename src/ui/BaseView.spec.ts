@@ -1,5 +1,3 @@
-/// <reference path="TestGame.ts" />
-
 module TK.SpaceTac.UI.Specs {
     testing("BaseView", test => {
         let testgame = setupEmptyView(test);

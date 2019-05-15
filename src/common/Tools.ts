@@ -477,7 +477,7 @@ module TK {
     /**
      * Copy an object (only a shallow copy of immediate properties)
      */
-    export function copy<T>(object: T): T {
+    export function copy<T extends Object>(object: T): T {
         let objectCopy = <T>Object.create(object.constructor.prototype);
         copyfields(object, objectCopy);
         return objectCopy;

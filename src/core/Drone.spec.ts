@@ -1,5 +1,3 @@
-/// <reference path="effects/BaseEffect.ts" />
-
 module TK.SpaceTac {
     testing("Drone", test => {
         test.case("applies area effects when deployed", check => {

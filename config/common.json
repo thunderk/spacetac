@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "module": "system",
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "strict": true,
+        "sourceMap": true,
+        "lib": [
+            "dom",
+            "es6",
+            "scripthost"
+        ],
+        "target": "es6"
+    }
+}

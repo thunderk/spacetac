@@ -1,5 +1,3 @@
-/// <reference path="../../common/Testing.ts" />
-
 module TK.SpaceTac.Specs {
     testing("ShipDeathDiff", test => {
         test.case("applies and reverts", check => {

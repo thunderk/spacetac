@@ -1,5 +1,3 @@
-/// <reference path="../TestGame.ts"/>
-
 module TK.SpaceTac.UI.Specs {
     testing("FleetCreationView", test => {
         let testgame = setupSingleView(test, () => [new FleetCreationView({}), []]);

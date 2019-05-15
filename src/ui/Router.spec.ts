@@ -1,6 +1,3 @@
-/// <reference path="TestGame.ts" />
-/// <reference path="Router.ts" />
-
 module TK.SpaceTac.UI.Specs {
     testing("Router", test => {
         let testgame = setupSingleView(test, () => [new Router({}), {}]);

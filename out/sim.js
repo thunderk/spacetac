@@ -2,7 +2,7 @@ const Pool = require('process-pool').default;
 
 const pool = new Pool({ processLimit: 8 });
 const work = pool.prepare(function () {
-    const App = require("./build").TK.SpaceTac;
+    const App = require("./app").TK.SpaceTac;
 
     async function doOneBattle(i) {
         let ai1 = new App.TacticalAI();

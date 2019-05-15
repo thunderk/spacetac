@@ -35,16 +35,16 @@ async function exec(command) {
 /**
  * Build app from typescript sources
  */
-async function ts(dist = false) {
+async function ts() {
     console.log("Building app...");
-    await exec(`tsc --project ${dist ? "./tsconfig.dist.json" : "."}`);
+    await exec(`tsc --build config/app.json config/tests.json`);
 }
 
 /**
  * Start watching for typescript changes
  */
 async function watch_ts() {
-    await exec(`tsc --project . --watch --preserveWatchOutput`);
+    await exec(`tsc --build config/app.json config/tests.json --watch --preserveWatchOutput`);
 }
 
 /**
@@ -135,33 +135,32 @@ async function watch_data() {
 }
 
 /**
- * Copy the vendors from node_modules to dist directory
+ * Copy and concatenate the vendors from node_modules to out/dependencies.js
  */
-async function vendors() {
-    console.log("Copying vendors...");
-    shell.rm('-rf', 'out/vendor');
-    shell.mkdir('-p', 'out/vendor');
-    shell.cp('-R', 'node_modules/phaser/dist', 'out/vendor/phaser');
-    shell.cp('-R', 'node_modules/parse/dist', 'out/vendor/parse');
-    shell.cp('-R', 'node_modules/jasmine-core/lib/jasmine-core', 'out/vendor/jasmine');
+async function dependencies() {
+    console.log("Bundling dependencies...");
+    const self = JSON.parse(fs.readFileSync("package.json"));
+    const deps = Object.keys(self["dependenciesMap"]).map(dependency => `node_modules/${dependency}/${self["dependenciesMap"][dependency]}`);
+    const bundle = shell.cat(deps);
+    fs.writeFileSync("out/dependencies.js", bundle);
 }
 
 /**
- * Start watching for vendors changes
+ * Start watching for dependencies changes
  */
-async function watch_vendors() {
-    watch(['package.json'], () => vendors());
+async function watch_dependencies() {
+    watch(['package.json'], () => dependencies());
     await forever();
 }
 
 /**
  * Trigger a single build
  */
-async function build(dist = false) {
+async function build() {
     await Promise.all([
-        ts(dist),
+        ts(),
         data(),
-        vendors()
+        dependencies()
     ]);
 }
 
@@ -170,14 +169,14 @@ async function build(dist = false) {
  */
 async function optimize() {
     // TODO do not overwrite dev build
-    await exec("uglifyjs out/build.dist.js --source-map --ecma 6 --mangle --keep-classnames --compress --output out/build.js");
+    await exec("uglifyjs out/app.js --source-map --ecma 6 --mangle --keep-classnames --compress --output out/app.js");
 }
 
 /**
  * Deploy to production
  */
 async function deploy(task, experimental = false) {
-    await build(true);
+    await build();
     await optimize();
     await exec(`rsync -avz --delete ./out/ hosting.thunderk.net:/srv/website/spacetac${experimental ? "x" : ""}/`);
 }
@@ -208,7 +207,7 @@ async function test(task) {
  * Run tests in karma when the build changes
  */
 async function watch_test(task) {
-    watch(["out/*.js", "out/*.html"], () => karma());
+    watch(["out/*.js", "out/*.html", "spec/support/*"], () => karma());
     await forever();
 }
 
@@ -216,7 +215,7 @@ async function watch_test(task) {
  * Run tests in karma, using freshly built app (for continuous integration)
  */
 async function ci(task) {
-    await Promise.all([ts(), vendors()]);
+    await Promise.all([ts(), dependencies()]);
     await karma();
     await exec("remap-istanbul -i out/coverage/coverage.json -o out/coverage -t html");
 }
@@ -230,6 +229,9 @@ async function serve() {
         port: 8012,
         root: 'out',
         ignore: 'out/coverage',
+        mount: [
+            ['/jasmine', './node_modules/jasmine-core/lib/jasmine-core']
+        ],
         wait: 500
     });
     await new Promise(() => null);
@@ -249,7 +251,7 @@ async function continuous() {
         serve(),
         watch_ts(),
         watch_data(),
-        watch_vendors(),
+        watch_dependencies(),
         watch_test(),
     ]);
 }
@@ -281,8 +283,8 @@ module.exports = {
     watch_ts: command(watch_ts),
     data: command(data),
     watch_data: command(watch_data),
-    vendors: command(vendors),
-    watch_vendors: command(watch_vendors),
+    dependencies: command(dependencies),
+    watch_dependencies: command(watch_dependencies),
     build: command(build),
     test: command(test),
     watch_test: command(watch_test),

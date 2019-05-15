@@ -1,0 +1,13 @@
+{
+    "extends": "./common.json",
+    "compilerOptions": {
+        "outFile": "../out/app.js",
+        "rootDir": ".."
+    },
+    "include": [
+        "../src/**/*.ts"
+    ],
+    "exclude": [
+        "../src/**/*.spec.ts"
+    ]
+}

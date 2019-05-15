@@ -21,6 +21,7 @@
     "glob": "^7.1.4",
     "glob-watcher": "^5.0.3",
     "jasmine": "^3.4.0",
+    "jasmine-core": "^3.4.0",
     "karma": "^4.1.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-coverage": "^1.1.2",
@@ -31,12 +32,15 @@
     "remap-istanbul": "^0.13.0",
     "runjs": "^4.4.2",
     "shelljs": "^0.8.3",
-    "typescript": "^3.4.5",
+    "typescript": "^3.5.0-dev.20190516",
     "uglify-js": "^3.5.12"
   },
   "dependencies": {
-    "jasmine-core": "^3.4.0",
     "parse": "^2.4.0",
     "phaser": "^3.17.0"
+  },
+  "dependenciesMap": {
+    "parse": "dist/parse.min.js",
+    "phaser": "dist/phaser.min.js"
   }
 }

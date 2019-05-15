@@ -1,0 +1,15 @@
+{
+    "extends": "./common.json",
+    "compilerOptions": {
+        "outFile": "../out/tests.js",
+        "rootDir": ".."
+    },
+    "include": [
+        "../src/**/*.spec.ts"
+    ],
+    "references": [
+        {
+            "path": "./app.json"
+        }
+    ]
+}

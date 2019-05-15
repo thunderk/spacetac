@@ -1,5 +1,3 @@
-/// <reference path="PersonalityReactions.ts" />
-
 module TK.SpaceTac.Specs {
     testing("PersonalityReactions", test => {
         function apply(pool: ReactionPool): PersonalityReaction | null {

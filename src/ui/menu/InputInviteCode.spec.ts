@@ -1,6 +1,3 @@
-/// <reference path="../TestGame.ts" />
-/// <reference path="MainMenu.ts" />
-
 module TK.SpaceTac.UI.Specs {
     testing("InputInviteCode", test => {
         let testgame = setupEmptyView(test);

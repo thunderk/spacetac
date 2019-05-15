@@ -1,10 +1,12 @@
 .venv
 coverage
 /node_modules
-/out/vendor
 /out/assets
-/out/build.*
+/out/app.*
+/out/tests.*
+/out/dependencies.js
 /graphics/**/*.blend?*
 /graphics/**/output.png
 /typings/
 *.log
+*.tsbuildinfo

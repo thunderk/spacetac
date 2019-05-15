@@ -1,5 +1,3 @@
-/// <reference path="Maneuver.ts" />
-
 module TK.SpaceTac.Specs {
     testing("TacticalAI", test => {
         class FixedManeuver extends Maneuver {

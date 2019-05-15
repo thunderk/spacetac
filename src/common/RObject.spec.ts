@@ -1,5 +1,3 @@
-/// <reference path="RObject.ts" />
-
 module TK.Specs {
     export class TestRObject extends RObject {
         x: number

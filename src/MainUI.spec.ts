@@ -1,4 +1,4 @@
-/// <reference path="ui/TestGame.ts" />
+/// <reference path="../node_modules/phaser/types/phaser.d.ts"/>
 
 module TK.SpaceTac.UI.Specs {
     class FakeStorage {

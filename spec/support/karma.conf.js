@@ -14,7 +14,7 @@ module.exports = function (config) {
     },
 
     preprocessors: {
-      'build.js': ['coverage']
+      'app.js': ['coverage']
     },
 
     coverageReporter: {
@@ -31,9 +31,9 @@ module.exports = function (config) {
     },
 
     files: [
-      'vendor/phaser/phaser.js',
-      'vendor/parse/parse.min.js',
-      'build.js'
+      'dependencies.js',
+      'app.js',
+      'tests.js',
     ]
   })
 }

@@ -1,21 +1,5 @@
 {
-    "compilerOptions": {
-        "module": "system",
-        "forceConsistentCasingInFileNames": true,
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
-        "removeComments": false,
-        "preserveConstEnums": true,
-        "outFile": "out/build.js",
-        "strict": true,
-        "sourceMap": true,
-        "lib": [
-            "dom",
-            "es6",
-            "scripthost"
-        ],
-        "target": "es6"
-    },
+    "extends": "./config/common.json",
     "include": [
         "src/**/*.ts"
     ]

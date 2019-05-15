@@ -1,5 +1,3 @@
-/// <reference path="DiffLog.ts" />
-
 module TK.Specs {
     class TestState {
         counter = 0

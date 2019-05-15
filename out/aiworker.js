@@ -8,7 +8,7 @@ var Phaser = new Proxy(function () { }, handler);
 //var debug = console.log;
 var debug = function () { };
 
-importScripts("build.js");
+importScripts("app.js");
 
 onmessage = function (e) {
     debug("[AI Worker] Received", e.data.length);
