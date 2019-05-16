@@ -5,7 +5,7 @@
 
 **Disclaimer: this is a work-in-progress technology preview**
 
-[![Play Online](https://thunderk.net/spacetac/play.svg)](https://thunderk.net/spacetac/)
+[![Play Online](https://thunderk.net/spacetac/play.png)](https://thunderk.net/spacetac/)
 
 *Play directly in your browser, no download or dependency required.*
 
