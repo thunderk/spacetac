@@ -169,7 +169,7 @@ async function build() {
  */
 async function optimize() {
     // TODO do not overwrite dev build
-    await exec("uglifyjs out/app.js --source-map --ecma 6 --mangle --keep-classnames --compress --output out/app.js");
+    await exec("terser out/app.js --source-map --ecma 6 --mangle --keep-classnames --compress --output out/app.js");
 }
 
 /**
@@ -178,6 +178,7 @@ async function optimize() {
 async function deploy(task, experimental = false) {
     await build();
     await optimize();
+    shell.rm("-r", "out/coverage");
     await exec(`rsync -avz --delete ./out/ hosting.thunderk.net:/srv/website/spacetac${experimental ? "x" : ""}/`);
 }
 
